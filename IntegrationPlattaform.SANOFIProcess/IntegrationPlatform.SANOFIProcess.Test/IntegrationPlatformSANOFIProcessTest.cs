@@ -49,7 +49,7 @@ namespace IntegrationPlatform.SANOFIProcess.Test
         {
             SanofiProcessLogModel oReturn = new SanofiProcessLogModel()
             {
-                ProviderPublicId = "A24EB150",
+                CompanyPublicId = "A24EB150",
                 ProcessName = "PruebaLog 4",
                 FileName = "https:-------------------------------------",
                 SendStatus = false,

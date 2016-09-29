@@ -59,14 +59,14 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.Controller
             return DataFactory.GetContableInfoByProvider(vProviderPublicId, vStartDate);
         }
 
-        public int SanofiProcessLogInsert(string ProviderPublicId, string ProcessName, string FileName, bool SendStatus, bool IsSuccess, bool Enable)
+        public int SanofiProcessLogInsert(int ProviderId, string ProcessName, string FileName, bool SendStatus, bool IsSuccess, bool Enable)
         {
-            return DataFactory.SanofiProcessLogInsert(ProviderPublicId, ProcessName, FileName, SendStatus, IsSuccess, Enable);
+            return DataFactory.SanofiProcessLogInsert(ProviderId, ProcessName, FileName, SendStatus, IsSuccess, Enable);
         }
 
-        public int SanofiProcessLogUpdate(int SanofiProcessLogId, string ProviderPublicId, string ProcessName, string FileName, bool IsSuccess, bool SendStatus, bool Enable)
+        public int SanofiProcessLogUpdate(int SanofiProcessLogId, int ProviderId, string ProcessName, string FileName, bool IsSuccess, bool SendStatus, bool Enable)
         {
-            return DataFactory.SanofiProcessLogUpdate(SanofiProcessLogId, ProviderPublicId, ProcessName, FileName, IsSuccess, SendStatus, Enable);
+            return DataFactory.SanofiProcessLogUpdate(SanofiProcessLogId, ProviderId, ProcessName, FileName, IsSuccess, SendStatus, Enable);
         }
 
         public List<Models.SanofiProcessLogModel> GetSanofiProcessLog(bool IsSuccess)

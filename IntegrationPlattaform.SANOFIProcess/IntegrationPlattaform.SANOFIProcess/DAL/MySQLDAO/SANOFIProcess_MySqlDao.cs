@@ -248,11 +248,11 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
             return oReturn;
         }
 
-        public int SanofiProcessLogInsert(string ProviderPublicId, string ProcessName, string FileName, bool SendStatus, bool IsSuccess, bool Enable)
+        public int SanofiProcessLogInsert(int ProviderId, string ProcessName, string FileName, bool SendStatus, bool IsSuccess, bool Enable)
         {
             List<System.Data.IDbDataParameter> lstparams = new List<System.Data.IDbDataParameter>();
 
-            lstparams.Add(DataInstance.CreateTypedParameter("vProviderPublicId", ProviderPublicId));
+            lstparams.Add(DataInstance.CreateTypedParameter("vProviderId", ProviderId));
             lstparams.Add(DataInstance.CreateTypedParameter("vProcessName", ProcessName));
             lstparams.Add(DataInstance.CreateTypedParameter("vFileName", FileName));
             lstparams.Add(DataInstance.CreateTypedParameter("vSendStatus", (SendStatus == true) ? 1 : 0));
@@ -269,12 +269,12 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
             return Convert.ToInt32(response.ScalarResult);
         }
 
-        public int SanofiProcessLogUpdate(int SanofiProcessLogId, string ProviderPublicId, string ProcessName, string FileName, bool IsSuccess, bool SendStatus, bool Enable)
+        public int SanofiProcessLogUpdate(int SanofiProcessLogId, int ProviderId, string ProcessName, string FileName, bool IsSuccess, bool SendStatus, bool Enable)
         {
             List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
 
             lstParams.Add(DataInstance.CreateTypedParameter("vSanofiProcessLogId", SanofiProcessLogId));
-            lstParams.Add(DataInstance.CreateTypedParameter("vProviderPublicId", ProviderPublicId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vProviderId", ProviderId));
             lstParams.Add(DataInstance.CreateTypedParameter("vProcessName", ProcessName));
             lstParams.Add(DataInstance.CreateTypedParameter("vFileName", FileName));
             lstParams.Add(DataInstance.CreateTypedParameter("vIsSuccess", (IsSuccess == true) ? 1 : 0));
@@ -317,7 +317,8 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
                         group spl by new
                         {
                             SanofiProcessLogId = spl.Field<int>("SanofiProcessLogId"),
-                            ProviderPublicId = spl.Field<string>("ProviderPublicId"),
+                            ProviderId = spl.Field<int>("ProviderId"),
+                            CompanyPublicId = spl.Field<string>("CompanyPublicId"),
                             ProcessName = spl.Field<string>("ProcessName"),
                             FileName = spl.Field<string>("FileName"),
                             SendStatus = spl.Field<UInt64>("SendStatus") == 1 ? true : false,
@@ -330,7 +331,8 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
                             select new SanofiProcessLogModel
                             {
                                 SanofiProcessLogId = splg.Key.SanofiProcessLogId,
-                                ProviderPublicId = splg.Key.ProviderPublicId,
+                                ProviderId = splg.Key.ProviderId,
+                                CompanyPublicId = splg.Key.CompanyPublicId,
                                 ProcessName = splg.Key.ProcessName,
                                 FileName = splg.Key.FileName,
                                 SendStatus = splg.Key.SendStatus,
@@ -354,12 +356,13 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
             SanofiProcessLogModel oReturn = new SanofiProcessLogModel();
 
             if (response.DataTableResult != null
-                && !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("ProviderPublicId")))
+                && response.DataTableResult.Rows[0].Field<int>("ProviderId")!=null)
             {
                 oReturn = new SanofiProcessLogModel
                 {
                     SanofiProcessLogId = response.DataTableResult.Rows[0].Field<int>("SanofiProcessLogId"),
-                    ProviderPublicId = response.DataTableResult.Rows[0].Field<string>("ProviderPublicId"),
+                    ProviderId = response.DataTableResult.Rows[0].Field<int>("ProviderId"),
+                    CompanyPublicId = response.DataTableResult.Rows[0].Field<string>("CompanyPublicId"),
                     ProcessName = response.DataTableResult.Rows[0].Field<string>("ProcessName"),
                     FileName = response.DataTableResult.Rows[0].Field<string>("FileName"),
                     SendStatus = response.DataTableResult.Rows[0].Field<UInt64>("SendStatus") == 1 ? true : false,
@@ -398,7 +401,7 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
                      group pl by new
                      {
                          SanofiProcessLogId = pl.Field<int>("SanofiProcessLogId"),
-                         ProviderPublicId = pl.Field<string>("ProviderPublicId"),
+                         ProviderId = pl.Field<int>("ProviderId"),                         
                          ProcessName = pl.Field<string>("ProcessName"),
                          FileName = pl.Field<string>("FileName"),
                          SendStatus = pl.Field<UInt64>("SendStatus") == 1 ? true : false,
@@ -411,7 +414,7 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
                          select new SanofiProcessLogModel()
                          {
                              SanofiProcessLogId = plg.Key.SanofiProcessLogId,
-                             ProviderPublicId = plg.Key.ProviderPublicId,
+                             ProviderId = plg.Key.ProviderId,                           
                              ProcessName = plg.Key.ProcessName,
                              FileName = plg.Key.FileName,
                              SendStatus = plg.Key.SendStatus,

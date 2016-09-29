@@ -10,7 +10,9 @@ namespace IntegrationPlattaform.SANOFIProcess.Models
     {
         public int SanofiProcessLogId { get; set; }
 
-        public string ProviderPublicId { get; set; }
+        public int ProviderId { get; set; }
+
+        public string CompanyPublicId { get; set; }
 
         public string ProcessName { get; set; }
 

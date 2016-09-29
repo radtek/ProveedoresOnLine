@@ -25,14 +25,14 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
 
                 // Get Providers SANOFI
                 //TODO: Get all sanofi providers 
-                List<CompanyModel> oProviders = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.GetAllProvidersByCustomerPublicId
-                    (
-                        IntegrationPlattaform.SANOFIProcess.Models.InternalSettings.Instance[
-                        IntegrationPlattaform.SANOFIProcess.Models.Constants.C_SANOFI_ProviderPublicId].Value
-                    );
-                //List<CompanyModel> oProviders = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.GetAllProvidersByCustomerPublicIdByStartDate(
-                //     IntegrationPlattaform.SANOFIProcess.Models.InternalSettings.Instance[
-                //     IntegrationPlattaform.SANOFIProcess.Models.Constants.C_SANOFI_ProviderPublicId].Value, LastProcess != null && LastProcess.ProviderPublicId != null ? LastProcess.LastModify : DateTime.Now.AddYears(-50));
+                //List<CompanyModel> oProviders = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.GetAllProvidersByCustomerPublicId
+                //    (
+                //        IntegrationPlattaform.SANOFIProcess.Models.InternalSettings.Instance[
+                //        IntegrationPlattaform.SANOFIProcess.Models.Constants.C_SANOFI_ProviderPublicId].Value
+                //    );
+                List<CompanyModel> oProviders = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.GetAllProvidersByCustomerPublicIdByStartDate(
+                     IntegrationPlattaform.SANOFIProcess.Models.InternalSettings.Instance[
+                     IntegrationPlattaform.SANOFIProcess.Models.Constants.C_SANOFI_ProviderPublicId].Value, LastProcess != null && LastProcess.CompanyPublicId != null ? LastProcess.LastModify : DateTime.Now.AddYears(-50));
 
                 Tuple<bool, string, string> oGeneralResult = new Tuple<bool, string, string>(false, "", "");
                 Tuple<bool, string, string> oComercialResult = new Tuple<bool, string, string>(false, "", "");
@@ -127,16 +127,16 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
 
                             List<SanofiProcessLogModel> oExist = new List<SanofiProcessLogModel>();
 
-                            oExist = oProcessLog.Where(l => p.CompanyPublicId == l.ProviderPublicId).ToList();
+                            oExist = oProcessLog.Where(l => p.CompanyPublicId == l.CompanyPublicId).ToList();
 
                             if (oExist != null && oExist.Count > 0)
                             {
                                 oExist.All(l =>
                              {
-                                 oGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetInfoByProvider(l.ProviderPublicId, LastProcess.LastModify).FirstOrDefault();
-                                 oComercialGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialInfoByProvider(l.ProviderPublicId, LastProcess.LastModify).FirstOrDefault();
-                                 oComercialBasicRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialBasicInfoByProvider(l.ProviderPublicId, LastProcess.LastModify).FirstOrDefault();
-                                 oContableRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetContableInfoByProvider(l.ProviderPublicId, LastProcess.LastModify).FirstOrDefault();
+                                 oGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetInfoByProvider(l.CompanyPublicId, LastProcess.LastModify).FirstOrDefault();
+                                 oComercialGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialInfoByProvider(l.CompanyPublicId, LastProcess.LastModify).FirstOrDefault();
+                                 oComercialBasicRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialBasicInfoByProvider(l.CompanyPublicId, LastProcess.LastModify).FirstOrDefault();
+                                 oContableRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetContableInfoByProvider(l.CompanyPublicId, LastProcess.LastModify).FirstOrDefault();
 
                                  if (oGeneralRow != null && (oComercialGeneralRow != null || oComercialBasicRow != null) && oContableRow != null)
                                  {
@@ -322,7 +322,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                 {
                     SanofiProcessLogModel oLogModel = new SanofiProcessLogModel()
                     {
-                        ProviderPublicId = x.CompanyId.ToString(),
+                        ProviderId = x.CompanyId,
                         ProcessName = "GeneralInfo",
                         FileName = strRemoteFile,
                         SendStatus = false,
@@ -341,7 +341,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                 {
                     SanofiProcessLogModel oLogModel = new SanofiProcessLogModel()
                     {
-                        ProviderPublicId = x.CompanyId.ToString(),
+                        ProviderId = x.CompanyId,
                         ProcessName = "GeneralInfo",
                         FileName = string.Empty,
                         SendStatus = false,
@@ -437,7 +437,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                 {
                     SanofiProcessLogModel oLogModel = new SanofiProcessLogModel()
                     {
-                        ProviderPublicId = x.CompanyId.ToString(),
+                        ProviderId = x.CompanyId,
                         ProcessName = "ComercialInfo",
                         FileName = strRemoteFile,
                         SendStatus = false,
@@ -456,7 +456,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                 {
                     SanofiProcessLogModel oLogModel = new SanofiProcessLogModel()
                     {
-                        ProviderPublicId = x.CompanyId.ToString(),
+                        ProviderId = x.CompanyId,
                         ProcessName = "ComercialInfo",
                         FileName = string.Empty,
                         SendStatus = false,
@@ -553,7 +553,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                 {
                     SanofiProcessLogModel oLogModel = new SanofiProcessLogModel()
                     {
-                        ProviderPublicId = x.CompanyId.ToString(),
+                        ProviderId = x.CompanyId,
                         ProcessName = "ContableInfo",
                         FileName = strRemoteFile,
                         SendStatus = false,
@@ -572,7 +572,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                 {
                     SanofiProcessLogModel oLogModel = new SanofiProcessLogModel()
                     {
-                        ProviderPublicId = x.CompanyId.ToString(),
+                        ProviderId = x.CompanyId,
                         ProcessName = "ContableInfo",
                         FileName = string.Empty,
                         SendStatus = false,
@@ -613,7 +613,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                 {
                     oLogModel.SanofiProcessLogId = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.SanofiProcessLogInsert
                         (
-                            oLogModel.ProviderPublicId,
+                            oLogModel.ProviderId,
                             oLogModel.ProcessName,
                             oLogModel.FileName,
                             oLogModel.SendStatus,
@@ -637,7 +637,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                 {
                     oLogModel.SanofiProcessLogId = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.SanofiProcessLogUpdate
                         (oLogModel.SanofiProcessLogId,
-                        oLogModel.ProviderPublicId,
+                        oLogModel.ProviderId,
                         oLogModel.ProcessName,
                         oLogModel.FileName,
                         oLogModel.IsSucces,
