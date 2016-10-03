@@ -167,11 +167,11 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
                         CompanyName = sci.Field<string>("CompanyName"),
                         IdentificationNumber = sci.Field<string>("IdentificationNumber"),
                         FiscalNumber = sci.Field<string>("FiscalNumber"),
-                        NIF_Type = sci.Field<string>("NIF_Type"),                        
+                        NIF_Type = sci.Field<string>("NIF_Type"),
                         CountsGroupItemName = sci.Field<string>("AcountsGroupItemName"),
-                        TaxClassName = sci.Field<string>("TaxClass"),                        
+                        TaxClassName = sci.Field<string>("TaxClass"),
                         CurrencyName = sci.Field<string>("CurrencyName"),
-                        Ramo = sci.Field<string>("Ramo"),                       
+                        Ramo = sci.Field<string>("Ramo"),
                     }
                         into scig
                         select new SanofiComercialInfoModel()
@@ -180,10 +180,10 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
                             CompanyName = scig.Key.CompanyName,
                             IdentificationNumber = scig.Key.IdentificationNumber,
                             FiscalNumber = scig.Key.FiscalNumber,
-                            NIFType = scig.Key.NIF_Type,                            
+                            NIFType = scig.Key.NIF_Type,
                             CountsGroupItemName = scig.Key.CountsGroupItemName,
-                            Ramo = scig.Key.Ramo,                            
-                            TaxClassName = scig.Key.TaxClassName,                            
+                            Ramo = scig.Key.Ramo,
+                            TaxClassName = scig.Key.TaxClassName,
                             CurrencyName = scig.Key.CurrencyName,
                         }).ToList();
             }
@@ -356,19 +356,19 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
             SanofiProcessLogModel oReturn = new SanofiProcessLogModel();
 
             if (response.DataTableResult != null
-                && response.DataTableResult.Rows[0].Field<int>("ProviderId")!=null)
+                && response.DataTableResult.Rows.Count > 0)
             {
                 oReturn = new SanofiProcessLogModel
                 {
-                    SanofiProcessLogId = response.DataTableResult.Rows[0].Field<int>("SanofiProcessLogId"),
-                    ProviderId = response.DataTableResult.Rows[0].Field<int>("ProviderId"),
-                    CompanyPublicId = response.DataTableResult.Rows[0].Field<string>("CompanyPublicId"),
-                    ProcessName = response.DataTableResult.Rows[0].Field<string>("ProcessName"),
-                    FileName = response.DataTableResult.Rows[0].Field<string>("FileName"),
-                    SendStatus = response.DataTableResult.Rows[0].Field<UInt64>("SendStatus") == 1 ? true : false,
-                    IsSucces = response.DataTableResult.Rows[0].Field<UInt64>("IsSuccess") == 1 ? true : false,
-                    CreateDate = response.DataTableResult.Rows[0].Field<DateTime>("CreateDate"),
-                    LastModify = response.DataTableResult.Rows[0].Field<DateTime>("lastModify")
+                    SanofiProcessLogId = !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("SanofiProcessLogId")) ? response.DataTableResult.Rows[0].Field<int>("SanofiProcessLogId") : 0,
+                    ProviderId = !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("ProviderId")) ? response.DataTableResult.Rows[0].Field<int>("ProviderId") : 0,
+                    CompanyPublicId = !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("CompanyPublicId")) ? response.DataTableResult.Rows[0].Field<string>("CompanyPublicId") : string.Empty,
+                    ProcessName = !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("ProcessName")) ? response.DataTableResult.Rows[0].Field<string>("ProcessName") : string.Empty,
+                    FileName = !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("FileName")) ? response.DataTableResult.Rows[0].Field<string>("FileName") : string.Empty,
+                    SendStatus = !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("SendStatus")) ? response.DataTableResult.Rows[0].Field<UInt64>("SendStatus") == 1 ? true : false : false,
+                    IsSucces = !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("IsSuccess")) ? response.DataTableResult.Rows[0].Field<UInt64>("IsSuccess") == 1 ? true : false : false,
+                    CreateDate = !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("CreateDate")) ? response.DataTableResult.Rows[0].Field<DateTime>("CreateDate") : new DateTime(),
+                    LastModify = !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("lastModify")) ? response.DataTableResult.Rows[0].Field<DateTime>("lastModify") : new DateTime(),
                 };
             }
             return oReturn;
@@ -401,7 +401,7 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
                      group pl by new
                      {
                          SanofiProcessLogId = pl.Field<int>("SanofiProcessLogId"),
-                         ProviderId = pl.Field<int>("ProviderId"),                         
+                         ProviderId = pl.Field<int>("ProviderId"),
                          ProcessName = pl.Field<string>("ProcessName"),
                          FileName = pl.Field<string>("FileName"),
                          SendStatus = pl.Field<UInt64>("SendStatus") == 1 ? true : false,
@@ -414,7 +414,7 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
                          select new SanofiProcessLogModel()
                          {
                              SanofiProcessLogId = plg.Key.SanofiProcessLogId,
-                             ProviderId = plg.Key.ProviderId,                           
+                             ProviderId = plg.Key.ProviderId,
                              ProcessName = plg.Key.ProcessName,
                              FileName = plg.Key.FileName,
                              SendStatus = plg.Key.SendStatus,
