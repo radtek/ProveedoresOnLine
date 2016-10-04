@@ -94,6 +94,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                             return true;
                         });
 
+                        LogFile("::::::::::::::Generating Files::::::::::::");
                         //Call Function to create the txt;
                         if (oGeneralInfo != null && oGeneralInfo.Count > 0)
                         {
@@ -114,12 +115,16 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                             oContableResult = ContableInfoProcess(oContableInfo);
                             LogFile("Countable Info for " + oContableInfo.Count);
                         }
+
+                        LogFile("::::::::::::::Generating Files Process Finish::::::::::::");
                         LogFile("Set Up Process finish " + DateTime.Now);
+
                     #endregion
                     }
                     else
                     {
                         #region ProcessLog Last Date
+
                         //When ProcessLog has a Last Date
                         //log file
                         LogFile("Start send " + oProviders.Count.ToString());
@@ -134,15 +139,25 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                         //Check providers list with log process
                         oProviders.All(p =>
                         {
-                            oExist = ids.Where(l => p.CompanyPublicId == l).ToList();
-                            oNoExist = ids.Where(l => p.CompanyPublicId != l).Select(y => y).ToList();
+                            if (ids.Any(l => l == p.CompanyPublicId))
+                            {
+                                oExist.Add(p.CompanyPublicId);
+                            }
+                            else
+                            {
+                                oNoExist.Add(p.CompanyPublicId);
+                            }
+
+                            //oExist = ids.Where(l => p.CompanyPublicId == l).ToList();
+                            //oNoExist = ids.Where(l => p.CompanyPublicId != l).Select(y => y).ToList();
                             return true;
                         });
-                        LogFile("New Providers" + oNoExist);
-                        LogFile("Update info for " + oExist + " Providers");
+                        
+                        
 
                         if (oNoExist != null && oNoExist.Count > 0)
                         {
+                            LogFile("New Providers " + oNoExist.Count);
                             count = 0;
                             oNoExist.All(l =>
                             {
@@ -161,14 +176,16 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
 
                                     LogFile("New Provider: " + l + "Succesfully validated");
                                 }
+                                LogFile(count+1 + " New Provider: " + l);
                                 count++;
                                 return true;
                             });
-                            LogFile("New provider validation process ends for " + count + " provider");
+                            LogFile("New provider validation process ends for " + count + " providers");
                         }
 
                         if (oExist != null && oExist.Count > 0)
                         {
+                            LogFile("Update info for " + oExist.Count + " Providers");
                             count = 0;
                             oExist.All(l =>
                             {
@@ -188,10 +205,11 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                                 if (oContableRow != null)
                                     oContableInfo.Add(oContableRow);
 
+                                LogFile(count+1 + " Update info for Provider: " + l);
                                 count++;
                                 return true;
                             });
-                            LogFile("Update provider validation process ends for " + count + " providers");
+                            LogFile("Update providers validation process ends for " + count + " providers");
                         }
 
                         LogFile("::::::::::::::Generating Files::::::::::::");
@@ -216,8 +234,10 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                             oContableResult = ContableInfoProcess(oContableInfo);
                             LogFile("Countable Info for " + oContableInfo.Count);
                         }
+                        LogFile("::::::::::::::Generating Files Process Finish::::::::::::");
                         LogFile("Start Process finish " + DateTime.Now);
                     }
+
                         #endregion
                 }
                 else

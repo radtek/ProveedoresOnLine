@@ -340,7 +340,7 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
                                 CreateDate = splg.Key.CreateDate,
                                 LastModify = splg.Key.LastModify
                             }).ToList();
-            }
+            }            
             return oReturn;
         }
 
@@ -358,18 +358,56 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
             if (response.DataTableResult != null
                 && response.DataTableResult.Rows.Count > 0)
             {
-                oReturn = new SanofiProcessLogModel
+                oReturn =
+                    (
+                        from spl in response.DataTableResult.AsEnumerable()
+                        where !spl.IsNull("SanofiProcessLogId")
+                        group spl by new
+                        {
+                            SanofiProcessLogId = spl.Field<int>("SanofiProcessLogId"),
+                            ProviderId = spl.Field<int>("ProviderId"),
+                            CompanyPublicId = spl.Field<string>("CompanyPublicId"),
+                            ProcessName = spl.Field<string>("ProcessName"),
+                            FileName = spl.Field<string>("FileName"),
+                            SendStatus = spl.Field<UInt64>("SendStatus") == 1 ? true : false,
+                            IsSuccess = spl.Field<UInt64>("IsSuccess") == 1 ? true : false,
+                            CreateDate = spl.Field<DateTime>("CreateDate"),
+                            LastModify = spl.Field<DateTime>("LastModify"),
+                            Enable = spl.Field<UInt64>("Enable") == 1 ? true : false
+                        }
+                            into splg
+                            select new SanofiProcessLogModel
+                            {
+                                SanofiProcessLogId = splg.Key.SanofiProcessLogId,
+                                ProviderId = splg.Key.ProviderId,
+                                CompanyPublicId = splg.Key.CompanyPublicId,
+                                ProcessName = splg.Key.ProcessName,
+                                FileName = splg.Key.FileName,
+                                SendStatus = splg.Key.SendStatus,
+                                IsSucces = splg.Key.IsSuccess,
+                                CreateDate = splg.Key.CreateDate,
+                                LastModify = splg.Key.LastModify,
+                                Enable = splg.Key.Enable
+                            }).FirstOrDefault();
+            }
+
+            if(oReturn ==null)
+            {
+                oReturn = new SanofiProcessLogModel()
                 {
-                    SanofiProcessLogId = !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("SanofiProcessLogId")) ? response.DataTableResult.Rows[0].Field<int>("SanofiProcessLogId") : 0,
-                    ProviderId = !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("ProviderId")) ? response.DataTableResult.Rows[0].Field<int>("ProviderId") : 0,
-                    CompanyPublicId = !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("CompanyPublicId")) ? response.DataTableResult.Rows[0].Field<string>("CompanyPublicId") : string.Empty,
-                    ProcessName = !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("ProcessName")) ? response.DataTableResult.Rows[0].Field<string>("ProcessName") : string.Empty,
-                    FileName = !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("FileName")) ? response.DataTableResult.Rows[0].Field<string>("FileName") : string.Empty,
-                    SendStatus = !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("SendStatus")) ? response.DataTableResult.Rows[0].Field<UInt64>("SendStatus") == 1 ? true : false : false,
-                    IsSucces = !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("IsSuccess")) ? response.DataTableResult.Rows[0].Field<UInt64>("IsSuccess") == 1 ? true : false : false,
-                    CreateDate = !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("CreateDate")) ? response.DataTableResult.Rows[0].Field<DateTime>("CreateDate") : new DateTime(),
-                    LastModify = !string.IsNullOrEmpty(response.DataTableResult.Rows[0].Field<string>("lastModify")) ? response.DataTableResult.Rows[0].Field<DateTime>("lastModify") : new DateTime(),
+                    SanofiProcessLogId = 0,
+                    ProviderId = 0,
+                    CompanyPublicId = string.Empty,
+                    ProcessName = string.Empty,
+                    FileName = string.Empty,
+                    SendStatus = false,
+                    IsSucces = false,
+                    CreateDate = new DateTime(0001,01,01),
+                    LastModify = new DateTime(0001, 01, 01),
+                    Enable = false
                 };
+                    
+                 
             }
             return oReturn;
         }
