@@ -116,7 +116,8 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                             LogFile("Countable Info for " + oContableInfo.Count);
                         }
 
-                        LogFile("::::::::::::::Generating Files Process Finish::::::::::::");
+                        LogFile("::::::::::::::Files Process Finish::::::::::::");
+
                         LogFile("Set Up Process finish " + DateTime.Now);
 
                     #endregion
