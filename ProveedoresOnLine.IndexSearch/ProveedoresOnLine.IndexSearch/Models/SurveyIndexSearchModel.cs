@@ -19,5 +19,9 @@ namespace ProveedoresOnLine.IndexSearch.Models
         public string SurveyStatusId { get; set; }
 
         public string SurveyStatus { get; set; }
+
+        public string UserId { get; set; }
+
+        public string User { get; set; }
     }
 }
