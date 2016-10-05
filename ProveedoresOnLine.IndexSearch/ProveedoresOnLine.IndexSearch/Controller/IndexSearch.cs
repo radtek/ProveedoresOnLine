@@ -110,6 +110,24 @@ namespace ProveedoresOnLine.IndexSearch.Controller
 
         #region Survey Index
 
+        public static bool SurveyIndexationFunction()
+        {
+            List<SurveyIndexSearchModel> oSurveyIndexSearch = GetSurveyIndex();
+
+            try
+            {
+                LogFile("Start Process: " + "ProvidersToIndex:::" + oSurveyIndexSearch.Count());
+            }
+            catch (Exception err)
+            {
+                LogFile("Index Process Failed for Company: " + err.Message + "Inner Exception::" + err.InnerException);
+            }
+
+            LogFile("Index Process Successfull for: " + oSurveyIndexSearch.Count());
+
+            return true;
+        }
+
         public static List<SurveyIndexSearchModel> GetSurveyIndex()
         {
             return DAL.Controller.IndexSearchDataController.Instance.GetSurveyIndex();
