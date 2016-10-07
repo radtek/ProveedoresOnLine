@@ -32,7 +32,7 @@ namespace ElasticSearchProjectDev
         {
             Uri node = new Uri("http://192.168.0.94:9200/");
             var settings = new ConnectionSettings(node);
-            settings.DefaultIndex("personsearch");
+            settings.DefaultIndex("dev_companysurveyindex");
             ElasticClient client = new ElasticClient(settings);
             var searchResults = client.Search<Person>(s => s
             .From(0)
