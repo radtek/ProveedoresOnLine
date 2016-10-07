@@ -51,6 +51,9 @@
     <Reference Include="ProveedoresOnLine.Company">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.Company\developer\ProveedoresOnLine.Company.dll</HintPath>
     </Reference>
+    <Reference Include="ProveedoresOnLine.SurveyModule">
+      <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.SurveyModule\developer\ProveedoresOnLine.SurveyModule.dll</HintPath>
+    </Reference>
     <Reference Include="SettingsManager">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\SettingsManager\developer\SettingsManager.dll</HintPath>
     </Reference>

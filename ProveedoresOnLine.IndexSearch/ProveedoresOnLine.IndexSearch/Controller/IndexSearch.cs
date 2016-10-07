@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Configuration;
+using ProveedoresOnLine.SurveyModule.Models.Index;
+
 namespace ProveedoresOnLine.IndexSearch.Controller
 {
     public class IndexSearch
@@ -126,6 +128,11 @@ namespace ProveedoresOnLine.IndexSearch.Controller
             LogFile("Index Process Successfull for: " + oSurveyIndexSearch.Count());
 
             return true;
+        }
+
+        public static List<CompanySurveyIndexModel> GetCompanySurveyIndex()
+        {
+            return DAL.Controller.IndexSearchDataController.Instance.GetCompanySurveyIndex();
         }
 
         public static List<SurveyIndexSearchModel> GetSurveyIndex()

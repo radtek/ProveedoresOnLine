@@ -1,5 +1,6 @@
 ﻿using ProveedoresOnLine.Company.Models.Company;
 using ProveedoresOnLine.IndexSearch.Models;
+using ProveedoresOnLine.SurveyModule.Models.Index;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,12 @@ namespace ProveedoresOnLine.IndexSearch.Interfaces
         List<CompanyIndexModel> GetCompanyIndex();
 
         List<CustomerProviderIndexModel> GetCustomerProviderIndex();
+
+        #endregion
+
+        #region Company Survey Index
+
+        List<CompanySurveyIndexModel> GetCompanySurveyIndex();
 
         #endregion
 

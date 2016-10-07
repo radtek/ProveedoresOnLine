@@ -1,6 +1,7 @@
 ﻿using ProveedoresOnLine.Company.Models.Company;
 using ProveedoresOnLine.IndexSearch.Interfaces;
 using ProveedoresOnLine.IndexSearch.Models;
+using ProveedoresOnLine.SurveyModule.Models.Index;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,6 +55,11 @@ namespace ProveedoresOnLine.IndexSearch.DAL.Controller
         #endregion
 
         #region Survey Index
+
+        public List<CompanySurveyIndexModel> GetCompanySurveyIndex()
+        {
+            return DataFactory.GetCompanySurveyIndex();    
+        }
 
         public List<SurveyIndexSearchModel> GetSurveyIndex()
         {

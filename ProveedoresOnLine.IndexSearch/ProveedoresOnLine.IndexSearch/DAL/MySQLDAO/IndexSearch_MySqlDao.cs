@@ -1,6 +1,7 @@
 ﻿using ProveedoresOnLine.Company.Models.Company;
 using ProveedoresOnLine.IndexSearch.Interfaces;
 using ProveedoresOnLine.IndexSearch.Models;
+using ProveedoresOnLine.SurveyModule.Models.Index;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -150,6 +151,119 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
         #endregion
 
         #region Survey Index
+
+        public List<CompanySurveyIndexModel> GetCompanySurveyIndex()
+        {
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataSet,
+                CommandText = "C_IndexCompanySurvey",
+                CommandType = CommandType.StoredProcedure,
+            });
+
+            List<CompanySurveyIndexModel> oReturn = null;
+
+            if (response.DataSetResult != null &&
+                response.DataSetResult.Tables[0] != null &&
+                response.DataSetResult.Tables[0].Rows.Count > 0 &&
+                response.DataSetResult.Tables[1] != null &&
+                response.DataSetResult.Tables[1].Rows.Count > 0 &&
+                response.DataSetResult.Tables[2] != null &&
+                response.DataSetResult.Tables[2].Rows.Count > 0)
+            {
+                oReturn =
+                    (from ci in response.DataSetResult.Tables[1].AsEnumerable()
+                     where !ci.IsNull("CompanyPublicId")
+                     group ci by new
+                     {
+                         CompanyPublicId = ci.Field<string>("CompanyPublicId"),
+                         CompanyName = ci.Field<string>("CompanyName"),
+                         CompanyIdentificationTypeId = !ci.IsNull("CompanyIdentificationTypeId") ? ci.Field<int>("CompanyIdentificationTypeId") : 0,
+                         CompanyIdentificationType = ci.Field<string>("CompanyIdentificationType"),
+                         CompanyIdentificationNumber = ci.Field<string>("CompanyIdentificationNumber"),
+                         CompanyEnable = ci.Field<UInt64>("CompanyEnable") == 1 ? true : false,
+                         LogoUrl = ci.Field<string>("LogoUrl"),
+                         CountryId = !ci.IsNull("CountryId") ? ci.Field<int>("CountryId") : 0,
+                         Country = ci.Field<string>("Country"),
+                         CityId = !ci.IsNull("CityId") ? ci.Field<int>("CityId") : 0,
+                         City = ci.Field<string>("City"),
+                         ICAId = !ci.IsNull("ICAId") ? ci.Field<int>("ICAId") : 0,
+                         ICA = ci.Field<string>("ICA"),
+                     }
+                         into cig
+                     select new CompanySurveyIndexModel()
+                     {
+                         CompanyPublicId = cig.Key.CompanyPublicId,
+                         CompanyName = cig.Key.CompanyName,
+                         IdentificationTypeId = cig.Key.CompanyIdentificationTypeId,
+
+                         IdentificationType = cig.Key.CompanyIdentificationType,
+
+                         IdentificationNumber = cig.Key.CompanyIdentificationNumber,
+
+                         CompanyEnable = cig.Key.CompanyEnable,
+                         LogoUrl = cig.Key.LogoUrl,
+
+                         CountryId = cig.Key.CountryId,
+                         Country = cig.Key.Country,
+                         CityId = cig.Key.CityId,
+                         City = cig.Key.City,
+
+                         ICAId = cig.Key.ICAId,
+                         ICA = cig.Key.ICA,
+
+                         oCustomerProviderIndexModel =
+                            (from cp in response.DataSetResult.Tables[0].AsEnumerable()
+                             where !cp.IsNull("CustomerProviderId") &&
+                                   cp.Field<string>("ProviderPublicId") == cig.Key.CompanyPublicId
+                             group cp by new
+                             {
+                                 CustomerProviderId = !cp.IsNull("CustomerProviderId") ? cp.Field<int>("CustomerProviderId") : 0,
+                                 CustomerPublicId = cp.Field<string>("CustomerPublicId"),
+                                 StatusId = !cp.IsNull("StatusId") ? cp.Field<int>("StatusId") : 0,
+                                 Status = cp.Field<string>("Status"),
+                                 CustomerProviderEnable = cp.Field<UInt64>("CustomerProviderEnable") == 1 ? true : false,
+                             }
+                                 into cpg
+                             select new CustomerProviderIndexModel()
+                             {
+                                 CustomerProviderId = cpg.Key.CustomerProviderId,
+                                 CustomerPublicId = cpg.Key.CustomerPublicId,
+                                 StatusId = cpg.Key.StatusId,
+                                 Status = cpg.Key.Status,
+                                 CustomerProviderEnable = cpg.Key.CustomerProviderEnable,
+                             }).ToList(),
+                         oSurveyIndexModel =
+                            (from si in response.DataSetResult.Tables[2].AsEnumerable()
+                             where !si.IsNull("SurveyId") &&
+                                    si.Field<string>("CompanyPublicId") == cig.Key.CompanyPublicId
+                             group si by new
+                             {
+                                 SurveyId = si.Field<int>("SurveyId"),
+                                 SurveyPublicId = si.Field<string>("SurveyPublicId"),
+                                 SurveyTypeId = si.Field<int>("SurveyTypeId"),
+                                 SurveyType = si.Field<string>("SurveyType"),
+                                 SurveyStatusId = si.Field<int>("SurveyStatusId"),
+                                 SurveyStatus = si.Field<string>("SurveyStatus"),
+                                 CompanyPublicId = si.Field<string>("CompanyPublicId"),
+                             }
+                             into sig
+                             select new SurveyIndexModel()
+                             {
+                                 SurveyId = sig.Key.SurveyId,
+                                 CompanyPublicID = sig.Key.CompanyPublicId,
+                                 SurveyPublicId = sig.Key.SurveyPublicId,
+                                 SurveyTypeId = sig.Key.SurveyTypeId,
+                                 SurveyType = sig.Key.SurveyType,
+                                 SurveyStatusId = sig.Key.SurveyStatusId,
+                                 SurveyStatus = sig.Key.SurveyStatus                                 
+                             }).ToList(),
+                     }).ToList();
+            }
+
+            return oReturn;
+        }
+
 
         public List<SurveyIndexSearchModel> GetSurveyIndex()
         {

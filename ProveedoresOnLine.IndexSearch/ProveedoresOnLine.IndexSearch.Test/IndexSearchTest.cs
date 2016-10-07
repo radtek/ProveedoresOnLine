@@ -6,6 +6,7 @@ using ProveedoresOnLine.Company.Models.Company;
 using System.Linq;
 using Nest;
 using System.Collections;
+using ProveedoresOnLine.SurveyModule.Models.Index;
 
 namespace ProveedoresOnLine.IndexSearch.Test
 {
@@ -122,6 +123,17 @@ namespace ProveedoresOnLine.IndexSearch.Test
                      q.Term(p => p.CommercialCompanyName, "SAP") ||
                      q.Term(p => p.IdentificationNumber, "SAP"))
                 );
+        }
+
+        [TestMethod]
+        public void TestGetCompanySurveyIndex()
+        {
+            List<CompanySurveyIndexModel> oReturn =
+                ProveedoresOnLine.IndexSearch.Controller.IndexSearch.GetCompanySurveyIndex();
+
+            CompanySurveyIndexModel oModel = oReturn.Where(x => x.oSurveyIndexModel != null && x.oSurveyIndexModel.Count > 0).FirstOrDefault();
+
+            Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
         }
     }
 }
