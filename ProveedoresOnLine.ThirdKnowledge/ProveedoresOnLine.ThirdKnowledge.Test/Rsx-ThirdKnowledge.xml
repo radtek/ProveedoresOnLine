@@ -9,23 +9,23 @@
     <key name="ThirdKnowedge_AuthServicePass"><![CDATA[{D6-E9$C3S6Q#5WW&5@}]]></key>
 
     <!--FTP_ServerIp-->
-    <key name="ThirdKnowedge_FTPServerIP">190.242.114.111:27</key>
+    <key name="ThirdKnowedge_FTPServerIP">131.0.170.154:27</key>
 
     <!--FTP_FTPFIleName-->
     <key name="ThirdKnowedge_UploadFTPFileName">FTP_ThirdKnowledge</key>
 
     <!--WS_UserName-->
-    <key name="ThirdKnowedge_FTPUserName">FTP_PUBLICAR</key>
+    <key name="ThirdKnowedge_FTPUserName">FTP_Publicar</key>
 
     <!--WS_Password-->
-    <key name="ThirdKnowedge_FTPPassworUser">p1u2b3l415c6@778*</key>
+    <key name="ThirdKnowedge_FTPPassworUser">9ubl1c4r.2016</key>
 
     <key name="TK_UploadSuccessFileAgent">POL_UploadSuccessFile_Mail</key>
 
     <key name="TK_ReadyResultAgent">POL_ReadyResult_Mail</key>
 
     <!--Temp Folder-->
-    <key name="File_TempDirectory">C:\Users\JOHMARVA\Source\Repos\ProveedoresOnLine\ProveedoresOnLine.ThirdKnowledge\ProveedoresOnLine.ThirdKnowledge.Test\TempDirectory\</key>
+    <key name="File_TempDirectory">D:\ProveedoresOnLine\repos\ProveedoresOnLine.ThirdKnowledge\ProveedoresOnLine.ThirdKnowledge.Test\TempDirectory\</key>
     
     <!--S3 Path File-->
     <key name="File_S3FilePath">https://s3.amazonaws.com/stgproveedoresonline/MarketPlace/ThirdKnowledge/</key>
