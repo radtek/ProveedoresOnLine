@@ -11,8 +11,10 @@ namespace ProveedoresOnLine.SurveyModule.Models.Index
     [ElasticsearchType(Name = "CompanySurvey_Info")]
     public class CompanySurveyIndexModel
     {
-        public CompanySurveyIndexModel() { }
+        public CompanySurveyIndexModel()
+        {
 
+        }
         public string Id { get { return CompanyPublicId; } }
         [Number]
         public int IdentificationTypeId { get; set; }

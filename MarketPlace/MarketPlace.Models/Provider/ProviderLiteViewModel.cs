@@ -1,4 +1,5 @@
 ﻿using ProveedoresOnLine.Company.Models.Company;
+using ProveedoresOnLine.SurveyModule.Models.Index;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace MarketPlace.Models.Provider
         public ProveedoresOnLine.CompanyProvider.Models.Provider.ProviderModel RelatedProvider { get; private set; }
 
         public CompanyIndexModel ElasticRealtedProvider { get; private set; }
+
+        public CompanySurveyIndexModel ElasticRelatedProviderSurvey { get; private set; }
 
         /// <summary>
         /// provider is related for session customer
@@ -179,6 +182,11 @@ namespace MarketPlace.Models.Provider
         public ProviderLiteViewModel(CompanyIndexModel oElasticSearchModel)
         {
             ElasticRealtedProvider = oElasticSearchModel;
+        }
+
+        public ProviderLiteViewModel(CompanySurveyIndexModel oElasticSurveySearchModel)
+        {
+            ElasticRelatedProviderSurvey = oElasticSurveySearchModel;
         }
     }
 }

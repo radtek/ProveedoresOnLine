@@ -98,6 +98,7 @@
     <Compile Include="General\NotificationViewModel.cs" />
     <Compile Include="Provider\ProviderAditionalDocumentViewModel.cs" />
     <Compile Include="Provider\ProviderCalificationViewModel.cs" />
+    <Compile Include="Survey\SurveySearchViewModel.cs" />
     <Compile Include="ThirdKnowledge\ThirdKnowledgeSearchViewModel.cs" />
     <Compile Include="ThirdKnowledge\ThirdKnowledgeViewModel.cs" />
     <Compile Include="Company\CompanyUtil.cs" />
@@ -135,7 +136,6 @@
     <Compile Include="Survey\SurveyConfigItemViewModel.cs" />
     <Compile Include="Survey\SurveyItemViewModel.cs" />
     <Compile Include="Survey\SurveyProgramModel.cs" />
-    <Compile Include="Survey\SurveySearchViewModel.cs" />
     <Compile Include="Survey\SurveyViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
