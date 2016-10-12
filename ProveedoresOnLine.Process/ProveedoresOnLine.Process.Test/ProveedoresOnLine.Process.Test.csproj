@@ -174,13 +174,16 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
     <Compile Include="CalificationProjectProcessJobTest.cs" />
     <Compile Include="CompanyIndexProcessJobTest.cs" />
+    <Compile Include="CompanySurveyIndexProcessJobTest.cs" />
     <Compile Include="RestrictiveListReadProcessJobTest.cs" />
     <Compile Include="RestrictiveListSendProcessJobTest.cs" />
     <Compile Include="SANOFIIntegrationProcessJobTest.cs" />

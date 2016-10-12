@@ -16,7 +16,7 @@ namespace ElasticSearchProjectDevTest
         [TestMethod]
         public void SearchPerson()
         {
-            ElasticSearchProjectDev.ElasticSearchProcess.SearchPerson("Sebastian");
+            ElasticSearchProjectDev.ElasticSearchProcess.SearchPerson("TODO INDUSTRIAS SAS");
         }
     }
 }

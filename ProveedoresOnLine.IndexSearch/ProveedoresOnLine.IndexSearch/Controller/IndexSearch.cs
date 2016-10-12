@@ -30,7 +30,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
         {
             List<CompanyIndexModel> oCompanyToIndex = GetCompanyIndex();
             try
-            {   
+            {
                 LogFile("Start Process: " + "ProvidersToIndex:::" + oCompanyToIndex.Count());
 
                 Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
@@ -66,7 +66,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
             return true;
         }
 
-        public static bool CustomerProviderIdexationFunction() 
+        public static bool CustomerProviderIdexationFunction()
         {
             int CustomerProviderId = 0;
             var Counter = 0;
@@ -101,7 +101,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
             }
             catch (Exception err)
             {
-                LogFile("Index Process Failed for CustomerProvider: " + CustomerProviderId + err.Message + "Inner Exception::" + err.InnerException);                
+                LogFile("Index Process Failed for CustomerProvider: " + CustomerProviderId + err.Message + "Inner Exception::" + err.InnerException);
             }
 
             LogFile("Index Process Successfull for: " + Counter + " Customers-Providers");
@@ -114,18 +114,48 @@ namespace ProveedoresOnLine.IndexSearch.Controller
 
         public static bool SurveyIndexationFunction()
         {
-            List<SurveyIndexSearchModel> oSurveyIndexSearch = GetSurveyIndex();
+            List<CompanySurveyIndexModel> oCompanySurveyIndexSearch = GetCompanySurveyIndex();
 
             try
             {
-                LogFile("Start Process: " + "ProvidersToIndex:::" + oSurveyIndexSearch.Count());
+                LogFile("Start Process: " + "ProviderSurveyToIndex:::" + oCompanySurveyIndexSearch.Count());
+
+                Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+
+                var settings = new ConnectionSettings(node);
+
+                settings.DefaultIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value);
+
+                ElasticClient client = new ElasticClient(settings);
+
+                ICreateIndexResponse oElasticResponse = client.
+                        CreateIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value, c => c
+                        .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                        .Analysis(a => a.
+                            Analyzers(an => an.
+                                Custom("customWhiteSpace", anc => anc.
+                                    Filters("asciifolding", "lowercase").
+                                    Tokenizer("whitespace")
+                                        )
+                                    ).TokenFilters(tf => tf
+                                    .EdgeNGram("customEdgeNGram", engrf => engrf
+                                    .MinGram(1)
+                                    .MaxGram(10))
+                                )
+                            ).NumberOfShards(1)
+                        )
+                    );
+
+                client.Map<CompanyIndexModel>(m => m.AutoMap());
+
+                var Index = client.IndexMany(oCompanySurveyIndexSearch, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value);
             }
             catch (Exception err)
             {
                 LogFile("Index Process Failed for Company: " + err.Message + "Inner Exception::" + err.InnerException);
             }
 
-            LogFile("Index Process Successfull for: " + oSurveyIndexSearch.Count());
+            LogFile("Index Process Successfull for: " + oCompanySurveyIndexSearch.Count());
 
             return true;
         }
