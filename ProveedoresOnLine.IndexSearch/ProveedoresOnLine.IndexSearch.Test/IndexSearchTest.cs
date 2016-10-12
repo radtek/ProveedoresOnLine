@@ -126,6 +126,50 @@ namespace ProveedoresOnLine.IndexSearch.Test
         }
 
         [TestMethod]
+        public void SearchCompanySurvey()
+        {
+            Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+            var settings = new ConnectionSettings(node);
+            settings.DisableDirectStreaming(true);
+            settings.DefaultIndex("dev_companysurveyindex");
+            ElasticClient CompanySurveyClient = new ElasticClient(settings);
+
+            Nest.ISearchResponse<CompanySurveyIndexModel> result = CompanySurveyClient.Search<CompanySurveyIndexModel>(s => s
+            .From(0)
+                .Size(20)
+                    .Aggregations
+                     (agg => agg
+                        .Nested("status_avg", x => x.
+                            Path(p => p.oCustomerProviderIndexModel).
+                            Aggregations(aggs => aggs.
+                                Terms("status", term => term.
+                                    Field(fi => fi.oCustomerProviderIndexModel.First().StatusId)
+                                )
+                            )
+                        )
+                        .Terms("city", aggv => aggv
+                            .Field(fi => fi.CityId))
+                        .Terms("country", c => c
+                            .Field(fi => fi.CountryId))
+                        .Terms("blacklist", bl => bl
+                            .Field(fi => fi.InBlackList)))
+                .Query(q =>
+                    q.Nested(n => n
+                        .Path(p => p.oCustomerProviderIndexModel)
+                            .Query(fq => fq
+                                .Match(match => match
+                                                    .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                                    .Query("DA5C572E")
+                                )
+                              ).ScoreMode(NestedScoreMode.Max)
+                           )
+                    )
+                .Query(q =>
+                     q.Term(p => p.CompanyName, "SAP"))
+                );
+        }
+
+        [TestMethod]
         public void TestGetCompanySurveyIndex()
         {
             List<CompanySurveyIndexModel> oReturn =

@@ -1,4 +1,5 @@
 ﻿using ProveedoresOnLine.Company.Models.Company;
+using ProveedoresOnLine.SurveyModule.Models.Index;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,10 @@ namespace MarketPlace.Models.Provider
         public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> BlackListFilter { get; set; }
         public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> CountryFilter { get; set; }        
 
+        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> SurveyType { get; set; }
+
+        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> SurveyStatus { get; set; }
+
         public string SearchParam { get; set; }
 
         public string SearchFilter { get; set; }
@@ -44,6 +49,7 @@ namespace MarketPlace.Models.Provider
 
         public Nest.ISearchResponse<CustomerProviderIndexModel> ElasticCustomerProviderModel { get; set; }
      
+        public Nest.ISearchResponse<CompanySurveyIndexModel> ElasticCompanySurveyModel { get; set; }
 
         #region Comparison
 

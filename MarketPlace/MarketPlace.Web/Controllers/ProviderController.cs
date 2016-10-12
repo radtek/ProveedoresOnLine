@@ -71,7 +71,9 @@ namespace MarketPlace.Web.Controllers
                     StatusFilter = new List<ElasticSearchFilter>(),
                     BlackListFilter = new List<ElasticSearchFilter>(),
                 };
+
                 #region ElasticSearch             
+                
                 #region Search Result Company
 
                 settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanyIndex].Value);
@@ -112,7 +114,8 @@ namespace MarketPlace.Web.Controllers
                      q.Term(p => p.CompanyName, SearchParam) ||
                      q.Term(p => p.CommercialCompanyName, SearchParam) ||
                      q.Term(p => p.IdentificationNumber, SearchParam))
-                );             
+                );  
+                           
                 #endregion
 
                 //parse view model
@@ -195,6 +198,7 @@ namespace MarketPlace.Web.Controllers
                 {
                     oModel.ProviderFilterResult = oFilterModel.Where(x => x.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).ToList();
                 }
+
                 #endregion Providers
 
                 if (!string.IsNullOrEmpty(ProjectPublicId))

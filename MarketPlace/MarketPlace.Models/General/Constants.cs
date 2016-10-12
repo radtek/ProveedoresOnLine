@@ -110,6 +110,8 @@
 
         public const string C_Settings_CustomerProviderIndex = "CustomerProviderIndex";
 
+        public const string C_Settings_CompanySurveyIndex = "CompanySurveyIndex";
+
         #endregion
 
         #endregion
