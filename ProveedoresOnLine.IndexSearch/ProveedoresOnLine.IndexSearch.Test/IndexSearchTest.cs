@@ -29,24 +29,7 @@ namespace ProveedoresOnLine.IndexSearch.Test
 
             Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
         }
-
-        [TestMethod]
-        public void GetAllSurveyIndexSearch()
-        {
-            List<SurveyIndexSearchModel> oReturn =
-                Controller.IndexSearch.GetSurveyIndex();
-
-            Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
-        }
-
-        [TestMethod]
-        public void GetAllSurveyInfoIndexSearch()
-        {
-            List<SurveyInfoIndexSearchModel> oReturn =
-                Controller.IndexSearch.GetSurveyInfoIndex();
-
-            Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
-        }
+             
         [TestMethod]
         public void CompanyIndexationFunction()
         {
@@ -124,6 +107,37 @@ namespace ProveedoresOnLine.IndexSearch.Test
                      q.Term(p => p.IdentificationNumber, "SAP"))
                 );
         }
+        
+        #region Survey
+
+        [TestMethod]
+        public void TestGetCompanySurveyIndex()
+        {
+            List<CompanySurveyIndexModel> oReturn =
+                ProveedoresOnLine.IndexSearch.Controller.IndexSearch.GetCompanySurveyIndex();
+
+            CompanySurveyIndexModel oModel = oReturn.Where(x => x.oSurveyIndexModel != null && x.oSurveyIndexModel.Count > 0).FirstOrDefault();
+
+            Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
+        }
+
+        [TestMethod]
+        public void GetAllSurveyIndexSearch()
+        {
+            List<SurveyIndexSearchModel> oReturn =
+                Controller.IndexSearch.GetSurveyIndex();
+
+            Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
+        }
+
+        [TestMethod]
+        public void GetAllSurveyInfoIndexSearch()
+        {
+            List<SurveyInfoIndexSearchModel> oReturn =
+                Controller.IndexSearch.GetSurveyInfoIndex();
+
+            Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
+        }
 
         [TestMethod]
         public void SearchCompanySurvey()
@@ -159,25 +173,15 @@ namespace ProveedoresOnLine.IndexSearch.Test
                             .Query(fq => fq
                                 .Match(match => match
                                                     .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                                                    .Query("DA5C572E")
+                                                    .Query("")
                                 )
                               ).ScoreMode(NestedScoreMode.Max)
                            )
                     )
                 .Query(q =>
-                     q.Term(p => p.CompanyName, "SAP"))
+                     q.Term(p => p.CompanyName, ""))
                 );
         }
-
-        [TestMethod]
-        public void TestGetCompanySurveyIndex()
-        {
-            List<CompanySurveyIndexModel> oReturn =
-                ProveedoresOnLine.IndexSearch.Controller.IndexSearch.GetCompanySurveyIndex();
-
-            CompanySurveyIndexModel oModel = oReturn.Where(x => x.oSurveyIndexModel != null && x.oSurveyIndexModel.Count > 0).FirstOrDefault();
-
-            Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
-        }
+        #endregion
     }
 }
