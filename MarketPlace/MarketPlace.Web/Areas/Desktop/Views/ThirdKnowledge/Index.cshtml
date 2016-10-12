@@ -1,4 +1,21 @@
-﻿@{
+﻿@model MarketPlace.Models.Provider.ProviderSearchViewModel
+
+@{
     ViewBag.Title = "Proveedores OnLine - Modulo de terceros";
     Layout = MVC.Desktop.Shared.Views._Layout;
 }
+
+<div class="row">
+    <div class="col-md-12">
+        <label>Conocimiento de terceros</label>
+    </div>
+</div>
+
+<div class="POMPProviderSearchBox">
+    <!--SearchBox-->
+    <input class="POMPTextField" id="Search_txtSearchBox" type="text" @*value="@Model.SearchParam"*@ onkeydown="if (event.keyCode == 13) javascript:Provider_SearchObject.Search()" placeholder="Buscar Proveedor por Razón Social, NIT o Actividad." />
+    <a class="POMPButtons POMPSearchButtons" href="javascript:Provider_SearchObject.Search();">
+        Encontrar
+        <span class="POMPSearchButtonsLupita"></span>
+    </a>
+</div>

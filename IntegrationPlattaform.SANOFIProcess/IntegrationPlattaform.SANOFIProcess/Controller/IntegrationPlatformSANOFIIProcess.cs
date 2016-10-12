@@ -581,7 +581,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                           "0010" + strSep +
                           "1" + strSep +
                           "1" + strSep +
-                          x.PayWay + strSep);
+                          ""+ strSep);
                     #endregion
 
                     return true;
