@@ -87,12 +87,10 @@ namespace MarketPlace.Web.Controllers
                     .Aggregations
                      (agg => agg
                         .Nested("status_avg", x => x.
-                            Path(p => p.oCustomerProviderIndexModel).
-                            Aggregations(aggs => aggs.
-                                Terms("status", term => term.
-                                    Field(fi => fi.oCustomerProviderIndexModel.First().StatusId)
+                            Path(p => p.oCustomerProviderIndexModel.Where(y => y.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).Select(y => y).FirstOrDefault()).                            
+                            Aggregations(aggs => aggs.Terms("status", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().StatusId) 
                                 )
-                            )
+                            )                        
                         )
                         .Terms("city", aggv => aggv
                             .Field(fi => fi.CityId))
@@ -111,10 +109,10 @@ namespace MarketPlace.Web.Controllers
                               ).ScoreMode(NestedScoreMode.Max)
                            )                    
                     )
-                .Query(q =>
-                     q.Term(p => p.CompanyName, SearchParam != null ? SearchParam.ToLowerInvariant() : SearchParam) ||
-                     q.Term(p => p.CommercialCompanyName, SearchParam != null ? SearchParam.ToLowerInvariant() : SearchParam) ||
-                     q.Term(p => p.IdentificationNumber, SearchParam != null ? SearchParam.ToLowerInvariant() : SearchParam))
+                .Query(q => q.QueryString(qs => qs.Query(SearchParam)))
+                     //q.Term(p => p.CompanyName, SearchParam != null ? SearchParam.ToLowerInvariant() : SearchParam) ||
+                     //q.Term(p => p.CommercialCompanyName, SearchParam != null ? SearchParam.ToLowerInvariant() : SearchParam) ||
+                     //q.Term(p => p.IdentificationNumber, SearchParam != null ? SearchParam.ToLowerInvariant() : SearchParam))
                 );  
                            
                 #endregion
