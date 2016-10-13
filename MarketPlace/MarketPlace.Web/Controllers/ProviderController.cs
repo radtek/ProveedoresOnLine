@@ -72,7 +72,7 @@ namespace MarketPlace.Web.Controllers
                     BlackListFilter = new List<ElasticSearchFilter>(),
                 };
 
-                #region ElasticSearch             
+                #region ElasticSearch
                 
                 #region Search Result Company
 
@@ -82,16 +82,15 @@ namespace MarketPlace.Web.Controllers
 
                 oModel.ElasticCompanyModel = client.Search<CompanyIndexModel>(s => s
                 .From(0)
+                .TrackScores(true)
                 .Size(20)
                     .Aggregations
                      (agg => agg
                         .Nested("status_avg", x => x.
-                            Path(p => p.oCustomerProviderIndexModel).
-                            Aggregations(aggs => aggs.
-                                Terms("status", term => term.
-                                    Field(fi => fi.oCustomerProviderIndexModel.First().StatusId)
+                            Path(p => p.oCustomerProviderIndexModel.Where(y => y.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).Select(y => y).FirstOrDefault()).                            
+                            Aggregations(aggs => aggs.Terms("status", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().StatusId) 
                                 )
-                            )
+                            )                        
                         )
                         .Terms("city", aggv => aggv
                             .Field(fi => fi.CityId))
@@ -104,16 +103,16 @@ namespace MarketPlace.Web.Controllers
                         .Path(p => p.oCustomerProviderIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
-                                                    .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                                                    .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                .Query(SessionModel.CurrentCompany.CompanyPublicId)
                                 )
                               ).ScoreMode(NestedScoreMode.Max)
                            )                    
                     )
-                .Query(q =>
-                     q.Term(p => p.CompanyName, SearchParam) ||
-                     q.Term(p => p.CommercialCompanyName, SearchParam) ||
-                     q.Term(p => p.IdentificationNumber, SearchParam))
+                .Query(q => q.QueryString(qs => qs.Query(SearchParam)))
+                     //q.Term(p => p.CompanyName, SearchParam != null ? SearchParam.ToLowerInvariant() : SearchParam) ||
+                     //q.Term(p => p.CommercialCompanyName, SearchParam != null ? SearchParam.ToLowerInvariant() : SearchParam) ||
+                     //q.Term(p => p.IdentificationNumber, SearchParam != null ? SearchParam.ToLowerInvariant() : SearchParam))
                 );  
                            
                 #endregion

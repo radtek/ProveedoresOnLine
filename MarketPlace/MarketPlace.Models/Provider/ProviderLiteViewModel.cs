@@ -1,4 +1,5 @@
-﻿using ProveedoresOnLine.Company.Models.Company;
+﻿using MarketPlace.Models.General;
+using ProveedoresOnLine.Company.Models.Company;
 using ProveedoresOnLine.SurveyModule.Models.Index;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,7 @@ namespace MarketPlace.Models.Provider
             {
                 if (ElasticRealtedProvider != null)
                 {
-                    return int.Parse(ElasticRealtedProvider.ProviderStatus);
+                    return int.Parse(ElasticRealtedProvider.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).Select(x => x.Status).FirstOrDefault());
                 }
                 else
                 {
@@ -63,7 +64,7 @@ namespace MarketPlace.Models.Provider
             {
                 if (ElasticRealtedProvider != null)
                 {
-                    if (ElasticRealtedProvider.ProviderStatus ==
+                    if (ElasticRealtedProvider.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).Select(x => x.StatusId).FirstOrDefault().ToString() ==
                     MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ProviderStatus_Certified].Value ||
                     ElasticRealtedProvider.ProviderStatus == "902004" ||
                     ElasticRealtedProvider.ProviderStatus == "902008")
@@ -75,7 +76,7 @@ namespace MarketPlace.Models.Provider
                         return false;
                     }
                 }
-                if (ProviderStatusId.ToString() ==
+                if (ElasticRealtedProvider.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).Select(x => x.StatusId).FirstOrDefault().ToString() ==
                     MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ProviderStatus_Certified].Value ||
                     ProviderStatusId.ToString() == "902004" ||
                     ProviderStatusId.ToString() == "902008")
