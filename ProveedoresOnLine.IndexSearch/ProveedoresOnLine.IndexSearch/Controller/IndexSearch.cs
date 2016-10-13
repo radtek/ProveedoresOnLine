@@ -124,12 +124,12 @@ namespace ProveedoresOnLine.IndexSearch.Controller
 
                 var settings = new ConnectionSettings(node);
 
-                settings.DefaultIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value);
+                settings.DefaultIndex("dev_companysurveyindex");
 
                 ElasticClient client = new ElasticClient(settings);
 
                 ICreateIndexResponse oElasticResponse = client.
-                        CreateIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value, c => c
+                        CreateIndex("dev_companysurveyindex", c => c
                         .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
                         .Analysis(a => a.
                             Analyzers(an => an.
@@ -146,9 +146,9 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                         )
                     );
 
-                client.Map<CompanyIndexModel>(m => m.AutoMap());
+                client.Map<CompanySurveyIndexModel>(m => m.AutoMap());
 
-                var Index = client.IndexMany(oCompanySurveyIndexSearch, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value);
+                var Index = client.IndexMany(oCompanySurveyIndexSearch, "dev_companysurveyindex");
             }
             catch (Exception err)
             {
