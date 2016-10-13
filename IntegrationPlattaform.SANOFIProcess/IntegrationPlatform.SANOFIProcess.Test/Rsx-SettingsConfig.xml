@@ -9,6 +9,6 @@
   </Module>
 
   <Module name="SanofiMessage">
-    <key name="location">C:\Publicar Proyectos\ProveedoresOnLine\IntegrationPlattaform.SANOFIProcess\IntegrationPlatform.SANOFIProcess.Test\Rsx-IntegrationPlatformSANOFIMessage.xml</key>
+    <key name="location">D:\ProveedoresOnLine\repos\IntegrationPlattaform.SANOFIProcess\IntegrationPlatform.SANOFIProcess.Test\Rsx-IntegrationPlatformSANOFIMessage.xml</key>
   </Module>
 </SettingsConfig>
