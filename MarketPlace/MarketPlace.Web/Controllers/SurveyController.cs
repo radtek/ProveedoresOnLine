@@ -139,6 +139,8 @@ namespace MarketPlace.Web.Controllers
                     CountryFilter = new List<ElasticSearchFilter>(),
                     StatusFilter = new List<ElasticSearchFilter>(),
                     BlackListFilter = new List<ElasticSearchFilter>(),
+                    SurveyStatus = new List<ElasticSearchFilter>(),
+                    SurveyType = new List<ElasticSearchFilter>()
                 };
 
                 #region Elastic Search
@@ -162,6 +164,14 @@ namespace MarketPlace.Web.Controllers
                                 )
                             )
                         )
+                        .Nested("survey_avg", x => x.
+                            Path(p => p.oSurveyIndexModel).
+                            Aggregations(aggs => aggs.
+                                Terms("survey", term => term.
+                                Field(fi => fi.oSurveyIndexModel.First().SurveyId)
+                                )
+                            )
+                        )
                         .Terms("city", aggv => aggv
                             .Field(fi => fi.CityId))
                         .Terms("country", c => c
@@ -178,6 +188,17 @@ namespace MarketPlace.Web.Controllers
                                 )
                               ).ScoreMode(NestedScoreMode.Max)
                            )
+                    )
+                .Query(q =>
+                    q.Nested(n => n
+                        .Path(p => p.oSurveyIndexModel)
+                            .Query(fq => fq
+                                .Match(match => match
+                                                    .Field(field => field.oSurveyIndexModel.First().CustomerPublicId)
+                                                    .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                )
+                            ).ScoreMode(NestedScoreMode.Max)
+                        )
                     )
                 .Query(q =>
                      q.Term(p => p.CompanyName, SearchParam) ||
@@ -260,31 +281,16 @@ namespace MarketPlace.Web.Controllers
 
                 #region Survey Type Aggregation
 
-                //oModel.ElasticCompanySurveyModel.Aggs.Nested("surveytype_avg").Terms("surveytype").Buckets.All(x =>
-                //{
-                //    oModel.SurveyType.Add(new ElasticSearchFilter()
-                //    {
-                //        FilterCount = (int)x.DocCount,
-                //        FilterType = x.Key,
-                //    });
+                oModel.ElasticCompanySurveyModel.Aggs.Nested("survey_avg").Terms("survey").Buckets.All(x =>
+                {
+                    oModel.SurveyStatus.Add(new ElasticSearchFilter()
+                    {
+                        FilterCount = (int)x.DocCount,
+                        FilterType = x.Key.Split('.')[0],
+                    });
 
-                //    return true;
-                //});
-
-                #endregion
-
-                #region Survey Status Aggregation
-
-                //oModel.ElasticCompanySurveyModel.Aggs.Terms("surveystatus").Buckets.All(x =>
-                //{
-                //    oModel.SurveyStatus.Add(new ElasticSearchFilter()
-                //    {
-                //        FilterCount = (int)x.DocCount,
-                //        FilterType = x.Key,
-                //    });
-
-                //    return true;
-                //});
+                    return true;
+                });
 
                 #endregion
 

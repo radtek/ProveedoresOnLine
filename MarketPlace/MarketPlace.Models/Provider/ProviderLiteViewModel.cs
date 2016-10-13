@@ -14,8 +14,6 @@ namespace MarketPlace.Models.Provider
 
         public CompanyIndexModel ElasticRealtedProvider { get; private set; }
 
-        public CompanySurveyIndexModel ElasticRelatedProviderSurvey { get; private set; }
-
         /// <summary>
         /// provider is related for session customer
         /// </summary>
@@ -186,7 +184,31 @@ namespace MarketPlace.Models.Provider
 
         public ProviderLiteViewModel(CompanySurveyIndexModel oElasticSurveySearchModel)
         {
-            ElasticRelatedProviderSurvey = oElasticSurveySearchModel;
+            ElasticRealtedProvider = new CompanyIndexModel()
+            {
+                CatlificationRating = oElasticSurveySearchModel.CatlificationRating,
+                City = oElasticSurveySearchModel.City,
+                CityId = oElasticSurveySearchModel.CityId,
+                CommercialCompanyName = oElasticSurveySearchModel.CommercialCompanyName,
+                CompanyEnable = oElasticSurveySearchModel.CompanyEnable,
+                CompanyName = oElasticSurveySearchModel.CompanyName,
+                CompanyPublicId = oElasticSurveySearchModel.CompanyPublicId,
+                Country = oElasticSurveySearchModel.Country,
+                CountryId = oElasticSurveySearchModel.CountryId,
+                CustomerPublicId = oElasticSurveySearchModel.CustomerPublicId,
+                ICA = oElasticSurveySearchModel.ICA,
+                ICAId = oElasticSurveySearchModel.ICAId,
+                IdentificationNumber = oElasticSurveySearchModel.IdentificationNumber,
+                IdentificationType = oElasticSurveySearchModel.IdentificationType,
+                IdentificationTypeId = oElasticSurveySearchModel.IdentificationTypeId,
+                InBlackList = oElasticSurveySearchModel.InBlackList,
+                LogoUrl = oElasticSurveySearchModel.LogoUrl,
+                oCustomerProviderIndexModel = oElasticSurveySearchModel.oCustomerProviderIndexModel,
+                PrincipalActivity = oElasticSurveySearchModel.PrincipalActivity,
+                PrincipalActivityId = oElasticSurveySearchModel.PrincipalActivityId,
+                ProviderStatus = oElasticSurveySearchModel.ProviderStatus,
+                ProviderStatusId = oElasticSurveySearchModel.ProviderStatusId,
+            };
         }
     }
 }

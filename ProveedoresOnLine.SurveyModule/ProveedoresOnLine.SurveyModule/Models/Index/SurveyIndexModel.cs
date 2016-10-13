@@ -22,7 +22,10 @@ namespace ProveedoresOnLine.SurveyModule.Models.Index
         public string SurveyPublicId { get; set; }
 
         [String]
-        public string CompanyPublicID { get; set; }
+        public string CompanyPublicId { get; set; }
+
+        [String]
+        public string CustomerPublicId { get; set; }
 
         [Number]
         public int SurveyTypeId { get; set; }

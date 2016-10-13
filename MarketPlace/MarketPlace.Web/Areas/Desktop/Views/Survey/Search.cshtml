@@ -34,17 +34,6 @@
 
 @section inlinescripts
 {
-    @Html.Partial(MVC.Desktop.Shared.Views._P_Search_Filter, Model)
-    @Html.Partial(MVC.Desktop.Shared.Views._P_Search_Result, Model)
-    @if (Model.RelatedProject != null)
-    {
-        @Html.Partial(MVC.Desktop.Shared.Views._P_Search_Project, Model)
-    }
-    else
-    {
-        @Html.Partial(MVC.Desktop.Shared.Views._P_Search_Comparison, Model)
-    }
-
     <script type="text/javascript">
         $(document).ready(function () {
             Provider_SearchObject.Init({

@@ -186,6 +186,29 @@
                     </ul>
                 </li>
             }
+
+            if (Model.SurveyStatus != null && Model.SurveyStatus.Count > 0)
+            {
+                <li>
+                    <span>Estado de evaluación </span>
+                    <ul>
+                        @foreach (var oFilterItem in Model.SurveyStatus)
+                        {
+                            <li>
+                                @if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
+                                {
+                                    <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterCount + ";" + oFilterItem.FilterCount)'}});" />
+                                    <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                }
+                                @*else
+                                    {
+                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType.ItemId + ";" + oFilterItem.FilterValue.ItemId)'}});" />
+                                    }*@
+                            </li>
+                        }
+                    </ul>
+                </li>
+            }
         }
     </ul>
 }

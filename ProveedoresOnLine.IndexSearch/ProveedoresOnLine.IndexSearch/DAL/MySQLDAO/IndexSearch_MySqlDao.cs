@@ -246,12 +246,14 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                                  SurveyStatusId = si.Field<int>("SurveyStatusId"),
                                  SurveyStatus = si.Field<string>("SurveyStatus"),
                                  CompanyPublicId = si.Field<string>("CompanyPublicId"),
+                                 CustomerPublicId = si.Field<string>("CustomerPublicId"),
                              }
                              into sig
                              select new SurveyIndexModel()
                              {
                                  SurveyId = sig.Key.SurveyId,
-                                 CompanyPublicID = sig.Key.CompanyPublicId,
+                                 CompanyPublicId = sig.Key.CompanyPublicId,
+                                 CustomerPublicId = sig.Key.CustomerPublicId,
                                  SurveyPublicId = sig.Key.SurveyPublicId,
                                  SurveyTypeId = sig.Key.SurveyTypeId,
                                  SurveyType = sig.Key.SurveyType,
