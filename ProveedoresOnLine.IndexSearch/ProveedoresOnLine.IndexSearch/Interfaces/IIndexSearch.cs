@@ -35,6 +35,6 @@ namespace ProveedoresOnLine.IndexSearch.Interfaces
 
         #endregion
 
-        #endregion
+        #endregion     
     }
 }

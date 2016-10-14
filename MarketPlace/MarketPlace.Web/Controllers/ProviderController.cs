@@ -73,7 +73,7 @@ namespace MarketPlace.Web.Controllers
                 };
 
                 #region ElasticSearch
-                
+
                 #region Search Result Company
 
                 settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanyIndex].Value);
@@ -83,22 +83,22 @@ namespace MarketPlace.Web.Controllers
                 oModel.ElasticCompanyModel = client.Search<CompanyIndexModel>(s => s
                 .From(0)
                 .TrackScores(true)
-                .Size(20)
-                    .Aggregations
-                     (agg => agg
-                        .Nested("status_avg", x => x.
-                            Path(p => p.oCustomerProviderIndexModel.Where(y => y.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).Select(y => y).FirstOrDefault()).                            
-                            Aggregations(aggs => aggs.Terms("status", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().StatusId) 
-                                )
-                            )                        
+                .Size(20)               
+                .Aggregations
+                    (agg => agg
+                    .Nested("status_avg", x => x.
+                        Path(p => p.oCustomerProviderIndexModel).
+                        Aggregations(aggs => aggs.Terms("status", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().StatusId)
+                            )
                         )
-                        .Terms("city", aggv => aggv
-                            .Field(fi => fi.CityId))
-                        .Terms("country", c => c
-                            .Field(fi => fi.CountryId))
-                        .Terms("blacklist", bl => bl
-                            .Field(fi => fi.InBlackList)))
-                .Query(q =>                     
+                    )
+                    .Terms("city", aggv => aggv
+                        .Field(fi => fi.CityId))
+                    .Terms("country", c => c
+                        .Field(fi => fi.CountryId))
+                    .Terms("blacklist", bl => bl
+                        .Field(fi => fi.InBlackList)))
+                .Query(q =>
                     q.Nested(n => n
                         .Path(p => p.oCustomerProviderIndexModel)
                             .Query(fq => fq
@@ -107,14 +107,28 @@ namespace MarketPlace.Web.Controllers
                                 .Query(SessionModel.CurrentCompany.CompanyPublicId)
                                 )
                               ).ScoreMode(NestedScoreMode.Max)
-                           )                    
+                           )
                     )
-                .Query(q => q.QueryString(qs => qs.Query(SearchParam)))
-                     //q.Term(p => p.CompanyName, SearchParam != null ? SearchParam.ToLowerInvariant() : SearchParam) ||
-                     //q.Term(p => p.CommercialCompanyName, SearchParam != null ? SearchParam.ToLowerInvariant() : SearchParam) ||
-                     //q.Term(p => p.IdentificationNumber, SearchParam != null ? SearchParam.ToLowerInvariant() : SearchParam))
-                );  
-                           
+                .Query(q => 
+                    q.Bool( b => b
+                        .Filter(f => 
+                            {
+                                QueryContainer qb = null;
+                                qb = q.QueryString(qs => qs.Query(SearchParam));
+                                if (true)
+                                {
+                                    qb &= q.Term(p => p.ProviderStatusId, 902006);
+                                }
+                                return qb;
+                            })                                                 
+                        )
+                    )
+                     .Query(q => q.QueryString(qs => qs.Query(SearchParam)))                     
+                    //q.Term(p => p.CompanyName, SearchParam != null ? SearchParam.ToLowerInvariant() : SearchParam) ||
+                    //q.Term(p => p.CommercialCompanyName, SearchParam != null ? SearchParam.ToLowerInvariant() : SearchParam) ||
+                    //q.Term(p => p.IdentificationNumber, SearchParam != null ? SearchParam.ToLowerInvariant() : SearchParam))
+                );
+
                 #endregion
 
                 //parse view model
@@ -159,16 +173,26 @@ namespace MarketPlace.Web.Controllers
 
                 #region Status Aggregation
 
-                oModel.ElasticCompanyModel.Aggs.Nested("status_avg").Terms("status").Buckets.All(x =>
-                {                    
-                    oModel.StatusFilter.Add(new ElasticSearchFilter
+                //Item1: StatusID
+                //Item2: StatusName
+                List<Tuple<string, string>> oStatus = new List<Tuple<string, string>>();
+
+                var olist = oModel.ProviderSearchResult.GroupBy(x => x.ProviderStatusId);
+
+                if (olist != null)
+                {
+                    olist.All(x =>
                     {
-                        FilterCount = (int)x.DocCount,
-                        FilterType = x.Key.Split('.')[0],
-                        FilterName = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(x.Key.Split('.')[0]),
+                        oModel.StatusFilter.Add(new ElasticSearchFilter
+                        {
+                            FilterCount = oModel.ProviderSearchResult.Where(y => y.ProviderStatusId == x.Key).Select(y => y).ToList().Count(),
+                            FilterType = x.Key.ToString(),
+                            FilterName = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(x.Key.ToString()),
+                        });
+                        return true;
                     });
-                    return true;
-                });
+                }
+
                 #endregion
 
                 #region BlackList Aggregation

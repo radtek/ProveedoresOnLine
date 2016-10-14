@@ -38,7 +38,9 @@ namespace MarketPlace.Models.Provider
             {
                 if (ElasticRealtedProvider != null)
                 {
-                    return int.Parse(ElasticRealtedProvider.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).Select(x => x.Status).FirstOrDefault());
+                    return ElasticRealtedProvider.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).Select(x => x.StatusId).FirstOrDefault();
+
+                    //return int.Parse(ElasticRealtedProvider.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).Select(x => x.Status).FirstOrDefault());
                 }
                 else
                 {
