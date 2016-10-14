@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using ProveedoresOnLine.Company.Models.Util;
 
 namespace ProveedoresOnLine.SurveyModule.Test
 {
@@ -42,5 +43,17 @@ namespace ProveedoresOnLine.SurveyModule.Test
 
             Assert.IsTrue(oReturn != null);
         }
+
+        #region Util
+
+        [TestMethod]
+        public void GetSurveyName()
+        {
+            List<CatalogModel> oReturn = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.CatalogGetSurveyName();
+
+            Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
+        }
+
+        #endregion
     }
 }

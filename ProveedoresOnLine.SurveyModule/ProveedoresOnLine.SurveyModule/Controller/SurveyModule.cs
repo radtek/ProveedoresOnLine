@@ -945,5 +945,14 @@ namespace ProveedoresOnLine.SurveyModule.Controller
         }
 
         #endregion
+
+        #region Util
+
+        public static List<ProveedoresOnLine.Company.Models.Util.CatalogModel> CatalogGetSurveyName()
+        {
+            return DAL.Controller.SurveyDataController.Instance.CatalogGetSurveyName();
+        }
+
+        #endregion
     }
 }
