@@ -159,36 +159,47 @@
 
         <!--Actions for related provider -->
         <ul class="POMPSearchResultLineTwo">
-            @if (!Model.Item2.IsProviderCustomer)
+            @if (Model.Item1.ElasticCompanyModel != null)
             {
-                <li>
-                    <!--Actions for not related provider -->
-                    <!--<a href="" title="">Hacerlo mi proveedor</a>-->
-                </li>
-            }
-            else
-            {
-                if (oCurrentModule.Any(x => x == (int)MarketPlace.Models.General.enumModule.ComparisionInfo))
+                if (!Model.Item2.IsProviderCustomer)
                 {
-                    if (Model.Item2.ProviderAddRemoveEnable)
+                    <li>
+                        <!--Actions for not related provider -->
+                        <!--<a href="" title="">Hacerlo mi proveedor</a>-->
+                    </li>
+                }
+                else
+                {
+                    if (oCurrentModule.Any(x => x == (int)MarketPlace.Models.General.enumModule.ComparisionInfo))
                     {
-                        if (Model.Item2.IsProviderCustomer && Model.Item2.ProviderLiteType == MarketPlace.Models.General.enumProviderLiteType.Project)
+                        if (Model.Item2.ProviderAddRemoveEnable)
                         {
-                            <li>
-                                <a style="display:@(oIsInLeftPanel ? "none" : string.Empty)" href="javascript:Provider_SearchObject.AddProjectProvider('@Model.Item2.ElasticRealtedProvider.CompanyPublicId');" title="">Agregar al proceso de selección</a>
-                            </li>
-                        }
-                        else if (Model.Item2.IsProviderCustomer && Model.Item2.ProviderLiteType == MarketPlace.Models.General.enumProviderLiteType.Comparison)
-                        {
-                            <li>
-                                <a style="display:@(oIsInLeftPanel ? "none" : string.Empty)" href="javascript:Provider_SearchObject.AddCompareProvider('@Model.Item2.ElasticRealtedProvider.CompanyPublicId');" title="">Agregar a Comparación</a>
-                            </li>
+                            if (Model.Item2.IsProviderCustomer && Model.Item2.ProviderLiteType == MarketPlace.Models.General.enumProviderLiteType.Project)
+                            {
+                                <li>
+                                    <a style="display:@(oIsInLeftPanel ? "none" : string.Empty)" href="javascript:Provider_SearchObject.AddProjectProvider('@Model.Item2.ElasticRealtedProvider.CompanyPublicId');" title="">Agregar al proceso de selección</a>
+                                </li>
+                            }
+                            else if (Model.Item2.IsProviderCustomer && Model.Item2.ProviderLiteType == MarketPlace.Models.General.enumProviderLiteType.Comparison)
+                            {
+                                <li>
+                                    <a style="display:@(oIsInLeftPanel ? "none" : string.Empty)" href="javascript:Provider_SearchObject.AddCompareProvider('@Model.Item2.ElasticRealtedProvider.CompanyPublicId');" title="">Agregar a Comparación</a>
+                                </li>
+                            }
                         }
                     }
                 }
-
+            }
+            else if (Model.Item1.ElasticCompanySurveyModel != null)
+            {
                 <li>
-                    <a href="@(Url.RouteUrl
+                    <a>Agregar a evaluación</a>
+                </li>
+
+            }            
+
+            <li>
+                <a href="@(Url.RouteUrl
                             (MarketPlace.Models.General.Constants.C_Routes_Default,
                             new
                             {
@@ -196,8 +207,7 @@
                                 action = MVC.Provider.ActionNames.GIProviderInfo,
                                 ProviderPublicId = Model.Item2.ElasticRealtedProvider.CompanyPublicId
                             }))">Ver detalle</a>
-                </li>
-            }
+            </li>                
         </ul>
     </div>
 </div>

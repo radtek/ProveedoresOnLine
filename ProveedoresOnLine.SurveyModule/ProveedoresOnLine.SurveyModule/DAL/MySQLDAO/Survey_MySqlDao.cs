@@ -1797,5 +1797,42 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
         }
 
         #endregion
+
+        #region Util
+
+        public List<ProveedoresOnLine.Company.Models.Util.CatalogModel> CatalogGetSurveyName()
+        {
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "U_Catalog_GetSurveyName",
+                CommandType = CommandType.StoredProcedure,
+            });
+
+            List<CatalogModel> oReturn = null;
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn =
+                    (from sn in response.DataTableResult.AsEnumerable()
+                     where !sn.IsNull("SurveyConfigId")
+                     group sn by new
+                     {
+                         SurveyConfigId = sn.Field<int>("SurveyConfigId"),
+                         SurveyName = sn.Field<string>("SurveyName"),
+                     }
+                     into sng
+                     select new CatalogModel()
+                     {
+                         ItemId = sng.Key.SurveyConfigId,
+                         ItemName = sng.Key.SurveyName,
+                     }).ToList();
+            }
+
+            return oReturn;
+        }
+
+        #endregion
     }
 }

@@ -71,5 +71,11 @@ namespace ProveedoresOnLine.SurveyModule.Interfaces
         void SurveyIndex();
 
         #endregion
+
+        #region Util
+
+        List<ProveedoresOnLine.Company.Models.Util.CatalogModel> CatalogGetSurveyName();
+
+        #endregion
     }
 }

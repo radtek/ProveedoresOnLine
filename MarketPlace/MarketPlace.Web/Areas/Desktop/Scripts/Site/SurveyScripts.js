@@ -592,3 +592,95 @@ var Survey_File = {
         });
     },
 };
+
+/*************************** Survey Search create survey *************************************/
+var Survey_SearchObject = {
+
+    AddSurveyProvider: function (vProviderPublicId){
+        //add provider to survey
+
+    },
+
+    AddProjectProvider: function (vProviderPublicId) {
+        if (Provider_SearchObject.ProjectPublicId != null && Provider_SearchObject.ProjectPublicId.length > 0) {
+            //add company to existing compare process
+            $.ajax({
+                url: BaseUrl.ApiUrl + '/ProjectApi?ProjectAddCompany=true&ProjectPublicId=' + Provider_SearchObject.ProjectPublicId + '&ProviderPublicId=' + vProviderPublicId,
+                dataType: 'json',
+                success: function (result) {
+                    if (result != null) {
+                        Provider_SearchObject.OpenProject();
+                    }
+                },
+                error: function (result) {
+                    Dialog_ShowMessage('Proceso de selección', 'Se ha generado un error agregando al proveedor al proceso de selección, por favor intentelo nuevamente.', null);
+                }
+            });
+        }
+        else {
+            //new compare process
+            Dialog_ShowMessage('Proceso de selección', 'No hay ningun proceso de selección abierto.', null);
+        }
+    },
+
+    OpenProject: function () {
+        if (Provider_SearchObject.ProjectPublicId != null && Provider_SearchObject.ProjectPublicId.length > 0) {
+            $.ajax({
+                url: BaseUrl.ApiUrl + '/ProjectApi?ProjectGet=true&ProjectPublicId=' + Provider_SearchObject.ProjectPublicId,
+                dataType: 'json',
+                success: function (result) {
+                    if (result != null) {
+                        //clean compare items
+                        $('#' + Provider_SearchObject.ObjectId + '_Project_ItemContainer').html('');
+
+                        //render compare items
+                        $.each(result.RelatedProjectProvider, function (item, value) {
+                            //get item html
+                            var oItemHtml = $('#' + Provider_SearchObject.ObjectId + '_Project_Item_Template').html();
+
+                            //replace provider info
+
+                            oItemHtml = oItemHtml.replace(/{ProviderPublicId}/gi, value.RelatedProvider.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyPublicId);
+                            oItemHtml = oItemHtml.replace(/{ProviderLogoUrl}/gi, value.RelatedProvider.RelatedLiteProvider.ProviderLogoUrl);
+                            oItemHtml = oItemHtml.replace(/{CompanyName}/gi, value.RelatedProvider.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName);
+                            oItemHtml = oItemHtml.replace(/{IdentificationType}/gi, value.RelatedProvider.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationType.ItemName);
+                            oItemHtml = oItemHtml.replace(/{IdentificationNumber}/gi, value.RelatedProvider.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationNumber);
+                            oItemHtml = oItemHtml.replace(/{ProviderRateClass}/gi, 'rateit');
+                            oItemHtml = oItemHtml.replace(/{ProviderRate}/gi, value.RelatedProvider.RelatedLiteProvider.ProviderRate);
+                            oItemHtml = oItemHtml.replace(/{ProviderRateCount}/gi, value.RelatedProvider.RelatedLiteProvider.ProviderRateCount);
+
+                            //validate item certified
+                            if (value.RelatedProvider.RelatedLiteProvider.ProviderIsCertified != null && value.RelatedProvider.RelatedLiteProvider.ProviderIsCertified == true) {
+                                oItemHtml = oItemHtml.replace(/{ProviderIsCertified}/gi, '');
+                            }
+                            else {
+                                oItemHtml = oItemHtml.replace(/{ProviderIsCertified}/gi, 'none');
+                            }
+
+                            //validate black list
+                            if (value.RelatedProvider.RelatedLiteProvider.ProviderAlertRisk != Provider_SearchObject.BlackListStatusShowAlert) {
+                                oItemHtml = oItemHtml.replace(/{ProviderAlertRisk}/gi, 'none');
+                            }
+                            else {
+                                oItemHtml = oItemHtml.replace(/{ProviderAlertRisk}/gi, '');
+                            }
+
+                            $('#' + Provider_SearchObject.ObjectId + '_Project_ItemContainer').append(oItemHtml);
+
+                            //remove search result add project button
+                            $("a[href*='Provider_SearchObject.AddProjectProvider(\\\'" + value.RelatedProvider.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyPublicId + "\\\')']").hide();
+                        });
+
+                        //re-init all rates
+                        $('.rateit').rateit();
+
+                        //init generic tooltip
+                        Tooltip_InitGeneric();
+                    }
+                },
+                error: function (result) {
+                }
+            });
+        }
+    },
+};

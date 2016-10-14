@@ -146,7 +146,7 @@ namespace MarketPlace.Web.Controllers
                 #region Elastic Search
 
                 #region Search result company
-                
+
                 settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanySurveyIndex].Value);
                 settings.DisableDirectStreaming(true);
                 ElasticClient client = new ElasticClient(settings);
@@ -172,12 +172,22 @@ namespace MarketPlace.Web.Controllers
                                 )
                             )
                         )
+                        .Nested("surveystatus_avg", x => x.
+                            Path(p => p.oSurveyIndexModel).
+                            Aggregations(aggs => aggs.
+                                Terms("surveystatus", term => term.
+                                Field(fi => fi.oSurveyIndexModel.First().SurveyStatusId)
+                                )
+                            )
+                        )
                         .Terms("city", aggv => aggv
                             .Field(fi => fi.CityId))
                         .Terms("country", c => c
                             .Field(fi => fi.CountryId))
                         .Terms("blacklist", bl => bl
-                            .Field(fi => fi.InBlackList)))
+                            .Field(fi => fi.InBlackList)
+                        )
+                    )
                 .Query(q =>
                     q.Nested(n => n
                         .Path(p => p.oCustomerProviderIndexModel)
@@ -200,11 +210,7 @@ namespace MarketPlace.Web.Controllers
                             ).ScoreMode(NestedScoreMode.Max)
                         )
                     )
-                .Query(q =>
-                     q.Term(p => p.CompanyName, SearchParam) ||
-                     q.Term(p => p.CommercialCompanyName, SearchParam) ||
-                     q.Term(p => p.IdentificationNumber, SearchParam))
-                );
+                .Query(q => q.QueryString(qs => qs.Query(SearchParam))));
 
                 #endregion
 
@@ -281,12 +287,29 @@ namespace MarketPlace.Web.Controllers
 
                 #region Survey Type Aggregation
 
-                oModel.ElasticCompanySurveyModel.Aggs.Nested("survey_avg").Terms("survey").Buckets.All(x =>
+                oModel.ElasticCompanySurveyModel.Aggs.Nested("surveystatus_avg").Terms("surveystatus").Buckets.All(x =>
                 {
                     oModel.SurveyStatus.Add(new ElasticSearchFilter()
                     {
                         FilterCount = (int)x.DocCount,
                         FilterType = x.Key.Split('.')[0],
+                        FilterName = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(x.Key.Split('.')[0]),
+                    });
+
+                    return true;
+                });
+
+                #endregion
+
+                #region Survey status Aggregation
+
+                oModel.ElasticCompanySurveyModel.Aggs.Nested("survey_avg").Terms("survey").Buckets.All(x =>
+                {
+                    oModel.SurveyType.Add(new ElasticSearchFilter()
+                    {
+                        FilterCount = (int)x.DocCount,
+                        FilterType = x.Key.Split('.')[0],
+                        FilterName = MarketPlace.Models.Survey.SurveyUtil.GetSurveyOptionName(x.Key.Split('.')[0]),
                     });
 
                     return true;
