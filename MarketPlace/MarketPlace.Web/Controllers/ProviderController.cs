@@ -109,24 +109,51 @@ namespace MarketPlace.Web.Controllers
                               ).ScoreMode(NestedScoreMode.Max)
                            )
                     )
-                .Query(q => 
-                    q.Bool( b => b
-                        .Filter(f => 
-                            {
-                                QueryContainer qb = null;
-                                qb = q.QueryString(qs => qs.Query(SearchParam));
-                                if (true)
-                                {
-                                    qb &= q.Term(p => p.ProviderStatusId, 902006);
-                                }
-                                return qb;
-                            })                                                 
-                        )
-                    )
-                     .Query(q => q.QueryString(qs => qs.Query(SearchParam)))                     
-                    //q.Term(p => p.CompanyName, SearchParam != null ? SearchParam.ToLowerInvariant() : SearchParam) ||
-                    //q.Term(p => p.CommercialCompanyName, SearchParam != null ? SearchParam.ToLowerInvariant() : SearchParam) ||
-                    //q.Term(p => p.IdentificationNumber, SearchParam != null ? SearchParam.ToLowerInvariant() : SearchParam))
+                .Query(q => q.
+                    Filtered(f => f
+                    .Query(q1 => q1.MatchAll())
+                    .Filter(f2 =>
+                    {
+                        QueryContainer qb = null;
+
+                        qb &= q.Term(m => m.CompanyName, SearchParam)
+                            || q.Term(m => m.CommercialCompanyName, SearchParam)
+                            || q.Term(m => m.IdentificationNumber, SearchParam);
+
+                        if (true)
+                        {
+                            qb &= q.Term(m => m.CityId, 1512);
+                        }
+                        if (true)
+                        {
+                            qb &= q.Term(m => m.CountryId, 988);
+                        }
+                        if (true)
+                        {
+                            qb &= q.Nested(n => n
+                             .Path(p => p.oCustomerProviderIndexModel)
+                            .Query(fq => fq
+                                .Match(match => match
+                                .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
+                                .Query("902005")
+                                )
+                              )
+                           );
+                        }
+
+                        qb &= q.Nested(n => n
+                             .Path(p => p.oCustomerProviderIndexModel)
+                            .Query(fq => fq
+                                .Match(match => match
+                                .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                )
+                              )
+                           );
+
+                        return qb;
+                    })
+                    ))
                 );
 
                 #endregion

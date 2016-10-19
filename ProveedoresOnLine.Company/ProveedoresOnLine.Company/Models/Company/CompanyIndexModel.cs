@@ -37,18 +37,19 @@ namespace ProveedoresOnLine.Company.Models.Company
 
         [Number]
         public int PrincipalActivityId { get; set; }
-        [String]
+        
+        [String(Index = FieldIndexOption.Analyzed)]
         public string PrincipalActivity { get; set; }
 
         [Number]
         public int CountryId { get; set; }
 
-        [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
+        [String(Index = FieldIndexOption.Analyzed)]
         public string Country { get; set; }
 
         [Number]
         public int CityId { get; set; }
-        [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
+        [String(Index = FieldIndexOption.Analyzed)]
         public string City { get; set; }
 
         [String]
@@ -58,13 +59,14 @@ namespace ProveedoresOnLine.Company.Models.Company
         public bool InBlackList { get; set; }
 
         public int ProviderStatusId { get; set; }
+        [String(Index = FieldIndexOption.Analyzed)]
         public string ProviderStatus { get; set; }
 
         public bool CompanyEnable { get; set; }
 
         [Number]
         public int ICAId { get; set; }
-        [String]
+        [String(Index = FieldIndexOption.Analyzed)]
         public string ICA { get; set; }
 
         [Nested]

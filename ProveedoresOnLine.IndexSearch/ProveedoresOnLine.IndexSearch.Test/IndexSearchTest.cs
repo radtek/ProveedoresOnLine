@@ -74,8 +74,8 @@ namespace ProveedoresOnLine.IndexSearch.Test
             Nest.ISearchResponse<CompanyIndexModel> result = CustomerProviderClient.Search<CompanyIndexModel>(s => s
             .From(0)
                 .TrackScores(true)
-                .Size(20)                    
-                .Query(q =>
+                .Size(20)                                    
+                .Query(q => 
                     q.Nested(n => n
                         .Path(p => p.oCustomerProviderIndexModel)
                             .Query(fq => fq
@@ -101,7 +101,49 @@ namespace ProveedoresOnLine.IndexSearch.Test
                             .Field(fi => fi.CountryId))
                         .Terms("blacklist", bl => bl
                             .Field(fi => fi.InBlackList)))
-                .Query(q => q.QueryString(qs => qs.Query("ernst"))) 
+                .Query(q => q.
+                    Filtered(f => f
+                    .Query(q1 => q1.MatchAll())
+                    .Filter(f2 => 
+                    {
+                        QueryContainer qb = null;
+
+                        qb &= q.Term(m => m.CompanyName, "colsein");
+
+                        if (true)
+                        {
+                            qb &= q.Term(m => m.CityId, 1512);
+                        }
+                        if (true)
+                        {
+                            qb &= q.Term(m => m.CountryId, 988);
+                        }
+                        if (true)
+                        {
+                            qb &= q.Nested(n => n
+                             .Path(p => p.oCustomerProviderIndexModel)
+                            .Query(fq => fq
+                                .Match(match => match
+                                .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
+                                .Query("902005")
+                                )
+                              )
+                           );
+                        }
+
+                        qb &= q.Nested(n => n
+                             .Path(p => p.oCustomerProviderIndexModel)
+                            .Query(fq => fq
+                                .Match(match => match
+                                .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                .Query("DA5C572E")
+                                )
+                              )
+                           );
+                        
+                        return qb;
+                    })                                      
+                    ))                    
                 );
         }
 
