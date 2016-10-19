@@ -580,7 +580,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                           (!string.IsNullOrEmpty(x.PayCondition) ? x.PayCondition.PadLeft(4, '0') : "0") + strSep +
                           "0010" + strSep +
                           "1" + strSep +
-                          "1" + strSep +
+                          "01" + strSep +
                           ""+ strSep);
                     #endregion
 
