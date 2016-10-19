@@ -596,35 +596,35 @@ var Survey_File = {
 /*************************** Survey Search create survey *************************************/
 var Survey_SearchObject = {
 
-    ObjectId: '',
-    SearchUrl: '',
-    CompareId: '',
-    CompareUrl: '',
-    ProjectPublicId: '',
-    ProjectUrl: '',
-    SearchParam: '',
-    SearchFilter: '',
-    SearchOrderType: '',
-    OrderOrientation: false,
-    PageNumber: 0,
-    RowCount: 0,
-
-    Init: function (vInitObject) {
-        this.ObjectId = vInitObject.ObjectId;
-        this.SearchUrl = vInitObject.SearchUrl;
-        this.CompareId = vInitObject.CompareId;
-        this.CompareUrl = vInitObject.CompareUrl;
-        this.ProjectPublicId = vInitObject.ProjectPublicId;
-        this.ProjectUrl = vInitObject.ProjectUrl;
-        this.SearchParam = vInitObject.SearchParam;
-        this.SearchFilter = vInitObject.SearchFilter;
-        this.SearchOrderType = vInitObject.SearchOrderType;
-        this.OrderOrientation = vInitObject.OrderOrientation;
-        this.PageNumber = vInitObject.PageNumber;
-        this.RowCount = vInitObject.RowCount;
-    },
-
     AddSurveyProvider: function (vProviderPublicId) {
-        debugger;
+        $.ajax({
+            url: BaseUrl.ApiUrl + '/SurveyApi?SurveyAddProvider=true&ProviderPublicId=' + vProviderPublicId,
+            dataType: 'json',
+            success: function (result) {
+                debugger;
+                if (result != null) {
+
+                    var oItemHtml = $('#POMPProviderSurvey').html();
+
+                    //replace provider info
+                    oItemHtml = oItemHtml.replace(/{ProviderPublicId}/gi, result.ElasticRealtedProvider.CompanyPublicId);
+                    oItemHtml = oItemHtml.replace(/{ProviderLogoUrl}/gi, result.ElasticRealtedProvider.LogoUrl);
+                    oItemHtml = oItemHtml.replace(/{CompanyName}/gi, result.ElasticRealtedProvider.CompanyName);
+                    oItemHtml = oItemHtml.replace(/{IdentificationType}/gi, result.ElasticRealtedProvider.IdentificationType);
+                    oItemHtml = oItemHtml.replace(/{IdentificationNumber}/gi, result.ElasticRealtedProvider.IdentificationNumber);
+
+                    $('#Search_Survey_Item_Template').append("<li id='li_prv_" + vProviderPublicId + "'>" + oItemHtml + "</li>");
+
+                    document.getElementById("AddProviderSurvey_" + vProviderPublicId).style.display = "none";
+                }
+            },
+            error: function (result) {
+            }
+        });
     },
+
+    RemoveSurveyProvider: function (vProviderPublicId) {
+        $("#li_prv_" + vProviderPublicId).remove();
+        document.getElementById("AddProviderSurvey_" + vProviderPublicId).style.display = "inline";
+    }
 };

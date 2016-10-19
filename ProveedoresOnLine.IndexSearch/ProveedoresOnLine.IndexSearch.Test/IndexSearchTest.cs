@@ -74,8 +74,8 @@ namespace ProveedoresOnLine.IndexSearch.Test
             Nest.ISearchResponse<CompanyIndexModel> result = CustomerProviderClient.Search<CompanyIndexModel>(s => s
             .From(0)
                 .TrackScores(true)
-                .Size(20)                                    
-                .Query(q => 
+                .Size(20)
+                .Query(q =>
                     q.Nested(n => n
                         .Path(p => p.oCustomerProviderIndexModel)
                             .Query(fq => fq
@@ -86,7 +86,7 @@ namespace ProveedoresOnLine.IndexSearch.Test
                               ).ScoreMode(NestedScoreMode.Max)
                            )
                     )
-                    .Aggregations(agg => agg                        
+                    .Aggregations(agg => agg
                         .Nested("status_avg", x => x.
                             Path(p => p.oCustomerProviderIndexModel.Where(y => y.CustomerPublicId == "DA5C572E")
                                 .Select(y => y).FirstOrDefault())
@@ -104,7 +104,7 @@ namespace ProveedoresOnLine.IndexSearch.Test
                 .Query(q => q.
                     Filtered(f => f
                     .Query(q1 => q1.MatchAll())
-                    .Filter(f2 => 
+                    .Filter(f2 =>
                     {
                         QueryContainer qb = null;
 
@@ -140,11 +140,36 @@ namespace ProveedoresOnLine.IndexSearch.Test
                                 )
                               )
                            );
-                        
+
                         return qb;
-                    })                                      
-                    ))                    
+                    })
+                    ))
                 );
+        }
+
+        [TestMethod]
+        public void SearchCompanyByPublicId()
+        {
+            Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+            var settings = new ConnectionSettings(node);
+            settings.DisableDirectStreaming(true);
+            settings.DefaultIndex("dev_companyindex");
+            ElasticClient CustomerProviderClient = new ElasticClient(settings);
+
+            Nest.ISearchResponse<CompanyIndexModel> oResult = CustomerProviderClient.Search<CompanyIndexModel>(s => s
+                .From(0)
+                .Size(1)
+                .Query(q => q.QueryString(qs => qs.Query("1B686E34"))));
+
+            //Nest.ISearchResponse<CompanyIndexModel> oResult = CustomerProviderClient.Search<CompanyIndexModel>(s => s
+            //    .From(0)
+            //    .TrackScores(true)
+            //    .Size(1)
+            //    .Query(query => query.Filtered(filtered => filtered
+            //        .Query(q => q.MatchAll())
+            //        .Filter(f => f.Nested(nf => nf
+            //            .InnerHits()
+            //            .Path(p => p.CompanyPublicId == "1CA3A147"))))));
         }
 
         #region Survey

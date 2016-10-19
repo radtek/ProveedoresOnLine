@@ -1,5 +1,7 @@
 ﻿using MarketPlace.Models.General;
 using MarketPlace.Models.Provider;
+using Nest;
+using ProveedoresOnLine.Company.Models.Company;
 using ProveedoresOnLine.Company.Models.Util;
 using ProveedoresOnLine.SurveyModule.Models;
 using System;
@@ -258,11 +260,47 @@ namespace MarketPlace.Web.ControllersApi
             return oReturn;
         }
 
+        [HttpPost]
+        [HttpGet]
+        public ProviderLiteViewModel SurveyAddProvider
+            (string SurveyAddProvider,
+            string ProviderPublicId)
+        {
+            ProviderLiteViewModel oModel = null;
+
+            if (SurveyAddProvider == "true")
+            {
+                Uri node = new Uri(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
+                var settings = new ConnectionSettings(node);
+
+                settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanyIndex].Value);
+                settings.DisableDirectStreaming(true);
+                ElasticClient client = new ElasticClient(settings);
+
+                Nest.ISearchResponse<CompanyIndexModel> oResult = client.Search<CompanyIndexModel>(s => s
+                    .From(0)
+                    .Size(1)
+                    .Query(q => q.QueryString(qs => qs.Query(ProviderPublicId))));
+
+                if (oResult != null && oResult.Documents.Count() > 0)
+                {
+                    oResult.Documents.All(prv =>
+                    {
+                        oModel = new ProviderLiteViewModel(prv);
+
+                        return true;
+                    });
+                }
+            }
+
+            return oModel;
+        }
+
         #region Survey Charts
 
         [HttpPost]
         [HttpGet]
-        public List<Tuple<string, int,int>> GetSurveyByResponsable(string GetSurveyByResponsable)
+        public List<Tuple<string, int, int>> GetSurveyByResponsable(string GetSurveyByResponsable)
         {
             //Get Charts By Module
             List<GenericChartsModel> oResult = new List<GenericChartsModel>();
@@ -280,14 +318,14 @@ namespace MarketPlace.Web.ControllersApi
                 oRelatedChart.GenericChartsInfoModel = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.GetSurveyByResponsable(MarketPlace.Models.General.SessionModel.CurrentCompany.CompanyPublicId, string.Empty, DateTime.Now);
             else
                 oRelatedChart.GenericChartsInfoModel = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.GetSurveyByResponsable(MarketPlace.Models.General.SessionModel.CurrentCompany.CompanyPublicId, SessionModel.CurrentLoginUser.Email, DateTime.Now);
-                List<Tuple<string, int, int>> oReturn = new List<Tuple<string, int, int>>();
-            
+            List<Tuple<string, int, int>> oReturn = new List<Tuple<string, int, int>>();
+
 
             if (oRelatedChart.GenericChartsInfoModel != null && oRelatedChart.GenericChartsInfoModel.Count > 0)
             {
                 oRelatedChart.GenericChartsInfoModel.All(x =>
                 {
-                    oReturn.Add(Tuple.Create(x.ItemName, x.Count,x.Year));
+                    oReturn.Add(Tuple.Create(x.ItemName, x.Count, x.Year));
                     return true;
                 });
             }
@@ -398,14 +436,14 @@ namespace MarketPlace.Web.ControllersApi
 
 
             // Se repite el estado porque es necesario para el tooltip de la gráfica
-            List<Tuple<string, int, string, string,int>> oReturn = new List<Tuple<string, int, string, string,int>>();
+            List<Tuple<string, int, string, string, int>> oReturn = new List<Tuple<string, int, string, string, int>>();
 
 
             if (oRelatedChart.GenericChartsInfoModel != null && oRelatedChart.GenericChartsInfoModel.Count > 0)
             {
                 oRelatedChart.GenericChartsInfoModel.All(x =>
                 {
-                    oReturn.Add(Tuple.Create(x.ItemName, x.Count, x.AxisX, x.ItemType,x.Year));
+                    oReturn.Add(Tuple.Create(x.ItemName, x.Count, x.AxisX, x.ItemType, x.Year));
                     return true;
                 });
             }

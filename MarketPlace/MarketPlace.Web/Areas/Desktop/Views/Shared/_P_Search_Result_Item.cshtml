@@ -64,7 +64,9 @@
         <!--Provider Logo-->
         @if (Model.Item2.IsProviderCustomer)
         {
-            <a href="@(Url.RouteUrl
+            if (Model.Item1.ElasticCompanyModel != null)
+            {
+                <a href="@(Url.RouteUrl
                    (MarketPlace.Models.General.Constants.C_Routes_Default,
                    new
                    {
@@ -72,8 +74,23 @@
                        action = MVC.Provider.ActionNames.GIProviderInfo,
                        ProviderPublicId = Model.Item2.ElasticRealtedProvider.CompanyPublicId
                    }))">
-                <img class="POMPSearchResultProvLogo" src="@Model.Item2.ProviderLogoUrl" />
-            </a>
+                    <img class="POMPSearchResultProvLogo" src="@Model.Item2.ProviderLogoUrl" />
+                </a>
+            }
+            else if (Model.Item1.ElasticCompanySurveyModel != null)
+            {
+                <a href="@(Url.RouteUrl
+                   (MarketPlace.Models.General.Constants.C_Routes_Default,
+                   new
+                   {
+                       controller = MVC.Survey.Name,
+                       action = MVC.Survey.ActionNames.SVSurveySearch,
+                       ProviderPublicId = Model.Item2.ElasticRealtedProvider.CompanyPublicId
+                   }))">
+                    <img class="POMPSearchResultProvLogo" src="@Model.Item2.ProviderLogoUrl" />
+                </a>
+            }
+
         }
         else
         {
@@ -84,16 +101,32 @@
         <div class="POMPSearchResultNameIDWrapper">
             @if (Model.Item2.IsProviderCustomer)
             {
-                <a href="@(Url.RouteUrl
-           (MarketPlace.Models.General.Constants.C_Routes_Default,
-           new
-           {
-               controller = MVC.Provider.Name,
-               action = MVC.Provider.ActionNames.GIProviderInfo,
-               ProviderPublicId = Model.Item2.ElasticRealtedProvider.CompanyPublicId
-           }))">
-                   @Model.Item2.ElasticRealtedProvider.CompanyName
-                </a>
+                if (Model.Item1.ElasticCompanyModel != null)
+                {
+                    <a href="@(Url.RouteUrl
+                               (MarketPlace.Models.General.Constants.C_Routes_Default,
+                               new
+                               {
+                                   controller = MVC.Provider.Name,
+                                   action = MVC.Provider.ActionNames.GIProviderInfo,
+                                   ProviderPublicId = Model.Item2.ElasticRealtedProvider.CompanyPublicId
+                               }))">
+                        @Model.Item2.ElasticRealtedProvider.CompanyName
+                    </a>
+                }
+                else if (Model.Item1.ElasticCompanySurveyModel != null)
+                {
+                    <a href="@(Url.RouteUrl
+                               (MarketPlace.Models.General.Constants.C_Routes_Default,
+                               new
+                               {
+                                   controller = MVC.Survey.Name,
+                                   action = MVC.Survey.ActionNames.SVSurveySearch,
+                                   ProviderPublicId = Model.Item2.ElasticRealtedProvider.CompanyPublicId
+                               }))">
+                        @Model.Item2.ElasticRealtedProvider.CompanyName
+                    </a>
+                }
             }
             else
             {
@@ -192,14 +225,16 @@
             }
             else if (Model.Item1.ElasticCompanySurveyModel != null)
             {
-                <li>
+                <li id="AddProviderSurvey_@(Model.Item2.ElasticRealtedProvider.CompanyPublicId)">
                     <a style="display:@(oIsInLeftPanel ? "none" : string.Empty)" href="javascript:Survey_SearchObject.AddSurveyProvider('@Model.Item2.ElasticRealtedProvider.CompanyPublicId')">Agregar a evaluación</a>
                 </li>
 
-            }            
+            }
 
-            <li>
-                <a href="@(Url.RouteUrl
+            @if (Model.Item1.ElasticCompanyModel != null)
+            {
+                <li>
+                    <a href="@(Url.RouteUrl
                             (MarketPlace.Models.General.Constants.C_Routes_Default,
                             new
                             {
@@ -207,7 +242,21 @@
                                 action = MVC.Provider.ActionNames.GIProviderInfo,
                                 ProviderPublicId = Model.Item2.ElasticRealtedProvider.CompanyPublicId
                             }))">Ver detalle</a>
-            </li>                
+                </li>
+            }
+            else if (Model.Item1.ElasticCompanySurveyModel != null)
+            {
+                <li>
+                    <a href="@(Url.RouteUrl
+                            (MarketPlace.Models.General.Constants.C_Routes_Default,
+                            new
+                            {
+                                controller = MVC.Survey.Name,
+                                action = MVC.Survey.ActionNames.SVSurveySearch,
+                                ProviderPublicId = Model.Item2.ElasticRealtedProvider.CompanyPublicId
+                            }))">Ver detalle</a>
+                </li>
+            }
         </ul>
     </div>
 </div>
