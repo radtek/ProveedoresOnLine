@@ -1,4 +1,4 @@
-﻿@model Tuple<MarketPlace.Models.Provider.ProviderSearchViewModel, MarketPlace.Models.Provider.ProviderLiteViewModel>
+﻿@model Tuple< MarketPlace.Models.Provider.ProviderSearchViewModel, MarketPlace.Models.Provider.ProviderLiteViewModel>
 
 @{
     //set project / comparison
@@ -193,7 +193,7 @@
             else if (Model.Item1.ElasticCompanySurveyModel != null)
             {
                 <li>
-                    <a>Agregar a evaluación</a>
+                    <a style="display:@(oIsInLeftPanel ? "none" : string.Empty)" href="javascript:Survey_SearchObject.AddSurveyProvider('@Model.Item2.ElasticRealtedProvider.CompanyPublicId')">Agregar a evaluación</a>
                 </li>
 
             }            

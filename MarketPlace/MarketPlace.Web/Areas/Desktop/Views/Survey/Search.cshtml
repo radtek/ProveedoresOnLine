@@ -7,7 +7,6 @@
     Model.RenderScripts = false;
 }
 
-
 <div class="POMPProviderSearchBox">
     <!--SearchBox-->
     <input class="POMPTextField" id="Search_txtSearchBox" type="text" value="@Model.SearchParam" onkeydown="if (event.keyCode == 13) javascript:Provider_SearchObject.Search()" placeholder="Buscar Proveedor por Razón Social, NIT o Actividad." />
@@ -17,7 +16,6 @@
     </a>
 </div>
 <div class="POMProviderSearchGreatWrapper">
-
     <div class="POMPProviderFilterMenuWrapper">
         <!--SearchFilter-->
         @Html.Partial(MVC.Desktop.Shared.Views._P_Search_Filter, Model)
@@ -26,7 +24,9 @@
         <!--SearchResult-->
         @Html.Partial(MVC.Desktop.Shared.Views._P_Search_Result, Model)
     </div>
-
+    <div class="POMPComparisonListWrapper">
+        @Html.Partial(MVC.Desktop.Shared.Views._P_Search_Survey, Model)
+    </div>
 </div>
 @{
     Model.RenderScripts = true;
