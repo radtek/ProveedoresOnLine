@@ -5,37 +5,42 @@
 </div>
 
 <div>
-    <ul id="Search_Survey_Item_Template"></ul>
+    <form>
+        <ul id="Search_Survey_Item_Template"></ul>
+    </form>
 </div>
 
 <!--templates-->
 <div style="display:none;">
-    <!--Comparison item template-->
-    <div class="POMPComparisonResultStatusCertified">
-        <!--Check certificacion-->
-        <img style="display:{ProviderIsCertified}" class="SelGenericTooltip" title="Proveedor validado" src="@MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ProviderStatus_Certified_Logo].Value" />
-    </div>
-    <div id="POMPProviderSurvey" class="POMPComparisonResultProvDataWrapper">
+    <div id="POMPProviderSurvey">
+        <!--Comparison item template-->
+        <div class="POMPComparisonResultStatusCertified">
+            <!--Check certificacion-->
+            <img style="display:{ProviderIsCertified}" class="SelGenericTooltip" title="Proveedor validado" src="@MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ProviderStatus_Certified_Logo].Value" />
+        </div>
+        <div class="POMPComparisonResultProvDataWrapper">
 
-        <a href="@(Url.RouteUrl
+            <a href="@(Url.RouteUrl
                     (MarketPlace.Models.General.Constants.C_Routes_Default,
                     new
                     {
                         controller = MVC.Survey.Name,
                         action = MVC.Survey.ActionNames.SVSurveySearch,
                     }) + "?ProviderPublicId={ProviderPublicId}")">
-            <img class="POMPComparisonResultProvLogo" src="{ProviderLogoUrl}" />
-        </a>
-        <div class="POMPComparisonResultNameIDWrapper">
-            <label>{CompanyName}</label>
-            <label><span>{IdentificationType} :</span> {IdentificationNumber}</label>
-        </div>
-        <div class="POMPComparisonResultAlertComparWrapper">
-            <a href="javascript:Survey_SearchObject.RemoveSurveyProvider('{ProviderPublicId}');">
-                <div class="SelGenericTooltip POMPComparisonResultIncludeCoparisonIcon" title="Quitar proveedor"></div>
+                <img class="POMPComparisonResultProvLogo" src="{ProviderLogoUrl}" />
             </a>
+            <div class="POMPComparisonResultNameIDWrapper">
+                <label>{CompanyName}</label>
+                <label><span>{IdentificationType} :</span> {IdentificationNumber}</label>
+            </div>
+            <div class="POMPComparisonResultAlertComparWrapper">
+                <a href="javascript:Survey_SearchObject.RemoveSurveyProvider('{ProviderPublicId}');">
+                    <div class="SelGenericTooltip POMPComparisonResultIncludeCoparisonIcon" title="Quitar proveedor"></div>
+                </a>
+            </div>
+            <input type="hidden" value="{ProviderPublicId}" />
         </div>
-    </div>
+    </div>    
 </div>
 
 <div class="POMPComparisonActionWrapper">

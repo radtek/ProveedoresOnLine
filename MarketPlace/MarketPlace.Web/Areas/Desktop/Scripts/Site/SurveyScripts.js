@@ -601,9 +601,9 @@ var Survey_SearchObject = {
             url: BaseUrl.ApiUrl + '/SurveyApi?SurveyAddProvider=true&ProviderPublicId=' + vProviderPublicId,
             dataType: 'json',
             success: function (result) {
-                debugger;
                 if (result != null) {
 
+                    debugger;
                     var oItemHtml = $('#POMPProviderSurvey').html();
 
                     //replace provider info
@@ -612,6 +612,14 @@ var Survey_SearchObject = {
                     oItemHtml = oItemHtml.replace(/{CompanyName}/gi, result.ElasticRealtedProvider.CompanyName);
                     oItemHtml = oItemHtml.replace(/{IdentificationType}/gi, result.ElasticRealtedProvider.IdentificationType);
                     oItemHtml = oItemHtml.replace(/{IdentificationNumber}/gi, result.ElasticRealtedProvider.IdentificationNumber);
+
+                    //validate item certified
+                    if (result.ProviderIsCertified != null && result.ProviderIsCertified == true) {
+                        oItemHtml = oItemHtml.replace(/{ProviderIsCertified}/gi, '');
+                    }
+                    else {
+                        oItemHtml = oItemHtml.replace(/{ProviderIsCertified}/gi, 'none');
+                    }
 
                     $('#Search_Survey_Item_Template').append("<li id='li_prv_" + vProviderPublicId + "'>" + oItemHtml + "</li>");
 
