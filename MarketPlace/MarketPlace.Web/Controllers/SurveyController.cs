@@ -1075,9 +1075,16 @@ namespace MarketPlace.Web.Controllers
 
         private List<string> GetSurveySearchRequest()
         {
-            List<string> oReturn = null;
+            List<string> oReturn = new List<string>();
 
-            oReturn.Add(Request["ProviderPublicId"]);
+            string[] oProviderPublicId = Request["ProviderPublicId"].Split(',');
+
+            oProviderPublicId.All(x =>
+            {
+                oReturn.Add(x);
+
+                return true;
+            });
 
             return oReturn;
         }
