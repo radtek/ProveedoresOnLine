@@ -40,8 +40,7 @@ var Provider_SearchObject = {
         this.BlackListStatusShowAlert = vInitObject.BlackListStatusShowAlert;
     },
 
-    RenderAsync: function () {
-        debugger;
+    RenderAsync: function () {        
         //init Search input
         $('#' + Provider_SearchObject.ObjectId + '_txtSearchBox').keydown(function (e) {
             if (e.keyCode == 13) {
@@ -102,6 +101,7 @@ var Provider_SearchObject = {
     },
 
     GetSearchUrl: function () {
+        debugger;
         var oUrl = this.SearchUrl;
 
         oUrl += '?CompareId=' + this.CompareId;

@@ -46,7 +46,6 @@
         MarketComparison = 803001,
         ProviderStatistics = 803002,
     }
-
     #endregion
 
     #region Util

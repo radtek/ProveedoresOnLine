@@ -68,17 +68,17 @@ namespace MarketPlace.Models.Provider
 
         #region Methods
 
-        public List<Tuple<string, string>> GetlstSearchFilter()
+        public List<Tuple<string, string, string>> GetlstSearchFilter()
         {
-            List<Tuple<string, string>> oReturn = new List<Tuple<string, string>>();
+            List<Tuple<string, string, string>> oReturn = new List<Tuple<string, string, string>>();
 
             if (!string.IsNullOrEmpty(SearchFilter))
             {
                 oReturn = SearchFilter.Replace(" ", "").
                     Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).
                     Where(x => x.IndexOf(';') >= 0).
-                    Select(x => new Tuple<string, string>(x.Split(';')[0], x.Split(';')[1])).
-                    Where(x => !string.IsNullOrEmpty(x.Item1) && !string.IsNullOrEmpty(x.Item2)).
+                    Select(x => new Tuple<string, string, string>(x.Split(';')[0], x.Split(';')[1], x.Split(';')[2])).
+                    Where(x => !string.IsNullOrEmpty(x.Item1) && !string.IsNullOrEmpty(x.Item2) && !string.IsNullOrEmpty(x.Item3)).
                     ToList();
             }
 
