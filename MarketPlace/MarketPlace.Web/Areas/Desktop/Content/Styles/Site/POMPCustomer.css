@@ -194,6 +194,12 @@ form ul {
     padding: 0;
     margin-left: 2%;
 }
+form ul li{
+    text-decoration: none;
+    border-bottom: 1px solid #ff8300;
+    padding: 8px 0px;
+    font-weight: normal !important;
+}
 
 .ulBasicInfo {
     /*border: 1px solid green;*/

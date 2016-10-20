@@ -26,6 +26,9 @@
             <img style="display:{ProviderIsCertified}" class="SelGenericTooltip" title="Proveedor validado" src="@MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ProviderStatus_Certified_Logo].Value" />
         </div>
         <div class="POMPComparisonResultProvDataWrapper">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-4">
 
             <a href="@(Url.RouteUrl
                     (MarketPlace.Models.General.Constants.C_Routes_Default,
@@ -36,16 +39,31 @@
                     }) + "?ProviderPublicId={ProviderPublicId}")">
                 <img class="POMPComparisonResultProvLogo" src="{ProviderLogoUrl}" />
             </a>
+
+                    </div>
+                    <div class="col-md-4">
+
             <div class="POMPComparisonResultNameIDWrapper">
                 <label>{CompanyName}</label>
                 <label><span>{IdentificationType} :</span> {IdentificationNumber}</label>
             </div>
+
+                    </div>
+                    <div class="col-md-4">
             <div class="POMPComparisonResultAlertComparWrapper">
                 <a href="javascript:Survey_SearchObject.RemoveSurveyProvider('{ProviderPublicId}');">
                     <div class="SelGenericTooltip POMPComparisonResultIncludeCoparisonIcon" title="Quitar proveedor"></div>
                 </a>
             </div>
-            <input id="ProviderPublicId" type="hidden" value="{ProviderPublicId}" />
-        </div>
+                    </div>
+                </div>
+                <input type="hidden" value="{ProviderPublicId}" />
+            </div>
     </div>    
+</div>
+</div>
+
+
+<div class="POMPComparisonActionWrapper">
+    <button>Crear evaluación</button>
 </div>
