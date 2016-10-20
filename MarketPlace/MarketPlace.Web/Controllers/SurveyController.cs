@@ -338,6 +338,18 @@ namespace MarketPlace.Web.Controllers
             return View(oModel);
         }
 
+        public virtual ActionResult SurveySearchUpsert()
+        {
+            if (!string.IsNullOrEmpty(Request["UpsertAction"]) && Request["UpsertAction"].Trim() == "true")
+            {
+                List<string> oProviderList = GetSurveySearchRequest();
+            }
+
+            ProviderViewModel oModel = new ProviderViewModel();
+
+            return View(oModel);
+        }
+
         public virtual ActionResult SurveyUpsert(string SurveyPublicId, string StepId)
         {
             //get survey request model
@@ -1060,6 +1072,22 @@ namespace MarketPlace.Web.Controllers
         #endregion Survey request
 
         #region Private functions
+
+        private List<string> GetSurveySearchRequest()
+        {
+            List<string> oReturn = new List<string>();
+
+            string[] oProviderPublicId = Request["ProviderPublicId"].Split(',');
+
+            oProviderPublicId.All(x =>
+            {
+                oReturn.Add(x);
+
+                return true;
+            });
+
+            return oReturn;
+        }
 
         private SurveyModel GetSurveyUpsertRequest()
         {

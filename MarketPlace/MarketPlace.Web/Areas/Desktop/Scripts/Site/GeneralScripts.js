@@ -186,7 +186,6 @@ $(document).ready(function () {
 
 var ReportViewerObj = {    
     RenderReportViewer: function (vInitObject) {
-        debugger;
         var cmbToAppend = '<center><span>Formatos disponibles<span>:&nbsp;&nbsp;<select name= "' + vInitObject.ObjectId + '_cmbFormat">';
         $.each(vInitObject.Options, function (item, value)
         {

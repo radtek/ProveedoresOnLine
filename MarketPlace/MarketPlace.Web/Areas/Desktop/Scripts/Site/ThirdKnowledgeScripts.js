@@ -103,7 +103,6 @@ var Third_KnowledgeSimpleSearchObject = {
                                     if (value.ListName != null) {
                                         resultDiv += '<div class="col-sm-2 POMPProviderBoxInfo">' + value.ListName + '</div>';
                                     }
-                                    debugger;   
                                     if (value.QueryBasicPublicId != null) {
                                         resultDiv += '<div class="col-sm-1 POMPProviderBoxInfo">' + '<a target = "_blank" href="' + Third_KnowledgeSimpleSearchObject.Url + '?QueryBasicPublicId=' + value.QueryBasicPublicId + '&ReturnUrl=null">' + "Ver_Detalle" + '</a>' + '</div>';
                                     }
@@ -306,7 +305,6 @@ var Third_KnowledgeSearch = {
 
 var ThirdKnowledge_ReportViewerObj = {    
     RenderReportViewer: function (vInitObject) {
-        debugger;
         var cmbToAppend = '<center><span>Formatos disponibles<span>:&nbsp;&nbsp;<select name= "' + vInitObject.ObjectId + '_cmbFormat">';
         $.each(vInitObject.Options, function (item, value) {
             if (value == "EXCEL" || value == "Excel") {

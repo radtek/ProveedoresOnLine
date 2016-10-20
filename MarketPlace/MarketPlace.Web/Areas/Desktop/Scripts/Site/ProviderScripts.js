@@ -40,7 +40,7 @@ var Provider_SearchObject = {
         this.BlackListStatusShowAlert = vInitObject.BlackListStatusShowAlert;
     },
 
-    RenderAsync: function () {        
+    RenderAsync: function () {
         //init Search input
         $('#' + Provider_SearchObject.ObjectId + '_txtSearchBox').keydown(function (e) {
             if (e.keyCode == 13) {
@@ -62,7 +62,6 @@ var Provider_SearchObject = {
 
     /*{SearchFilter{Enable,Value},SearchOrderType,OrderOrientation,PageNumber}*/
     Search: function (vSearchObject) {
-        debugger;
         /*get serach param*/
         if (this.SearchParam != $('#' + Provider_SearchObject.ObjectId + '_txtSearchBox').val()) {
             /*Init pager*/

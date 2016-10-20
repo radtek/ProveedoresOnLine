@@ -327,7 +327,6 @@ var Survey_Evaluation_ProgramObject = {
                 dataType: 'json',
                 success: function (e) {
                     if (e != null && e.length > 0) {
-                        debugger;
                         //Render Roles
                         var divEvaluator = $('#' + Survey_Evaluation_ProgramObject.ObjectId + '_EvaluatorDiv').html('');
                         var area = null;
@@ -381,7 +380,6 @@ var Survey_Evaluation_ProgramObject = {
                                     serverFiltering: true,
                                     transport: {
                                         read: function (options) {
-                                            debugger;
                                             $.ajax({
                                                 url: BaseUrl.ApiUrl + '/CompanyApi?UserCompanySearchByRoleAC=true&RolId=' + value.SurveyConfigItemInfoRol + '&SearchParam=' + options.data.filter.filters[0].value,
                                                 dataType: 'json',
@@ -603,7 +601,6 @@ var Survey_SearchObject = {
             success: function (result) {
                 if (result != null) {
 
-                    debugger;
                     var oItemHtml = $('#POMPProviderSurvey').html();
 
                     //replace provider info
