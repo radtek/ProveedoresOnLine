@@ -1,12 +1,19 @@
 ﻿    <!--Project actions-->
 <span class="POMPComparisonTitle">Evaluación de desempeño</span>
-<div class="POMPComparisonActionWrapper">
-    <button>Crear evaluación</button>
-</div>
+
 
 <div>
-    <form>
+    <form id="frmProviderSurveyList" method="post" action="@(Url.Action
+                                                            (MVC.Survey.ActionNames.SurveySearchUpsert,
+                                                            MVC.Survey.Name))">
         <ul id="Search_Survey_Item_Template"></ul>
+
+        <div class="POMPComparisonActionWrapper">
+            <button type="submit">Crear evaluación</button>
+        </div>
+        <div style="display:none">
+            <input type="hidden" name="UpsertAction" id="UpsertAction" value="true" />
+        </div>
     </form>
 </div>
 
@@ -38,11 +45,7 @@
                     <div class="SelGenericTooltip POMPComparisonResultIncludeCoparisonIcon" title="Quitar proveedor"></div>
                 </a>
             </div>
-            <input type="hidden" value="{ProviderPublicId}" />
+            <input id="ProviderPublicId" type="hidden" value="{ProviderPublicId}" />
         </div>
     </div>    
-</div>
-
-<div class="POMPComparisonActionWrapper">
-    <button>Crear evaluación</button>
 </div>

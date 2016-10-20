@@ -1381,6 +1381,7 @@
     <Content Include="Areas\Desktop\Views\Survey\SVSurveyEvaluatorDetail.cshtml" />
     <Content Include="Areas\Desktop\Views\Survey\SVSurveyReport.cshtml" />
     <Content Include="Areas\Desktop\Views\Survey\SVSurveyProgram.cshtml" />
+    <Content Include="Areas\Desktop\Views\Survey\SurveySearchUpsert.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Desktop\Content\Images\" />
