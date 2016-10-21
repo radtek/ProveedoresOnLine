@@ -89,8 +89,6 @@ namespace MarketPlace.Models.Provider
 
         public ProviderCalificationViewModel ProviderCalification { get; set; }
 
-
-       
-            
+        public string RelatedSurveyProviders { get; set; }
     }
 }
