@@ -68,6 +68,7 @@ namespace MarketPlace.Web.Controllers
                     CompanyIndexModel = new ProveedoresOnLine.Company.Models.Company.CompanyIndexModel(),
                     CityFilter = new List<ElasticSearchFilter>(),
                     CountryFilter = new List<ElasticSearchFilter>(),
+                    IcaFilter = new List<ElasticSearchFilter>(),
                     StatusFilter = new List<ElasticSearchFilter>(),
                     BlackListFilter = new List<ElasticSearchFilter>(),
                 };
@@ -98,6 +99,8 @@ namespace MarketPlace.Web.Controllers
                             )
                         )
                     )
+                    .Terms("ica", aggv => aggv
+                        .Field(fi => fi.ICAId))
                     .Terms("city", aggv => aggv
                         .Field(fi => fi.CityId))
                     .Terms("country", c => c
@@ -129,6 +132,14 @@ namespace MarketPlace.Web.Controllers
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
                         {
                             qb &= q.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
+                        }
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= q.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
+                        }
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= q.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
                         }
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
                         {
@@ -223,6 +234,21 @@ namespace MarketPlace.Web.Controllers
                         return true;
                     });
                 }
+
+                #endregion
+
+                #region ICA Aggregation
+
+                oModel.ElasticCompanyModel.Aggs.Terms("ica").Buckets.All(x =>
+                {
+                    oModel.IcaFilter.Add(new ElasticSearchFilter
+                    {
+                        FilterCount = (int)x.DocCount,
+                        FilterType = x.Key.Split('.')[0],
+                        FilterName = MarketPlace.Models.Company.CompanyUtil.GetICAName(x.Key.Split('.')[0]),
+                    });
+                    return true;
+                });
 
                 #endregion
 

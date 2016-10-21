@@ -64,21 +64,7 @@ namespace MarketPlace.Models.Provider
         {
             get
             {
-                if (ElasticRealtedProvider != null)
-                {
-                    if (ElasticRealtedProvider.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).Select(x => x.StatusId).FirstOrDefault().ToString() ==
-                    MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ProviderStatus_Certified].Value ||
-                    ElasticRealtedProvider.ProviderStatus == "902004" ||
-                    ElasticRealtedProvider.ProviderStatus == "902008")
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                if (ElasticRealtedProvider.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).Select(x => x.StatusId).FirstOrDefault().ToString() ==
+                if (ProviderStatusId.ToString() ==
                     MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ProviderStatus_Certified].Value ||
                     ProviderStatusId.ToString() == "902004" ||
                     ProviderStatusId.ToString() == "902008")
@@ -89,7 +75,6 @@ namespace MarketPlace.Models.Provider
                 {
                     return false;
                 }
-
             }
         }
 
