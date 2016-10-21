@@ -283,6 +283,7 @@ var Survey_Evaluation_ProgramObject = {
     },
 
     RenderEvaluation: function () {
+        debugger;
         //Autocomplete  Evaluación
         $('#' + Survey_Evaluation_ProgramObject.ObjectId + '_SurveyName').kendoAutoComplete({
             minLength: 0,
@@ -326,43 +327,55 @@ var Survey_Evaluation_ProgramObject = {
                 url: BaseUrl.ApiUrl + '/SurveyApi?SCSurveyConfigItemGetBySurveyConfigId=true&SurveyConfigId=' + IdSurvey + '&SurveyConfigItemType=' + '1202004',
                 dataType: 'json',
                 success: function (e) {
+                    debugger;
                     if (e != null && e.length > 0) {
+                        debugger;
                         //Render Roles
                         var divEvaluator = $('#' + Survey_Evaluation_ProgramObject.ObjectId + '_EvaluatorDiv').html('');
                         var area = null;
                         var inarea = 0;//si es un area
-                        var result = '<ul>';
+                        //var result = '<ul>';
+                        var result;
                         var resultAddInfo = '';
-                        divEvaluator.append(result);
+                        //divEvaluator.append(result);
                         //Set Rol
                         $.each(e, function (item, value) {
+                            debugger;
+                            result = '';
                             if (area == value.AreaName && inarea == 1) {
-                                resultAddInfo += '<li style="list-style:none; margin-top:15px">';
-                                resultAddInfo += '<label>' + value.SurveyConfigItemInfoRolName + ':</label>';
-                                resultAddInfo += '<input id="' + Survey_Evaluation_ProgramObject.ObjectId + '_Evaluator_'
-                                                               + value.SurveyConfigItemInfoRolId + '" placeholder="andres.perez@gmail.com" required validationmessage="Seleccione un evaluador" name="SurveyInfo_1204003_0_' + //0 es igual al info Id
-                                                                 value.SurveyConfigItemInfoRolId + '_' + value.AreaId
-                                                                 + '_' + value.SurveyConfigItemInfoRolWeight + '" />';
-                                resultAddInfo += '</li>';
-                                divEvaluator.append(resultAddInfo);
-                                resultAddInfo = '';
+                                result += '<div class="col-xs-6">';
+                                result += '<label>' + value.SurveyConfigItemInfoRolName + ':</label>';
+                                result += '<input id="' + Survey_Evaluation_ProgramObject.ObjectId + '_Evaluator_' +
+                                                            value.SurveyConfigItemInfoRolId + '" placeholder="andres.perez@gmail.com" required validationmessage="Seleccione un evaluador" name="SurveyInfo_1204003_0_' + //0 es igual al info Id 
+                                                            value.SurveyConfigItemInfoRolId + '_' + value.AreaId + '_' +
+                                                            value.SurveyConfigItemInfoRolWeight + '" />';
+                                result += '</div>';
+                                //divEvaluator.append(resultAddInfo);
+                                //resultAddInfo = '';
                             }
-                            else {
+                            else
+                            {
                                 inarea = 0;
-                                if (area != value.AreaName && inarea == 0) {
-                                    resultAddInfo += '<li style="list-style:none"><div class="panel panel-default"><div class="panel-heading">' + value.AreaName + '</div></div></li>';//Close the Body Panel
-                                    result += resultAddInfo;
+                                if (area != value.AreaName) {
+                                    result += '<div class="col-xs-12">' + value.AreaName + '</div>';//Close the Body Panel
+                                    //result += resultAddInfo;
                                     inarea = 1;
                                 }
-                                resultAddInfo += '<li style="list-style:none">';
-                                resultAddInfo += '<label>' + value.SurveyConfigItemInfoRolName + ':</label>';
-                                resultAddInfo += '<input id="' + Survey_Evaluation_ProgramObject.ObjectId + '_Evaluator_' + value.SurveyConfigItemInfoRolId + '" placeholder="andres.perez@gmail.com" required validationmessage="Seleccione un evaluador" name="SurveyInfo_1204003_0_' + value.SurveyConfigItemInfoRolId + '_' + value.AreaId + '_' + value.SurveyConfigItemInfoRolWeight + '" />';
-                                resultAddInfo += '</li>';
+                                result += '<div class="col-xs-6">';
+                                result += '<label>' + value.SurveyConfigItemInfoRolName + ':</label>';
+                                result += '<input id="' + Survey_Evaluation_ProgramObject.ObjectId + '_Evaluator_' +
+                                                            value.SurveyConfigItemInfoRolId + '" placeholder="andres.perez@gmail.com" required validationmessage="Seleccione un evaluador" name="SurveyInfo_1204003_0_' +
+                                                            value.SurveyConfigItemInfoRolId + '_' + value.AreaId + '_' +
+                                                            value.SurveyConfigItemInfoRolWeight + '" />';
+                                result += '</div>';
 
-                                divEvaluator.append(resultAddInfo);
-                                resultAddInfo = '';
+                                //divEvaluator.append(resultAddInfo);
+                                //resultAddInfo = '';
                                 area = value.AreaName;
                             }
+
+                            divEvaluator.append(result);
+
                             //init survey evaluator autocomplete
                             $('#' + Survey_Evaluation_ProgramObject.ObjectId + '_Evaluator_' + value.SurveyConfigItemInfoRolId).kendoAutoComplete({
                                 minLength: 0,
@@ -396,8 +409,7 @@ var Survey_Evaluation_ProgramObject = {
                             });
                         });
 
-                        result = '</ul><br/><br/>';
-                        divEvaluator.append(result);
+                        //result += '</ul><br/><br/>';
 
                         //init tooltips
                         Tooltip_InitGeneric();

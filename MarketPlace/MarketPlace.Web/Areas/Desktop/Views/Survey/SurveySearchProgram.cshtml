@@ -165,6 +165,7 @@
                 ObjectId: 'Survey_ProgramSurvey',
                 DateFormat: '@(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_DateFormat_Kendo].Value)',
             });
+            debugger;
             Survey_Evaluation_ProgramObject.RenderEvaluation();
             $("#Survey_ProgramSurvey_Form").submit(function (e) {
                 Survey_SaveObject.ProgressBar_Generic_Show();
@@ -175,6 +176,7 @@
                     type: 'POST',
                     data: $("#Survey_ProgramSurvey_Form").serialize(),
                     success: function (result) {
+                        debugger;
                         Survey_SaveObject.ProgressBar_Generic_Hidden();
                         Dialog_ShowMessage("Evaluación", "Evaluación almacenada correctamente.", "@(Url.Action(MVC.Survey.ActionNames.Search,MVC.Survey.Name))");
                     },
