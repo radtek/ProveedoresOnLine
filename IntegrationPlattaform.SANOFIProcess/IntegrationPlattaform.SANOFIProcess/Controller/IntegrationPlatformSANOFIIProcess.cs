@@ -345,7 +345,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                           x.Region + strSep +
                           x.Country + strSep +
                           x.PhoneNumber.Replace("(","").Replace(")","").Replace("+","").Replace(" ","") + strSep +
-                          x.Fax + strSep +
+                          x.Fax.Replace("(", "").Replace(")", "").Replace("+", "").Replace(" ", "") + strSep +
                           x.Email_OC + strSep +
                           x.Email_P + strSep +
                           x.Email_Cert + strSep +
