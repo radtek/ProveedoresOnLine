@@ -1275,6 +1275,7 @@
     <Content Include="Areas\Desktop\Views\Shared\_CD_CustomField_101002.cshtml" />
     <Content Include="Areas\Desktop\Views\Shared\_CD_CustomField_101003.cshtml" />
     <Content Include="Areas\Desktop\Views\Shared\_P_Search_Survey.cshtml" />
+    <Content Include="Areas\Desktop\Views\Survey\SurveySearchProgram.cshtml" />
     <None Include="Properties\PublishProfiles\Alex-JP MP.pubxml" />
     <None Include="Properties\PublishProfiles\David.pubxml" />
     <None Include="Properties\PublishProfiles\DiegoF.pubxml" />
@@ -1381,7 +1382,6 @@
     <Content Include="Areas\Desktop\Views\Survey\SVSurveyEvaluatorDetail.cshtml" />
     <Content Include="Areas\Desktop\Views\Survey\SVSurveyReport.cshtml" />
     <Content Include="Areas\Desktop\Views\Survey\SVSurveyProgram.cshtml" />
-    <Content Include="Areas\Desktop\Views\Survey\SurveySearchUpsert.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Desktop\Content\Images\" />

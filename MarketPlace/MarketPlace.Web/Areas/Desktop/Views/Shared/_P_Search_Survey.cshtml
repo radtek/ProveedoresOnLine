@@ -3,12 +3,14 @@
 
 <div>
     <form id="frmProviderSurveyList" method="post" action="@(Url.Action
-                                                            (MVC.Survey.ActionNames.SurveySearchUpsert,
+                                                            (MVC.Survey.ActionNames.SurveySearchProgram,
                                                             MVC.Survey.Name))">
         <ul id="Search_Survey_Item_Template"></ul>
 
         <div class="POMPComparisonActionWrapper">
-            <button type="submit">Crear evaluación</button>
+            <div id="SurveyProgramButtom" class="SurveyProgramButtom" style="display: none;">
+                <button type="submit">Crear evaluación</button>
+            </div>
         </div>
         <div style="display:none">
             <input type="hidden" name="UpsertAction" id="UpsertAction" value="true" />
