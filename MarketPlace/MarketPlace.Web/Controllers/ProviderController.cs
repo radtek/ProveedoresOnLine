@@ -74,6 +74,12 @@ namespace MarketPlace.Web.Controllers
 
                 #region ElasticSearch
 
+                List<Tuple<string, string, string>> lstSearchFilter = new List<Tuple<string,string,string>>();
+                if (!string.IsNullOrEmpty(SearchFilter))
+                {
+                    lstSearchFilter = oModel.GetlstSearchFilter();
+                }
+
                 #region Search Result Company
 
                 settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanyIndex].Value);
@@ -81,7 +87,7 @@ namespace MarketPlace.Web.Controllers
                 ElasticClient client = new ElasticClient(settings);
 
                 oModel.ElasticCompanyModel = client.Search<CompanyIndexModel>(s => s
-                .From(0)
+                .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
                 .TrackScores(true)
                 .Size(20)               
                 .Aggregations
@@ -111,31 +117,27 @@ namespace MarketPlace.Web.Controllers
                     )
                 .Query(q => q.
                     Filtered(f => f
-                    .Query(q1 => q1.MatchAll())
+                    .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
                     .Filter(f2 =>
                     {
                         QueryContainer qb = null;
 
-                        qb &= q.Term(m => m.CompanyName, SearchParam)
-                            || q.Term(m => m.CommercialCompanyName, SearchParam)
-                            || q.Term(m => m.IdentificationNumber, SearchParam);
-
-                        if (true)
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.CityId, 1512);
+                            qb &= q.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
                         }
-                        if (true)
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.CountryId, 988);
+                            qb &= q.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
                         }
-                        if (true)
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
                         {
                             qb &= q.Nested(n => n
                              .Path(p => p.oCustomerProviderIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
                                 .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
-                                .Query("902005")
+                                .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault())
                                 )
                               )
                            );
@@ -156,6 +158,8 @@ namespace MarketPlace.Web.Controllers
                     ))
                 );
 
+
+                oModel.TotalRows = (int)oModel.ElasticCompanyModel.Total;
                 #endregion
 
                 //parse view model
@@ -238,16 +242,16 @@ namespace MarketPlace.Web.Controllers
 
                 #region Providers
 
-                List<GenericFilterModel> oFilterModel = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchFilterNew
-                    (SessionModel.CurrentCompany.CompanyPublicId,
-                    oModel.SearchParam,
-                    oModel.SearchFilter,
-                    SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1" ? true : false);
+                //List<GenericFilterModel> oFilterModel = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchFilterNew
+                //    (SessionModel.CurrentCompany.CompanyPublicId,
+                //    oModel.SearchParam,
+                //    oModel.SearchFilter,
+                //    SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1" ? true : false);
 
-                if (oFilterModel != null)
-                {
-                    oModel.ProviderFilterResult = oFilterModel.Where(x => x.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).ToList();
-                }
+                //if (oFilterModel != null)
+                //{
+                //    oModel.ProviderFilterResult = oFilterModel.Where(x => x.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).ToList();
+                //}
 
                 #endregion Providers
 

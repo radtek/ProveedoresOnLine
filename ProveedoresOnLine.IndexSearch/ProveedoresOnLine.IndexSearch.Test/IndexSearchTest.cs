@@ -70,10 +70,11 @@ namespace ProveedoresOnLine.IndexSearch.Test
             settings.DisableDirectStreaming(true);
             settings.DefaultIndex("dev_companyindex");
             ElasticClient CustomerProviderClient = new ElasticClient(settings);
-
+            int page = 0;
             Nest.ISearchResponse<CompanyIndexModel> result = CustomerProviderClient.Search<CompanyIndexModel>(s => s
             .From(0)
                 .TrackScores(true)
+                .From(page)
                 .Size(20)
                 .Query(q =>
                     q.Nested(n => n

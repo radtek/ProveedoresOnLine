@@ -100,6 +100,7 @@ var Provider_SearchObject = {
     },
 
     GetSearchUrl: function () {
+        debugger;
         var oUrl = this.SearchUrl;
 
         oUrl += '?CompareId=' + this.CompareId;
