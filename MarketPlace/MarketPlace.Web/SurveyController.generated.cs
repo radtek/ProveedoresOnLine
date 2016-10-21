@@ -131,6 +131,7 @@ namespace MarketPlace.Web.Controllers
         {
             public readonly string Index = "Index";
             public readonly string Search = "Search";
+            public readonly string SurveySearchProgram = "SurveySearchProgram";
             public readonly string SurveyUpsert = "SurveyUpsert";
             public readonly string SurveyFinalize = "SurveyFinalize";
             public readonly string SVSurveySearch = "SVSurveySearch";
@@ -145,6 +146,7 @@ namespace MarketPlace.Web.Controllers
         {
             public const string Index = "Index";
             public const string Search = "Search";
+            public const string SurveySearchProgram = "SurveySearchProgram";
             public const string SurveyUpsert = "SurveyUpsert";
             public const string SurveyFinalize = "SurveyFinalize";
             public const string SVSurveySearch = "SVSurveySearch";
@@ -292,6 +294,17 @@ namespace MarketPlace.Web.Controllers
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "OrderOrientation", OrderOrientation);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "PageNumber", PageNumber);
             SearchOverride(callInfo, ProjectPublicId, CompareId, SearchParam, SearchFilter, SearchOrderType, OrderOrientation, PageNumber);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void SurveySearchProgramOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult SurveySearchProgram()
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.SurveySearchProgram);
+            SurveySearchProgramOverride(callInfo);
             return callInfo;
         }
 

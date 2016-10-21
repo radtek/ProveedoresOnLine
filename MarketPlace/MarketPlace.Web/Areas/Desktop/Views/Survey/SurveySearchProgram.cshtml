@@ -1,0 +1,190 @@
+﻿@model MarketPlace.Models.Provider.ProviderViewModel
+@{
+    ViewBag.Title = "Proveedores OnLine - Programar Evaluación de desempeño";
+    Layout = MVC.Desktop.Shared.Views._Layout;
+    Model.RenderScripts = false;
+}
+
+<div class="POMPProviderGreatWrapper">
+    <div>
+        <label class="POMPSectionTitles">Programar Evaluaciones De Desempeño</label>
+        <div class="container-fluid POMPContainerDetail">
+            <div id="Survey_ProgramSurvey">
+                <div class=" container-fluid POMPProviderDetailContainer">
+                    <form id="Survey_ProgramSurvey_Form" method="post" action="@(Url.Action(MVC.Survey.ActionNames.SurveySearchProgram,MVC.Survey.Name))">
+                        <br />
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div class="col-xs-12 POMPProviderBoxInfo">
+                                    <label>Evaluación:</label>
+                                </div>
+                                <div class="col-xs-12 POMPProviderBoxInfo">
+                                    <input class="POMPEvaluationInput" id="Survey_ProgramSurvey_SurveyName" placeholder="Evaluación" required validationmessage="Seleccione una evaluación" value="@if (Model.RelatedSurvey != null) { @Model.RelatedSurvey.SurveyConfigName.ToString();}" autofocus />
+                                </div>
+                            </div>
+                            @{
+                                List<int> oCurrentSubMenu = MarketPlace.Models.General.SessionModel.CurrentSelectionOption();
+                                if (oCurrentSubMenu.Any(x => x == (int)MarketPlace.Models.General.enumSelectionProcess.CreateProcess))
+                                {
+                                    <div class="col-xs-6">
+                                        <div class="col-xs-12 POMPProviderBoxInfo">
+                                            <label>Obra / Proyecto / Proceso Selección:</label>
+                                        </div>
+                                        <div class="col-xs-12 POMPProviderBoxInfo">
+                                            <input class="POMPEvaluationInput" id="Survey_ProgramSurvey_ProjectName" placeholder="Obra o proyecto" value="@if (Model.RelatedProject != null) { @Model.RelatedProject.ProjectName.ToString();}" />
+
+                                            @if (Model.RelatedProject != null)
+                                            {
+                                                <a href="@(Url.RouteUrl(MarketPlace.Models.General.Constants.C_Routes_Default,
+                                                            new
+                                                            {
+                                                                controller = MVC.Project.Name,
+                                                                action = MVC.Project.ActionNames.ProjectDetail,
+                                                                ProjectPublicId = Model.RelatedProject.ProjectPublicId
+                                                            }))">Ver Detalle</a>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div class="col-xs-12 POMPProviderBoxInfo">
+                                    <label>Fecha de Envío:</label>
+                                </div>
+                                <div class="col-xs-12 POMPProviderBoxInfo">
+                                    <input class="POMPEvaluationInput" id="Survey_ProgramSurvey_IssueDate" placeholder="yyyy-MM-dd" required validationmessage="Seleccione una fecha" name="SurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.IssueDate).ToString())_" value="@if (Model.RelatedSurvey != null) { @Model.RelatedSurvey.SurveyIssueDate.ToString();}" />
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="col-xs-12 POMPProviderBoxInfo">
+                                    <label>Fecha de Caducidad:</label>
+                                </div>
+                                <div class="col-xs-12 POMPProviderBoxInfo">
+                                    <input class="POMPEvaluationInput" id="Survey_ProgramSurvey_ExpirationDate" placeholder="yyyy-MM-dd" required validarionmessage="Seleccione una fecha" name="SurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.ExpirationDate).ToString())_" value="@if (Model.RelatedSurvey != null) { @Model.RelatedSurvey.SurveyExpirationDate.ToString();}" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="container-fluid">
+                                    <div id="Survey_ProgramSurvey_EvaluatorDiv"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <div class="col-xs-12">
+                                    <label>Contrato o Factura:</label>
+                                </div>
+                                <div class="col-xs-12">
+                                    <input class="POMPEvaluationInput" id="Survey_ProgramSurvey_Contract" name="SurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.Contract).ToString())_" value="@if (Model.RelatedSurvey != null) { @Model.RelatedSurvey.SurveyContract.ToString();}" />
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="col-xs-12">
+                                    <label>Fecha Inicial:</label>
+                                </div>
+                                <div class="col-xs-12">
+                                    <input class="POMPEvaluationInput" id="Survey_ProgramSurvey_StartDate" placeholder="yyyy-MM-dd" name="SurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.StartDate).ToString())_" value="@if (Model.RelatedSurvey != null) { @Model.RelatedSurvey.SurveyStartDate.ToString();}" />
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="col-xs-12">
+                                    <label>Fecha Final:</label>
+                                </div>
+                                <div class="col-xs-12">
+                                    <input class="POMPEvaluationInput" id="Survey_ProgramSurvey_EndDate" placeholder="yyyy-MM-dd" name="SurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.EndDate).ToString())_" value="@if (Model.RelatedSurvey != null) { @Model.RelatedSurvey.SurveyEndDate.ToString();}" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="col-xs-4">
+                                    <label>Observaciones:</label>
+                                </div>
+                                <div class="col-xs-12">
+                                    <textarea class="POMPEvaluationInput" id="Survey_ProgramSurvey_Comments" name="SurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.Comments).ToString())_">
+                                        @if (Model.RelatedSurvey != null)
+                                        {
+                                            @Model.RelatedSurvey.SurveyComments.ToString();
+                                        }
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                        @*Hidden Inputs*@
+                        <div style="display:none">
+                            <input type="hidden" id="Survey_ProgramSurvey_SurveyPublicId" name="SurveyPublicId">
+                            <input type="hidden" id="Survey_ProgramSurvey_ProjectPublicId" name="SurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.Project).ToString())_" value="@if (Model.RelatedProject != null) { @Model.RelatedProject.ProjectPublicId.ToString();}">
+                            <input type="hidden" id="Survey_ProgramSurvey_SurveyConfigId" name="SurveyConfigId" />
+                            <input type="hidden" id="Survey_ProgramSurvey_UpsertSurveySearch" name="UpsertSurveySearch" value="true" />
+                            <input type="hidden" id="Survey_ProgramSurvey_ProviderList" name="ProviderList" value="@(Model.RelatedSurveyProviders)" />
+                            <input type="hidden" id="Survey_ProgramSurvey_Responsible" name="SurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.Responsible).ToString())_" value="@MarketPlace.Models.General.SessionModel.CurrentLoginUser.Email" />
+                            <input type="hidden" id="Survey_ProgramSurvey_Status" name="SurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.Status).ToString())_" value="@(((int)MarketPlace.Models.General.enumSurveyStatus.Program).ToString())" />
+                            <input type="hidden" id="Survey_ProgramSurvey_Progress" name="SurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.Progress).ToString())_" value="0" />
+                            <input type="hidden" id="Survey_ProgramSurvey_Rating" name="SurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.Rating).ToString())_" value="0" />
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12" style="text-align:right;">
+                                <input type="submit" id="buttonSubmit" value="Guardar" class="POMPSaveButton" />
+                            </div>
+                        </div>
+                    </form>
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--loader-->
+<div id="loading"></div>
+<!--modal-->
+<div style="display:none;">
+    <!--Generic message dialog-->
+    <div id="Generic_MessageDialog">
+        <div title="${Title}">
+            ${Message}
+        </div>
+    </div>
+</div>
+@{
+    Model.RenderScripts = true;
+}
+@section inlinescripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Survey_Evaluation_ProgramObject.Init({
+                ObjectId: 'Survey_ProgramSurvey',
+                DateFormat: '@(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_DateFormat_Kendo].Value)',
+            });
+            Survey_Evaluation_ProgramObject.RenderEvaluation();
+            $("#Survey_ProgramSurvey_Form").submit(function (e) {
+                Survey_SaveObject.ProgressBar_Generic_Show();
+                e.preventDefault();
+                $.ajax({
+                    timeout: 9000,
+                    url: '@(Url.Action(MVC.Survey.ActionNames.SurveySearchProgram, MVC.Survey.Name))',
+                    type: 'POST',
+                    data: $("#Survey_ProgramSurvey_Form").serialize(),
+                    success: function (result) {
+                        Survey_SaveObject.ProgressBar_Generic_Hidden();
+                        Dialog_ShowMessage("Evaluación", "Evaluación almacenada correctamente.", "@(Url.Action(MVC.Survey.ActionNames.Search,MVC.Survey.Name))");
+                    },
+                    error: function (x, t, m) {
+                        Survey_SaveObject.ProgressBar_Generic_Hidden();
+                        Dialog_ShowMessage("Evaluación", "Evaluación almacenada correctamente.", "@(Url.Action(MVC.Survey.ActionNames.Search,MVC.Survey.Name))");
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+}

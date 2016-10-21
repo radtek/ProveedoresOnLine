@@ -1,12 +1,20 @@
 ﻿    <!--Project actions-->
 <span class="POMPComparisonTitle">Evaluación de desempeño</span>
-<div class="POMPComparisonActionWrapper">
-    <button>Crear evaluación</button>
-</div>
 
 <div>
-    <form>
-        <ul id="Search_Survey_Item_Template" class="POMPProviderSurveySearch"></ul>
+    <form id="frmProviderSurveyList" method="post" action="@(Url.Action
+                                                            (MVC.Survey.ActionNames.SurveySearchProgram,
+                                                            MVC.Survey.Name))">
+        <ul id="Search_Survey_Item_Template"></ul>
+
+        <div class="POMPComparisonActionWrapper">
+            <div id="SurveyProgramButtom" class="SurveyProgramButtom" style="display: none;">
+                <button type="submit">Crear evaluación</button>
+            </div>
+        </div>
+        <div style="display:none">
+            <input type="hidden" name="UpsertAction" id="UpsertAction" value="true" />
+        </div>
     </form>
 </div>
 
@@ -22,17 +30,15 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="col-md-4">
-
                         <a href="@(Url.RouteUrl
-                    (MarketPlace.Models.General.Constants.C_Routes_Default,
-                    new
-                    {
-                        controller = MVC.Survey.Name,
-                        action = MVC.Survey.ActionNames.SVSurveySearch,
-                    }) + "?ProviderPublicId={ProviderPublicId}")">
+                            (MarketPlace.Models.General.Constants.C_Routes_Default,
+                            new
+                            {
+                                controller = MVC.Survey.Name,
+                                action = MVC.Survey.ActionNames.SVSurveySearch,
+                            }) + "?ProviderPublicId={ProviderPublicId}")">
                             <img class="POMPComparisonResultProvLogo" src="{ProviderLogoUrl}" />
                         </a>
-
                     </div>
                     <div class="col-md-4">
 
@@ -40,7 +46,6 @@
                             <label>{CompanyName}</label>
                             <label><span>{IdentificationType} :</span> {IdentificationNumber}</label>
                         </div>
-
                     </div>
                     <div class="col-md-4">
                         <div class="POMPComparisonResultAlertComparWrapper">
@@ -48,15 +53,11 @@
                                 <div class="SelGenericTooltip POMPComparisonResultIncludeCoparisonIcon" title="Quitar proveedor"></div>
                             </a>
                         </div>
+                        <input id="ProviderPublicId" name="ProviderPublicId" type="hidden" value="{ProviderPublicId}" />
                     </div>
                 </div>
-                <input type="hidden" value="{ProviderPublicId}" />
             </div>
         </div>
     </div>
 </div>
 
-
-<div class="POMPComparisonActionWrapper">
-    <button>Crear evaluación</button>
-</div>

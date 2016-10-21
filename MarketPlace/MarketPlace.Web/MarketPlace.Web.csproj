@@ -1275,6 +1275,7 @@
     <Content Include="Areas\Desktop\Views\Shared\_CD_CustomField_101002.cshtml" />
     <Content Include="Areas\Desktop\Views\Shared\_CD_CustomField_101003.cshtml" />
     <Content Include="Areas\Desktop\Views\Shared\_P_Search_Survey.cshtml" />
+    <Content Include="Areas\Desktop\Views\Survey\SurveySearchProgram.cshtml" />
     <None Include="Properties\PublishProfiles\Alex-JP MP.pubxml" />
     <None Include="Properties\PublishProfiles\David.pubxml" />
     <None Include="Properties\PublishProfiles\DiegoF.pubxml" />

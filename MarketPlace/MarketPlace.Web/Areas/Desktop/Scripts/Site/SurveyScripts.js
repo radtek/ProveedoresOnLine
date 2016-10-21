@@ -192,7 +192,7 @@ var Survey_ProgramObject = {
                                         value.SurveyConfigItemInfoRolId + '_' + value.AreaId + '" /></li>'
                                 }
                                 else {
-                                    var result = '<li><label>' + value.AreaName + '</label></li>' +
+                                    var result = '<li class="abc"><label>' + value.AreaName + '</label></li>' +
                                                 '<li><label>' + value.SurveyConfigItemInfoRolName + ':</label><input id="Survey_ProgramSurvey_Evaluator' +
                                                  "_" + value.SurveyConfigItemInfoRolId +
                                                  '" placeholder="andres.perez@gmail.com" required validationmessage="Seleccione un evaluador" name="SurveyInfo_1204003_0_' +
@@ -201,7 +201,7 @@ var Survey_ProgramObject = {
                                     area = value.AreaName;
                                 }
 
-                                DialogDiv.find('#' + Survey_ProgramObject.ObjectId + '_EvaluatorDiv').append(result);
+                                DialogDiv.find('#' + Survey_ProgramObject.ObjectId + '_EvaluatorDiv').append('<ul>' + result + '</ul>');
 
                                 //init survey evaluator autocomplete
                                 DialogDiv.find('#' + Survey_ProgramObject.ObjectId + '_Evaluator_' + value.SurveyConfigItemInfoRolId).kendoAutoComplete({
@@ -327,7 +327,6 @@ var Survey_Evaluation_ProgramObject = {
                 dataType: 'json',
                 success: function (e) {
                     if (e != null && e.length > 0) {
-                        debugger;
                         //Render Roles
                         var divEvaluator = $('#' + Survey_Evaluation_ProgramObject.ObjectId + '_EvaluatorDiv').html('');
                         var area = null;
@@ -381,7 +380,6 @@ var Survey_Evaluation_ProgramObject = {
                                     serverFiltering: true,
                                     transport: {
                                         read: function (options) {
-                                            debugger;
                                             $.ajax({
                                                 url: BaseUrl.ApiUrl + '/CompanyApi?UserCompanySearchByRoleAC=true&RolId=' + value.SurveyConfigItemInfoRol + '&SearchParam=' + options.data.filter.filters[0].value,
                                                 dataType: 'json',
@@ -603,7 +601,11 @@ var Survey_SearchObject = {
             success: function (result) {
                 if (result != null) {
 
-                    debugger;
+                    //Add survey program buttom
+                    if (($('#Search_Survey_Item_Template li').size() + 1) > 0) {
+                        document.getElementById("SurveyProgramButtom").style.display = "inline";
+                    }
+
                     var oItemHtml = $('#POMPProviderSurvey').html();
 
                     //replace provider info
@@ -634,5 +636,10 @@ var Survey_SearchObject = {
     RemoveSurveyProvider: function (vProviderPublicId) {
         $("#li_prv_" + vProviderPublicId).remove();
         document.getElementById("AddProviderSurvey_" + vProviderPublicId).style.display = "inline";
+
+        //Remove survey program buttom
+        if ($('#Search_Survey_Item_Template li').size() <= 0) {
+            document.getElementById("SurveyProgramButtom").style.display = "none";
+        }
     }
 };

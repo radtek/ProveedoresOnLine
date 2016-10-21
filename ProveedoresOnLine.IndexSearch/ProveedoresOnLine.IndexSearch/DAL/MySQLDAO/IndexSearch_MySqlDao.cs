@@ -57,6 +57,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                          City = ci.Field<string>("City"),
                          ICAId = !ci.IsNull("ICAId") ? ci.Field<int>("ICAId") : 0,
                          ICA = ci.Field<string>("ICA"),
+                         InBlackList = ci.Field<int>("InBlackList") == 1 ? true : false,
                      }
                          into cig
                          select new CompanyIndexModel()
@@ -79,6 +80,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
 
                              ICAId = cig.Key.ICAId,
                              ICA = cig.Key.ICA,
+                             InBlackList = cig.Key.InBlackList,
 
                              oCustomerProviderIndexModel =
                                 (from cp in response.DataSetResult.Tables[0].AsEnumerable()

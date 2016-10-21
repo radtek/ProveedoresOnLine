@@ -23,6 +23,7 @@ namespace MarketPlace.Models.Survey
         public decimal Average { get; set; }
 
         List<MarketPlace.Models.General.FileModel> oSurveyFile;
+
         public List<MarketPlace.Models.General.FileModel> SurveyFile
         {
             get
@@ -47,7 +48,7 @@ namespace MarketPlace.Models.Survey
                 return oSurveyFile;
             }
         }
-
+        
         #region Survey Info Fields
 
         public string SurveyLastModify
