@@ -283,7 +283,6 @@ var Survey_Evaluation_ProgramObject = {
     },
 
     RenderEvaluation: function () {
-        debugger;
         //Autocomplete  Evaluación
         $('#' + Survey_Evaluation_ProgramObject.ObjectId + '_SurveyName').kendoAutoComplete({
             minLength: 0,
@@ -327,9 +326,7 @@ var Survey_Evaluation_ProgramObject = {
                 url: BaseUrl.ApiUrl + '/SurveyApi?SCSurveyConfigItemGetBySurveyConfigId=true&SurveyConfigId=' + IdSurvey + '&SurveyConfigItemType=' + '1202004',
                 dataType: 'json',
                 success: function (e) {
-                    debugger;
                     if (e != null && e.length > 0) {
-                        debugger;
                         //Render Roles
                         var divEvaluator = $('#' + Survey_Evaluation_ProgramObject.ObjectId + '_EvaluatorDiv').html('');
                         var area = null;
@@ -340,15 +337,14 @@ var Survey_Evaluation_ProgramObject = {
                         //divEvaluator.append(result);
                         //Set Rol
                         $.each(e, function (item, value) {
-                            debugger;
                             result = '';
                             if (area == value.AreaName && inarea == 1) {
                                 result += '<div class="col-xs-6">';
-                                result += '<label>' + value.SurveyConfigItemInfoRolName + ':</label>';
-                                result += '<input id="' + Survey_Evaluation_ProgramObject.ObjectId + '_Evaluator_' +
+                                result += '<div class="col-xs-12"><label>' + value.SurveyConfigItemInfoRolName + ':</label></div>';
+                                result += '<div class="col-xs-12"><input id="' + Survey_Evaluation_ProgramObject.ObjectId + '_Evaluator_' +
                                                             value.SurveyConfigItemInfoRolId + '" placeholder="andres.perez@gmail.com" required validationmessage="Seleccione un evaluador" name="SurveyInfo_1204003_0_' + //0 es igual al info Id 
                                                             value.SurveyConfigItemInfoRolId + '_' + value.AreaId + '_' +
-                                                            value.SurveyConfigItemInfoRolWeight + '" />';
+                                                            value.SurveyConfigItemInfoRolWeight + '" /></div>';
                                 result += '</div>';
                                 //divEvaluator.append(resultAddInfo);
                                 //resultAddInfo = '';
@@ -357,16 +353,16 @@ var Survey_Evaluation_ProgramObject = {
                             {
                                 inarea = 0;
                                 if (area != value.AreaName) {
-                                    result += '<div class="col-xs-12">' + value.AreaName + '</div>';//Close the Body Panel
+                                    result += '<div class="col-xs-12 POMPSectionTitlesBox"><label>' + value.AreaName + '</label></div>';//Close the Body Panel
                                     //result += resultAddInfo;
                                     inarea = 1;
                                 }
                                 result += '<div class="col-xs-6">';
-                                result += '<label>' + value.SurveyConfigItemInfoRolName + ':</label>';
-                                result += '<input id="' + Survey_Evaluation_ProgramObject.ObjectId + '_Evaluator_' +
+                                result += '<div class="col-xs-12"><label>' + value.SurveyConfigItemInfoRolName + ':</label></div>';
+                                result += '<div class="col-xs-12"><input id="' + Survey_Evaluation_ProgramObject.ObjectId + '_Evaluator_' +
                                                             value.SurveyConfigItemInfoRolId + '" placeholder="andres.perez@gmail.com" required validationmessage="Seleccione un evaluador" name="SurveyInfo_1204003_0_' +
                                                             value.SurveyConfigItemInfoRolId + '_' + value.AreaId + '_' +
-                                                            value.SurveyConfigItemInfoRolWeight + '" />';
+                                                            value.SurveyConfigItemInfoRolWeight + '" /></div>';
                                 result += '</div>';
 
                                 //divEvaluator.append(resultAddInfo);

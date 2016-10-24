@@ -53,9 +53,9 @@ namespace MarketPlace.Models.Provider
                              ItemId :
                              0;
                 }
-
             }
         }
+
 
         /// <summary>
         /// Is certified
