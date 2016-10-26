@@ -416,6 +416,9 @@
         IsRelatedProvider = 112003,
         RestrictiveListProvider = 112004,
         MyClients = 112005,
+
+        MyProviders = 112006,
+        OtherProviders = 112007,
     }
 
     public enum enumCustomerProviderInfoType

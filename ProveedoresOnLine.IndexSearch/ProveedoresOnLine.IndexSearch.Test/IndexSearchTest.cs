@@ -78,30 +78,28 @@ namespace ProveedoresOnLine.IndexSearch.Test
                 .Size(20)
                 .Query(q =>
                     q.Nested(n => n
-                        .Path(p => p.oCustomerProviderIndexModel)
-                            .Query(fq => fq
-                                .Match(match => match
-                                .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                                .Query("DA5C572E")
-                                )
-                              ).ScoreMode(NestedScoreMode.Max)
-                           )
+                    .Path(p => p.oCustomerProviderIndexModel)
+                        .Query(fq => fq
+                            .Match(match => match
+                            .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                            .Query("DA5C572E")
+                            )
+                            ).ScoreMode(NestedScoreMode.Max)
+                        )
                     )
-                    .Aggregations(agg => agg
-                        .Nested("status_avg", x => x.
-                            Path(p => p.oCustomerProviderIndexModel.Where(y => y.CustomerPublicId == "DA5C572E")
-                                .Select(y => y).FirstOrDefault())
-                            .Aggregations(aggs => aggs.
-                                Terms("status", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().StatusId)
-                                )
+                    .Aggregations(agg => agg                        
+                        .Nested("myproviders_avg", x => x.
+                        Path(p => p.oCustomerProviderIndexModel).
+                        Aggregations(aggs => aggs.Terms("myproviders", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().CustomerPublicId)
                             )
                         )
-                        .Terms("city", aggv => aggv
-                            .Field(fi => fi.CityId))
-                        .Terms("country", c => c
-                            .Field(fi => fi.CountryId))
-                        .Terms("blacklist", bl => bl
-                            .Field(fi => fi.InBlackList)))
+                    )
+                    .Terms("city", aggv => aggv
+                        .Field(fi => fi.CityId))
+                    .Terms("country", c => c
+                        .Field(fi => fi.CountryId))
+                    .Terms("blacklist", bl => bl
+                        .Field(fi => fi.InBlackList)))
                 .Query(q => q.
                     Filtered(f => f
                     .Query(q1 => q1.MatchAll())
@@ -109,7 +107,7 @@ namespace ProveedoresOnLine.IndexSearch.Test
                     {
                         QueryContainer qb = null;
 
-                        qb &= q.Term(m => m.CompanyName, "colsein");
+                        //qb &= q.Term(m => m.CompanyName, "colsein");
 
                         if (true)
                         {

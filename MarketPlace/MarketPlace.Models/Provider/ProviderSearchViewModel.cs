@@ -22,7 +22,9 @@ namespace MarketPlace.Models.Provider
         public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> StatusFilter { get; set; }
         public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> BlackListFilter { get; set; }
         public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> CountryFilter { get; set; }
-        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> IcaFilter { get; set; }        
+        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> IcaFilter { get; set; }
+        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> MyProvidersFilter { get; set; }
+        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> OtherProvidersFilter { get; set; } 
 
         public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> SurveyType { get; set; }
 
