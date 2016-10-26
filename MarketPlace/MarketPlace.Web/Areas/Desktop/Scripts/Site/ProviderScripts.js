@@ -41,7 +41,6 @@ var Provider_SearchObject = {
     },
 
     RenderAsync: function () {
-        debugger;
         //init Search input
         $('#' + Provider_SearchObject.ObjectId + '_txtSearchBox').keydown(function (e) {
             if (e.keyCode == 13) {
@@ -63,7 +62,6 @@ var Provider_SearchObject = {
 
     /*{SearchFilter{Enable,Value},SearchOrderType,OrderOrientation,PageNumber}*/
     Search: function (vSearchObject) {
-        debugger;
         /*get serach param*/
         if (this.SearchParam != $('#' + Provider_SearchObject.ObjectId + '_txtSearchBox').val()) {
             /*Init pager*/
@@ -102,7 +100,6 @@ var Provider_SearchObject = {
     },
 
     GetSearchUrl: function () {
-        debugger;
         var oUrl = this.SearchUrl;
 
         oUrl += '?CompareId=' + this.CompareId;

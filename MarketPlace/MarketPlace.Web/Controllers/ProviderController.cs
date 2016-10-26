@@ -270,6 +270,7 @@ namespace MarketPlace.Web.Controllers
                 #endregion
 
                 #region Country Aggregation
+
                 oModel.ElasticCompanyModel.Aggs.Terms("country").Buckets.All(x =>
                 {
                     oModel.CountryFilter.Add(new ElasticSearchFilter
