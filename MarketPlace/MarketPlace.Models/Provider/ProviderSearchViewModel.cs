@@ -54,6 +54,8 @@ namespace MarketPlace.Models.Provider
      
         public Nest.ISearchResponse<CompanySurveyIndexModel> ElasticCompanySurveyModel { get; set; }
 
+        public string RelatedSurveyProviders { get; set; }
+
         #region Comparison
 
         public MarketPlace.Models.Compare.CompareViewModel RelatedCompare { get; set; }

@@ -170,7 +170,7 @@
                 Survey_SaveObject.ProgressBar_Generic_Show();
                 e.preventDefault();
                 $.ajax({
-                    timeout: 9000,
+                    timeout: 200000,
                     url: '@(Url.Action(MVC.Survey.ActionNames.SurveySearchProgram, MVC.Survey.Name))',
                     type: 'POST',
                     data: $("#Survey_ProgramSurvey_Form").serialize(),

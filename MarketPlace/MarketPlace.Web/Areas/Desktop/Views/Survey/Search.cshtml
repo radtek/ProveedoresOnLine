@@ -28,6 +28,23 @@
         @Html.Partial(MVC.Desktop.Shared.Views._P_Search_Survey, Model)
     </div>
 </div>
+
+<!--Templates-->
+<div style="display: none;">
+    <form id="frmProviderSearch" method="post" action="@(Url.Action
+                                                            (MVC.Survey.ActionNames.Search,
+                                                            MVC.Survey.Name))">
+        <div id="div_ProviderList">
+        </div>
+        <input type="hidden" id="SearchParam" name="SearchParam" value="@Model.SearchParam" />
+        <input type="hidden" id="SearchFilter" name="SearchFilter" value="@Model.SearchFilter" />
+        <input type="hidden" id="SearchOrderType" name="SearchOrderType" value="@(((int)Model.SearchOrderType).ToString())" />
+        <input type="hidden" id="OrderOrientation" name="OrderOrientation" value="@Model.OrderOrientation.ToString().ToLower()" />
+        <input type="hidden" id="PageNumber" name="PageNumber" value="@Model.PageNumber" />
+        <input type="hidden" id="RequestPage" name="RequestPage" value="true" />
+    </form>
+</div>
+
 @{
     Model.RenderScripts = true;
 }
@@ -41,26 +58,18 @@
                 SearchUrl: '@(Url.RouteUrl(MarketPlace.Models.General.Constants.C_Routes_Default,
                             new
                             {
-                                controller = MVC.Provider.Name,
-                                action = MVC.Provider.ActionNames.Search
+                                controller = MVC.Survey.Name,
+                                action = MVC.Survey.ActionNames.Search
                             }))',
-
-                ProjectPublicId: '@(Model.RelatedProject != null ? Model.RelatedProject.ProjectPublicId : string.Empty)',
-                ProjectUrl: '@(Url.RouteUrl(MarketPlace.Models.General.Constants.C_Routes_Default,
-                            new
-                            {
-                                controller = MVC.Project.Name,
-                                action = MVC.Project.ActionNames.ProjectDetailRecalculate
-                            }) + "?ProjectPublicId={ProjectPublicId}")',
-
                 SearchParam: '@Model.SearchParam',
                 SearchFilter: '@Model.SearchFilter',
                 SearchOrderType: '@(((int)Model.SearchOrderType).ToString())',
                 OrderOrientation: @Model.OrderOrientation.ToString().ToLower(),
                 PageNumber: @Model.PageNumber,
                 RowCount: @Model.RowCount,
-
                 BlackListStatusShowAlert: @((int)MarketPlace.Models.General.enumBlackListStatus.ShowAlert),
+                IsProviderSurvey: true,
+                RelatedProviderSurvey: '@Model.RelatedSurveyProviders',
             });
 
             Provider_SearchObject.RenderAsync();

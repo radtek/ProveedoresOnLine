@@ -174,7 +174,6 @@ namespace MarketPlace.Models.Provider
         {
             ElasticRealtedProvider = new CompanyIndexModel()
             {
-                CatlificationRating = oElasticSurveySearchModel.CatlificationRating,
                 City = oElasticSurveySearchModel.City,
                 CityId = oElasticSurveySearchModel.CityId,
                 CommercialCompanyName = oElasticSurveySearchModel.CommercialCompanyName,
