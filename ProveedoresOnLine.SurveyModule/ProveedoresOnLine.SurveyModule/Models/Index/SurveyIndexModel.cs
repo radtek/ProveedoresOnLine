@@ -12,12 +12,8 @@ namespace ProveedoresOnLine.SurveyModule.Models.Index
     {
         public SurveyIndexModel() { }
 
-        [Number]
-        public int Id { get { return SurveyId; } }
-
-        [Number]
-        public int SurveyId { get; set; }
-
+        public string Id { get { return SurveyPublicId; } }
+        
         [String]
         public string SurveyPublicId { get; set; }
 
