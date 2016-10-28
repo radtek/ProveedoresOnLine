@@ -44,6 +44,14 @@ namespace ProveedoresOnLine.SurveyModule.Test
             Assert.IsTrue(oReturn != null);
         }
 
+        [TestMethod]
+        public void SurveyConfigGetById()
+        {
+            ProveedoresOnLine.SurveyModule.Models.SurveyConfigModel oReturn = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyConfigGetById(44);
+
+            Assert.AreEqual(true, oReturn != null && oReturn.ItemId > 0);
+        }
+
         #region Util
 
         [TestMethod]
@@ -54,6 +62,13 @@ namespace ProveedoresOnLine.SurveyModule.Test
             Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
         }
 
+        [TestMethod]
+        public void GetSurveyById()
+        {
+            List<ProveedoresOnLine.SurveyModule.Models.SurveyConfigModel> oReturn = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.MP_SurveyConfigSearch("DA5C572E", "44", 1, 15000);
+
+            Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
+        }
         #endregion
     }
 }

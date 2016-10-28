@@ -69,7 +69,7 @@
                 RowCount: @Model.RowCount,
                 BlackListStatusShowAlert: @((int)MarketPlace.Models.General.enumBlackListStatus.ShowAlert),
                 IsProviderSurvey: true,
-                RelatedProviderSurvey: '@(Model.RelatedSurveyProviders)',
+                RelatedProviderSurvey: '@Model.RelatedSurveyProviders',
             });
 
             Provider_SearchObject.RenderAsync();
