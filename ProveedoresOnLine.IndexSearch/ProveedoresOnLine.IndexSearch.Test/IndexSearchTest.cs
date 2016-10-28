@@ -245,6 +245,71 @@ namespace ProveedoresOnLine.IndexSearch.Test
                      q.Term(p => p.CompanyName, ""))
                 );
         }
+
+        [TestMethod]
+        public void DeleteCompanySurveyIndex()
+        {
+            Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+            var settings = new ConnectionSettings(node);
+            settings.DisableDirectStreaming(true);
+            settings.DefaultIndex("dev_companysurveyindex");
+            ElasticClient CompanySurveyClient = new ElasticClient(settings);
+
+            //CompanySurveyClient.Delete("dev_companysurveyindex");
+        }
+
+        [TestMethod]
+        public void CompanySurveyIndexationFunction()
+        {
+            bool oReturn = ProveedoresOnLine.IndexSearch.Controller.IndexSearch.SurveyIndexationFunction();
+
+            Assert.AreEqual(true, oReturn);
+        }
+
+        [TestMethod]
+        public void CompanySurveyIndexPartialFunction()
+        {
+            Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+            var settings = new ConnectionSettings(node);
+            settings.DefaultIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value);
+            settings.DisableDirectStreaming(true);
+            ElasticClient client = new ElasticClient(settings);
+
+            Nest.ISearchResponse<CompanySurveyIndexModel> oResult = client.Search<CompanySurveyIndexModel>(s => s
+                .From(0)
+                .Size(1)
+                .Query(q => q.QueryString(qs => qs.Query("11CC0EBC"))));
+
+            CompanySurveyIndexModel oModelToIndex = new CompanySurveyIndexModel(oResult.Documents.FirstOrDefault());
+
+            oModelToIndex.oSurveyIndexModel.Add(new SurveyIndexModel()
+            {
+                CompanyPublicId = "18474D1D",
+                CustomerPublicId = "DA5C572E",
+                SurveyPublicId = "BB7DAVID",
+                SurveyStatus = "Programada",
+                SurveyStatusId = 1206001,
+                SurveyType = "EVALUACION DE DESEMPEÑO PROVEEDORES ONLINE 1",
+                SurveyTypeId = 44,
+            });
+
+            Uri nodeToIndex = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+            var settingsToIndex = new ConnectionSettings(nodeToIndex);
+            settingsToIndex.DefaultIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value);
+            ElasticClient clientToIndex = new ElasticClient(settingsToIndex);
+
+            ICreateIndexResponse oElasticResponse = clientToIndex.CreateIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value, c => c
+                            .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                            .Analysis(a => a.Analyzers(an => an.Custom("customWhiteSpace", anc => anc.Filters("asciifolding", "lowercase")
+                                .Tokenizer("whitespace")
+                                )).TokenFilters(tf => tf
+                                        .EdgeNGram("customEdgeNGram", engrf => engrf
+                                        .MinGram(1)
+                                        .MaxGram(10)))).NumberOfShards(1)
+                            ));
+
+            var Index = clientToIndex.Index(oModelToIndex);
+        }
         #endregion
     }
 }

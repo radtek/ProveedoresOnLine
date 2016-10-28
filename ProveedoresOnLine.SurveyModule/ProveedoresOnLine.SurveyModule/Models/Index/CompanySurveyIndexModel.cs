@@ -72,5 +72,48 @@ namespace ProveedoresOnLine.SurveyModule.Models.Index
 
         [Nested]
         public List<SurveyIndexModel> oSurveyIndexModel { get; set; }
+
+        public CompanySurveyIndexModel(CompanySurveyIndexModel oCompanySurveyIndexModel)
+        {
+            IdentificationTypeId = oCompanySurveyIndexModel.IdentificationTypeId;
+            IdentificationType = oCompanySurveyIndexModel.IdentificationType;
+           
+            IdentificationNumber = oCompanySurveyIndexModel.IdentificationNumber;
+           
+            CompanyName = oCompanySurveyIndexModel.CompanyName;
+            
+            CommercialCompanyName = oCompanySurveyIndexModel.CommercialCompanyName;
+            
+            CompanyPublicId = oCompanySurveyIndexModel.CompanyPublicId;
+           
+            LogoUrl = oCompanySurveyIndexModel.LogoUrl;
+            
+            CatlificationRating = oCompanySurveyIndexModel.CatlificationRating;
+            
+            PrincipalActivityId = oCompanySurveyIndexModel.PrincipalActivityId;
+            PrincipalActivity = oCompanySurveyIndexModel.PrincipalActivity;
+            
+            CountryId = oCompanySurveyIndexModel.CountryId;
+            Country = oCompanySurveyIndexModel.Country;
+            
+            CityId = oCompanySurveyIndexModel.CityId;
+            City = oCompanySurveyIndexModel.City;
+            
+            CustomerPublicId = oCompanySurveyIndexModel.CustomerPublicId;
+            
+            InBlackList = oCompanySurveyIndexModel.InBlackList;
+            
+            ProviderStatusId = oCompanySurveyIndexModel.ProviderStatusId;
+            ProviderStatus = oCompanySurveyIndexModel.ProviderStatus;
+            
+            CompanyEnable = oCompanySurveyIndexModel.CompanyEnable;
+            
+            ICAId = oCompanySurveyIndexModel.ICAId;
+            ICA = oCompanySurveyIndexModel.ICA;
+            
+            oCustomerProviderIndexModel = oCompanySurveyIndexModel.oCustomerProviderIndexModel;
+            
+            oSurveyIndexModel = oCompanySurveyIndexModel.oSurveyIndexModel;
+        }
     }
 }
