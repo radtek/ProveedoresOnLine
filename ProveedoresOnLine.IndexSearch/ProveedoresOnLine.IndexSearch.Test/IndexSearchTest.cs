@@ -87,7 +87,7 @@ namespace ProveedoresOnLine.IndexSearch.Test
                             ).ScoreMode(NestedScoreMode.Max)
                         )
                     )
-                    .Aggregations(agg => agg                        
+                    .Aggregations(agg => agg
                         .Nested("myproviders_avg", x => x.
                         Path(p => p.oCustomerProviderIndexModel).
                         Aggregations(aggs => aggs.Terms("myproviders", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().CustomerPublicId)
@@ -309,6 +309,43 @@ namespace ProveedoresOnLine.IndexSearch.Test
                             ));
 
             var Index = clientToIndex.Index(oModelToIndex);
+        }
+
+        [TestMethod]
+        public void CompanySurveyIndexUpdate()
+        {
+            Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+            var settings = new ConnectionSettings(node);
+            settings.DefaultIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value);
+            settings.DisableDirectStreaming(true);
+            ElasticClient client = new ElasticClient(settings);
+
+            Nest.ISearchResponse<CompanySurveyIndexModel> oResult = client.Search<CompanySurveyIndexModel>(s => s
+                .From(0)
+                .Size(1)
+                .Query(q => q.QueryString(qs => qs.Query("11CC0EBC"))));
+
+            CompanySurveyIndexModel oModelToIndex = new CompanySurveyIndexModel(oResult.Documents.FirstOrDefault());
+
+            oModelToIndex.oSurveyIndexModel = new List<SurveyIndexModel>(){
+                new SurveyIndexModel(){
+                    CompanyPublicId = "18474D1D",
+                    CustomerPublicId = "DA5C572E",
+                    SurveyPublicId = "DAVIDDDD",
+                    SurveyStatus = "Progreso",
+                    SurveyStatusId = 1206003,
+                    SurveyType = "EVALUACION DE DESEMPEÑO PROVEEDORES ONLINE 1",
+                    SurveyTypeId = 44,
+                },
+            };
+
+            Uri nodeToIndex = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+            var settingsToIndex = new ConnectionSettings(nodeToIndex);
+            settingsToIndex.DefaultIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value);
+            ElasticClient clientToIndex = new ElasticClient(settingsToIndex);
+            
+            var response = clientToIndex.Update<CompanySurveyIndexModel, object>(u => u.
+                Index)
         }
         #endregion
     }
