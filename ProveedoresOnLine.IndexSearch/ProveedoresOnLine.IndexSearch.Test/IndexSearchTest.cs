@@ -344,9 +344,10 @@ namespace ProveedoresOnLine.IndexSearch.Test
             settingsToIndex.DefaultIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value);
             ElasticClient clientToIndex = new ElasticClient(settingsToIndex);
             
-            var response = clientToIndex.Update<CompanySurveyIndexModel, object>(u => u.
-                Index)
+            //var response = clientToIndex.Update<CompanySurveyIndexModel, object>(u => u.
+            //    Index)
         }
+
         #endregion
     }
 }
