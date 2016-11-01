@@ -412,8 +412,8 @@ namespace MarketPlace.Web.Controllers
                             SurveyPublicId = Survey.SurveyPublicId,
                             CompanyPublicId = Survey.RelatedProvider.RelatedCompany.CompanyPublicId,
                             CustomerPublicId = SessionModel.CurrentCompany.CompanyPublicId,
-                            SurveyStatusId = Survey.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.ItemInfoId).DefaultIfEmpty(0).FirstOrDefault(),
-                            SurveyStatus = Survey.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault(),
+                            SurveyStatusId = Survey.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => Convert.ToInt32(x.Value)).DefaultIfEmpty(0).FirstOrDefault(),
+                            SurveyStatus = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(Survey.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault()),
                             SurveyTypeId = oSurveyConfigModel.ItemId,
                             SurveyType = oSurveyConfigModel.ItemName,
                         });
@@ -453,7 +453,7 @@ namespace MarketPlace.Web.Controllers
             #region Index Survey
 
             /*Get Survey Config by surveyconfigid*/
-            SurveyModel oSurveyModel = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetById(oSurveyToUpsert.SurveyPublicId);
+            SurveyModel oSurveyModel = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetById(SurveyPublicId);
 
             SurveyConfigModel oSurveyConfigModel = new SurveyConfigModel()
             {
@@ -476,16 +476,14 @@ namespace MarketPlace.Web.Controllers
 
             CompanySurveyIndexModel oModelToIndex = new CompanySurveyIndexModel(oResult.Documents.FirstOrDefault());
 
-            oModelToIndex.oSurveyIndexModel.Add(new ProveedoresOnLine.SurveyModule.Models.Index.SurveyIndexModel()
+            if (oModelToIndex.oSurveyIndexModel.Any(x => x.SurveyPublicId == oSurveyModel.ParentSurveyPublicId))
             {
-                SurveyPublicId = oSurveyToUpsert.SurveyPublicId,
-                CompanyPublicId = oSurveyModel.RelatedProvider.RelatedCompany.CompanyPublicId,
-                CustomerPublicId = oSurveyConfigModel.RelatedCustomer.RelatedCompany.CompanyPublicId,
-                SurveyStatusId = oSurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.ItemInfoId).DefaultIfEmpty(0).FirstOrDefault(),
-                SurveyStatus = oSurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault(),
-                SurveyTypeId = oSurveyConfigModel.ItemId,
-                SurveyType = oSurveyConfigModel.ItemName,
-            });
+                foreach (var survey in oModelToIndex.oSurveyIndexModel.Where(x => x.SurveyPublicId == oSurveyModel.ParentSurveyPublicId))
+                {
+                    survey.SurveyStatusId = oSurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => Convert.ToInt32(x.Value)).DefaultIfEmpty(0).FirstOrDefault();
+                    survey.SurveyStatus = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(oSurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault());
+                }
+            }
 
             ICreateIndexResponse oElasticResponse = client.CreateIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanySurveyIndex].Value, c => c
             .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
@@ -555,16 +553,14 @@ namespace MarketPlace.Web.Controllers
 
                 CompanySurveyIndexModel oModelToIndex = new CompanySurveyIndexModel(oResult.Documents.FirstOrDefault());
 
-                oModelToIndex.oSurveyIndexModel.Add(new ProveedoresOnLine.SurveyModule.Models.Index.SurveyIndexModel()
+                if (oModelToIndex.oSurveyIndexModel.Any(x => x.SurveyPublicId == oSurveyModel.ParentSurveyPublicId))
                 {
-                    SurveyPublicId = oSurveyToUpsert.SurveyPublicId,
-                    CompanyPublicId = oSurveyModel.RelatedProvider.RelatedCompany.CompanyPublicId,
-                    CustomerPublicId = oSurveyConfigModel.RelatedCustomer.RelatedCompany.CompanyPublicId,
-                    SurveyStatusId = oSurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.ItemInfoId).DefaultIfEmpty(0).FirstOrDefault(),
-                    SurveyStatus = oSurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault(),
-                    SurveyTypeId = oSurveyConfigModel.ItemId,
-                    SurveyType = oSurveyConfigModel.ItemName,
-                });
+                    foreach (var survey in oModelToIndex.oSurveyIndexModel.Where(x => x.SurveyPublicId == oSurveyModel.ParentSurveyPublicId))
+                    {
+                        survey.SurveyStatusId = oSurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => Convert.ToInt32(x.Value)).DefaultIfEmpty(0).FirstOrDefault();
+                        survey.SurveyStatus = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(oSurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault());
+                    }
+                }
 
                 ICreateIndexResponse oElasticResponse = client.CreateIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanySurveyIndex].Value, c => c
                 .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
@@ -995,8 +991,8 @@ namespace MarketPlace.Web.Controllers
                         SurveyPublicId = SurveyToUpsert.SurveyPublicId,
                         CompanyPublicId = SurveyToUpsert.RelatedProvider.RelatedCompany.CompanyPublicId,
                         CustomerPublicId = SessionModel.CurrentCompany.CompanyPublicId,
-                        SurveyStatusId = SurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.ItemInfoId).DefaultIfEmpty(0).FirstOrDefault(),
-                        SurveyStatus = SurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault(),
+                        SurveyStatusId = SurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => Convert.ToInt32(x.Value)).DefaultIfEmpty(0).FirstOrDefault(),
+                        SurveyStatus = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(SurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault()),
                         SurveyTypeId = oSurveyConfigModel.ItemId,
                         SurveyType = oSurveyConfigModel.ItemName,
                     });

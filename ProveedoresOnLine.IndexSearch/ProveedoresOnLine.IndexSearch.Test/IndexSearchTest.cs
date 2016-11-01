@@ -339,13 +339,18 @@ namespace ProveedoresOnLine.IndexSearch.Test
                 },
             };
 
+            
+        }
+
+        [TestMethod]
+        public void CompanySurveyDeleteIndex()
+        {
             Uri nodeToIndex = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
             var settingsToIndex = new ConnectionSettings(nodeToIndex);
             settingsToIndex.DefaultIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value);
             ElasticClient clientToIndex = new ElasticClient(settingsToIndex);
-            
-            //var response = clientToIndex.Update<CompanySurveyIndexModel, object>(u => u.
-            //    Index)
+
+            clientToIndex.DeleteIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value);
         }
 
         #endregion
