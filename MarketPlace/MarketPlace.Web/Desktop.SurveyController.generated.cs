@@ -113,12 +113,6 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
         {
             return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.SVSurveyProgram);
         }
-        [NonAction]
-        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public virtual System.Web.Mvc.FileResult GetPdfFileBytes()
-        {
-            return new T4MVC_System_Web_Mvc_FileResult(Area, Name, ActionNames.GetPdfFileBytes);
-        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public SurveyController Actions { get { return MVC.Desktop.Survey; } }
@@ -145,7 +139,6 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             public readonly string SVSurveyEvaluatorDetail = "SVSurveyEvaluatorDetail";
             public readonly string SVSurveyReport = "SVSurveyReport";
             public readonly string SVSurveyProgram = "SVSurveyProgram";
-            public readonly string GetPdfFileBytes = "GetPdfFileBytes";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -161,7 +154,6 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             public const string SVSurveyEvaluatorDetail = "SVSurveyEvaluatorDetail";
             public const string SVSurveyReport = "SVSurveyReport";
             public const string SVSurveyProgram = "SVSurveyProgram";
-            public const string GetPdfFileBytes = "GetPdfFileBytes";
         }
 
 
@@ -180,6 +172,8 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionParamsClass_Search
         {
+            public readonly string ProjectPublicId = "ProjectPublicId";
+            public readonly string CompareId = "CompareId";
             public readonly string SearchParam = "SearchParam";
             public readonly string SearchFilter = "SearchFilter";
             public readonly string SearchOrderType = "SearchOrderType";
@@ -253,14 +247,6 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             public readonly string SurveyPublicId = "SurveyPublicId";
             public readonly string ProjectPublicId = "ProjectPublicId";
         }
-        static readonly ActionParamsClass_GetPdfFileBytes s_params_GetPdfFileBytes = new ActionParamsClass_GetPdfFileBytes();
-        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_GetPdfFileBytes GetPdfFileBytesParams { get { return s_params_GetPdfFileBytes; } }
-        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_GetPdfFileBytes
-        {
-            public readonly string FilePath = "FilePath";
-        }
         static readonly ViewsClass s_views = new ViewsClass();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ViewsClass Views { get { return s_views; } }
@@ -310,18 +296,20 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
         }
 
         [NonAction]
-        partial void SearchOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string SearchParam, string SearchFilter, string SearchOrderType, string OrderOrientation, string PageNumber);
+        partial void SearchOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string ProjectPublicId, string CompareId, string SearchParam, string SearchFilter, string SearchOrderType, string OrderOrientation, string PageNumber);
 
         [NonAction]
-        public override System.Web.Mvc.ActionResult Search(string SearchParam, string SearchFilter, string SearchOrderType, string OrderOrientation, string PageNumber)
+        public override System.Web.Mvc.ActionResult Search(string ProjectPublicId, string CompareId, string SearchParam, string SearchFilter, string SearchOrderType, string OrderOrientation, string PageNumber)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Search);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "ProjectPublicId", ProjectPublicId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "CompareId", CompareId);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "SearchParam", SearchParam);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "SearchFilter", SearchFilter);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "SearchOrderType", SearchOrderType);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "OrderOrientation", OrderOrientation);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "PageNumber", PageNumber);
-            SearchOverride(callInfo, SearchParam, SearchFilter, SearchOrderType, OrderOrientation, PageNumber);
+            SearchOverride(callInfo, ProjectPublicId, CompareId, SearchParam, SearchFilter, SearchOrderType, OrderOrientation, PageNumber);
             return callInfo;
         }
 
@@ -428,18 +416,6 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "SurveyPublicId", SurveyPublicId);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "ProjectPublicId", ProjectPublicId);
             SVSurveyProgramOverride(callInfo, ProviderPublicId, SurveyPublicId, ProjectPublicId);
-            return callInfo;
-        }
-
-        [NonAction]
-        partial void GetPdfFileBytesOverride(T4MVC_System_Web_Mvc_FileResult callInfo, string FilePath);
-
-        [NonAction]
-        public override System.Web.Mvc.FileResult GetPdfFileBytes(string FilePath)
-        {
-            var callInfo = new T4MVC_System_Web_Mvc_FileResult(Area, Name, ActionNames.GetPdfFileBytes);
-            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "FilePath", FilePath);
-            GetPdfFileBytesOverride(callInfo, FilePath);
             return callInfo;
         }
 
