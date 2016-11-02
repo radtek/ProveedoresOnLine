@@ -15,6 +15,7 @@ namespace ProveedoresOnLine.Company.Models.Company
         {
 
         }
+
         public string Id { get { return CompanyPublicId; } }
         [Number]
         public int IdentificationTypeId { get; set; }
