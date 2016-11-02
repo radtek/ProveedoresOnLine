@@ -13,7 +13,7 @@ namespace ProveedoresOnLine.SurveyModule.Models.Index
         public SurveyIndexModel() { }
 
         public string Id { get { return SurveyPublicId; } }
-
+        
         [String]
         public string SurveyPublicId { get; set; }
 

@@ -20,6 +20,8 @@ var Provider_SearchObject = {
     OrderOrientation: false,
     PageNumber: 0,
     RowCount: 0,
+    IsProviderSurvey: false,
+    RelatedProviderSurvey: '',
 
     BlackListStatusShowAlert: '',
 
@@ -36,6 +38,8 @@ var Provider_SearchObject = {
         this.OrderOrientation = vInitObject.OrderOrientation;
         this.PageNumber = vInitObject.PageNumber;
         this.RowCount = vInitObject.RowCount;
+        this.IsProviderSurvey = vInitObject.IsProviderSurvey;
+        this.RelatedProviderSurvey = vInitObject.RelatedProviderSurvey;
 
         this.BlackListStatusShowAlert = vInitObject.BlackListStatusShowAlert;
     },
@@ -58,10 +62,15 @@ var Provider_SearchObject = {
                 });
             }
         });
+
+        if (Provider_SearchObject.RelatedProviderSurvey != "") {
+            Survey_SearchObject.GetSurveyProviderList(Provider_SearchObject.RelatedProviderSurvey);
+        }
     },
 
     /*{SearchFilter{Enable,Value},SearchOrderType,OrderOrientation,PageNumber}*/
     Search: function (vSearchObject) {
+
         /*get serach param*/
         if (this.SearchParam != $('#' + Provider_SearchObject.ObjectId + '_txtSearchBox').val()) {
             /*Init pager*/
@@ -96,10 +105,24 @@ var Provider_SearchObject = {
                 this.PageNumber = vSearchObject.PageNumber;
             }
         }
-        window.location = Provider_SearchObject.GetSearchUrl();
+
+        if (Provider_SearchObject.IsProviderSurvey) {
+
+            document.getElementById("SearchParam").value = this.SearchParam;
+            document.getElementById("SearchFilter").value = this.SearchFilter;
+            document.getElementById("SearchOrderType").value = this.SearchOrderType;
+            document.getElementById("OrderOrientation").value = this.OrderOrientation;
+            document.getElementById("PageNumber").value = this.PageNumber;
+
+            document.getElementById('frmProviderSearch').submit();
+        }
+        else {
+            window.location = Provider_SearchObject.GetSearchUrl();
+        }
     },
 
     GetSearchUrl: function () {
+
         var oUrl = this.SearchUrl;
 
         oUrl += '?CompareId=' + this.CompareId;
@@ -117,7 +140,7 @@ var Provider_SearchObject = {
         $.ajax({
             url: BaseUrl.ApiUrl + '/ProviderApi?ReportGeneralCompare=true&SearchParam=' + Provider_SearchObject.SearchParam + '&SearchFilter=' + Provider_SearchObject.SearchFilter,
             dataType: 'json',
-            success: function (result) {                
+            success: function (result) {
                 if (result != null) {
                     window.location = result;
                 }
@@ -723,7 +746,7 @@ var Provider_SurveyReports = {
                 },
                 'Generar Reporte': function () {
                     DialogDiv.find('#' + Provider_SurveyReports.ObjectId + '_Form').submit();
-                    DialogDiv.dialog("close");               
+                    DialogDiv.dialog("close");
                 }
             }
         });

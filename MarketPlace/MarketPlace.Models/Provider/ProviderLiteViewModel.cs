@@ -85,6 +85,11 @@ namespace MarketPlace.Models.Provider
         {
             get
             {
+                if (RelatedProvider != null && RelatedProvider.RelatedCompany != null && RelatedProvider.RelatedCompany.CompanyInfo.Any(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.CompanyLogo))
+                {
+                    return !string.IsNullOrEmpty(RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.CompanyLogo).Select(x => x.Value).FirstOrDefault()) ? RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.CompanyLogo).Select(x => x.Value).FirstOrDefault() : MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_Company_DefaultLogoUrl].Value;
+                }
+
                 string pic = ElasticRealtedProvider != null ? ElasticRealtedProvider.LogoUrl :
                             MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_Company_DefaultLogoUrl].Value;
 
@@ -116,7 +121,7 @@ namespace MarketPlace.Models.Provider
                 {
                     return 0;
                 }
-                
+
                 //return (5 * (IsProviderCustomer &&
                 //        RelatedProvider != null &&
                 //        RelatedProvider.RelatedCustomerInfo != null ?

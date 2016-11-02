@@ -2220,7 +2220,6 @@ var Admin_CompanyRoleObject = {
                         //validate SurveyConfigId attribute
                         if (data.RoleModuleId != null && data.RoleModuleId.length > 0) {
                             //validate to redirect for selected module
-                            debugger;
                             if (data.RoleModule == "804001") {
                                 window.location = Admin_CompanyRoleObject.RoleOptionUpsertUrl.replace('amp;', '').replace(/\${RoleCompanyId}/gi, Admin_CompanyRoleObject.RoleCompanyId).replace(/\${RoleModuleId}/gi, data.RoleModuleId);
                             }
