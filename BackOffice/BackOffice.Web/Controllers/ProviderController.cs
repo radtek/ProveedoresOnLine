@@ -92,7 +92,7 @@ namespace BackOffice.Web.Controllers
                     oCustomerModel.RelatedCompany = ProveedoresOnLine.Company.Controller.Company.CompanyGetBasicInfo(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_PublicarPublicId].Value);
 
                     ProveedoresOnLine.CompanyCustomer.Controller.CompanyCustomer.CustomerProviderUpsert(oCustomerModel);
-
+                    //New Provider
                     #region Index Company
 
                     #region Model to index
@@ -195,6 +195,7 @@ namespace BackOffice.Web.Controllers
                 }
                 else
                 {
+                    //Provider Exists
                     #region Index Company
 
                     Uri node = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
