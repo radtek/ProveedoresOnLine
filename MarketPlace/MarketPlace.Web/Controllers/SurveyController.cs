@@ -342,17 +342,6 @@ namespace MarketPlace.Web.Controllers
 
                 #region Providers
 
-                List<GenericFilterModel> oFilterModel = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchFilterNew
-                    (SessionModel.CurrentCompany.CompanyPublicId,
-                    oModel.SearchParam,
-                    oModel.SearchFilter,
-                    SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1" ? true : false);
-
-                if (oFilterModel != null)
-                {
-                    oModel.ProviderFilterResult = oFilterModel.Where(x => x.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).ToList();
-                }
-
                 #endregion
             }
 
