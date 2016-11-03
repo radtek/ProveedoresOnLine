@@ -241,7 +241,6 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                                     si.Field<string>("CompanyPublicId") == cig.Key.CompanyPublicId
                              group si by new
                              {
-                                 SurveyId = si.Field<int>("SurveyId"),
                                  SurveyPublicId = si.Field<string>("SurveyPublicId"),
                                  SurveyTypeId = si.Field<int>("SurveyTypeId"),
                                  SurveyType = si.Field<string>("SurveyType"),
@@ -253,7 +252,6 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                              into sig
                              select new SurveyIndexModel()
                              {
-                                 SurveyId = sig.Key.SurveyId,
                                  CompanyPublicId = sig.Key.CompanyPublicId,
                                  CustomerPublicId = sig.Key.CustomerPublicId,
                                  SurveyPublicId = sig.Key.SurveyPublicId,

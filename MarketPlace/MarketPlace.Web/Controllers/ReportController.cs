@@ -48,6 +48,7 @@ namespace MarketPlace.Web.Controllers
             if (Request["SurveyGeneralInfoReport"] == "True")
             {
                 byte[] buffer = null;
+                buffer = ProveedoresOnLine.Reports.Controller.ReportModule.RPSVGeneralReportInfo(SessionModel.CurrentCompany.CompanyPublicId);
                 StringBuilder data = new StringBuilder();
                 List<ProveedoresOnLine.SurveyModule.Models.SurveyModel> surveyByProvider = ProveedoresOnLine.Reports.Controller.ReportModule.SurveyGetAllByCustomer(SessionModel.CurrentCompany.CompanyPublicId);
                 string strSep = ";";
@@ -69,6 +70,7 @@ namespace MarketPlace.Web.Controllers
                         "\"" + "PREGUNTAS" + "\"" + strSep +
                         "\"" + "RESPUESTAS" + "\"" + strSep +
                         "\"" + "COMENTARIO RESPUESTA" + "\"");
+
                 if (surveyByProvider != null && surveyByProvider.Count > 0)
                 {
                     surveyByProvider.All(x =>
@@ -118,7 +120,7 @@ namespace MarketPlace.Web.Controllers
                                             if (a.ItemType.ItemId == (int)enumSurveyConfigItemType.EvaluationArea)
                                             {
                                                 /* project name */
-                                                project_name = y.SurveyInfo.Where(np=> np != null &&  np.ItemInfoType.ItemId == (int)enumSurveyInfoType.Project).Select(np=>np.ValueName).DefaultIfEmpty("N/D").FirstOrDefault();
+                                                project_name = y.SurveyInfo.Where(np => np != null && np.ItemInfoType.ItemId == (int)enumSurveyInfoType.Project).Select(np => np.ValueName).DefaultIfEmpty("N/D").FirstOrDefault();
                                                 /* Description for area */
                                                 area_name = a.ItemName.ToString();
                                                 description_area = "N/D";
@@ -137,7 +139,8 @@ namespace MarketPlace.Web.Controllers
                                                     answer_question = "N/D";
                                                     description_question = "N/D";
                                                     /* get  questions by area */
-                                                    y.RelatedSurveyConfig.RelatedSurveyConfigItem.All(e => {
+                                                    y.RelatedSurveyConfig.RelatedSurveyConfigItem.All(e =>
+                                                    {
                                                         if (e.ParentItem != null && e.ParentItem.ItemId == a.ItemId && e.ItemType.ItemId == (int)enumSurveyConfigItemType.Question)
                                                         {
                                                             /*question*/
@@ -145,7 +148,8 @@ namespace MarketPlace.Web.Controllers
                                                             /*answer by question*/
                                                             answer_question = y.RelatedSurveyConfig.RelatedSurveyConfigItem.Where(f => f.ParentItem != null && f.ParentItem.ItemId == e.ItemId && f.ItemType.ItemId == (int)enumSurveyConfigItemType.Answer).Select(f => f.ItemName).DefaultIfEmpty("N/D").FirstOrDefault();
                                                             /*get detail for question*/
-                                                            y.RelatedSurveyItem.Where(r => r.RelatedSurveyConfigItem.ItemId == e.ItemId).All(g => {
+                                                            y.RelatedSurveyItem.Where(r => r.RelatedSurveyConfigItem.ItemId == e.ItemId).All(g =>
+                                                            {
                                                                 description_question = g.ItemInfo.Where(h => h.ItemInfoType != null && h.ItemInfoType.ItemId == (int)enumSurveyItemInfoType.DescriptionText).Select(h => h.Value).DefaultIfEmpty("N/D").FirstOrDefault();
                                                                 /*add line to print*/
                                                                 data.AppendLine(

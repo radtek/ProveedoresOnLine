@@ -260,7 +260,6 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
                 public readonly string Index = "Index";
                 public readonly string Search = "Search";
                 public readonly string SurveySearchProgram = "SurveySearchProgram";
-                public readonly string SurveySearchUpsert = "SurveySearchUpsert";
                 public readonly string SVSurveyDetail = "SVSurveyDetail";
                 public readonly string SVSurveyEvaluatorDetail = "SVSurveyEvaluatorDetail";
                 public readonly string SVSurveyProgram = "SVSurveyProgram";
@@ -270,7 +269,6 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             public readonly string Index = "~/Areas/Desktop/Views/Survey/Index.cshtml";
             public readonly string Search = "~/Areas/Desktop/Views/Survey/Search.cshtml";
             public readonly string SurveySearchProgram = "~/Areas/Desktop/Views/Survey/SurveySearchProgram.cshtml";
-            public readonly string SurveySearchUpsert = "~/Areas/Desktop/Views/Survey/SurveySearchUpsert.cshtml";
             public readonly string SVSurveyDetail = "~/Areas/Desktop/Views/Survey/SVSurveyDetail.cshtml";
             public readonly string SVSurveyEvaluatorDetail = "~/Areas/Desktop/Views/Survey/SVSurveyEvaluatorDetail.cshtml";
             public readonly string SVSurveyProgram = "~/Areas/Desktop/Views/Survey/SVSurveyProgram.cshtml";

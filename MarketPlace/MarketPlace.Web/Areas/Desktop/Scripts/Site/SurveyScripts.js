@@ -317,7 +317,7 @@ var Survey_Evaluation_ProgramObject = {
                     },
                 }
             }
-        }).focusout(function () {            
+        }).focusout(function () {
             var IdSurvey = $('#' + Survey_Evaluation_ProgramObject.ObjectId + '_SurveyConfigId').val();
             if (IdSurvey == '') {
                 $('#' + Survey_Evaluation_ProgramObject.ObjectId + '_SurveyName').val('');
@@ -349,8 +349,7 @@ var Survey_Evaluation_ProgramObject = {
                                 //divEvaluator.append(resultAddInfo);
                                 //resultAddInfo = '';
                             }
-                            else
-                            {
+                            else {
                                 inarea = 0;
                                 if (area != value.AreaName) {
                                     result += '<div class="col-xs-12 POMPSectionTitlesBox"><label>' + value.AreaName + '</label></div>';//Close the Body Panel
@@ -618,7 +617,7 @@ var Survey_SearchObject = {
 
                     //replace provider info
                     oItemHtml = oItemHtml.replace(/{ProviderPublicId}/gi, result.ElasticRealtedProvider.CompanyPublicId);
-                    oItemHtml = oItemHtml.replace(/{ProviderLogoUrl}/gi, result.ElasticRealtedProvider.LogoUrl);
+                    oItemHtml = oItemHtml.replace(/{ProviderLogoUrl}/gi, result.ProviderLogoUrl);
                     oItemHtml = oItemHtml.replace(/{CompanyName}/gi, result.ElasticRealtedProvider.CompanyName);
                     oItemHtml = oItemHtml.replace(/{IdentificationType}/gi, result.ElasticRealtedProvider.IdentificationType);
                     oItemHtml = oItemHtml.replace(/{IdentificationNumber}/gi, result.ElasticRealtedProvider.IdentificationNumber);
@@ -631,6 +630,12 @@ var Survey_SearchObject = {
                         oItemHtml = oItemHtml.replace(/{ProviderIsCertified}/gi, 'none');
                     }
 
+                    var oProviderList = '<input id="ProviderPublicId_{ProviderPublicId}" name="ProviderPublicId" type="hidden" value="{ProviderPublicId}">';
+
+                    oProviderList = oProviderList.replace(/{ProviderPublicId}/gi, result.ElasticRealtedProvider.CompanyPublicId);
+
+                    $('#div_ProviderList').append(oProviderList);
+
                     $('#Search_Survey_Item_Template').append("<li id='li_prv_" + vProviderPublicId + "'>" + oItemHtml + "</li>");
 
                     document.getElementById("AddProviderSurvey_" + vProviderPublicId).style.display = "none";
@@ -642,12 +647,71 @@ var Survey_SearchObject = {
     },
 
     RemoveSurveyProvider: function (vProviderPublicId) {
+
         $("#li_prv_" + vProviderPublicId).remove();
+        $("#ProviderPublicId_" + vProviderPublicId).remove();
+
         document.getElementById("AddProviderSurvey_" + vProviderPublicId).style.display = "inline";
 
         //Remove survey program buttom
         if ($('#Search_Survey_Item_Template li').size() <= 0) {
             document.getElementById("SurveyProgramButtom").style.display = "none";
         }
-    }
+    },
+
+    GetSurveyProviderList: function (vProviderList) {
+
+        if (vProviderList != null && vProviderList != "") {
+            var oProviderList = vProviderList.split(",");
+
+            var oItemHtml = $('#POMPProviderSurvey').html();
+
+            oProviderList.forEach(function (prv) {
+                $.ajax({
+                    url: BaseUrl.ApiUrl + '/SurveyApi?SurveyAddProvider=true&ProviderPublicId=' + prv,
+                    dataType: 'json',
+                    success: function (result) {
+                        if (result != null) {
+
+                            //Add survey program buttom
+                            if (($('#Search_Survey_Item_Template li').size() + 1) > 0) {
+                                document.getElementById("SurveyProgramButtom").style.display = "inline";
+                            }
+
+                            var oItemHtml = $('#POMPProviderSurvey').html();
+
+                            //replace provider info
+                            oItemHtml = oItemHtml.replace(/{ProviderPublicId}/gi, result.ElasticRealtedProvider.CompanyPublicId);
+                            oItemHtml = oItemHtml.replace(/{ProviderLogoUrl}/gi, result.ElasticRealtedProvider.LogoUrl);
+                            oItemHtml = oItemHtml.replace(/{CompanyName}/gi, result.ElasticRealtedProvider.CompanyName);
+                            oItemHtml = oItemHtml.replace(/{IdentificationType}/gi, result.ElasticRealtedProvider.IdentificationType);
+                            oItemHtml = oItemHtml.replace(/{IdentificationNumber}/gi, result.ElasticRealtedProvider.IdentificationNumber);
+
+                            //validate item certified
+                            if (result.ProviderIsCertified != null && result.ProviderIsCertified == true) {
+                                oItemHtml = oItemHtml.replace(/{ProviderIsCertified}/gi, '');
+                            }
+                            else {
+                                oItemHtml = oItemHtml.replace(/{ProviderIsCertified}/gi, 'none');
+                            }
+
+                            var oProviderList = '<input id="ProviderPublicId_{ProviderPublicId}" name="ProviderPublicId" type="hidden" value="{ProviderPublicId}">';
+
+                            oProviderList = oProviderList.replace(/{ProviderPublicId}/gi, result.ElasticRealtedProvider.CompanyPublicId);
+
+                            $('#div_ProviderList').append(oProviderList);
+
+                            $('#Search_Survey_Item_Template').append("<li id='li_prv_" + prv + "'>" + oItemHtml + "</li>");
+
+                            if (document.getElementById("AddProviderSurvey_" + prv) != null) {
+                                document.getElementById("AddProviderSurvey_" + prv).style.display = "none";
+                            }
+                        }
+                    },
+                    error: function (result) {
+                    }
+                });
+            });
+        }
+    },
 };

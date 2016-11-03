@@ -11,10 +11,6 @@ namespace ProveedoresOnLine.Company.Models.Company
     [ElasticsearchType(Name = "Customer_Info")]
     public class CompanyIndexModel
     {
-        public CompanyIndexModel()
-        {
-
-        }
         public string Id { get { return CompanyPublicId; } }
         [Number]
         public int IdentificationTypeId { get; set; }
@@ -71,5 +67,50 @@ namespace ProveedoresOnLine.Company.Models.Company
 
         [Nested]
         public List<CustomerProviderIndexModel> oCustomerProviderIndexModel { get; set; }
+
+        public CompanyIndexModel()
+        {
+
+        }
+
+        public CompanyIndexModel(CompanyIndexModel oCompanyIndexModel)
+        {
+            IdentificationTypeId = oCompanyIndexModel.IdentificationTypeId;
+            IdentificationType = oCompanyIndexModel.IdentificationType;
+
+            IdentificationNumber = oCompanyIndexModel.IdentificationNumber;
+
+            CompanyName = oCompanyIndexModel.CompanyName;
+
+            CommercialCompanyName = oCompanyIndexModel.CommercialCompanyName;
+
+            CompanyPublicId = oCompanyIndexModel.CompanyPublicId;
+
+            LogoUrl = oCompanyIndexModel.LogoUrl;
+
+            CatlificationRating = oCompanyIndexModel.CatlificationRating;
+
+            PrincipalActivityId = oCompanyIndexModel.PrincipalActivityId;
+            PrincipalActivity = oCompanyIndexModel.PrincipalActivity;
+
+            CountryId = oCompanyIndexModel.CountryId;
+            Country = oCompanyIndexModel.Country;
+
+            CityId = oCompanyIndexModel.CityId;
+            City = oCompanyIndexModel.City;
+
+            CustomerPublicId = oCompanyIndexModel.CustomerPublicId;
+
+            InBlackList = oCompanyIndexModel.InBlackList;
+
+            ProviderStatus = oCompanyIndexModel.ProviderStatus;
+
+            CompanyEnable = oCompanyIndexModel.CompanyEnable;
+
+            ICAId = oCompanyIndexModel.ICAId;
+            ICA = oCompanyIndexModel.ICA;
+
+            oCustomerProviderIndexModel = oCompanyIndexModel.oCustomerProviderIndexModel;
+        }
     }
 }
