@@ -86,6 +86,8 @@ namespace MarketPlace.Models.Provider
             get
             {
                 string pic = ElasticRealtedProvider != null ? ElasticRealtedProvider.LogoUrl :
+                            RelatedProvider != null && RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.CompanyLogo).Select(x => x.Value).FirstOrDefault() != null
+                            ? RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.CompanyLogo).Select(x => x.Value).FirstOrDefault() :
                             MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_Company_DefaultLogoUrl].Value;
 
                 if (!string.IsNullOrEmpty(pic))

@@ -15,6 +15,7 @@ var Survey_ChartsObject = {
     },
 
     RenderChartSurveyByResponsable: function () {
+        debugger;
         $.ajax({
             url: BaseUrl.ApiUrl + '/SurveyApi?GetSurveyByResponsable=true',
             dataType: "json",
@@ -81,7 +82,7 @@ var Survey_ChartsObject = {
                         else if (topping == "Vencida") {
                             SearchFilter = 1206005;
                         }
-                        window.location = Survey_ChartsObject.GetSearchUrl(SearchFilter, Survey_ChartsObject.UserEmail);
+                        //window.location = Survey_ChartsObject.GetSearchUrl(SearchFilter, Survey_ChartsObject.UserEmail);
                     }
                 }
                 google.visualization.events.addListener(vBarChart, 'select', selectHandler);
@@ -103,7 +104,7 @@ var Survey_ChartsObject = {
     },
 
     GetSearchUrl: function (SearchFilter, UserEmail) {
-
+        debugger;
         var oUrl = this.SearchUrl;
 
         oUrl += '?CompareId=';
@@ -194,7 +195,7 @@ var SurveyByName_ChartsObject = {
                     var selectedItem = vBarChart.getChart().getSelection();
                     if (selectedItem) {
                         var SearchFilter = data.getValue(selectedItem[0].row, 2);
-                        window.location = SurveyByName_ChartsObject.GetSearchUrl(SearchFilter);
+                        //window.location = SurveyByName_ChartsObject.GetSearchUrl(SearchFilter);
                     }
 
                 }
@@ -327,7 +328,7 @@ var SurveyByEvaluators_ChartsObject = {
                     var selectedItem = vBarChart.getChart().getSelection();
                     if (selectedItem) {
                         var SearchFilter = data.getValue(selectedItem[0].row, 5);
-                        window.location = SurveyByEvaluators_ChartsObject.GetSearchUrl(SearchFilter);
+                        //window.location = SurveyByEvaluators_ChartsObject.GetSearchUrl(SearchFilter);
                     }
                 }
                 google.visualization.events.addListener(vBarChart, 'select', selectHandler);
@@ -445,7 +446,7 @@ var SurveyByMonth_ChartsObject = {
                     var selectedItem = pieChart.getChart().getSelection();
                     if (selectedItem) {
                         var SearchFilter = data.getValue(selectedItem[0].row, 4);
-                        window.location = SurveyByMonth_ChartsObject.GetSearchUrl(SearchFilter);
+                        //window.location = SurveyByMonth_ChartsObject.GetSearchUrl(SearchFilter);
                     }
                 }
 
@@ -493,6 +494,7 @@ var Providers_ChartsObject = {
     },
 
     RenderChatrProvidersByStatus: function () {
+        debugger;
         $.ajax({
             url: BaseUrl.ApiUrl + '/ProviderApi?GetProvidersByState=true',
             dataType: "json",
@@ -543,7 +545,7 @@ var Providers_ChartsObject = {
                             SearchFilter = 902008;
                         }
 
-                        window.location = Providers_ChartsObject.GetSearchUrl(SearchFilter);
+                        //window.location = Providers_ChartsObject.GetSearchUrl(SearchFilter);
 
                     }
                 }
@@ -641,7 +643,7 @@ var NationalProviders_ChartsObject = {
                         else if (topping == "Inactivo Nacional") {
                             SearchFilter = 902011;
                         }
-                        window.location = NationalProviders_ChartsObject.GetSearchUrl(SearchFilter);
+                        //window.location = NationalProviders_ChartsObject.GetSearchUrl(SearchFilter);
 
                     }
                 }
@@ -734,7 +736,7 @@ var AlienProviders_ChartsObject = {
                             SearchFilter = 902012;
                         }
 
-                        window.location = AlienProviders_ChartsObject.GetSearchUrl(SearchFilter);
+                        //window.location = AlienProviders_ChartsObject.GetSearchUrl(SearchFilter);
 
                     }
                 }
