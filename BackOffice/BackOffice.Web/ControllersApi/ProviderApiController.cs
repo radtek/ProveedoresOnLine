@@ -429,7 +429,7 @@ namespace BackOffice.Web.ControllersApi
 
                         ProveedoresOnLine.Company.Models.Company.CompanyIndexModel oCompanyToIndex = new ProveedoresOnLine.Company.Models.Company.CompanyIndexModel()
                         {
-                            CompanyPublicId = oCompany.CompanyPublicId, 
+                            CompanyPublicId = oCompany.CompanyPublicId,
                             CompanyName = searchResults.Documents.FirstOrDefault().CompanyName,
                             CommercialCompanyName = searchResults.Documents.FirstOrDefault().CommercialCompanyName,
                             CustomerPublicId = searchResults.Documents.FirstOrDefault().CustomerPublicId,
@@ -2503,6 +2503,11 @@ namespace BackOffice.Web.ControllersApi
             {
                 string[] oCustomerPublicId = oCompanyPublicList.Split(new char[] { ',' });
 
+                BackOffice.Models.Provider.ProviderViewModel oModel = new Models.Provider.ProviderViewModel()
+                {
+                    ProviderOptions = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.CatalogGetProviderOptions(),
+                };
+
                 foreach (var item in oCustomerPublicId)
                 {
                     ProveedoresOnLine.Company.Models.Company.CompanyModel oCompanyModel = ProveedoresOnLine.Company.Controller.Company.CompanyGetBasicInfo(item);
@@ -2525,7 +2530,186 @@ namespace BackOffice.Web.ControllersApi
 
                     oCustomerModel.RelatedCompany = oCompanyModel;
 
-                    ProveedoresOnLine.CompanyCustomer.Controller.CompanyCustomer.CustomerProviderUpsert(oCustomerModel);
+                    oCustomerModel = ProveedoresOnLine.CompanyCustomer.Controller.CompanyCustomer.CustomerProviderUpsert(oCustomerModel);
+
+                    #region Index
+
+                    #region CompanyIndex
+                    Uri node = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
+                    var settings = new ConnectionSettings(node);
+
+                    settings.DefaultIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value);
+                    settings.DisableDirectStreaming(true);
+                    ElasticClient client = new ElasticClient(settings);
+
+                    //Getting Model from index
+                    Nest.ISearchResponse<CompanyIndexModel> oResult = client.Search<CompanyIndexModel>(s => s
+                        .From(0)
+                        .Size(1)
+                        .Query(q => q.QueryString(qs => qs.Query(oProviderPublicId))));
+
+                    //Model to index 
+                    #region Model
+
+                    CompanyIndexModel oCompanyIndexModel = new CompanyIndexModel()
+                    {
+                        CatlificationRating = oResult.Documents.FirstOrDefault().CatlificationRating,
+
+                        City = oResult.Documents.FirstOrDefault().City,
+                        CityId = oResult.Documents.FirstOrDefault().CityId,
+
+                        CommercialCompanyName = oResult.Documents.FirstOrDefault().CommercialCompanyName,
+
+                        CompanyEnable = oResult.Documents.FirstOrDefault().CompanyEnable,
+
+                        CompanyName = oResult.Documents.FirstOrDefault().CompanyName,
+
+                        CompanyPublicId = oResult.Documents.FirstOrDefault().CompanyPublicId,
+
+                        Country = oResult.Documents.FirstOrDefault().Country,
+                        CountryId = oResult.Documents.FirstOrDefault().CountryId,
+                        CustomerPublicId = oResult.Documents.FirstOrDefault().CustomerPublicId,
+
+                        ICA = oResult.Documents.FirstOrDefault().ICA,
+                        ICAId = oResult.Documents.FirstOrDefault().ICAId,
+
+                        IdentificationNumber = oResult.Documents.FirstOrDefault().IdentificationNumber,
+
+
+                        IdentificationType = oResult.Documents.FirstOrDefault().IdentificationType,
+                        IdentificationTypeId = oResult.Documents.FirstOrDefault().IdentificationTypeId,
+
+                        InBlackList = oResult.Documents.FirstOrDefault().InBlackList,
+
+                        LogoUrl = oResult.Documents.FirstOrDefault().LogoUrl,
+
+                        oCustomerProviderIndexModel = oResult.Documents.FirstOrDefault().oCustomerProviderIndexModel,
+
+                        PrincipalActivity = oResult.Documents.FirstOrDefault().PrincipalActivity,
+                        PrincipalActivityId = oResult.Documents.FirstOrDefault().PrincipalActivityId,
+
+                        ProviderStatus = oResult.Documents.FirstOrDefault().ProviderStatus,
+                        ProviderStatusId = oResult.Documents.FirstOrDefault().ProviderStatusId,
+                    };
+
+                    #endregion
+
+                    if (!oCompanyIndexModel.oCustomerProviderIndexModel.Any(x => x.CustomerPublicId == item))
+                    {
+                        oCompanyIndexModel.oCustomerProviderIndexModel.Add(new CustomerProviderIndexModel()
+                        {
+                            ProviderPublicId = oProviderPublicId,
+                            StatusId = Convert.ToInt32(BackOffice.Models.General.enumProviderCustomerStatus.Creation),
+                            Status = oModel.ProviderOptions.Where(y => y.ItemId == Convert.ToInt32(BackOffice.Models.General.enumProviderCustomerStatus.Creation)).Select(y => y.ItemName).DefaultIfEmpty(string.Empty).FirstOrDefault(),
+                            CustomerPublicId = item,
+                            CustomerProviderEnable = true,
+                            CustomerProviderId = oCustomerModel.RelatedProvider.Where(y => y.RelatedProvider.CompanyPublicId == oProviderPublicId).Select(y => y.CustomerProviderId).DefaultIfEmpty(0).FirstOrDefault(),
+
+                        });
+
+                        ICreateIndexResponse oElasticResponse = client.CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value, c => c
+                            .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                            .Analysis(a => a.Analyzers(an => an.Custom("customWhiteSpace", anc => anc.Filters("asciifolding", "lowercase")
+                                .Tokenizer("whitespace")
+                                )).TokenFilters(tf => tf
+                                        .EdgeNGram("customEdgeNGram", engrf => engrf
+                                        .MinGram(1)
+                                        .MaxGram(10)))).NumberOfShards(1)
+                            ));
+
+                        var Index = client.Index(oCompanyIndexModel);
+                    }
+                    #endregion
+
+                    #region SurveyIndex
+                    Uri node2 = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
+                    var settings2 = new ConnectionSettings(node2);
+
+                    settings2.DefaultIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanySurveyIndex].Value);
+                    settings2.DisableDirectStreaming(true);
+                    ElasticClient client2 = new ElasticClient(settings2);
+
+                    //Getting Model from index
+                    Nest.ISearchResponse<ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel> oResult2 = client2.Search< ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel> (s => s
+                        .From(0)
+                        .Size(1)
+                        .Query(q => q.QueryString(qs => qs.Query(oProviderPublicId))));
+
+                    //Model to index 
+                    #region Model
+
+                    ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel oCompanySurveyIndexModel = new ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel()
+                    {
+                        CatlificationRating = oResult2.Documents.FirstOrDefault().CatlificationRating,
+
+                        City = oResult2.Documents.FirstOrDefault().City,
+                        CityId = oResult2.Documents.FirstOrDefault().CityId,
+
+                        CommercialCompanyName = oResult2.Documents.FirstOrDefault().CommercialCompanyName,
+
+                        CompanyEnable = oResult2.Documents.FirstOrDefault().CompanyEnable,
+
+                        CompanyName = oResult2.Documents.FirstOrDefault().CompanyName,
+
+                        CompanyPublicId = oResult2.Documents.FirstOrDefault().CompanyPublicId,
+
+                        Country = oResult2.Documents.FirstOrDefault().Country,
+                        CountryId = oResult2.Documents.FirstOrDefault().CountryId,
+                        CustomerPublicId = oResult2.Documents.FirstOrDefault().CustomerPublicId,
+
+                        ICA = oResult2.Documents.FirstOrDefault().ICA,
+                        ICAId = oResult2.Documents.FirstOrDefault().ICAId,
+
+                        IdentificationNumber = oResult2.Documents.FirstOrDefault().IdentificationNumber,
+
+
+                        IdentificationType = oResult2.Documents.FirstOrDefault().IdentificationType,
+                        IdentificationTypeId = oResult2.Documents.FirstOrDefault().IdentificationTypeId,
+
+                        InBlackList = oResult2.Documents.FirstOrDefault().InBlackList,
+
+                        LogoUrl = oResult2.Documents.FirstOrDefault().LogoUrl,
+
+                        oCustomerProviderIndexModel = oResult2.Documents.FirstOrDefault().oCustomerProviderIndexModel,
+
+                        PrincipalActivity = oResult2.Documents.FirstOrDefault().PrincipalActivity,
+                        PrincipalActivityId = oResult2.Documents.FirstOrDefault().PrincipalActivityId,
+
+                        ProviderStatus = oResult2.Documents.FirstOrDefault().ProviderStatus,
+                        ProviderStatusId = oResult2.Documents.FirstOrDefault().ProviderStatusId,
+                    };
+
+                    #endregion
+
+                    if (!oCompanySurveyIndexModel.oCustomerProviderIndexModel.Any(x => x.CustomerPublicId == item))
+                    {
+                        oCompanySurveyIndexModel.oCustomerProviderIndexModel.Add(new CustomerProviderIndexModel()
+                        {
+                            ProviderPublicId = oProviderPublicId,
+                            StatusId = Convert.ToInt32(BackOffice.Models.General.enumProviderCustomerStatus.Creation),
+                            Status = oModel.ProviderOptions.Where(y => y.ItemId == Convert.ToInt32(BackOffice.Models.General.enumProviderCustomerStatus.Creation)).Select(y => y.ItemName).DefaultIfEmpty(string.Empty).FirstOrDefault(),
+                            CustomerPublicId = item,
+                            CustomerProviderEnable = true,
+                            CustomerProviderId = oCustomerModel.RelatedProvider.Where(y => y.RelatedProvider.CompanyPublicId == oProviderPublicId).Select(y => y.CustomerProviderId).DefaultIfEmpty(0).FirstOrDefault(),
+
+                        });
+
+                        ICreateIndexResponse oElasticResponse2 = client2.CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value, c => c
+                            .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                            .Analysis(a => a.Analyzers(an => an.Custom("customWhiteSpace", anc => anc.Filters("asciifolding", "lowercase")
+                                .Tokenizer("whitespace")
+                                )).TokenFilters(tf => tf
+                                        .EdgeNGram("customEdgeNGram", engrf => engrf
+                                        .MinGram(1)
+                                        .MaxGram(10)))).NumberOfShards(1)
+                            ));
+
+                        var Index = client2.Index(oCompanySurveyIndexModel);
+                    }
+
+                    #endregion
+
+                    #endregion
                 }
             }
         }
@@ -2613,6 +2797,8 @@ namespace BackOffice.Web.ControllersApi
 
                     #region Index
 
+                    #region CompanyIndex
+
                     Uri node = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
                     var settings = new ConnectionSettings(node);
 
@@ -2620,11 +2806,13 @@ namespace BackOffice.Web.ControllersApi
                     settings.DisableDirectStreaming(true);
                     ElasticClient client = new ElasticClient(settings);
 
+                    //Getting Model from index
                     Nest.ISearchResponse<CompanyIndexModel> oResult = client.Search<CompanyIndexModel>(s => s
                         .From(0)
                         .Size(1)
                         .Query(q => q.QueryString(qs => qs.Query(ProviderPublicId))));
 
+                    //Model to index 
                     #region Model
 
                     CompanyIndexModel oCompanyIndexModel = new CompanyIndexModel()
@@ -2669,6 +2857,7 @@ namespace BackOffice.Web.ControllersApi
                     };
 
                     #endregion
+
                     if (oCompanyIndexModel.oCustomerProviderIndexModel.Any(x => x.CustomerPublicId == customer))
                     {
                         oCompanyIndexModel.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == customer).All(x =>
@@ -2679,18 +2868,106 @@ namespace BackOffice.Web.ControllersApi
                                 return true;
                             });
                     }
-                   
-                        ICreateIndexResponse oElasticResponse = client.CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value, c => c
-                                .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
-                                .Analysis(a => a.Analyzers(an => an.Custom("customWhiteSpace", anc => anc.Filters("asciifolding", "lowercase")
-                                    .Tokenizer("whitespace")
-                                    )).TokenFilters(tf => tf
-                                            .EdgeNGram("customEdgeNGram", engrf => engrf
-                                            .MinGram(1)
-                                            .MaxGram(10)))).NumberOfShards(1)
-                                ));
+
+                    ICreateIndexResponse oElasticResponse = client.CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value, c => c
+                            .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                            .Analysis(a => a.Analyzers(an => an.Custom("customWhiteSpace", anc => anc.Filters("asciifolding", "lowercase")
+                                .Tokenizer("whitespace")
+                                )).TokenFilters(tf => tf
+                                        .EdgeNGram("customEdgeNGram", engrf => engrf
+                                        .MinGram(1)
+                                        .MaxGram(10)))).NumberOfShards(1)
+                            ));
 
                     var Index = client.Index(oCompanyIndexModel);
+
+                    #endregion
+
+                    #region SurveyIndex
+
+                    Uri node2 = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
+                    var settings2 = new ConnectionSettings(node2);
+
+                    settings2.DefaultIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanySurveyIndex].Value);
+                    settings2.DisableDirectStreaming(true);
+                    ElasticClient client2 = new ElasticClient(settings2);
+
+                    //Getting Model from index
+                    Nest.ISearchResponse<ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel> oResult2 = client2.Search<ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel>(s => s
+                        .From(0)
+                        .Size(1)
+                        .Query(q => q.QueryString(qs => qs.Query(ProviderPublicId))));
+
+                    //Model to index 
+                    #region Model
+
+                    ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel oCompanySurveyIndexModel = new ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel()
+                    {
+                        CatlificationRating = oResult2.Documents.FirstOrDefault().CatlificationRating,
+
+                        City = oResult2.Documents.FirstOrDefault().City,
+                        CityId = oResult2.Documents.FirstOrDefault().CityId,
+
+                        CommercialCompanyName = oResult2.Documents.FirstOrDefault().CommercialCompanyName,
+
+                        CompanyEnable = oResult2.Documents.FirstOrDefault().CompanyEnable,
+
+                        CompanyName = oResult2.Documents.FirstOrDefault().CompanyName,
+
+                        CompanyPublicId = oResult2.Documents.FirstOrDefault().CompanyPublicId,
+
+                        Country = oResult2.Documents.FirstOrDefault().Country,
+                        CountryId = oResult2.Documents.FirstOrDefault().CountryId,
+                        CustomerPublicId = oResult2.Documents.FirstOrDefault().CustomerPublicId,
+
+                        ICA = oResult2.Documents.FirstOrDefault().ICA,
+                        ICAId = oResult2.Documents.FirstOrDefault().ICAId,
+
+                        IdentificationNumber = oResult2.Documents.FirstOrDefault().IdentificationNumber,
+
+
+                        IdentificationType = oResult2.Documents.FirstOrDefault().IdentificationType,
+                        IdentificationTypeId = oResult2.Documents.FirstOrDefault().IdentificationTypeId,
+
+                        InBlackList = oResult2.Documents.FirstOrDefault().InBlackList,
+
+                        LogoUrl = oResult2.Documents.FirstOrDefault().LogoUrl,
+
+                        oCustomerProviderIndexModel = oResult2.Documents.FirstOrDefault().oCustomerProviderIndexModel,
+
+                        PrincipalActivity = oResult2.Documents.FirstOrDefault().PrincipalActivity,
+                        PrincipalActivityId = oResult2.Documents.FirstOrDefault().PrincipalActivityId,
+
+                        ProviderStatus = oResult2.Documents.FirstOrDefault().ProviderStatus,
+                        ProviderStatusId = oResult2.Documents.FirstOrDefault().ProviderStatusId,
+                    };
+
+                    #endregion
+
+                    if (oCompanySurveyIndexModel.oCustomerProviderIndexModel.Any(x => x.CustomerPublicId == customer))
+                    {
+                        oCompanySurveyIndexModel.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == customer).All(x =>
+                        {
+                            x.ProviderPublicId = ProviderPublicId;
+                            x.StatusId = Convert.ToInt32(System.Web.HttpContext.Current.Request.Form["SH_Currency"]);
+                            x.Status = oModel.ProviderOptions.Where(y => y.ItemId == Convert.ToInt32(System.Web.HttpContext.Current.Request.Form["SH_Currency"])).Select(y => y.ItemName).DefaultIfEmpty(string.Empty).FirstOrDefault();
+                            return true;
+                        });
+                    }
+
+                    ICreateIndexResponse oElasticResponse2 = client2.CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value, c => c
+                            .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                            .Analysis(a => a.Analyzers(an => an.Custom("customWhiteSpace", anc => anc.Filters("asciifolding", "lowercase")
+                                .Tokenizer("whitespace")
+                                )).TokenFilters(tf => tf
+                                        .EdgeNGram("customEdgeNGram", engrf => engrf
+                                        .MinGram(1)
+                                        .MaxGram(10)))).NumberOfShards(1)
+                            ));
+
+                    var Index2 = client2.Index(oCompanySurveyIndexModel);
+
+                    #endregion
 
                     #endregion
                 }
@@ -2739,6 +3016,179 @@ namespace BackOffice.Web.ControllersApi
 
                 /*Asociate related customer provider to Document Management*/
                 ProveedoresOnLine.AsociateProvider.Client.Controller.AsociateProviderClient.AP_AsociateRelatedCustomerProvider(oCustomer.CompanyPublicId, ProviderPublicId, oCustomerProvider.RelatedProvider.FirstOrDefault().Enable);
+
+                #region Index
+                #region CompanyIndex
+
+                Uri node = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
+                var settings = new ConnectionSettings(node);
+
+                settings.DefaultIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value);
+                settings.DisableDirectStreaming(true);
+                ElasticClient client = new ElasticClient(settings);
+
+                //Getting Model from index
+                Nest.ISearchResponse<CompanyIndexModel> oResult = client.Search<CompanyIndexModel>(s => s
+                    .From(0)
+                    .Size(1)
+                    .Query(q => q.QueryString(qs => qs.Query(ProviderPublicId))));
+
+                //Model to index 
+                #region Model
+
+                CompanyIndexModel oCompanyIndexModel = new CompanyIndexModel()
+                {
+                    CatlificationRating = oResult.Documents.FirstOrDefault().CatlificationRating,
+
+                    City = oResult.Documents.FirstOrDefault().City,
+                    CityId = oResult.Documents.FirstOrDefault().CityId,
+
+                    CommercialCompanyName = oResult.Documents.FirstOrDefault().CommercialCompanyName,
+
+                    CompanyEnable = oResult.Documents.FirstOrDefault().CompanyEnable,
+
+                    CompanyName = oResult.Documents.FirstOrDefault().CompanyName,
+
+                    CompanyPublicId = oResult.Documents.FirstOrDefault().CompanyPublicId,
+
+                    Country = oResult.Documents.FirstOrDefault().Country,
+                    CountryId = oResult.Documents.FirstOrDefault().CountryId,
+                    CustomerPublicId = oResult.Documents.FirstOrDefault().CustomerPublicId,
+
+                    ICA = oResult.Documents.FirstOrDefault().ICA,
+                    ICAId = oResult.Documents.FirstOrDefault().ICAId,
+
+                    IdentificationNumber = oResult.Documents.FirstOrDefault().IdentificationNumber,
+
+
+                    IdentificationType = oResult.Documents.FirstOrDefault().IdentificationType,
+                    IdentificationTypeId = oResult.Documents.FirstOrDefault().IdentificationTypeId,
+
+                    InBlackList = oResult.Documents.FirstOrDefault().InBlackList,
+
+                    LogoUrl = oResult.Documents.FirstOrDefault().LogoUrl,
+
+                    oCustomerProviderIndexModel = oResult.Documents.FirstOrDefault().oCustomerProviderIndexModel,
+
+                    PrincipalActivity = oResult.Documents.FirstOrDefault().PrincipalActivity,
+                    PrincipalActivityId = oResult.Documents.FirstOrDefault().PrincipalActivityId,
+
+                    ProviderStatus = oResult.Documents.FirstOrDefault().ProviderStatus,
+                    ProviderStatusId = oResult.Documents.FirstOrDefault().ProviderStatusId,
+                };
+                #endregion
+
+                
+                
+
+                if (oCompanyIndexModel.oCustomerProviderIndexModel.Any(x => x.CustomerPublicId == oDataToUpsert.CP_CustomerPublicId))
+                {
+                    oCompanyIndexModel.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == oDataToUpsert.CP_CustomerPublicId).All(x =>
+                    {
+                        x.ProviderPublicId = ProviderPublicId;
+                        x.CustomerProviderEnable = Convert.ToBoolean(oDataToUpsert.CP_Enable);
+                        return true;
+                    });
+
+                    ICreateIndexResponse oElasticResponse = client.CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value, c => c
+                        .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                        .Analysis(a => a.Analyzers(an => an.Custom("customWhiteSpace", anc => anc.Filters("asciifolding", "lowercase")
+                            .Tokenizer("whitespace")
+                            )).TokenFilters(tf => tf
+                                    .EdgeNGram("customEdgeNGram", engrf => engrf
+                                    .MinGram(1)
+                                    .MaxGram(10)))).NumberOfShards(1)
+                        ));
+
+                    var Index = client.Index(oCompanyIndexModel);
+                }
+                #endregion
+
+                #region SurveyIndex
+
+                Uri node2 = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
+                var settings2 = new ConnectionSettings(node2);
+
+                settings2.DefaultIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanySurveyIndex].Value);
+                settings2.DisableDirectStreaming(true);
+                ElasticClient client2 = new ElasticClient(settings2);
+
+                //Getting Model from index
+                Nest.ISearchResponse<ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel> oResult2 = client2.Search<ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel>(s => s
+                    .From(0)
+                    .Size(1)
+                    .Query(q => q.QueryString(qs => qs.Query(ProviderPublicId))));
+
+                //Model to index 
+                #region Model
+
+                ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel oCompanySurveyIndexModel = new ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel()
+                {
+                    CatlificationRating = oResult2.Documents.FirstOrDefault().CatlificationRating,
+
+                    City = oResult2.Documents.FirstOrDefault().City,
+                    CityId = oResult2.Documents.FirstOrDefault().CityId,
+
+                    CommercialCompanyName = oResult2.Documents.FirstOrDefault().CommercialCompanyName,
+
+                    CompanyEnable = oResult2.Documents.FirstOrDefault().CompanyEnable,
+
+                    CompanyName = oResult2.Documents.FirstOrDefault().CompanyName,
+
+                    CompanyPublicId = oResult2.Documents.FirstOrDefault().CompanyPublicId,
+
+                    Country = oResult2.Documents.FirstOrDefault().Country,
+                    CountryId = oResult2.Documents.FirstOrDefault().CountryId,
+                    CustomerPublicId = oResult2.Documents.FirstOrDefault().CustomerPublicId,
+
+                    ICA = oResult2.Documents.FirstOrDefault().ICA,
+                    ICAId = oResult2.Documents.FirstOrDefault().ICAId,
+
+                    IdentificationNumber = oResult2.Documents.FirstOrDefault().IdentificationNumber,
+
+
+                    IdentificationType = oResult2.Documents.FirstOrDefault().IdentificationType,
+                    IdentificationTypeId = oResult2.Documents.FirstOrDefault().IdentificationTypeId,
+
+                    InBlackList = oResult2.Documents.FirstOrDefault().InBlackList,
+
+                    LogoUrl = oResult2.Documents.FirstOrDefault().LogoUrl,
+
+                    oCustomerProviderIndexModel = oResult2.Documents.FirstOrDefault().oCustomerProviderIndexModel,
+
+                    PrincipalActivity = oResult2.Documents.FirstOrDefault().PrincipalActivity,
+                    PrincipalActivityId = oResult2.Documents.FirstOrDefault().PrincipalActivityId,
+
+                    ProviderStatus = oResult2.Documents.FirstOrDefault().ProviderStatus,
+                    ProviderStatusId = oResult2.Documents.FirstOrDefault().ProviderStatusId,
+                };
+                #endregion
+
+                if (oCompanySurveyIndexModel.oCustomerProviderIndexModel.Any(x => x.CustomerPublicId == oDataToUpsert.CP_CustomerPublicId))
+                {
+                    oCompanySurveyIndexModel.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == oDataToUpsert.CP_CustomerPublicId).All(x =>
+                    {
+                        x.ProviderPublicId = ProviderPublicId;
+                        x.CustomerProviderEnable = Convert.ToBoolean(oDataToUpsert.CP_Enable);
+                        return true;
+                    });
+
+                    ICreateIndexResponse oElasticResponse2 = client2.CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value, c => c
+                        .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                        .Analysis(a => a.Analyzers(an => an.Custom("customWhiteSpace", anc => anc.Filters("asciifolding", "lowercase")
+                            .Tokenizer("whitespace")
+                            )).TokenFilters(tf => tf
+                                    .EdgeNGram("customEdgeNGram", engrf => engrf
+                                    .MinGram(1)
+                                    .MaxGram(10)))).NumberOfShards(1)
+                        ));
+
+                    var Index = client2.Index(oCompanySurveyIndexModel);
+                }
+
+                #endregion
+
+                #endregion
 
             }
 
