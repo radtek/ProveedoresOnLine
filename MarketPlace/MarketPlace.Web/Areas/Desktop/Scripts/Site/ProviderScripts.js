@@ -117,7 +117,7 @@ var Provider_SearchObject = {
             document.getElementById('frmProviderSearch').submit();
         }
         else {
-            window.location = Provider_SearchObject.GetSearchUrl();
+        window.location = Provider_SearchObject.GetSearchUrl();
         }
     },
 
@@ -140,7 +140,7 @@ var Provider_SearchObject = {
         $.ajax({
             url: BaseUrl.ApiUrl + '/ProviderApi?ReportGeneralCompare=true&SearchParam=' + Provider_SearchObject.SearchParam + '&SearchFilter=' + Provider_SearchObject.SearchFilter,
             dataType: 'json',
-            success: function (result) {
+            success: function (result) {                
                 if (result != null) {
                     window.location = result;
                 }
@@ -746,7 +746,7 @@ var Provider_SurveyReports = {
                 },
                 'Generar Reporte': function () {
                     DialogDiv.find('#' + Provider_SurveyReports.ObjectId + '_Form').submit();
-                    DialogDiv.dialog("close");
+                    DialogDiv.dialog("close");               
                 }
             }
         });

@@ -1277,7 +1277,7 @@
     <Content Include="Areas\Desktop\Views\Shared\_P_Search_Survey.cshtml" />
     <Content Include="Areas\Desktop\Views\Survey\SurveySearchProgram.cshtml" />
     <None Include="Properties\PublishProfiles\Alex-JP MP.pubxml" />
-    <None Include="Properties\PublishProfiles\David.pubxml" />
+    <None Include="Properties\PublishProfiles\David MP.pubxml" />
     <None Include="Properties\PublishProfiles\DiegoF.pubxml" />
     <None Include="Properties\PublishProfiles\P1.pubxml" />
     <None Include="Properties\PublishProfiles\Sebastian Home MP.pubxml" />
