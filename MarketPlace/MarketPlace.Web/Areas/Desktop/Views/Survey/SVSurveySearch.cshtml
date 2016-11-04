@@ -118,9 +118,9 @@
                                     <div class="SurveyPromDiv">@Math.Round(average, 1) %</div>
                                     <br />
                                     @{
-                                        List<int> oCurrentSubMenu = MarketPlace.Models.General.SessionModel.CurrentProviderSubMenu((int)MarketPlace.Models.General.enumProviderMenu.Survey);
+                                        List<int> oCurrentSurveyMenu = MarketPlace.Models.General.SessionModel.CurrentSurveyOption();
 
-                                        if (oCurrentSubMenu.Any(x => x == (int)MarketPlace.Models.General.enumProviderSubMenu.SurveyProgram))
+                                        if (oCurrentSurveyMenu.Any(x => x == (int)MarketPlace.Models.General.enumProviderSubMenu.SurveyProgram))
                                         {
                                             <div>
                                                 <a class="SurveySearchButtoms SurveyPromA" id="POMPButtonSurveryNewEvaluation" href="@(Url.RouteUrl(MarketPlace.Models.General.Constants.C_Routes_Default,
@@ -159,7 +159,7 @@
                 else
                 {
                     @*Validación de Modulos por Rol*@
-                    if (oCurrentSubMenu.Any(x => x == (int)MarketPlace.Models.General.enumProviderSubMenu.SurveyProgram))
+                    if (oCurrentSurveyMenu.Any(x => x == (int)MarketPlace.Models.General.enumProviderSubMenu.SurveyProgram))
                     {
                         <a href="@(Url.RouteUrl(MarketPlace.Models.General.Constants.C_Routes_Default,
                                         new

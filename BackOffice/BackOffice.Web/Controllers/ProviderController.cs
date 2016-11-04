@@ -107,6 +107,7 @@ namespace BackOffice.Web.Controllers
                         CustomerPublicId = oCustomerModel.RelatedCompany.CompanyPublicId,
                         IdentificationNumber = CompanyToUpsert.IdentificationNumber,
                         IdentificationTypeId = CompanyToUpsert.CompanyType.ItemId,
+                        IdentificationType = oModel.ProviderOptions.Where(x => x.ItemId == CompanyToUpsert.IdentificationType.ItemId).Select(x => x.ItemName).DefaultIfEmpty(string.Empty).FirstOrDefault(),
                         ProviderStatus = BackOffice.Models.General.enumProviderCustomerStatus.Creation.ToString(),
                         ProviderStatusId = Convert.ToInt32(BackOffice.Models.General.enumProviderCustomerStatus.Creation),
                         oCustomerProviderIndexModel = new List<CustomerProviderIndexModel>()
@@ -157,6 +158,7 @@ namespace BackOffice.Web.Controllers
                         CustomerPublicId = oCustomerModel.RelatedCompany.CompanyPublicId,
                         IdentificationNumber = CompanyToUpsert.IdentificationNumber,
                         IdentificationTypeId = CompanyToUpsert.CompanyType.ItemId,
+                        IdentificationType = oModel.ProviderOptions.Where(x => x.ItemId == CompanyToUpsert.IdentificationType.ItemId).Select(x => x.ItemName).DefaultIfEmpty(string.Empty).FirstOrDefault(),
                         ProviderStatus = BackOffice.Models.General.enumProviderCustomerStatus.Creation.ToString(),
                         ProviderStatusId = Convert.ToInt32(BackOffice.Models.General.enumProviderCustomerStatus.Creation),
                         oCustomerProviderIndexModel = new List<CustomerProviderIndexModel>()

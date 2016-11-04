@@ -975,6 +975,9 @@ namespace MarketPlace.Web.Controllers
 
                     CompanySurveyIndexModel oModelToIndex = new CompanySurveyIndexModel(oResult.Documents.FirstOrDefault());
 
+                    if (oModelToIndex.oSurveyIndexModel == null)
+                        oModelToIndex.oSurveyIndexModel = new List<ProveedoresOnLine.SurveyModule.Models.Index.SurveyIndexModel>();
+
                     oModelToIndex.oSurveyIndexModel.Add(new ProveedoresOnLine.SurveyModule.Models.Index.SurveyIndexModel()
                     {
                         SurveyPublicId = SurveyToUpsert.SurveyPublicId,
