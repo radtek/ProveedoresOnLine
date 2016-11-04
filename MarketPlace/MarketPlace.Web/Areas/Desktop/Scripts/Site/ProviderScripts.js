@@ -69,8 +69,7 @@ var Provider_SearchObject = {
     },
 
     /*{SearchFilter{Enable,Value},SearchOrderType,OrderOrientation,PageNumber}*/
-    Search: function (vSearchObject) {
-
+    Search: function (vSearchObject) {        
         /*get serach param*/
         if (this.SearchParam != $('#' + Provider_SearchObject.ObjectId + '_txtSearchBox').val()) {
             /*Init pager*/
@@ -84,7 +83,7 @@ var Provider_SearchObject = {
                 if (vSearchObject.SearchFilter.Enable == true) {
                     this.SearchFilter += ',' + vSearchObject.SearchFilter.Value;
                 }
-                else {
+                else {                    
                     this.SearchFilter = this.SearchFilter.replace(new RegExp(vSearchObject.SearchFilter.Value, 'gi'), '').replace(/,,/gi, '');
                 }
 
@@ -121,8 +120,7 @@ var Provider_SearchObject = {
         }
     },
 
-    GetSearchUrl: function () {
-
+    GetSearchUrl: function () {        
         var oUrl = this.SearchUrl;
 
         oUrl += '?CompareId=' + this.CompareId;
