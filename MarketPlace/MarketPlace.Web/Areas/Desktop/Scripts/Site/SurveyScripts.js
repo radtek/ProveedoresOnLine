@@ -660,7 +660,7 @@ var Survey_SearchObject = {
     },
 
     GetSurveyProviderList: function (vProviderList) {
-
+        
         if (vProviderList != null && vProviderList != "") {
             var oProviderList = vProviderList.split(",");
 
@@ -682,7 +682,7 @@ var Survey_SearchObject = {
 
                             //replace provider info
                             oItemHtml = oItemHtml.replace(/{ProviderPublicId}/gi, result.ElasticRealtedProvider.CompanyPublicId);
-                            oItemHtml = oItemHtml.replace(/{ProviderLogoUrl}/gi, result.ElasticRealtedProvider.LogoUrl);
+                            oItemHtml = oItemHtml.replace(/{ProviderLogoUrl}/gi, result.ProviderLogoUrl);
                             oItemHtml = oItemHtml.replace(/{CompanyName}/gi, result.ElasticRealtedProvider.CompanyName);
                             oItemHtml = oItemHtml.replace(/{IdentificationType}/gi, result.ElasticRealtedProvider.IdentificationType);
                             oItemHtml = oItemHtml.replace(/{IdentificationNumber}/gi, result.ElasticRealtedProvider.IdentificationNumber);
