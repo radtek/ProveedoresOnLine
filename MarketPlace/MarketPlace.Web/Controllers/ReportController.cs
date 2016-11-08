@@ -48,7 +48,7 @@ namespace MarketPlace.Web.Controllers
             if (Request["SurveyGeneralInfoReport"] == "True")
             {
                 byte[] buffer = null;
-                buffer = ProveedoresOnLine.Reports.Controller.ReportModule.RPSVGeneralReportInfo(SessionModel.CurrentCompany.CompanyPublicId);
+
                 StringBuilder data = new StringBuilder();
                 List<ProveedoresOnLine.SurveyModule.Models.SurveyModel> surveyByProvider = ProveedoresOnLine.Reports.Controller.ReportModule.SurveyGetAllByCustomer(SessionModel.CurrentCompany.CompanyPublicId);
                 string strSep = ";";
