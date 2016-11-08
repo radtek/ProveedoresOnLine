@@ -114,34 +114,7 @@ namespace MarketPlace.Web.Controllers
                     .Terms("country", c => c
                         .Field(fi => fi.CountryId))
                     .Terms("blacklist", bl => bl
-                        .Field(fi => fi.InBlackList)))
-                //.Query(q =>
-                //    {
-                //        if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == 203010).Select(x => x.Value).FirstOrDefault() == "1" )
-                //        {
-                //            q.Nested(n => n
-                //            .Path(p => p.oCustomerProviderIndexModel)
-                //                .Query(fq => fq
-                //                    .Match(match => match
-                //                    .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId))
-                //                  ).ScoreMode(NestedScoreMode.Max)
-                //                   );                        
-                //        }
-                //        else
-                //        {
-                //            q.Nested(n => n
-                //            .Path(p => p.oCustomerProviderIndexModel)
-                //                .Query(fq => fq
-                //                    .Match(match => match
-                //                    .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                //                    .Query(SessionModel.CurrentCompany.CompanyPublicId))
-                //                    ).ScoreMode(NestedScoreMode.Max)
-                //                );                        
-                //        }                        
-
-                //        return q;
-                //        //203010
-                //    })                    
+                        .Field(fi => fi.InBlackList)))                               
                 .Query(q => q.
                     Filtered(f => f
                     .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
@@ -420,7 +393,38 @@ namespace MarketPlace.Web.Controllers
 
                     #endregion Project config
                 }
-            }
+
+                if (lstSearchFilter != null && lstSearchFilter.Count > 0)
+                {
+                    string newFilterUrl = "";
+                    lstSearchFilter.All(x =>
+                        {
+                            if (int.Parse(x.Item3) == (int)enumFilterType.City)                            
+                                newFilterUrl += "," + x.Item1 + ";" + oModel.CityFilter.FirstOrDefault().FilterCount + ";" + x.Item3;
+                            
+                            if (int.Parse(x.Item3) == (int)enumFilterType.Country)
+                                newFilterUrl += "," + x.Item1 + ";" + oModel.CountryFilter.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
+                            
+                            if (int.Parse(x.Item3) == (int)enumFilterType.ProviderStatus)
+                                newFilterUrl += "," + x.Item1 + ";" + oModel.StatusFilter.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
+                            
+                            if (int.Parse(x.Item3) == (int)enumFilterType.EconomicActivity)
+                                newFilterUrl += "," + x.Item1 + ";" + oModel.IcaFilter.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
+                            
+                            if (int.Parse(x.Item3) == (int)enumFilterType.RestrictiveListProvider)
+                                newFilterUrl += "," + x.Item1 + ";" + oModel.BlackListFilter.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
+                            
+                            if (int.Parse(x.Item3) == (int)enumFilterType.MyProviders)
+                                newFilterUrl += "," + x.Item1 + ";" + oModel.MyProvidersFilter.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
+                            
+                            if (int.Parse(x.Item3) == (int)enumFilterType.OtherProviders)
+                                newFilterUrl += "," + x.Item1 + ";" + oModel.OtherProvidersFilter.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
+                            
+                            return true;
+                        });
+                    oModel.SearchFilter = newFilterUrl;
+                }
+            }           
 
             return View(oModel);
         }

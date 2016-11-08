@@ -15,7 +15,7 @@ var Survey_ChartsObject = {
     },
 
     RenderChartSurveyByResponsable: function () {
-        debugger;
+        
         $.ajax({
             url: BaseUrl.ApiUrl + '/SurveyApi?GetSurveyByResponsable=true',
             dataType: "json",
@@ -104,7 +104,7 @@ var Survey_ChartsObject = {
     },
 
     GetSearchUrl: function (SearchFilter, UserEmail) {
-        debugger;
+        
         var oUrl = this.SearchUrl;
 
         oUrl += '?CompareId=';
@@ -494,7 +494,7 @@ var Providers_ChartsObject = {
     },
 
     RenderChatrProvidersByStatus: function () {
-        debugger;
+        
         $.ajax({
             url: BaseUrl.ApiUrl + '/ProviderApi?GetProvidersByState=true',
             dataType: "json",

@@ -245,7 +245,8 @@
 
             }
         }
-        @if (oCurrentMenu.Any(x => x == (int)MarketPlace.Models.General.enumProviderMenu.Survey))
+        @if (oCurrentModule.Any(x => x == (int)MarketPlace.Models.General.enumModule.Survey) &&
+            Model.ElasticCompanySurveyModel != null)
         {
             //Survey Type filter
             if (Model.SurveyType != null && Model.SurveyType.Count > 0)
@@ -280,7 +281,7 @@
             if (Model.SurveyStatus != null && Model.SurveyStatus.Count > 0)
             {
                 <li>
-                    <span>Tipo de evaluación</span>
+                    <span>Estado de evaluación</span>
                     <ul>
                         @foreach (var oFilterItem in Model.SurveyStatus)
                         {
