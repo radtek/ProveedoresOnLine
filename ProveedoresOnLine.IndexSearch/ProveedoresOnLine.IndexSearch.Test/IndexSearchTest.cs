@@ -76,31 +76,7 @@ namespace ProveedoresOnLine.IndexSearch.Test
                 .TrackScores(true)
                 .From(page)
                 .Size(20)
-                .Query(q =>
-                    q.Nested(n => n
-                    .Path(p => p.oCustomerProviderIndexModel)
-                        .Query(fq => fq
-                            .Match(match => match
-                            .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                            .Query("DA5C572E")
-                            )
-                            ).ScoreMode(NestedScoreMode.Max)
-                        )
-                    )
-                    .Aggregations(agg => agg
-                        .Nested("myproviders_avg", x => x.
-                        Path(p => p.oCustomerProviderIndexModel).
-                        Aggregations(aggs => aggs.Terms("myproviders", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().CustomerPublicId)
-                            )
-                        )
-                    )
-                    .Terms("city", aggv => aggv
-                        .Field(fi => fi.CityId))
-                    .Terms("country", c => c
-                        .Field(fi => fi.CountryId))
-                    .Terms("blacklist", bl => bl
-                        .Field(fi => fi.InBlackList)))
-                .Query(q => q.
+                .Query(q => q.                   
                     Filtered(f => f
                     .Query(q1 => q1.MatchAll())
                     .Filter(f2 =>
@@ -111,23 +87,23 @@ namespace ProveedoresOnLine.IndexSearch.Test
 
                         if (true)
                         {
-                            qb &= q.Term(m => m.CityId, 1512);
+                            //qb &= q.Term(m => m.CityId, 1512);
                         }
                         if (true)
                         {
-                            qb &= q.Term(m => m.CountryId, 988);
+                            //qb &= q.Term(m => m.CountryId, 988);
                         }
                         if (true)
                         {
-                            qb &= q.Nested(n => n
-                             .Path(p => p.oCustomerProviderIndexModel)
-                            .Query(fq => fq
-                                .Match(match => match
-                                .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
-                                .Query("902005")
-                                )
-                              )
-                           );
+                            // qb &= q.Nested(n => n
+                            //  .Path(p => p.oCustomerProviderIndexModel)
+                            // .Query(fq => fq
+                            //     .Match(match => match
+                            //     .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
+                            //     .Query("902005")
+                            //     )
+                            //   )
+                            //);
                         }
 
                         qb &= q.Nested(n => n
@@ -139,11 +115,29 @@ namespace ProveedoresOnLine.IndexSearch.Test
                                 )
                               )
                            );
-
                         return qb;
                     })
                     ))
-                );
+                    .Aggregations
+                    (agg => agg
+                        .Nested("myproviders_avg", x => x.
+                            Path(p => p.oCustomerProviderIndexModel).
+                            Aggregations(aggs => aggs.Terms("myproviders", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().CustomerPublicId)
+                            )
+                        )
+                    )
+                    .Nested("status_avg", x => x.
+                            Path(p => p.oCustomerProviderIndexModel.Where(l => l.CustomerPublicId == "DA5C572E").Select(l => l).ToList()).
+                            Aggregations(aggs => aggs.Terms("status", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().StatusId)
+                            )
+                        ))
+                    .Terms("city", aggv => aggv
+                        .Field(fi => fi.CityId))
+                    .Terms("country", c => c
+                        .Field(fi => fi.CountryId))
+                    .Terms("blacklist", bl => bl
+                        .Field(fi => fi.InBlackList)))
+                );           
         }
 
         [TestMethod]
@@ -339,7 +333,7 @@ namespace ProveedoresOnLine.IndexSearch.Test
                 },
             };
 
-            
+
         }
 
         [TestMethod]
