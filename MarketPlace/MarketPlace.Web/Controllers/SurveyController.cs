@@ -203,7 +203,7 @@ namespace MarketPlace.Web.Controllers
                                 .Query(SessionModel.CurrentCompany.CompanyPublicId)
                                 )
                               ).ScoreMode(NestedScoreMode.Max)
-                           )
+                            )
                     )
                 .Query(q => q.
                     Filtered(f => f
@@ -306,37 +306,37 @@ namespace MarketPlace.Web.Controllers
 
                 #endregion
 
-                //#region Survey Type Aggregation
+                #region Survey Status Aggregation
 
-                //oModel.ElasticCompanySurveyModel.Aggs.Nested("surveystatus_avg").Terms("surveystatus").Buckets.All(x =>
-                //{
-                //    oModel.SurveyStatus.Add(new ElasticSearchFilter()
-                //    {
-                //        FilterCount = (int)x.DocCount,
-                //        FilterType = x.Key.Split('.')[0],
-                //        FilterName = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(x.Key.Split('.')[0]),
-                //    });
-
-                //    return true;
-                //});
-
-                //#endregion
-
-                #region Survey status Aggregation
-
-                oModel.ElasticCompanySurveyModel.Aggs.Nested("survey_avg").Terms("survey").Buckets.All(x =>
+                oModel.ElasticCompanySurveyModel.Aggs.Nested("surveystatus_avg").Terms("surveystatus").Buckets.All(x =>
                 {
-                    oModel.SurveyType.Add(new ElasticSearchFilter()
+                    oModel.SurveyStatus.Add(new ElasticSearchFilter()
                     {
                         FilterCount = (int)x.DocCount,
                         FilterType = x.Key.Split('.')[0],
-                        FilterName = MarketPlace.Models.Survey.SurveyUtil.GetSurveyOptionName(x.Key.Split('.')[0]),
+                        FilterName = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(x.Key.Split('.')[0]),
                     });
 
                     return true;
                 });
 
                 #endregion
+
+                //#region Survey Type Aggregation
+
+                //oModel.ElasticCompanySurveyModel.Aggs.Nested("survey_avg").Terms("survey").Buckets.All(x =>
+                //{
+                //    oModel.SurveyType.Add(new ElasticSearchFilter()
+                //    {
+                //        FilterCount = (int)x.DocCount,
+                //        FilterType = x.Key.Split('.')[0],
+                //        FilterName = MarketPlace.Models.Survey.SurveyUtil.GetSurveyOptionName(x.Key.Split('.')[0]),
+                //    });
+
+                //    return true;
+                //});
+
+                //#endregion
 
                 #endregion
 
