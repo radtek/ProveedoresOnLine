@@ -265,6 +265,15 @@ namespace MarketPlace.Web.Controllers
                                 )
                               )
                            );
+                        qb &= q.Nested(n => n
+                            .Path(p => p.oSurveyIndexModel)
+                           .Query(fq => fq
+                               .Match(match => match
+                               .Field(field => field.oSurveyIndexModel.First().CustomerPublicId)
+                               .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                               )
+                             )
+                          );
 
                         return qb;
                     })
