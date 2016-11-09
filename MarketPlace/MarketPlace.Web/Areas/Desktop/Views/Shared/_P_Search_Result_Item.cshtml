@@ -190,6 +190,11 @@
             <span>(@Model.Item2.ProviderRateCount)</span>
         </div>
 
+
+        @{
+            List<int> oCurrentSurveyOptions = MarketPlace.Models.General.SessionModel.CurrentSurveyOption();
+        }
+
         <!--Actions for related provider -->
         <ul class="POMPSearchResultLineTwo">
             @if (Model.Item1.ElasticCompanyModel != null)
@@ -225,10 +230,12 @@
             }
             else if (Model.Item1.ElasticCompanySurveyModel != null)
             {
-                <li id="AddProviderSurvey_@(Model.Item2.ElasticRealtedProvider.CompanyPublicId)">
-                    <a style="display:@(oIsInLeftPanel ? "none" : string.Empty)" href="javascript:Survey_SearchObject.AddSurveyProvider('@Model.Item2.ElasticRealtedProvider.CompanyPublicId')">Agregar a evaluación</a>
-                </li>
-
+                if (oCurrentSurveyOptions.Any(x => x == (int)MarketPlace.Models.General.enumProviderSubMenu.SurveyProgram))
+                {
+                    <li id="AddProviderSurvey_@(Model.Item2.ElasticRealtedProvider.CompanyPublicId)">
+                        <a style="display:@(oIsInLeftPanel ? "none" : string.Empty)" href="javascript:Survey_SearchObject.AddSurveyProvider('@Model.Item2.ElasticRealtedProvider.CompanyPublicId')">Agregar a evaluación</a>
+                    </li>
+                }
             }
 
             @if (Model.Item1.ElasticCompanyModel != null)
