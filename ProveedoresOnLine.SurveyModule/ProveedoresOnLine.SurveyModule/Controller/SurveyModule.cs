@@ -937,6 +937,15 @@ namespace ProveedoresOnLine.SurveyModule.Controller
         }
         #endregion
 
+        #region SurveyReport
+
+        public static ProveedoresOnLine.SurveyModule.Models.SurverReportModel.SurveyReportModel SurveyGeneralReport(string CustomerPublicId)
+        {
+            return DAL.Controller.SurveyDataController.Instance.SurveyGeneralReport(CustomerPublicId);
+        }
+
+        #endregion
+
         #region Index
 
         public static void SurveyIndex()

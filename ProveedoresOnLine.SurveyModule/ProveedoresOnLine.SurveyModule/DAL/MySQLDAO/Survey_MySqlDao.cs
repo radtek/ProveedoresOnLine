@@ -1782,7 +1782,47 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
 
             return oReturn;
         }
-        #endregion        
+        #endregion
+
+        #region SurveyReport
+
+        public SurveyModule.Models.SurverReportModel.SurveyReportModel SurveyGeneralReport(string CustomerPublicId)
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
+
+            lstParams.Add(DataInstance.CreateTypedParameter("vCustomerPublicId", CustomerPublicId));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataSet,
+                CommandText = "MP_CP_Survey_GeneralReport",
+                CommandType = System.Data.CommandType.StoredProcedure,
+                Parameters = lstParams
+            });
+
+            SurveyModule.Models.SurverReportModel.SurveyReportModel oReturn = null;
+
+            if (response.DataSetResult != null && 
+                response.DataSetResult.Tables.Count > 1 && 
+                response.DataSetResult.Tables[0] != null && 
+                response.DataSetResult.Tables[0].Rows.Count > 0 &&
+                response.DataSetResult.Tables[1] != null &&
+                response.DataSetResult.Tables[1].Rows.Count > 0 &&
+                response.DataSetResult.Tables[2] != null &&
+                response.DataSetResult.Tables[2].Rows.Count > 0)
+            {
+                oReturn = new Models.SurverReportModel.SurveyReportModel()
+                {
+
+                };
+            }
+
+            return oReturn;
+        }
+
+
+        #endregion
+
 
         #region Survey Index
 
