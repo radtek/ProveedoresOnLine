@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProveedoresOnLine.SurveyModule.Interfaces;
+using ProveedoresOnLine.SurveyModule.Models.SurverReportModel;
 
 namespace ProveedoresOnLine.SurveyModule.DAL.Controller
 {
@@ -158,7 +160,16 @@ namespace ProveedoresOnLine.SurveyModule.DAL.Controller
         {
             return DataFactory.GetSurveyByMonth(CustomerPublicId, ResponsableEmail);
         }
-        #endregion        
+        #endregion
+
+        #region SurveyReport
+
+        SurveyReportModel ISurveyData.SurveyGeneralReport(string CustomerPublicId)
+        {
+            return DataFactory.SurveyGeneralReport(CustomerPublicId);
+        }
+
+        #endregion
 
         #region Index
 
@@ -175,6 +186,8 @@ namespace ProveedoresOnLine.SurveyModule.DAL.Controller
         {
             return DataFactory.CatalogGetSurveyName();
         }
+
+       
 
         #endregion
     }

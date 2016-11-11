@@ -66,6 +66,12 @@ namespace ProveedoresOnLine.SurveyModule.Interfaces
 
         #endregion
 
+        #region SurveyReport
+
+        SurveyModule.Models.SurverReportModel.SurveyReportModel SurveyGeneralReport(string CustomerPublicId);
+
+        #endregion
+
         #region Index
 
         void SurveyIndex();
