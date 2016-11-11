@@ -112,6 +112,8 @@
 
         public const string C_Settings_CompanySurveyIndex = "CompanySurveyIndex";
 
+        public const string C_Settings_SurveyIndex = "SurveyIndex";
+
         #endregion
 
         #endregion

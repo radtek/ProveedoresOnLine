@@ -22,6 +22,8 @@ namespace ProveedoresOnLine.IndexSearch.Models
 
         public const string C_Settings_CustomerProviderIndex = "CustomerProviderIndex";
 
+        public const string C_Settings_SurveyIndex = "SurveyIndex";
+
         #endregion
 
         #region AppSettings

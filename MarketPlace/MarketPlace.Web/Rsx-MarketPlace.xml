@@ -47,6 +47,8 @@
     <key name="CustomerProviderIndex">dev_customerproviderindex</key>
 
     <key name="CompanySurveyIndex">dev_companysurveyindex</key>
+    
+    <key name="SurveyIndex">dev_surveyindex</key>
       
     <key name="Desktop_Analytics">
       <![CDATA[

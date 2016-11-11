@@ -3,8 +3,10 @@ using MarketPlace.Models.Provider;
 using MarketPlace.Models.Survey;
 using Microsoft.Reporting.WebForms;
 using Nest;
+using ProveedoresOnLine.Company.Models.Company;
 using ProveedoresOnLine.Company.Models.Util;
 using ProveedoresOnLine.CompanyProvider.Models.Provider;
+using ProveedoresOnLine.IndexSearch.Models;
 using ProveedoresOnLine.SurveyModule.Models;
 using ProveedoresOnLine.SurveyModule.Models.Index;
 using System;
@@ -116,22 +118,6 @@ namespace MarketPlace.Web.Controllers
             if (SessionModel.CurrentURL != null)
                 SessionModel.CurrentURL = null;
 
-            string oRelatedSurveyProviders = "";
-
-            #region Request
-
-            if (Request["RequestPage"] == "true")
-            {
-                SearchParam = Request["SearchParam"];
-                SearchFilter = Request["SearchFilter"];
-                SearchOrderType = Request["SearchOrderType"];
-                OrderOrientation = Request["OrderOrientation"];
-                PageNumber = Request["PageNumber"];
-                oRelatedSurveyProviders = Request["ProviderPublicId"];
-            }
-
-            #endregion
-
             ProviderSearchViewModel oModel = null;
 
             if (SessionModel.CurrentCompany != null &&
@@ -156,13 +142,13 @@ namespace MarketPlace.Web.Controllers
                     IcaFilter = new List<ElasticSearchFilter>(),
                     StatusFilter = new List<ElasticSearchFilter>(),
                     BlackListFilter = new List<ElasticSearchFilter>(),
+                    MyProvidersFilter = new List<ElasticSearchFilter>(),
+                    OtherProvidersFilter = new List<ElasticSearchFilter>(),
                     SurveyStatus = new List<ElasticSearchFilter>(),
                     SurveyType = new List<ElasticSearchFilter>(),
                 };
 
-                oModel.RelatedSurveyProviders = oRelatedSurveyProviders;
-
-                #region Elastic Search
+                #region ElasticSearch
 
                 List<Tuple<string, string, string>> lstSearchFilter = new List<Tuple<string, string, string>>();
                 if (!string.IsNullOrEmpty(SearchFilter))
@@ -170,53 +156,22 @@ namespace MarketPlace.Web.Controllers
                     lstSearchFilter = oModel.GetlstSearchFilter();
                 }
 
-                #region Search result company
+                #region Search Result Company
 
-                settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanySurveyIndex].Value);
+                settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanyIndex].Value);
                 settings.DisableDirectStreaming(true);
                 ElasticClient client = new ElasticClient(settings);
 
-                oModel.ElasticCompanySurveyModel = client.Search<ProveedoresOnLine.SurveyModule.Models.Index.SurveyIndexModel>(s => s
+                oModel.ElasticCompanyModel = client.Search<CompanyIndexModel>(s => s
                 .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
                 .TrackScores(true)
                 .Size(20)
                 .Aggregations
-                    (agg => agg
-                    .Nested("survey_avg", x => x.
-                        Path(p => p).
-                        Aggregations(aggs => aggs.Terms("survey", term => term.Field(fi => fi.SurveyTypeId)))
-                    )
-                    .Nested("surveystatus_avg", x => x.
-                        Path(p => p).
-                        Aggregations(aggs => aggs.Terms("surveystatus", term => term.Field(fi => fi.SurveyStatusId)))
-                    )
-                    //.Terms("city", aggv => aggv
-                    //    .Field(fi => fi.CityId))
-                    //.Terms("country", c => c
-                    //    .Field(fi => fi.CountryId))
-                )
-                //.Query(q =>
-                //    q.Nested(n => n
-                //        .Path(p => p.oCustomerProviderIndexModel)
-                //            .Query(fq => fq
-                //                .Match(match => match
-                //                .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                //                .Query(SessionModel.CurrentCompany.CompanyPublicId)
-                //                )
-                //              ).ScoreMode(NestedScoreMode.Max)
-                //            )
-                //    )
-                .Query(q =>
-                    q.Nested(n => n
-                        .Path(p => p)
-                            .Query(fq => fq
-                                .Match(match => match
-                                .Field(field => field.CustomerPublicId)
-                                .Query(SessionModel.CurrentCompany.CompanyPublicId)
-                                )
-                              ).ScoreMode(NestedScoreMode.Max)
-                            )
-                    )
+                    (agg => agg                        
+                    .Terms("city", aggv => aggv
+                        .Field(fi => fi.CityId))
+                    .Terms("country", c => c
+                        .Field(fi => fi.CountryId)))                    
                 .Query(q => q.
                     Filtered(f => f
                     .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
@@ -224,164 +179,164 @@ namespace MarketPlace.Web.Controllers
                     {
                         QueryContainer qb = null;
 
-                        //if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
-                        //{
-                        //    qb &= q.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
-                        //}
-                        //if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
-                        //{
-                        //    qb &= q.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
-                        //}
-                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y).FirstOrDefault() != null)
+                        #region Basic Providers Filters
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
-                                .Path(p => p)
-                                .Query(fq => fq
-                                    .Match(match => match
-                                    .Field(field => field.SurveyStatusId)
-                                    .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y.Item1).FirstOrDefault())
-                                    )
-                                )
-                            );
+                            qb &= q.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
                         }
-                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y).FirstOrDefault() != null)
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
-                                .Path(p => p)
-                                .Query(fq => fq
-                                    .Match(match => match
-                                    .Field(field => field.SurveyTypeId)
-                                    .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y.Item1).FirstOrDefault())
-                                    )
-                                )
-                            );
-                        }
-
-                        //qb &= q.Nested(n => n
-                        //     .Path(p => p.oCustomerProviderIndexModel)
-                        //    .Query(fq => fq
-                        //        .Match(match => match
-                        //        .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                        //        .Query(SessionModel.CurrentCompany.CompanyPublicId)
-                        //        )
-                        //      )
-                        //   );
-                        qb &= q.Nested(n => n
-                            .Path(p => p)
-                           .Query(fq => fq
-                               .Match(match => match
-                               .Field(field => field.CustomerPublicId)
-                               .Query(SessionModel.CurrentCompany.CompanyPublicId)
-                               )
-                             )
-                          );
+                            qb &= q.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
+                        }                                    
+                        #endregion
 
                         return qb;
                     })
                     ))
                 );
 
-                oModel.TotalRows = (int)oModel.ElasticCompanySurveyModel.Total;
+                oModel.TotalRows = (int)oModel.ElasticCompanyModel.Total;
+                #endregion
 
+                #region Search Result Survey
+
+                var settingsSurvey = new ConnectionSettings(node);
+                settingsSurvey.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_SurveyIndex].Value);
+                settingsSurvey.DisableDirectStreaming(true);
+                ElasticClient srvclient = new ElasticClient(settingsSurvey);
+
+                oModel.ElasticSurveyModel = srvclient.Search<SurveyIndexSearchModel>(s => s
+                .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
+                .TrackScores(true)
+                .Size(20)                
+                .Aggregations
+                    (agg => agg
+                    .Terms("srv_status", aggv => aggv
+                        .Field(fi => fi.SurveyStatusId))
+                    .Terms("srv_type", c => c
+                        .Field(fi => fi.SurveyTypeId)))
+                .Query(q => q.                    
+                    Filtered(f => f
+                     .Query(qi => qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId)))
+                    //.Query(q1 => q1.Match(m => m.Field(fld => fld.CustomerPublicId) == "")
+                        //MatchAll() && q.Term(po => po.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId))
+                    .Filter(f2 =>
+                    {
+                        QueryContainer qb = null;                        
+
+                        #region Status Srv Filters                      
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= q.Term(m => m.SurveyStatusId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y.Item1).FirstOrDefault());
+                        }
+                        #endregion
+
+                        #region Type Srv Filters
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= q.Term(m => m.SurveyTypeId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y.Item1).FirstOrDefault());
+                        }
+                        #endregion
+
+                        return qb;
+                    })
+                    ))
+                );
+
+                oModel.TotalRows = (int)oModel.ElasticCompanyModel.Total;
                 #endregion
 
                 //parse view model
-                //if (oModel.ElasticCompanySurveyModel != null && oModel.ElasticCompanySurveyModel.Documents.Count() > 0)
-                //{
-                //    oModel.ElasticCompanySurveyModel.Documents.All(prv =>
-                //    {
-                //        oModel.ProviderSearchResult.Add
-                //            (new ProviderLiteViewModel(prv));
+                if (oModel.ElasticCompanyModel != null && oModel.ElasticCompanyModel.Documents.Count() > 0)
+                {
+                    oModel.ElasticCompanyModel.Documents.All(prv =>
+                    {
+                        oModel.ProviderSearchResult.Add
+                            (new ProviderLiteViewModel(prv));
 
-                //        return true;
-                //    });
-                //}
+                        return true;
+                    });
+                }
 
-                //#region City Aggregation
+                #region City Aggregation
 
-                //oModel.ElasticCompanySurveyModel.Aggs.Terms("city").Buckets.All(x =>
-                //{
-                //    oModel.CityFilter.Add(new ElasticSearchFilter
-                //    {
-                //        FilterCount = (int)x.DocCount,
-                //        FilterType = x.Key.Split('.')[0],
-                //        FilterName = MarketPlace.Models.Company.CompanyUtil.GetCityName(x.Key.Split('.')[0]),
-                //    });
-                //    return true;
-                //});
+                oModel.ElasticCompanyModel.Aggs.Terms("city").Buckets.All(x =>
+                {
+                    oModel.CityFilter.Add(new ElasticSearchFilter
+                    {
+                        FilterCount = (int)x.DocCount,
+                        FilterType = x.Key.Split('.')[0],
+                        FilterName = MarketPlace.Models.Company.CompanyUtil.GetCityName(x.Key.Split('.')[0]),
+                    });
+                    return true;
+                });
 
-                //#endregion
+                #endregion
 
-                //#region Country Aggregation
+                #region Country Aggregation
 
-                //oModel.ElasticCompanySurveyModel.Aggs.Terms("country").Buckets.All(x =>
-                //{
-                //    oModel.CountryFilter.Add(new ElasticSearchFilter
-                //    {
-                //        FilterCount = (int)x.DocCount,
-                //        FilterType = x.Key.Split('.')[0],
-                //        FilterName = MarketPlace.Models.Company.CompanyUtil.GetCountryNameByCountryId(x.Key.Split('.')[0]),
-                //    });
-                //    return true;
-                //});
-
-                //#endregion
+                oModel.ElasticCompanyModel.Aggs.Terms("country").Buckets.All(x =>
+                {
+                    oModel.CountryFilter.Add(new ElasticSearchFilter
+                    {
+                        FilterCount = (int)x.DocCount,
+                        FilterType = x.Key.Split('.')[0],
+                        FilterName = MarketPlace.Models.Company.CompanyUtil.GetCountryNameByCountryId(x.Key.Split('.')[0]),
+                    });
+                    return true;
+                });
+                #endregion              
 
                 #region Survey Status Aggregation
 
-                oModel.ElasticCompanySurveyModel.Aggs.Nested("surveystatus_avg").Terms("surveystatus").Buckets.All(x =>
+                oModel.ElasticSurveyModel.Aggs.Terms("srv_status").Buckets.All(x =>
                 {
-                    oModel.SurveyStatus.Add(new ElasticSearchFilter()
+                    oModel.SurveyStatus.Add(new ElasticSearchFilter
                     {
                         FilterCount = (int)x.DocCount,
                         FilterType = x.Key.Split('.')[0],
                         FilterName = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(x.Key.Split('.')[0]),
                     });
-
                     return true;
                 });
-
-                #endregion
+                #endregion        
 
                 #region Survey Type Aggregation
 
-                oModel.ElasticCompanySurveyModel.Aggs.Nested("survey_avg").Terms("survey").Buckets.All(x =>
+                oModel.ElasticSurveyModel.Aggs.Terms("srv_type").Buckets.All(x =>
                 {
-                    oModel.SurveyType.Add(new ElasticSearchFilter()
+                    oModel.SurveyType.Add(new ElasticSearchFilter
                     {
                         FilterCount = (int)x.DocCount,
                         FilterType = x.Key.Split('.')[0],
                         FilterName = MarketPlace.Models.Survey.SurveyUtil.GetSurveyOptionName(x.Key.Split('.')[0]),
                     });
-
                     return true;
                 });
+                #endregion        
 
-                #endregion
-
-                #endregion
+                #endregion               
 
                 if (lstSearchFilter != null && lstSearchFilter.Count > 0)
                 {
                     string newFilterUrl = "";
                     lstSearchFilter.All(x =>
                     {
-                        //if (int.Parse(x.Item3) == (int)enumFilterType.City)
-                        //    newFilterUrl += "," + x.Item1 + ";" + oModel.CityFilter.FirstOrDefault().FilterCount + ";" + x.Item3;
+                        if (int.Parse(x.Item3) == (int)enumFilterType.City)
+                            newFilterUrl += "," + x.Item1 + ";" + oModel.CityFilter.FirstOrDefault().FilterCount + ";" + x.Item3;
 
-                        //if (int.Parse(x.Item3) == (int)enumFilterType.Country)
-                        //    newFilterUrl += "," + x.Item1 + ";" + oModel.CountryFilter.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
-
-                        if (int.Parse(x.Item3) == (int)enumFilterType.SurveyType)
-                            newFilterUrl += "," + x.Item1 + ";" + oModel.SurveyType.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
+                        if (int.Parse(x.Item3) == (int)enumFilterType.Country)
+                            newFilterUrl += "," + x.Item1 + ";" + oModel.CountryFilter.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
 
                         if (int.Parse(x.Item3) == (int)enumFilterType.SurveyStatus)
-                            newFilterUrl += "," + x.Item1 + ";" + oModel.SurveyStatus.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
+                            newFilterUrl += "," + x.Item1 + ";" + oModel.SurveyStatus.FirstOrDefault().FilterCount + ";" + x.Item3;
+
+                        if (int.Parse(x.Item3) == (int)enumFilterType.SurveyType)
+                            newFilterUrl += "," + x.Item1 + ";" + oModel.SurveyType.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";    
 
                         return true;
                     });
                     oModel.SearchFilter = newFilterUrl;
-
                 }
             }
 
