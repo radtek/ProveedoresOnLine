@@ -68,7 +68,7 @@ namespace ProveedoresOnLine.SurveyModule.Interfaces
 
         #region SurveyReport
 
-        SurveyModule.Models.SurverReportModel.SurveyReportModel SurveyGeneralReport(string CustomerPublicId);
+        List<SurveyModule.Models.SurverReportModel.SurveyReportModelTable1> SurveyGeneralReport(string CustomerPublicId);
 
         #endregion
 

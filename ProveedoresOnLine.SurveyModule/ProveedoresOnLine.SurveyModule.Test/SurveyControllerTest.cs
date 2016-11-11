@@ -55,9 +55,9 @@ namespace ProveedoresOnLine.SurveyModule.Test
         [TestMethod]
         public void  SurveyGeneralReport()
         {
-            ProveedoresOnLine.SurveyModule.Models.SurverReportModel.SurveyReportModel oReturn = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGeneralReport("1EA5A78A");
+            List<ProveedoresOnLine.SurveyModule.Models.SurverReportModel.SurveyReportModelTable1> oReturn = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGeneralReport("1EA5A78A");
 
-            Assert.AreEqual(true, oReturn != null && oReturn.SurveyIdTable1 >0);
+            Assert.AreEqual(true, oReturn != null && oReturn.Count >0);
         }
 
         #region Util
