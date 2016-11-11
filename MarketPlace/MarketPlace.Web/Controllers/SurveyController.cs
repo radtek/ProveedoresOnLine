@@ -184,7 +184,7 @@ namespace MarketPlace.Web.Controllers
                     (agg => agg
                     .Nested("survey_avg", x => x.
                         Path(p => p.oSurveyIndexModel).
-                        Aggregations(aggs => aggs.Terms("survey", term => term.Field(fi => fi.oSurveyIndexModel.First().SurveyPublicId)))
+                        Aggregations(aggs => aggs.Terms("survey", term => term.Field(fi => fi.oSurveyIndexModel.First().SurveyTypeId)))
                     )
                     .Nested("surveystatus_avg", x => x.
                         Path(p => p.oSurveyIndexModel).
@@ -203,7 +203,18 @@ namespace MarketPlace.Web.Controllers
                                 .Query(SessionModel.CurrentCompany.CompanyPublicId)
                                 )
                               ).ScoreMode(NestedScoreMode.Max)
-                           )
+                            )
+                    )
+                .Query(q =>
+                    q.Nested(n => n
+                        .Path(p => p.oSurveyIndexModel)
+                            .Query(fq => fq
+                                .Match(match => match
+                                .Field(field => field.oSurveyIndexModel.First().CustomerPublicId)
+                                .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                )
+                              ).ScoreMode(NestedScoreMode.Max)
+                            )
                     )
                 .Query(q => q.
                     Filtered(f => f
@@ -254,6 +265,15 @@ namespace MarketPlace.Web.Controllers
                                 )
                               )
                            );
+                        qb &= q.Nested(n => n
+                            .Path(p => p.oSurveyIndexModel)
+                           .Query(fq => fq
+                               .Match(match => match
+                               .Field(field => field.oSurveyIndexModel.First().CustomerPublicId)
+                               .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                               )
+                             )
+                          );
 
                         return qb;
                     })
@@ -306,23 +326,23 @@ namespace MarketPlace.Web.Controllers
 
                 #endregion
 
-                //#region Survey Type Aggregation
+                #region Survey Status Aggregation
 
-                //oModel.ElasticCompanySurveyModel.Aggs.Nested("surveystatus_avg").Terms("surveystatus").Buckets.All(x =>
-                //{
-                //    oModel.SurveyStatus.Add(new ElasticSearchFilter()
-                //    {
-                //        FilterCount = (int)x.DocCount,
-                //        FilterType = x.Key.Split('.')[0],
-                //        FilterName = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(x.Key.Split('.')[0]),
-                //    });
+                oModel.ElasticCompanySurveyModel.Aggs.Nested("surveystatus_avg").Terms("surveystatus").Buckets.All(x =>
+                {
+                    oModel.SurveyStatus.Add(new ElasticSearchFilter()
+                    {
+                        FilterCount = (int)x.DocCount,
+                        FilterType = x.Key.Split('.')[0],
+                        FilterName = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(x.Key.Split('.')[0]),
+                    });
 
-                //    return true;
-                //});
+                    return true;
+                });
 
-                //#endregion
+                #endregion
 
-                #region Survey status Aggregation
+                #region Survey Type Aggregation
 
                 oModel.ElasticCompanySurveyModel.Aggs.Nested("survey_avg").Terms("survey").Buckets.All(x =>
                 {
