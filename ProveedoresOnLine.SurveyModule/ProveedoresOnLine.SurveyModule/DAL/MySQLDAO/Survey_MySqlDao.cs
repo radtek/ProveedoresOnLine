@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data;
 using ProveedoresOnLine.SurveyModule.Models;
 using ProveedoresOnLine.Company.Models.Util;
+using ProveedoresOnLine.SurveyModule.Models.SurverReportModel;
 
 namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
 {
@@ -1786,7 +1787,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
 
         #region SurveyReport
 
-        public SurveyModule.Models.SurverReportModel.SurveyReportModel SurveyGeneralReport(string CustomerPublicId)
+        public List<SurveyModule.Models.SurverReportModel.SurveyReportModelTable1> SurveyGeneralReport(string CustomerPublicId)
         {
             List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
 
@@ -1800,7 +1801,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                 Parameters = lstParams
             });
 
-            SurveyModule.Models.SurverReportModel.SurveyReportModel oReturn = null;
+            List<SurveyModule.Models.SurverReportModel.SurveyReportModelTable1> oReturn = null;
 
             if (response.DataSetResult != null && 
                 response.DataSetResult.Tables.Count > 1 && 
@@ -1811,43 +1812,92 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                 response.DataSetResult.Tables[2] != null &&
                 response.DataSetResult.Tables[2].Rows.Count > 0)
             {
-                oReturn = new Models.SurverReportModel.SurveyReportModel()
-                {
-                    SurveyName = response.DataSetResult.Tables[2].Rows[0].Field<string>("SurveyName"),
-                    Responsable = response.DataSetResult.Tables[0].Rows[0].Field<string>("Responsable"),
-                    CompanyName = response.DataSetResult.Tables[0].Rows[0].Field<string>("CompanyName"),
-                    IdentificationNumber = response.DataSetResult.Tables[0].Rows[0].Field<string>("IdentificationNumber"),
-                    Project = response.DataSetResult.Tables[0].Rows[0].Field<string>("Project"),
-                    Comments = response.DataSetResult.Tables[0].Rows[0].Field<string>("Comments"),
-                    Status = response.DataSetResult.Tables[0].Rows[0].Field<string>("Status"),
-                    SendDate = response.DataSetResult.Tables[0].Rows[0].Field<string>("SendDate"),
-                    ExpirationDate = response.DataSetResult.Tables[0].Rows[0].Field<string>("ExpirationDate"),
-                    LastModify = response.DataSetResult.Tables[0].Rows[0].Field<DateTime>("LastModify"),
-                    EvaluationArea = response.DataSetResult.Tables[2].Rows[0].Field<string>("EvaluationArea"),
-                    AreaComment = response.DataSetResult.Tables[1].Rows[0].Field<string>("AreaComment"),
-                    Question = response.DataSetResult.Tables[2].Rows[0].Field<string>("Question"),
-                    Answer = response.DataSetResult.Tables[2].Rows[0].Field<string>("Answer"),
-                    DescriptiveText = response.DataSetResult.Tables[1].Rows[0].Field<string>("DescriptiveText"),
-                    SurveyIdTable1 = response.DataSetResult.Tables[0].Rows[0].Field<Int64>("SurveyIdTable1"),
-                    SurveyIdTable2 = response.DataSetResult.Tables[1].Rows[0].Field<Int64>("SurveyIdTable2"),
-                    ParentSurveyIdTable1 = response.DataSetResult.Tables[0].Rows[0].Field<Int64>("ParentSurveyIdTable1"),
-                    ParentSurveyIdTable2 = response.DataSetResult.Tables[1].Rows[0].Field<Int64>("ParentSurveyIdTable2"),
-                    SurveyConfigIdTable1 = response.DataSetResult.Tables[0].Rows[0].Field<Int64>("SurveyConfigIdTable1"),
-                    SurveyConfigIdTable3 = response.DataSetResult.Tables[2].Rows[0].Field<Int64>("SurveyConfigIdTable3"),
-                    SurveyConfigItemId = response.DataSetResult.Tables[2].Rows[0].Field<Int64>("SurveyConfigItemId"),
-                    SurveyConfigItemType = response.DataSetResult.Tables[2].Rows[0].Field<Int64>("SurveyConfigItemType"),
-                    SurveyInfoId = response.DataSetResult.Tables[0].Rows[0].Field<Int64>("SurveyInfoId"),
-                    SurveyInfoType = response.DataSetResult.Tables[0].Rows[0].Field<Int64>("SurveyInfoType"),
-                    SurveyItemInfoId = response.DataSetResult.Tables[1].Rows[0].Field<Int64>("SurveyItemInfoId"),
-                    SurveyItemInfoType = response.DataSetResult.Tables[1].Rows[0].Field<Int64>("SurveyItemInfoType"),
-                    AreaRol = response.DataSetResult.Tables[2].Rows[0].Field<string>("AreaRol"),
-                    ModuleCalification = response.DataSetResult.Tables[1].Rows[0].Field<string>("ModuleCalification"),
-                    Calification = response.DataSetResult.Tables[0].Rows[0].Field<string>("Calification"),
-                    EvaluatorTable1 = response.DataSetResult.Tables[0].Rows[0].Field<string>("EvaluatorTable1"),
-                    EvaluatorTable2 = response.DataSetResult.Tables[1].Rows[0].Field<string>("EvaluatorTable2"),
-                    EvaluatorRol = response.DataSetResult.Tables[1].Rows[0].Field<string>("EvaluatorRol"),
+                oReturn = (from tb1 in response.DataSetResult.Tables[0].AsEnumerable()
+                           where !tb1.IsNull("SurveyIdTable1")
+                           group tb1 by new
+                           {
+                               SurveyIdTable1 = tb1.Field<Int64>("SurveyIdTable1"),
+                               SurveyConfigIdTable1 = tb1.Field<Int64>("SurveyConfigIdTable1"),
+                               ParentSurveyIdTable1 = tb1.Field<Int64>("ParentSurveyIdTable1"),
+                               CompanyName = tb1.Field<string>("CompanyName"),
+                               IdentificationNumber = tb1.Field<string>("IdentificationNumber"),
+                               Responsable = tb1.Field<string>("Responsable"),
+                               Status = tb1.Field<string>("Status"),
+                               Calification = tb1.Field<string>("Calification"),
+                               SendDate = tb1.Field<string>("SendDate"),
+                               ExpirationDate = tb1.Field<string>("ExpirationDate"),
+                               LastModify = tb1.Field<DateTime>("LastModify"),
+                               EvaluatorTable1 = tb1.Field<string>("EvaluatorTable1"),
+                               Project = tb1.Field<string>("Project"),
+                               Comments = tb1.Field<string>("Comments")
+                           } into tb1g
+                           select new SurveyReportModelTable1
+                           {
+                               SurveyIdTable1 = tb1g.Key.SurveyIdTable1,
+                               ParentSurveyIdTable1 = tb1g.Key.ParentSurveyIdTable1,
+                               SurveyConfigIdTable1 = tb1g.Key.SurveyConfigIdTable1,
+                               CompanyName = tb1g.Key.CompanyName,
+                               IdentificationNumber = tb1g.Key.IdentificationNumber,
+                               Responsable = tb1g.Key.Responsable,
+                               Status = tb1g.Key.Status,
+                               Calification = tb1g.Key.Calification,
+                               SendDate = tb1g.Key.SendDate,
+                               ExpirationDate = tb1g.Key.ExpirationDate,
+                               LastModify = tb1g.Key.LastModify,
+                               EvaluatorTable1 = tb1g.Key.EvaluatorTable1,
+                               Project = tb1g.Key.Project,
+                               Comments = tb1g.Key.Comments,
+                               Table2 = (from tb2 in response.DataSetResult.Tables[1].AsEnumerable()
+                                         where !tb2.IsNull("SurveyIdTable2") && tb1g.Key.SurveyIdTable1 == tb2.Field<int>("SurveyIdTable2")
+                                         group tb2 by new
+                                         {
+                                             SurveyItemId = tb2.Field<Int64>("SurveyItemId"),
+                                             SurveyItemInfoId = tb2.Field<Int64>("SurveyItemInfoId"),
+                                             SurveyInfoId = tb2.Field<Int64>("SurveyInfoId"),
+                                             SurveyIdTable2 = tb2.Field<Int64>("SurveyIdTable2"),
+                                             SurveyInfoType = tb2.Field<Int64>("SurveyInfoType"),
+                                             ParentSurveyIdTable2 = tb2.Field<Int64>("ParentSurveyIdTable2"),                                             
+                                             SurveyItemInfoType = tb2.Field<Int64>("SurveyItemInfoType"),
+                                             ModuleCalification = tb2.Field<string>("ModuleCalification"),
+                                             DescriptiveText =tb2.Field<string>("DescriptiveText"),
+                                             EvaluatorRol = tb2.Field<string>("EvaluatorRol"),
+                                             EvaluatorTable2 = tb2.Field<string>("EvaluatorTable2"),
+                                             AreaComment = tb2.Field<string>("AreaComment"),
+                                         }
+                                         into tb2g
+                                         select new SurveyReportModelTable2
+                                         {
+                                             SurveyItemId = tb2g.Key.SurveyItemId,
+                                             SurveyItemInfoId = tb2g.Key.SurveyItemInfoId,
+                                             SurveyInfoId = tb2g.Key.SurveyInfoId,
+                                             SurveyIdTable2 = tb2g.Key.SurveyIdTable2,
+                                             SurveyInfoType = tb2g.Key.SurveyInfoType,
+                                             ParentSurveyIdTable2 = tb2g.Key.ParentSurveyIdTable2,
+                                             SurveyItemInfoType = tb2g.Key.SurveyItemInfoType,
+                                             ModuleCalification = tb2g.Key.ModuleCalification,
+                                             DescriptiveText = tb2g.Key.DescriptiveText,
+                                             EvaluatorRol = tb2g.Key.EvaluatorRol,
+                                             EvaluatorTable2 = tb2g.Key.EvaluatorTable2,
+                                             AreaComment = tb2g.Key.AreaComment,                                          
+                                         }).ToList(),
+                               Table3= (from tb3 in response.DataSetResult.Tables[2].AsEnumerable()
+                                        where !tb3.IsNull("SurveyConfigItemId") && tb1g.Key.SurveyConfigIdTable1 == tb3.Field<Int64>("SurveyConfigIdTable3")
+                                        group tb3 by new
+                                        {
+                                            SurveyConfigItemId = tb3.Field<Int64>("SurveyConfigItemId"),
+                                            SurveyConfigIdTable3 = tb3.Field<Int64>("SurveyConfigIdTable3"),
+                                            SurveyConfigItemType = tb3.Field<Int64>("SurveyConfigItemType"),
+                                            SurveyName = tb3.Field<string>("SurveyName"),
+                                            EvaluationArea = tb3.Field<string>("EvaluationArea"),
+                                            Question = tb3.Field<string>("Question"),
+                                            Answer = tb3.Field<string>("Answer"),
+                                            AreaRol = tb3.Field<string>("AreaRol")
+                                        } into tb3g
+                                        select new SurveyReportModelTable3
+                                        {
 
-                };
+                                        }).ToList()                                                                                         
+                           }).ToList();                                                      
             }
 
             return oReturn;

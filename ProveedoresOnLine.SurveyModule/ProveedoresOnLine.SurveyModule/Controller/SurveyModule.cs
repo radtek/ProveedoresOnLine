@@ -939,7 +939,7 @@ namespace ProveedoresOnLine.SurveyModule.Controller
 
         #region SurveyReport
 
-        public static ProveedoresOnLine.SurveyModule.Models.SurverReportModel.SurveyReportModel SurveyGeneralReport(string CustomerPublicId)
+        public static List<ProveedoresOnLine.SurveyModule.Models.SurverReportModel.SurveyReportModelTable1> SurveyGeneralReport(string CustomerPublicId)
         {
             return DAL.Controller.SurveyDataController.Instance.SurveyGeneralReport(CustomerPublicId);
         }

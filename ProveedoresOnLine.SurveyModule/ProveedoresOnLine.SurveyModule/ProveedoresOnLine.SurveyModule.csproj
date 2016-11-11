@@ -88,7 +88,9 @@
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\Index\CompanySurveyIndexModel.cs" />
     <Compile Include="Models\Index\SurveyIndexModel.cs" />
-    <Compile Include="Models\SurverReportModel\SurveyReportModel.cs" />
+    <Compile Include="Models\SurverReportModel\SurveyReportModelTable1.cs" />
+    <Compile Include="Models\SurverReportModel\SurveyReportModelTable2.cs" />
+    <Compile Include="Models\SurverReportModel\SurveyReportModelTable3.cs" />
     <Compile Include="Models\SurveyConfigModel.cs" />
     <Compile Include="Models\SurveyIndexModel.cs" />
     <Compile Include="Models\SurveyItemModel.cs" />
