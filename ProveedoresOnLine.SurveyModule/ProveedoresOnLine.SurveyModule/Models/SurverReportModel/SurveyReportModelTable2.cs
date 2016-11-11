@@ -10,9 +10,7 @@ namespace ProveedoresOnLine.SurveyModule.Models.SurverReportModel
     {
         #region Table 2
         public Int64 SurveyItemInfoId { get; set; }
-        public Int64 SurveyInfoId { get; set; }
         public Int64 SurveyIdTable2 { get; set; }
-        public Int64 SurveyInfoType { get; set; }
         public Int64 ParentSurveyIdTable2 { get; set; }
         public Int64 SurveyItemId { get; set; }
         public Int64 SurveyItemInfoType { get; set; }

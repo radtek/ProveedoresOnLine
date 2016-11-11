@@ -9,9 +9,11 @@ namespace ProveedoresOnLine.SurveyModule.Models.SurverReportModel
     public class SurveyReportModelTable1
     {
         #region Table 1
+        public Int64 SurveyInfoId { get; set; }
         public Int64 SurveyIdTable1 { get; set; }
         public Int64 SurveyConfigIdTable1 { get; set; }
         public Int64 ParentSurveyIdTable1 { get; set; }
+        public Int64 SurveyInfoType { get; set; }
         public string CompanyName { get; set; }
         public string IdentificationNumber { get; set; }
         public string Responsable { get; set; }
@@ -26,21 +28,6 @@ namespace ProveedoresOnLine.SurveyModule.Models.SurverReportModel
         public List<SurveyReportModelTable2> Table2 { get; set; }
         public List<SurveyReportModelTable3> Table3 { get; set;}
         #endregion
-
-        
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
+      
     }
 }

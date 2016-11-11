@@ -1816,9 +1816,11 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                            where !tb1.IsNull("SurveyIdTable1")
                            group tb1 by new
                            {
+                               SurveyInfoId = tb1.Field<Int64>("SurveyInfoId"),
                                SurveyIdTable1 = tb1.Field<Int64>("SurveyIdTable1"),
                                SurveyConfigIdTable1 = tb1.Field<Int64>("SurveyConfigIdTable1"),
                                ParentSurveyIdTable1 = tb1.Field<Int64>("ParentSurveyIdTable1"),
+                               SurveyInfoType = tb1.Field<Int64>("SurveyInfoType"),
                                CompanyName = tb1.Field<string>("CompanyName"),
                                IdentificationNumber = tb1.Field<string>("IdentificationNumber"),
                                Responsable = tb1.Field<string>("Responsable"),
@@ -1833,9 +1835,11 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                            } into tb1g
                            select new SurveyReportModelTable1
                            {
+                               SurveyInfoId = tb1g.Key.SurveyInfoId,
                                SurveyIdTable1 = tb1g.Key.SurveyIdTable1,
                                ParentSurveyIdTable1 = tb1g.Key.ParentSurveyIdTable1,
                                SurveyConfigIdTable1 = tb1g.Key.SurveyConfigIdTable1,
+                              SurveyInfoType = tb1g.Key.SurveyInfoType,
                                CompanyName = tb1g.Key.CompanyName,
                                IdentificationNumber = tb1g.Key.IdentificationNumber,
                                Responsable = tb1g.Key.Responsable,
@@ -1848,14 +1852,12 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                Project = tb1g.Key.Project,
                                Comments = tb1g.Key.Comments,
                                Table2 = (from tb2 in response.DataSetResult.Tables[1].AsEnumerable()
-                                         where !tb2.IsNull("SurveyIdTable2") && tb1g.Key.SurveyIdTable1 == tb2.Field<int>("SurveyIdTable2")
+                                         where !tb2.IsNull("SurveyIdTable2") && tb1g.Key.SurveyIdTable1 == tb2.Field<Int64>("SurveyIdTable2")
                                          group tb2 by new
                                          {
                                              SurveyItemId = tb2.Field<Int64>("SurveyItemId"),
-                                             SurveyItemInfoId = tb2.Field<Int64>("SurveyItemInfoId"),
-                                             SurveyInfoId = tb2.Field<Int64>("SurveyInfoId"),
+                                             SurveyItemInfoId = tb2.Field<Int64>("SurveyItemInfoId"),                                            
                                              SurveyIdTable2 = tb2.Field<Int64>("SurveyIdTable2"),
-                                             SurveyInfoType = tb2.Field<Int64>("SurveyInfoType"),
                                              ParentSurveyIdTable2 = tb2.Field<Int64>("ParentSurveyIdTable2"),                                             
                                              SurveyItemInfoType = tb2.Field<Int64>("SurveyItemInfoType"),
                                              ModuleCalification = tb2.Field<string>("ModuleCalification"),
@@ -1868,10 +1870,8 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                          select new SurveyReportModelTable2
                                          {
                                              SurveyItemId = tb2g.Key.SurveyItemId,
-                                             SurveyItemInfoId = tb2g.Key.SurveyItemInfoId,
-                                             SurveyInfoId = tb2g.Key.SurveyInfoId,
+                                             SurveyItemInfoId = tb2g.Key.SurveyItemInfoId,                                             
                                              SurveyIdTable2 = tb2g.Key.SurveyIdTable2,
-                                             SurveyInfoType = tb2g.Key.SurveyInfoType,
                                              ParentSurveyIdTable2 = tb2g.Key.ParentSurveyIdTable2,
                                              SurveyItemInfoType = tb2g.Key.SurveyItemInfoType,
                                              ModuleCalification = tb2g.Key.ModuleCalification,
