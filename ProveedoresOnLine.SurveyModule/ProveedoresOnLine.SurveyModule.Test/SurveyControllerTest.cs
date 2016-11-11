@@ -52,6 +52,14 @@ namespace ProveedoresOnLine.SurveyModule.Test
             Assert.AreEqual(true, oReturn != null && oReturn.ItemId > 0);
         }
 
+        [TestMethod]
+        public void  SurveyGeneralReport()
+        {
+            ProveedoresOnLine.SurveyModule.Models.SurverReportModel.SurveyReportModel oReturn = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGeneralReport("1EA5A78A");
+
+            Assert.AreEqual(true, oReturn != null && oReturn.SurveyIdTable1 >0);
+        }
+
         #region Util
 
         [TestMethod]

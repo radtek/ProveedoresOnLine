@@ -1813,6 +1813,39 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
             {
                 oReturn = new Models.SurverReportModel.SurveyReportModel()
                 {
+                    SurveyName = response.DataSetResult.Tables[2].Rows[0].Field<string>("SurveyName"),
+                    Responsable = response.DataSetResult.Tables[0].Rows[0].Field<string>("Responsable"),
+                    CompanyName = response.DataSetResult.Tables[0].Rows[0].Field<string>("CompanyName"),
+                    IdentificationNumber = response.DataSetResult.Tables[0].Rows[0].Field<string>("IdentificationNumber"),
+                    Project = response.DataSetResult.Tables[0].Rows[0].Field<string>("Project"),
+                    Comments = response.DataSetResult.Tables[0].Rows[0].Field<string>("Comments"),
+                    Status = response.DataSetResult.Tables[0].Rows[0].Field<string>("Status"),
+                    SendDate = response.DataSetResult.Tables[0].Rows[0].Field<string>("SendDate"),
+                    ExpirationDate = response.DataSetResult.Tables[0].Rows[0].Field<string>("ExpirationDate"),
+                    LastModify = response.DataSetResult.Tables[0].Rows[0].Field<DateTime>("LastModify"),
+                    EvaluationArea = response.DataSetResult.Tables[2].Rows[0].Field<string>("EvaluationArea"),
+                    AreaComment = response.DataSetResult.Tables[1].Rows[0].Field<string>("AreaComment"),
+                    Question = response.DataSetResult.Tables[2].Rows[0].Field<string>("Question"),
+                    Answer = response.DataSetResult.Tables[2].Rows[0].Field<string>("Answer"),
+                    DescriptiveText = response.DataSetResult.Tables[1].Rows[0].Field<string>("DescriptiveText"),
+                    SurveyIdTable1 = response.DataSetResult.Tables[0].Rows[0].Field<Int64>("SurveyIdTable1"),
+                    SurveyIdTable2 = response.DataSetResult.Tables[1].Rows[0].Field<Int64>("SurveyIdTable2"),
+                    ParentSurveyIdTable1 = response.DataSetResult.Tables[0].Rows[0].Field<Int64>("ParentSurveyIdTable1"),
+                    ParentSurveyIdTable2 = response.DataSetResult.Tables[1].Rows[0].Field<Int64>("ParentSurveyIdTable2"),
+                    SurveyConfigIdTable1 = response.DataSetResult.Tables[0].Rows[0].Field<Int64>("SurveyConfigIdTable1"),
+                    SurveyConfigIdTable3 = response.DataSetResult.Tables[2].Rows[0].Field<Int64>("SurveyConfigIdTable3"),
+                    SurveyConfigItemId = response.DataSetResult.Tables[2].Rows[0].Field<Int64>("SurveyConfigItemId"),
+                    SurveyConfigItemType = response.DataSetResult.Tables[2].Rows[0].Field<Int64>("SurveyConfigItemType"),
+                    SurveyInfoId = response.DataSetResult.Tables[0].Rows[0].Field<Int64>("SurveyInfoId"),
+                    SurveyInfoType = response.DataSetResult.Tables[0].Rows[0].Field<Int64>("SurveyInfoType"),
+                    SurveyItemInfoId = response.DataSetResult.Tables[1].Rows[0].Field<Int64>("SurveyItemInfoId"),
+                    SurveyItemInfoType = response.DataSetResult.Tables[1].Rows[0].Field<Int64>("SurveyItemInfoType"),
+                    AreaRol = response.DataSetResult.Tables[2].Rows[0].Field<string>("AreaRol"),
+                    ModuleCalification = response.DataSetResult.Tables[1].Rows[0].Field<string>("ModuleCalification"),
+                    Calification = response.DataSetResult.Tables[0].Rows[0].Field<string>("Calification"),
+                    EvaluatorTable1 = response.DataSetResult.Tables[0].Rows[0].Field<string>("EvaluatorTable1"),
+                    EvaluatorTable2 = response.DataSetResult.Tables[1].Rows[0].Field<string>("EvaluatorTable2"),
+                    EvaluatorRol = response.DataSetResult.Tables[1].Rows[0].Field<string>("EvaluatorRol"),
 
                 };
             }
@@ -1822,7 +1855,6 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
 
 
         #endregion
-
 
         #region Survey Index
 
