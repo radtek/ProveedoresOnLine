@@ -164,13 +164,14 @@
                     if (Model.Item2.ProviderAddRemoveEnable && MarketPlace.Models.General.SessionModel.CurrentCompanyType != MarketPlace.Models.General.enumCompanyType.BuyerProvider)
                     {
                         if (Model.Item2.IsProviderCustomer &&
-                             Model.Item2.ProviderLiteType == MarketPlace.Models.General.enumProviderLiteType.Project)
+                             Model.Item2.ProviderLiteType == MarketPlace.Models.General.enumProviderLiteType.Project &&
+                            Model.Item1.ElasticCompanyModel != null)
                         {
                             <a style="display:@(oIsInLeftPanel ? "none" : string.Empty)" href="javascript:Provider_SearchObject.AddProjectProvider('@Model.Item2.ElasticRealtedProvider.CompanyPublicId');">
                                 <div class="SelGenericTooltip POMPSearchResultIncludeCoparisonIcon" title="Agregar al proceso de selección"></div>
                             </a>
                         }
-                        else if (Model.Item2.IsProviderCustomer && Model.Item2.ProviderLiteType == MarketPlace.Models.General.enumProviderLiteType.Comparison)
+                        else if (Model.Item2.IsProviderCustomer && Model.Item2.ProviderLiteType == MarketPlace.Models.General.enumProviderLiteType.Comparison && Model.Item1.ElasticCompanyModel != null)
                         {
                             <a style="display:@(oIsInLeftPanel ? "none" : string.Empty)" href="javascript:Provider_SearchObject.AddCompareProvider('@Model.Item2.ElasticRealtedProvider.CompanyPublicId');">
                                 <div class="SelGenericTooltip POMPSearchResultIncludeCoparisonIcon" title="Agregar a la lista de comparación"></div>

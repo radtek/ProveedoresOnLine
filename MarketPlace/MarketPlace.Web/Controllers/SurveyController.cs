@@ -182,14 +182,14 @@ namespace MarketPlace.Web.Controllers
                 .Size(20)
                 .Aggregations
                     (agg => agg
-                    .Nested("survey_avg", x => x.
-                        Path(p => p.oSurveyIndexModel).
-                        Aggregations(aggs => aggs.Terms("survey", term => term.Field(fi => fi.oSurveyIndexModel.First().SurveyTypeId)))
-                    )
-                    .Nested("surveystatus_avg", x => x.
-                        Path(p => p.oSurveyIndexModel).
-                        Aggregations(aggs => aggs.Terms("surveystatus", term => term.Field(fi => fi.oSurveyIndexModel.First().SurveyStatusId)))
-                    )
+                    //.Nested("survey_avg", x => x.
+                    //    Path(p => p.oSurveyIndexModel).
+                    //    Aggregations(aggs => aggs.Terms("survey", term => term.Field(fi => fi.oSurveyIndexModel.First().SurveyTypeId)))
+                    //)
+                    //.Nested("surveystatus_avg", x => x.
+                    //    Path(p => p.oSurveyIndexModel).
+                    //    Aggregations(aggs => aggs.Terms("surveystatus", term => term.Field(fi => fi.oSurveyIndexModel.First().SurveyStatusId)))
+                    //)
                     .Terms("city", aggv => aggv
                         .Field(fi => fi.CityId))
                     .Terms("country", c => c
@@ -205,17 +205,17 @@ namespace MarketPlace.Web.Controllers
                               ).ScoreMode(NestedScoreMode.Max)
                             )
                     )
-                .Query(q =>
-                    q.Nested(n => n
-                        .Path(p => p.oSurveyIndexModel)
-                            .Query(fq => fq
-                                .Match(match => match
-                                .Field(field => field.oSurveyIndexModel.First().CustomerPublicId)
-                                .Query(SessionModel.CurrentCompany.CompanyPublicId)
-                                )
-                              ).ScoreMode(NestedScoreMode.Max)
-                            )
-                    )
+                //.Query(q =>
+                //    q.Nested(n => n
+                //        .Path(p => p.oSurveyIndexModel)
+                //            .Query(fq => fq
+                //                .Match(match => match
+                //                .Field(field => field.oSurveyIndexModel.First().CustomerPublicId)
+                //                .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                //                )
+                //              ).ScoreMode(NestedScoreMode.Max)
+                //            )
+                //    )
                 .Query(q => q.
                     Filtered(f => f
                     .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
@@ -231,30 +231,30 @@ namespace MarketPlace.Web.Controllers
                         {
                             qb &= q.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
                         }
-                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y).FirstOrDefault() != null)
-                        {
-                            qb &= q.Nested(n => n
-                                .Path(p => p.oSurveyIndexModel)
-                                .Query(fq => fq
-                                    .Match(match => match
-                                    .Field(field => field.oSurveyIndexModel.First().SurveyStatusId)
-                                    .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y.Item1).FirstOrDefault())
-                                    )
-                                )
-                            );
-                        }
-                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y).FirstOrDefault() != null)
-                        {
-                            qb &= q.Nested(n => n
-                                .Path(p => p.oSurveyIndexModel)
-                                .Query(fq => fq
-                                    .Match(match => match
-                                    .Field(field => field.oSurveyIndexModel.First().SurveyTypeId)
-                                    .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y.Item1).FirstOrDefault())
-                                    )
-                                )
-                            );
-                        }
+                        //if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y).FirstOrDefault() != null)
+                        //{
+                        //    qb &= q.Nested(n => n
+                        //        .Path(p => p.oSurveyIndexModel)
+                        //        .Query(fq => fq
+                        //            .Match(match => match
+                        //            .Field(field => field.oSurveyIndexModel.First().SurveyStatusId)
+                        //            .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y.Item1).FirstOrDefault())
+                        //            )
+                        //        )
+                        //    );
+                        //}
+                        //if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y).FirstOrDefault() != null)
+                        //{
+                        //    qb &= q.Nested(n => n
+                        //        .Path(p => p.oSurveyIndexModel)
+                        //        .Query(fq => fq
+                        //            .Match(match => match
+                        //            .Field(field => field.oSurveyIndexModel.First().SurveyTypeId)
+                        //            .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y.Item1).FirstOrDefault())
+                        //            )
+                        //        )
+                        //    );
+                        //}
 
                         qb &= q.Nested(n => n
                              .Path(p => p.oCustomerProviderIndexModel)
@@ -265,15 +265,15 @@ namespace MarketPlace.Web.Controllers
                                 )
                               )
                            );
-                        qb &= q.Nested(n => n
-                            .Path(p => p.oSurveyIndexModel)
-                           .Query(fq => fq
-                               .Match(match => match
-                               .Field(field => field.oSurveyIndexModel.First().CustomerPublicId)
-                               .Query(SessionModel.CurrentCompany.CompanyPublicId)
-                               )
-                             )
-                          );
+                        //qb &= q.Nested(n => n
+                        //    .Path(p => p.oSurveyIndexModel)
+                        //   .Query(fq => fq
+                        //       .Match(match => match
+                        //       .Field(field => field.oSurveyIndexModel.First().CustomerPublicId)
+                        //       .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                        //       )
+                        //     )
+                        //  );
 
                         return qb;
                     })
@@ -326,37 +326,37 @@ namespace MarketPlace.Web.Controllers
 
                 #endregion
 
-                #region Survey Status Aggregation
+                //#region Survey Status Aggregation
 
-                oModel.ElasticCompanySurveyModel.Aggs.Nested("surveystatus_avg").Terms("surveystatus").Buckets.All(x =>
-                {
-                    oModel.SurveyStatus.Add(new ElasticSearchFilter()
-                    {
-                        FilterCount = (int)x.DocCount,
-                        FilterType = x.Key.Split('.')[0],
-                        FilterName = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(x.Key.Split('.')[0]),
-                    });
+                //oModel.ElasticCompanySurveyModel.Aggs.Nested("surveystatus_avg").Terms("surveystatus").Buckets.All(x =>
+                //{
+                //    oModel.SurveyStatus.Add(new ElasticSearchFilter()
+                //    {
+                //        FilterCount = (int)x.DocCount,
+                //        FilterType = x.Key.Split('.')[0],
+                //        FilterName = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(x.Key.Split('.')[0]),
+                //    });
 
-                    return true;
-                });
+                //    return true;
+                //});
 
-                #endregion
+                //#endregion
 
-                #region Survey Type Aggregation
+                //#region Survey Type Aggregation
 
-                oModel.ElasticCompanySurveyModel.Aggs.Nested("survey_avg").Terms("survey").Buckets.All(x =>
-                {
-                    oModel.SurveyType.Add(new ElasticSearchFilter()
-                    {
-                        FilterCount = (int)x.DocCount,
-                        FilterType = x.Key.Split('.')[0],
-                        FilterName = MarketPlace.Models.Survey.SurveyUtil.GetSurveyOptionName(x.Key.Split('.')[0]),
-                    });
+                //oModel.ElasticCompanySurveyModel.Aggs.Nested("survey_avg").Terms("survey").Buckets.All(x =>
+                //{
+                //    oModel.SurveyType.Add(new ElasticSearchFilter()
+                //    {
+                //        FilterCount = (int)x.DocCount,
+                //        FilterType = x.Key.Split('.')[0],
+                //        FilterName = MarketPlace.Models.Survey.SurveyUtil.GetSurveyOptionName(x.Key.Split('.')[0]),
+                //    });
 
-                    return true;
-                });
+                //    return true;
+                //});
 
-                #endregion
+                //#endregion
 
                 #endregion
 
@@ -371,11 +371,11 @@ namespace MarketPlace.Web.Controllers
                         if (int.Parse(x.Item3) == (int)enumFilterType.Country)
                             newFilterUrl += "," + x.Item1 + ";" + oModel.CountryFilter.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
                         
-                        if (int.Parse(x.Item3) == (int)enumFilterType.SurveyType)
-                            newFilterUrl += "," + x.Item1 + ";" + oModel.SurveyType.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
+                        //if (int.Parse(x.Item3) == (int)enumFilterType.SurveyType)
+                        //    newFilterUrl += "," + x.Item1 + ";" + oModel.SurveyType.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
 
-                        if (int.Parse(x.Item3) == (int)enumFilterType.SurveyStatus)
-                            newFilterUrl += "," + x.Item1 + ";" + oModel.SurveyStatus.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
+                        //if (int.Parse(x.Item3) == (int)enumFilterType.SurveyStatus)
+                        //    newFilterUrl += "," + x.Item1 + ";" + oModel.SurveyStatus.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
 
                         return true;
                     });

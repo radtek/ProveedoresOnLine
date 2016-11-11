@@ -249,6 +249,8 @@ namespace ProveedoresOnLine.IndexSearch.Test
             settings.DefaultIndex("dev_companysurveyindex");
             ElasticClient CompanySurveyClient = new ElasticClient(settings);
 
+            CompanySurveyClient.DeleteIndex("dev_companysurveyindex");
+
             //CompanySurveyClient.Delete("dev_companysurveyindex");
         }
 
