@@ -1895,7 +1895,14 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                         } into tb3g
                                         select new SurveyReportModelTable3
                                         {
-
+                                            SurveyConfigItemId = tb3g.Key.SurveyConfigItemId,
+                                            SurveyConfigIdTable3 = tb3g.Key.SurveyConfigIdTable3,
+                                            SurveyConfigItemType = tb3g.Key.SurveyConfigItemType,
+                                            SurveyName = tb3g.Key.SurveyName,
+                                            EvaluationArea = tb3g.Key.EvaluationArea,
+                                            Question = tb3g.Key.Question,
+                                            Answer = tb3g.Key.Answer,
+                                            AreaRol = tb3g.Key.AreaRol
                                         }).ToList()                                                                                         
                            }).ToList();                                                      
             }
