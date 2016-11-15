@@ -225,10 +225,10 @@ namespace ProveedoresOnLine.IndexSearch.Test
             Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
             var settings = new ConnectionSettings(node);
             settings.DisableDirectStreaming(true);
-            settings.DefaultIndex("dev_companysurveyindex");
+            settings.DefaultIndex("dev_surveyindex");
             ElasticClient CompanySurveyClient = new ElasticClient(settings);
 
-            CompanySurveyClient.DeleteIndex("dev_companysurveyindex");
+            CompanySurveyClient.DeleteIndex("dev_surveyindex");
 
             //CompanySurveyClient.Delete("dev_companysurveyindex");
         }

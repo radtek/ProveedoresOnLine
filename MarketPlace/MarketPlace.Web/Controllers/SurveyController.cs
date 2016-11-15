@@ -441,15 +441,12 @@ namespace MarketPlace.Web.Controllers
             Nest.ISearchResponse<SurveyIndexSearchModel> oResult = client.Search<SurveyIndexSearchModel>(s => s
                 .From(0)
                 .Size(1)
-                .Query(q => q.QueryString(qs => qs.Query(SurveyPublicId))));
+                .Query(q => q.QueryString(qs => qs.Query(oSurveyModel.ParentSurveyPublicId))));
 
             SurveyIndexSearchModel oModelToIndex = oResult.Documents.FirstOrDefault();
 
-            if (oModelToIndex.SurveyPublicId == oSurveyModel.ParentSurveyPublicId)
-            {
-                oModelToIndex.SurveyStatusId = oSurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault();
-                oModelToIndex.SurveyStatus = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(oSurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault());
-            }
+            oModelToIndex.SurveyStatusId = oSurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault();
+            oModelToIndex.SurveyStatus = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(oSurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault());
 
             ICreateIndexResponse oElasticResponse = client.CreateIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_SurveyIndex].Value, c => c
             .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
@@ -508,15 +505,12 @@ namespace MarketPlace.Web.Controllers
                 Nest.ISearchResponse<SurveyIndexSearchModel> oResult = client.Search<SurveyIndexSearchModel>(s => s
                     .From(0)
                     .Size(1)
-                    .Query(q => q.QueryString(qs => qs.Query(SurveyPublicId))));
+                    .Query(q => q.QueryString(qs => qs.Query(oSurveyModel.ParentSurveyPublicId))));
 
                 SurveyIndexSearchModel oModelToIndex = oResult.Documents.FirstOrDefault();
 
-                if (oModelToIndex.SurveyPublicId == oSurveyModel.ParentSurveyPublicId)
-                {
-                    oModelToIndex.SurveyStatusId = oSurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault();
-                    oModelToIndex.SurveyStatus = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(oSurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault());
-                }
+                oModelToIndex.SurveyStatusId = oSurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault();
+                oModelToIndex.SurveyStatus = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(oSurveyToUpsert.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumSurveyInfoType.Status).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault());
 
                 ICreateIndexResponse oElasticResponse = client.CreateIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_SurveyIndex].Value, c => c
                 .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)

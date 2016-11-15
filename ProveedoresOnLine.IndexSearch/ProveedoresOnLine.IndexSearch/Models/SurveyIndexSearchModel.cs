@@ -10,6 +10,8 @@ namespace ProveedoresOnLine.IndexSearch.Models
     [ElasticsearchType(Name = "survey_model")]
     public class SurveyIndexSearchModel
     {
+        public string Id { get { return SurveyPublicId; } }
+
         [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
         public string CompanyPublicId { get; set; }
         [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
