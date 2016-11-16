@@ -340,10 +340,10 @@ namespace MarketPlace.Web.Controllers
                     string newFilterUrl = "";
                     lstSearchFilter.All(x =>
                     {
-                        if (int.Parse(x.Item3) == (int)enumFilterType.City)
+                        if (int.Parse(x.Item3) == (int)enumFilterType.City && oModel.CityFilter.Count > 0)
                             newFilterUrl += "," + x.Item1 + ";" + oModel.CityFilter.FirstOrDefault().FilterCount + ";" + x.Item3;
 
-                        if (int.Parse(x.Item3) == (int)enumFilterType.Country)
+                        if (int.Parse(x.Item3) == (int)enumFilterType.Country && oModel.CountryFilter.Count > 0)
                             newFilterUrl += "," + x.Item1 + ";" + oModel.CountryFilter.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
 
                         if (int.Parse(x.Item3) == (int)enumFilterType.SurveyStatus)
