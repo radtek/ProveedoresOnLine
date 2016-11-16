@@ -105,38 +105,46 @@ namespace ProveedoresOnLine.IndexSearch.Test
                             //   )
                             //);
                         }
+                        string[] ol = new string[2];
+                        ol[0] = "6f66f28e";
+                        ol[1] = "18474d1d";
 
-                        qb &= q.Nested(n => n
-                             .Path(p => p.oCustomerProviderIndexModel)
-                            .Query(fq => fq
-                                .Match(match => match
-                                .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                                .Query("DA5C572E")
-                                )
-                              )
-                           );
+                        qb &= q.Terms(tms => tms
+                                    .Field(fi => fi.CompanyPublicId)
+                                    .Terms(ol)
+                                );                      
+              
+                        //qb &= q.Nested(n => n
+                        //     .Path(p => p.oCustomerProviderIndexModel)
+                        //    .Query(fq => fq
+                        //        .Match(match => match
+                        //        .Field(field => field.oCustomerProviderIndexModel.First().ProviderPublicId)
+                        //        .Query("DA5C572E")
+                        //        )
+                        //      )
+                        //   );
                         return qb;
                     })
                     ))
-                    .Aggregations
-                    (agg => agg
-                        .Nested("myproviders_avg", x => x.
-                            Path(p => p.oCustomerProviderIndexModel).
-                            Aggregations(aggs => aggs.Terms("myproviders", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().CustomerPublicId)
-                            )
-                        )
-                    )
-                    .Nested("status_avg", x => x.
-                            Path(p => p.oCustomerProviderIndexModel.Where(l => l.CustomerPublicId == "DA5C572E").Select(l => l).ToList()).
-                            Aggregations(aggs => aggs.Terms("status", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().StatusId)
-                            )
-                        ))
-                    .Terms("city", aggv => aggv
-                        .Field(fi => fi.CityId))
-                    .Terms("country", c => c
-                        .Field(fi => fi.CountryId))
-                    .Terms("blacklist", bl => bl
-                        .Field(fi => fi.InBlackList)))
+                    //.Aggregations
+                    //(agg => agg
+                    //    .Nested("myproviders_avg", x => x.
+                    //        Path(p => p.oCustomerProviderIndexModel).
+                    //        Aggregations(aggs => aggs.Terms("myproviders", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().CustomerPublicId)
+                    //        )
+                    //    )
+                    //)
+                    //.Nested("status_avg", x => x.
+                    //        Path(p => p.oCustomerProviderIndexModel.Where(l => l.CustomerPublicId == "DA5C572E").Select(l => l).ToList()).
+                    //        Aggregations(aggs => aggs.Terms("status", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().StatusId)
+                    //        )
+                    //    ))
+                    //.Terms("city", aggv => aggv
+                    //    .Field(fi => fi.CityId))
+                    //.Terms("country", c => c
+                    //    .Field(fi => fi.CountryId))
+                    //.Terms("blacklist", bl => bl
+                    //    .Field(fi => fi.InBlackList)))
                 );
         }
 
@@ -362,3 +370,4 @@ namespace ProveedoresOnLine.IndexSearch.Test
         #endregion
     }
 }
+

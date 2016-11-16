@@ -156,48 +156,6 @@ namespace MarketPlace.Web.Controllers
                     lstSearchFilter = oModel.GetlstSearchFilter();
                 }
 
-                #region Search Result Company
-
-                settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanyIndex].Value);
-                settings.DisableDirectStreaming(true);
-                ElasticClient client = new ElasticClient(settings);
-
-                oModel.ElasticCompanyModel = client.Search<CompanyIndexModel>(s => s
-                .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
-                .TrackScores(true)
-                .Size(20)
-                .Aggregations
-                    (agg => agg
-                    .Terms("city", aggv => aggv
-                        .Field(fi => fi.CityId))
-                    .Terms("country", c => c
-                        .Field(fi => fi.CountryId)))
-                .Query(q => q.
-                    Filtered(f => f
-                    .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
-                    .Filter(f2 =>
-                    {
-                        QueryContainer qb = null;
-
-                        #region Basic Providers Filters
-                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
-                        {
-                            qb &= q.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
-                        }
-                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
-                        {
-                            qb &= q.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
-                        }
-                        #endregion
-
-                        return qb;
-                    })
-                    ))
-                );
-
-                oModel.TotalRows = (int)oModel.ElasticCompanyModel.Total;
-                #endregion
-
                 #region Search Result Survey
 
                 var settingsSurvey = new ConnectionSettings(node);
@@ -218,8 +176,6 @@ namespace MarketPlace.Web.Controllers
                 .Query(q => q.
                     Filtered(f => f
                      .Query(qi => qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId)))
-                        //.Query(q1 => q1.Match(m => m.Field(fld => fld.CustomerPublicId) == "")
-                        //MatchAll() && q.Term(po => po.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId))
                     .Filter(f2 =>
                     {
                         QueryContainer qb = null;
@@ -241,6 +197,96 @@ namespace MarketPlace.Web.Controllers
                         return qb;
                     })
                     ))
+                );
+
+                #region Survey Status Aggregation
+
+                oModel.ElasticSurveyModel.Aggs.Terms("srv_status").Buckets.All(x =>
+                {
+                    oModel.SurveyStatus.Add(new ElasticSearchFilter
+                    {
+                        FilterCount = (int)x.DocCount,
+                        FilterType = x.Key.Split('.')[0],
+                        FilterName = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(x.Key.Split('.')[0]),
+                    });
+                    return true;
+                });
+                #endregion
+
+                #region Survey Type Aggregation
+
+                oModel.ElasticSurveyModel.Aggs.Terms("srv_type").Buckets.All(x =>
+                {
+                    oModel.SurveyType.Add(new ElasticSearchFilter
+                    {
+                        FilterCount = (int)x.DocCount,
+                        FilterType = x.Key.Split('.')[0],
+                        FilterName = MarketPlace.Models.Survey.SurveyUtil.GetSurveyOptionName(x.Key.Split('.')[0]),
+                    });
+                    return true;
+                });
+                #endregion
+
+                #endregion
+
+                #region Search Result Company
+
+                settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanyIndex].Value);
+                settings.DisableDirectStreaming(true);
+                ElasticClient client = new ElasticClient(settings);
+
+                oModel.ElasticCompanyModel = client.Search<CompanyIndexModel>(s => s
+                .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
+                .TrackScores(true)
+                .Size(20)
+                .Query(q => q.
+                    Filtered(f => f
+                    .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
+                    .Filter(f2 =>
+                    {
+                        QueryContainer qb = null;
+
+                        #region Basic Providers Filters
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= q.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
+                        }
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= q.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
+                        }
+                        #endregion
+
+                        #region Status Srv Filters
+
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= q.Terms(tms => tms
+                                      .Field(fi => fi.CompanyPublicId)
+                                      .Terms<string>(oModel.ElasticSurveyModel.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
+                                  );
+                        }
+                        #endregion
+
+                        #region Type Srv Filters
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= q.Terms(tms => tms
+                                       .Field(fi => fi.CompanyPublicId)
+                                       .Terms<string>(oModel.ElasticSurveyModel.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
+                                   );
+                        }
+                        #endregion
+
+                        return qb;
+                    })
+                    ))
+                .Aggregations
+                    (agg => agg
+                    .Terms("city", aggv => aggv
+                        .Field(fi => fi.CityId))
+                    .Terms("country", c => c
+                        .Field(fi => fi.CountryId)))               
                 );
 
                 oModel.TotalRows = (int)oModel.ElasticCompanyModel.Total;
@@ -282,34 +328,6 @@ namespace MarketPlace.Web.Controllers
                         FilterCount = (int)x.DocCount,
                         FilterType = x.Key.Split('.')[0],
                         FilterName = MarketPlace.Models.Company.CompanyUtil.GetCountryNameByCountryId(x.Key.Split('.')[0]),
-                    });
-                    return true;
-                });
-                #endregion
-
-                #region Survey Status Aggregation
-
-                oModel.ElasticSurveyModel.Aggs.Terms("srv_status").Buckets.All(x =>
-                {
-                    oModel.SurveyStatus.Add(new ElasticSearchFilter
-                    {
-                        FilterCount = (int)x.DocCount,
-                        FilterType = x.Key.Split('.')[0],
-                        FilterName = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(x.Key.Split('.')[0]),
-                    });
-                    return true;
-                });
-                #endregion
-
-                #region Survey Type Aggregation
-
-                oModel.ElasticSurveyModel.Aggs.Terms("srv_type").Buckets.All(x =>
-                {
-                    oModel.SurveyType.Add(new ElasticSearchFilter
-                    {
-                        FilterCount = (int)x.DocCount,
-                        FilterType = x.Key.Split('.')[0],
-                        FilterName = MarketPlace.Models.Survey.SurveyUtil.GetSurveyOptionName(x.Key.Split('.')[0]),
                     });
                     return true;
                 });
