@@ -120,6 +120,22 @@ namespace MarketPlace.Web.Controllers
 
             ProviderSearchViewModel oModel = null;
 
+            string oRelatedSurveyProviders = "";
+
+            #region Request Prodider Search
+
+            if (Request["RequestPage"] == "true")
+            {
+                SearchParam = Request["SearchParam"];
+                SearchFilter = Request["SearchFilter"];
+                SearchOrderType = Request["SearchOrderType"];
+                OrderOrientation = Request["OrderOrientation"];
+                PageNumber = Request["PageNumber"];
+                oRelatedSurveyProviders = Request["ProviderPublicId"];
+            }
+
+            #endregion
+
             if (SessionModel.CurrentCompany != null &&
                 !string.IsNullOrEmpty(SessionModel.CurrentCompany.CompanyPublicId))
             {
@@ -146,6 +162,7 @@ namespace MarketPlace.Web.Controllers
                     OtherProvidersFilter = new List<ElasticSearchFilter>(),
                     SurveyStatus = new List<ElasticSearchFilter>(),
                     SurveyType = new List<ElasticSearchFilter>(),
+                    RelatedSurveyProviders = oRelatedSurveyProviders,
                 };
 
                 #region ElasticSearch
