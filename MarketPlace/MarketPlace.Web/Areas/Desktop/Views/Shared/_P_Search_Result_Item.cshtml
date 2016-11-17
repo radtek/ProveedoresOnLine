@@ -64,7 +64,7 @@
         <!--Provider Logo-->
         @if (Model.Item2.IsProviderCustomer)
         {
-            if (Model.Item1.ElasticCompanyModel != null)
+            if (Model.Item1.ElasticCompanyModel != null && Model.Item1.ElasticSurveyModel == null)
             {
                 <a href="@(Url.RouteUrl
                    (MarketPlace.Models.General.Constants.C_Routes_Default,
@@ -77,7 +77,7 @@
                     <img class="POMPSearchResultProvLogo" src="@Model.Item2.ProviderLogoUrl" />
                 </a>
             }
-            else if (Model.Item1.ElasticCompanySurveyModel != null)
+            else if (Model.Item1.ElasticCompanyModel != null && Model.Item1.ElasticSurveyModel != null)
             {
                 <a href="@(Url.RouteUrl
                    (MarketPlace.Models.General.Constants.C_Routes_Default,
@@ -101,7 +101,7 @@
         <div class="POMPSearchResultNameIDWrapper">
             @if (Model.Item2.IsProviderCustomer)
             {
-                if (Model.Item1.ElasticCompanyModel != null)
+                if (Model.Item1.ElasticCompanyModel != null && Model.Item1.ElasticSurveyModel == null)
                 {
                     <a href="@(Url.RouteUrl
                                (MarketPlace.Models.General.Constants.C_Routes_Default,
@@ -114,7 +114,7 @@
                         @Model.Item2.ElasticRealtedProvider.CompanyName
                     </a>
                 }
-                else if (Model.Item1.ElasticCompanySurveyModel != null)
+                else if (Model.Item1.ElasticCompanyModel != null && Model.Item1.ElasticSurveyModel != null)
                 {
                     <a href="@(Url.RouteUrl
                                (MarketPlace.Models.General.Constants.C_Routes_Default,
@@ -198,7 +198,7 @@
 
         <!--Actions for related provider -->
         <ul class="POMPSearchResultLineTwo">
-            @if (Model.Item1.ElasticCompanyModel != null)
+            @if (Model.Item1.ElasticCompanyModel != null && Model.Item1.ElasticSurveyModel == null)
             {
                 if (!Model.Item2.IsProviderCustomer)
                 {
@@ -229,7 +229,7 @@
                     }
                 }
             }
-            else if (Model.Item1.ElasticCompanySurveyModel != null)
+            else if (Model.Item1.ElasticCompanyModel != null && Model.Item1.ElasticSurveyModel != null)
             {
                 if (oCurrentSurveyOptions.Any(x => x == (int)MarketPlace.Models.General.enumProviderSubMenu.SurveyProgram))
                 {
@@ -239,7 +239,7 @@
                 }
             }
 
-            @if (Model.Item1.ElasticCompanyModel != null)
+            @if (Model.Item1.ElasticCompanyModel != null && Model.Item1.ElasticSurveyModel == null)
             {
                 <li>
                     <a href="@(Url.RouteUrl
@@ -252,7 +252,7 @@
                             }))">Ver detalle</a>
                 </li>
             }
-            else if (Model.Item1.ElasticCompanySurveyModel != null)
+            else if (Model.Item1.ElasticCompanyModel != null && Model.Item1.ElasticSurveyModel != null)
             {
                 <li>
                     <a href="@(Url.RouteUrl

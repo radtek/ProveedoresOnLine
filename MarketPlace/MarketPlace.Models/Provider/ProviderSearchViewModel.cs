@@ -1,4 +1,5 @@
 ﻿using ProveedoresOnLine.Company.Models.Company;
+using ProveedoresOnLine.IndexSearch.Models;
 using ProveedoresOnLine.SurveyModule.Models.Index;
 using System;
 using System.Collections.Generic;
@@ -49,6 +50,7 @@ namespace MarketPlace.Models.Provider
         public ProveedoresOnLine.Company.Models.Company.CompanyIndexModel CompanyIndexModel { get; set; }
 
         public Nest.ISearchResponse<CompanyIndexModel> ElasticCompanyModel { get; set; }
+        public Nest.ISearchResponse<SurveyIndexSearchModel> ElasticSurveyModel { get; set; }
 
         public Nest.ISearchResponse<CustomerProviderIndexModel> ElasticCustomerProviderModel { get; set; }
      

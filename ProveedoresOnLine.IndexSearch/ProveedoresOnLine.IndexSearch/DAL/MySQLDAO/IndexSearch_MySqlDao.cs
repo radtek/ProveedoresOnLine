@@ -286,26 +286,28 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                      where !sv.IsNull("CompanyPublicId")
                      group sv by new
                      {
+                         CustomerPublicId = sv.Field<string>("CustomerPublicId"),
                          CompanyPublicId = sv.Field<string>("CompanyPublicId"),
                          SurveyPublicId = sv.Field<string>("SurveyPublicId"),
                          SurveyTypeId = sv.Field<int?>("SurveyTypeId").ToString(),
                          SurveyType = sv.Field<string>("SurveyType"),
                          SurveyStatusId = sv.Field<int?>("SurveyStatusId").ToString(),
                          SurveyStatus = sv.Field<string>("SurveyStatus"),
-                         SurveyUserId = sv.Field<int?>("UserId").ToString(),
-                         SurveyUser = sv.Field<string>("User"),
+                         //SurveyUserId = sv.Field<int?>("UserId").ToString(),
+                         //SurveyUser = sv.Field<string>("User"),
                      }
                          into svg
                          select new SurveyIndexSearchModel()
                          {
+                             CustomerPublicId = svg.Key.CustomerPublicId,
                              CompanyPublicId = svg.Key.CompanyPublicId,
                              SurveyPublicId = svg.Key.SurveyPublicId,
                              SurveyTypeId = svg.Key.SurveyTypeId,
                              SurveyType = svg.Key.SurveyType,
                              SurveyStatusId = svg.Key.SurveyStatusId,
                              SurveyStatus = svg.Key.SurveyStatus,
-                             UserId = svg.Key.SurveyUserId,
-                             User = svg.Key.SurveyUser,
+                             //UserId = svg.Key.SurveyUserId,
+                             //User = svg.Key.SurveyUser,
                          }).ToList();
             }
 

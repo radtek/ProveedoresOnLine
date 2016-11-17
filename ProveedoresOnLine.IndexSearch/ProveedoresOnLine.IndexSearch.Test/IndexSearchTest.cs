@@ -76,7 +76,7 @@ namespace ProveedoresOnLine.IndexSearch.Test
                 .TrackScores(true)
                 .From(page)
                 .Size(20)
-                .Query(q => q.                   
+                .Query(q => q.
                     Filtered(f => f
                     .Query(q1 => q1.MatchAll())
                     .Filter(f2 =>
@@ -105,39 +105,47 @@ namespace ProveedoresOnLine.IndexSearch.Test
                             //   )
                             //);
                         }
+                        string[] ol = new string[2];
+                        ol[0] = "6f66f28e";
+                        ol[1] = "18474d1d";
 
-                        qb &= q.Nested(n => n
-                             .Path(p => p.oCustomerProviderIndexModel)
-                            .Query(fq => fq
-                                .Match(match => match
-                                .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                                .Query("DA5C572E")
-                                )
-                              )
-                           );
+                        qb &= q.Terms(tms => tms
+                                    .Field(fi => fi.CompanyPublicId)
+                                    .Terms(ol)
+                                );                      
+              
+                        //qb &= q.Nested(n => n
+                        //     .Path(p => p.oCustomerProviderIndexModel)
+                        //    .Query(fq => fq
+                        //        .Match(match => match
+                        //        .Field(field => field.oCustomerProviderIndexModel.First().ProviderPublicId)
+                        //        .Query("DA5C572E")
+                        //        )
+                        //      )
+                        //   );
                         return qb;
                     })
                     ))
-                    .Aggregations
-                    (agg => agg
-                        .Nested("myproviders_avg", x => x.
-                            Path(p => p.oCustomerProviderIndexModel).
-                            Aggregations(aggs => aggs.Terms("myproviders", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().CustomerPublicId)
-                            )
-                        )
-                    )
-                    .Nested("status_avg", x => x.
-                            Path(p => p.oCustomerProviderIndexModel.Where(l => l.CustomerPublicId == "DA5C572E").Select(l => l).ToList()).
-                            Aggregations(aggs => aggs.Terms("status", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().StatusId)
-                            )
-                        ))
-                    .Terms("city", aggv => aggv
-                        .Field(fi => fi.CityId))
-                    .Terms("country", c => c
-                        .Field(fi => fi.CountryId))
-                    .Terms("blacklist", bl => bl
-                        .Field(fi => fi.InBlackList)))
-                );           
+                    //.Aggregations
+                    //(agg => agg
+                    //    .Nested("myproviders_avg", x => x.
+                    //        Path(p => p.oCustomerProviderIndexModel).
+                    //        Aggregations(aggs => aggs.Terms("myproviders", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().CustomerPublicId)
+                    //        )
+                    //    )
+                    //)
+                    //.Nested("status_avg", x => x.
+                    //        Path(p => p.oCustomerProviderIndexModel.Where(l => l.CustomerPublicId == "DA5C572E").Select(l => l).ToList()).
+                    //        Aggregations(aggs => aggs.Terms("status", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().StatusId)
+                    //        )
+                    //    ))
+                    //.Terms("city", aggv => aggv
+                    //    .Field(fi => fi.CityId))
+                    //.Terms("country", c => c
+                    //    .Field(fi => fi.CountryId))
+                    //.Terms("blacklist", bl => bl
+                    //    .Field(fi => fi.InBlackList)))
+                );
         }
 
         [TestMethod]
@@ -202,41 +210,20 @@ namespace ProveedoresOnLine.IndexSearch.Test
             Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
             var settings = new ConnectionSettings(node);
             settings.DisableDirectStreaming(true);
-            settings.DefaultIndex("dev_companysurveyindex");
+            settings.DefaultIndex("dev_surveyindex");
             ElasticClient CompanySurveyClient = new ElasticClient(settings);
 
-            Nest.ISearchResponse<CompanySurveyIndexModel> result = CompanySurveyClient.Search<CompanySurveyIndexModel>(s => s
+            Nest.ISearchResponse<SurveyIndexSearchModel> result = CompanySurveyClient.Search<SurveyIndexSearchModel>(s => s
             .From(0)
                 .Size(20)
-                    .Aggregations
-                     (agg => agg
-                        .Nested("status_avg", x => x.
-                            Path(p => p.oCustomerProviderIndexModel).
-                            Aggregations(aggs => aggs.
-                                Terms("status", term => term.
-                                    Field(fi => fi.oCustomerProviderIndexModel.First().StatusId)
-                                )
-                            )
-                        )
-                        .Terms("city", aggv => aggv
-                            .Field(fi => fi.CityId))
-                        .Terms("country", c => c
-                            .Field(fi => fi.CountryId))
-                        .Terms("blacklist", bl => bl
-                            .Field(fi => fi.InBlackList)))
-                .Query(q =>
-                    q.Nested(n => n
-                        .Path(p => p.oCustomerProviderIndexModel)
-                            .Query(fq => fq
-                                .Match(match => match
-                                                    .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                                                    .Query("")
-                                )
-                              ).ScoreMode(NestedScoreMode.Max)
-                           )
-                    )
-                .Query(q =>
-                     q.Term(p => p.CompanyName, ""))
+                //    .Aggregations
+                //     (agg => agg                        
+                //        .Terms("status", aggv => aggv
+                //            .Field(fi => fi.SurveyStatusId)                       
+                    
+                //))
+                .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CustomerPublicId)).Query("DA5C572E")))
+                
                 );
         }
 
@@ -246,10 +233,10 @@ namespace ProveedoresOnLine.IndexSearch.Test
             Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
             var settings = new ConnectionSettings(node);
             settings.DisableDirectStreaming(true);
-            settings.DefaultIndex("dev_companysurveyindex");
+            settings.DefaultIndex("dev_surveyindex");
             ElasticClient CompanySurveyClient = new ElasticClient(settings);
 
-            CompanySurveyClient.DeleteIndex("dev_companysurveyindex");
+            CompanySurveyClient.DeleteIndex("dev_surveyindex");
 
             //CompanySurveyClient.Delete("dev_companysurveyindex");
         }
@@ -349,6 +336,38 @@ namespace ProveedoresOnLine.IndexSearch.Test
             clientToIndex.DeleteIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value);
         }
 
+        [TestMethod]
+        public void SurveyIndexation()
+        {
+            List<SurveyIndexSearchModel> SurveyndexModelList = ProveedoresOnLine.IndexSearch.Controller.IndexSearch.GetSurveyIndex();
+
+            Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+            var settings = new ConnectionSettings(node);
+            settings.DefaultIndex("dev_surveyindex");
+            ElasticClient client = new ElasticClient(settings);
+
+            ICreateIndexResponse oElasticResponse = client.
+                    CreateIndex("dev_surveyindex", c => c
+                    .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                    .Analysis(a => a.
+                        Analyzers(an => an.
+                            Custom("customWhiteSpace", anc => anc.
+                                Filters("asciifolding", "lowercase").
+                                Tokenizer("whitespace")
+                                    )
+                                ).TokenFilters(tf => tf
+                                .EdgeNGram("customEdgeNGram", engrf => engrf
+                                .MinGram(1)
+                                .MaxGram(10))
+                            )
+                        ).NumberOfShards(1)
+                    )
+                );
+            client.Map<SurveyIndexSearchModel>(m => m.AutoMap());
+                var Index = client.IndexMany(SurveyndexModelList, "dev_surveyindex");            
+        }
+
         #endregion
     }
 }
+

@@ -662,8 +662,8 @@ var Survey_SearchObject = {
     GetSurveyProviderList: function (vProviderList) {
         
         if (vProviderList != null && vProviderList != "") {
-            var oProviderList = vProviderList.split(",");
 
+            var oProviderList = vProviderList.split(",");
             var oItemHtml = $('#POMPProviderSurvey').html();
 
             oProviderList.forEach(function (prv) {
