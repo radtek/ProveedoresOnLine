@@ -35,11 +35,11 @@ namespace ProveedoresOnLine.IndexSearch.Controller
 
                 Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
                 var settings = new ConnectionSettings(node);
-                settings.DefaultIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanyIndex].Value);
+                settings.DefaultIndex("prod_companyindex");
                 ElasticClient client = new ElasticClient(settings);
 
                 ICreateIndexResponse oElasticResponse = client.
-                        CreateIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanyIndex].Value, c => c
+                        CreateIndex("prod_companyindex", c => c
                         .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
                         .Analysis(a => a.
                             Analyzers(an => an.
@@ -56,7 +56,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                         )
                     );
                 client.Map<CompanyIndexModel>(m => m.AutoMap());
-                var Index = client.IndexMany(oCompanyToIndex, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanyIndex].Value);
+                var Index = client.IndexMany(oCompanyToIndex, "prod_companyindex");
             }
             catch (Exception err)
             {
@@ -79,7 +79,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                     {
                         Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
                         var settings = new ConnectionSettings(node);
-                        settings.DefaultIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CustomerProviderIndex].Value);
+                        settings.DefaultIndex("stg_companyindex");
                         ElasticClient client = new ElasticClient(settings);
                         CustomerProviderId = cp.CustomerProviderId;
 

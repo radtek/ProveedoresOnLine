@@ -295,6 +295,13 @@ namespace MarketPlace.Web.Controllers
                         }
                         #endregion
 
+                        qb &= q.Nested(n => n
+                           .Path(p => p.oCustomerProviderIndexModel)
+                               .Query(fq => fq
+                                   .Match(match => match
+                                   .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                   .Query(SessionModel.CurrentCompany.CompanyPublicId))
+                               ));
                         return qb;
                     })
                     ))
