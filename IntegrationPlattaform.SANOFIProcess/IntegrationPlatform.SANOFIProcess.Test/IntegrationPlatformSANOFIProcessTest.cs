@@ -18,8 +18,8 @@ namespace IntegrationPlatform.SANOFIProcess.Test
         public void GetInfo_ByProvider()
         {
             List<SanofiGeneralInfoModel> oReturn = new List<SanofiGeneralInfoModel>();
-            DateTime startdate = new DateTime(01,01,0001);
-            oReturn = IntegrationPlattaform.SANOFIProcess.Controller.IntegrationPlatformSANOFIIProcess.GetInfoByProvider("A24EB150", startdate);
+            DateTime startdate = new DateTime(2000,01,01,00,00,00);
+            oReturn = IntegrationPlattaform.SANOFIProcess.Controller.IntegrationPlatformSANOFIIProcess.GetInfoByProvider("219DE278", startdate);
 
             Assert.AreEqual(true, oReturn.Count > 0);
         }
@@ -75,6 +75,7 @@ namespace IntegrationPlatform.SANOFIProcess.Test
         {
             Assert.IsNotNull(IntegrationPlattaform.SANOFIProcess.Controller.IntegrationPlatformSANOFIIProcess.GetSanofiLastProcessLog());
         }
+     
 
         #region Sanofi Message Proccess
 

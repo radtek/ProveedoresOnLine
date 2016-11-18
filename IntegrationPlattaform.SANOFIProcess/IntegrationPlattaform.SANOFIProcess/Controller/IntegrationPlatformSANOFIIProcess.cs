@@ -334,8 +334,8 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
 
                     #region Write Process
                     Header.AppendLine(
-                           x.CompanyName + strSep +
-                           x.ComercialName + strSep +
+                          (string.IsNullOrEmpty(NaturalName))? x.CompanyName : NaturalLastName + ", " + NaturalName + strSep +
+                          "" + strSep +
                           NaturalName + strSep +
                           NaturalLastName + strSep +
                           x.IdentificationNumber + strSep +
