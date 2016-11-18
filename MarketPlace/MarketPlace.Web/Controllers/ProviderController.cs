@@ -2783,11 +2783,11 @@ namespace MarketPlace.Web.Controllers
                     (ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetById(SurveyPublicId));
             }
 
-            //if (Request["DownloadReport"] == "true")
-            //{
-            //    GenericReportModel SurveyReport = Report_SurveyGeneral(oModel);
-            //    return File(SurveyReport.File, SurveyReport.MimeType, SurveyReport.FileName);
-            //}
+            if (Request["DownloadReport"] == "true")
+            {
+                GenericReportModel SurveyReport = Report_SurveyGeneral(oModel);
+                return File(SurveyReport.File, SurveyReport.MimeType, SurveyReport.FileName);
+            }
 
             return View(oModel);
         }
@@ -4964,96 +4964,96 @@ namespace MarketPlace.Web.Controllers
 
         #region Pivate Functions
 
-        //private GenericReportModel Report_SurveyGeneral(ProviderViewModel oModel)
-        //{
-        //    List<ReportParameter> parameters = new List<ReportParameter>();
-        //    GenericReportModel oReporModel = new GenericReportModel();
+        private GenericReportModel Report_SurveyGeneral(ProviderViewModel oModel)
+        {
+            List<ReportParameter> parameters = new List<ReportParameter>();
+            GenericReportModel oReporModel = new GenericReportModel();
 
-        //    //CustomerInfo
-        //    parameters.Add(new ReportParameter("CustomerName", SessionModel.CurrentCompany.CompanyName));
-        //    parameters.Add(new ReportParameter("CustomerIdentification", SessionModel.CurrentCompany.IdentificationNumber));
-        //    parameters.Add(new ReportParameter("CustomerIdentificationType", SessionModel.CurrentCompany.IdentificationType.ItemName));
-        //    parameters.Add(new ReportParameter("CustomerImage", SessionModel.CurrentCompany_CompanyLogo));
-        //    //ProviderInfo
-        //    parameters.Add(new ReportParameter("ProviderName", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName));
-        //    parameters.Add(new ReportParameter("ProviderIdentificationType", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationType.ItemName));
-        //    parameters.Add(new ReportParameter("ProviderIdentificationNumber", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationNumber));
+            //CustomerInfo
+            parameters.Add(new ReportParameter("CustomerName", SessionModel.CurrentCompany.CompanyName));
+            parameters.Add(new ReportParameter("CustomerIdentification", SessionModel.CurrentCompany.IdentificationNumber));
+            parameters.Add(new ReportParameter("CustomerIdentificationType", SessionModel.CurrentCompany.IdentificationType.ItemName));
+            parameters.Add(new ReportParameter("CustomerImage", SessionModel.CurrentCompany_CompanyLogo));
+            //ProviderInfo
+            parameters.Add(new ReportParameter("ProviderName", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName));
+            parameters.Add(new ReportParameter("ProviderIdentificationType", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationType.ItemName));
+            parameters.Add(new ReportParameter("ProviderIdentificationNumber", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationNumber));
 
-        //    //SurveyInfo
-        //    parameters.Add(new ReportParameter("SurveyConfigName", oModel.RelatedSurvey.SurveyConfigName));
-        //    parameters.Add(new ReportParameter("SurveyRating", oModel.RelatedSurvey.SurveyRating.ToString()));
-        //    parameters.Add(new ReportParameter("SurveyStatusName", oModel.RelatedSurvey.SurveyStatusName));
-        //    parameters.Add(new ReportParameter("SurveyIssueDate", oModel.RelatedSurvey.SurveyIssueDate));
-        //    parameters.Add(new ReportParameter("SurveyLastModify", oModel.RelatedSurvey.SurveyLastModify));
-        //    parameters.Add(new ReportParameter("SurveyResponsible", oModel.RelatedSurvey.SurveyResponsible));
-        //    parameters.Add(new ReportParameter("SurveyAverage", oModel.RelatedSurvey.Average.ToString()));
+            //SurveyInfo
+            parameters.Add(new ReportParameter("SurveyConfigName", oModel.RelatedSurvey.SurveyConfigName));
+            parameters.Add(new ReportParameter("SurveyRating", oModel.RelatedSurvey.SurveyRating.ToString()));
+            parameters.Add(new ReportParameter("SurveyStatusName", oModel.RelatedSurvey.SurveyStatusName));
+            parameters.Add(new ReportParameter("SurveyIssueDate", oModel.RelatedSurvey.SurveyIssueDate));
+            parameters.Add(new ReportParameter("SurveyLastModify", oModel.RelatedSurvey.SurveyLastModify));
+            parameters.Add(new ReportParameter("SurveyResponsible", oModel.RelatedSurvey.SurveyResponsible));
+            parameters.Add(new ReportParameter("SurveyAverage", oModel.RelatedSurvey.Average.ToString()));
 
-        //    // DataSet Evaluators table
-        //    DataTable data = new DataTable();
-        //    data.Columns.Add("SurveyEvaluatorDetail");
-        //    data.Columns.Add("SurveyStatusNameDetail");
-        //    data.Columns.Add("SurveyRatingDetail");
-        //    data.Columns.Add("SurveyProgressDetail");
+            // DataSet Evaluators table
+            DataTable data = new DataTable();
+            data.Columns.Add("SurveyEvaluatorDetail");
+            data.Columns.Add("SurveyStatusNameDetail");
+            data.Columns.Add("SurveyRatingDetail");
+            data.Columns.Add("SurveyProgressDetail");
 
-        //    List<Models.Survey.SurveyViewModel> EvaluatorDetailList = new List<Models.Survey.SurveyViewModel>();
+            List<Models.Survey.SurveyViewModel> EvaluatorDetailList = new List<Models.Survey.SurveyViewModel>();
 
-        //    foreach (var Evaluator in oModel.RelatedSurvey.SurveyEvaluatorList.Distinct())
-        //    {
-        //        Models.Survey.SurveyViewModel SurveyEvaluatorDetail = new Models.Survey.SurveyViewModel
-        //                (ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetByUser(oModel.RelatedSurvey.SurveyPublicId, Evaluator));
+            foreach (var Evaluator in oModel.RelatedSurvey.SurveyEvaluatorList.Distinct())
+            {
+                Models.Survey.SurveyViewModel SurveyEvaluatorDetail = new Models.Survey.SurveyViewModel
+                        (ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetByUser(oModel.RelatedSurvey.SurveyPublicId, Evaluator));
 
-        //        EvaluatorDetailList.Add(SurveyEvaluatorDetail);
+                EvaluatorDetailList.Add(SurveyEvaluatorDetail);
 
-        //        DataRow row;
-        //        row = data.NewRow();
-        //        row["SurveyEvaluatorDetail"] = SurveyEvaluatorDetail.SurveyEvaluator;
-        //        row["SurveyStatusNameDetail"] = SurveyEvaluatorDetail.SurveyStatusName;
-        //        row["SurveyRatingDetail"] = SurveyEvaluatorDetail.SurveyRating;
-        //        row["SurveyProgressDetail"] = SurveyEvaluatorDetail.SurveyProgress.ToString() + "%";
-        //        data.Rows.Add(row);
-        //    }
+                DataRow row;
+                row = data.NewRow();
+                row["SurveyEvaluatorDetail"] = SurveyEvaluatorDetail.SurveyEvaluator;
+                row["SurveyStatusNameDetail"] = SurveyEvaluatorDetail.SurveyStatusName;
+                row["SurveyRatingDetail"] = SurveyEvaluatorDetail.SurveyRating;
+                row["SurveyProgressDetail"] = SurveyEvaluatorDetail.SurveyProgress.ToString() + "%";
+                data.Rows.Add(row);
+            }
 
-        //    // DataSet Area's Table
-        //    DataTable data2 = new DataTable();
-        //    data2.Columns.Add("SurveyAreaName");
-        //    data2.Columns.Add("SurveyAreaRating");
-        //    data2.Columns.Add("SurveyAreaWeight");
+            // DataSet Area's Table
+            DataTable data2 = new DataTable();
+            data2.Columns.Add("SurveyAreaName");
+            data2.Columns.Add("SurveyAreaRating");
+            data2.Columns.Add("SurveyAreaWeight");
 
-        //    foreach (var EvaluationArea in
-        //                oModel.RelatedSurvey.GetSurveyConfigItem(MarketPlace.Models.General.enumSurveyConfigItemType.EvaluationArea, null))
-        //    {
-        //        int RatingforArea = 0;
+            foreach (var EvaluationArea in
+                        oModel.RelatedSurvey.GetSurveyConfigItem(MarketPlace.Models.General.enumSurveyConfigItemType.EvaluationArea, null))
+            {
+                int RatingforArea = 0;
 
-        //        foreach (Models.Survey.SurveyViewModel SurveyDetailInfo in EvaluatorDetailList)
-        //        {
-        //            var EvaluationAreaInf = SurveyDetailInfo.GetSurveyItem(EvaluationArea.SurveyConfigItemId);
+                foreach (Models.Survey.SurveyViewModel SurveyDetailInfo in EvaluatorDetailList)
+                {
+                    var EvaluationAreaInf = SurveyDetailInfo.GetSurveyItem(EvaluationArea.SurveyConfigItemId);
 
-        //            if (EvaluationAreaInf != null)
-        //            {
-        //                RatingforArea = RatingforArea + (int)EvaluationAreaInf.Ratting;
-        //            }
-        //        }
+                    if (EvaluationAreaInf != null)
+                    {
+                        RatingforArea = RatingforArea + (int)EvaluationAreaInf.Ratting;
+                    }
+                }
 
-        //        DataRow row;
-        //        row = data2.NewRow();
-        //        row["SurveyAreaName"] = EvaluationArea.Name;
-        //        row["SurveyAreaRating"] = RatingforArea;
-        //        row["SurveyAreaWeight"] = EvaluationArea.Weight.ToString() + "%";
-        //        data2.Rows.Add(row);
-        //    }
+                DataRow row;
+                row = data2.NewRow();
+                row["SurveyAreaName"] = EvaluationArea.Name;
+                row["SurveyAreaRating"] = RatingforArea;
+                row["SurveyAreaWeight"] = EvaluationArea.Weight.ToString() + "%";
+                data2.Rows.Add(row);
+            }
 
-        //    Tuple<byte[], string, string> SurveyGeneralReport = ProveedoresOnLine.Reports.Controller.ReportModule.SV_GeneralReport(
-        //                                                    data,
-        //                                                    data2,
-        //                                                    parameters,
-        //                                                    enumCategoryInfoType.PDF.ToString(),
-        //                                                    Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim());
+            Tuple<byte[], string, string> SurveyGeneralReport = ProveedoresOnLine.Reports.Controller.ReportModule.SV_GeneralReport(
+                                                            data,
+                                                            data2,
+                                                            parameters,
+                                                            enumCategoryInfoType.PDF.ToString(),
+                                                            Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim());
 
-        //    oReporModel.File = SurveyGeneralReport.Item1;
-        //    oReporModel.MimeType = SurveyGeneralReport.Item2;
-        //    oReporModel.FileName = SurveyGeneralReport.Item3;
-        //    return oReporModel;
-        //}
+            oReporModel.File = SurveyGeneralReport.Item1;
+            oReporModel.MimeType = SurveyGeneralReport.Item2;
+            oReporModel.FileName = SurveyGeneralReport.Item3;
+            return oReporModel;
+        }
 
         private GenericReportModel Report_SurveyEvaluatorDetail(ProviderViewModel oModel)
         {
