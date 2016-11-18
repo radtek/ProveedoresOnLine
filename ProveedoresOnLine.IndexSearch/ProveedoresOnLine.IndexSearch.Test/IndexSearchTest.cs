@@ -343,11 +343,11 @@ namespace ProveedoresOnLine.IndexSearch.Test
 
             Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
             var settings = new ConnectionSettings(node);
-            settings.DefaultIndex("dev_surveyindex");
+            settings.DefaultIndex("prod_surveyindex");
             ElasticClient client = new ElasticClient(settings);
 
             ICreateIndexResponse oElasticResponse = client.
-                    CreateIndex("dev_surveyindex", c => c
+                    CreateIndex("prod_surveyindex", c => c
                     .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
                     .Analysis(a => a.
                         Analyzers(an => an.
@@ -364,7 +364,7 @@ namespace ProveedoresOnLine.IndexSearch.Test
                     )
                 );
             client.Map<SurveyIndexSearchModel>(m => m.AutoMap());
-                var Index = client.IndexMany(SurveyndexModelList, "dev_surveyindex");            
+            var Index = client.IndexMany(SurveyndexModelList, "prod_surveyindex");            
         }
 
         #endregion

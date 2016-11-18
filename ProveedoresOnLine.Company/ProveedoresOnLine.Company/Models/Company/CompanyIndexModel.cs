@@ -25,7 +25,7 @@ namespace ProveedoresOnLine.Company.Models.Company
         [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
         public string CommercialCompanyName { get; set; }
 
-        [String(Index = FieldIndexOption.No)]
+        [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
         public string CompanyPublicId { get; set; }
 
         public string LogoUrl { get; set; }
