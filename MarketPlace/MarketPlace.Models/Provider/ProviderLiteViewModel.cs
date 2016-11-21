@@ -22,10 +22,7 @@ namespace MarketPlace.Models.Provider
         {
             get
             {
-                return true;
-                //return RelatedProvider != null &&
-                //        RelatedProvider.RelatedCustomerInfo != null &&
-                //        RelatedProvider.RelatedCustomerInfo.Any(x => x.Key == MarketPlace.Models.General.SessionModel.CurrentCompany.CompanyPublicId);
+                return true;              
             }
         }
 
@@ -39,12 +36,23 @@ namespace MarketPlace.Models.Provider
                 if (ElasticRealtedProvider != null)
                 {
                     return ElasticRealtedProvider.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).Select(x => x.StatusId).FirstOrDefault();
-
-                    //return int.Parse(ElasticRealtedProvider.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).Select(x => x.Status).FirstOrDefault());
                 }
                 else
                 {
-                    return IsProviderCustomer &&
+                    if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x).FirstOrDefault() != null)
+                    {
+                        return IsProviderCustomer &&
+                         RelatedProvider != null &&
+                         RelatedProvider.RelatedCustomerInfo != null ?
+                             RelatedProvider.
+                             RelatedCustomerInfo[Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value].
+                             ItemType.
+                             ItemId :
+                             0;                        
+                    }
+                    else
+                    {
+                        return IsProviderCustomer &&
                          RelatedProvider != null &&
                          RelatedProvider.RelatedCustomerInfo != null ?
                              RelatedProvider.
@@ -52,6 +60,7 @@ namespace MarketPlace.Models.Provider
                              ItemType.
                              ItemId :
                              0;
+                    }                    
                 }
             }
         }
@@ -123,18 +132,6 @@ namespace MarketPlace.Models.Provider
                 {
                     return 0;
                 }
-
-                //return (5 * (IsProviderCustomer &&
-                //        RelatedProvider != null &&
-                //        RelatedProvider.RelatedCustomerInfo != null ?
-                //            RelatedProvider.
-                //            RelatedCustomerInfo[MarketPlace.Models.General.SessionModel.CurrentCompany.CompanyPublicId].
-                //            ItemInfo.
-                //            Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCustomerProviderInfoType.ProviderRate).
-                //            Select(x => Convert.ToDecimal(x.Value)).
-                //            DefaultIfEmpty(0).
-                //            FirstOrDefault() :
-                //            0) / 100);
             }
         }
 
