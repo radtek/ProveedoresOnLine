@@ -2168,12 +2168,16 @@ namespace MarketPlace.Web.Controllers
 
                 oModel.RelatedLiteProvider.RelatedProvider.RelatedFinantial = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPFinancialGetBasicInfo(ProviderPublicId, (int)enumFinancialType.BankInfoType);
                 oModel.RelatedFinancialInfo = new List<ProviderFinancialViewModel>();
-
+                
                 if (oModel.RelatedLiteProvider.RelatedProvider.RelatedFinantial != null)
-                {
+                {                    
                     oModel.RelatedLiteProvider.RelatedProvider.RelatedFinantial.All(x =>
-                    {
-                        oModel.RelatedFinancialInfo.Add(new ProviderFinancialViewModel(x));
+                    {                        
+                        if (x.ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)enumFinancialInfoType.IB_Customer).Select(y => y.Value).FirstOrDefault() == "A Quien Interese" ||
+                            x.ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)enumFinancialInfoType.IB_Customer).Select(y => y.Value).FirstOrDefault() == SessionModel.CurrentCompany.CompanyName)
+                        {
+                            oModel.RelatedFinancialInfo.Add(new ProviderFinancialViewModel(x));
+                        }                        
                         return true;
                     });
                 }
