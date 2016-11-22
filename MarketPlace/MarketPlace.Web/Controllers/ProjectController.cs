@@ -26,6 +26,11 @@ namespace MarketPlace.Web.Controllers
 
             //get basic search model
 
+            if (SearchFilter != null)
+            {
+                List<Tuple<string, string, string>> lstSearchFilter = oModel.GetlstSearchFilter();
+            }
+
             oModel = new Models.Provider.ProviderSearchViewModel()
             {
                 ProviderOptions = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.CatalogGetProviderOptions(),
