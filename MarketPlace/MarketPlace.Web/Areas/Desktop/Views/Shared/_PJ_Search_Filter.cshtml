@@ -1,7 +1,7 @@
 ﻿@model MarketPlace.Models.Provider.ProviderSearchViewModel
 
 @{
-    List<Tuple<string, string>> lstSearchFilter = Model.GetlstSearchFilter();
+    List<Tuple<string, string, string>> lstSearchFilter = Model.GetlstSearchFilter();
 
 }
 
@@ -21,11 +21,11 @@
                             <li>
                                 @if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ItemId.ToString() && x.Item2 == oFilterItem.FilterValue.ItemId.ToString()))
                                 {
-                                    <input type="checkbox" checked="checked" onchange="javascript: Project_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType.ItemId + ";" + oFilterItem.FilterValue.ItemId)'}});" />
+                                    <input type="checkbox" checked="checked" onchange="javascript: Project_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType.ItemId + ";" + oFilterItem.FilterValue.ItemId + ";" + 0)'}});" />
                                 }
                                 else
                                 {
-                                    <input type="checkbox" onchange="javascript: Project_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType.ItemId + ";" + oFilterItem.FilterValue.ItemId)', }});" />
+                                    <input type="checkbox" onchange="javascript: Project_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType.ItemId + ";" + oFilterItem.FilterValue.ItemId + ";" + 0 )', }});" />
                                 }
                                 <span>@oFilterItem.FilterValue.ItemName (@oFilterItem.Quantity) </span>
                             </li>
@@ -44,11 +44,11 @@
                             <li>
                                 @if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ItemId.ToString() && x.Item2 == oFilterItem.FilterValue.ItemId.ToString()))
                                 {
-                                    <input type="checkbox" checked="checked" onchange="javascript: Project_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType.ItemId + ";" + oFilterItem.FilterValue.ItemId)'}});" />
+                                    <input type="checkbox" checked="checked" onchange="javascript: Project_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType.ItemId + ";" + oFilterItem.FilterValue.ItemId + ";" + 0)'}});" />
                                 }
                                 else
                                 {
-                                    <input type="checkbox" onchange="javascript: Project_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType.ItemId + ";" + oFilterItem.FilterValue.ItemId)'}});" />
+                                    <input type="checkbox" onchange="javascript: Project_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType.ItemId + ";" + oFilterItem.FilterValue.ItemId + ";" + 0)'}});" />
                                 }
                                 <span>@oFilterItem.FilterValue.ItemName (@oFilterItem.Quantity) </span>
                             </li>
@@ -67,11 +67,11 @@
                             <li>
                                 @if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ItemId.ToString() && x.Item2 == oFilterItem.FilterValue.ItemId.ToString()))
                                 {
-                                    <input type="checkbox" checked="checked" onchange="javascript: Project_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType.ItemId + ";" + oFilterItem.FilterValue.ItemId)'}});" />
+                                    <input type="checkbox" checked="checked" onchange="javascript: Project_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType.ItemId + ";" + oFilterItem.FilterValue.ItemId + ";" + 0)'}});" />
                                 }
                                 else
                                 {
-                                    <input type="checkbox" onchange="javascript: Project_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType.ItemId + ";" + oFilterItem.FilterValue.ItemId)'}});" />
+                                    <input type="checkbox" onchange="javascript: Project_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType.ItemId + ";" + oFilterItem.FilterValue.ItemId + ";" + 0)'}});" />
                                 }
                                 <span>@oFilterItem.FilterValue.ItemName (@oFilterItem.Quantity) </span>
                             </li>

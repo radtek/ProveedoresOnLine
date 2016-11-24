@@ -602,8 +602,18 @@ namespace MarketPlace.Web.Controllers
                 SessionModel.CurrentURL = null;
 
             //get basic provider info
-            var olstProvider = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchById
+            List<ProviderModel> olstProvider = new List<ProviderModel>();
+            if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x).FirstOrDefault() != null)
+            {
+                olstProvider = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchById
+                (Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, ProviderPublicId);
+            }
+            else
+            {
+                //get basic provider info
+                olstProvider = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchById
                 (SessionModel.CurrentCompany.CompanyPublicId, ProviderPublicId);
+            }
 
             var oProvider = olstProvider.
                 Where(x => SessionModel.CurrentCompany.CompanyType.ItemId == (int)enumCompanyType.BuyerProvider ?
@@ -816,8 +826,18 @@ namespace MarketPlace.Web.Controllers
                 SessionModel.CurrentURL = null;
 
             //get basic provider info
-            var olstProvider = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchById
+            List<ProviderModel> olstProvider = new List<ProviderModel>();
+            if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x).FirstOrDefault() != null)
+            {
+                olstProvider = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchById
+                (Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, ProviderPublicId);
+            }
+            else
+            {
+                //get basic provider info
+                olstProvider = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchById
                 (SessionModel.CurrentCompany.CompanyPublicId, ProviderPublicId);
+            }
 
             var oProvider = olstProvider.
                 Where(x => SessionModel.CurrentCompany.CompanyType.ItemId == (int)enumCompanyType.BuyerProvider ?
@@ -858,9 +878,18 @@ namespace MarketPlace.Web.Controllers
             else
             {
                 //get basic provider info
-                var olstProvider = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchById
+                List<ProviderModel> olstProvider = new List<ProviderModel>();
+                if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x).FirstOrDefault() != null)
+                {
+                    olstProvider = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchById
+                    (Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, ProviderPublicId);
+                }
+                else
+                {
+                    //get basic provider info
+                    olstProvider = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchById
                     (SessionModel.CurrentCompany.CompanyPublicId, ProviderPublicId);
-
+                }
                 var oProvider = olstProvider.
                 Where(x => SessionModel.CurrentCompany.CompanyType.ItemId == (int)enumCompanyType.BuyerProvider ?
                             (x.RelatedCompany.CompanyPublicId == ProviderPublicId) :
@@ -892,8 +921,18 @@ namespace MarketPlace.Web.Controllers
                 SessionModel.CurrentURL = null;
 
             //get basic provider info
-            var olstProvider = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchById
+            List<ProviderModel> olstProvider = new List<ProviderModel>();
+            if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x).FirstOrDefault() != null)
+            {
+                olstProvider = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchById
+                (Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, ProviderPublicId);
+            }
+            else
+            {
+                //get basic provider info
+                olstProvider = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchById
                 (SessionModel.CurrentCompany.CompanyPublicId, ProviderPublicId);
+            };
 
             var oProvider = olstProvider.
                  Where(x => SessionModel.CurrentCompany.CompanyType.ItemId == (int)enumCompanyType.BuyerProvider ?
@@ -937,8 +976,18 @@ namespace MarketPlace.Web.Controllers
                 SessionModel.CurrentURL = null;
 
             //get basic provider info
-            var olstProvider = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchById
+            List<ProviderModel> olstProvider = new List<ProviderModel>();
+            if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x).FirstOrDefault() != null)
+            {
+                olstProvider = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchById
+                (Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, ProviderPublicId);
+            }
+            else
+            {
+                //get basic provider info
+                olstProvider = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchById
                 (SessionModel.CurrentCompany.CompanyPublicId, ProviderPublicId);
+            }
 
             var oProvider = olstProvider.
                  Where(x => SessionModel.CurrentCompany.CompanyType.ItemId == (int)enumCompanyType.BuyerProvider ?

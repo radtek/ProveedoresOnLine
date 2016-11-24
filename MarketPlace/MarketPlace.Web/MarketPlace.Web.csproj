@@ -1288,6 +1288,7 @@
     <Content Include="Areas\Desktop\Scripts\rateit\jquery.rateit.js" />
     <Content Include="Areas\Desktop\Scripts\rateit\jquery.rateit.min.js" />
     <Content Include="Areas\Desktop\Scripts\rateit\jquery.rateit.min.js.map" />
+    <None Include="Properties\PublishProfiles\SebastianMartinez_ASUS.pubxml" />
     <None Include="Properties\PublishProfiles\Sebastian_Home_MP.pubxml" />
     <None Include="T4MVC.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
