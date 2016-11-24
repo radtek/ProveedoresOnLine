@@ -1,5 +1,6 @@
 ﻿using Microsoft.Reporting.WebForms;
 using ProveedoresOnLine.SurveyModule.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -395,6 +396,46 @@ namespace ProveedoresOnLine.Reports.Controller
 
         }
 
+        byte[] SurveyGeneralReport(string CustomerPublicId)
+        {
+            byte[] buffer = null;
+            List<ProveedoresOnLine.SurveyModule.Models.SurverReportModel.SurveyReportModelTable1> svGeneralReport = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGeneralReport(CustomerPublicId);          
+
+            StringBuilder data = new StringBuilder();            
+            string strSep = ";";
+
+            data.AppendLine
+                    (
+                    "\"" + "TIPO EVALUACION" + "\"" + strSep +
+                    "\"" + "RESPONSABLE" + "\"" + strSep +
+                    "\"" + "PROVEEDOR" + "\"" + strSep +
+                    "\"" + "PROYECTO" + "\"" + strSep +
+                    "\"" + "OBSERVACIONES" + "\"" + strSep +
+                    "\"" + "ESTADO" + "\"" + strSep +
+                    "\"" + "FECHA DE ENVIO" + "\"" + strSep +
+                    "\"" + "FECHA DE CADUCIDAD" + "\"" + strSep +
+                    "\"" + "EVALUADORES" + "\"" + strSep +
+                    "\"" + "CALIFICACION" + "\"" + strSep +
+                    "\"" + "ULTIMA MODIFICACION" + "\"" + strSep +
+                    "\"" + "AREA" + "\"" + strSep +
+                    "\"" + "COMENTARIO AREA" + "\"" + strSep +
+                    "\"" + "PREGUNTAS" + "\"" + strSep +
+                    "\"" + "RESPUESTAS" + "\"" + strSep +
+                    "\"" + "COMENTARIO RESPUESTA" + "\"");
+
+            //if (svGeneralReport != null && svGeneralReport.Count >0)
+            //{
+            //    svGeneralReport.All(rp =>
+            //    {
+            //        string tipoeval = rp.Table3.Where(x => x.SurveyConfigIdTable3 == rp.SurveyConfigIdTable1).Select(x => x.SurveyName).DefaultIfEmpty(string.Empty).FirstOrDefault();
+            //        string respo = rp.Responsable;
+            //        string area = rp.Table3.Where(x => x.SurveyConfigIdTable3 == rp.SurveyConfigIdTable1 && x.SurveyConfigItemType == (int)).Select(x => x.EvaluationArea).DefaultIfEmpty(string.Empty).FirstOrDefault();
+            //        return true;
+            //    });
+                
+            //}
+            return buffer;
+        }
         #endregion
 
         #region ThirdKnowledgeReports

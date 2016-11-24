@@ -45,16 +45,7 @@ namespace ProveedoresOnLine.Reports.Interfaces
         #endregion
 
         #endregion
-
-        #region General Report
-
-        #region Data
-
-
-
-        #endregion
-
-        #endregion
+        
 
         #region SelectionProcess Report
 
