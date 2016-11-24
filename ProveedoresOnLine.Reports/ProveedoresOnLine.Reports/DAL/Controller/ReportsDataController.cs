@@ -100,8 +100,7 @@ namespace ProveedoresOnLine.Reports.DAL.Controller
         #region SelectionProcess Report
 
         #endregion
-
-
+       
         #region Provider Customer Report
 
         public List<ProveedoresOnLine.Reports.Models.Reports.CustomerProviderReportModel> R_ProviderCustomerReport(string CustomerPublicId)

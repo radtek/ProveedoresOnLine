@@ -19,7 +19,7 @@ namespace ProveedoresOnLine.Reports.DAL.MySQLDAO
         }
 
         #region Survey Report
-
+       
         public List<SurveyModule.Models.SurveyModel> SurveyGetAllByCustomer(string CustomerPublicId)
         {
             List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
