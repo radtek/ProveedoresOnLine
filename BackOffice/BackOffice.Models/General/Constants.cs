@@ -36,12 +36,8 @@
 
         public const string C_Settings_Analytics = "Analytics";
 
-        public const string C_Settings_ElasticSearchUrl = "ElasticSearch_Url";
-
-        public const string C_Settings_CompanyIndex = "CompanyIndex";
-
-        public const string C_Settings_CompanySurveyIndex = "CompanySurveyIndex";
-
+        public const string C_Settings_ProviderStatus_Certified = "ProviderStatus_Certified";
+       
         #endregion
 
         #region Administrator User Roles
@@ -63,6 +59,35 @@
         public const string C_Settings_File_RemoteDirectory = "File_RemoteDirectory";
 
         public const string C_Settings_File_ExcelDirectory = "File_ExcelDirectory";
+
+        #endregion
+
+        #region Company
+
+        public const string C_Settings_Company_DefaultLogoUrl = "Company_DefaultLogoUrl";
+        public const string C_Settings_Company_Customer_DefaultLogoUrl = "Company_Customer_DefaultLogoUrl";
+
+        #endregion
+
+        #region Customers
+
+        public const string CC_CompanyPublicId_Publicar = "CompanyPublicId_Publicar";
+
+        public const string CC_CompanyPublicId_ClientePolipropileno = "CompanyPublicId_ClientePolipropileno";
+
+        #endregion
+
+        #region Index
+
+        public const string C_Settings_ElasticSearchUrl = "ElasticSearchUrl";
+
+        public const string C_Settings_CompanyIndex = "CompanyIndex";
+
+        public const string C_Settings_CustomerProviderIndex = "CustomerProviderIndex";
+
+        public const string C_Settings_CompanySurveyIndex = "CompanySurveyIndex";
+
+        public const string C_Settings_SurveyIndex = "SurveyIndex";
 
         #endregion
 

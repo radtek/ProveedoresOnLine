@@ -1,4 +1,5 @@
 ﻿using BackOffice.Models.General;
+using BackOffice.Models.Provider;
 using Nest;
 using ProveedoresOnLine.Company.Models.Company;
 using ProveedoresOnLine.Company.Models.Util;
@@ -26,16 +27,17 @@ namespace BackOffice.Web.Controllers
                     ((int)(BackOffice.Models.General.enumCompanyType.Provider)).ToString() + "," +
                     ((int)(BackOffice.Models.General.enumCompanyType.BuyerProvider)).ToString();
 
+            //ProviderSearchViewModel oModel = null;
             //generic model info
-            BackOffice.Models.Provider.ProviderViewModel oModel = new Models.Provider.ProviderViewModel()
+            ProviderViewModel oModel = new ProviderViewModel()
             {
                 ProviderOptions = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.CatalogGetProviderOptions(),
-                SearchFilter = ProveedoresOnLine.Company.Controller.Company.CompanySearchFilter(oCompanyType, oSearchParam, oSearchFilter),
+                //SearchFilter = ProveedoresOnLine.Company.Controller.Company.CompanySearchFilter(oCompanyType, oSearchParam, oSearchFilter),
             };
 
             if (oModel.SearchFilter == null)
                 oModel.SearchFilter = new List<GenericFilterModel>();
-
+            
             return View(oModel);
         }
 
@@ -476,7 +478,7 @@ namespace BackOffice.Web.Controllers
 
         #endregion
 
-            #endregion
+        #endregion
 
         #region Legal Info
 
