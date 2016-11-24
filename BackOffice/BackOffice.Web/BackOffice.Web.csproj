@@ -136,6 +136,9 @@
     <Reference Include="ProveedoresOnLine.FileManager">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.FileManager\developer\ProveedoresOnLine.FileManager.dll</HintPath>
     </Reference>
+    <Reference Include="ProveedoresOnLine.IndexSearch">
+      <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.CompanyIndexSearch\developer\ProveedoresOnLine.IndexSearch.dll</HintPath>
+    </Reference>
     <Reference Include="ProveedoresOnLine.ProjectModule">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.ProjectModule\developer\ProveedoresOnLine.ProjectModule.dll</HintPath>
     </Reference>

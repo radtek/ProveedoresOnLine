@@ -173,6 +173,7 @@
     /// <summary>
     /// Contact info type
     /// </summary>
+    /// 
     public enum enumContactInfoType
     {
         //CompanyContact
@@ -478,6 +479,44 @@
         Full_Validate = 902005,
     }
 
+    [System.ComponentModel.DefaultValue(LiteDescription)]
+    public enum enumProviderLiteType
+    {
+        LiteDescription,
+        Comparison,
+        Project,
+    }
+
+    public enum enumSearchOrderType
+    {
+        CustomerRate = 113001,
+        Relevance = 113002,
+        Alphabetic = 113003,
+    }
+
+    public enum enumFilterType
+    {
+        EconomicActivity = 111006,
+        CustomEconomicActivity = 111007,
+        Country = 111018,
+        City = 111008,
+
+        StartDateSurvey = 111009,
+        EndDateSurvey = 111010,
+        SurveyStatus = 111011,
+        SurveyType = 111012,
+        SurveyRank = 111013,
+        SurveyEvaluator = 111014,
+
+        ProviderStatus = 112001,
+        ProviderRate = 112002,
+        IsRelatedProvider = 112003,
+        RestrictiveListProvider = 112004,
+        MyClients = 112005,
+
+        MyProviders = 112006,
+        OtherProviders = 112007,
+    }
     #endregion
 
     #region Survey
@@ -627,6 +666,16 @@
         CalificationProjectConfigItem = 2004002,
         CalificationProjectConfigValidate = 2004003,
         CalificationProjectConfigItemInfo = 2004004,
+    }
+
+    #endregion
+
+    #region Alert Risk
+
+    public enum enumBlackListStatus
+    {
+        ShowAlert = 1101001,
+        DontShowAlert = 1101002,
     }
 
     #endregion
