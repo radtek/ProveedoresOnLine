@@ -40,8 +40,12 @@ namespace BackOffice.Models.Provider
             RelatedCompany = oRelatedCompany;
             TotalRows = oTotalRows;
         }
+        public ProviderSearchViewModel()
+        {
 
-        public ProviderSearchViewModel(CompanyIndexModel oDocumentCompany)
+        }
+
+        public ProviderSearchViewModel(CompanyIndexModel oDocumentCompany, int TotalRowsParam)
         {
             this.ImageUrl = oDocumentCompany.LogoUrl;
             this.IdentificationNumber = oDocumentCompany.IdentificationNumber;
@@ -50,6 +54,7 @@ namespace BackOffice.Models.Provider
             this.ProviderName = oDocumentCompany.CompanyName;
             this.ProviderPublicId = oDocumentCompany.CompanyPublicId;
             this.Enable = oDocumentCompany.CompanyEnable;
+            this.TotalRows = TotalRowsParam;          
         }
 
         public bool RenderScripts { get; set; }
@@ -98,17 +103,17 @@ namespace BackOffice.Models.Provider
 
         #region Methods
 
-        public List<Tuple<string, string, string>> GetlstSearchFilter()
+        public List<Tuple<string, string>> GetlstSearchFilter(string SearchFilter)
         {
-            List<Tuple<string, string, string>> oReturn = new List<Tuple<string, string, string>>();
+            List<Tuple<string, string>> oReturn = new List<Tuple<string, string>>();
 
             if (!string.IsNullOrEmpty(SearchFilter))
             {
                 oReturn = SearchFilter.Replace(" ", "").
                     Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).
                     Where(x => x.IndexOf(';') >= 0).
-                    Select(x => new Tuple<string, string, string>(x.Split(';')[0], x.Split(';')[1], x.Split(';')[2])).
-                    Where(x => !string.IsNullOrEmpty(x.Item1) && !string.IsNullOrEmpty(x.Item2) && !string.IsNullOrEmpty(x.Item3)).
+                    Select(x => new Tuple<string, string>(x.Split(';')[0], x.Split(';')[1])).
+                    Where(x => !string.IsNullOrEmpty(x.Item1) && !string.IsNullOrEmpty(x.Item2)).
                     ToList();
             }
 
