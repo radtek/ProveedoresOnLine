@@ -349,7 +349,7 @@ namespace ProveedoresOnLine.Reports.Controller
         #endregion
 
         #region SVGeneralReport
-        public static Tuple<byte[], string, string> SV_GeneralReport(DataTable data, DataTable data2, List<ReportParameter> ReportData, string FormatType, string FilePath)
+        public static Tuple<byte[], string, string> SV_GeneralReport(DataTable data, DataTable data2,DataTable data3, List<ReportParameter> ReportData, string FormatType, string FilePath)
         {
             LocalReport localReport = new LocalReport();
             localReport.EnableExternalImages = true;
@@ -365,6 +365,11 @@ namespace ProveedoresOnLine.Reports.Controller
             source2.Name = "DS_SurveyGeneralInfoAreas";
             source2.Value = data2 != null ? data2 : new DataTable();
             localReport.DataSources.Add(source2);
+
+            ReportDataSource source3 = new ReportDataSource();
+            source3.Name = "DS_EvaluatorDetailReport";
+            source3.Value = data3 != null ? data3 : new DataTable();
+            localReport.DataSources.Add(source3);
 
             string mimeType;
             string encoding;
