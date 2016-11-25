@@ -5236,6 +5236,8 @@ namespace MarketPlace.Web.Controllers
             List<ReportParameter> parameters = new List<ReportParameter>();
             GenericReportModel oReporModel = new GenericReportModel();
 
+            #region Parameters Filling
+
             //CustomerInfo
             parameters.Add(new ReportParameter("CustomerName", SessionModel.CurrentCompany.CompanyName));
             parameters.Add(new ReportParameter("CustomerIdentification", SessionModel.CurrentCompany.IdentificationNumber));
@@ -5254,6 +5256,11 @@ namespace MarketPlace.Web.Controllers
             parameters.Add(new ReportParameter("SurveyLastModify", oModel.RelatedSurvey.SurveyLastModify));
             parameters.Add(new ReportParameter("SurveyResponsible", oModel.RelatedSurvey.SurveyResponsible));
             parameters.Add(new ReportParameter("SurveyAverage", oModel.RelatedSurvey.Average.ToString()));
+
+            #endregion
+
+            #region DataSet Filling
+
 
             // DataSet Evaluators table
             DataTable data = new DataTable();
@@ -5309,9 +5316,75 @@ namespace MarketPlace.Web.Controllers
                 data2.Rows.Add(row);
             }
 
+            //DataSet SurveyDetails
+            DataTable data3 = new DataTable();
+            data3.Columns.Add("Area");
+            data3.Columns.Add("Question");
+            data3.Columns.Add("Answer");
+            data3.Columns.Add("QuestionRating");
+            data3.Columns.Add("QuestionWeight");
+            data3.Columns.Add("QuestionDescription");
+            data3.Columns.Add("Evaluator");
+
+            DataRow row3;
+            foreach (var EvaluationArea in
+                        oModel.RelatedSurvey.GetSurveyConfigItem(MarketPlace.Models.General.enumSurveyConfigItemType.EvaluationArea, null))
+            {
+                var lstQuestion = oModel.RelatedSurvey.GetSurveyConfigItem
+                    (MarketPlace.Models.General.enumSurveyConfigItemType.Question, EvaluationArea.SurveyConfigItemId);
+
+                foreach (var Question in lstQuestion)
+                {
+                    
+                    if (Question.QuestionType != Convert.ToString(MarketPlace.Models.General.enumSurveyQuestionType.File))
+                    {
+                        row3 = data3.NewRow();
+                        row3["Area"] = EvaluationArea.Name;
+                        row3["Question"] = Question.Order + " " + Question.Name;
+                        
+                        var QuestionInfo = oModel.RelatedSurvey.GetSurveyItem(Question.SurveyConfigItemId);
+                        var lstAnswer = oModel.RelatedSurvey.GetSurveyConfigItem
+                            (MarketPlace.Models.General.enumSurveyConfigItemType.Answer, Question.SurveyConfigItemId);
+                        
+                        foreach (var Answer in lstAnswer)
+                        {
+                            if (QuestionInfo != null && QuestionInfo.Answer == Answer.SurveyConfigItemId)
+                            {
+                                row3["Answer"] = Answer.Name;                                
+                            }
+                        }
+                        
+                        if (string.IsNullOrEmpty(row3["Answer"].ToString()))
+                        {
+                            row3["Answer"] = "Sin Responder";
+                            row3["QuestionRating"] = "NA";
+                        }
+                        else
+                        {
+                            row3["QuestionRating"] = QuestionInfo.Ratting;
+                        }
+
+                        row3["QuestionWeight"] = Question.Weight;
+
+                        if (QuestionInfo != null && QuestionInfo.DescriptionText != null)
+                        {
+                            row3["QuestionDescription"] = QuestionInfo.DescriptionText;
+                        }
+                        else
+                        {
+                            row3["QuestionDescription"] = "";
+                        }
+                        row3["Evaluator"] = oModel.RelatedSurvey.SurveyEvaluator;
+                        data3.Rows.Add(row3);
+                    }
+                }
+            }
+            #endregion
+
             Tuple<byte[], string, string> SurveyGeneralReport = ProveedoresOnLine.Reports.Controller.ReportModule.SV_GeneralReport(
                                                             data,
                                                             data2,
+                                                            data3,
                                                             parameters,
                                                             enumCategoryInfoType.PDF.ToString(),
                                                             Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim());

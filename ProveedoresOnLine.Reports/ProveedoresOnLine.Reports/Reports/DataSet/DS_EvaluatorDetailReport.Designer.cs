@@ -291,6 +291,8 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
             
             private global::System.Data.DataColumn columnQuestionDescription;
             
+            private global::System.Data.DataColumn columnEvaluator;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public DS_EvaluatorDetailReportDataTable() {
@@ -374,6 +376,14 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn EvaluatorColumn {
+                get {
+                    return this.columnEvaluator;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -409,7 +419,7 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public DS_EvaluatorDetailReportRow AddDS_EvaluatorDetailReportRow(string Area, string Question, string Answer, string QuestionRating, string QuestionWeight, string QuestionDescription) {
+            public DS_EvaluatorDetailReportRow AddDS_EvaluatorDetailReportRow(string Area, string Question, string Answer, string QuestionRating, string QuestionWeight, string QuestionDescription, string Evaluator) {
                 DS_EvaluatorDetailReportRow rowDS_EvaluatorDetailReportRow = ((DS_EvaluatorDetailReportRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Area,
@@ -417,7 +427,8 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
                         Answer,
                         QuestionRating,
                         QuestionWeight,
-                        QuestionDescription};
+                        QuestionDescription,
+                        Evaluator};
                 rowDS_EvaluatorDetailReportRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowDS_EvaluatorDetailReportRow);
                 return rowDS_EvaluatorDetailReportRow;
@@ -446,6 +457,7 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
                 this.columnQuestionRating = base.Columns["QuestionRating"];
                 this.columnQuestionWeight = base.Columns["QuestionWeight"];
                 this.columnQuestionDescription = base.Columns["QuestionDescription"];
+                this.columnEvaluator = base.Columns["Evaluator"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -463,6 +475,8 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
                 base.Columns.Add(this.columnQuestionWeight);
                 this.columnQuestionDescription = new global::System.Data.DataColumn("QuestionDescription", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnQuestionDescription);
+                this.columnEvaluator = new global::System.Data.DataColumn("Evaluator", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnEvaluator);
                 this.ExtendedProperties.Add("Generator_TablePropName", "_DS_EvaluatorDetailReport");
                 this.ExtendedProperties.Add("Generator_UserTableName", "DS_EvaluatorDetailReport");
             }
@@ -706,6 +720,22 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string Evaluator {
+                get {
+                    try {
+                        return ((string)(this[this.tableDS_EvaluatorDetailReport.EvaluatorColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Evaluator\' in table \'DS_EvaluatorDetailReport\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDS_EvaluatorDetailReport.EvaluatorColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsAreaNull() {
                 return this.IsNull(this.tableDS_EvaluatorDetailReport.AreaColumn);
             }
@@ -774,6 +804,18 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetQuestionDescriptionNull() {
                 this[this.tableDS_EvaluatorDetailReport.QuestionDescriptionColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsEvaluatorNull() {
+                return this.IsNull(this.tableDS_EvaluatorDetailReport.EvaluatorColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetEvaluatorNull() {
+                this[this.tableDS_EvaluatorDetailReport.EvaluatorColumn] = global::System.Convert.DBNull;
             }
         }
         
