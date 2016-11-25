@@ -587,6 +587,13 @@
         //Set Area Description
         AreaHasDescription = 1203008,
     }
+    //SurveyConfig QuestionType
+    public enum enumSurveyQuestionType
+    {
+        Question =118001,
+        File = 118002
+        
+    }
 
 
     #endregion

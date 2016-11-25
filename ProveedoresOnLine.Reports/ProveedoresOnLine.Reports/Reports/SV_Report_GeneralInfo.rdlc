@@ -234,7 +234,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>3.88951cm</Top>
+        <Top>3.57201cm</Top>
         <Left>1.18601cm</Left>
         <Height>0.57354cm</Height>
         <Width>4.79241cm</Width>
@@ -271,7 +271,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>3.88951cm</Top>
+        <Top>3.57201cm</Top>
         <Left>6.15481cm</Left>
         <Height>0.57354cm</Height>
         <Width>4.21033cm</Width>
@@ -308,7 +308,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>3.88951cm</Top>
+        <Top>3.57201cm</Top>
         <Left>10.54153cm</Left>
         <Height>0.57354cm</Height>
         <Width>4.21033cm</Width>
@@ -345,7 +345,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>5.28354cm</Top>
+        <Top>4.96604cm</Top>
         <Left>1.18601cm</Left>
         <Height>0.57354cm</Height>
         <Width>4.79241cm</Width>
@@ -382,7 +382,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>5.28354cm</Top>
+        <Top>4.96604cm</Top>
         <Left>6.15481cm</Left>
         <Height>0.57354cm</Height>
         <Width>8.59705cm</Width>
@@ -647,7 +647,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>DS_SurveyGeneralInfoAreas</DataSetName>
-        <Top>7.6946cm</Top>
+        <Top>6.67757cm</Top>
         <Left>0.53412cm</Left>
         <Height>1.14708cm</Height>
         <Width>15.69657cm</Width>
@@ -658,45 +658,6 @@
           </Border>
         </Style>
       </Tablix>
-      <Textbox Name="Textbox26">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>   Detalle de las áreas de evaluación:</Value>
-                <Style>
-                  <FontWeight>Bold</FontWeight>
-                  <Color>DimGray</Color>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox19</rd:DefaultName>
-        <Top>6.33011cm</Top>
-        <Left>0.1274cm</Left>
-        <Height>0.78521cm</Height>
-        <Width>16.47911cm</Width>
-        <ZIndex>12</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <BottomBorder>
-            <Color>#f87b00</Color>
-            <Style>Solid</Style>
-          </BottomBorder>
-          <BackgroundColor>#ececec</BackgroundColor>
-          <VerticalAlign>Middle</VerticalAlign>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
       <Textbox Name="Textbox11">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
@@ -717,11 +678,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>3.29833cm</Top>
+        <Top>2.98083cm</Top>
         <Left>1.18602cm</Left>
         <Height>0.57354cm</Height>
         <Width>4.7924cm</Width>
-        <ZIndex>13</ZIndex>
+        <ZIndex>12</ZIndex>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -758,11 +719,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>3.29833cm</Top>
+        <Top>2.98083cm</Top>
         <Left>6.15481cm</Left>
         <Height>0.57354cm</Height>
         <Width>4.21033cm</Width>
-        <ZIndex>14</ZIndex>
+        <ZIndex>13</ZIndex>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -799,11 +760,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>3.29833cm</Top>
+        <Top>2.98083cm</Top>
         <Left>10.54153cm</Left>
         <Height>0.57354cm</Height>
         <Width>4.21033cm</Width>
-        <ZIndex>15</ZIndex>
+        <ZIndex>14</ZIndex>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -840,11 +801,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>4.70294cm</Top>
+        <Top>4.38544cm</Top>
         <Left>1.18601cm</Left>
         <Height>0.57354cm</Height>
         <Width>4.79241cm</Width>
-        <ZIndex>16</ZIndex>
+        <ZIndex>15</ZIndex>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -881,11 +842,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>4.70294cm</Top>
+        <Top>4.38544cm</Top>
         <Left>6.15481cm</Left>
         <Height>0.57354cm</Height>
         <Width>8.59705cm</Width>
-        <ZIndex>17</ZIndex>
+        <ZIndex>16</ZIndex>
         <Style>
           <Border>
             <Color>LightGrey</Color>
@@ -902,49 +863,14 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
-      <Textbox Name="Textbox27">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>   Detalle de las evaluaciones:</Value>
-                <Style>
-                  <FontWeight>Bold</FontWeight>
-                  <Color>DimGray</Color>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox19</rd:DefaultName>
-        <Top>9.04209cm</Top>
-        <Height>0.78521cm</Height>
-        <Width>16.60651cm</Width>
-        <ZIndex>18</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <BottomBorder>
-            <Color>#f87b00</Color>
-            <Style>Solid</Style>
-          </BottomBorder>
-          <BackgroundColor>#ececec</BackgroundColor>
-          <VerticalAlign>Middle</VerticalAlign>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
       <Tablix Name="Tablix1">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
               <Width>2.9443cm</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>2.3726cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>2.81372cm</Width>
@@ -953,16 +879,13 @@
               <Width>2.78408cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.43276cm</Width>
+              <Width>1.32147cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.64506cm</Width>
+              <Width>1.53059cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.89842cm</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>2.17824cm</Width>
+              <Width>1.92982cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -980,6 +903,7 @@
                             <TextRun>
                               <Value>Area</Value>
                               <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
                                 <FontSize>9pt</FontSize>
                               </Style>
                             </TextRun>
@@ -1005,6 +929,41 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
+                    <Textbox Name="Textbox1">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Evaluador</Value>
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                                <FontSize>9pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox1</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
                     <Textbox Name="Textbox38">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -1014,6 +973,7 @@
                             <TextRun>
                               <Value>Pregunta</Value>
                               <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
                                 <FontSize>9pt</FontSize>
                               </Style>
                             </TextRun>
@@ -1048,6 +1008,7 @@
                             <TextRun>
                               <Value>Respuesta</Value>
                               <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
                                 <FontSize>9pt</FontSize>
                               </Style>
                             </TextRun>
@@ -1073,40 +1034,6 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox30">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>Cal</Value>
-                              <Style>
-                                <FontSize>9pt</FontSize>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox30</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
                     <Textbox Name="Textbox42">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -1116,6 +1043,7 @@
                             <TextRun>
                               <Value>Peso</Value>
                               <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
                                 <FontSize>9pt</FontSize>
                               </Style>
                             </TextRun>
@@ -1148,8 +1076,9 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Question Rating</Value>
+                              <Value>Cal.Pregunta</Value>
                               <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
                                 <FontSize>9pt</FontSize>
                               </Style>
                             </TextRun>
@@ -1184,6 +1113,7 @@
                             <TextRun>
                               <Value>Comentarios</Value>
                               <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
                                 <FontSize>9pt</FontSize>
                               </Style>
                             </TextRun>
@@ -1223,6 +1153,7 @@
                             <TextRun>
                               <Value>=Fields!Area.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
                                 <FontSize>9pt</FontSize>
                               </Style>
                             </TextRun>
@@ -1248,6 +1179,41 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
+                    <Textbox Name="Evaluator">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!Evaluator.Value</Value>
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                                <FontSize>9pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Evaluator</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
                     <Textbox Name="Question">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -1257,6 +1223,7 @@
                             <TextRun>
                               <Value>=Fields!Question.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
                                 <FontSize>9pt</FontSize>
                               </Style>
                             </TextRun>
@@ -1291,6 +1258,7 @@
                             <TextRun>
                               <Value>=Fields!Answer.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
                                 <FontSize>9pt</FontSize>
                               </Style>
                             </TextRun>
@@ -1316,38 +1284,6 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox31">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value />
-                              <Style>
-                                <FontSize>9pt</FontSize>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox31</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
                     <Textbox Name="QuestionWeight">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -1357,6 +1293,7 @@
                             <TextRun>
                               <Value>=Fields!QuestionWeight.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
                                 <FontSize>9pt</FontSize>
                               </Style>
                             </TextRun>
@@ -1391,6 +1328,7 @@
                             <TextRun>
                               <Value>=Fields!QuestionRating.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
                                 <FontSize>9pt</FontSize>
                               </Style>
                             </TextRun>
@@ -1425,6 +1363,7 @@
                             <TextRun>
                               <Value>=Fields!QuestionDescription.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
                                 <FontSize>9pt</FontSize>
                               </Style>
                             </TextRun>
@@ -1474,22 +1413,100 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>DS_EvaluatorDetailReport</DataSetName>
-        <Top>10.32119cm</Top>
-        <Left>0.53412cm</Left>
+        <Top>8.96264cm</Top>
+        <Left>0.53411cm</Left>
         <Height>1.05562cm</Height>
-        <Width>15.69657cm</Width>
-        <ZIndex>19</ZIndex>
+        <Width>15.69658cm</Width>
+        <ZIndex>17</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Tablix>
+      <Textbox Name="Textbox27">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>   Detalle de las evaluaciones:</Value>
+                <Style>
+                  <FontWeight>Bold</FontWeight>
+                  <Color>DimGray</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox19</rd:DefaultName>
+        <Top>8.00104cm</Top>
+        <Left>0.05016in</Left>
+        <Height>0.78521cm</Height>
+        <Width>16.47911cm</Width>
+        <ZIndex>18</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <BottomBorder>
+            <Color>#f87b00</Color>
+            <Style>Solid</Style>
+          </BottomBorder>
+          <BackgroundColor>#ececec</BackgroundColor>
+          <VerticalAlign>Middle</VerticalAlign>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox26">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>   Detalle de las áreas de evaluación:</Value>
+                <Style>
+                  <FontWeight>Bold</FontWeight>
+                  <Color>DimGray</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox19</rd:DefaultName>
+        <Top>5.71597cm</Top>
+        <Left>0.1274cm</Left>
+        <Height>0.78521cm</Height>
+        <Width>16.47911cm</Width>
+        <ZIndex>19</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <BottomBorder>
+            <Color>#f87b00</Color>
+            <Style>Solid</Style>
+          </BottomBorder>
+          <BackgroundColor>#ececec</BackgroundColor>
+          <VerticalAlign>Middle</VerticalAlign>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
-    <Height>4.55198in</Height>
+    <Height>3.98948in</Height>
     <Style />
   </Body>
-  <Width>6.538in</Width>
+  <Width>6.81021in</Width>
   <Page>
     <PageHeader>
       <Height>2.17118cm</Height>
@@ -1737,10 +1754,14 @@
           <DataField>QuestionDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="Evaluator">
+          <DataField>Evaluator</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>DS_EvaluatorDetailReport</rd:DataSetName>
-        <rd:SchemaPath>C:\Users\JOHMARVA\Source\Repos\ProveedoresOnLine\ProveedoresOnLine.Reports\ProveedoresOnLine.Reports\Reports\DataSet\DS_EvaluatorDetailReport.xsd</rd:SchemaPath>
+        <rd:SchemaPath>C:\Users\DFZ-23\Documents\PUBLICAR\POL\ProveedoresOnLine.Reports\ProveedoresOnLine.Reports\Reports\DataSet\DS_EvaluatorDetailReport.xsd</rd:SchemaPath>
         <rd:TableName>DS_EvaluatorDetailReport</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />

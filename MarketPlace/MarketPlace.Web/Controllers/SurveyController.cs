@@ -2033,6 +2033,7 @@ namespace MarketPlace.Web.Controllers
             Tuple<byte[], string, string> SurveyGeneralReport = ProveedoresOnLine.Reports.Controller.ReportModule.SV_GeneralReport(
                                                             data,
                                                             data2,
+                                                            data3,
                                                             parameters,
                                                             enumCategoryInfoType.PDF.ToString(),
                                                             Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim());
