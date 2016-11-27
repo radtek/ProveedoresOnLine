@@ -1319,14 +1319,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="QuestionRating">
+                    <Textbox Name="SurveyRating">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!QuestionRating.Value</Value>
+                              <Value>=Fields!SurveyRating.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI Light</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -1338,7 +1338,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>QuestionRating</rd:DefaultName>
+                      <rd:DefaultName>SurveyRating</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1758,10 +1758,14 @@
           <DataField>Evaluator</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="SurveyRating">
+          <DataField>SurveyRating</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>DS_EvaluatorDetailReport</rd:DataSetName>
-        <rd:SchemaPath>C:\Users\DFZ-23\Documents\PUBLICAR\POL\ProveedoresOnLine.Reports\ProveedoresOnLine.Reports\Reports\DataSet\DS_EvaluatorDetailReport.xsd</rd:SchemaPath>
+        <rd:SchemaPath>D:\ProveedoresOnLine\repos\ProveedoresOnLine.Reports\ProveedoresOnLine.Reports\Reports\DataSet\DS_EvaluatorDetailReport.xsd</rd:SchemaPath>
         <rd:TableName>DS_EvaluatorDetailReport</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />

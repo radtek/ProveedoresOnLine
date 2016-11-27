@@ -5269,8 +5269,33 @@ namespace MarketPlace.Web.Controllers
             data.Columns.Add("SurveyRatingDetail");
             data.Columns.Add("SurveyProgressDetail");
 
+            // DataSet Area's Table
+            DataTable data2 = new DataTable();
+            data2.Columns.Add("SurveyAreaName");
+            data2.Columns.Add("SurveyAreaRating");
+            data2.Columns.Add("SurveyAreaWeight");
+
+            //DataSet SurveyDetails
+            DataTable data3 = new DataTable();
+            data3.Columns.Add("Area");
+            data3.Columns.Add("Question");
+            data3.Columns.Add("Answer");
+            data3.Columns.Add("QuestionRating");
+            data3.Columns.Add("QuestionWeight");
+            data3.Columns.Add("QuestionDescription");
+            data3.Columns.Add("Evaluator");
+
+            List<Models.Survey.SurveyViewModel> lstSurvey = new List<Models.Survey.SurveyViewModel>();
+            //getting answers
+            oModel.RelatedSurvey.RelatedSurvey.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)Models.General.enumSurveyInfoType.CurrentArea).Select(x => x);
+
+
+
             List<Models.Survey.SurveyViewModel> EvaluatorDetailList = new List<Models.Survey.SurveyViewModel>();
 
+
+        
+            //DataSet1
             foreach (var Evaluator in oModel.RelatedSurvey.SurveyEvaluatorList.Distinct())
             {
                 Models.Survey.SurveyViewModel SurveyEvaluatorDetail = new Models.Survey.SurveyViewModel
@@ -5287,17 +5312,13 @@ namespace MarketPlace.Web.Controllers
                 data.Rows.Add(row);
             }
 
-            // DataSet Area's Table
-            DataTable data2 = new DataTable();
-            data2.Columns.Add("SurveyAreaName");
-            data2.Columns.Add("SurveyAreaRating");
-            data2.Columns.Add("SurveyAreaWeight");
-
+            
+            //DataSet2
             foreach (var EvaluationArea in
                         oModel.RelatedSurvey.GetSurveyConfigItem(MarketPlace.Models.General.enumSurveyConfigItemType.EvaluationArea, null))
             {
                 int RatingforArea = 0;
-
+                
                 foreach (Models.Survey.SurveyViewModel SurveyDetailInfo in EvaluatorDetailList)
                 {
                     var EvaluationAreaInf = SurveyDetailInfo.GetSurveyItem(EvaluationArea.SurveyConfigItemId);
@@ -5309,6 +5330,7 @@ namespace MarketPlace.Web.Controllers
                 }
 
                 DataRow row;
+
                 row = data2.NewRow();
                 row["SurveyAreaName"] = EvaluationArea.Name;
                 row["SurveyAreaRating"] = RatingforArea;
@@ -5316,20 +5338,15 @@ namespace MarketPlace.Web.Controllers
                 data2.Rows.Add(row);
             }
 
-            //DataSet SurveyDetails
-            DataTable data3 = new DataTable();
-            data3.Columns.Add("Area");
-            data3.Columns.Add("Question");
-            data3.Columns.Add("Answer");
-            data3.Columns.Add("QuestionRating");
-            data3.Columns.Add("QuestionWeight");
-            data3.Columns.Add("QuestionDescription");
-            data3.Columns.Add("Evaluator");
+           
+            
 
-            DataRow row3;
+            
+            //DataSet3
             foreach (var EvaluationArea in
                         oModel.RelatedSurvey.GetSurveyConfigItem(MarketPlace.Models.General.enumSurveyConfigItemType.EvaluationArea, null))
             {
+                DataRow row3;
                 var lstQuestion = oModel.RelatedSurvey.GetSurveyConfigItem
                     (MarketPlace.Models.General.enumSurveyConfigItemType.Question, EvaluationArea.SurveyConfigItemId);
 
