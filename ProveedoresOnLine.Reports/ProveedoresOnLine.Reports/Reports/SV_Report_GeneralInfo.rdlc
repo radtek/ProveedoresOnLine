@@ -675,7 +675,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox1</rd:DefaultName>
@@ -707,7 +709,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox3</rd:DefaultName>
@@ -739,7 +743,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox5</rd:DefaultName>
@@ -776,7 +782,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>SurveyAreaName</rd:DefaultName>
@@ -808,7 +816,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>SurveyAreaWeight</rd:DefaultName>
@@ -840,7 +850,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>SurveyAreaRating</rd:DefaultName>
@@ -962,10 +974,14 @@
                           <TextRuns>
                             <TextRun>
                               <Value>Area</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                              </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox47</rd:DefaultName>
@@ -992,10 +1008,14 @@
                           <TextRuns>
                             <TextRun>
                               <Value>Evaluador</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                              </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox49</rd:DefaultName>
@@ -1022,10 +1042,14 @@
                           <TextRuns>
                             <TextRun>
                               <Value>Pregunta</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                              </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox51</rd:DefaultName>
@@ -1052,10 +1076,14 @@
                           <TextRuns>
                             <TextRun>
                               <Value>Respuesta</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                              </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox55</rd:DefaultName>
@@ -1082,10 +1110,14 @@
                           <TextRuns>
                             <TextRun>
                               <Value>Calificacion</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                              </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox57</rd:DefaultName>
@@ -1117,10 +1149,14 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Fields!Area.Value</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                              </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Area1</rd:DefaultName>
@@ -1147,10 +1183,14 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Fields!Evaluator.Value</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                              </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Evaluator</rd:DefaultName>
@@ -1177,10 +1217,14 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Fields!Question.Value</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                              </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Question</rd:DefaultName>
@@ -1207,10 +1251,14 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Fields!Answer.Value</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                              </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Answer</rd:DefaultName>
@@ -1237,10 +1285,14 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Fields!SurveyRating.Value</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                              </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>SurveyRating</rd:DefaultName>
