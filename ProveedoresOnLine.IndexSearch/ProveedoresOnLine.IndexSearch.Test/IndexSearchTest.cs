@@ -37,20 +37,6 @@ namespace ProveedoresOnLine.IndexSearch.Test
 
             Assert.AreEqual(true, oReturn != null && oReturn == true);
         }
-        [TestMethod]
-        public void TestMethod1()
-        {
-            var colours = new[]  
-{  
-     new { Name = "Red" },  
-     new { Name = "Green" },  
-     new { Name = "Blue" },  
-};
-
-            Console.WriteLine(colours[0].GetType() ==
-                colours[1].GetType());
-
-        }
 
         [TestMethod]
         public void CustomerProviderIndexationFunction()
