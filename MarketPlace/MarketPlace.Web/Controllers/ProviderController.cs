@@ -5303,40 +5303,47 @@ namespace MarketPlace.Web.Controllers
                 row["SurveyStatusNameDetail"] = SurveyEvaluatorDetail.SurveyStatusName;
                 row["SurveyRatingDetail"] = SurveyEvaluatorDetail.SurveyRating;
                 row["SurveyProgressDetail"] = SurveyEvaluatorDetail.SurveyProgress.ToString() + "%";
+                var orden = 0;
                 foreach (var sv in EvaluatorDetailList)
                 {
+                     
+                    DataRow row3 = data3.NewRow();
                     foreach (var svci in sv.RelatedSurvey.RelatedSurveyConfig.RelatedSurveyConfigItem)
                     {
-                        DataRow row3;
-                        row3 = data3.NewRow();
+                       
                         foreach (var item in svci.ItemInfo)
                         {
                             
                             
-                            if (svci.ItemType.ItemId==1202001)
+                            if (svci.ItemType.ItemId==1202001 )
                             {
                                 
                                 row3["Area"] = svci.ItemName;
                             }
-                            if (svci.ItemType.ItemId == 1202002)
+                            if (svci.ItemType.ItemId == 1202002 && item.ItemInfoType.ItemId==1203001&& int.Parse(item.Value)==orden )
                             {
                                 
                                 row3["Question"] = svci.ItemName;
                             }
-                            if (svci.ItemType.ItemId == 1202003)
+                            if (svci.ItemType.ItemId == 1202003 && item.ItemInfoType.ItemId == 1203001 && int.Parse(item.Value) == orden)
                             {
                                
                                 row3["Answer"] = svci.ItemName;
                             }
+                                                        
+                                row3["Evaluator"] = SurveyEvaluatorDetail.SurveyEvaluator;                            
                             
-                            row3["Evaluator"] = SurveyEvaluatorDetail.SurveyEvaluator;
-                            
-                            row3["QuestionRating"] = sv.RelatedSurvey.SurveyInfo.All(x => x.ItemInfoId == 1205001);
-                            
+
+                            if (svci.ParentItem != null)
+                            {
+                                row3["QuestionRating"] = sv.RelatedSurvey.SurveyInfo.Where(x=>x.ItemInfoType.ItemId==1205001).Select(x=>x.Value);
+                            }
+
+                            orden++;
                         }
-                        data3.Rows.Add(row3);
+                        
                     }
-                    
+                    data3.Rows.Add(row3);
                 }
                 
                 data.Rows.Add(row);
