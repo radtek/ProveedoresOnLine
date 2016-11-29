@@ -17,6 +17,7 @@ using ProveedoresOnLine.CalificationBatch.Models;
 using Nest;
 using ProveedoresOnLine.Company.Models.Company;
 using MarketPlace.Models.ElasticSearchModels;
+using MarketPlace.Models.Survey;
 
 namespace MarketPlace.Web.Controllers
 {
@@ -256,7 +257,7 @@ namespace MarketPlace.Web.Controllers
                 #endregion
 
                 #region Status Aggregation
-                                
+
                 //int ProvidersForClientcount = 0;
 
                 oModel.ElasticCompanyModel.Aggs.Nested("status_avg").Terms("status").Buckets.All(x =>
@@ -618,7 +619,7 @@ namespace MarketPlace.Web.Controllers
             if (SessionModel.CurrentURL != null)
                 SessionModel.CurrentURL = null;
             //get basic provider info
-             List<ProviderModel> olstProvider = new List<ProviderModel>();
+            List<ProviderModel> olstProvider = new List<ProviderModel>();
             if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x).FirstOrDefault() != null)
             {
                 olstProvider = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchById
@@ -2168,16 +2169,16 @@ namespace MarketPlace.Web.Controllers
 
                 oModel.RelatedLiteProvider.RelatedProvider.RelatedFinantial = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPFinancialGetBasicInfo(ProviderPublicId, (int)enumFinancialType.BankInfoType);
                 oModel.RelatedFinancialInfo = new List<ProviderFinancialViewModel>();
-                
+
                 if (oModel.RelatedLiteProvider.RelatedProvider.RelatedFinantial != null)
-                {                    
+                {
                     oModel.RelatedLiteProvider.RelatedProvider.RelatedFinantial.All(x =>
-                    {                        
+                    {
                         if (x.ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)enumFinancialInfoType.IB_Customer).Select(y => y.Value).FirstOrDefault() == "A Quien Interese" ||
                             x.ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)enumFinancialInfoType.IB_Customer).Select(y => y.Value).FirstOrDefault() == SessionModel.CurrentCompany.CompanyName)
                         {
                             oModel.RelatedFinancialInfo.Add(new ProviderFinancialViewModel(x));
-                        }                        
+                        }
                         return true;
                     });
                 }
@@ -3189,7 +3190,7 @@ namespace MarketPlace.Web.Controllers
                  Where(x => SessionModel.CurrentCompany.CompanyType.ItemId == (int)enumCompanyType.BuyerProvider ?
                              (x.RelatedCompany.CompanyPublicId == ProviderPublicId) :
                              x.RelatedCompany.CompanyPublicId == ProviderPublicId).FirstOrDefault();
-           
+
 
             return View(oModel);
         }
@@ -5260,196 +5261,102 @@ namespace MarketPlace.Web.Controllers
             #endregion
 
             #region DataSet Filling
-
-
-            // DataSet Evaluators table
-            DataTable data = new DataTable();
-            data.Columns.Add("SurveyEvaluatorDetail");
-            data.Columns.Add("SurveyStatusNameDetail");
-            data.Columns.Add("SurveyRatingDetail");
-            data.Columns.Add("SurveyProgressDetail");
-
+          
             // DataSet Area's Table
-            DataTable data2 = new DataTable();
-            data2.Columns.Add("SurveyAreaName");
-            data2.Columns.Add("SurveyAreaRating");
-            data2.Columns.Add("SurveyAreaWeight");
+            DataTable data = new DataTable();
+            data.Columns.Add("SurveyAreaName");
+            data.Columns.Add("SurveyAreaRating");
+            data.Columns.Add("SurveyAreaWeight");
 
             //DataSet SurveyDetails
-            DataTable data3 = new DataTable();
-            data3.Columns.Add("Area");
-            data3.Columns.Add("Question");
-            data3.Columns.Add("Answer");
-            data3.Columns.Add("QuestionRating");
-            data3.Columns.Add("QuestionWeight");
-            data3.Columns.Add("QuestionDescription");
-            data3.Columns.Add("Evaluator");
-           
+            DataTable data2 = new DataTable();
+            data2.Columns.Add("Area");
+            data2.Columns.Add("Question");
+            data2.Columns.Add("Answer");
+            data2.Columns.Add("QuestionRating");
+            data2.Columns.Add("QuestionWeight");
+            data2.Columns.Add("QuestionDescription");
+            data2.Columns.Add("Evaluator");
+
             List<Models.Survey.SurveyViewModel> EvaluatorDetailList = new List<Models.Survey.SurveyViewModel>();
 
-        
-            //DataSet1
+            List<SurveyViewModel> oAllSurvey = new List<SurveyViewModel>();
+
+            if (oModel.RelatedSurvey.SurveyEvaluatorList != null && oModel.RelatedSurvey.SurveyEvaluatorList.Count > 0)
+            {
+                oModel.RelatedSurvey.SurveyEvaluatorList.Distinct().All(x =>
+                {
+                    //Survey Childs
+                    oAllSurvey.Add(new SurveyViewModel(ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetByUser(oModel.RelatedSurvey.SurveyPublicId, x)));
+                    return true;
+                });
+            }
+            
             foreach (var Evaluator in oModel.RelatedSurvey.SurveyEvaluatorList.Distinct())
             {
                 Models.Survey.SurveyViewModel SurveyEvaluatorDetail = new Models.Survey.SurveyViewModel
                         (ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetByUser(oModel.RelatedSurvey.SurveyPublicId, Evaluator));
-                
-                
+
                 EvaluatorDetailList.Add(SurveyEvaluatorDetail);
 
-                DataRow row;
-                row = data.NewRow();
-                row["SurveyEvaluatorDetail"] = SurveyEvaluatorDetail.SurveyEvaluator;
-                row["SurveyStatusNameDetail"] = SurveyEvaluatorDetail.SurveyStatusName;
-                row["SurveyRatingDetail"] = SurveyEvaluatorDetail.SurveyRating;
-                row["SurveyProgressDetail"] = SurveyEvaluatorDetail.SurveyProgress.ToString() + "%";
-                var orden = 0;
-                foreach (var sv in EvaluatorDetailList)
+                //DataSet1
+                foreach (var EvaluationArea in
+                            oModel.RelatedSurvey.GetSurveyConfigItem(MarketPlace.Models.General.enumSurveyConfigItemType.EvaluationArea, null))
                 {
-                     
-                    DataRow row3 = data3.NewRow();
-                    foreach (var svci in sv.RelatedSurvey.RelatedSurveyConfig.RelatedSurveyConfigItem)
+                    int RatingforArea = 0;
+
+                    foreach (Models.Survey.SurveyViewModel SurveyDetailInfo in EvaluatorDetailList)
                     {
-                       
-                        foreach (var item in svci.ItemInfo)
+                        var EvaluationAreaInf = SurveyDetailInfo.GetSurveyItem(EvaluationArea.SurveyConfigItemId);
+
+                        if (EvaluationAreaInf != null)
                         {
-                            
-                            
-                            if (svci.ItemType.ItemId==1202001 )
-                            {
-                                
-                                row3["Area"] = svci.ItemName;
-                            }
-                            if (svci.ItemType.ItemId == 1202002 && item.ItemInfoType.ItemId==1203001&& int.Parse(item.Value)==orden )
-                            {
-                                
-                                row3["Question"] = svci.ItemName;
-                            }
-                            if (svci.ItemType.ItemId == 1202003 && item.ItemInfoType.ItemId == 1203001 && int.Parse(item.Value) == orden)
-                            {
-                               
-                                row3["Answer"] = svci.ItemName;
-                            }
-                                                        
-                                row3["Evaluator"] = SurveyEvaluatorDetail.SurveyEvaluator;                            
-                            
-
-                            if (svci.ParentItem != null)
-                            {
-                                row3["QuestionRating"] = sv.RelatedSurvey.SurveyInfo.Where(x=>x.ItemInfoType.ItemId==1205001).Select(x=>x.Value);
-                            }
-
-                            orden++;
+                            RatingforArea = RatingforArea + (int)EvaluationAreaInf.Ratting;
                         }
-                        
                     }
-                    data3.Rows.Add(row3);
+
+                    DataRow row;
+
+                    row = data.NewRow();
+                    row["SurveyAreaName"] = EvaluationArea.Name;
+                    row["SurveyAreaRating"] = RatingforArea;
+                    row["SurveyAreaWeight"] = EvaluationArea.Weight.ToString() + "%";
+                    data.Rows.Add(row);
                 }
-                
-                data.Rows.Add(row);
             }
 
-            
             //DataSet2
-            foreach (var EvaluationArea in
-                        oModel.RelatedSurvey.GetSurveyConfigItem(MarketPlace.Models.General.enumSurveyConfigItemType.EvaluationArea, null))
+            #region Dataset2 Filling
+
+            DataRow row2;
+
+            var oSurveyDetail = BuildDetailGeneralReport(oModel);
+
+            oSurveyDetail.All(rp =>
             {
-                int RatingforArea = 0;
-                
-                foreach (Models.Survey.SurveyViewModel SurveyDetailInfo in EvaluatorDetailList)
+                rp.All(subrep =>
                 {
-                    var EvaluationAreaInf = SurveyDetailInfo.GetSurveyItem(EvaluationArea.SurveyConfigItemId);
+                    row2 = data2.NewRow();
+                    row2["Area"] = subrep.Item1.ItemName;
+                    row2["Evaluator"] = subrep.Item2;
+                    row2["Question"] = subrep.Item3.ItemName;
+                    row2["Answer"] = subrep.Item4.ItemName;
+                    row2["QuestionWeight"] = subrep.Item3.ItemInfo.Where(x=>x.ItemInfoType.ItemId==1203002).Select(x=>x.Value).FirstOrDefault();
+                    row2["QuestionRating"] = subrep.Item4.ItemInfo.Where(x=>x.ItemInfoType.ItemId==1205001).Select(x=>x.Value).FirstOrDefault();
+                    row2["QuestionDescription"] = subrep.Item4.ItemInfo.Where(x=>x.ItemInfoType.ItemId==1204010).Select(x=>x.Value).FirstOrDefault();
+                    data2.Rows.Add(row2);
+                    return true;
+                });
+                return true;
+            });
 
-                    if (EvaluationAreaInf != null)
-                    {
-                        RatingforArea = RatingforArea + (int)EvaluationAreaInf.Ratting;
-                    }
-                }
-
-                DataRow row;
-
-                row = data2.NewRow();
-                row["SurveyAreaName"] = EvaluationArea.Name;
-                row["SurveyAreaRating"] = RatingforArea;
-                row["SurveyAreaWeight"] = EvaluationArea.Weight.ToString() + "%";
-                data2.Rows.Add(row);
-            }
-
-
-
-
-
-            //DataSet3
-            #region Dataset3 Filling
-
-            
-            //foreach (var EvaluationArea in
-            //            oModel.RelatedSurvey.GetSurveyConfigItem(MarketPlace.Models.General.enumSurveyConfigItemType.EvaluationArea, null))
-            //{
-            //    var oSurvey = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetById(oModel.RelatedSurvey.SurveyPublicId);
-                
-
-               
-
-                
-            //    var lstQuestion = oModel.RelatedSurvey.GetSurveyConfigItem
-            //        (MarketPlace.Models.General.enumSurveyConfigItemType.Question, EvaluationArea.SurveyConfigItemId);
-
-            
-            //    foreach (var Question in lstQuestion)
-            //    {
-                    
-            //        if (Question.QuestionType != Convert.ToString(MarketPlace.Models.General.enumSurveyQuestionType.File))
-            //        {
-            //            row3 = data3.NewRow();
-            //            row3["Area"] = EvaluationArea.Name;
-            //            row3["Question"] = Question.Order + " " + Question.Name;
-                        
-            //            var QuestionInfo = oModel.RelatedSurvey.GetSurveyItem(Question.SurveyConfigItemId);
-            //            var lstAnswer = oModel.RelatedSurvey.GetSurveyConfigItem
-            //                (MarketPlace.Models.General.enumSurveyConfigItemType.Answer, Question.SurveyConfigItemId);
-                        
-            //            foreach (var Answer in lstAnswer)
-            //            {
-            //                if (Question != null)
-            //                {
-            //                    row3["Answer"] =oSurvey.RelatedSurveyConfig.RelatedSurveyConfigItem.Where(x=>x.ItemType.ItemId==1202003 && x.ItemId==int.Parse(Question.RelatedSurveyConfigItem.ItemInfo.Where(y=>y.ItemInfoType.ItemId==1203001).Select(y=>y.Value).FirstOrDefault())).Select(x=>x.ItemName);                                
-            //                }
-            //            }
-                        
-            //            if (string.IsNullOrEmpty(row3["Answer"].ToString()))
-            //            {
-            //                row3["Answer"] = "Sin Responder";
-            //                row3["QuestionRating"] = "NA";
-            //            }
-            //            else
-            //            {
-            //                row3["QuestionRating"] = oSurvey.SurveyInfo.Where(x=>x.ItemInfoType.ItemId==1204006).Select(x=>x.Value);
-            //            }
-
-            //            row3["QuestionWeight"] = Question.Weight;
-
-            //            if (QuestionInfo != null && QuestionInfo.DescriptionText != null)
-            //            {
-            //                row3["QuestionDescription"] = QuestionInfo.DescriptionText;
-            //            }
-            //            else
-            //            {
-            //                row3["QuestionDescription"] = "";
-            //            }
-            //            //row3["Evaluator"] = EvaluatorDetailList.Where(x=>x.).Select(x => x);
-            //            data3.Rows.Add(row3);
-            //        }
-            //    }
-            //}
             #endregion
 
             #endregion
 
             Tuple<byte[], string, string> SurveyGeneralReport = ProveedoresOnLine.Reports.Controller.ReportModule.SV_GeneralReport(
                                                             data,
-                                                            data2,
-                                                            data3,
+                                                            data2,                                                            
                                                             parameters,
                                                             enumCategoryInfoType.PDF.ToString(),
                                                             Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim());
@@ -6040,6 +5947,64 @@ namespace MarketPlace.Web.Controllers
 
             }
             return oTotalScore;
+        }
+
+        public List<List<Tuple<GenericItemModel, string, GenericItemModel, GenericItemModel>>> BuildDetailGeneralReport(ProviderViewModel oModel)
+        {
+            List<List<Tuple<GenericItemModel, string, GenericItemModel, GenericItemModel>>> oObjToReturn = new List<List<Tuple<GenericItemModel, string, GenericItemModel, GenericItemModel>>>();
+            oModel.RelatedSurvey.SurveyEvaluatorList.Distinct().All(
+                ev =>
+                {
+                    Models.Survey.SurveyViewModel oReturn = new Models.Survey.SurveyViewModel
+                    (ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetByUser(oModel.RelatedSurvey.SurveyPublicId, ev));
+                    List<GenericItemModel> Areas = new List<GenericItemModel>();
+                    List<GenericItemModel> Questions = new List<GenericItemModel>();
+                    List<GenericItemModel> Answers = new List<GenericItemModel>();
+                    Areas = oReturn.RelatedSurvey.RelatedSurveyConfig.RelatedSurveyConfigItem.Where(x => x.ItemType.ItemId == 1202001 && x.ParentItem == null).Select(x => x).ToList();
+                    Areas.All(ar =>
+                    {
+                        Questions.AddRange(oReturn.RelatedSurvey.RelatedSurveyConfig.RelatedSurveyConfigItem.Where(x => x.ItemType.ItemId == 1202002 && x.ParentItem != null && x.ParentItem.ItemId == ar.ItemId).Select(x => x).ToList());
+                        return true;
+                    });
+                    Questions.All(q =>
+                    {
+                        Answers.Add(oReturn.RelatedSurvey.RelatedSurveyItem.Where(x => x != null && x.RelatedSurveyConfigItem != null && x.RelatedSurveyConfigItem.ItemId == q.ItemId).Select(x => new GenericItemModel()
+                        {
+                            ItemId = x.ItemId,
+                            ItemInfo = x.ItemInfo,
+                            CreateDate = x.CreateDate,
+                            ItemName = oReturn.RelatedSurvey.RelatedSurveyConfig.RelatedSurveyConfigItem.
+                                                                                Where(inf => inf.ItemId == int.Parse(x.ItemInfo.Where(subinf => subinf.ItemInfoType.ItemId == 1205003).
+                                                                                        Select(subinf => subinf.Value).FirstOrDefault())).Select(inf => inf.ItemName).FirstOrDefault(),
+                            ParentItem = new GenericItemModel()
+                            {
+                                ItemId = x.RelatedSurveyConfigItem.ItemId
+                            }
+                        }).FirstOrDefault());
+                        return true;
+                    });
+
+                    List<Tuple<GenericItemModel, string, GenericItemModel, GenericItemModel>> objtToBuildReport = new List<Tuple<GenericItemModel, string, GenericItemModel, GenericItemModel>>();
+
+                    if (Answers != null)
+                    {
+                        Answers.All(asw =>
+                        {
+                            if (asw != null)
+                            {
+                                GenericItemModel oQuestionsToAdd = Questions.Where(qs => qs.ItemId == asw.ParentItem.ItemId).Select(qs => qs).FirstOrDefault();
+                                GenericItemModel oAreasToAdd = Areas.Where(a => a.ItemId == oQuestionsToAdd.ParentItem.ItemId).Select(a => a).FirstOrDefault();
+
+                                objtToBuildReport.Add(new Tuple<GenericItemModel, string, GenericItemModel, GenericItemModel>
+                                    (oAreasToAdd, ev, oQuestionsToAdd, asw));
+                            }
+                            oObjToReturn.Add(objtToBuildReport);
+                            return true;
+                        });
+                    }
+                    return true;
+                });
+            return oObjToReturn;
         }
 
         #endregion Pivate Functions

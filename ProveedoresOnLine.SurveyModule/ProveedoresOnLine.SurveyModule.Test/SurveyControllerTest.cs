@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using ProveedoresOnLine.Company.Models.Util;
+using System.Linq;
 
 namespace ProveedoresOnLine.SurveyModule.Test
 {
@@ -38,9 +39,53 @@ namespace ProveedoresOnLine.SurveyModule.Test
         [TestMethod]
         public void GetSurveyByUser()
         {
-            ProveedoresOnLine.SurveyModule.Models.SurveyModel oReturn =
-                ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetByUser("9D766F92", "david.moncayo@publicar.com");
+            Models.SurveyModel oReturn = Controller.SurveyModule.SurveyGetByUser("13B48042", "spenuela@alpina.com.co");
+            List<GenericItemModel> Areas = new List<GenericItemModel>();
+            List<GenericItemModel> Questions = new List<GenericItemModel>();
+            List<GenericItemModel> Answers = new List<GenericItemModel>();
+            Areas = oReturn.RelatedSurveyConfig.RelatedSurveyConfigItem.Where(x => x.ItemType.ItemId == 1202001 && x.ParentItem == null).Select(x => x).ToList();
+            Areas.All(ar =>
+            {
+                Questions.AddRange(oReturn.RelatedSurveyConfig.RelatedSurveyConfigItem.Where(x => x.ItemType.ItemId == 1202002 && x.ParentItem != null && x.ParentItem.ItemId == ar.ItemId).Select(x => x).ToList());
+                return true;
+            });
+            Questions.All(q =>
+            {
+                Answers.Add(oReturn.RelatedSurveyItem.Where(x => x != null && x.RelatedSurveyConfigItem != null && x.RelatedSurveyConfigItem.ItemId == q.ItemId).Select(x => new GenericItemModel()
+                                                        {
+                                                            ItemId = x.ItemId,
+                                                            ItemInfo = x.ItemInfo,
+                                                            CreateDate = x.CreateDate,
+                                                            ItemName = oReturn.RelatedSurveyConfig.RelatedSurveyConfigItem.
+                                                                        Where(inf => inf.ItemId == int.Parse(x.ItemInfo.Where(subinf => subinf.ItemInfoType.ItemId == 1205003).
+                                                                                Select(subinf => subinf.Value).FirstOrDefault())).Select(inf => inf.ItemName).FirstOrDefault(),
+                                                            ParentItem = new GenericItemModel()
+                                                                {
+                                                                    ItemId = x.RelatedSurveyConfigItem.ItemId
+                                                                }
+                                                        }).FirstOrDefault());
+                return true;
+            });
 
+            List<Tuple<GenericItemModel, string, GenericItemModel, GenericItemModel>> objtToBuildReport = new List<Tuple<GenericItemModel, string, GenericItemModel, GenericItemModel>>();
+
+            if (Answers != null)
+            {
+                Answers.All(asw =>
+                {
+                    if (asw != null)
+                    {
+                        GenericItemModel oQuestionsToAdd = Questions.Where(qs => qs.ItemId == asw.ParentItem.ItemId).Select(qs => qs).FirstOrDefault();
+                        GenericItemModel oAreasToAdd = Areas.Where(a => a.ItemId == oQuestionsToAdd.ParentItem.ItemId).Select(a => a).FirstOrDefault();
+
+                        objtToBuildReport.Add(new Tuple<GenericItemModel, string, GenericItemModel, GenericItemModel>
+                            (oAreasToAdd, "spenuela@alpina.com.co", oQuestionsToAdd, asw));
+                    }
+                    
+                    return true;
+                });               
+            }
+            
             Assert.IsTrue(oReturn != null);
         }
 
@@ -59,7 +104,11 @@ namespace ProveedoresOnLine.SurveyModule.Test
 
             Assert.AreEqual(true, oReturn != null && oReturn.Count >0);
         }
-
+        [TestMethod]
+        public void DetailedSurveyReport()
+        {
+            
+        }
         #region Util
 
         [TestMethod]
