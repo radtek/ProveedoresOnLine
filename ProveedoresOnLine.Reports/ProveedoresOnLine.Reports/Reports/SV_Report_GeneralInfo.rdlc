@@ -22,8 +22,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>0.28269cm</Top>
-        <Left>0.53412cm</Left>
+        <Top>0.21214cm</Top>
+        <Left>0.2548cm</Left>
         <Height>0.57354cm</Height>
         <Width>2.59218cm</Width>
         <Style>
@@ -57,8 +57,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>1.06437cm</Top>
-        <Left>0.53412cm</Left>
+        <Top>0.99382cm</Top>
+        <Left>0.2548cm</Left>
         <Height>0.57354cm</Height>
         <Width>2.59218cm</Width>
         <ZIndex>1</ZIndex>
@@ -92,8 +92,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>0.28269cm</Top>
-        <Left>2.60418cm</Left>
+        <Top>0.21214cm</Top>
+        <Left>2.32486cm</Left>
         <Height>0.57354cm</Height>
         <Width>12.928cm</Width>
         <ZIndex>2</ZIndex>
@@ -127,8 +127,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>1.05379cm</Top>
-        <Left>2.60418cm</Left>
+        <Top>0.98324cm</Top>
+        <Left>2.32486cm</Left>
         <Height>0.57354cm</Height>
         <Width>12.92801cm</Width>
         <ZIndex>3</ZIndex>
@@ -163,8 +163,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>1.82196cm</Top>
-        <Left>0.53412cm</Left>
+        <Top>1.75141cm</Top>
+        <Left>0.2548cm</Left>
         <Height>0.57354cm</Height>
         <Width>2.59218cm</Width>
         <ZIndex>4</ZIndex>
@@ -198,8 +198,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>1.82196cm</Top>
-        <Left>2.60418cm</Left>
+        <Top>1.75141cm</Top>
+        <Left>2.32486cm</Left>
         <Height>0.57354cm</Height>
         <Width>12.92801cm</Width>
         <ZIndex>5</ZIndex>
@@ -234,8 +234,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>3.25451cm</Top>
-        <Left>1.50351cm</Left>
+        <Top>3.18396cm</Top>
+        <Left>2.32486cm</Left>
         <Height>0.57354cm</Height>
         <Width>4.79241cm</Width>
         <ZIndex>6</ZIndex>
@@ -271,8 +271,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>3.25451cm</Top>
-        <Left>6.47231cm</Left>
+        <Top>3.18396cm</Top>
+        <Left>7.29366cm</Left>
         <Height>0.57354cm</Height>
         <Width>4.21033cm</Width>
         <ZIndex>7</ZIndex>
@@ -308,8 +308,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>3.25451cm</Top>
-        <Left>10.85903cm</Left>
+        <Top>3.18396cm</Top>
+        <Left>11.68038cm</Left>
         <Height>0.57354cm</Height>
         <Width>4.21033cm</Width>
         <ZIndex>8</ZIndex>
@@ -345,8 +345,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>4.64854cm</Top>
-        <Left>1.50351cm</Left>
+        <Top>4.57799cm</Top>
+        <Left>2.32486cm</Left>
         <Height>0.57354cm</Height>
         <Width>4.79241cm</Width>
         <ZIndex>9</ZIndex>
@@ -382,8 +382,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>4.64854cm</Top>
-        <Left>6.47231cm</Left>
+        <Top>4.57799cm</Top>
+        <Left>7.29366cm</Left>
         <Height>0.57354cm</Height>
         <Width>8.59705cm</Width>
         <ZIndex>10</ZIndex>
@@ -419,8 +419,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>2.66333cm</Top>
-        <Left>1.50352cm</Left>
+        <Top>2.59278cm</Top>
+        <Left>2.32487cm</Left>
         <Height>0.57354cm</Height>
         <Width>4.7924cm</Width>
         <ZIndex>11</ZIndex>
@@ -460,8 +460,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>2.66333cm</Top>
-        <Left>6.47231cm</Left>
+        <Top>2.59278cm</Top>
+        <Left>7.29366cm</Left>
         <Height>0.57354cm</Height>
         <Width>4.21033cm</Width>
         <ZIndex>12</ZIndex>
@@ -501,8 +501,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>2.66333cm</Top>
-        <Left>10.85903cm</Left>
+        <Top>2.59278cm</Top>
+        <Left>11.68038cm</Left>
         <Height>0.57354cm</Height>
         <Width>4.21033cm</Width>
         <ZIndex>13</ZIndex>
@@ -542,8 +542,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>4.06794cm</Top>
-        <Left>1.50351cm</Left>
+        <Top>3.99739cm</Top>
+        <Left>2.32486cm</Left>
         <Height>0.57354cm</Height>
         <Width>4.79241cm</Width>
         <ZIndex>14</ZIndex>
@@ -583,8 +583,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox6</rd:DefaultName>
-        <Top>4.075cm</Top>
-        <Left>6.47231cm</Left>
+        <Top>4.00445cm</Top>
+        <Left>7.29366cm</Left>
         <Height>0.57354cm</Height>
         <Width>8.59705cm</Width>
         <ZIndex>15</ZIndex>
@@ -623,9 +623,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox19</rd:DefaultName>
         <Top>5.29264cm</Top>
-        <Left>0.1274cm</Left>
+        <Left>0.2548cm</Left>
         <Height>0.78521cm</Height>
-        <Width>16.2201cm</Width>
+        <Width>16.20043cm</Width>
         <ZIndex>16</ZIndex>
         <Style>
           <Border>
@@ -647,13 +647,13 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>6.82153cm</Width>
+              <Width>6.85028cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.79459cm</Width>
+              <Width>1.91945cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.06986cm</Width>
+              <Width>2.20014cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -891,10 +891,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>DS_SurveyGeneralInfoAreas</DataSetName>
-        <Top>6.21896cm</Top>
-        <Left>0.53412cm</Left>
+        <Top>6.18368cm</Top>
+        <Left>3.02981cm</Left>
         <Height>1.2cm</Height>
-        <Width>15.68598cm</Width>
+        <Width>10.96987cm</Width>
         <ZIndex>17</ZIndex>
         <Style>
           <Border>
@@ -921,9 +921,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox19</rd:DefaultName>
         <Top>7.56007cm</Top>
-        <Left>0.1274cm</Left>
+        <Left>0.2548cm</Left>
         <Height>0.78521cm</Height>
-        <Width>16.2201cm</Width>
+        <Width>16.20043cm</Width>
         <ZIndex>18</ZIndex>
         <Style>
           <Border>
@@ -945,19 +945,19 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>3.10707cm</Width>
+              <Width>1.86115cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.10707cm</Width>
+              <Width>2.39032cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.10707cm</Width>
+              <Width>4.77158cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.10707cm</Width>
+              <Width>3.50157cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.10707cm</Width>
+              <Width>2.68136cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -976,6 +976,7 @@
                               <Value>Area</Value>
                               <Style>
                                 <FontFamily>Segoe UI Light</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1010,6 +1011,7 @@
                               <Value>Evaluador</Value>
                               <Style>
                                 <FontFamily>Segoe UI Light</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1044,6 +1046,7 @@
                               <Value>Pregunta</Value>
                               <Style>
                                 <FontFamily>Segoe UI Light</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1078,6 +1081,7 @@
                               <Value>Respuesta</Value>
                               <Style>
                                 <FontFamily>Segoe UI Light</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1112,6 +1116,7 @@
                               <Value>Calificacion</Value>
                               <Style>
                                 <FontFamily>Segoe UI Light</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1151,6 +1156,7 @@
                               <Value>=Fields!Area.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI Light</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1185,6 +1191,7 @@
                               <Value>=Fields!Evaluator.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI Light</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1219,6 +1226,7 @@
                               <Value>=Fields!Question.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI Light</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1253,6 +1261,7 @@
                               <Value>=Fields!Answer.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI Light</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1287,6 +1296,7 @@
                               <Value>=Fields!SurveyRating.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI Light</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1336,7 +1346,7 @@
         <Top>8.40898cm</Top>
         <Left>0.68474cm</Left>
         <Height>1.2cm</Height>
-        <Width>15.53535cm</Width>
+        <Width>15.20597cm</Width>
         <ZIndex>19</ZIndex>
         <Style>
           <Border>
@@ -1348,7 +1358,7 @@
     <Height>4.11448in</Height>
     <Style />
   </Body>
-  <Width>7.42001in</Width>
+  <Width>6.58261in</Width>
   <Page>
     <PageHeader>
       <Height>2.17118cm</Height>
@@ -1380,7 +1390,7 @@
               <rd:DefaultName>sv_survey_tittle</rd:DefaultName>
               <Top>0.57641cm</Top>
               <Height>0.865cm</Height>
-              <Width>12.66203cm</Width>
+              <Width>12.81061cm</Width>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1394,9 +1404,9 @@
             </Textbox>
           </ReportItems>
           <KeepTogether>true</KeepTogether>
-          <Left>3.94448cm</Left>
+          <Left>3.9092cm</Left>
           <Height>2.01167cm</Height>
-          <Width>12.66203cm</Width>
+          <Width>12.81062cm</Width>
           <Style>
             <Border>
               <Style>None</Style>
@@ -1453,7 +1463,7 @@
           <Top>0.24504cm</Top>
           <Left>0.2548cm</Left>
           <Height>0.97042cm</Height>
-          <Width>16.22431cm</Width>
+          <Width>16.46502cm</Width>
           <Style>
             <Border>
               <Style>None</Style>
