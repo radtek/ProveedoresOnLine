@@ -5332,7 +5332,7 @@ namespace MarketPlace.Web.Controllers
 
             var oSurveyDetail = BuildDetailGeneralReport(oModel);
 
-            oSurveyDetail.All(rp =>
+            oSurveyDetail.OrderByDescending(x => x.OrderByDescending(y => y.Item1.ItemName)).All(rp =>
             {
                 rp.All(subrep =>
                 {
