@@ -622,10 +622,9 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox19</rd:DefaultName>
-        <Top>4.88369cm</Top>
-        <Left>0.2548cm</Left>
+        <Top>4.91897cm</Top>
         <Height>0.78521cm</Height>
-        <Width>26.01647cm</Width>
+        <Width>26.7cm</Width>
         <ZIndex>16</ZIndex>
         <Style>
           <Border>
@@ -892,9 +891,9 @@
         </TablixRowHierarchy>
         <DataSetName>DS_SurveyGeneralInfoAreas</DataSetName>
         <Top>5.77474cm</Top>
-        <Left>7.29587cm</Left>
+        <Left>7.02309cm</Left>
         <Height>1.2cm</Height>
-        <Width>12.35729cm</Width>
+        <Width>12.35728cm</Width>
         <ZIndex>17</ZIndex>
         <Style>
           <Border>
@@ -921,9 +920,8 @@
         </Paragraphs>
         <rd:DefaultName>Textbox19</rd:DefaultName>
         <Top>7.15113cm</Top>
-        <Left>0.2548cm</Left>
         <Height>0.78521cm</Height>
-        <Width>26.01647cm</Width>
+        <Width>26.7cm</Width>
         <ZIndex>18</ZIndex>
         <Style>
           <Border>
@@ -945,25 +943,28 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>2.98568cm</Width>
+              <Width>3.05859cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.10709cm</Width>
+              <Width>3.18cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>5.44097cm</Width>
+              <Width>5.51388cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>6.51438cm</Width>
+              <Width>6.58729cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.7616cm</Width>
+              <Width>1.83451cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.56011cm</Width>
+              <Width>1.63302cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.71678cm</Width>
+              <Width>1.00156cm</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>2.94302cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1147,14 +1148,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox2">
+                    <Textbox Name="Textbox4">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Peso</Value>
+                              <Value>Peso %</Value>
                               <Style>
                                 <FontFamily>Segoe UI Light</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1166,7 +1167,42 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox2</rd:DefaultName>
+                      <rd:DefaultName>Textbox4</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox25">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Pond</Value>
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox25</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1408,6 +1444,7 @@
                               <Style>
                                 <FontFamily>Segoe UI Light</FontFamily>
                                 <FontSize>8pt</FontSize>
+                                <Format>0.00%</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1417,6 +1454,41 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>QuestionWeight</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="TotalAreaRating">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!TotalAreaRating.Value</Value>
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>TotalAreaRating</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1478,6 +1550,7 @@
             <TablixMember />
             <TablixMember />
             <TablixMember />
+            <TablixMember />
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
@@ -1492,9 +1565,9 @@
         </TablixRowHierarchy>
         <DataSetName>DS_EvaluatorDetailReport</DataSetName>
         <Top>8.07745cm</Top>
-        <Left>0.68474cm</Left>
+        <Left>0.51938cm</Left>
         <Height>1.2cm</Height>
-        <Width>25.08661cm</Width>
+        <Width>25.75189cm</Width>
         <ZIndex>19</ZIndex>
         <Style>
           <Border>
@@ -1730,6 +1803,10 @@
         </Field>
         <Field Name="SurveyRating">
           <DataField>SurveyRating</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TotalAreaRating">
+          <DataField>TotalAreaRating</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
