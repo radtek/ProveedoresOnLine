@@ -355,6 +355,7 @@ namespace ProveedoresOnLine.Reports.Controller
             localReport.EnableExternalImages = true;
             localReport.ReportPath = @"" + FilePath + "SV_Report_GeneralInfo.rdlc";
             localReport.SetParameters(ReportData);
+            
           
             ReportDataSource source2 = new ReportDataSource();
             source2.Name = "DS_SurveyGeneralInfoAreas";
@@ -372,12 +373,12 @@ namespace ProveedoresOnLine.Reports.Controller
             string deviceInfo =
                        "<DeviceInfo>" +
                        "  <OutputFormat>" + FormatType + "</OutputFormat>" +
-                       "  <PageWidth>8.5in</PageWidth>" +
-                       "  <PageHeight>11in</PageHeight>" +
-                       "  <MarginTop>0.5in</MarginTop>" +
-                       "  <MarginLeft>1in</MarginLeft>" +
-                       "  <MarginRight>1in</MarginRight>" +
-                       "  <MarginBottom>0.5in</MarginBottom>" +
+                       "  <PageWidth>29.7cm</PageWidth>" +
+                       "  <PageHeight>21cm</PageHeight>" +
+                       "  <MarginTop>1.5cm</MarginTop>" +
+                       "  <MarginLeft>1.5cm</MarginLeft>" +
+                       "  <MarginRight>1.5cm</MarginRight>" +
+                       "  <MarginBottom>1.5cm</MarginBottom>" +
                        "</DeviceInfo>";
             Warning[] warnings;
             string[] streams;
