@@ -1930,29 +1930,6 @@ namespace MarketPlace.Web.Controllers
             data.Columns.Add("SurveyAreaRating");
             data.Columns.Add("SurveyAreaWeight");
 
-            foreach (var EvaluationArea in
-                        oModel.RelatedSurvey.GetSurveyConfigItem(MarketPlace.Models.General.enumSurveyConfigItemType.EvaluationArea, null))
-            {
-                int RatingforArea = 0;
-
-                foreach (Models.Survey.SurveyViewModel SurveyDetailInfo in EvaluatorDetailList)
-                {
-                    var EvaluationAreaInf = SurveyDetailInfo.GetSurveyItem(EvaluationArea.SurveyConfigItemId);
-
-                    if (EvaluationAreaInf != null)
-                    {
-                        RatingforArea = RatingforArea + (int)EvaluationAreaInf.Ratting;
-                    }
-                }
-
-                DataRow row;
-                row = data.NewRow();
-                row["SurveyAreaName"] = EvaluationArea.Name;
-                row["SurveyAreaRating"] = RatingforArea;
-                row["SurveyAreaWeight"] = EvaluationArea.Weight.ToString() + "%";
-                data.Rows.Add(row);
-            }
-
             //DataSet SurveyDetails
             DataTable data2 = new DataTable();
             data2.Columns.Add("Area");
@@ -1962,8 +1939,39 @@ namespace MarketPlace.Web.Controllers
             data2.Columns.Add("QuestionWeight");
             data2.Columns.Add("QuestionDescription");
 
-            DataRow row2;
+            foreach (var Evaluator in oModel.RelatedSurvey.SurveyEvaluatorList.Distinct())
+            {
+                Models.Survey.SurveyViewModel SurveyEvaluatorDetail = new Models.Survey.SurveyViewModel
+                        (ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetByUser(oModel.RelatedSurvey.SurveyPublicId, Evaluator));
 
+                EvaluatorDetailList.Add(SurveyEvaluatorDetail);
+
+                //DataSet1
+                foreach (var EvaluationArea in
+                            oModel.RelatedSurvey.GetSurveyConfigItem(MarketPlace.Models.General.enumSurveyConfigItemType.EvaluationArea, null))
+                {
+                    int RatingforArea = 0;
+
+                    foreach (Models.Survey.SurveyViewModel SurveyDetailInfo in EvaluatorDetailList)
+                    {
+                        var EvaluationAreaInf = SurveyDetailInfo.GetSurveyItem(EvaluationArea.SurveyConfigItemId);
+
+                        if (EvaluationAreaInf != null)
+                        {
+                            RatingforArea = RatingforArea + (int)EvaluationAreaInf.Ratting;
+                        }
+                    }
+
+                    DataRow row;
+                    row = data.NewRow();
+                    row["SurveyAreaName"] = EvaluationArea.Name;
+                    row["SurveyAreaRating"] = RatingforArea;
+                    row["SurveyAreaWeight"] = EvaluationArea.Weight.ToString() + "%";
+                    data.Rows.Add(row);
+                }
+            }
+
+            DataRow row2;
 
             var oSurveyDetail = BuildDetailGeneralReport(oModel);
 
@@ -1981,7 +1989,7 @@ namespace MarketPlace.Web.Controllers
 
             #endregion
 
-            Tuple<byte[], string, string> SurveyGeneralReport = ProveedoresOnLine.Reports.Controller.ReportModule.SV_GeneralReport(                                                            
+            Tuple<byte[], string, string> SurveyGeneralReport = ProveedoresOnLine.Reports.Controller.ReportModule.SV_GeneralReport(
                                                             data,
                                                             data2,
                                                             parameters,
