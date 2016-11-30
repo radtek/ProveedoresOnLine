@@ -5332,7 +5332,7 @@ namespace MarketPlace.Web.Controllers
 
             var oSurveyDetail = BuildDetailGeneralReport(oModel);
 
-            oSurveyDetail.OrderByDescending(x => x.OrderByDescending(y => y.Item1.ItemName)).All(rp =>
+            oSurveyDetail.All(rp =>
             {
                 rp.All(subrep =>
                 {
@@ -5344,7 +5344,11 @@ namespace MarketPlace.Web.Controllers
                     row2["QuestionWeight"] = subrep.Item3.ItemInfo.Where(x=>x.ItemInfoType.ItemId==1203002).Select(x=>x.Value).FirstOrDefault();
                     row2["QuestionRating"] = subrep.Item4.ItemInfo.Where(x=>x.ItemInfoType.ItemId==1205001).Select(x=>x.Value).FirstOrDefault();
                     row2["QuestionDescription"] = subrep.Item4.ItemInfo.Where(x=>x.ItemInfoType.ItemId==1204010).Select(x=>x.Value).FirstOrDefault();
+                    if (string.IsNullOrEmpty(row2["QuestionDescription"].ToString()))
+                        row2["QuestionDescription"] = "Sin Comentarios";
+
                     data2.Rows.Add(row2);
+
                     return true;
                 });
                 return true;
