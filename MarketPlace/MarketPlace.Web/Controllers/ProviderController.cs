@@ -5261,7 +5261,7 @@ namespace MarketPlace.Web.Controllers
             #endregion
 
             #region DataSet Filling
-          
+
             // DataSet Area's Table
             DataTable data = new DataTable();
             data.Columns.Add("SurveyAreaName");
@@ -5277,52 +5277,41 @@ namespace MarketPlace.Web.Controllers
             data2.Columns.Add("QuestionWeight");
             data2.Columns.Add("QuestionDescription");
             data2.Columns.Add("Evaluator");
+            data2.Columns.Add("TotalAreaRating");
 
             List<Models.Survey.SurveyViewModel> EvaluatorDetailList = new List<Models.Survey.SurveyViewModel>();
 
-            List<SurveyViewModel> oAllSurvey = new List<SurveyViewModel>();
-
-            if (oModel.RelatedSurvey.SurveyEvaluatorList != null && oModel.RelatedSurvey.SurveyEvaluatorList.Count > 0)
-            {
-                oModel.RelatedSurvey.SurveyEvaluatorList.Distinct().All(x =>
-                {
-                    //Survey Childs
-                    oAllSurvey.Add(new SurveyViewModel(ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetByUser(oModel.RelatedSurvey.SurveyPublicId, x)));
-                    return true;
-                });
-            }
-            
             foreach (var Evaluator in oModel.RelatedSurvey.SurveyEvaluatorList.Distinct())
             {
                 Models.Survey.SurveyViewModel SurveyEvaluatorDetail = new Models.Survey.SurveyViewModel
                         (ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetByUser(oModel.RelatedSurvey.SurveyPublicId, Evaluator));
 
                 EvaluatorDetailList.Add(SurveyEvaluatorDetail);
+            }
 
-                //DataSet1
-                foreach (var EvaluationArea in
-                            oModel.RelatedSurvey.GetSurveyConfigItem(MarketPlace.Models.General.enumSurveyConfigItemType.EvaluationArea, null))
+            //DataSet1
+            foreach (var EvaluationArea in
+                        oModel.RelatedSurvey.GetSurveyConfigItem(MarketPlace.Models.General.enumSurveyConfigItemType.EvaluationArea, null).Distinct())
+            {
+                int RatingforArea = 0;
+
+                foreach (Models.Survey.SurveyViewModel SurveyDetailInfo in EvaluatorDetailList)
                 {
-                    int RatingforArea = 0;
+                    var EvaluationAreaInf = SurveyDetailInfo.GetSurveyItem(EvaluationArea.SurveyConfigItemId);
 
-                    foreach (Models.Survey.SurveyViewModel SurveyDetailInfo in EvaluatorDetailList)
+                    if (EvaluationAreaInf != null)
                     {
-                        var EvaluationAreaInf = SurveyDetailInfo.GetSurveyItem(EvaluationArea.SurveyConfigItemId);
-
-                        if (EvaluationAreaInf != null)
-                        {
-                            RatingforArea = RatingforArea + (int)EvaluationAreaInf.Ratting;
-                        }
+                        RatingforArea = RatingforArea + (int)EvaluationAreaInf.Ratting;
                     }
-
-                    DataRow row;
-
-                    row = data.NewRow();
-                    row["SurveyAreaName"] = EvaluationArea.Name;
-                    row["SurveyAreaRating"] = RatingforArea;
-                    row["SurveyAreaWeight"] = EvaluationArea.Weight.ToString() + "%";
-                    data.Rows.Add(row);
                 }
+
+                DataRow row;
+
+                row = data.NewRow();
+                row["SurveyAreaName"] = EvaluationArea.Name;
+                row["SurveyAreaRating"] = RatingforArea;
+                row["SurveyAreaWeight"] = EvaluationArea.Weight.ToString() + "%";
+                data.Rows.Add(row);
             }
 
             //DataSet2
@@ -5341,9 +5330,10 @@ namespace MarketPlace.Web.Controllers
                     row2["Evaluator"] = subrep.Item2;
                     row2["Question"] = subrep.Item3.ItemName;
                     row2["Answer"] = subrep.Item4.ItemName;
-                    row2["QuestionWeight"] = subrep.Item3.ItemInfo.Where(x=>x.ItemInfoType.ItemId==1203002).Select(x=>x.Value).FirstOrDefault();
-                    row2["QuestionRating"] = subrep.Item4.ItemInfo.Where(x=>x.ItemInfoType.ItemId==1205001).Select(x=>x.Value).FirstOrDefault();
-                    row2["QuestionDescription"] = subrep.Item4.ItemInfo.Where(x=>x.ItemInfoType.ItemId==1204010).Select(x=>x.Value).FirstOrDefault();
+                    row2["QuestionWeight"] = subrep.Item3.ItemInfo.Where(x => x.ItemInfoType.ItemId == 1203002).Select(x => x.Value).FirstOrDefault();
+                    row2["QuestionRating"] = subrep.Item4.ItemInfo.Where(x => x.ItemInfoType.ItemId == 1205001).Select(x => x.Value).FirstOrDefault();
+                    row2["TotalAreaRating"] = Convert.ToDouble(row2["QuestionWeight"].ToString()) * Convert.ToDouble(row2["QuestionRating"].ToString()) / 100;
+                    row2["QuestionDescription"] = subrep.Item4.ItemInfo.Where(x => x.ItemInfoType.ItemId == 1204010).Select(x => x.Value).FirstOrDefault();
                     if (string.IsNullOrEmpty(row2["QuestionDescription"].ToString()))
                         row2["QuestionDescription"] = "Sin Comentarios";
 
@@ -5360,7 +5350,7 @@ namespace MarketPlace.Web.Controllers
 
             Tuple<byte[], string, string> SurveyGeneralReport = ProveedoresOnLine.Reports.Controller.ReportModule.SV_GeneralReport(
                                                             data,
-                                                            data2,                                                            
+                                                            data2,
                                                             parameters,
                                                             enumCategoryInfoType.PDF.ToString(),
                                                             Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim());
