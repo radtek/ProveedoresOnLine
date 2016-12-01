@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProveedoresOnLine.SurveyModule.Interfaces;
+using ProveedoresOnLine.SurveyModule.Models;
 using ProveedoresOnLine.SurveyModule.Models.SurverReportModel;
 
 namespace ProveedoresOnLine.SurveyModule.DAL.Controller
 {
-    internal class SurveyDataController : ProveedoresOnLine.SurveyModule.Interfaces.ISurveyData
+    internal class SurveyDataController : ISurveyData
     {
         #region singleton instance
 
@@ -127,6 +128,11 @@ namespace ProveedoresOnLine.SurveyModule.DAL.Controller
             return DataFactory.SurveyGetByCustomerProvider(CustomerPublicId, ProviderPublicId);
         }
 
+        public List<SurveyModel> SurveyGetAllByCustomer(string CustomerPublicId)
+        {
+            return DataFactory.SurveyGetAllByCustomer(CustomerPublicId);
+        }
+
         #endregion
 
         #region SurveyBatch
@@ -169,6 +175,11 @@ namespace ProveedoresOnLine.SurveyModule.DAL.Controller
             return DataFactory.SurveyGeneralReport(CustomerPublicId);
         }
 
+        public List<SurveyModel> ReportAllSurvey(string SurveyPublicId, string CustomerPublicId)
+        {
+            return DataFactory.ReportAllSurvey(SurveyPublicId, CustomerPublicId);
+        }
+
         #endregion
 
         #region Index
@@ -187,7 +198,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.Controller
             return DataFactory.CatalogGetSurveyName();
         }
 
-       
+        
 
         #endregion
     }

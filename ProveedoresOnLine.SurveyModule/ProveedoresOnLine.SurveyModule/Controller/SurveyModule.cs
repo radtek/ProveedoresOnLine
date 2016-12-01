@@ -452,6 +452,11 @@ namespace ProveedoresOnLine.SurveyModule.Controller
             return DAL.Controller.SurveyDataController.Instance.SurveyGetByCustomerProvider(CustomerPublicId, ProviderPublicId);
         }
 
+        public static List<SurveyModel> SurveyGetAllByCustomer(string CustomerPublicId)
+        {
+            return DAL.Controller.SurveyDataController.Instance.SurveyGetAllByCustomer(CustomerPublicId);
+        }
+
         /// <summary>
         /// Recalculate survey values and upsert into a database
         /// </summary>
@@ -942,6 +947,11 @@ namespace ProveedoresOnLine.SurveyModule.Controller
         public static List<ProveedoresOnLine.SurveyModule.Models.SurverReportModel.SurveyReportModelTable1> SurveyGeneralReport(string CustomerPublicId)
         {
             return DAL.Controller.SurveyDataController.Instance.SurveyGeneralReport(CustomerPublicId);
+        }
+
+        public static List<SurveyModel> ReportAllSurvey(string SurveyPublicId, string CustomerPublicId)
+        {
+            return DAL.Controller.SurveyDataController.Instance.ReportAllSurvey(SurveyPublicId, CustomerPublicId);
         }
 
         #endregion
