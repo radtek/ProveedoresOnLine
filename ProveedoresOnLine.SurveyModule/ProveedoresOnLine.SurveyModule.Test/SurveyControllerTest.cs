@@ -105,9 +105,11 @@ namespace ProveedoresOnLine.SurveyModule.Test
             Assert.AreEqual(true, oReturn != null && oReturn.Count >0);
         }
         [TestMethod]
-        public void DetailedSurveyReport()
+        public void SurveyGetAllByCustomer()
         {
-            
+            List<SurveyModule.Models.SurveyModel> oReturn = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetAllByCustomer("1EA5A78A");
+
+            Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
         }
         #region Util
 

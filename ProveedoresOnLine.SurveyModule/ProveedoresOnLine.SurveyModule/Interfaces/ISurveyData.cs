@@ -48,6 +48,8 @@ namespace ProveedoresOnLine.SurveyModule.Interfaces
 
         List<SurveyModule.Models.SurveyModel> SurveyGetByCustomerProvider(string CustomerPublicId, string ProviderPublicId);
 
+         List<SurveyModule.Models.SurveyModel> SurveyGetAllByCustomer(string CustomerPublicId);
+
         #endregion
 
         #region SurveyBatch
