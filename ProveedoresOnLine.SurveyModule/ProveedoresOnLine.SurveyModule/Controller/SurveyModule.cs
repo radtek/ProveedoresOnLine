@@ -452,6 +452,11 @@ namespace ProveedoresOnLine.SurveyModule.Controller
             return DAL.Controller.SurveyDataController.Instance.SurveyGetByCustomerProvider(CustomerPublicId, ProviderPublicId);
         }
 
+        public static List<SurveyModel> SurveyGetAllByCustomer(string CustomerPublicId)
+        {
+            return DAL.Controller.SurveyDataController.Instance.SurveyGetAllByCustomer(CustomerPublicId);
+        }
+
         /// <summary>
         /// Recalculate survey values and upsert into a database
         /// </summary>

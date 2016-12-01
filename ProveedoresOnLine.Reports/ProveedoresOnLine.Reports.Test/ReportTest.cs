@@ -42,6 +42,9 @@ namespace ProveedoresOnLine.Reports.Test
         public void SV_Report_SurveyGetAllByCustomer()
         {
             List<SurveyModule.Models.SurveyModel> oModel = ProveedoresOnLine.Reports.Controller.ReportModule.SurveyGetAllByCustomer("DA5C572E");
+
+
+            Assert.IsTrue(oModel != null);
         }
 
         #endregion
