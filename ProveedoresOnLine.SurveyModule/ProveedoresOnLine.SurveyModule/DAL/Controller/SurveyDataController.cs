@@ -175,6 +175,11 @@ namespace ProveedoresOnLine.SurveyModule.DAL.Controller
             return DataFactory.SurveyGeneralReport(CustomerPublicId);
         }
 
+        public List<SurveyModel> ReportAllSurvey(string SurveyPublicId, string CustomerPublicId)
+        {
+            return DataFactory.ReportAllSurvey(SurveyPublicId, CustomerPublicId);
+        }
+
         #endregion
 
         #region Index
@@ -192,7 +197,9 @@ namespace ProveedoresOnLine.SurveyModule.DAL.Controller
         {
             return DataFactory.CatalogGetSurveyName();
         }
-       
+
+        
+
         #endregion
     }
 }

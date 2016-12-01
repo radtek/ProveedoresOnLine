@@ -11,7 +11,7 @@ using ProveedoresOnLine.CompanyProvider.Models.Provider;
 
 namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
 {
-    internal class Survey_MySqlDao : ProveedoresOnLine.SurveyModule.Interfaces.ISurveyData
+    internal class Survey_MySqlDao : Interfaces.ISurveyData
     {
         private ADO.Interfaces.IADO DataInstance;
 
@@ -232,7 +232,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
             return oReturn;
         }
 
-        public List<GenericItemModel> SurveyConfigItemGetBySurveyConfigId(int SurveyConfigId, int? ParentSurveyConfigItem, int? SurveyItemType,  bool Enable)
+        public List<GenericItemModel> SurveyConfigItemGetBySurveyConfigId(int SurveyConfigId, int? ParentSurveyConfigItem, int? SurveyItemType, bool Enable)
         {
             List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
 
@@ -370,8 +370,8 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
         {
             List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
 
-            lstParams.Add(DataInstance.CreateTypedParameter("vSurveyConfigId", SurveyConfigId));            
-            lstParams.Add(DataInstance.CreateTypedParameter("vSurveyItemType", SurveyItemType));           
+            lstParams.Add(DataInstance.CreateTypedParameter("vSurveyConfigId", SurveyConfigId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vSurveyItemType", SurveyItemType));
 
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
@@ -573,7 +573,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                          SurveyConfigId = sv.Field<int>("SurveyConfigId"),
                          SurveyName = sv.Field<string>("SurveyName"),
                          User = sv.Field<string>("User"),
-                         ParentSurveyPublicId = sv.Field<string>("ParentSurveyPublicId"), 
+                         ParentSurveyPublicId = sv.Field<string>("ParentSurveyPublicId"),
                      } into svg
                      select new SurveyModel()
                      {
@@ -585,7 +585,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                          RelatedSurveyConfig = new SurveyConfigModel()
                          {
                              ItemId = svg.Key.SurveyConfigId,
-                             ItemName = svg.Key.SurveyName,                             
+                             ItemName = svg.Key.SurveyName,
                              ItemInfo =
                                 (from scinf in response.DataTableResult.AsEnumerable()
                                  where !scinf.IsNull("SurveyConfigInfoId") &&
@@ -598,7 +598,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                      SurveyConfigInfoTypeName = scinf.Field<string>("SurveyConfigInfoTypeName"),
                                      SurveyConfigInfoValue = scinf.Field<string>("SurveyConfigInfoValue"),
                                      SurveyConfigInfoLargeValue = scinf.Field<string>("SurveyConfigInfoLargeValue"),
-                                     SurveyConfigInfoValueName = scinf.Field<string>("SurveyConfigInfoValueName"),                                     
+                                     SurveyConfigInfoValueName = scinf.Field<string>("SurveyConfigInfoValueName"),
 
                                  } into scinfg
                                  select new GenericItemInfoModel()
@@ -611,7 +611,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                      },
                                      Value = scinfg.Key.SurveyConfigInfoValue,
                                      LargeValue = scinfg.Key.SurveyConfigInfoLargeValue,
-                                     ValueName = scinfg.Key.SurveyConfigInfoValueName,                                     
+                                     ValueName = scinfg.Key.SurveyConfigInfoValueName,
                                  }).ToList(),
                          },
                          SurveyInfo =
@@ -651,7 +651,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
         {
             List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
 
-            lstParams.Add(DataInstance.CreateTypedParameter("vSurveyPublicId", SurveyPublicId));            
+            lstParams.Add(DataInstance.CreateTypedParameter("vSurveyPublicId", SurveyPublicId));
 
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
@@ -710,7 +710,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                          LargeValue = svinfg.Key.SurveyInfoLargeValue,
                                          ValueName = svinfg.Key.SurveyInfoValueName,
                                          LastModify = svinfg.Key.SurveyItemInfoLastModify,
-                                     }).ToList(), 
+                                     }).ToList(),
                     #endregion
 
                     #region RelatedSurveyItem
@@ -723,7 +723,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                          SurveyItemId = svit.Field<int>("SurveyItemId"),
                                          SurveyItemSurveyConfigItemId = svit.Field<int>("SurveyItemSurveyConfigItemId"),
                                          EvaluatorRolId = svit.Field<int>("EvaluatorRolId"),
-                                         SurveyItemLastModify = svit.Field<DateTime>("SurveyItemLastModify"),                                         
+                                         SurveyItemLastModify = svit.Field<DateTime>("SurveyItemLastModify"),
                                      } into svitg
                                      select new SurveyItemModel()
                                      {
@@ -758,7 +758,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                                  Value = svitinfg.Key.SurveyItemInfoValue,
                                                  LargeValue = svitinfg.Key.SurveyItemInfoLargeValue,
                                              }).ToList(),
-                                     }).ToList(), 
+                                     }).ToList(),
                     #endregion
 
                     RelatedSurveyConfig = new SurveyConfigModel()
@@ -809,7 +809,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                  SurveyConfigItemId = scit.Field<int>("SurveyConfigItemId"),
                                  SurveyConfigItemName = scit.Field<string>("SurveyConfigItemName"),
                                  SurveyConfigItemTypeId = scit.Field<int>("SurveyConfigItemTypeId"),
-                                 SurveyConfigItemTypeName = scit.Field<string>("SurveyConfigItemTypeName"),                        
+                                 SurveyConfigItemTypeName = scit.Field<string>("SurveyConfigItemTypeName"),
                                  ParentSurveyConfigItem = scit.Field<int?>("ParentSurveyConfigItem"),
                              } into scitg
                              select new GenericItemModel()
@@ -821,7 +821,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                      ItemId = scitg.Key.SurveyConfigItemTypeId,
                                      ItemName = scitg.Key.SurveyConfigItemTypeName,
                                  },
-                                 
+
                                  ParentItem = scitg.Key.ParentSurveyConfigItem == null ? null :
                                     new GenericItemModel()
                                     {
@@ -1912,9 +1912,9 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
 
             List<SurveyModule.Models.SurverReportModel.SurveyReportModelTable1> oReturn = null;
 
-            if (response.DataSetResult != null && 
-                response.DataSetResult.Tables.Count > 1 && 
-                response.DataSetResult.Tables[0] != null && 
+            if (response.DataSetResult != null &&
+                response.DataSetResult.Tables.Count > 1 &&
+                response.DataSetResult.Tables[0] != null &&
                 response.DataSetResult.Tables[0].Rows.Count > 0 &&
                 response.DataSetResult.Tables[1] != null &&
                 response.DataSetResult.Tables[1].Rows.Count > 0 &&
@@ -1948,7 +1948,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                SurveyIdTable1 = tb1g.Key.SurveyIdTable1,
                                ParentSurveyIdTable1 = tb1g.Key.ParentSurveyIdTable1,
                                SurveyConfigIdTable1 = tb1g.Key.SurveyConfigIdTable1,
-                              SurveyInfoType = tb1g.Key.SurveyInfoType,
+                               SurveyInfoType = tb1g.Key.SurveyInfoType,
                                CompanyName = tb1g.Key.CompanyName,
                                IdentificationNumber = tb1g.Key.IdentificationNumber,
                                Responsable = tb1g.Key.Responsable,
@@ -1965,12 +1965,12 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                          group tb2 by new
                                          {
                                              SurveyItemId = tb2.Field<Int64>("SurveyItemId"),
-                                             SurveyItemInfoId = tb2.Field<Int64>("SurveyItemInfoId"),                                            
+                                             SurveyItemInfoId = tb2.Field<Int64>("SurveyItemInfoId"),
                                              SurveyIdTable2 = tb2.Field<Int64>("SurveyIdTable2"),
-                                             ParentSurveyIdTable2 = tb2.Field<Int64>("ParentSurveyIdTable2"),                                             
+                                             ParentSurveyIdTable2 = tb2.Field<Int64>("ParentSurveyIdTable2"),
                                              SurveyItemInfoType = tb2.Field<Int64>("SurveyItemInfoType"),
                                              ModuleCalification = tb2.Field<string>("ModuleCalification"),
-                                             DescriptiveText =tb2.Field<string>("DescriptiveText"),
+                                             DescriptiveText = tb2.Field<string>("DescriptiveText"),
                                              EvaluatorRol = tb2.Field<string>("EvaluatorRol"),
                                              EvaluatorTable2 = tb2.Field<string>("EvaluatorTable2"),
                                              AreaComment = tb2.Field<string>("AreaComment"),
@@ -1979,7 +1979,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                          select new SurveyReportModelTable2
                                          {
                                              SurveyItemId = tb2g.Key.SurveyItemId,
-                                             SurveyItemInfoId = tb2g.Key.SurveyItemInfoId,                                             
+                                             SurveyItemInfoId = tb2g.Key.SurveyItemInfoId,
                                              SurveyIdTable2 = tb2g.Key.SurveyIdTable2,
                                              ParentSurveyIdTable2 = tb2g.Key.ParentSurveyIdTable2,
                                              SurveyItemInfoType = tb2g.Key.SurveyItemInfoType,
@@ -1987,38 +1987,276 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                              DescriptiveText = tb2g.Key.DescriptiveText,
                                              EvaluatorRol = tb2g.Key.EvaluatorRol,
                                              EvaluatorTable2 = tb2g.Key.EvaluatorTable2,
-                                             AreaComment = tb2g.Key.AreaComment,                                          
+                                             AreaComment = tb2g.Key.AreaComment,
                                          }).ToList(),
-                               Table3= (from tb3 in response.DataSetResult.Tables[2].AsEnumerable()
-                                        where !tb3.IsNull("SurveyConfigItemId") && tb1g.Key.SurveyConfigIdTable1 == tb3.Field<Int64>("SurveyConfigIdTable3")
-                                        group tb3 by new
-                                        {
-                                            SurveyConfigItemId = tb3.Field<Int64>("SurveyConfigItemId"),
-                                            SurveyConfigIdTable3 = tb3.Field<Int64>("SurveyConfigIdTable3"),
-                                            SurveyConfigItemType = tb3.Field<Int64>("SurveyConfigItemType"),
-                                            SurveyName = tb3.Field<string>("SurveyName"),
-                                            EvaluationArea = tb3.Field<string>("EvaluationArea"),
-                                            Question = tb3.Field<string>("Question"),
-                                            Answer = tb3.Field<string>("Answer"),
-                                            AreaRol = tb3.Field<string>("AreaRol")
-                                        } into tb3g
-                                        select new SurveyReportModelTable3
-                                        {
-                                            SurveyConfigItemId = tb3g.Key.SurveyConfigItemId,
-                                            SurveyConfigIdTable3 = tb3g.Key.SurveyConfigIdTable3,
-                                            SurveyConfigItemType = tb3g.Key.SurveyConfigItemType,
-                                            SurveyName = tb3g.Key.SurveyName,
-                                            EvaluationArea = tb3g.Key.EvaluationArea,
-                                            Question = tb3g.Key.Question,
-                                            Answer = tb3g.Key.Answer,
-                                            AreaRol = tb3g.Key.AreaRol
-                                        }).ToList()                                                                                         
-                           }).ToList();                                                      
+                               Table3 = (from tb3 in response.DataSetResult.Tables[2].AsEnumerable()
+                                         where !tb3.IsNull("SurveyConfigItemId") && tb1g.Key.SurveyConfigIdTable1 == tb3.Field<Int64>("SurveyConfigIdTable3")
+                                         group tb3 by new
+                                         {
+                                             SurveyConfigItemId = tb3.Field<Int64>("SurveyConfigItemId"),
+                                             SurveyConfigIdTable3 = tb3.Field<Int64>("SurveyConfigIdTable3"),
+                                             SurveyConfigItemType = tb3.Field<Int64>("SurveyConfigItemType"),
+                                             SurveyName = tb3.Field<string>("SurveyName"),
+                                             EvaluationArea = tb3.Field<string>("EvaluationArea"),
+                                             Question = tb3.Field<string>("Question"),
+                                             Answer = tb3.Field<string>("Answer"),
+                                             AreaRol = tb3.Field<string>("AreaRol")
+                                         } into tb3g
+                                         select new SurveyReportModelTable3
+                                         {
+                                             SurveyConfigItemId = tb3g.Key.SurveyConfigItemId,
+                                             SurveyConfigIdTable3 = tb3g.Key.SurveyConfigIdTable3,
+                                             SurveyConfigItemType = tb3g.Key.SurveyConfigItemType,
+                                             SurveyName = tb3g.Key.SurveyName,
+                                             EvaluationArea = tb3g.Key.EvaluationArea,
+                                             Question = tb3g.Key.Question,
+                                             Answer = tb3g.Key.Answer,
+                                             AreaRol = tb3g.Key.AreaRol
+                                         }).ToList()
+                           }).ToList();
             }
 
             return oReturn;
         }
 
+        public List<SurveyModel> ReportAllSurvey(string SurveyPublicId, string CustomerPublicId)
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
+
+            lstParams.Add(DataInstance.CreateTypedParameter("vSurveyPublicId", SurveyPublicId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vCustomerPublicId", CustomerPublicId));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataSet,
+                CommandText = "MP_CP_ReportAllSurveyByCustomer",
+                CommandType = CommandType.StoredProcedure,
+                Parameters = lstParams,
+            });
+
+            List<SurveyModel> oReturn = null;
+
+            if (response.DataSetResult != null &&
+                response.DataSetResult.Tables.Count > 1 &&
+                response.DataSetResult.Tables[0] != null &&
+                response.DataSetResult.Tables[0].Rows.Count > 0 &&
+                response.DataSetResult.Tables[1] != null &&
+                response.DataSetResult.Tables[1].Rows.Count > 0)
+            {
+                oReturn = (from sv in response.DataSetResult.Tables[0].AsEnumerable()
+                           where !sv.IsNull("SurveyPublicId") && sv.Field<Int32>("SurveyId") == response.DataSetResult.Tables[0].Rows[0].Field<Int32>("SurveyId")
+                           group sv by new
+                           {
+                               SurveyPublicId = response.DataSetResult.Tables[1].Rows[0].Field<string>("SurveyPublicId"),
+                               LastModify = response.DataSetResult.Tables[1].Rows[0].Field<DateTime>("SurveyLastModify"),
+                               CreateDate = response.DataSetResult.Tables[1].Rows[0].Field<DateTime>("SurveyCreateDate"),
+                               User = response.DataSetResult.Tables[1].Rows[0].Field<string>("User"),
+                               ParentSurveyPublicId = response.DataSetResult.Tables[1].Rows[0].Field<string>("ParentSurveyId"),
+
+                               #region RelatedProvider
+
+
+                               RelatedProvider = new CompanyProvider.Models.Provider.ProviderModel()
+                               {
+                                   RelatedCompany = new Company.Models.Company.CompanyModel()
+                                   {
+                                       CompanyPublicId = response.DataSetResult.Tables[1].Rows[0].Field<string>("ProviderPublicId"),
+                                   },
+                               },
+                               #endregion
+
+                               #region SurveyInfo
+                               SurveyInfo =
+                                    (from svinf in response.DataSetResult.Tables[1].AsEnumerable()
+                                     where !svinf.IsNull("SurveyInfoId") &&
+                                            svinf.Field<string>("SurveyPublicId") == response.DataSetResult.Tables[1].Rows[0].Field<string>("SurveyPublicId")
+                                     group svinf by new
+                                     {
+                                         SurveyInfoId = svinf.Field<int>("SurveyInfoId"),
+                                         SurveyInfoTypeId = svinf.Field<int>("SurveyInfoTypeId"),
+                                         SurveyInfoTypeName = svinf.Field<string>("SurveyInfoTypeName"),
+                                         SurveyInfoValue = svinf.Field<string>("SurveyInfoValue"),
+                                         SurveyInfoLargeValue = svinf.Field<string>("SurveyInfoLargeValue"),
+                                         SurveyInfoValueName = svinf.Field<string>("SurveyInfoValueName"),
+                                         SurveyItemLastModify = svinf.Field<DateTime>("SurveyItemLastModify"),
+                                     } into svinfg
+                                     select new GenericItemInfoModel()
+                                     {
+                                         ItemInfoId = svinfg.Key.SurveyInfoId,
+                                         ItemInfoType = new CatalogModel()
+                                         {
+                                             ItemId = svinfg.Key.SurveyInfoTypeId,
+                                             ItemName = svinfg.Key.SurveyInfoTypeName,
+                                         },
+                                         Value = svinfg.Key.SurveyInfoValue,
+                                         LargeValue = svinfg.Key.SurveyInfoLargeValue,
+                                         ValueName = svinfg.Key.SurveyInfoValueName,
+                                         LastModify = svinfg.Key.SurveyItemLastModify,
+                                     }).ToList(),
+                               #endregion
+
+                               #region RelatedSurveyItem
+                               RelatedSurveyItem =
+                                    (from svit in response.DataSetResult.Tables[1].AsEnumerable()
+                                     where !svit.IsNull("SurveyItemId") &&
+                                            svit.Field<string>("SurveyPublicId") == response.DataSetResult.Tables[1].Rows[0].Field<string>("SurveyPublicId")
+                                     group svit by new
+                                     {
+                                         SurveyItemId = svit.Field<int>("SurveyItemId"),
+                                         SurveyItemSurveyConfigItemId = svit.Field<int>("SurveyItemSurveyConfigItemId"),
+                                         EvaluatorRolId = svit.Field<int>("EvaluatorRolId"),
+                                         SurveyItemLastModify = svit.Field<DateTime>("SurveyItemLastModify"),
+                                     } into svitg
+                                     select new SurveyItemModel()
+                                     {
+                                         ItemId = svitg.Key.SurveyItemId,
+                                         RelatedSurveyConfigItem = new GenericItemModel()
+                                         {
+                                             ItemId = svitg.Key.SurveyItemSurveyConfigItemId,
+                                         },
+                                         EvaluatorRoleId = svitg.Key.EvaluatorRolId,
+                                         LastModify = svitg.Key.SurveyItemLastModify,
+
+                                         ItemInfo =
+                                            (from svitinf in response.DataSetResult.Tables[1].AsEnumerable()
+                                             where !svitinf.IsNull("SurveyItemInfoId") &&
+                                                    svitinf.Field<int>("SurveyItemId") == svitg.Key.SurveyItemId
+                                             group svitinf by new
+                                             {
+                                                 SurveyItemInfoId = svitinf.Field<int>("SurveyItemInfoId"),
+                                                 SurveyItemInfoTypeId = svitinf.Field<int>("SurveyItemInfoTypeId"),
+                                                 SurveyItemInfoTypeName = svitinf.Field<string>("SurveyItemInfoTypeName"),
+                                                 SurveyItemInfoValue = svitinf.Field<string>("SurveyItemInfoValue"),
+                                                 SurveyItemInfoLargeValue = svitinf.Field<string>("SurveyItemInfoLargeValue"),
+                                             } into svitinfg
+                                             select new GenericItemInfoModel()
+                                             {
+                                                 ItemInfoId = svitinfg.Key.SurveyItemInfoId,
+                                                 ItemInfoType = new CatalogModel()
+                                                 {
+                                                     ItemId = svitinfg.Key.SurveyItemInfoTypeId,
+                                                     ItemName = svitinfg.Key.SurveyItemInfoTypeName,
+                                                 },
+                                                 Value = svitinfg.Key.SurveyItemInfoValue,
+                                                 LargeValue = svitinfg.Key.SurveyItemInfoLargeValue,
+                                             }).ToList(),
+                                     }).ToList(),
+                               #endregion
+
+                               #region RelatedSurveyConfig
+
+
+                               RelatedSurveyConfig = new SurveyConfigModel()
+                               {
+                                   ItemId = response.DataSetResult.Tables[0].Rows[0].Field<int>("SurveyConfigId"),
+                                   ItemName = response.DataSetResult.Tables[0].Rows[0].Field<string>("SurveyName"),
+
+                                   RelatedCustomer = new CompanyCustomer.Models.Customer.CustomerModel()
+                                   {
+                                       RelatedCompany = new Company.Models.Company.CompanyModel()
+                                       {
+                                           CompanyPublicId = response.DataSetResult.Tables[0].Rows[0].Field<string>("CustomerPublicId"),
+                                       },
+                                   },
+
+                                   ItemInfo =
+                           (from scinf in response.DataSetResult.Tables[0].AsEnumerable()
+                            where !scinf.IsNull("SurveyConfigInfoId") &&
+                                   scinf.Field<int>("SurveyConfigId") == response.DataSetResult.Tables[0].Rows[0].Field<int>("SurveyConfigId")
+                            group scinf by new
+                            {
+                                SurveyConfigInfoId = scinf.Field<int>("SurveyConfigInfoId"),
+                                SurveyConfigInfoTypeId = scinf.Field<int>("SurveyConfigInfoTypeId"),
+                                SurveyConfigInfoTypeName = scinf.Field<string>("SurveyConfigInfoTypeName"),
+                                SurveyConfigInfoValue = scinf.Field<string>("SurveyConfigInfoValue"),
+                                SurveyConfigInfoLargeValue = scinf.Field<string>("SurveyConfigInfoLargeValue"),
+                                SurveyConfigInfoValueName = scinf.Field<string>("SurveyConfigInfoValueName"),
+                            } into scinfg
+                            select new GenericItemInfoModel()
+                            {
+                                ItemInfoId = scinfg.Key.SurveyConfigInfoId,
+                                ItemInfoType = new CatalogModel()
+                                {
+                                    ItemId = scinfg.Key.SurveyConfigInfoTypeId,
+                                    ItemName = scinfg.Key.SurveyConfigInfoTypeName,
+                                },
+                                Value = scinfg.Key.SurveyConfigInfoValue,
+                                LargeValue = scinfg.Key.SurveyConfigInfoLargeValue,
+                                ValueName = scinfg.Key.SurveyConfigInfoValueName,
+                            }).ToList(),
+
+                                   RelatedSurveyConfigItem =
+                            (from scit in response.DataSetResult.Tables[0].AsEnumerable()
+                             where !scit.IsNull("SurveyConfigItemId") &&
+                                    scit.Field<int>("SurveyConfigId") == response.DataSetResult.Tables[0].Rows[0].Field<int>("SurveyConfigId")
+                             group scit by new
+                             {
+                                 SurveyConfigItemId = scit.Field<int>("SurveyConfigItemId"),
+                                 SurveyConfigItemName = scit.Field<string>("SurveyConfigItemName"),
+                                 SurveyConfigItemTypeId = scit.Field<int>("SurveyConfigItemTypeId"),
+                                 SurveyConfigItemTypeName = scit.Field<string>("SurveyConfigItemTypeName"),
+                                 ParentSurveyConfigItem = scit.Field<int?>("ParentSurveyConfigItem"),
+                             } into scitg
+                             select new GenericItemModel()
+                             {
+                                 ItemId = scitg.Key.SurveyConfigItemId,
+                                 ItemName = scitg.Key.SurveyConfigItemName,
+                                 ItemType = new CatalogModel()
+                                 {
+                                     ItemId = scitg.Key.SurveyConfigItemTypeId,
+                                     ItemName = scitg.Key.SurveyConfigItemTypeName,
+                                 },
+                                 ParentItem = scitg.Key.ParentSurveyConfigItem == null ? null :
+                                    new GenericItemModel()
+                                    {
+                                        ItemId = scitg.Key.ParentSurveyConfigItem.Value,
+                                    },
+
+                                 ItemInfo =
+                                     (from scitinf in response.DataSetResult.Tables[0].AsEnumerable()
+                                      where !scitinf.IsNull("SurveyConfigItemInfoId") &&
+                                             scitinf.Field<int>("SurveyConfigItemId") == scitg.Key.SurveyConfigItemId
+                                      group scitinf by new
+                                      {
+                                          SurveyConfigItemInfoId = scitinf.Field<int>("SurveyConfigItemInfoId"),
+                                          SurveyConfigItemInfoTypeId = scitinf.Field<int>("SurveyConfigItemInfoTypeId"),
+                                          SurveyConfigItemInfoTypeName = scitinf.Field<string>("SurveyConfigItemInfoTypeName"),
+                                          SurveyConfigItemInfoValue = scitinf.Field<string>("SurveyConfigItemInfoValue"),
+                                          SurveyConfigItemInfoLargeValue = scitinf.Field<string>("SurveyConfigItemInfoLargeValue"),
+                                      } into scitinfg
+                                      select new GenericItemInfoModel()
+                                      {
+                                          ItemInfoId = scitinfg.Key.SurveyConfigItemInfoId,
+                                          ItemInfoType = new CatalogModel()
+                                          {
+                                              ItemId = scitinfg.Key.SurveyConfigItemInfoTypeId,
+                                              ItemName = scitinfg.Key.SurveyConfigItemInfoTypeName,
+                                          },
+                                          Value = scitinfg.Key.SurveyConfigItemInfoValue,
+                                          LargeValue = scitinfg.Key.SurveyConfigItemInfoLargeValue,
+                                      }).ToList(),
+                             }).ToList(),
+                               },
+                               #endregion
+                           }
+                           into svg
+                           select new SurveyModel()
+                           {
+
+                               SurveyPublicId = svg.Key.SurveyPublicId,
+                               LastModify = svg.Key.LastModify,
+                               CreateDate = svg.Key.CreateDate,
+                               User = svg.Key.User,
+                               ParentSurveyPublicId = svg.Key.ParentSurveyPublicId,
+                               RelatedProvider = svg.Key.RelatedProvider,
+                               SurveyInfo = svg.Key.SurveyInfo,
+                               RelatedSurveyItem = svg.Key.RelatedSurveyItem,
+                               RelatedSurveyConfig = svg.Key.RelatedSurveyConfig,
+
+                           }).ToList();
+            }
+            return oReturn;
+        }
 
         #endregion
 
@@ -2070,8 +2308,6 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
 
             return oReturn;
         }
-
-       
 
         #endregion
     }

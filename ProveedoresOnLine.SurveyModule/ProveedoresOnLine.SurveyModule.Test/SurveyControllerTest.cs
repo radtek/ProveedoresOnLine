@@ -43,6 +43,7 @@ namespace ProveedoresOnLine.SurveyModule.Test
             List<GenericItemModel> Areas = new List<GenericItemModel>();
             List<GenericItemModel> Questions = new List<GenericItemModel>();
             List<GenericItemModel> Answers = new List<GenericItemModel>();
+
             Areas = oReturn.RelatedSurveyConfig.RelatedSurveyConfigItem.Where(x => x.ItemType.ItemId == 1202001 && x.ParentItem == null).Select(x => x).ToList();
             Areas.All(ar =>
             {
@@ -100,9 +101,9 @@ namespace ProveedoresOnLine.SurveyModule.Test
         [TestMethod]
         public void  SurveyGeneralReport()
         {
-            List<ProveedoresOnLine.SurveyModule.Models.SurverReportModel.SurveyReportModelTable1> oReturn = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGeneralReport("1EA5A78A");
+            List<SurveyModule.Models.SurveyModel> oReturn = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.ReportAllSurvey("DD8AC84A", "1EA5A78A");
 
-            Assert.AreEqual(true, oReturn != null && oReturn.Count >0);
+            Assert.AreEqual(true, oReturn != null);
         }
         [TestMethod]
         public void SurveyGetAllByCustomer()
