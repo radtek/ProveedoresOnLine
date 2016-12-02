@@ -2045,8 +2045,10 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
             {
                 oReturn = (from sv in response.DataSetResult.Tables[0].AsEnumerable()
                            where !sv.IsNull("SurveyPublicId") && sv.Field<Int32>("SurveyId") == response.DataSetResult.Tables[0].Rows[0].Field<Int32>("SurveyId")
-                           group sv by new
+                           && sv.Field<Int32>("SurveyId") == response.DataSetResult.Tables[1].Rows[0].Field<Int32>("SurveyId")
+                           group sv.Field<Int32>("SurveyId") by new
                            {
+                               SurveyId = response.DataSetResult.Tables[0].Rows[0].Field < Int32>("SurveyId"),
                                SurveyPublicId = response.DataSetResult.Tables[1].Rows[0].Field<string>("SurveyPublicId"),
                                LastModify = response.DataSetResult.Tables[1].Rows[0].Field<DateTime>("SurveyLastModify"),
                                CreateDate = response.DataSetResult.Tables[1].Rows[0].Field<DateTime>("SurveyCreateDate"),
@@ -2242,7 +2244,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                            into svg
                            select new SurveyModel()
                            {
-
+                               SurveyId = svg.Key.SurveyId,
                                SurveyPublicId = svg.Key.SurveyPublicId,
                                LastModify = svg.Key.LastModify,
                                CreateDate = svg.Key.CreateDate,

@@ -102,7 +102,7 @@ namespace ProveedoresOnLine.SurveyModule.Test
         public void  SurveyGeneralReport()
         {
             List<SurveyModule.Models.SurveyModel> oReturn = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.ReportAllSurvey("DD8AC84A", "1EA5A78A");
-
+            oReturn.GroupBy(p => p.SurveyId);
             Assert.AreEqual(true, oReturn != null);
         }
         [TestMethod]
