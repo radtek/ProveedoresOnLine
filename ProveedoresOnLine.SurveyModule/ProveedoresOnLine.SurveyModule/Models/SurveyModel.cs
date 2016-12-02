@@ -8,6 +8,7 @@ namespace ProveedoresOnLine.SurveyModule.Models
 {
     public class SurveyModel
     {
+        public Int32 SurveyId { get; set; }
         public string SurveyPublicId { get; set; }
 
         public ProveedoresOnLine.CompanyProvider.Models.Provider.ProviderModel RelatedProvider { get; set; }
