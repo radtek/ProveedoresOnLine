@@ -2059,51 +2059,63 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                LastModify = response.DataSetResult.Tables[1].Rows[0].Field<DateTime>("SurveyLastModify"),
                                CreateDate = response.DataSetResult.Tables[1].Rows[0].Field<DateTime>("SurveyCreateDate"),
                                User = response.DataSetResult.Tables[1].Rows[0].Field<string>("User"),
-                               
 
                                #region RelatedProvider
-
-
                                RelatedProvider = new CompanyProvider.Models.Provider.ProviderModel()
                                {
                                    RelatedCompany = new Company.Models.Company.CompanyModel()
                                    {
                                        CompanyPublicId = response.DataSetResult.Tables[1].Rows[0].Field<string>("ProviderPublicId"),
+                                       CompanyName= response.DataSetResult.Tables[1].Rows[0].Field<string>("CompanyName"),
+                                       IdentificationNumber = response.DataSetResult.Tables[1].Rows[0].Field<string>("IdentificationNumber")
                                    },
+                                   
                                },
                                #endregion
 
                                #region SurveyInfo
+
                                SurveyInfo =
                                     (from svinf in response.DataSetResult.Tables[1].AsEnumerable()
-                                     where !svinf.IsNull("SurveyInfoId") &&
-                                            svinf.Field<int>("SurveyInfoId") == response.DataSetResult.Tables[1].Rows[0].Field<int>("SurveyInfoId")
+                                     where !svinf.IsNull("SurveyInfoId")
+                                        && svinf.Field<int>("SurveyId")
+                                        == svg.Key.SurveyId
                                      group svinf by new
                                      {
-                                         SurveyInfoId = svinf.Field<int>("SurveyInfoId")
+                                         SurveyId = svinf.Field<int>("SurveyId"),
+                                         SurveyInfoId = svinf.Field<int>("SurveyInfoId"),
+                                         SurveyInfoTypeId = svinf.Field<int>("SurveyInfoTypeId"),
+                                         SurveyInfoTypeName = svinf.Field<string>("SurveyInfoTypeName"),
+                                         SurveyInfoValue = svinf.Field<string>("SurveyInfoValue"),
+                                         SurveyInfoLargeValue = svinf.Field<string>("SurveyInfoLargeValue"),
+                                         SurveyInfoValueName = svinf.Field<string>("SurveyInfoValueName"),
+
                                      } into svinfg
                                      select new GenericItemInfoModel()
-                                     {                                                                                  
-                                         ItemInfoId = response.DataSetResult.Tables[1].Rows[0].Field<int>("SurveyInfoId"),
+                                     {                                                                            
+                                         ItemInfoId = svinfg.Key.SurveyInfoId,
                                          ItemInfoType = new CatalogModel()
                                          {
-                                             ItemId = response.DataSetResult.Tables[1].Rows[0].Field<int>("SurveyInfoTypeId"),
-                                             ItemName = response.DataSetResult.Tables[1].Rows[0].Field<string>("SurveyInfoTypeName"),
+                                             ItemId = svinfg.Key.SurveyInfoTypeId,
+                                             ItemName = svinfg.Key.SurveyInfoTypeName,
+                                             CatalogId = svinfg.Key.SurveyId,
                                          },
-                                         Value = response.DataSetResult.Tables[1].Rows[0].Field<string>("SurveyInfoValue"),
-                                         LargeValue = response.DataSetResult.Tables[1].Rows[0].Field<string>("SurveyInfoLargeValue"),
-                                         ValueName = response.DataSetResult.Tables[1].Rows[0].Field<string>("SurveyInfoValueName"),
-                                         LastModify = response.DataSetResult.Tables[1].Rows[0].Field<DateTime>("SurveyItemLastModify"),
+                                         Value = svinfg.Key.SurveyInfoValue,
+                                         LargeValue = svinfg.Key.SurveyInfoLargeValue,
+                                         ValueName = svinfg.Key.SurveyInfoValueName,
+                                         //LastModify = svinfg.Key.LastModify,
                                      }).ToList(),
+
                                #endregion
 
                                #region RelatedSurveyItem
                                RelatedSurveyItem =
                                     (from svit in response.DataSetResult.Tables[1].AsEnumerable()
                                      where !svit.IsNull("SurveyItemId") &&
-                                            svit.Field<int>("SurveyItemId") == response.DataSetResult.Tables[1].Rows[0].Field<int>("SurveyItemId")
+                                            svit.Field<int>("SurveyId") == svg.Key.SurveyId
                                      group svit by new
                                      {
+                                         SurveyId = svit.Field<int>("SurveyId"),
                                          SurveyItemId = svit.Field<int>("SurveyItemId"),
                                          SurveyItemSurveyConfigItemId = svit.Field<int>("SurveyItemSurveyConfigItemId"),
                                          EvaluatorRolId = svit.Field<int>("EvaluatorRolId"),
@@ -2124,7 +2136,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                              where !svitinf.IsNull("SurveyItemInfoId") &&
                                                     svitinf.Field<int>("SurveyItemId") == svitg.Key.SurveyItemId
                                              group svitinf by new
-                                             {
+                                             {                                                 
                                                  SurveyItemInfoId = svitinf.Field<int>("SurveyItemInfoId"),
                                                  SurveyItemInfoTypeId = svitinf.Field<int>("SurveyItemInfoTypeId"),
                                                  SurveyItemInfoTypeName = svitinf.Field<string>("SurveyItemInfoTypeName"),
@@ -2138,6 +2150,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                                  {
                                                      ItemId = svitinfg.Key.SurveyItemInfoTypeId,
                                                      ItemName = svitinfg.Key.SurveyItemInfoTypeName,
+                                                     CatalogId = svitg.Key.SurveyId
                                                  },
                                                  Value = svitinfg.Key.SurveyItemInfoValue,
                                                  LargeValue = svitinfg.Key.SurveyItemInfoLargeValue,

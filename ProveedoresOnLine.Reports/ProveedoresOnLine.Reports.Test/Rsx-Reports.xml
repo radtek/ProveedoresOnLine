@@ -3,7 +3,7 @@
   <Reports>
     <key name="ReportPath">
       <![CDATA[
-        C:\PublicarPO\ProveedoresOnLine.Reports\ProveedoresOnLine.Reports.Test\Reports\
+        D:\ProveedoresOnLine\repos\ProveedoresOnLine.Reports\ProveedoresOnLine.Reports\Reports
       ]]>
      </key>
   </Reports>
