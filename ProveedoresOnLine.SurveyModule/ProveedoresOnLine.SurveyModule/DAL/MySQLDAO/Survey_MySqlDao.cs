@@ -1895,7 +1895,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
         #endregion
 
         #region SurveyReport
-
+        //To Do: Erase
         public List<SurveyModule.Models.SurverReportModel.SurveyReportModelTable1> SurveyGeneralReport(string CustomerPublicId)
         {
             List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
@@ -2044,16 +2044,22 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                 response.DataSetResult.Tables[1].Rows.Count > 0)
             {
                 oReturn = (from sv in response.DataSetResult.Tables[0].AsEnumerable()
-                           where !sv.IsNull("SurveyPublicId") && sv.Field<Int32>("SurveyId") == response.DataSetResult.Tables[0].Rows[0].Field<Int32>("SurveyId")
-                           && sv.Field<Int32>("SurveyId") == response.DataSetResult.Tables[1].Rows[0].Field<Int32>("SurveyId")
-                           group sv.Field<Int32>("SurveyId") by new
+                           where !sv.IsNull("SurveyId")
+                           group sv by new
                            {
-                               SurveyId = response.DataSetResult.Tables[0].Rows[0].Field < Int32>("SurveyId"),
-                               SurveyPublicId = response.DataSetResult.Tables[1].Rows[0].Field<string>("SurveyPublicId"),
+                               SurveyId = sv.Field<Int32>("SurveyId"),
+                               ParentSurveyPublicId = sv.Field<string>("ParentSurveyId")
+                               
+                           } into svg
+                           select new SurveyModel()
+                           {
+                               SurveyId = svg.Key.SurveyId,
+                               SurveyPublicId = svg.Key.ParentSurveyPublicId,
+                               ParentSurveyPublicId = svg.Key.ParentSurveyPublicId,
                                LastModify = response.DataSetResult.Tables[1].Rows[0].Field<DateTime>("SurveyLastModify"),
                                CreateDate = response.DataSetResult.Tables[1].Rows[0].Field<DateTime>("SurveyCreateDate"),
                                User = response.DataSetResult.Tables[1].Rows[0].Field<string>("User"),
-                               ParentSurveyPublicId = response.DataSetResult.Tables[1].Rows[0].Field<string>("ParentSurveyId"),
+                               
 
                                #region RelatedProvider
 
@@ -2071,29 +2077,23 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                SurveyInfo =
                                     (from svinf in response.DataSetResult.Tables[1].AsEnumerable()
                                      where !svinf.IsNull("SurveyInfoId") &&
-                                            svinf.Field<string>("SurveyPublicId") == response.DataSetResult.Tables[1].Rows[0].Field<string>("SurveyPublicId")
+                                            svinf.Field<int>("SurveyInfoId") == response.DataSetResult.Tables[1].Rows[0].Field<int>("SurveyInfoId")
                                      group svinf by new
                                      {
-                                         SurveyInfoId = svinf.Field<int>("SurveyInfoId"),
-                                         SurveyInfoTypeId = svinf.Field<int>("SurveyInfoTypeId"),
-                                         SurveyInfoTypeName = svinf.Field<string>("SurveyInfoTypeName"),
-                                         SurveyInfoValue = svinf.Field<string>("SurveyInfoValue"),
-                                         SurveyInfoLargeValue = svinf.Field<string>("SurveyInfoLargeValue"),
-                                         SurveyInfoValueName = svinf.Field<string>("SurveyInfoValueName"),
-                                         SurveyItemLastModify = svinf.Field<DateTime>("SurveyItemLastModify"),
+                                         SurveyInfoId = svinf.Field<int>("SurveyInfoId")
                                      } into svinfg
                                      select new GenericItemInfoModel()
-                                     {
-                                         ItemInfoId = svinfg.Key.SurveyInfoId,
+                                     {                                                                                  
+                                         ItemInfoId = response.DataSetResult.Tables[1].Rows[0].Field<int>("SurveyInfoId"),
                                          ItemInfoType = new CatalogModel()
                                          {
-                                             ItemId = svinfg.Key.SurveyInfoTypeId,
-                                             ItemName = svinfg.Key.SurveyInfoTypeName,
+                                             ItemId = response.DataSetResult.Tables[1].Rows[0].Field<int>("SurveyInfoTypeId"),
+                                             ItemName = response.DataSetResult.Tables[1].Rows[0].Field<string>("SurveyInfoTypeName"),
                                          },
-                                         Value = svinfg.Key.SurveyInfoValue,
-                                         LargeValue = svinfg.Key.SurveyInfoLargeValue,
-                                         ValueName = svinfg.Key.SurveyInfoValueName,
-                                         LastModify = svinfg.Key.SurveyItemLastModify,
+                                         Value = response.DataSetResult.Tables[1].Rows[0].Field<string>("SurveyInfoValue"),
+                                         LargeValue = response.DataSetResult.Tables[1].Rows[0].Field<string>("SurveyInfoLargeValue"),
+                                         ValueName = response.DataSetResult.Tables[1].Rows[0].Field<string>("SurveyInfoValueName"),
+                                         LastModify = response.DataSetResult.Tables[1].Rows[0].Field<DateTime>("SurveyItemLastModify"),
                                      }).ToList(),
                                #endregion
 
@@ -2101,7 +2101,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                RelatedSurveyItem =
                                     (from svit in response.DataSetResult.Tables[1].AsEnumerable()
                                      where !svit.IsNull("SurveyItemId") &&
-                                            svit.Field<string>("SurveyPublicId") == response.DataSetResult.Tables[1].Rows[0].Field<string>("SurveyPublicId")
+                                            svit.Field<int>("SurveyItemId") == response.DataSetResult.Tables[1].Rows[0].Field<int>("SurveyItemId")
                                      group svit by new
                                      {
                                          SurveyItemId = svit.Field<int>("SurveyItemId"),
@@ -2240,20 +2240,6 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                              }).ToList(),
                                },
                                #endregion
-                           }
-                           into svg
-                           select new SurveyModel()
-                           {
-                               SurveyId = svg.Key.SurveyId,
-                               SurveyPublicId = svg.Key.SurveyPublicId,
-                               LastModify = svg.Key.LastModify,
-                               CreateDate = svg.Key.CreateDate,
-                               User = svg.Key.User,
-                               ParentSurveyPublicId = svg.Key.ParentSurveyPublicId,
-                               RelatedProvider = svg.Key.RelatedProvider,
-                               SurveyInfo = svg.Key.SurveyInfo,
-                               RelatedSurveyItem = svg.Key.RelatedSurveyItem,
-                               RelatedSurveyConfig = svg.Key.RelatedSurveyConfig,
 
                            }).ToList();
             }
