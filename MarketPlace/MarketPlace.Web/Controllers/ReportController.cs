@@ -119,7 +119,7 @@ namespace MarketPlace.Web.Controllers
                                     {
                                     x.Item1.RelatedSurveyConfig.RelatedSurveyConfigItem.All(a =>
                                         {
-                                            evaluator = x.Item1.User.ToString();
+                                            evaluator = x.Item1.SurveyInfo.Where(h => h.ItemInfoType.ItemId == (int)enumSurveyInfoType.Evaluator).Select(h => h.Value).FirstOrDefault();
                                             area_name = "N/D";
                                             project_name = "N/D";
                                             /*area*/
@@ -170,7 +170,7 @@ namespace MarketPlace.Web.Controllers
                                                                     "\"" + x.Item1.SurveyInfo.Where(j => j.ItemInfoType.ItemId == (int)enumSurveyInfoType.ExpirationDate).Select(j => j.Value).DefaultIfEmpty("").FirstOrDefault().ToString() + "\"" + "" + strSep +
                                                                     /*get evaluator*/
                                                                     "\"" + evaluator + "\"" + strSep +
-                                                                    "\"" + x.Item1.SurveyInfo.Where(j => j.ItemInfoType.ItemId == (int)enumSurveyInfoType.Rating).Select(j => j.Value).DefaultIfEmpty("").FirstOrDefault().ToString() + "\"" + "" + strSep +
+                                                                    "\"" + x.Item1.SurveyInfo.Where(j => j.ItemInfoType.ItemId == (int)enumSurveyItemInfoType.Ratting).Select(j => j.Value).DefaultIfEmpty("").FirstOrDefault().ToString() + "\"" + "" + strSep +
                                                                     "\"" + x.Item1.LastModify.ToString("dd/MM/yyyy") + "\"" + "" + strSep +
                                                                     /*get area name*/
                                                                     "\"" + area_name + "\"" + "" + strSep +
