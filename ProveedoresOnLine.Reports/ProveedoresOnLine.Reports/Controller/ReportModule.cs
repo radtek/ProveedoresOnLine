@@ -1,18 +1,75 @@
 ﻿using Microsoft.Reporting.WebForms;
-using ProveedoresOnLine.SurveyModule.Models;
-
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Web;
-using System.Threading.Tasks;
+using ProveedoresOnLine.Company.Models.Util;
+using ProveedoresOnLine.SurveyModule.Models;
 
 namespace ProveedoresOnLine.Reports.Controller
 {
     public class ReportModule
     {
+        #region ReportSurveyAllEvaluations
+
+        public static List<Tuple<SurveyModel, List<GenericItemModel>, List<GenericItemModel>, List<GenericItemModel>>> ReportSurveyAllbyCustomer(string CustomerPublicId)
+        {
+            List<SurveyModule.Models.SurveyModel> oSurveyParents = SurveyModule.Controller.SurveyModule.SurveyGetAllByCustomer("1EA5A78A");
+            List<Tuple<SurveyModel, List<GenericItemModel>, List<GenericItemModel>, List<GenericItemModel>>> oReturn = new List<Tuple<SurveyModel, List<GenericItemModel>, List<GenericItemModel>, List<GenericItemModel>>>();
+
+            oSurveyParents.All(x =>
+            {
+                List<Tuple<SurveyModel, List<GenericItemModel>, List<GenericItemModel>, List<GenericItemModel>>> oChildReturn = new List<Tuple<SurveyModel, List<GenericItemModel>, List<GenericItemModel>, List<GenericItemModel>>>();
+                List<SurveyModule.Models.SurveyModel> ChildSurvey = new List<SurveyModule.Models.SurveyModel>();
+                ChildSurvey.AddRange(SurveyModule.Controller.SurveyModule.ReportAllSurvey(Convert.ToString(x.SurveyPublicId), "1EA5A78A"));
+                //TODO: Build obj tuple with parent and sons
+
+                List<GenericItemModel> Areas = new List<GenericItemModel>();
+                List<GenericItemModel> Questions = new List<GenericItemModel>();
+                List<GenericItemModel> Answers = new List<GenericItemModel>();
+
+                ChildSurvey.All(m =>
+                {
+                    Areas.Add(m.RelatedSurveyConfig.RelatedSurveyConfigItem.Where(y => y.ItemType.ItemId == 1202001 && y.ParentItem == null).Select(z => z).FirstOrDefault());
+
+                    Areas.All(ar =>
+                    {
+                        Questions.AddRange(m.RelatedSurveyConfig.RelatedSurveyConfigItem.Where(e => e.ItemType.ItemId == 1202002 && e.ParentItem != null && e.ParentItem.ItemId == ar.ItemId).Select(e => e).ToList());
+                        return true;
+                    });
+                    Questions.All(q =>
+                    {
+                        Answers.Add(m.RelatedSurveyItem.Where(e => e != null && e.RelatedSurveyConfigItem != null && e.RelatedSurveyConfigItem.ItemId == q.ItemId).Select(e => new GenericItemModel()
+                        {
+                            ItemId = e.ItemId,
+                            ItemInfo = e.ItemInfo,
+                            CreateDate = x.CreateDate,
+                            ItemName = m.RelatedSurveyConfig.RelatedSurveyConfigItem.
+                                                                                Where(inf => inf.ItemId == int.Parse(e.ItemInfo.Where(subinf => subinf.ItemInfoType.ItemId == 1205003).
+                                                                                       Select(subinf => subinf.Value).FirstOrDefault())).Select(inf => inf.ItemName).FirstOrDefault(),
+                            ParentItem = new GenericItemModel()
+                            {
+                                ItemId = e.RelatedSurveyConfigItem.ItemId
+                            }
+                        }).FirstOrDefault());
+                        return true;
+                    });
+
+                    oChildReturn.Add(new Tuple<SurveyModel, List<GenericItemModel>, List<GenericItemModel>, List<GenericItemModel>>(m, Areas, Questions, Answers));
+                    oReturn.AddRange(oChildReturn);
+
+                    return true;
+                });
+
+                
+                return true;
+            });
+            return oReturn;
+        }
+
+        #endregion
+
         #region ReportsSurveyDetail
 
         public static Tuple<byte[], string, string> CP_SurveyReportDetail(int ReportType, string FormatType, List<ReportParameter> ReportData, string FilePath)
