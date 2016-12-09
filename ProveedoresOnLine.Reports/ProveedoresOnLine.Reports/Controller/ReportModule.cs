@@ -13,23 +13,22 @@ namespace ProveedoresOnLine.Reports.Controller
     {
         #region ReportSurveyAllEvaluations
 
-        public static List<Tuple<SurveyModel, List<GenericItemModel>, List<GenericItemModel>, List<GenericItemModel>>> ReportSurveyAllbyCustomer(string CustomerPublicId)
+        public static List<Tuple<SurveyModel, List<GenericItemModel>, List<Tuple<SurveyModel, GenericItemModel>>, List<GenericItemModel>>> ReportSurveyAllbyCustomer(string CustomerPublicId)
         {
-            List<SurveyModule.Models.SurveyModel> oSurveyParents = SurveyModule.Controller.SurveyModule.SurveyGetAllByCustomer("1EA5A78A");
-            List<Tuple<SurveyModel, List<GenericItemModel>, List<GenericItemModel>, List<GenericItemModel>>> oReturn = new List<Tuple<SurveyModel, List<GenericItemModel>, List<GenericItemModel>, List<GenericItemModel>>>();
+            List<SurveyModule.Models.SurveyModel> oSurveyParents = SurveyModule.Controller.SurveyModule.SurveyGetAllByCustomer(CustomerPublicId);
+            List<Tuple<SurveyModel, List<GenericItemModel>, List<Tuple<SurveyModel, GenericItemModel>>, List<GenericItemModel>>> oReturn = new List<Tuple<SurveyModel, List<GenericItemModel>, List<Tuple<SurveyModel, GenericItemModel>>, List<GenericItemModel>>>();
 
             oSurveyParents.All(x =>
             {
-                List<Tuple<SurveyModel, List<GenericItemModel>, List<GenericItemModel>, List<GenericItemModel>>> oChildReturn = new List<Tuple<SurveyModel, List<GenericItemModel>, List<GenericItemModel>, List<GenericItemModel>>>();
-                List<SurveyModule.Models.SurveyModel> ChildSurvey = new List<SurveyModule.Models.SurveyModel>();
-                ChildSurvey.AddRange(SurveyModule.Controller.SurveyModule.ReportAllSurvey(Convert.ToString(x.SurveyPublicId), "1EA5A78A"));
-                //TODO: Build obj tuple with parent and sons
-
+                x.ChildSurvey = new List<SurveyModel>();
+                List<Tuple<SurveyModel, List<GenericItemModel>, List<Tuple<SurveyModel, GenericItemModel>>, List<GenericItemModel>>> oChildReturn = new List<Tuple<SurveyModel, List<GenericItemModel>, List<Tuple<SurveyModel, GenericItemModel>>, List<GenericItemModel>>>();
+                x.ChildSurvey.AddRange(SurveyModule.Controller.SurveyModule.ReportAllSurvey(Convert.ToString(x.SurveyPublicId), CustomerPublicId));
+                
                 List<GenericItemModel> Areas = new List<GenericItemModel>();
                 List<GenericItemModel> Questions = new List<GenericItemModel>();
                 List<GenericItemModel> Answers = new List<GenericItemModel>();
-
-                ChildSurvey.All(m =>
+                List<Tuple<SurveyModel, GenericItemModel>> oSurveyQuestionsModel = new List<Tuple<SurveyModel, GenericItemModel>>();
+                x.ChildSurvey.All(m =>
                 {
                     Areas.Add(m.RelatedSurveyConfig.RelatedSurveyConfigItem.Where(y => y.ItemType.ItemId == 1202001 && y.ParentItem == null).Select(z => z).FirstOrDefault());
 
@@ -50,21 +49,24 @@ namespace ProveedoresOnLine.Reports.Controller
                                                                                        Select(subinf => subinf.Value).FirstOrDefault())).Select(inf => inf.ItemName).FirstOrDefault(),
                             ParentItem = new GenericItemModel()
                             {
-                                ItemId = e.RelatedSurveyConfigItem.ItemId
+                                ItemId = e.RelatedSurveyConfigItem.ItemId                                
                             }
+                            
                         }).FirstOrDefault());
-                        return true;
-                    });
 
-                    oChildReturn.Add(new Tuple<SurveyModel, List<GenericItemModel>, List<GenericItemModel>, List<GenericItemModel>>(m, Areas, Questions, Answers));
+                        oSurveyQuestionsModel.Add(new Tuple<SurveyModel, GenericItemModel>(m, q));
+                        return true;
+                    });                    
+                    
+                    oChildReturn.Add(new Tuple<SurveyModel, List<GenericItemModel>, List<Tuple<SurveyModel, GenericItemModel>>, List<GenericItemModel>>(x, Areas, oSurveyQuestionsModel, Answers));
                     oReturn.AddRange(oChildReturn);
 
                     return true;
                 });
-
-                
                 return true;
             });
+
+            oReturn = oReturn.Distinct().ToList();
             return oReturn;
         }
 
