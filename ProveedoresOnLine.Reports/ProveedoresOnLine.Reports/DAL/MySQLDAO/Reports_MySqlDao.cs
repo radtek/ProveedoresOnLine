@@ -45,6 +45,7 @@ namespace ProveedoresOnLine.Reports.DAL.MySQLDAO
                      where !sv.IsNull("SurveyPublicId")
                      group sv by new
                      {
+                         SurveyId = sv.Field<int>("SurveyId"),
                          SurveyPublicId = sv.Field<string>("SurveyPublicId"),
                          LastModify = sv.Field<DateTime>("LastModify"),
                          SurveyConfigId = sv.Field<int>("SurveyConfigId"),
@@ -54,6 +55,7 @@ namespace ProveedoresOnLine.Reports.DAL.MySQLDAO
                      } into svg
                      select new SurveyModel()
                      {
+                         SurveyId = svg.Key.SurveyId,
                          SurveyPublicId = svg.Key.SurveyPublicId,
                          LastModify = svg.Key.LastModify,
                          ParentSurveyPublicId = svg.Key.ParentPublicSurveyId,                         
@@ -959,3 +961,4 @@ namespace ProveedoresOnLine.Reports.DAL.MySQLDAO
 
     }
 }
+
