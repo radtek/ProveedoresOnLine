@@ -106,7 +106,8 @@ namespace MarketPlace.Web.Controllers
                                 x.Item3.All(
                                     q => {
                                         string QuestionName = x.Item4 != null ? x.Item4.Where(re => re != null && re.ParentItem.ItemId == q.Item2.ItemId).Select(re => re.ItemName).DefaultIfEmpty("").FirstOrDefault() : "N/D";
-                                        string QuestionDesc = "N/D";
+                                        var objToCompare = x.Item4.Where(re => re != null && re.ParentItem.ItemId == q.Item2.ItemId).Select(re => re).DefaultIfEmpty().FirstOrDefault();                                       
+                                        
                                         data.AppendLine
                                         (
                                             "\"" + x.Item1.RelatedSurveyConfig.ItemName.ToString() + "\"" + strSep +
@@ -127,7 +128,7 @@ namespace MarketPlace.Web.Controllers
                                             "\"" + q.Item1.SurveyInfo.Where(inf => inf.ItemInfoType.ItemId == (int)enumSurveyInfoType.Comments).Select(inf => inf.Value).FirstOrDefault() + "\"" + "" + strSep +
                                             "\"" + q.Item2.ItemName + "\"" + "" + strSep +
                                             "\"" + QuestionName + "\"" + "" + strSep +
-                                            "\"" + QuestionDesc + "\""
+                                            "\"" + objToCompare.ItemInfo.Where(inf => inf.ItemInfoType.ItemId == (int)enumSurveyItemInfoType.AreaDescription).Select(inf => inf.Value).DefaultIfEmpty("").FirstOrDefault() + "\""
                                         );
                                         return true;
                                     });
