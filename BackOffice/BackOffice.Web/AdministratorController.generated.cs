@@ -101,6 +101,18 @@ namespace BackOffice.Web.Controllers
         {
             return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.AdminReports);
         }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.ActionResult AdminThirdknowledge()
+        {
+            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.AdminThirdknowledge);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.FileResult GetPdfFileBytes()
+        {
+            return new T4MVC_System_Web_Mvc_FileResult(Area, Name, ActionNames.GetPdfFileBytes);
+        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public AdministratorController Actions { get { return MVC.Administrator; } }
@@ -135,6 +147,8 @@ namespace BackOffice.Web.Controllers
             public readonly string AdminSelectionOption = "AdminSelectionOption";
             public readonly string AdminSurvey = "AdminSurvey";
             public readonly string AdminReports = "AdminReports";
+            public readonly string AdminThirdknowledge = "AdminThirdknowledge";
+            public readonly string GetPdfFileBytes = "GetPdfFileBytes";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -158,6 +172,8 @@ namespace BackOffice.Web.Controllers
             public const string AdminSelectionOption = "AdminSelectionOption";
             public const string AdminSurvey = "AdminSurvey";
             public const string AdminReports = "AdminReports";
+            public const string AdminThirdknowledge = "AdminThirdknowledge";
+            public const string GetPdfFileBytes = "GetPdfFileBytes";
         }
 
 
@@ -221,6 +237,23 @@ namespace BackOffice.Web.Controllers
         {
             public readonly string RoleCompanyId = "RoleCompanyId";
         }
+        static readonly ActionParamsClass_AdminThirdknowledge s_params_AdminThirdknowledge = new ActionParamsClass_AdminThirdknowledge();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_AdminThirdknowledge AdminThirdknowledgeParams { get { return s_params_AdminThirdknowledge; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_AdminThirdknowledge
+        {
+            public readonly string RoleCompanyId = "RoleCompanyId";
+            public readonly string RoleModuleId = "RoleModuleId";
+        }
+        static readonly ActionParamsClass_GetPdfFileBytes s_params_GetPdfFileBytes = new ActionParamsClass_GetPdfFileBytes();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_GetPdfFileBytes GetPdfFileBytesParams { get { return s_params_GetPdfFileBytes; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_GetPdfFileBytes
+        {
+            public readonly string FilePath = "FilePath";
+        }
         static readonly ViewsClass s_views = new ViewsClass();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ViewsClass Views { get { return s_views; } }
@@ -245,6 +278,7 @@ namespace BackOffice.Web.Controllers
                 public readonly string AdminRulesUpsert = "AdminRulesUpsert";
                 public readonly string AdminSelectionOption = "AdminSelectionOption";
                 public readonly string AdminSurvey = "AdminSurvey";
+                public readonly string AdminThirdknowledge = "AdminThirdknowledge";
                 public readonly string AdminTreeUpsert = "AdminTreeUpsert";
                 public readonly string AdminTRMUpsert = "AdminTRMUpsert";
                 public readonly string AdminUserUpsert = "AdminUserUpsert";
@@ -264,6 +298,7 @@ namespace BackOffice.Web.Controllers
             public readonly string AdminRulesUpsert = "~/Views/Administrator/AdminRulesUpsert.cshtml";
             public readonly string AdminSelectionOption = "~/Views/Administrator/AdminSelectionOption.cshtml";
             public readonly string AdminSurvey = "~/Views/Administrator/AdminSurvey.cshtml";
+            public readonly string AdminThirdknowledge = "~/Views/Administrator/AdminThirdknowledge.cshtml";
             public readonly string AdminTreeUpsert = "~/Views/Administrator/AdminTreeUpsert.cshtml";
             public readonly string AdminTRMUpsert = "~/Views/Administrator/AdminTRMUpsert.cshtml";
             public readonly string AdminUserUpsert = "~/Views/Administrator/AdminUserUpsert.cshtml";
@@ -482,6 +517,31 @@ namespace BackOffice.Web.Controllers
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.AdminReports);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "RoleCompanyId", RoleCompanyId);
             AdminReportsOverride(callInfo, RoleCompanyId);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void AdminThirdknowledgeOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, int RoleCompanyId, int RoleModuleId);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult AdminThirdknowledge(int RoleCompanyId, int RoleModuleId)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.AdminThirdknowledge);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "RoleCompanyId", RoleCompanyId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "RoleModuleId", RoleModuleId);
+            AdminThirdknowledgeOverride(callInfo, RoleCompanyId, RoleModuleId);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void GetPdfFileBytesOverride(T4MVC_System_Web_Mvc_FileResult callInfo, string FilePath);
+
+        [NonAction]
+        public override System.Web.Mvc.FileResult GetPdfFileBytes(string FilePath)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_FileResult(Area, Name, ActionNames.GetPdfFileBytes);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "FilePath", FilePath);
+            GetPdfFileBytesOverride(callInfo, FilePath);
             return callInfo;
         }
 

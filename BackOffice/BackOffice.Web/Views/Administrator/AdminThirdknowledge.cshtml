@@ -1,7 +1,7 @@
 ﻿@model BackOffice.Models.Provider.ProviderViewModel
 
 @{
-    ViewBag.Title = "Administrar Opciones de evaluación de desempeño.";
+    ViewBag.Title = "Administrar Opciones de Conocimiento de Terceros";
     Layout = MVC.Shared.Views._Layout;
 
     Model.RenderScripts = false;
@@ -15,7 +15,7 @@
     </div>
     <div class="POBOProviderContentWrapper">
         <div id="POBOProviderUpsertForm">
-            <label class="POBOSectionTitles">Administración de opciones de evaluación de desempeño.</label>
+            <label class="POBOSectionTitles">Administración de opciones de conocimiento de terceros.</label>
             <a href="@(Url.Action(
                 MVC.Administrator.ActionNames.AdminModule,
                 MVC.Administrator.Name,
@@ -57,7 +57,7 @@
 
     @{
         string oModuleOptionList = (new System.Web.Script.Serialization.JavaScriptSerializer()).
-        Serialize(Model.ProviderOptions.Where(x => x.CatalogId == 813).ToList());
+        Serialize(Model.ProviderOptions.Where(x => x.CatalogId == 815).ToList());
     }
 
     <script type="text/javascript">
