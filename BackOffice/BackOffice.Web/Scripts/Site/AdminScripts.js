@@ -1697,6 +1697,7 @@ var Admin_CompanyRoleObject = {
     RoleOptionUpsertUrl: '',
     SelectionOptionUpsertUrl: '',
     SurveyUpsertUrl: '',
+    ThirdknowledgeUpsertUrl:'',
     ModuleList: '',
     ReportList: '',
     //ProviderList
@@ -1707,6 +1708,7 @@ var Admin_CompanyRoleObject = {
     HSEQInfoList: '',
     AditionallInfoList: '',
     SurveyInfoList: '',
+    ThirdknowledgeInfoList:'',
 
     ProviderInfoList: '',
     AdminOptions: new Array(),
@@ -1722,6 +1724,7 @@ var Admin_CompanyRoleObject = {
         this.RoleOptionUpsertUrl = vInitObject.RoleOptionUpsertUrl;
         this.SelectionOptionUpsertUrl = vInitObject.SelectionOptionUpsertUrl;
         this.SurveyUpsertUrl = vInitObject.SurveyUpsertUrl;
+        this.ThirdknowledgeUpsertUrl = vInitObject.ThirdknowledgeUpsertUrl;
         this.ModuleList = vInitObject.ModuleList;
         this.ReportList = vInitObject.ReportList;
         //ProviderInfo menu
@@ -1732,6 +1735,7 @@ var Admin_CompanyRoleObject = {
         this.HSEQInfoList = vInitObject.HSEQInfoList;
         this.AditionallInfoList = vInitObject.AditionallInfoList;
         this.SurveyInfoList = vInitObject.SurveyInfoList;
+        this.ThirdknowledgeInfoList = vInitObject.ThirdknowledgeInfoList;
 
         if (vInitObject.AdminOptions != null) {
             $.each(vInitObject.AdminOptions, function (item, value) {
@@ -1785,6 +1789,12 @@ var Admin_CompanyRoleObject = {
         else if (vRenderObject.ObjectType == '804008') {
             Admin_CompanyRoleObject.RenderSurveyUpsert(vRenderObject);
         }
+        else if (vRenderObject.ObjectType == '804005') {
+            debugger;
+            Admin_CompanyRoleObject.RenderThirdknowledgeUpsert(vRenderObject)
+        }
+
+        
 
 
         //Render config options
@@ -2925,6 +2935,134 @@ var Admin_CompanyRoleObject = {
                         .appendTo(container)
                         .kendoDropDownList({
                             dataSource: Admin_CompanyRoleObject.ReportList,
+                            dataTextField: 'ItemName',
+                            dataValueField: 'ItemId',
+                            optionLabel: 'Seleccione una opción'
+                        });
+                },
+            }],
+        });
+    },
+
+    RenderThirdknowledgeUpsert: function (vRenderObject) {
+        $('#' + Admin_CompanyRoleObject.ObjectId).kendoGrid({
+            editable: true,
+            navigatable: false,
+            pageable: false,
+            scrollable: true,
+            toolbar:
+                [{ name: 'create', text: 'Nuevo' },
+                { name: 'save', text: 'Guardar' },
+                { name: 'cancel', text: 'Descartar' },
+                { name: 'ViewEnable', template: $('#' + Admin_CompanyRoleObject.ObjectId + '_ViewEnablesTemplate').html() },
+                { name: 'ShortcutToolTip', template: $('#' + Admin_CompanyRoleObject.ObjectId + '_ShortcutToolTipTemplate').html() }],
+            dataSource: {
+                schema: {
+                    model: {
+                        id: 'ModuleOptionId',
+                        fields: {
+                            ModuleOption: { editable: true, nullable: false },
+                            Enable: { editable: true, type: 'boolean', defaultValue: true },
+                        }
+                    }
+                },
+                transport: {
+                    read: function (options) {
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/UtilApi?ModuleOptionAdmin=true&RoleModuleId=' + Admin_CompanyRoleObject.RoleModuleId + '&ViewEnable=' + Admin_CompanyRoleObject.GetViewEnable(),
+                            dataType: 'json',
+                            success: function (result) {
+                                options.success(result);
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', 'Error al cargar la información');
+                            }
+                        });
+                    },
+                    create: function (options) {
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/UtilApi?ModuleOptionUpsert=true&RoleModuleId=' + Admin_CompanyRoleObject.RoleModuleId,
+                            dataType: 'json',
+                            type: 'post',
+                            data: {
+                                DataToUpsert: kendo.stringify(options.data)
+                            },
+                            success: function (result) {
+                                options.success(result);
+                                Message('success', 'Se agregó un nuevo menú');
+
+                                $('#' + Admin_CompanyRoleObject.ObjectId).data('kendoGrid').dataSource.read();
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', 'El menú no se pudo agregar');
+                            }
+                        });
+                    },
+                    update: function (options) {
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/UtilApi?ModuleOptionUpsert=true&RoleModuleId=' + Admin_CompanyRoleObject.RoleModuleId,
+                            dataType: 'json',
+                            type: 'post',
+                            data: {
+                                DataToUpsert: kendo.stringify(options.data)
+                            },
+                            success: function (result) {
+                                options.success(result);
+                                Message('success', 'Se modificó el registro correctamente');
+
+                                $('#' + Admin_CompanyRoleObject.ObjectId).data('kendoGrid').dataSource.read();
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', 'Error al modificar el registro');
+                            }
+                        });
+                    },
+                },
+                requestStart: function () {
+                    kendo.ui.progress($("#loading"), true);
+                },
+                requestEnd: function () {
+                    kendo.ui.progress($("#loading"), false);
+                },
+            },
+            columns: [{
+                field: 'Enable',
+                title: 'Enable',
+                width: '50px',
+                template: function (dataItem) {
+                    var oReturn = '';
+
+                    if (dataItem.Enable == true) {
+                        oReturn = 'Si';
+                    }
+                    else {
+                        oReturn = 'No';
+                    }
+
+                    return oReturn;
+                },
+            }, {
+                field: 'ModuleOption',
+                title: 'Menú',
+                width: '150px',
+                template: function (dataItem) {
+                    var oReturn = 'Seleccione una opción';
+                    $.each(Admin_CompanyRoleObject.ModuleList, function (item, value) {
+                        if (value.ItemId == dataItem.ModuleOption) {
+                            oReturn = value.ItemName;
+                        }
+                    });
+
+                    return oReturn;
+                },
+                editor: function (container, options) {
+                    $('<input required data-bind="value:' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataSource: Admin_CompanyRoleObject.ModuleList,
                             dataTextField: 'ItemName',
                             dataValueField: 'ItemId',
                             optionLabel: 'Seleccione una opción'

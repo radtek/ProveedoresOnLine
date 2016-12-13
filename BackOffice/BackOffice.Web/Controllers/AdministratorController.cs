@@ -300,6 +300,28 @@ namespace BackOffice.Web.Controllers
             return View(oModel);
         }
 
+        public virtual ActionResult AdminThirdknowledge(int RoleCompanyId, int RoleModuleId)
+        {
+            BackOffice.Models.Provider.ProviderViewModel oModel = new ProviderViewModel()
+            {
+                ProviderOptions = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.CatalogGetProviderOptions(),
+                RelatedRole = new ProveedoresOnLine.Company.Models.Role.RoleCompanyModel()
+                {
+                    RoleCompanyId = RoleCompanyId,
+                    RoleModule = new List<ProveedoresOnLine.Company.Models.Role.RoleModuleModel>()
+                    {
+                        new ProveedoresOnLine.Company.Models.Role.RoleModuleModel()
+                        {
+                            RoleModuleId = RoleModuleId,
+                        },
+                    },
+                },
+            };
+
+            oModel.ProviderMenu = GetAdminMenu(oModel);
+            return View(oModel);            
+        }
+
         #region Menu
 
         private List<BackOffice.Models.General.GenericMenu> GetAdminMenu
