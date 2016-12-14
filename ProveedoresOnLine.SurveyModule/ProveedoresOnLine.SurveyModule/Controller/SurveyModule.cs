@@ -944,11 +944,6 @@ namespace ProveedoresOnLine.SurveyModule.Controller
 
         #region SurveyReport
 
-        public static List<ProveedoresOnLine.SurveyModule.Models.SurverReportModel.SurveyReportModelTable1> SurveyGeneralReport(string CustomerPublicId)
-        {
-            return DAL.Controller.SurveyDataController.Instance.SurveyGeneralReport(CustomerPublicId);
-        }
-
         public static List<SurveyModel> ReportAllSurvey(string SurveyPublicId, string CustomerPublicId)
         {
             return DAL.Controller.SurveyDataController.Instance.ReportAllSurvey(SurveyPublicId, CustomerPublicId);
