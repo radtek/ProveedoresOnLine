@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace ProveedoresOnLine.IndexSearch.Test
 {
-    class ThirdknowledgeIndexTest
+    public class ThirdknowledgeIndexTest
     {
+        
     }
 }
