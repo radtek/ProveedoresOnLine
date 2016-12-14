@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProveedoresOnLine.IndexSearch", "ProveedoresOnLine.IndexSearch\ProveedoresOnLine.IndexSearch.csproj", "{EE6578FA-AF0B-4567-85BC-3F9070B3F9FF}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProveedoresOnLine.CompanyIndexSearch", "ProveedoresOnLine.CompanyIndexSearch\ProveedoresOnLine.CompanyIndexSearch.csproj", "{A0EACCFD-15CC-4395-86F4-D9E8B0E80BB5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProveedoresOnLine.SurveyIndexSearch", "ProveedoresOnLine.SurveyIndexSearch\ProveedoresOnLine.SurveyIndexSearch.csproj", "{A7A24E6F-E93F-4DAF-8067-43EEE19DC070}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProveedoresOnline.ThirdknowledgeIndexSearch", "ProveedoresOnline.ThirdknowledgeIndexSearch\ProveedoresOnline.ThirdknowledgeIndexSearch.csproj", "{414215A5-AD37-4434-8B56-5503F593CD3E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{A7A24E6F-E93F-4DAF-8067-43EEE19DC070}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7A24E6F-E93F-4DAF-8067-43EEE19DC070}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7A24E6F-E93F-4DAF-8067-43EEE19DC070}.Release|Any CPU.Build.0 = Release|Any CPU
+		{414215A5-AD37-4434-8B56-5503F593CD3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{414215A5-AD37-4434-8B56-5503F593CD3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{414215A5-AD37-4434-8B56-5503F593CD3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{414215A5-AD37-4434-8B56-5503F593CD3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
