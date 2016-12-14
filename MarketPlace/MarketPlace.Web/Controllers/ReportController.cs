@@ -128,7 +128,7 @@ namespace MarketPlace.Web.Controllers
                                             "\"" + q.Item1.SurveyInfo.Where(inf => inf.ItemInfoType.ItemId == (int)enumSurveyInfoType.Comments).Select(inf => inf.Value).FirstOrDefault() + "\"" + "" + strSep +
                                             "\"" + q.Item2.ItemName + "\"" + "" + strSep +
                                             "\"" + QuestionName + "\"" + "" + strSep +
-                                            "\"" + objToCompare.ItemInfo.Where(inf => inf.ItemInfoType.ItemId == (int)enumSurveyItemInfoType.AreaDescription).Select(inf => inf.Value).DefaultIfEmpty("").FirstOrDefault() + "\""
+                                            "\"" + objToCompare != null ? objToCompare.ItemInfo.Where(inf => inf.ItemInfoType.ItemId == (int)enumSurveyItemInfoType.AreaDescription).Select(inf => inf.Value).DefaultIfEmpty("").FirstOrDefault() : "N/A" + "\""
                                         );
                                         return true;
                                     });
