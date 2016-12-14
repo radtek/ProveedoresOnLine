@@ -14,10 +14,12 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
     internal class IndexSearch_MySqlDao : IIndexSearch
     {
         private ADO.Interfaces.IADO DataInstance;
+        private ADO.Interfaces.IADO DataInstanceTopbls;
 
         public IndexSearch_MySqlDao()
         {
             DataInstance = new ADO.MYSQL.MySqlImplement(Models.Constants.C_POL_SearchConnectionName);
+            DataInstanceTopbls = new ADO.MYSQL.MySqlImplement(Models.Constants.C_Topbls_SearchConnectionName);
         }
 
         #region Company Index
@@ -60,50 +62,50 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                          InBlackList = ci.Field<int>("InBlackList") == 1 ? true : false,
                      }
                          into cig
-                         select new CompanyIndexModel()
-                         {
-                             CompanyPublicId = cig.Key.CompanyPublicId,
-                             CompanyName = cig.Key.CompanyName,
-                             IdentificationTypeId = cig.Key.CompanyIdentificationTypeId,
+                     select new CompanyIndexModel()
+                     {
+                         CompanyPublicId = cig.Key.CompanyPublicId,
+                         CompanyName = cig.Key.CompanyName,
+                         IdentificationTypeId = cig.Key.CompanyIdentificationTypeId,
 
-                             IdentificationType = cig.Key.CompanyIdentificationType,
+                         IdentificationType = cig.Key.CompanyIdentificationType,
 
-                             IdentificationNumber = cig.Key.CompanyIdentificationNumber,
+                         IdentificationNumber = cig.Key.CompanyIdentificationNumber,
 
-                             CompanyEnable = cig.Key.CompanyEnable,
-                             LogoUrl = cig.Key.LogoUrl,
+                         CompanyEnable = cig.Key.CompanyEnable,
+                         LogoUrl = cig.Key.LogoUrl,
 
-                             CountryId = cig.Key.CountryId,
-                             Country = cig.Key.Country,
-                             CityId = cig.Key.CityId,
-                             City = cig.Key.City,
+                         CountryId = cig.Key.CountryId,
+                         Country = cig.Key.Country,
+                         CityId = cig.Key.CityId,
+                         City = cig.Key.City,
 
-                             ICAId = cig.Key.ICAId,
-                             ICA = cig.Key.ICA,
-                             InBlackList = cig.Key.InBlackList,
+                         ICAId = cig.Key.ICAId,
+                         ICA = cig.Key.ICA,
+                         InBlackList = cig.Key.InBlackList,
 
-                             oCustomerProviderIndexModel =
-                                (from cp in response.DataSetResult.Tables[0].AsEnumerable()
-                                 where !cp.IsNull("CustomerProviderId") &&
-                                       cp.Field<string>("ProviderPublicId") == cig.Key.CompanyPublicId
-                                 group cp by new
-                                 {
-                                     CustomerProviderId = !cp.IsNull("CustomerProviderId") ? cp.Field<int>("CustomerProviderId") : 0,
-                                     CustomerPublicId = cp.Field<string>("CustomerPublicId"),
-                                     StatusId = !cp.IsNull("StatusId") ? cp.Field<int>("StatusId") : 0,
-                                     Status = cp.Field<string>("Status"),
-                                     CustomerProviderEnable = cp.Field<UInt64>("CustomerProviderEnable") == 1 ? true : false,
-                                 }
-                                     into cpg
-                                     select new CustomerProviderIndexModel()
-                                     {
-                                         CustomerProviderId = cpg.Key.CustomerProviderId,
-                                         CustomerPublicId = cpg.Key.CustomerPublicId,
-                                         StatusId = cpg.Key.StatusId,
-                                         Status = cpg.Key.Status,
-                                         CustomerProviderEnable = cpg.Key.CustomerProviderEnable,
-                                     }).ToList()
-                         }).ToList();
+                         oCustomerProviderIndexModel =
+                            (from cp in response.DataSetResult.Tables[0].AsEnumerable()
+                             where !cp.IsNull("CustomerProviderId") &&
+                                   cp.Field<string>("ProviderPublicId") == cig.Key.CompanyPublicId
+                             group cp by new
+                             {
+                                 CustomerProviderId = !cp.IsNull("CustomerProviderId") ? cp.Field<int>("CustomerProviderId") : 0,
+                                 CustomerPublicId = cp.Field<string>("CustomerPublicId"),
+                                 StatusId = !cp.IsNull("StatusId") ? cp.Field<int>("StatusId") : 0,
+                                 Status = cp.Field<string>("Status"),
+                                 CustomerProviderEnable = cp.Field<UInt64>("CustomerProviderEnable") == 1 ? true : false,
+                             }
+                                 into cpg
+                             select new CustomerProviderIndexModel()
+                             {
+                                 CustomerProviderId = cpg.Key.CustomerProviderId,
+                                 CustomerPublicId = cpg.Key.CustomerPublicId,
+                                 StatusId = cpg.Key.StatusId,
+                                 Status = cpg.Key.Status,
+                                 CustomerProviderEnable = cpg.Key.CustomerProviderEnable,
+                             }).ToList()
+                     }).ToList();
             }
 
             return oReturn;
@@ -136,15 +138,15 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                          CustomerProviderEnable = cp.Field<UInt64>("CustomerProviderEnable") == 1 ? true : false,
                      }
                          into cpg
-                         select new CustomerProviderIndexModel()
-                         {
-                             CustomerProviderId = cpg.Key.CustomerProviderId,
-                             CustomerPublicId = cpg.Key.CustomerPublicId,
-                             ProviderPublicId = cpg.Key.ProviderPublicId,
-                             StatusId = cpg.Key.StatusId,
-                             Status = cpg.Key.Status,
-                             CustomerProviderEnable = cpg.Key.CustomerProviderEnable,
-                         }).ToList();
+                     select new CustomerProviderIndexModel()
+                     {
+                         CustomerProviderId = cpg.Key.CustomerProviderId,
+                         CustomerPublicId = cpg.Key.CustomerPublicId,
+                         ProviderPublicId = cpg.Key.ProviderPublicId,
+                         StatusId = cpg.Key.StatusId,
+                         Status = cpg.Key.Status,
+                         CustomerProviderEnable = cpg.Key.CustomerProviderEnable,
+                     }).ToList();
             }
 
             return oRetun;
@@ -258,7 +260,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                                  SurveyTypeId = sig.Key.SurveyTypeId,
                                  SurveyType = sig.Key.SurveyType,
                                  SurveyStatusId = sig.Key.SurveyStatusId,
-                                 SurveyStatus = sig.Key.SurveyStatus                                 
+                                 SurveyStatus = sig.Key.SurveyStatus
                              }).ToList(),
                      }).ToList();
             }
@@ -297,18 +299,18 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                          //SurveyUser = sv.Field<string>("User"),
                      }
                          into svg
-                         select new SurveyIndexSearchModel()
-                         {
-                             CustomerPublicId = svg.Key.CustomerPublicId,
-                             CompanyPublicId = svg.Key.CompanyPublicId,
-                             SurveyPublicId = svg.Key.SurveyPublicId,
-                             SurveyTypeId = svg.Key.SurveyTypeId,
-                             SurveyType = svg.Key.SurveyType,
-                             SurveyStatusId = svg.Key.SurveyStatusId,
-                             SurveyStatus = svg.Key.SurveyStatus,
-                             //UserId = svg.Key.SurveyUserId,
-                             //User = svg.Key.SurveyUser,
-                         }).ToList();
+                     select new SurveyIndexSearchModel()
+                     {
+                         CustomerPublicId = svg.Key.CustomerPublicId,
+                         CompanyPublicId = svg.Key.CompanyPublicId,
+                         SurveyPublicId = svg.Key.SurveyPublicId,
+                         SurveyTypeId = svg.Key.SurveyTypeId,
+                         SurveyType = svg.Key.SurveyType,
+                         SurveyStatusId = svg.Key.SurveyStatusId,
+                         SurveyStatus = svg.Key.SurveyStatus,
+                         //UserId = svg.Key.SurveyUserId,
+                         //User = svg.Key.SurveyUser,
+                     }).ToList();
             }
 
             return oReturn;
@@ -340,18 +342,99 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                          UserEmail = svinf.Field<string>("UserEmail"),
                      }
                          into svinfg
-                         select new SurveyInfoIndexSearchModel()
-                         {
-                             ParentSurveyPublicId = svinfg.Key.ParentSurveyPublicId,
-                             SurveyPublicId = svinfg.Key.SurveyPublicId,
-                             SurveyUserEmail = svinfg.Key.UserEmail,
-                         }).ToList();
+                     select new SurveyInfoIndexSearchModel()
+                     {
+                         ParentSurveyPublicId = svinfg.Key.ParentSurveyPublicId,
+                         SurveyPublicId = svinfg.Key.SurveyPublicId,
+                         SurveyUserEmail = svinfg.Key.UserEmail,
+                     }).ToList();
             }
 
             return oReturn;
         }
 
+
+
         #endregion
+
+        #endregion
+
+        #region Thirdknowledge Index
+
+        public List<ThirdknowledgeIndexSearchModel> GetThirdknowledgeIndex()
+        {
+            ADO.Models.ADOModelResponse response = DataInstanceTopbls.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "GetAllInfo",
+                CommandType = CommandType.StoredProcedure,
+            });
+            List<ThirdknowledgeIndexSearchModel> oReturn = null;
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn =
+                    (from thk in response.DataTableResult.AsEnumerable()
+                     where !thk.IsNull("REGISTRO")
+                     group thk by new
+                     {
+                         Registry = thk.Field<string>("REGISTRO"),
+                         ListOrigin = thk.Field<string>("ORIGEN_LISTA"),
+                         ListType = thk.Field<string>("TIPO_LISTA"),
+                         Code = thk.Field<string>("CODIGO"),
+                         CompleteName = thk.Field<string>("NOMBRECOMPLETO"),
+                         FirstName = thk.Field<string>("PRIMER_NOMBRE"),
+                         SecondName = thk.Field<string>("SEGUNDO_NOMBRE"),
+                         FirstLastName = thk.Field<string>("PRIMER_APELLIDO"),
+                         SecondLastName = thk.Field<string>("SEGUNDO_APELLIDO"),
+                         PersonType = thk.Field<string>("TIPO_PERSONA"),
+                         TypeId = thk.Field<string>("ID"),
+                         ID = thk.Field<string>("ORIGEN_LISTA"),
+                         RelatedWiht = thk.Field<string>("RELACIONADO_CON"),
+                         ORoldescription1 = thk.Field<string>("ROL_O_DESCRIPCION1"),
+                         ORoldescription2 = thk.Field<string>("ROL_O_DESCRIPCION2"),
+                         AKA = thk.Field<string>("AKA"),
+                         Source = thk.Field<string>("FUENTE"),
+                         LastModify = thk.Field<string>("FECHA_UPDATE"),
+                         FinalDateRol = thk.Field<string>("FECHA_FINAL_ROL"),
+                         NationalitySourceCountry = thk.Field<string>("NACIONALIDAD_PAISDEORIGEN"),
+                         Address = thk.Field<string>("DIRECCION"),
+                         Status = thk.Field<string>("ESTADO"),
+                         ImageKey = thk.Field<string>("LLAVEIMAGEN"),
+                     }
+                     into thkg 
+                     select new ThirdknowledgeIndexSearchModel()
+                     {
+                         Registry = thkg.Key.Registry,
+                         ListOrigin = thkg.Key.ListOrigin,
+                         ListType = thkg.Key.ListType,
+                         Code = thkg.Key.Code,
+                         CompleteName = thkg.Key.CompleteName,
+                         FirstName = thkg.Key.FirstName,
+                         SecondName = thkg.Key.SecondName,
+                         FirstLastName = thkg.Key.FirstLastName,
+                         SecondLastName = thkg.Key.SecondLastName,
+                         PersonType = thkg.Key.PersonType,
+                         TypeId = thkg.Key.TypeId,
+                         ID = thkg.Key.ID,
+                         RelatedWiht = thkg.Key.RelatedWiht,
+                         ORoldescription1 = thkg.Key.ORoldescription1,
+                         ORoldescription2 = thkg.Key.ORoldescription2,
+                         AKA = thkg.Key.AKA,
+                         Source = thkg.Key.Source,
+                         LastModify = thkg.Key.LastModify,
+                         FinalDateRol = thkg.Key.FinalDateRol,
+                         NationalitySourceCountry = thkg.Key.NationalitySourceCountry,
+                         Address = thkg.Key.Address,
+                         Status = thkg.Key.Status,
+                         ImageKey = thkg.Key.ImageKey,
+
+                     }).ToList();
+            }
+
+            return oReturn;
+        }
 
         #endregion
     }

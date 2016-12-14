@@ -73,8 +73,18 @@ namespace ProveedoresOnLine.IndexSearch.DAL.Controller
             return DataFactory.GetSurveyInfoIndex();
         }
 
+
+
         #endregion
 
+        #endregion
+
+        #region Thirdknowledge Index
+
+        public List<ThirdknowledgeIndexSearchModel> GetThirdknowledgeIndex()
+        {
+            return DataFactory.GetThirdknowledgeIndex();
+        }
         #endregion
     }
 }

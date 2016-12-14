@@ -19,7 +19,7 @@ namespace ProveedoresOnLine.IndexSearch.Models
         public string SecondLastName { get; set; }
         public string PersonType { get; set; }
         public string TypeId { get; set; }
-        public string ID{ get; set; }
+        public string ID { get; set; }
         public string RelatedWiht { get; set; }
         public string ORoldescription1 { get; set; }
         public string ORoldescription2 { get; set; }

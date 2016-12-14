@@ -35,6 +35,12 @@ namespace ProveedoresOnLine.IndexSearch.Interfaces
 
         #endregion
 
-        #endregion     
-    }
+        #endregion
+
+        #region Thirdknowledge Index
+
+        List<ThirdknowledgeIndexSearchModel> GetThirdknowledgeIndex();      
+          
+    #endregion
+}
 }
