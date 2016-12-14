@@ -81,6 +81,7 @@
     <Compile Include="CompanySurveyIndexTest.cs" />
     <Compile Include="IndexSearchTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ThirdknowledgeIndexTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
