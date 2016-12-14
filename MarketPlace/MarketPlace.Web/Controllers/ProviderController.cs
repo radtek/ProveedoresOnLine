@@ -5952,12 +5952,20 @@ namespace MarketPlace.Web.Controllers
                     Models.Survey.SurveyViewModel oReturn = new Models.Survey.SurveyViewModel
                     (ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetByUser(oModel.RelatedSurvey.SurveyPublicId, ev));
                     List<GenericItemModel> Areas = new List<GenericItemModel>();
+                    List<GenericItemModel> AreasForEvaluator = new List<GenericItemModel>();
                     List<GenericItemModel> Questions = new List<GenericItemModel>();
                     List<GenericItemModel> Answers = new List<GenericItemModel>();
-                    Areas = oReturn.RelatedSurvey.RelatedSurveyConfig.RelatedSurveyConfigItem.Where(x => x.ItemType.ItemId == 1202001 && x.ParentItem == null).Select(x => x).ToList();
+                    //string[] strSplit = req.Split('_');
+                    Areas = oReturn.RelatedSurvey.RelatedSurveyConfig.RelatedSurveyConfigItem.Where(x => x.ItemType.ItemId == (int)enumSurveyConfigItemType.EvaluationArea && x.ParentItem == null).Select(x => x).ToList();
+                    oReturn.RelatedSurvey.SurveyInfo.Where(inf => inf.ItemInfoType.ItemId == (int)enumSurveyInfoType.CurrentArea).Select(inf => inf.Value.Split('_')[0]).ToList().All(ar =>
+                        {
+                            AreasForEvaluator.Add(Areas.Where(i => i.ItemId == int.Parse(ar)).Select(i => i).FirstOrDefault());
+                            return true;
+                        });
+                    Areas = AreasForEvaluator.Distinct().ToList();
                     Areas.All(ar =>
                     {
-                        Questions.AddRange(oReturn.RelatedSurvey.RelatedSurveyConfig.RelatedSurveyConfigItem.Where(x => x.ItemType.ItemId == 1202002 && x.ParentItem != null && x.ParentItem.ItemId == ar.ItemId).Select(x => x).ToList());
+                        Questions.AddRange(oReturn.RelatedSurvey.RelatedSurveyConfig.RelatedSurveyConfigItem.Where(x => x.ItemType.ItemId == (int)enumSurveyConfigItemType.Question && x.ParentItem != null && x.ParentItem.ItemId == ar.ItemId).Select(x => x).ToList());
                         return true;
                     });
                     Questions.All(q =>
@@ -5998,7 +6006,7 @@ namespace MarketPlace.Web.Controllers
                     }
                     return true;
                 });
-            return oObjToReturn;
+            return oObjToReturn.Distinct().ToList();
         }
 
         #endregion Pivate Functions
