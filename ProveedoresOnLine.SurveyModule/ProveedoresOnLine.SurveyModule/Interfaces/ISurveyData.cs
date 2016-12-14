@@ -71,9 +71,6 @@ namespace ProveedoresOnLine.SurveyModule.Interfaces
 
         #region SurveyReport
 
-        //ToDo: pendiente de borrar
-        List<SurveyModule.Models.SurverReportModel.SurveyReportModelTable1> SurveyGeneralReport(string CustomerPublicId);
-
         List<SurveyModel> ReportAllSurvey(string SurveyPublicId, string CustomerPublicId );
 
         #endregion

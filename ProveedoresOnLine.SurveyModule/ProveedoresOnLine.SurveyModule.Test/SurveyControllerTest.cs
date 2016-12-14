@@ -99,13 +99,6 @@ namespace ProveedoresOnLine.SurveyModule.Test
         }
 
         [TestMethod]
-        public void  SurveyGeneralReport()
-        {
-            List<SurveyModule.Models.SurveyModel> oReturn = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.ReportAllSurvey("DD8AC84A", "1EA5A78A");
-                                    
-            Assert.AreEqual(true, oReturn != null);
-        }
-        [TestMethod]
         public void SurveyGetAllByCustomer()
         {
             List<SurveyModule.Models.SurveyModel> oReturn = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetAllByCustomer("1EA5A78A");

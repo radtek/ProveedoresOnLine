@@ -170,11 +170,6 @@ namespace ProveedoresOnLine.SurveyModule.DAL.Controller
 
         #region SurveyReport
 
-        List<SurveyReportModelTable1> ISurveyData.SurveyGeneralReport(string CustomerPublicId)
-        {
-            return DataFactory.SurveyGeneralReport(CustomerPublicId);
-        }
-
         public List<SurveyModel> ReportAllSurvey(string SurveyPublicId, string CustomerPublicId)
         {
             return DataFactory.ReportAllSurvey(SurveyPublicId, CustomerPublicId);

@@ -107,12 +107,12 @@ namespace MarketPlace.Web.Controllers
                                     q => {
                                         string QuestionName = x.Item4 != null ? x.Item4.Where(re => re != null && re.ParentItem.ItemId == q.Item2.ItemId).Select(re => re.ItemName).DefaultIfEmpty("").FirstOrDefault() : "N/D";
                                         string DescQuestion = "N/A";
-                                        var objToCompare = x.Item4.Where(re => re != null && re.ParentItem.ItemId == q.Item2.ItemId).Select(re => re).DefaultIfEmpty().FirstOrDefault();
+                                        var objToCompare = x.Item4.Where(re => re != null && re.ParentItem.ItemId == q.Item2.ItemId).Select(re => re).DefaultIfEmpty().FirstOrDefault();                                       
                                         if (objToCompare != null)
                                         {
                                             DescQuestion = objToCompare.ItemInfo.Where(inf => inf.ItemInfoType.ItemId == (int)enumSurveyItemInfoType.AreaDescription).Select(inf => inf.Value).DefaultIfEmpty("").FirstOrDefault();
                                         }
-                                       
+                                        
                                         data.AppendLine
                                         (
                                             "\"" + x.Item1.RelatedSurveyConfig.ItemName.ToString() + "\"" + strSep +
