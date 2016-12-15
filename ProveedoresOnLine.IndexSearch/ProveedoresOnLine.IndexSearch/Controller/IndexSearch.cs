@@ -184,12 +184,11 @@ namespace ProveedoresOnLine.IndexSearch.Controller
         #region ThirdKnowledge Index
 
         public static bool GetThirdKnowlegdeIndex()
-        {
-            List<ThirdknowledgeIndexSearchModel> oToIndex =  DAL.Controller.IndexSearchDataController.Instance.GetThirdknowledgeIndex();
-                       
+        {                                   
             try
             {
-                LogFile("Start Process: " + "ThirdKnowledgeToIndex:::" + oToIndex.Count());
+                LogFile("Start Process: " + "ThirdKnowledgeToIndex:::");
+                List<ThirdknowledgeIndexSearchModel> oToIndex = DAL.Controller.IndexSearchDataController.Instance.GetThirdknowledgeIndex();
 
                 Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
                 var settings = new ConnectionSettings(node);
@@ -213,14 +212,14 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                             ).NumberOfShards(1)
                         )
                     );
-                client.Map<CompanyIndexModel>(m => m.AutoMap());
+                client.Map<ThirdknowledgeIndexSearchModel>(m => m.AutoMap());
                 var Index = client.IndexMany(oToIndex, "dev_thirdknowledgeindex");
+                LogFile("Index Process Successfull for: " + oToIndex.Count());
             }
             catch (Exception err)
             {
                 LogFile("Index Process Failed for Thirdknowledge: " + err.Message + "Inner Exception::" + err.InnerException);
-            }
-            LogFile("Index Process Successfull for: " + oToIndex.Count());
+            }            
             return true;
         }
 
@@ -239,7 +238,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                 if (!System.IO.Directory.Exists(LogFile))
                     System.IO.Directory.CreateDirectory(LogFile);
 
-                LogFile += "\\" + "Log_IndexSearchProcess_" + DateTime.Now.ToString("yyyyMMdd") + ".log";
+                LogFile += "\\" + "Log_ThirdKnowledgeIndexProcess_" + DateTime.Now.ToString("yyyyMMdd") + ".log";
 
                 using (System.IO.StreamWriter sw = System.IO.File.AppendText(LogFile))
                 {

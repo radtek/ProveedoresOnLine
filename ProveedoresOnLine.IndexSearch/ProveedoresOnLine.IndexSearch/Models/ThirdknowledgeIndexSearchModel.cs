@@ -9,9 +9,8 @@ namespace ProveedoresOnLine.IndexSearch.Models
 {
     [ElasticsearchType(Name = "thirdknowledge_model")]
     public class ThirdknowledgeIndexSearchModel
-    {
-        [String]
-        public string Registry { get; set; }
+    {        
+        public int Registry { get; set; }
         [String]
         public string ListOrigin { get; set; }
         [String]
