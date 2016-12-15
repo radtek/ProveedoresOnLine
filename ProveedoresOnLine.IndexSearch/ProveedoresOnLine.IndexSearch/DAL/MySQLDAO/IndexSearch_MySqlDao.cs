@@ -379,7 +379,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                      where !thk.IsNull("REGISTRO")
                      group thk by new
                      {
-                         Registry = thk.Field<UInt64>("REGISTRO").ToString(),
+                         //Registry = thk.Field<int>("REGISTRO"),
                          ListOrigin = thk.Field<string>("ORIGEN_LISTA"),
                          ListType = thk.Field<string>("TIPO_LISTA"),
                          Code = thk.Field<string>("CODIGO"),
@@ -406,7 +406,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                      into thkg 
                      select new ThirdknowledgeIndexSearchModel()
                      {
-                         Registry = thkg.Key.Registry,
+                         //Registry = thkg.Key.Registry,
                          ListOrigin = thkg.Key.ListOrigin,
                          ListType = thkg.Key.ListType,
                          Code = thkg.Key.Code,
