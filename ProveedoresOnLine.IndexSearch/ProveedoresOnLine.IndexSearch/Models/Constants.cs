@@ -8,8 +8,7 @@ namespace ProveedoresOnLine.IndexSearch.Models
 {
     public class Constants
     {
-        public const string C_POL_SearchConnectionName = "POL_SearchConnection";
-        public const string C_Topbls_SearchConnectionName = "Topbls_SearchConnection";
+        public const string C_POL_SearchConnectionName = "POL_SearchConnection";        
 
         #region InternalSettings
 
@@ -24,6 +23,8 @@ namespace ProveedoresOnLine.IndexSearch.Models
         public const string C_Settings_CustomerProviderIndex = "CustomerProviderIndex";
 
         public const string C_Settings_SurveyIndex = "SurveyIndex";
+
+        public const string C_Settings_ThirdKnowledgeIndex = "ThirdknowledgeIndex";
 
         #endregion
 

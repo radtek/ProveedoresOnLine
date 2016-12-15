@@ -181,6 +181,52 @@ namespace ProveedoresOnLine.IndexSearch.Controller
 
         #endregion
 
+        #region ThirdKnowledge Index
+
+        public static bool GetThirdKnowlegdeIndex()
+        {
+            List<ThirdknowledgeIndexSearchModel> oToIndex =  DAL.Controller.IndexSearchDataController.Instance.GetThirdknowledgeIndex();
+                       
+            try
+            {
+                LogFile("Start Process: " + "ThirdKnowledgeToIndex:::" + oToIndex.Count());
+
+                Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+                var settings = new ConnectionSettings(node);
+                settings.DefaultIndex("dev_thirdknowledgeindex");
+                ElasticClient client = new ElasticClient(settings);
+
+                ICreateIndexResponse oElasticResponse = client.
+                        CreateIndex("dev_thirdknowledgeindex", c => c
+                        .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                        .Analysis(a => a.
+                            Analyzers(an => an.
+                                Custom("customWhiteSpace", anc => anc.
+                                    Filters("asciifolding", "lowercase").
+                                    Tokenizer("whitespace")
+                                        )
+                                    ).TokenFilters(tf => tf
+                                    .EdgeNGram("customEdgeNGram", engrf => engrf
+                                    .MinGram(1)
+                                    .MaxGram(10))
+                                )
+                            ).NumberOfShards(1)
+                        )
+                    );
+                client.Map<CompanyIndexModel>(m => m.AutoMap());
+                var Index = client.IndexMany(oToIndex, "dev_thirdknowledgeindex");
+            }
+            catch (Exception err)
+            {
+                LogFile("Index Process Failed for Thirdknowledge: " + err.Message + "Inner Exception::" + err.InnerException);
+            }
+            LogFile("Index Process Successfull for: " + oToIndex.Count());
+            return true;
+        }
+
+        #endregion
+
+
         #region LogFile
         private static void LogFile(string LogMessage)
         {
