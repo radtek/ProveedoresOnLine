@@ -142,6 +142,9 @@
     <Reference Include="ProveedoresOnLine.RestrictiveListProcessBatch">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.RestrictiveListProcessBatch\developer\ProveedoresOnLine.RestrictiveListProcessBatch.dll</HintPath>
     </Reference>
+    <Reference Include="ProveedoresOnline.ThirdknowledgeIndexSearch">
+      <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnline.ThirdknowledgeIndexSearch\developer\ProveedoresOnline.ThirdknowledgeIndexSearch.dll</HintPath>
+    </Reference>
     <Reference Include="Quartz">
       <HintPath>..\packages\Quartz.2.3.1\lib\net40\Quartz.dll</HintPath>
     </Reference>
@@ -189,6 +192,7 @@
     <Compile Include="SANOFIIntegrationProcessJobTest.cs" />
     <Compile Include="SANOFIMessageTest.cs" />
     <Compile Include="SurveyReminderProcessJobTest.cs" />
+    <Compile Include="ThirdKnowledgeIndexProcessJobTest.cs" />
     <Compile Include="ThirdKnowledgeProcessJobTest.cs" />
     <Compile Include="SurveySendProcessJobTest.cs" />
     <Compile Include="MessageModuleJobTest.cs" />
