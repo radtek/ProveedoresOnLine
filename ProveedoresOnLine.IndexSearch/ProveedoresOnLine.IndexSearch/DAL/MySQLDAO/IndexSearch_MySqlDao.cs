@@ -18,7 +18,8 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
 
         public IndexSearch_MySqlDao()
         {
-            DataInstance = new ADO.MYSQL.MySqlImplement(Models.Constants.C_POL_SearchConnectionName);            
+            DataInstance = new ADO.MYSQL.MySqlImplement(Models.Constants.C_POL_SearchConnectionName);
+            DataInstanceTopbls = new ADO.MYSQL.MySqlImplement(Models.Constants.C_Topbls_SearchConnectionName);
         }
 
         #region Company Index
@@ -362,7 +363,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
 
         public List<ThirdknowledgeIndexSearchModel> GetThirdknowledgeIndex()
         {
-            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            ADO.Models.ADOModelResponse response = DataInstanceTopbls.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
                 CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
                 CommandText = "MP_TK_GetAllTOPBLSDATA",
@@ -378,7 +379,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                      where !thk.IsNull("REGISTRO")
                      group thk by new
                      {
-                         Registry = thk.Field<string>("REGISTRO"),
+                         Registry = thk.Field<UInt64>("REGISTRO").ToString(),
                          ListOrigin = thk.Field<string>("ORIGEN_LISTA"),
                          ListType = thk.Field<string>("TIPO_LISTA"),
                          Code = thk.Field<string>("CODIGO"),

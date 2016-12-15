@@ -8,7 +8,8 @@ namespace ProveedoresOnLine.IndexSearch.Models
 {
     public class Constants
     {
-        public const string C_POL_SearchConnectionName = "POL_SearchConnection";        
+        public const string C_POL_SearchConnectionName = "POL_SearchConnection";
+        public const string C_Topbls_SearchConnectionName = "Topbls_SearchConnection";
 
         #region InternalSettings
 
