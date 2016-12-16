@@ -2474,8 +2474,8 @@ namespace BackOffice.Web.ControllersApi
                 if (oDataToUpsert.Enable == true)
                 {
 
-                    oCompanyIndexModel.ICAId = Convert.ToInt32(oDataToUpsert.R_ICA);
-                    oCompanyIndexModel.ICA = oDataToUpsert.R_ICAName;
+                    oCompanyIndexModel.ICAId = !string.IsNullOrEmpty(oDataToUpsert.R_ICA)? Convert.ToInt32(oDataToUpsert.R_ICA):0;
+                    oCompanyIndexModel.ICA = !string.IsNullOrEmpty(oDataToUpsert.R_ICAName) ? oDataToUpsert.R_ICAName : "" ;
 
 
                     ICreateIndexResponse oElasticResponse = client.CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value, c => c
