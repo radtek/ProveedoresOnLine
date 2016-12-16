@@ -25,6 +25,8 @@ namespace ProveedoresOnLine.IndexSearch.Models
 
         public const string C_Settings_SurveyIndex = "SurveyIndex";
 
+        public const string C_Settings_ThirdKnowledgeIndex = "ThirdknowledgeIndex";
+
         #endregion
 
         #region AppSettings

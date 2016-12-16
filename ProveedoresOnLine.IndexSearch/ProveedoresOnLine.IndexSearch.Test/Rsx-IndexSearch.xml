@@ -6,5 +6,6 @@
     <key name="CompanySurveyIndex">dev_companysurveyindex</key>
     <key name="SurveyIndex">dev_surveyindex</key>
     <key name="CustomerProviderIndex">dev_customerproviderindex</key>
+    <key name="ThirdknowledgeIndex">dev_thirdknowledgeindex</key>
   </IndexSearch>
 </Settings>

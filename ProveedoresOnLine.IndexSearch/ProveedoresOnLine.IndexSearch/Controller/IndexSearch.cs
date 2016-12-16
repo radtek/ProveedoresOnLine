@@ -181,6 +181,51 @@ namespace ProveedoresOnLine.IndexSearch.Controller
 
         #endregion
 
+        #region ThirdKnowledge Index
+
+        public static bool GetThirdKnowlegdeIndex()
+        {                                   
+            try
+            {
+                LogFile("Start Process: " + "ThirdKnowledgeToIndex:::");
+                List<ThirdknowledgeIndexSearchModel> oToIndex = DAL.Controller.IndexSearchDataController.Instance.GetThirdknowledgeIndex();
+
+                Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+                var settings = new ConnectionSettings(node);
+                settings.DefaultIndex("dev_thirdknowledgeindex");
+                ElasticClient client = new ElasticClient(settings);
+
+                ICreateIndexResponse oElasticResponse = client.
+                        CreateIndex("dev_thirdknowledgeindex", c => c
+                        .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                        .Analysis(a => a.
+                            Analyzers(an => an.
+                                Custom("customWhiteSpace", anc => anc.
+                                    Filters("asciifolding", "lowercase").
+                                    Tokenizer("whitespace")
+                                        )
+                                    ).TokenFilters(tf => tf
+                                    .EdgeNGram("customEdgeNGram", engrf => engrf
+                                    .MinGram(1)
+                                    .MaxGram(10))
+                                )
+                            ).NumberOfShards(1)
+                        )
+                    );
+                client.Map<ThirdknowledgeIndexSearchModel>(m => m.AutoMap());
+                var Index = client.IndexMany(oToIndex, "dev_thirdknowledgeindex");
+                LogFile("Index Process Successfull for: " + oToIndex.Count());
+            }
+            catch (Exception err)
+            {
+                LogFile("Index Process Failed for Thirdknowledge: " + err.Message + "Inner Exception::" + err.InnerException);
+            }            
+            return true;
+        }
+
+        #endregion
+
+
         #region LogFile
         private static void LogFile(string LogMessage)
         {
@@ -193,7 +238,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                 if (!System.IO.Directory.Exists(LogFile))
                     System.IO.Directory.CreateDirectory(LogFile);
 
-                LogFile += "\\" + "Log_IndexSearchProcess_" + DateTime.Now.ToString("yyyyMMdd") + ".log";
+                LogFile += "\\" + "Log_ThirdKnowledgeIndexProcess_" + DateTime.Now.ToString("yyyyMMdd") + ".log";
 
                 using (System.IO.StreamWriter sw = System.IO.File.AppendText(LogFile))
                 {

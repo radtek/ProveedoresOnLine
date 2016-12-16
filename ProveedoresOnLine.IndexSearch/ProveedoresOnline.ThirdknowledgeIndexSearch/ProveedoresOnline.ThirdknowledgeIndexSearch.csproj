@@ -44,7 +44,16 @@
     <Compile Include="ThirdknowledgeIndexProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ProveedoresOnLine.IndexSearch\ProveedoresOnLine.IndexSearch.csproj">
+      <Project>{ee6578fa-af0b-4567-85bc-3f9070b3f9ff}</Project>
+      <Name>ProveedoresOnLine.IndexSearch</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>XCOPY "$(ProjectDir)$(OutDir)*.dll" "\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnline.ThirdknowledgeIndexSearch\developer\" /y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

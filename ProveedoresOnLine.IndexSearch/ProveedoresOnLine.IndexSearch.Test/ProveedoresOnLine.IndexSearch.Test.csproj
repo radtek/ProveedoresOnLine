@@ -102,6 +102,10 @@
       <Project>{ee6578fa-af0b-4567-85bc-3f9070b3f9ff}</Project>
       <Name>ProveedoresOnLine.IndexSearch</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ProveedoresOnline.ThirdknowledgeIndexSearch\ProveedoresOnline.ThirdknowledgeIndexSearch.csproj">
+      <Project>{414215a5-ad37-4434-8b56-5503f593cd3e}</Project>
+      <Name>ProveedoresOnline.ThirdknowledgeIndexSearch</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
