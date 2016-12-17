@@ -39,7 +39,7 @@ namespace ProveedoresOnLine.IndexSearch.Interfaces
 
         #region Thirdknowledge Index
 
-        List<ThirdknowledgeIndexSearchModel> GetThirdknowledgeIndex();      
+        List<ThirdknowledgeIndexSearchModel> GetThirdknowledgeIndex(int vRowFrom, int vRowTo);      
           
     #endregion
 }

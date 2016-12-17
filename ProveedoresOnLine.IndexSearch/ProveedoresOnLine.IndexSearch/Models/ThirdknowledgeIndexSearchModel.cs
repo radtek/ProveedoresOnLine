@@ -9,8 +9,10 @@ namespace ProveedoresOnLine.IndexSearch.Models
 {
     [ElasticsearchType(Name = "thirdknowledge_model")]
     public class ThirdknowledgeIndexSearchModel
-    {        
-        public int Registry { get; set; }
+    {
+        public UInt64 Id { get { return Registry; } }
+        [Number]
+        public UInt64 Registry { get; set; }
         [String]
         public string ListOrigin { get; set; }
         [String]
@@ -30,8 +32,9 @@ namespace ProveedoresOnLine.IndexSearch.Models
         [String]
         public string PersonType { get; set; }
         [String]
-        public string TypeId { get; set; }        
-        public string ID { get; set; }
+        public string TableCodeID { get; set; }
+        [String]
+        public string TypeId { get; set; }                
         [String]
         public string RelatedWiht { get; set; }
         [String]
@@ -42,7 +45,9 @@ namespace ProveedoresOnLine.IndexSearch.Models
         public string AKA { get; set; }
         [String]
         public string Source { get; set; }
-        [String]
+
+        [Number]
+        public int TotalRows { get; set; }
         public string LastModify { get; set; }
         public string FinalDateRol { get; set; }
         public string NationalitySourceCountry { get; set; }
