@@ -3598,7 +3598,7 @@ namespace MarketPlace.Web.Controllers
                     (SessionModel.CurrentCompany.CompanyPublicId,
                     SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1" ? true : false,
                     oModel.SearchParam,
-                    oModel.SearchFilter,
+                   null,
                     (int)oModel.SearchOrderType,
                     oModel.OrderOrientation,
                     oModel.PageNumber,
