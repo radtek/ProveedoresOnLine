@@ -27,6 +27,10 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                 List<PlanModel> oPlanModel = new List<PlanModel>();
                 PeriodModel oCurrentPeriod = new PeriodModel();
 
+
+                //TODO: Search Elastic
+
+
                 oAuth.UsuarioNombre = "e.perdomo";
                 oAuth.UsuarioClave = "sapote2016";
 

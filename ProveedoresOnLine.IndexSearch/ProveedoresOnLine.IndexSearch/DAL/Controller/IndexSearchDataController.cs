@@ -81,9 +81,9 @@ namespace ProveedoresOnLine.IndexSearch.DAL.Controller
 
         #region Thirdknowledge Index
 
-        public List<ThirdknowledgeIndexSearchModel> GetThirdknowledgeIndex()
+        public List<ThirdknowledgeIndexSearchModel> GetThirdknowledgeIndex(int vRowFrom, int vRowTo)
         {
-            return DataFactory.GetThirdknowledgeIndex();
+            return DataFactory.GetThirdknowledgeIndex(vRowFrom,vRowTo);
         }
         #endregion
     }

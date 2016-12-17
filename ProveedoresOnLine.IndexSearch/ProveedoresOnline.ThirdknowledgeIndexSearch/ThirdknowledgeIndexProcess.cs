@@ -10,7 +10,7 @@ namespace ProveedoresOnline.ThirdknowledgeIndexSearch
     {
         public static void StartProcess()
         {
-            ProveedoresOnLine.IndexSearch.Controller.IndexSearch.GetThirdKnowlegdeIndex();
+            ProveedoresOnLine.IndexSearch.Controller.IndexSearch.GetThirdknowledgeIndex(0, 10000);
         }
     }
 }

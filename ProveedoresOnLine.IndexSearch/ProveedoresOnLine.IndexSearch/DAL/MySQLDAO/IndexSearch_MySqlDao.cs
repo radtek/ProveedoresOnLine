@@ -353,21 +353,25 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
             return oReturn;
         }
 
-
-
         #endregion
 
         #endregion
 
         #region Thirdknowledge Index
 
-        public List<ThirdknowledgeIndexSearchModel> GetThirdknowledgeIndex()
+        public List<ThirdknowledgeIndexSearchModel> GetThirdknowledgeIndex(int vRowFrom, int vRowTo)
         {
+            List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
+
+            lstParams.Add(DataInstanceTopbls.CreateTypedParameter("vRowFrom", vRowFrom));
+            lstParams.Add(DataInstanceTopbls.CreateTypedParameter("vRowTo", vRowTo));
+
             ADO.Models.ADOModelResponse response = DataInstanceTopbls.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
                 CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
                 CommandText = "MP_TK_GetAllTOPBLSDATA",
                 CommandType = CommandType.StoredProcedure,
+                Parameters = lstParams,
             });
             List<ThirdknowledgeIndexSearchModel> oReturn = null;
 
@@ -379,7 +383,8 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                      where !thk.IsNull("REGISTRO")
                      group thk by new
                      {
-                         //Registry = thk.Field<int>("REGISTRO"),
+                         Registry = thk.Field<UInt64>("REGISTRO"),
+                         TotalRows = thk.Field<int>("TotalRows"),
                          ListOrigin = thk.Field<string>("ORIGEN_LISTA"),
                          ListType = thk.Field<string>("TIPO_LISTA"),
                          Code = thk.Field<string>("CODIGO"),
@@ -389,8 +394,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                          FirstLastName = thk.Field<string>("PRIMER_APELLIDO"),
                          SecondLastName = thk.Field<string>("SEGUNDO_APELLIDO"),
                          PersonType = thk.Field<string>("TIPO_PERSONA"),
-                         TypeId = thk.Field<string>("ID"),
-                         ID = thk.Field<string>("ORIGEN_LISTA"),
+                         TypeId = thk.Field<string>("ID"),                         
                          RelatedWiht = thk.Field<string>("RELACIONADO_CON"),
                          ORoldescription1 = thk.Field<string>("ROL_O_DESCRIPCION1"),
                          ORoldescription2 = thk.Field<string>("ROL_O_DESCRIPCION2"),
@@ -406,7 +410,8 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                      into thkg 
                      select new ThirdknowledgeIndexSearchModel()
                      {
-                         //Registry = thkg.Key.Registry,
+                         Registry = thkg.Key.Registry,
+                         TotalRows = thkg.Key.TotalRows,
                          ListOrigin = thkg.Key.ListOrigin,
                          ListType = thkg.Key.ListType,
                          Code = thkg.Key.Code,
@@ -416,8 +421,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                          FirstLastName = thkg.Key.FirstLastName,
                          SecondLastName = thkg.Key.SecondLastName,
                          PersonType = thkg.Key.PersonType,
-                         TypeId = thkg.Key.TypeId,
-                         ID = thkg.Key.ID,
+                         TypeId = thkg.Key.TypeId,                         
                          RelatedWiht = thkg.Key.RelatedWiht,
                          ORoldescription1 = thkg.Key.ORoldescription1,
                          ORoldescription2 = thkg.Key.ORoldescription2,
