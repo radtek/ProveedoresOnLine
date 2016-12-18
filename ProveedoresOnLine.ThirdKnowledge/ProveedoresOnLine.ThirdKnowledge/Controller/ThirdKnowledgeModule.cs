@@ -1,4 +1,5 @@
-﻿using ProveedoresOnLine.ThirdKnowledge.DAL.Controller;
+﻿using Nest;
+using ProveedoresOnLine.ThirdKnowledge.DAL.Controller;
 using ProveedoresOnLine.ThirdKnowledge.Models;
 using System;
 using System.Collections.Generic;
@@ -29,10 +30,23 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
 
                 //TODO: Search Elastic
+                Uri node = new Uri(InternalSettings.Instance[Constants.C_Settings_ElasticSearchUrl].Value);
+                var settings = new ConnectionSettings(node);
+                settings.DefaultIndex(InternalSettings.Instance[Constants.C_Settings_ThirdKnowledgeIndex].Value);
+                settings.DisableDirectStreaming(true);
+                ElasticClient client = new ElasticClient(settings);
 
+                var oSearchResult = client.Search<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel>(s => s
+                .TrackScores(true)
 
-                oAuth.UsuarioNombre = "e.perdomo";
-                oAuth.UsuarioClave = "sapote2016";
+                .From(0)
+                .Size(20)
+                .Query(q =>
+                        q.Term("typeId", IdentificationNumber)
+                       || q.Term("completeName", "Alvaro Uribe Velez")
+                 //q.Match(match => match
+                 //.Field(f => f.
+                 ));
 
                 //WS Request
                 var Result = oClient.ConsultaInspektor(oAuth, IdentificationNumber, Name);
@@ -80,7 +94,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                                                },
                                                Value = !string.IsNullOrEmpty(Name) ? Name : string.Empty,
                                                Enable = true,
-                                           });        
+                                           });
                                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
                                            {
                                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
@@ -313,9 +327,9 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
                 return oQueryToCreate;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 
