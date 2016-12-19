@@ -232,13 +232,13 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                                          || x.ListType == "SECTORAL SANCTIONS IDENTIFICATIONS_LIST_EEUU"
                                          || x.ListType == "SPECIALLY DESIGNATED NATIONALS LIST_EEUU"
                                          || x.ListType == "UNVERIFIED_LIST_EEUU" ? 
-                                         !string.IsNullOrEmpty(x.ListType) ? x.ListType + " - Criticidad Media" : 
+                                         x.ListType + " - Criticidad Media" : 
                                          x.ListType == "ESTRUCTURA DE GOBIERNO" 
                                          || x.ListType == "FIGURAS PUBLICAS"
                                          || x.ListType == "PANAMA PAPERS"
                                          || x.ListType == "PARTIDOS Y MOVIMIENTOS POLITICOS"
                                          || x.ListType == "PEPS INTERNACIONALES" ?
-                                         !string.IsNullOrEmpty(x.ListType) ? x.ListType + " - Criticidad Baja" : "NA" : "NA" : "NA",
+                                         x.ListType + " - Criticidad Baja" : "NA",
                                 Enable = true,
                             });
                             oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
