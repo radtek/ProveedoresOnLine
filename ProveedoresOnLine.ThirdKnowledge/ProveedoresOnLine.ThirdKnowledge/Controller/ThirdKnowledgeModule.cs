@@ -48,7 +48,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
                 oQueryToCreate.RelatedQueryBasicInfoModel = new List<TDQueryInfoModel>();
 
-                if (oSearchResult.Documents.Count > 0)
+                if (oSearchResult.Documents.Count() > 0)
                 {
                     oSearchResult.Documents.All(x =>
                         {
