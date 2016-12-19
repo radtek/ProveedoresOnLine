@@ -34,6 +34,14 @@
 
         public const string C_Setings_File_S3FilePath = "File_S3FilePath";
 
+        #region Elasticsearch
+
+        public const string C_Settings_ElasticSearchUrl = "ElasticSearchUrl";
+
+        public const string C_Settings_ThirdKnowledgeIndex = "ThirdknowledgeIndex";
+
+        #endregion
+
         #region Notifications
 
         public const string N_ThirdKnowledgeEndMassiveMessage = "N_ThirdKnowledgeEndMassiveMessage";

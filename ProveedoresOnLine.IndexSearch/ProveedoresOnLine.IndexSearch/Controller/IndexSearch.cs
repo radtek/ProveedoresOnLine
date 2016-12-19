@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Configuration;
 using ProveedoresOnLine.SurveyModule.Models.Index;
+using Newtonsoft.Json;
 
 namespace ProveedoresOnLine.IndexSearch.Controller
 {
@@ -183,21 +184,22 @@ namespace ProveedoresOnLine.IndexSearch.Controller
 
         #region ThirdKnowledge Index
 
-        public static bool GetThirdKnowlegdeIndex()
+        public static bool GetThirdknowledgeIndex(int RowFrom, int RowTo)
         {                                   
             try
             {
                 LogFile("Start Process: " + "ThirdKnowledgeToIndex:::");
-                List<ThirdknowledgeIndexSearchModel> oToIndex = DAL.Controller.IndexSearchDataController.Instance.GetThirdknowledgeIndex();
+
+                List<ThirdknowledgeIndexSearchModel> oToIndex = DAL.Controller.IndexSearchDataController.Instance.GetThirdknowledgeIndex(RowFrom, RowTo);
 
                 Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
                 var settings = new ConnectionSettings(node);
-                settings.DefaultIndex("dev_thirdknowledgeindex");
+                settings.DefaultIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ThirdKnowledgeIndex].Value);
                 ElasticClient client = new ElasticClient(settings);
 
                 ICreateIndexResponse oElasticResponse = client.
-                        CreateIndex("dev_thirdknowledgeindex", c => c
-                        .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                        CreateIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ThirdKnowledgeIndex].Value, c => c
+                        .Settings(s => s.NumberOfReplicas(1).NumberOfShards(1)
                         .Analysis(a => a.
                             Analyzers(an => an.
                                 Custom("customWhiteSpace", anc => anc.
@@ -212,8 +214,28 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                             ).NumberOfShards(1)
                         )
                     );
+
                 client.Map<ThirdknowledgeIndexSearchModel>(m => m.AutoMap());
-                var Index = client.IndexMany(oToIndex, "dev_thirdknowledgeindex");
+                var Index = client.IndexMany(oToIndex, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ThirdKnowledgeIndex].Value);
+
+                for (int i = 0; i < (oToIndex.FirstOrDefault().TotalRows / 10000); i++)
+			    {
+                    List<ThirdknowledgeIndexSearchModel> oToIterIndex = new List<ThirdknowledgeIndexSearchModel>();
+                    LogFile("Index Process Count::: " + RowFrom + "__:::__" + RowTo);
+                    RowFrom = RowFrom + 10000;
+                    if (i == 0)
+                    {
+                        RowFrom = 20000;
+                        oToIterIndex = DAL.Controller.IndexSearchDataController.Instance.GetThirdknowledgeIndex(20000, 10000);
+                    }
+                    else
+                        oToIterIndex = DAL.Controller.IndexSearchDataController.Instance.GetThirdknowledgeIndex(RowFrom, 10000);
+                    
+                    client.Map<ThirdknowledgeIndexSearchModel>(m => m.AutoMap());
+                    var IndexIter = client.IndexMany(oToIterIndex, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ThirdKnowledgeIndex].Value);
+                    LogFile("Index Process Status::: " + IndexIter.IsValid + "::" + IndexIter.DebugInformation);
+			    }             
+                
                 LogFile("Index Process Successfull for: " + oToIndex.Count());
             }
             catch (Exception err)
@@ -224,7 +246,6 @@ namespace ProveedoresOnLine.IndexSearch.Controller
         }
 
         #endregion
-
 
         #region LogFile
         private static void LogFile(string LogMessage)
