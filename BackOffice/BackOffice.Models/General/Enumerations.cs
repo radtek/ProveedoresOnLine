@@ -622,6 +622,7 @@
         Option = 801003,
         OptionInfo = 801004,
         Reports = 801005,
+        asdasdsad = 804005
     }
 
     public enum enumAdminModule

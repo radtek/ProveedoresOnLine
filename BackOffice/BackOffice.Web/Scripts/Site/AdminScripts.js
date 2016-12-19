@@ -1697,7 +1697,7 @@ var Admin_CompanyRoleObject = {
     RoleOptionUpsertUrl: '',
     SelectionOptionUpsertUrl: '',
     SurveyUpsertUrl: '',
-    ThirdknowledgeUpsertUrl:'',
+    ThirdknowledgeUpsertUrl: '',
     ModuleList: '',
     ReportList: '',
     //ProviderList
@@ -1714,6 +1714,7 @@ var Admin_CompanyRoleObject = {
     AdminOptions: new Array(),
 
     Init: function (vInitObject) {
+        debugger;
         this.ObjectId = vInitObject.ObjectId;
         this.ObjectType = vInitObject.ObjectType;
         this.RoleCompanyId = vInitObject.RoleCompanyId;
@@ -1743,7 +1744,7 @@ var Admin_CompanyRoleObject = {
             });
         }
     },
-
+    
     ConfigKeyBoard: function () {
         $(document.body).keydown(function (e) {
             if (e.altKey && e.shiftKey && e.keyCode == 71) {
@@ -1768,6 +1769,7 @@ var Admin_CompanyRoleObject = {
     },
 
     RenderAsync: function (vRenderObject) {
+        debugger;
         if (vRenderObject.ObjectType == '801002') {
             Admin_CompanyRoleObject.RenderRoleCompanyUpsert();
         }
@@ -1787,6 +1789,7 @@ var Admin_CompanyRoleObject = {
             Admin_CompanyRoleObject.RenderSelectionOptionUpsert(vRenderObject);
         }
         else if (vRenderObject.ObjectType == '804008') {
+            debugger;
             Admin_CompanyRoleObject.RenderSurveyUpsert(vRenderObject);
         }
         else if (vRenderObject.ObjectType == '804005') {
@@ -2238,6 +2241,10 @@ var Admin_CompanyRoleObject = {
                             }
                             else if (data.RoleModule == "804008") {
                                 window.location = Admin_CompanyRoleObject.SurveyUpsertUrl.replace('amp;', '').replace(/\${RoleCompanyId}/gi, Admin_CompanyRoleObject.RoleCompanyId).replace(/\${RoleModuleId}/gi, data.RoleModuleId);
+                            }
+                            else if (data.RoleModule == "804005") {
+                                debugger;
+                                window.location = Admin_CompanyRoleObject.ThirdknowledgeUpsertUrl.replace('amp;', '').replace(/\${RoleCompanyId}/gi, Admin_CompanyRoleObject.RoleCompanyId).replace(/\${RoleModuleId}/gi, data.RoleModuleId);
                             }
                             else {
                                 Message('error', 'El módulo seleccionado no tiene opciones por agregar.');
@@ -2943,7 +2950,7 @@ var Admin_CompanyRoleObject = {
             }],
         });
     },
-
+    
     RenderThirdknowledgeUpsert: function (vRenderObject) {
         $('#' + Admin_CompanyRoleObject.ObjectId).kendoGrid({
             editable: true,
