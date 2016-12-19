@@ -39,7 +39,7 @@ namespace MarketPlace.Web.Controllers
                 //Clean the season url saved
                 if (SessionModel.CurrentURL != null)
                     SessionModel.CurrentURL = null;
-
+                
                 //Get The Active Plan By Customer 
                 oCurrentPeriodList = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetCurrenPeriod(SessionModel.CurrentCompany.CompanyPublicId, true);
 
@@ -189,9 +189,13 @@ namespace MarketPlace.Web.Controllers
         {
             string RelatedUser = null;
 
-            if (SessionManager.SessionController.POLMarketPlace_MarketPlaceUserLogin.RelatedCompany.Where(x => x.CurrentSessionCompany == true).Select(x => x.RelatedUser.FirstOrDefault().RelatedCompanyRole.ParentRoleCompany).FirstOrDefault() != null)
+            if (SessionModel.CurrentCompanyLoginUser.RelatedCompany.FirstOrDefault().RelatedUser.FirstOrDefault().RelatedCompanyRole.ParentRoleCompany != null)
             {
-                RelatedUser = SessionManager.SessionController.POLMarketPlace_MarketPlaceUserLogin.RelatedCompany.Where(x => x.CurrentSessionCompany == true).Select(x => x.RelatedUser.FirstOrDefault().User).FirstOrDefault();
+                RelatedUser = SessionModel.CurrentCompanyLoginUser.RelatedUser.Email;
+            }
+            else
+            {
+                RelatedUser = null;
             }
 
             ProviderViewModel oModel = new ProviderViewModel();

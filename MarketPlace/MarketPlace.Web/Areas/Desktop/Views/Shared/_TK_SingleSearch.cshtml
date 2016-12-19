@@ -88,6 +88,11 @@
 <div id="loading"></div>
 @{
     string UrlReturn = Url.Action(MVC.ThirdKnowledge.ActionNames.TKDetailSingleSearch, MVC.ThirdKnowledge.Name);
+    bool OptionRole = false;
+}
+@if (Model.ProviderMenu != null && Model.ProviderMenu.Count > 0)
+{
+     OptionRole = Model.ProviderMenu.FirstOrDefault().ChildMenu.Any(x => x.Name == "Detalle Consulta");
 }
 
 <input type="hidden" name="ThirdKnowledge_FormQueryPublicId" id="ThirdKnowledge_FormQueryPublicId" value="" />
@@ -105,10 +110,12 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+        debugger;
         Third_KnowledgeSimpleSearchObject.Init({
             ObjectId: 'ThirdKnowledge',
             Url: '@UrlReturn',
-            ReSearch: '@Model.RelatedThirdKnowledge.ReSearch'
+            ReSearch: '@Model.RelatedThirdKnowledge.ReSearch',
+            QueryDetailsRoleOption:'@OptionRole',
         });
     });
 </script>
