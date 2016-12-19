@@ -868,6 +868,12 @@
         SurveyList = 813001,
         SurveyReports = 813002,
         SurveyProgram = 813003,
+
+        //Thirdknowledge
+        IndividualQuery=815001,
+        MasiveQuery = 815002,
+        MyQueries = 815003,
+        QueryDetails = 815004,
     }
 
     #endregion

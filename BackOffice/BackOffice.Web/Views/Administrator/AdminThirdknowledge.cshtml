@@ -25,7 +25,7 @@
                 Html.RenderPartial(MVC.Shared.Views._P_ProviderActions, Model);
             }
             <div id="loading"></div>
-            <div id="divGridSurveyOption"></div>
+            <div id="divGridThirdknowledgeOption"></div>
             @{
                 Model.IsForm = false;
                 Html.RenderPartial(MVC.Shared.Views._P_ProviderActions, Model);
@@ -37,13 +37,13 @@
 <!--templates-->
 <div style="display:none;">
     <!--template provider info menu-->
-    <div id="divGridSurveyOption_ShortcutToolTipTemplate">
+    <div id="divGridThirdknowledgeOption_ShortcutToolTipTemplate">
         <img class="divGrid_kbtooltip" src="@Url.Content(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_InfoTooltip].Value)" title=" Nuevo (alt+shift+n) -  Guardar (alt+shift+g) - Descartar (alt+shift+d) " />
     </div>
 
-    <div id="divGridSurveyOption_ViewEnablesTemplate">
+    <div id="divGridThirdknowledgeOption_ViewEnablesTemplate">
         <label class="POBOProviderGridVerSoloTrue">Ver solo los habilitados</label>
-        <input class="POBOProviderGridEnableContact" id="divGridSurveyOption_ViewEnable" type="checkbox" checked="checked" />
+        <input class="POBOProviderGridEnableContact" id="divGridThirdknowledgeOption_ViewEnable" type="checkbox" checked="checked" />
     </div>
 </div>
 
@@ -63,12 +63,12 @@
     <script type="text/javascript">
         $(document).ready(function () {
             Admin_CompanyRoleObject.Init({
-                ObjectId: 'divGridSurveyOption',
+                ObjectId: 'divGridThirdknowledgeOption',
                 RoleModuleId: '@(Model.RelatedRole.RoleModule.FirstOrDefault().RoleModuleId)',
                 ModuleList: @Html.Raw(oModuleOptionList),
             });
             Admin_CompanyRoleObject.RenderAsync({
-                ObjectType: '@((int)BackOffice.Models.General.enumAdminModule.Survey)',
+                ObjectType: '@((int)BackOffice.Models.General.enumAdminModule.ThirdKnowledge)',
             });
         });
     </script>

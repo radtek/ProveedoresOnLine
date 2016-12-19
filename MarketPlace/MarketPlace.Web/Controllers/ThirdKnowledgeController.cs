@@ -247,7 +247,7 @@ namespace MarketPlace.Web.Controllers
 
             if (!string.IsNullOrEmpty(Request["ThirdKnowledge_FormQueryPublicId"]))
                 QueryPublicId = Request["ThirdKnowledge_FormQueryPublicId"];
-            
+
             ProviderViewModel oModel = new ProviderViewModel();
             oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel();
             oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult = new List<TDQueryModel>();
@@ -533,78 +533,89 @@ namespace MarketPlace.Web.Controllers
 
             string oCurrentController = MarketPlace.Web.Controllers.BaseController.CurrentControllerName;
             string oCurrentAction = MarketPlace.Web.Controllers.BaseController.CurrentActionName;
+            List<int> oCurrentSurveySubMenu = SessionModel.CurrentThirdknowledgeOption();
 
             #region Menu Usuario
 
             MarketPlace.Models.General.GenericMenu oMenuAux = new GenericMenu();
-
-            //header
-            oMenuAux = new GenericMenu()
+            if (oCurrentSurveySubMenu != null && oCurrentSurveySubMenu.Count > 0)
             {
-                Name = "Menú Usuario",
-                Position = 0,
-                ChildMenu = new List<GenericMenu>(),
-            };
+                //header
+                oMenuAux = new GenericMenu()
+                {
+                    Name = "Menú Usuario",
+                    Position = 0,
+                    ChildMenu = new List<GenericMenu>(),
+                };
+                if (oCurrentSurveySubMenu.Any(y => y == (int)enumProviderSubMenu.IndividualQuery))
+                {
 
-            //Consulta individual
-            oMenuAux.ChildMenu.Add(new GenericMenu()
-            {
-                Name = "Consulta Individual",
-                Url = Url.RouteUrl
-                        (MarketPlace.Models.General.Constants.C_Routes_Default,
-                        new
-                        {
-                            controller = MVC.ThirdKnowledge.Name,
-                            action = MVC.ThirdKnowledge.ActionNames.TKSingleSearch
-                        }),
-                Position = 0,
-                IsSelected =
-                    (oCurrentAction == MVC.ThirdKnowledge.ActionNames.TKSingleSearch &&
-                    oCurrentController == MVC.ThirdKnowledge.Name)
-            });
 
-            //Consulta masiva
-            oMenuAux.ChildMenu.Add(new GenericMenu()
-            {
-                Name = "Consulta Masiva",
-                Url = Url.RouteUrl
-                        (MarketPlace.Models.General.Constants.C_Routes_Default,
-                        new
-                        {
-                            controller = MVC.ThirdKnowledge.Name,
-                            action = MVC.ThirdKnowledge.ActionNames.TKMasiveSearch
-                        }),
-                Position = 1,
-                IsSelected =
-                    (oCurrentAction == MVC.ThirdKnowledge.ActionNames.TKMasiveSearch &&
-                    oCurrentController == MVC.ThirdKnowledge.Name)
-            });
+                    //Consulta individual
+                    oMenuAux.ChildMenu.Add(new GenericMenu()
+                    {
+                        Name = "Consulta Individual",
+                        Url = Url.RouteUrl
+                                (MarketPlace.Models.General.Constants.C_Routes_Default,
+                                new
+                                {
+                                    controller = MVC.ThirdKnowledge.Name,
+                                    action = MVC.ThirdKnowledge.ActionNames.TKSingleSearch
+                                }),
+                        Position = 0,
+                        IsSelected =
+                            (oCurrentAction == MVC.ThirdKnowledge.ActionNames.TKSingleSearch &&
+                            oCurrentController == MVC.ThirdKnowledge.Name)
+                    });
+                }
 
-            //Consulta individual
-            oMenuAux.ChildMenu.Add(new GenericMenu()
-            {
-                Name = "Mis Consultas",
-                Url = Url.RouteUrl
-                        (MarketPlace.Models.General.Constants.C_Routes_Default,
-                        new
-                        {
-                            controller = MVC.ThirdKnowledge.Name,
-                            action = MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeSearch
-                        }),
-                Position = 2,
-                IsSelected =
-                    (oCurrentAction == MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeSearch &&
-                    oCurrentController == MVC.ThirdKnowledge.Name)
-            });
+                if (oCurrentSurveySubMenu.Any(y => y == (int)enumProviderSubMenu.MasiveQuery))
+                {
+                    //Consulta masiva
+                    oMenuAux.ChildMenu.Add(new GenericMenu()
+                    {
+                        Name = "Consulta Masiva",
+                        Url = Url.RouteUrl
+                            (MarketPlace.Models.General.Constants.C_Routes_Default,
+                            new
+                            {
+                                controller = MVC.ThirdKnowledge.Name,
+                                action = MVC.ThirdKnowledge.ActionNames.TKMasiveSearch
+                            }),
+                        Position = 1,
+                        IsSelected =
+                        (oCurrentAction == MVC.ThirdKnowledge.ActionNames.TKMasiveSearch &&
+                        oCurrentController == MVC.ThirdKnowledge.Name)
+                    });
+                }
 
-            #endregion
+                if (oCurrentSurveySubMenu.Any(y => y == (int)enumProviderSubMenu.MyQueries))
+                {
+                    //Mis Consultas
+                    oMenuAux.ChildMenu.Add(new GenericMenu()
+                    {
+                        Name = "Mis Consultas",
+                        Url = Url.RouteUrl
+                            (MarketPlace.Models.General.Constants.C_Routes_Default,
+                            new
+                            {
+                                controller = MVC.ThirdKnowledge.Name,
+                                action = MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeSearch
+                            }),
+                        Position = 2,
+                        IsSelected =
+                        (oCurrentAction == MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeSearch &&
+                        oCurrentController == MVC.ThirdKnowledge.Name)
+                    });
+                }
+                #endregion
 
-            //get is selected menu
-            oMenuAux.IsSelected = oMenuAux.ChildMenu.Any(x => x.IsSelected);
+                //get is selected menu
+                oMenuAux.IsSelected = oMenuAux.ChildMenu.Any(x => x.IsSelected);
 
-            //add menu
-            oReturn.Add(oMenuAux);
-
+                //add menu
+                oReturn.Add(oMenuAux);
+            }
             return oReturn;
         }
 
