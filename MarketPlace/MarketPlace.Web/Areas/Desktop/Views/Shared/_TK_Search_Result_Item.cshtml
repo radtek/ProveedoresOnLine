@@ -87,7 +87,7 @@
                 {
                     <div class="col-sm-2 POMPProviderBoxInfo"><span><a href="@MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.TK_File_S3FilePath].Value@item.FileName.Replace("xml","xlsx")">Ver archivo</a></span></div> 
                 }
-                @if (item.QueryStatus.ItemId == (int)MarketPlace.Models.General.enumThirdKnowledgeQueryStatus.Finalized)
+                @if (item.QueryStatus.ItemId == (int)MarketPlace.Models.General.enumThirdKnowledgeQueryStatus.Finalized && Model.ProviderMenu.FirstOrDefault().ChildMenu.Any(x=>x.Name == "Detalle Consulta"))
                 {
 
                     <div class="col-sm-2 text-right POMPProviderBoxInfo ThirdKnowledge_Detail">

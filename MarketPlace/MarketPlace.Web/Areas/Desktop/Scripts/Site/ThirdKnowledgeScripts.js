@@ -3,10 +3,12 @@ var Third_KnowledgeSimpleSearchObject = {
     ObjectId: '',
     Url: '',
     ReSearch: false,
+    QueryDetailsRoleOption:'',
     Init: function (vInitObject) {
         this.ObjectId = vInitObject.ObjectId;
         this.Url = vInitObject.Url;
         this.ReSearch = vInitObject.ReSearch;
+        this.QueryDetailsRoleOption = vInitObject.QueryDetailsRoleOption;
 
         if (this.ReSearch == "True") {
             //Call Research Function
@@ -103,7 +105,8 @@ var Third_KnowledgeSimpleSearchObject = {
                                     if (value.ListName != null) {
                                         resultDiv += '<div class="col-sm-2 POMPProviderBoxInfo">' + value.ListName + '</div>';
                                     }
-                                    if (value.QueryBasicPublicId != null) {
+                                    if (value.QueryBasicPublicId != null && value.QueryDetailsRoleOption == 'Detalle Consulta') {
+                                        debugger;
                                         resultDiv += '<div class="col-sm-1 POMPProviderBoxInfo">' + '<a target = "_blank" href="' + Third_KnowledgeSimpleSearchObject.Url + '?QueryBasicPublicId=' + value.QueryBasicPublicId + '&ReturnUrl=null">' + "Ver_Detalle" + '</a>' + '</div>';
                                     }
                                     resultDiv += '</div>';
