@@ -11,6 +11,7 @@
 <div class="container-fluid POMPTKDetailContainer" id="TKDetailContainer">
     @if (Model.Group != null && Model.Group.Count >= 0)
     {
+        var options = MarketPlace.Models.General.SessionModel.CurrentThirdknowledgeOption();
         foreach (var col in Model.Group)
         {
             if (col.Item1 == "SIN COINCIDENCIAS")
@@ -35,10 +36,8 @@
                         <div class="col-sm-4 POMPProviderBoxInfo text-left"><p>@subItem.IdNumberRequest</p></div>
                         <div class="col-sm-4 POMPProviderBoxInfo text-right">
                             <p>
-                                @if (Model.ProviderMenu.FirstOrDefault().ChildMenu.Any(x => x.Name == "Detalle Consulta"))
-                                {
-
-
+                                @if (options.Any(x=>x == (int)MarketPlace.Models.General.enumProviderSubMenu.QueryDetails))
+                                {                                   
                                     <a href="@(Url.RouteUrl
                                            (MarketPlace.Models.General.Constants.C_Routes_Default,
                                            new

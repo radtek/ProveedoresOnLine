@@ -3,7 +3,7 @@ var Third_KnowledgeSimpleSearchObject = {
     ObjectId: '',
     Url: '',
     ReSearch: false,
-    QueryDetailsRoleOption:'',
+    QueryDetailsRoleOption: '',
     Init: function (vInitObject) {
         this.ObjectId = vInitObject.ObjectId;
         this.Url = vInitObject.Url;
@@ -17,6 +17,7 @@ var Third_KnowledgeSimpleSearchObject = {
     },
 
     SimpleSearch: function () {
+        debugger;
         Third_KnowledgeSimpleSearchObject.Loading_Generic_Show();
         if ($('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_Form').length > 0) {
             $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_DivResult').html('')
@@ -105,7 +106,8 @@ var Third_KnowledgeSimpleSearchObject = {
                                     if (value.ListName != null) {
                                         resultDiv += '<div class="col-sm-2 POMPProviderBoxInfo">' + value.ListName + '</div>';
                                     }
-                                    if (value.QueryBasicPublicId != null && value.QueryDetailsRoleOption == 'Detalle Consulta') {
+                                    debugger;
+                                    if (value.QueryBasicPublicId != null && Third_KnowledgeSimpleSearchObject.QueryDetailsRoleOption == 'True') {
                                         debugger;
                                         resultDiv += '<div class="col-sm-1 POMPProviderBoxInfo">' + '<a target = "_blank" href="' + Third_KnowledgeSimpleSearchObject.Url + '?QueryBasicPublicId=' + value.QueryBasicPublicId + '&ReturnUrl=null">' + "Ver_Detalle" + '</a>' + '</div>';
                                     }

@@ -2,6 +2,7 @@
 
 @if (!Model.RenderScripts && Model.RelatedThidKnowledgeSearch != null)
 {
+    var option = MarketPlace.Models.General.SessionModel.CurrentThirdknowledgeOption();
     foreach (var item in Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult)
     {
         var QueryPublicId = item.QueryPublicId;
@@ -49,6 +50,7 @@
                 <div class="col-sm-2 POMPProviderBoxInfo"><span>@(item.QueryStatus.ItemId == (int)MarketPlace.Models.General.enumThirdKnowledgeQueryStatus.Finalized == true ? "Finalizado" : "En Progreso")</span></div>
                 @if (item.SearchType.ItemId == 201001)
                 {
+                    
                     <div class="col-sm-2 POMPProviderBoxInfo">
                         @{
                             string strInfo = "";
@@ -87,7 +89,7 @@
                 {
                     <div class="col-sm-2 POMPProviderBoxInfo"><span><a href="@MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.TK_File_S3FilePath].Value@item.FileName.Replace("xml","xlsx")">Ver archivo</a></span></div> 
                 }
-                @if (item.QueryStatus.ItemId == (int)MarketPlace.Models.General.enumThirdKnowledgeQueryStatus.Finalized && Model.ProviderMenu.FirstOrDefault().ChildMenu.Any(x=>x.Name == "Detalle Consulta"))
+                @if (item.QueryStatus.ItemId == (int)MarketPlace.Models.General.enumThirdKnowledgeQueryStatus.Finalized && option.Any(x=>x==(int)MarketPlace.Models.General.enumProviderSubMenu.QueryDetails))
                 {
 
                     <div class="col-sm-2 text-right POMPProviderBoxInfo ThirdKnowledge_Detail">
