@@ -5301,9 +5301,8 @@ namespace MarketPlace.Web.Controllers
 
                     if (EvaluationAreaInf != null)
                     {
-                        RatingforArea = RatingforArea + Convert.ToDouble(EvaluationAreaInf.RelatedSurveyItem.ItemInfo.Where(x=>x.ItemInfoType.ItemId == 1205001).Select(x=>x.Value).FirstOrDefault());
-                    }
-                    RatingforArea = RatingforArea * Convert.ToDouble(EvaluationArea.Weight) / 100;
+                        RatingforArea = RatingforArea + Convert.ToDouble(SurveyDetailInfo.RelatedSurvey.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumSurveyInfoType.Rating).Select(x => x.Value).FirstOrDefault());
+                    }                    
                 }
                 
                 DataRow row;
@@ -5331,10 +5330,10 @@ namespace MarketPlace.Web.Controllers
                     row2["Evaluator"] = subrep.Item2;
                     row2["Question"] = subrep.Item3.ItemName;
                     row2["Answer"] = subrep.Item4.ItemName;
-                    row2["QuestionWeight"] = subrep.Item3.ItemInfo.Where(x => x.ItemInfoType.ItemId == 1203002).Select(x => x.Value).FirstOrDefault();
-                    row2["QuestionRating"] = subrep.Item4.ItemInfo.Where(x => x.ItemInfoType.ItemId == 1205001).Select(x => x.Value).FirstOrDefault();
+                    row2["QuestionWeight"] = subrep.Item3.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumSurveyConfigItemInfoType.Weight).Select(x => x.Value).FirstOrDefault();
+                    row2["QuestionRating"] = subrep.Item4.ItemInfo.Where(x => x.ItemInfoType.ItemId ==(int)MarketPlace.Models.General.enumSurveyItemInfoType.Ratting).Select(x => x.Value).FirstOrDefault();
                     row2["TotalAreaRating"] = Convert.ToDouble(row2["QuestionWeight"].ToString()) * Convert.ToDouble(row2["QuestionRating"].ToString()) / 100;
-                    row2["QuestionDescription"] = subrep.Item4.ItemInfo.Where(x => x.ItemInfoType.ItemId == 1204010).Select(x => x.Value).FirstOrDefault();
+                    row2["QuestionDescription"] = subrep.Item4.ItemInfo.Where(x => x.ItemInfoType.ItemId ==(int)MarketPlace.Models.General.enumSurveyInfoType.Comments).Select(x => x.Value).FirstOrDefault();
                     if (string.IsNullOrEmpty(row2["QuestionDescription"].ToString()))
                         row2["QuestionDescription"] = "Sin Comentarios";
 
