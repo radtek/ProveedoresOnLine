@@ -28,7 +28,7 @@ namespace ProveedoresOnLine.IndexSearch.Test
             Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
             var settings = new ConnectionSettings(node);
             settings.DisableDirectStreaming(true);
-            settings.DefaultIndex("dev_companysurveyindex");
+            settings.DefaultIndex("prod_companysurveyindex");
             ElasticClient CustomerSurvey = new ElasticClient(settings);
             int page = 0;
             Nest.ISearchResponse<CompanySurveyIndexModel> result = CustomerSurvey.Search<CompanySurveyIndexModel>(s => s

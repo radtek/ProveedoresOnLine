@@ -18,13 +18,6 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         {
             try
             {
-                #region Set User Service
-
-                WS_Inspekt.Autenticacion oAuth = new WS_Inspekt.Autenticacion();
-                WS_Inspekt.WSInspektorSoapClient oClient = new WS_Inspekt.WSInspektorSoapClient();
-
-                #endregion Set User Service
-
                 List<PlanModel> oPlanModel = new List<PlanModel>();
                 PeriodModel oCurrentPeriod = new PeriodModel();
 
@@ -42,8 +35,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                 .From(0)
                 .Size(10)
                 .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Name)) &&
-                  q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
-
+                            q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
                  ));
 
                 oQueryToCreate.RelatedQueryBasicInfoModel = new List<TDQueryInfoModel>();
@@ -194,8 +186,8 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                                     ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.GroupName,
                                 },
                                 Value = !string.IsNullOrEmpty(x.ListType) &&
-                                         x.ListType.Contains("BOLETIN") 
-                                         || x.ListType =="FOREIGN CORRUPT PRACTICES ACT EEUU"
+                                         x.ListType.Contains("BOLETIN")
+                                         || x.ListType == "FOREIGN CORRUPT PRACTICES ACT EEUU"
                                          || x.ListType == "FOREIGN FINANCIAL INSTITUTIONS PART 561_EEUU"
                                          || x.ListType == "FOREIGN SANCTIONS EVADERS LIST_EEUU"
                                          || x.ListType == "FOREIGN_TERRORIST_ORGANIZATIONS_EEUU_FTO"
@@ -206,7 +198,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                                          || x.ListType == "OFAC"
                                          || x.ListType == "PALESTINIAN LEGISLATIVE COUNCIL LIST_EEUU"
                                          || x.ListType == "VINCULADOS" ?
-                                         "LISTAS RESTRICTIVAS" + " - Criticidad Alta" : 
+                                         "LISTAS RESTRICTIVAS" + " - Criticidad Alta" :
                                          x.ListType == "CONSEJO NACIONAL ELECTORAL"
                                          || x.ListType == "CONSEJO SUPERIOR DE LA JUDICATURA"
                                          || x.ListType == "CORTE CONSTITUCIONAL"
@@ -231,9 +223,9 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                                          || x.ListType == "ONU_RESOLUCION_2023"
                                          || x.ListType == "SECTORAL SANCTIONS IDENTIFICATIONS_LIST_EEUU"
                                          || x.ListType == "SPECIALLY DESIGNATED NATIONALS LIST_EEUU"
-                                         || x.ListType == "UNVERIFIED_LIST_EEUU" ? 
-                                         x.ListType + " - Criticidad Media" : 
-                                         x.ListType == "ESTRUCTURA DE GOBIERNO" 
+                                         || x.ListType == "UNVERIFIED_LIST_EEUU" ?
+                                         x.ListType + " - Criticidad Media" :
+                                         x.ListType == "ESTRUCTURA DE GOBIERNO"
                                          || x.ListType == "FIGURAS PUBLICAS"
                                          || x.ListType == "PANAMA PAPERS"
                                          || x.ListType == "PARTIDOS Y MOVIMIENTOS POLITICOS"
