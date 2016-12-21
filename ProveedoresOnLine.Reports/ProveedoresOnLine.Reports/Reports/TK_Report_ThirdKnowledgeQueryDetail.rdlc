@@ -915,7 +915,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox19</rd:DefaultName>
-            <Top>5.49481cm</Top>
+            <Top>5.46306cm</Top>
             <Left>0.64319cm</Left>
             <Height>0.57354cm</Height>
             <Width>4.47321cm</Width>
@@ -937,7 +937,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>= IIF(Parameters!Offence.Value = "--","--",IIF(Parameters!Status.Value = "true", "Activo" , "Inactivo"))</Value>
+                    <Value EvaluationMode="Constant">Activo</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <FontSize>9pt</FontSize>
@@ -948,7 +948,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox19</rd:DefaultName>
-            <Top>5.49481cm</Top>
+            <Top>5.48571cm</Top>
             <Left>5.25749cm</Left>
             <Height>0.57354cm</Height>
             <Width>10.46851cm</Width>

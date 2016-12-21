@@ -1175,7 +1175,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Status.Value</Value>
+                              <Value>Activo</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
