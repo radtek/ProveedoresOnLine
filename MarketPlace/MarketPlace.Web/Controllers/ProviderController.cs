@@ -5293,7 +5293,7 @@ namespace MarketPlace.Web.Controllers
             foreach (var EvaluationArea in
                         oModel.RelatedSurvey.GetSurveyConfigItem(MarketPlace.Models.General.enumSurveyConfigItemType.EvaluationArea, null).Distinct())
             {
-                int RatingforArea = 0;
+                double RatingforArea = 0;
 
                 foreach (Models.Survey.SurveyViewModel SurveyDetailInfo in EvaluatorDetailList)
                 {
@@ -5301,15 +5301,16 @@ namespace MarketPlace.Web.Controllers
 
                     if (EvaluationAreaInf != null)
                     {
-                        RatingforArea = RatingforArea + (int)EvaluationAreaInf.Ratting;
+                        RatingforArea = RatingforArea + Convert.ToDouble(EvaluationAreaInf.RelatedSurveyItem.ItemInfo.Where(x=>x.ItemInfoType.ItemId == 1205001).Select(x=>x.Value).FirstOrDefault());
                     }
+                    RatingforArea = RatingforArea * Convert.ToDouble(EvaluationArea.Weight) / 100;
                 }
-
+                
                 DataRow row;
 
                 row = data.NewRow();
                 row["SurveyAreaName"] = EvaluationArea.Name;
-                row["SurveyAreaRating"] = RatingforArea;
+                row["SurveyAreaRating"] = RatingforArea.ToString("0.0");
                 row["SurveyAreaWeight"] = EvaluationArea.Weight.ToString() + "%";
                 data.Rows.Add(row);
             }
