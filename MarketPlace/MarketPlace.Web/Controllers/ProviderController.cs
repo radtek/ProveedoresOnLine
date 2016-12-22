@@ -3623,9 +3623,9 @@ namespace MarketPlace.Web.Controllers
                 ElasticClient client = new ElasticClient(settings);
 
                 oModel.ElasticCompanyModel = client.Search<CompanyIndexModel>(s => s
-                //.From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
+                .From(0)
                 .TrackScores(true)
-                //.Size(20)                
+                .Size(20000000)                
                 .Query(q => q.
                     Filtered(f => f
                     .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
