@@ -3564,7 +3564,13 @@ namespace MarketPlace.Web.Controllers
             return oReporModel;
         }
 
-        public virtual ActionResult RPGeneral(string SearchParam, string SearchFilter)
+        public virtual ActionResult RPGeneral(string ProjectPublicId,
+            string CompareId,
+            string SearchParam,
+            string SearchFilter,
+            string SearchOrderType,
+            string OrderOrientation,
+            string PageNumber)
         {
             //Clean the season url saved
             if (SessionModel.CurrentURL != null)
@@ -3572,7 +3578,7 @@ namespace MarketPlace.Web.Controllers
 
             ProviderSearchViewModel oModel = null;
 
-            List<ProviderModel> oProviderResult;
+            //List<ProviderModel> oProviderResult;
 
             if (SessionModel.CurrentCompany != null &&
                 !string.IsNullOrEmpty(SessionModel.CurrentCompany.CompanyPublicId))
@@ -3583,205 +3589,207 @@ namespace MarketPlace.Web.Controllers
                     ProviderOptions = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.CatalogGetProviderOptions(),
                     SearchParam = SearchParam,
                     SearchFilter = SearchFilter == null ? null : (SearchFilter.Trim(new char[] { ',' }).Length > 0 ? SearchFilter.Trim(new char[] { ',' }) : null),
-                    SearchOrderType = MarketPlace.Models.General.enumSearchOrderType.Relevance,
-                    OrderOrientation = false,
-                    PageNumber = 0,
+                    SearchOrderType = string.IsNullOrEmpty(SearchOrderType) ? MarketPlace.Models.General.enumSearchOrderType.Relevance : (MarketPlace.Models.General.enumSearchOrderType)Convert.ToInt32(SearchOrderType),
+                    OrderOrientation = string.IsNullOrEmpty(OrderOrientation) ? false : ((OrderOrientation.Trim().ToLower() == "1") || (OrderOrientation.Trim().ToLower() == "true")),
+                    PageNumber = string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber),
                     ProviderSearchResult = new List<ProviderLiteViewModel>(),
+                    CompanyIndexModel = new ProveedoresOnLine.Company.Models.Company.CompanyIndexModel(),
+                    CityFilter = new List<ElasticSearchFilter>(),
+                    CountryFilter = new List<ElasticSearchFilter>(),
+                    IcaFilter = new List<ElasticSearchFilter>(),
+                    StatusFilter = new List<ElasticSearchFilter>(),
+                    BlackListFilter = new List<ElasticSearchFilter>(),
+                    MyProvidersFilter = new List<ElasticSearchFilter>(),
+                    OtherProvidersFilter = new List<ElasticSearchFilter>(),
                 };
 
                 #region Providers
 
-                //search providers
-                int oTotalRowsAux;
-                oProviderResult =
-                    ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchNew
-                    (SessionModel.CurrentCompany.CompanyPublicId,
-                    SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1" ? true : false,
-                    oModel.SearchParam,
-                   null,
-                    (int)oModel.SearchOrderType,
-                    oModel.OrderOrientation,
-                    oModel.PageNumber,
-                    //oModel.RowCount,
-                    65000,
-                    out oTotalRowsAux);
+                #region ElasticSearch
 
-                oModel.TotalRows = oTotalRowsAux;
-
-                List<GenericFilterModel> oFilterModel = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPProviderSearchFilterNew
-                    (SessionModel.CurrentCompany.CompanyPublicId,
-                    oModel.SearchParam,
-                    oModel.SearchFilter,
-                    SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1" ? true : false);
-
-                if (oFilterModel != null)
+                List<Tuple<string, string, string>> lstSearchFilter = new List<Tuple<string, string, string>>();
+                if (!string.IsNullOrEmpty(SearchFilter))
                 {
-                    oModel.ProviderFilterResult = oFilterModel.Where(x => x.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).ToList();
+                    lstSearchFilter = oModel.GetlstSearchFilter();
                 }
 
-                //Branch Info
+                #region Search Result Company
+
+                Uri node = new Uri(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
+                var settings = new ConnectionSettings(node);
+
+                settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanyIndex].Value);
+                settings.DisableDirectStreaming(true);
+                ElasticClient client = new ElasticClient(settings);
+
+                oModel.ElasticCompanyModel = client.Search<CompanyIndexModel>(s => s
+                //.From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
+                .TrackScores(true)
+                //.Size(20)                
+                .Query(q => q.
+                    Filtered(f => f
+                    .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
+                    .Filter(f2 =>
+                    {
+                        QueryContainer qb = null;
+
+                        #region Basic Providers Filters
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= q.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
+                        }
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= q.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
+                        }
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= q.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
+                        }
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= q.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
+                        }
+                        #endregion
+
+                        #region My Providers Filter
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.MyProviders).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= q.Nested(n => n
+                            .Path(p => p.oCustomerProviderIndexModel)
+                            .Query(fq => fq
+                                .Match(match => match
+                                .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                )
+                           ));
+                        }
+                        #endregion
+
+                        #region Other Providers Filter
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.OtherProviders).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= q.Nested(n => n
+                            .Path(p => p.oCustomerProviderIndexModel)
+                            .Query(fq => fq
+                                .Match(match => match
+                                .Field(field => field.oCustomerProviderIndexModel.Where(y => y.CustomerPublicId != SessionModel.CurrentCompany.CompanyPublicId).Select(y => y).First().CustomerPublicId)
+                                )
+                           ));
+                        }
+                        #endregion
+
+                        #region Provider Status
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= q.Nested(n => n
+                             .Path(p => p.oCustomerProviderIndexModel)
+                            .Query(fq => fq
+                                .Match(match => match
+                                .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
+                                .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault())
+                                )
+                              )
+                           );
+                        }
+
+                        #endregion
+
+                        #region Can see other Providers?
+                        if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1")
+                        {
+                            qb &= q.Nested(n => n
+                            .Path(p => p.oCustomerProviderIndexModel)
+                                .Query(fq => fq
+                                    .Match(match => match
+                                    .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId))
+                                  ));
+                        }
+                        else
+                        {
+                            qb &= q.Nested(n => n
+                            .Path(p => p.oCustomerProviderIndexModel)
+                                .Query(fq => fq
+                                    .Match(match => match
+                                    .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                    .Query(SessionModel.CurrentCompany.CompanyPublicId))
+                                ));
+                        }
+                        #endregion
+
+                        return qb;
+                    })
+                    ))
+                );
+
+                oModel.TotalRows = (int)oModel.ElasticCompanyModel.Total;
+                #endregion
 
                 //parse view model
-                if (oProviderResult != null && oProviderResult.Count > 0)
+                if (oModel.ElasticCompanyModel != null && oModel.ElasticCompanyModel.Documents.Count() > 0)
                 {
-                    oProviderResult.All(prv =>
+                    oModel.ElasticCompanyModel.Documents.All(prv =>
                     {
-                        prv.RelatedCommercial = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPContactGetBasicInfo(prv.RelatedCompany.CompanyPublicId, (int)enumContactType.Brach);
+                        oModel.ProviderSearchResult.Add
+                            (new ProviderLiteViewModel(prv));
+
                         return true;
                     });
                 }
+                              
+                #endregion
 
-                #endregion Providers
-
-                #region Crete Excel
-
-                //Write the document
-                StringBuilder data = new StringBuilder();
-                string strSep = ";";
-
-                oProviderResult.All(x =>
+                var ProviderList = new List<ProveedoresOnLine.Reports.Models.Reports.GeneralProviderReportModel>();
+                oModel.ProviderSearchResult.All(x =>
                 {
-                    string Address = string.Empty;
-                    string Telephone = string.Empty;
-                    string Representative = string.Empty;
-                    string Country = string.Empty;
-                    int CityId = 0;
-                    string City = string.Empty;
-                    string State = string.Empty;
-                    string StatusProvider = string.Empty;
-
-                    if (x.RelatedCommercial != null)
-                    {
-                        x.RelatedCommercial.Where(y => y != null).All(y =>
-                        {
-                            bool isPrincipal = y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumContactInfoType.BR_IsPrincipal &&
-                            z.Value == "1").Select(z => z.Value).FirstOrDefault() == "1" ? true : false;
-
-                            if (isPrincipal)
-                            {
-                                Address = y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumContactInfoType.B_Address).Select(z => z.Value).DefaultIfEmpty(string.Empty).FirstOrDefault();
-                                Telephone = y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumContactInfoType.B_Phone).Select(z => z.Value).DefaultIfEmpty(string.Empty).FirstOrDefault();
-                                Representative = y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumContactInfoType.B_Representative).Select(z => z.Value).DefaultIfEmpty(string.Empty).FirstOrDefault();
-
-                                int oTotalRows = 0;
-
-                                string sCityid = y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumContactInfoType.B_City).Select(z => z.Value).FirstOrDefault();
-                                if (sCityid.Length > 0)
-                                    CityId = Convert.ToInt32(sCityid);
-                                else
-                                    CityId = 0;
-
-                                List<ProveedoresOnLine.Company.Models.Util.GeographyModel> oGeographyModel = ProveedoresOnLine.Company.Controller.Company.CategorySearchByGeography(null, CityId, 0, 10000, out oTotalRows);
-
-
-                                Country = (oGeographyModel != null && oGeographyModel.FirstOrDefault().Country.ItemName.Length > 0 && oGeographyModel.FirstOrDefault().Country.ItemName != null) ? oGeographyModel.FirstOrDefault().Country.ItemName : "N/D";
-                                City = (oGeographyModel != null && oGeographyModel.FirstOrDefault().City.ItemName.Length > 0 && oGeographyModel.FirstOrDefault().City.ItemName != null) ? oGeographyModel.FirstOrDefault().City.ItemName : "N/D";
-                                State = (oGeographyModel != null && oGeographyModel.FirstOrDefault().State.ItemName.Length > 0 && oGeographyModel.FirstOrDefault().State.ItemName != null) ? oGeographyModel.FirstOrDefault().State.ItemName : "N/D";
-
-                            }
-
-                            return true;
-                        });
-
-                        if (x.RelatedCustomerInfo != null)
-                        {
-                            StatusProvider = x.RelatedCustomerInfo.FirstOrDefault().Value.ItemType.ItemName.ToString();
-                        }
-
-                        if (oProviderResult.IndexOf(x) == 0)
-                        {
-                            data.AppendLine
-                            ("\"" + "Tipo Identificacion" + "\"" + strSep +
-                                "\"" + "Numero Identificacion" + "\"" + strSep +
-                                "\"" + "Razon Social" + "\"" + strSep +
-                                "\"" + "Estado Proveedor" + "\"" + strSep +
-                                "\"" + "País" + "\"" + strSep +
-
-                                "\"" + "Ciudad" + "\"" + strSep +
-                                "\"" + "Estado" + "\"" + strSep +
-
-                                "\"" + "Dirección" + "\"" + strSep +
-                                "\"" + "Telefono" + "\"" + strSep +
-
-                                "\"" + "Representante" + "\"");
-                            data.AppendLine
-                                ("\"" + x.RelatedCompany.IdentificationType.ItemName + "\"" + strSep +
-                                "\"" + x.RelatedCompany.IdentificationNumber + "\"" + strSep +
-                                "\"" + x.RelatedCompany.CompanyName + "\"" + "" + strSep +
-                                "\"" + StatusProvider + "\"" + "" + strSep +
-                                "\"" + Country + "\"" + "" + strSep +
-                                "\"" + City + "\"" + strSep +
-                                "\"" + State + "\"" + "" + strSep +
-                                "\"" + Address + "\"" + strSep +
-                                "\"" + Telephone + "\"" + strSep +
-                                "\"" + Representative + "\"");
-                        }
-                        else
-                        {
-                            data.AppendLine
-                                ("\"" + x.RelatedCompany.IdentificationType.ItemName + "\"" + strSep +
-                                "\"" + x.RelatedCompany.IdentificationNumber + "\"" + strSep +
-                                "\"" + x.RelatedCompany.CompanyName + "\"" + "" + strSep +
-                                "\"" + StatusProvider + "\"" + "" + strSep +
-                                "\"" + Country + "\"" + "" + strSep +
-                                "\"" + City + "\"" + strSep +
-                                "\"" + State + "\"" + "" + strSep +
-                                "\"" + Address + "\"" + strSep +
-                                "\"" + Telephone + "\"" + strSep +
-                                "\"" + Representative + "\"");
-                        }
-                    }
-                    else
-                    {
-                        if (oProviderResult.IndexOf(x) == 0)
-                        {
-                            data.AppendLine
-                            ("\"" + "Tipo Identificacion" + "\"" + strSep +
-                                "\"" + "Numero Identificacion" + "\"" + strSep +
-                                "\"" + "Razon Social" + "\"" + strSep +
-                                "\"" + "Estado Proveedor" + "\"" + strSep +
-                                "\"" + "País" + "\"" + strSep +
-
-                                "\"" + "Ciudad" + "\"" + strSep +
-                                "\"" + "Estado" + "\"" + strSep +
-
-                                "\"" + "Dirección" + "\"" + strSep +
-                                "\"" + "Telefono" + "\"" + strSep +
-
-                                "\"" + "Representante" + "\"");
-                            data.AppendLine
-                                ("\"" + x.RelatedCompany.IdentificationType.ItemName + "\"" + strSep +
-                                "\"" + x.RelatedCompany.IdentificationNumber + "\"" + strSep +
-                                "\"" + x.RelatedCompany.CompanyName + "\"" + "" + strSep +
-                                "\"" + StatusProvider + "\"" + "" + strSep +
-                                "\"" + Country + "\"" + "" + strSep +
-                                "\"" + City + "\"" + strSep +
-                                "\"" + State + "\"" + "" + strSep +
-                                "\"" + Address + "\"" + strSep +
-                                "\"" + Telephone + "\"" + strSep +
-                                "\"" + Representative + "\"");
-                        }
-                        else
-                        {
-                            data.AppendLine
-                                ("\"" + x.RelatedCompany.IdentificationType.ItemName + "\"" + strSep +
-                                "\"" + x.RelatedCompany.IdentificationNumber + "\"" + strSep +
-                                "\"" + x.RelatedCompany.CompanyName + "\"" + "" + strSep +
-                                "\"" + "ND" + "\"" + "" + strSep +
-                                "\"" + "ND" + "\"" + "" + strSep +
-                                "\"" + "ND" + "\"" + strSep +
-                                "\"" + "ND" + "\"" + "" + strSep +
-                                "\"" + "ND" + "\"" + strSep +
-                                "\"" + "ND" + "\"" + strSep +
-                                "\"" + "ND" + "\"");
-                        }
-                    }
+                    ProviderList.AddRange(ProveedoresOnLine.Reports.Controller.ReportModule.R_ProviderGeneralReport(SessionModel.CurrentCompany.CompanyPublicId, x.ElasticRealtedProvider.CompanyPublicId));
                     return true;
                 });
+               
+                #endregion
+               
+                #region CreateExcel
+
+                StringBuilder data = new StringBuilder();
+                string strSep = ";";
+                data.AppendLine
+                    (
+                    "\"" + "TIPO IDENTIFICACION" + "\"" + strSep +
+                    "\"" + "NUMERO IDENTIFIACION" + "\"" + strSep +
+                    "\"" + "RAZON SOCIAL" + "\"" + strSep +
+                    "\"" + "ESTADO PROVEEDOR" + "\"" + strSep +
+                    "\"" + "PAIS" + "\"" + strSep +
+                    "\"" + "CIUDAD" + "\"" + strSep +
+                    "\"" + "ESTADO" + "\"" + strSep +
+                    "\"" + "DIRECCION" + "\"" + strSep +
+                    "\"" + "TELEFONO" + "\"" + strSep +
+                    "\"" + "REPRESENTANTE" + "\"");
+                if (ProviderList != null && ProviderList.Count > 0)
+                {
+                    ProviderList.All(x =>
+                    {
+                        data.AppendLine
+                        (
+                             "\"" + x.IdentificationType + "\"" + strSep +
+                             "\"" + x.IdentificationNumber + "\"" + strSep +
+                             "\"" + x.CompanyName + "\"" + strSep +
+                             "\"" + x.ProviderStatus + "\"" + strSep +
+                             "\"" + x.Country + "\"" + strSep +
+                             "\"" + x.City + "\"" + strSep +
+                             "\"" + x.State + "\"" + strSep +
+                             "\"" + x.Address + "\"" + strSep +
+                             "\"" + x.PhoneNumber + "\"" + strSep +
+                             "\"" + x.LegalRepresentative + "\""
+                        );
+
+                        return true;
+                    });
+                }
+                
 
                 byte[] buffer = Encoding.Default.GetBytes(data.ToString().ToCharArray());
 
-                #endregion Crete Excel
+                #endregion
 
                 return File(buffer, "application/csv", "Proveedores_" + DateTime.Now.ToString("yyyyMMddHHmm") + ".csv");
             }
@@ -5302,9 +5310,9 @@ namespace MarketPlace.Web.Controllers
                     if (EvaluationAreaInf != null)
                     {
                         RatingforArea = RatingforArea + Convert.ToDouble(SurveyDetailInfo.RelatedSurvey.SurveyInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumSurveyInfoType.Rating).Select(x => x.Value).FirstOrDefault());
-                    }                    
+                    }
                 }
-                
+
                 DataRow row;
 
                 row = data.NewRow();
@@ -5331,9 +5339,9 @@ namespace MarketPlace.Web.Controllers
                     row2["Question"] = subrep.Item3.ItemName;
                     row2["Answer"] = subrep.Item4.ItemName;
                     row2["QuestionWeight"] = subrep.Item3.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumSurveyConfigItemInfoType.Weight).Select(x => x.Value).FirstOrDefault();
-                    row2["QuestionRating"] = subrep.Item4.ItemInfo.Where(x => x.ItemInfoType.ItemId ==(int)MarketPlace.Models.General.enumSurveyItemInfoType.Ratting).Select(x => x.Value).FirstOrDefault();
+                    row2["QuestionRating"] = subrep.Item4.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumSurveyItemInfoType.Ratting).Select(x => x.Value).FirstOrDefault();
                     row2["TotalAreaRating"] = Convert.ToDouble(row2["QuestionWeight"].ToString()) * Convert.ToDouble(row2["QuestionRating"].ToString()) / 100;
-                    row2["QuestionDescription"] = subrep.Item4.ItemInfo.Where(x => x.ItemInfoType.ItemId ==(int)MarketPlace.Models.General.enumSurveyInfoType.Comments).Select(x => x.Value).FirstOrDefault();
+                    row2["QuestionDescription"] = subrep.Item4.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumSurveyInfoType.Comments).Select(x => x.Value).FirstOrDefault();
                     if (string.IsNullOrEmpty(row2["QuestionDescription"].ToString()))
                         row2["QuestionDescription"] = "Sin Comentarios";
 

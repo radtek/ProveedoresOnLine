@@ -93,12 +93,12 @@
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\Enumerations.cs" />
     <Compile Include="Models\Reports\CustomerProviderReportModel.cs" />
+    <Compile Include="Models\Reports\GeneralProviderReportModel.cs" />
     <Compile Include="Models\Reports\ReportsModel.cs" />
     <Compile Include="Models\Util\InternalSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\DataSet\DS_CalificationReport_BalanceInfo.cs">
       <DependentUpon>DS_CalificationReport_BalanceInfo.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\DataSet\DS_CalificationReport_BalanceInfo.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -107,7 +107,6 @@
     </Compile>
     <Compile Include="Reports\DataSet\DS_CalificationReport_Certification.cs">
       <DependentUpon>DS_CalificationReport_Certification.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\DataSet\DS_CalificationReport_Certification.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -121,7 +120,6 @@
     </Compile>
     <Compile Include="Reports\DataSet\DS_CalificationReport_FinancialInfo.cs">
       <DependentUpon>DS_CalificationReport_FinancialInfo.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\DataSet\DS_CalificationReport_FinancialInfo.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -130,7 +128,6 @@
     </Compile>
     <Compile Include="Reports\DataSet\DS_CalificationReport_LegalInfo.cs">
       <DependentUpon>DS_CalificationReport_LegalInfo.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\DataSet\DS_CalificationReport_LegalInfo.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -152,7 +149,6 @@
     </Compile>
     <Compile Include="Reports\DataSet\DS_FinancialReport.cs">
       <DependentUpon>DS_FinancialReport.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\DataSet\DS_FinancialReport.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -176,7 +172,6 @@
     </Compile>
     <Compile Include="Reports\DataSet\DS_GerencialReport_Contact.cs">
       <DependentUpon>DS_GerencialReport_Contact.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\DataSet\DS_GerencialReport_Contact.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -185,7 +180,6 @@
     </Compile>
     <Compile Include="Reports\DataSet\DS_GerencialReport_Terceros.cs">
       <DependentUpon>DS_GerencialReport_Terceros.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\DataSet\DS_GerencialReport_Terceros.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -194,7 +188,6 @@
     </Compile>
     <Compile Include="Reports\DataSet\DS_GIBlackListreport.cs">
       <DependentUpon>DS_GIBlackListreport.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\DataSet\DS_GIBlackListreport.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -203,7 +196,6 @@
     </Compile>
     <Compile Include="Reports\DataSet\DS_SelectionProcessReport.cs">
       <DependentUpon>DS_SelectionProcessReport.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\DataSet\DS_SelectionProcessReport.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -220,7 +212,6 @@
     </Compile>
     <Compile Include="Reports\DataSet\DS_Selection_Experience.cs">
       <DependentUpon>DS_Selection_Experience.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\DataSet\DS_Selection_Experience.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -234,7 +225,6 @@
     </Compile>
     <Compile Include="Reports\DataSet\DS_Selection_HSEQ.cs">
       <DependentUpon>DS_Selection_HSEQ.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\DataSet\DS_Selection_HSEQ.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -248,7 +238,6 @@
     </Compile>
     <Compile Include="Reports\DataSet\DS_Selection_TotalArea.cs">
       <DependentUpon>DS_Selection_TotalArea.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\DataSet\DS_Selection_TotalArea.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -257,7 +246,6 @@
     </Compile>
     <Compile Include="Reports\DataSet\DS_SurveyGeneralInfo.cs">
       <DependentUpon>DS_SurveyGeneralInfo.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\DataSet\DS_SurveyGeneralInfo.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -266,7 +254,6 @@
     </Compile>
     <Compile Include="Reports\DataSet\DS_SurveyGeneralInfoAreas.cs">
       <DependentUpon>DS_SurveyGeneralInfoAreas.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\DataSet\DS_SurveyGeneralInfoAreas.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -275,7 +262,6 @@
     </Compile>
     <Compile Include="Reports\DataSet\DS_ThirdKnowledgeReport.cs">
       <DependentUpon>DS_ThirdKnowledgeReport.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\DataSet\DS_ThirdKnowledgeReport.Designer.cs">
       <AutoGen>True</AutoGen>
