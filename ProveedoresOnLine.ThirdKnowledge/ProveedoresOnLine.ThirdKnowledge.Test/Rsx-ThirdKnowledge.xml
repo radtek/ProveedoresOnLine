@@ -2,12 +2,6 @@
 <Settings>
   <ThirdKnowledge>
 
-    <!--WS_ThirdKnowedge-->
-    <key name="ThirdKnowedge_AuthServiceUser">e.perdomo</key>
-
-    <!--WS_ThirdKnowedge-->
-    <key name="ThirdKnowedge_AuthServicePass"><![CDATA[{sapote2016}]]></key>
-
     <!--FTP_ServerIp-->
     <key name="ThirdKnowedge_FTPServerIP">131.0.170.154:27</key>
 
