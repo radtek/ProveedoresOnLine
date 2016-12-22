@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using ProveedoresOnLine.Company.Models.Util;
 using ProveedoresOnLine.SurveyModule.Models;
+using ProveedoresOnLine.Reports.Models.Reports;
 
 namespace ProveedoresOnLine.Reports.Controller
 {
@@ -877,6 +878,15 @@ namespace ProveedoresOnLine.Reports.Controller
                 if (FormatType == "Excel") { FormatType = "xls"; }
                 return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_CalificationReport + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
             }
+        #endregion
+
+        #region ProviderGeneralReport
+
+        public static List<GeneralProviderReportModel> R_ProviderGeneralReport(string CustomerPublicId, string ProviderPublicId)
+        {
+            return DAL.Controller.ReportsDataController.Instance.R_ProviderGeneralReport(CustomerPublicId, ProviderPublicId);
+        }
+
         #endregion
 
     }

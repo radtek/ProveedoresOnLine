@@ -94,7 +94,7 @@
 
                         <div class="col-sm-1 POMPProviderBoxInfo text-center">
                             <p>
-                                @if (Model.ProviderMenu.FirstOrDefault().ChildMenu.Any(x => x.Name == "Detalle Consulta"))
+                                @if (options.Any(x => x == (int)MarketPlace.Models.General.enumProviderSubMenu.QueryDetails))
                                 {
                                     <a href="@(Url.RouteUrl
            (MarketPlace.Models.General.Constants.C_Routes_Default,

@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProveedoresOnLine.Company.Models.Util;
+using ProveedoresOnLine.Reports.Models.Reports;
 using ProveedoresOnLine.SurveyModule.Models;
 
 namespace ProveedoresOnLine.Reports.DAL.Controller
 {
-    internal class ReportsDataController : ProveedoresOnLine.Reports.Interfaces.IReportData
+    internal class ReportsDataController : Interfaces.IReportData
     {
         #region singleton instance
 
@@ -106,6 +107,14 @@ namespace ProveedoresOnLine.Reports.DAL.Controller
         public List<ProveedoresOnLine.Reports.Models.Reports.CustomerProviderReportModel> R_ProviderCustomerReport(string CustomerPublicId)
         {
             return DataFactory.R_ProviderCustomerReport(CustomerPublicId);
+        }
+
+        #endregion
+
+        #region ProviderGeneralReport
+        public List<GeneralProviderReportModel> R_ProviderGeneralReport(string CustomerPublicId, string ProviderPublicId)
+        {
+            return DataFactory.R_ProviderGeneralReport(CustomerPublicId, ProviderPublicId);
         }
 
         #endregion

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Reporting.WebForms;
+using ProveedoresOnLine.Reports.Models.Reports;
 using ProveedoresOnLine.SurveyModule.Models;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,11 @@ namespace ProveedoresOnLine.Reports.Interfaces
         #region Reports
 
         #region ReportSurveyGetAllByCustomer
-        
+
         List<SurveyModule.Models.SurveyModel> SurveyGetAllByCustomer(string CustomerPublicId);
 
         SurveyModel SurveyGetByParentUser(string ParentSurveyPublicId, string User);
-        
+
         #endregion
 
         #region Gerencial Report
@@ -44,8 +45,7 @@ namespace ProveedoresOnLine.Reports.Interfaces
 
         #endregion
 
-        #endregion
-        
+        #endregion        
 
         #region SelectionProcess Report
 
@@ -54,7 +54,13 @@ namespace ProveedoresOnLine.Reports.Interfaces
         #region CustomerProviderReport
 
         List<ProveedoresOnLine.Reports.Models.Reports.CustomerProviderReportModel> R_ProviderCustomerReport(string CustomerPublicId);
- 
+
+        #endregion
+
+        #region ProviderGeneralReport
+
+        List<GeneralProviderReportModel> R_ProviderGeneralReport(string CustomerPublicId, string ProviderPublicId);
+
         #endregion
 
         #endregion

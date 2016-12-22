@@ -137,5 +137,14 @@ namespace ProveedoresOnLine.Reports.Test
         }
 
         #endregion
+
+        #region ProviderGeneralReport
+        [TestMethod]
+        public void ProviderGeneralReport()
+        {
+            var oReturn = ProveedoresOnLine.Reports.Controller.ReportModule.R_ProviderGeneralReport("DA5C572E", "1FAF80D7");
+        }
+
+        #endregion
     }
 }

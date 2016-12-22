@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using ProveedoresOnLine.CompanyProvider.Models.Provider;
+using ProveedoresOnLine.Reports.Models.Reports;
 
 namespace ProveedoresOnLine.Reports.DAL.MySQLDAO
 {
@@ -958,6 +959,64 @@ namespace ProveedoresOnLine.Reports.DAL.MySQLDAO
         }
 
         #endregion
+
+        #region ProviderGeneralReport
+
+        public List<GeneralProviderReportModel> R_ProviderGeneralReport(string CustomerPublicId, string ProviderPublicId)
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
+
+            lstParams.Add(DataInstance.CreateTypedParameter("vCustomerPublicId", CustomerPublicId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vProviderPublicId", ProviderPublicId));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "MP_CP_ProviderGeneralReport",
+                CommandType = CommandType.StoredProcedure,
+                Parameters = lstParams,
+            });
+
+            List<GeneralProviderReportModel> oReturn = new List<GeneralProviderReportModel>();
+
+            if (response.DataTableResult != null && response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn = 
+                    (from rp in response.DataTableResult.AsEnumerable()
+                     where !rp.IsNull("IdentificationNumber")
+                     group rp by new
+                     {
+                         IdentificationType = rp.Field<string>("IdentificationType"),
+                         IdentificationNumber = rp.Field<string>("IdentificationNumber"),
+                         CompanyName= rp.Field<string>("CompanyName"),
+                         ProviderStatus= rp.Field<string>("ProviderStatus"),
+                         Country= rp.Field<string>("Country"),
+                         City= rp.Field<string>("City"),
+                         State= rp.Field<string>("State"),
+                         Address= rp.Field<string>("Address"),
+                         PhoneNumber= rp.Field<string>("PhoneNumber"),
+                         LegalRepresentative= rp.Field<string>("LegalRepresentative")
+                     }
+                     into rpg
+                     select new GeneralProviderReportModel()
+                     {
+                         IdentificationType = rpg.Key.IdentificationType,
+                         IdentificationNumber = rpg.Key.IdentificationNumber,
+                         CompanyName = rpg.Key.CompanyName,
+                         ProviderStatus = rpg.Key.ProviderStatus,
+                         Country = rpg.Key.Country,
+                         City = rpg.Key.City,
+                         State = rpg.Key.State,
+                         Address = rpg.Key.Address,
+                         PhoneNumber = rpg.Key.PhoneNumber,
+                         LegalRepresentative = rpg.Key.LegalRepresentative
+                     }).ToList();
+            }            
+            return oReturn;
+        }
+
+        #endregion
+
 
     }
 }
