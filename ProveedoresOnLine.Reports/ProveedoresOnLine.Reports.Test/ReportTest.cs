@@ -143,6 +143,8 @@ namespace ProveedoresOnLine.Reports.Test
         public void ProviderGeneralReport()
         {
             var oReturn = ProveedoresOnLine.Reports.Controller.ReportModule.R_ProviderGeneralReport("DA5C572E", "1FAF80D7");
+
+            Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
         }
 
         #endregion
