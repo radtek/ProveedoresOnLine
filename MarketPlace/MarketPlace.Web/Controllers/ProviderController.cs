@@ -3625,7 +3625,7 @@ namespace MarketPlace.Web.Controllers
                 oModel.ElasticCompanyModel = client.Search<CompanyIndexModel>(s => s
                 .From(0)
                 .TrackScores(true)
-                .Size(20000000)                
+                .Size(int.Parse(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ProviderGeneralReport].Value))
                 .Query(q => q.
                     Filtered(f => f
                     .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
@@ -3740,12 +3740,14 @@ namespace MarketPlace.Web.Controllers
                 #endregion
 
                 var ProviderList = new List<ProveedoresOnLine.Reports.Models.Reports.GeneralProviderReportModel>();
-                oModel.ProviderSearchResult.All(x =>
+                if (oModel.ProviderSearchResult != null && oModel.ProviderSearchResult.Count > 0)
                 {
-                    ProviderList.AddRange(ProveedoresOnLine.Reports.Controller.ReportModule.R_ProviderGeneralReport(SessionModel.CurrentCompany.CompanyPublicId, x.ElasticRealtedProvider.CompanyPublicId));
-                    return true;
-                });
-               
+                    oModel.ProviderSearchResult.All(x =>
+                    {
+                        ProviderList.AddRange(ProveedoresOnLine.Reports.Controller.ReportModule.R_ProviderGeneralReport(SessionModel.CurrentCompany.CompanyPublicId, x.ElasticRealtedProvider.CompanyPublicId));
+                        return true;
+                    });
+                }
                 #endregion
                
                 #region CreateExcel
@@ -3764,6 +3766,7 @@ namespace MarketPlace.Web.Controllers
                     "\"" + "DIRECCION" + "\"" + strSep +
                     "\"" + "TELEFONO" + "\"" + strSep +
                     "\"" + "REPRESENTANTE" + "\"");
+
                 if (ProviderList != null && ProviderList.Count > 0)
                 {
                     ProviderList.All(x =>
@@ -3775,10 +3778,10 @@ namespace MarketPlace.Web.Controllers
                              "\"" + x.CompanyName + "\"" + strSep +
                              "\"" + x.ProviderStatus + "\"" + strSep +
                              "\"" + x.Country + "\"" + strSep +
-                             "\"" + x.City + "\"" + strSep +
-                             "\"" + x.State + "\"" + strSep +
+                             "\"" + x.City  + "\"" + strSep +
+                             "\"" + x.State  + "\"" + strSep +
                              "\"" + x.Address + "\"" + strSep +
-                             "\"" + x.PhoneNumber + "\"" + strSep +
+                             "\"" + x.PhoneNumber  + "\"" + strSep +
                              "\"" + x.LegalRepresentative + "\""
                         );
 

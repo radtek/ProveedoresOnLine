@@ -114,6 +114,8 @@
 
         public const string C_Settings_SurveyIndex = "SurveyIndex";
 
+        public const string C_Settings_ProviderGeneralReport = "ProviderGeneralReportSize";
+
         #endregion
 
         #endregion
