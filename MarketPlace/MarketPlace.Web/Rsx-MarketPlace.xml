@@ -85,10 +85,9 @@
     <key name="TK_Research_Image">glyphicon glyphicon-repeat</key>
     
     <!--ThirdKnowledge-->
-    <key name="MP_CP_UploadTemplate">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/PlantillaCargueMasivoPOL.xlsx</key>
-    <key name="MP_CP_ColPersonType">TIPOPERSONA</key>
-    <key name="MP_CP_ColIdNumber">NUMEIDEN</key>
-    <key name="MP_CP_ColIdName">NOMBRES</key>
+    <key name="MP_CP_UploadTemplate">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/PlantillaCargueMasivoPOL.xlsx</key>    
+    <key name="MP_CP_ColIdNumber">NUMERO DE IDENTIFICACION</key>
+    <key name="MP_CP_ColIdName">NOMBRES Y APELLIDOS</key>
     <key name="TK_UploadSuccessFileAgent">POL_UploadSuccessFile_Mail</key>
 
     <!--Notifications-->

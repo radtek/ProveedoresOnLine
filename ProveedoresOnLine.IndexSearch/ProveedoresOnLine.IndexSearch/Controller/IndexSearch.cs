@@ -216,20 +216,15 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                     );
 
                 client.Map<ThirdknowledgeIndexSearchModel>(m => m.AutoMap());
-                var Index = client.IndexMany(oToIndex, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ThirdKnowledgeIndex].Value);
-
+                //var Index = client.IndexMany(oToIndex, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ThirdKnowledgeIndex].Value);
+                RowFrom = 0;
                 for (int i = 0; i < (oToIndex.FirstOrDefault().TotalRows / 10000); i++)
 			    {
                     List<ThirdknowledgeIndexSearchModel> oToIterIndex = new List<ThirdknowledgeIndexSearchModel>();
-                    LogFile("Index Process Count::: " + RowFrom + "__:::__" + RowTo);
+                    LogFile("Index Process Count::: " + RowFrom + "__:::__" + RowTo);                   
+                   
+                    oToIterIndex = DAL.Controller.IndexSearchDataController.Instance.GetThirdknowledgeIndex(RowFrom, 10000);
                     RowFrom = RowFrom + 10000;
-                    if (i == 0)
-                    {
-                        RowFrom = 20000;
-                        oToIterIndex = DAL.Controller.IndexSearchDataController.Instance.GetThirdknowledgeIndex(20000, 10000);
-                    }
-                    else
-                        oToIterIndex = DAL.Controller.IndexSearchDataController.Instance.GetThirdknowledgeIndex(RowFrom, 10000);
                     
                     client.Map<ThirdknowledgeIndexSearchModel>(m => m.AutoMap());
                     var IndexIter = client.IndexMany(oToIterIndex, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ThirdKnowledgeIndex].Value);
