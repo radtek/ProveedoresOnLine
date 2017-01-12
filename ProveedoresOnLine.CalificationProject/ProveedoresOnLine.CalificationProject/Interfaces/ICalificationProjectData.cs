@@ -21,6 +21,20 @@ namespace ProveedoresOnLine.CalificationProject.Interfaces
 
         Models.CalificationProject.CalificationProjectConfigModel CalificationProjectConfig_GetByCalificationProjectConfigId(int CalificationProjectConfigId);
 
+        List<Models.CalificationProject.CalificationProjectConfigModel> CalificationProjectConfigGetByProvider(string ProviderPublicId);
+
+        #endregion
+
+        #region ProjectConfigInfo
+
+        int CalificationProjectConfigInfoUpsert(int CalificationProjectConfigInfoId, string ProviderPublicId, int CalificationProjectConfigId, bool Status, bool Enable);
+
+        List<ConfigInfoModel> CalificationProjectConfigInfoGetAll();
+
+        List<ConfigInfoModel> CalificationProjectConfigInfoGetByProvider(string ProviderPublicId, bool Enable);
+
+        
+
         #endregion
 
         #region ConfigItem

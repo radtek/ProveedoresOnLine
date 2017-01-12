@@ -284,6 +284,176 @@ namespace ProveedoresOnLine.CalificationProject.DAL.MySqlDAO
             return oReturn;
         }
 
+        public List<CalificationProjectConfigModel> CalificationProjectConfigGetByProvider(string ProviderPublicId)
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
+
+            lstParams.Add(DataInstance.CreateTypedParameter("vProviderPublicId", ProviderPublicId));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "CC_CalificationProjectConfigGetByProvider",
+                CommandType = CommandType.StoredProcedure,
+                Parameters = lstParams,
+            });
+
+            List<CalificationProjectConfigModel> oReturn = new List<CalificationProjectConfigModel>();
+
+            oReturn = (from cpc in response.DataTableResult.AsEnumerable()
+                       where !cpc.IsNull("CalificationProjectConfigId")
+                       group cpc by new
+                       {
+                           CalificationProjectConfigId = cpc.Field<int>("CalificationProjectConfigId"),
+                           CompanyId = cpc.Field<int>("CompanyId"),
+                           CompanyName = cpc.Field<string>("CompanyName"),
+                           CustomerPublicId = cpc.Field<string>("CustomerPublicId"),
+                           CalificationProjectConfigName = cpc.Field<string>("CalificationProjectConfigName"),
+                           Enable = cpc.Field<UInt64>("Enable")==1?true:false,
+                           LastModify = cpc.Field<DateTime>("LastModify")
+                       } 
+                       into cpcg
+                       select new CalificationProjectConfigModel()
+                       {
+                           CalificationProjectConfigId = cpcg.Key.CalificationProjectConfigId,
+                           CompanyId = cpcg.Key.CompanyId,
+                           Company = new Company.Models.Company.CompanyModel()
+                           {
+                               CompanyName = cpcg.Key.CompanyName,
+                               CompanyPublicId = cpcg.Key.CustomerPublicId
+                           },
+                           CalificationProjectConfigName = cpcg.Key.CalificationProjectConfigName,
+                           Enable = cpcg.Key.Enable,
+                           LastModify = cpcg.Key.LastModify
+                       }).ToList();
+            return oReturn;
+        }   
+        #endregion
+
+        #region ProjectConfigInfo
+        public int CalificationProjectConfigInfoUpsert(int CalificationProjectConfigInfoId, string ProviderPublicId, int CalificationProjectConfigId, bool Status, bool Enable)
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
+
+            lstParams.Add(DataInstance.CreateTypedParameter("vCalificationProjectConfigInfoId", CalificationProjectConfigInfoId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vProviderPublicId", ProviderPublicId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vCalificationProjectConfigId", CalificationProjectConfigId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vStatus", (Status == true) ? 1 : 0));
+            lstParams.Add(DataInstance.CreateTypedParameter("vEnable", (Enable == true) ? 1 : 0));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.Scalar,
+                CommandText = "CC_CalificationProjectConfigInfoUpsert",
+                CommandType = System.Data.CommandType.StoredProcedure,
+                Parameters = lstParams,
+            });
+
+            return int.Parse(response.ScalarResult.ToString());
+        }
+
+        public List<ConfigInfoModel> CalificationProjectConfigInfoGetAll()
+        {                     
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "CC_CalificationProjectConfigInfo_GetAll",
+                CommandType = System.Data.CommandType.StoredProcedure,                
+            });
+
+            List<ConfigInfoModel> oReturn = new List<ConfigInfoModel>();
+
+            if (response.DataTableResult != null && response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn = (from cpci in response.DataTableResult.AsEnumerable()
+                           where !cpci.IsNull("CalificationProjectConfigInfoId")
+                           group cpci by new
+                           {
+                             CalificationProjectConfigInfoId = cpci.Field<int>("CalificationProjectConfigInfoId"),
+                             RelatedProvider = cpci.Field<string>("ProviderPublicId"),
+                             CalificationProjectConfigId = cpci.Field<int>("CalificationProjectConfigId"),
+                             Status = cpci.Field<UInt64>("Status") == 1 ? true : false,
+                             Enable = cpci.Field<UInt64>("Enable") == 1 ? true : false
+                           } into cpcig
+                           select new ConfigInfoModel()
+                           {
+                               CalificationProjectConfigInfoId = cpcig.Key.CalificationProjectConfigInfoId,
+                               RelatedProvider = new Company.Models.Company.CompanyModel()
+                               {
+                                   CompanyPublicId = cpcig.Key.RelatedProvider 
+                               },
+                               RelatedCalificationProjectConfig = new CalificationProjectConfigModel()
+                               {
+                                   CalificationProjectConfigId = cpcig.Key.CalificationProjectConfigId,
+                               },
+                               Status = cpcig.Key.Status,
+                               Enable = cpcig.Key.Enable                             
+                           }).ToList();
+            }
+            return oReturn;
+        }
+
+        public List<ConfigInfoModel> CalificationProjectConfigInfoGetByProvider(string ProviderPublicId, bool Enable)
+        {
+            List<System.Data.IDbDataParameter> lstparams = new List<IDbDataParameter>();
+
+            lstparams.Add(DataInstance.CreateTypedParameter("vProviderPublicId", ProviderPublicId));
+            lstparams.Add(DataInstance.CreateTypedParameter("vEnable", (Enable == true) ? 1 : 0));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "CC_CalificationProjectConfigInfo_GetByProvider",
+                CommandType = System.Data.CommandType.StoredProcedure,
+                Parameters = lstparams,
+            });
+
+            List<ConfigInfoModel> oReturn = new List<ConfigInfoModel>();
+
+            oReturn = (from cpcinf in response.DataTableResult.AsEnumerable()
+                       where !cpcinf.IsNull("CalificationProjectConfigId")
+                       group cpcinf by new
+                       {
+                           CalificationProjectConfigInfoId = cpcinf.Field<int>("CalificationProjectConfigInfoId"),
+                           CompanyId = cpcinf.Field<int>("CompanyId"),
+                           CustomerPublicId = cpcinf.Field<string>("CustomerPublicId"),
+                           ProviderPublicId= cpcinf.Field<string>("ProviderPublicId"),
+                           CalificationProjectConfigId = cpcinf.Field<int>("CalificationProjectConfigId"),
+                           CompanyName = cpcinf.Field<string>("CompanyName"),
+                           CalificationProjectConfigName = cpcinf.Field<string>("CalificationProjectConfigName"),
+                           Status = cpcinf.Field<UInt64>("Status") == 1 ? true : false,
+                           Enable = cpcinf.Field<UInt64>("Enable") == 1 ? true : false,
+                           LastModify = cpcinf.Field<DateTime>("LastModify"),
+                           CreateDate = cpcinf.Field<DateTime>("CreateDate")
+
+                       } into cpinfg
+                       select new ConfigInfoModel()
+                       {
+                           CalificationProjectConfigInfoId = cpinfg.Key.CalificationProjectConfigInfoId,
+                           CompanyId = cpinfg.Key.CompanyId,
+                           RelatedCustomer = new Company.Models.Company.CompanyModel()
+                           {
+                               CompanyName = cpinfg.Key.CompanyName,
+                               CompanyPublicId = cpinfg.Key.CustomerPublicId
+                           },
+                           RelatedProvider = new Company.Models.Company.CompanyModel()
+                           {
+                               CompanyPublicId = cpinfg.Key.ProviderPublicId
+                           },
+                           RelatedCalificationProjectConfig = new CalificationProjectConfigModel()
+                           {
+                               CalificationProjectConfigId = cpinfg.Key.CalificationProjectConfigId,
+                               CalificationProjectConfigName = cpinfg.Key.CalificationProjectConfigName
+                           },
+                           Status = cpinfg.Key.Status,
+                           Enable = cpinfg.Key.Enable,
+                           LastModify = cpinfg.Key.LastModify,
+                           CreateDate = cpinfg.Key.CreateDate
+                       }).ToList();
+
+            return oReturn;            
+        }
+
         #endregion
 
         #region ConfigItem

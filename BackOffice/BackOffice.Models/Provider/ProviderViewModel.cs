@@ -42,5 +42,15 @@ namespace BackOffice.Models.Provider
         public string GridToSave { get; set; }
 
         public List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> CustomerCustomField { get; set; }
+
+        #region CalificationProjectConfigInfo
+        public List<CalificationProjectConfigInfoViewModel> RelatedCalificationProjectConfigInfo { get; set; }
+        public List<ProveedoresOnLine.Company.Models.Util.CatalogModel> CPCConfig { get; set; }
+        public List<ProveedoresOnLine.Company.Models.Util.CatalogModel> CPCCompany { get; set; }
+
+        public List<Tuple<string, string>> CPCCOmpanyddl { get; set; }
+
+        #endregion
+
     }
 }
