@@ -22,9 +22,8 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch.Models
 
         public ExcelModel(DataRow Row)
         {
-            //this.TIPOPERSONA = Row["TIPOPERSONA"].ToString();
-            this.NUMEIDEN = Row["NUMEIDEN"].ToString();
-            this.NOMBRES = Row["NOMBRES"].ToString();
+            this.NUMEIDEN = Row[ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeIdNumberCollumn].Value].ToString();
+            this.NOMBRES = Row[ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeNameCollumn].Value].ToString();
         }
     }
 }

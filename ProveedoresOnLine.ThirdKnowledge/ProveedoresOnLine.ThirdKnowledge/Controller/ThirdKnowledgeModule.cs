@@ -18,11 +18,23 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         {
             try
             {
+                if (!string.IsNullOrEmpty(Name))
+                {
+                    if (Name.ToLower().Contains("sas"))                    
+                        Name = Name.ToLower().Replace("sas", "");                    
+                    else if (Name.ToLower().Contains("s.a.s"))
+                        Name = Name.ToLower().Replace("s.a.s", "");         
+                    else if (Name.ToLower().Contains("s.a"))
+                        Name = Name.ToLower().Replace("s.a", "");
+                    else if (Name.ToLower().Contains("ltda"))
+                        Name = Name.ToLower().Replace("ltda", "");
+                    else if (Name.ToLower().Contains("l.t.d.a"))
+                        Name = Name.ToLower().Replace("l.t.d.a", "");
+                }
                 List<PlanModel> oPlanModel = new List<PlanModel>();
                 PeriodModel oCurrentPeriod = new PeriodModel();
 
-
-                //TODO: Search Elastic
+                //Search Elastic
                 Uri node = new Uri(InternalSettings.Instance[Constants.C_Settings_ElasticSearchUrl].Value);
                 var settings = new ConnectionSettings(node);
                 settings.DefaultIndex(InternalSettings.Instance[Constants.C_Settings_ThirdKnowledgeIndex].Value);
@@ -31,12 +43,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
                 var oSearchResult = client.Search<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel>(s => s
                 .TrackScores(true)
-
                 .From(0)
                 .Size(10)
-                .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Name)) &&
+                 .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Name)) ||
                             q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
-                 ));
+                 ).MinScore(2));
 
                 oQueryToCreate.RelatedQueryBasicInfoModel = new List<TDQueryInfoModel>();
 
@@ -49,18 +60,22 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             oInfoCreate.IdentificationResult = x.TypeId;
                             oInfoCreate.Offense = x.RelatedWiht;
                             oInfoCreate.NameResult = x.CompleteName;
+
                             if (x.ListType == "FIGURAS PUBLICAS" || x.ListType == "PEPS INTERNACIONALES")
                                 oInfoCreate.Peps = x.ListType;
                             else
                                 oInfoCreate.Peps = "N/A";
-                            if (x.TypeId == IdentificationNumber && x.CompleteName == Name)
+
+                            #region Group by Priority
+                            if (!string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(IdentificationNumber) && x.TypeId == IdentificationNumber && x.CompleteName == Name)
                                 oInfoCreate.Priority = "1";
-                            else if (x.TypeId == IdentificationNumber && x.CompleteName != Name)
+                            else if (!string.IsNullOrEmpty(IdentificationNumber) && x.TypeId == IdentificationNumber && x.CompleteName != Name)
                                 oInfoCreate.Priority = "2";
-                            else if (x.TypeId != IdentificationNumber && x.CompleteName == Name)
+                            else if (!string.IsNullOrEmpty(Name) && x.TypeId != IdentificationNumber && x.CompleteName == Name)
                                 oInfoCreate.Priority = "3";
                             else
                                 oInfoCreate.Priority = "3";
+                            #endregion
 
                             oInfoCreate.Status = x.Status;
                             oInfoCreate.Enable = true;

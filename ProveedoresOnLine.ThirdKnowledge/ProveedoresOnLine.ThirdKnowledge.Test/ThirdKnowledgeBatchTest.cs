@@ -9,7 +9,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
     public class ThirdKnowledgeBatchTest
     {
         [TestMethod]
-        public void GetQueriesInProgress()
+        public void StartProcess()
         {
             ProveedoresOnLine.ThirdKnowledgeBatch.ThirdKnowledgeFTPProcess.StartProcess();            
         }

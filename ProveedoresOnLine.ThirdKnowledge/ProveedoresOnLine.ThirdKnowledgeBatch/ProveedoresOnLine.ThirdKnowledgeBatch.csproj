@@ -30,12 +30,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Elasticsearch.Net">
+      <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.IndexSearch\developer\Elasticsearch.Net.dll</HintPath>
+    </Reference>
     <Reference Include="EPPlus">
       <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="ExcelApi">
       <HintPath>..\packages\NetOffice.Excel.1.7.3.0\lib\net45\ExcelApi.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="FileRepository.Manager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.FileManager\developer\FileRepository.Manager.dll</HintPath>
+    </Reference>
+    <Reference Include="FileRepository.S3">
+      <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.FileManager\developer\FileRepository.S3.dll</HintPath>
     </Reference>
     <Reference Include="LinqToExcel">
       <HintPath>..\packages\LinqToExcel_x64.1.10.1\lib\LinqToExcel.dll</HintPath>
@@ -55,13 +65,27 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Office.Interop.Excel.14.0.0.1\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
     </Reference>
+    <Reference Include="Nest">
+      <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.IndexSearch\developer\Nest.dll</HintPath>
+    </Reference>
     <Reference Include="NetOffice">
       <HintPath>..\packages\NetOffice.Core.1.7.3.0\lib\net45\NetOffice.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="OfficeApi">
       <HintPath>..\packages\NetOffice.Core.1.7.3.0\lib\net45\OfficeApi.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="ProveedoresOnLine.FileManager">
+      <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.FileManager\developer\ProveedoresOnLine.FileManager.dll</HintPath>
+    </Reference>
+    <Reference Include="ProveedoresOnLine.IndexSearch, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.IndexSearch\developer\ProveedoresOnLine.IndexSearch.dll</HintPath>
     </Reference>
     <Reference Include="Remotion">
       <HintPath>..\packages\LinqToExcel_x64.1.10.1\lib\Remotion.dll</HintPath>
@@ -99,7 +123,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -107,9 +130,6 @@
       <Project>{dd514276-29e3-4b4f-b837-d99100c666d6}</Project>
       <Name>ProveedoresOnLine.ThirdKnowledge</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

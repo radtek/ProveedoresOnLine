@@ -64,13 +64,15 @@ namespace MarketPlace.Web.ControllersApi
                             oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel();
                             oModel.RelatedThidKnowledgeSearch.CollumnsResult = new TDQueryModel();
 
-                            //Get Reqsult
+                            //Get Result
                             oModel.RelatedThidKnowledgeSearch.CollumnsResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(oCurrentPeriodList.FirstOrDefault().
                                             RelatedPeriodModel.FirstOrDefault().PeriodPublicId,
                                            System.Web.HttpContext.Current.Request["IdentificationNumber"], System.Web.HttpContext.Current.Request["Name"], oQueryToCreate);
                             //Init Finally Tuple, Group by ItemGroup Name
                             List<Tuple<string, List<ThirdKnowledgeViewModel>>> Group = new List<Tuple<string, List<ThirdKnowledgeViewModel>>>();
                             List<string> Item1 = new List<string>();
+                            List<string> ItemGroup = new List<string>();
+                            
                             if (oModel.RelatedThidKnowledgeSearch.CollumnsResult != null)
                             {
                                 oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryBasicInfoModel.All(x =>
@@ -78,7 +80,12 @@ namespace MarketPlace.Web.ControllersApi
                                     Item1.Add(x.DetailInfo.Where(y => y.ItemInfoType.ItemId == (int)enumThirdKnowledgeColls.GroupName).Select(y => y.Value).FirstOrDefault());
                                     return true;
                                 });
-                                Item1 = Item1.GroupBy(x => x).Select(grp => grp.Last()).ToList();
+
+                                ItemGroup.Add(Item1.Where(x => x.Contains("Criticidad Alta")).Select(x => x).DefaultIfEmpty("").FirstOrDefault());
+                                ItemGroup.Add(Item1.Where(x => x.Contains("Criticidad Media")).Select(x => x).DefaultIfEmpty("").FirstOrDefault());
+                                ItemGroup.Add(Item1.Where(x => x.Contains("Criticidad Baja")).Select(x => x).DefaultIfEmpty("").FirstOrDefault());
+
+                                Item1 = ItemGroup.Where(x => !string.IsNullOrEmpty(x)).Select(x => x).ToList();
 
                                 List<ThirdKnowledgeViewModel> oItem2 = new List<ThirdKnowledgeViewModel>();
                                 Tuple<string, List<ThirdKnowledgeViewModel>> oTupleItem = new Tuple<string, List<ThirdKnowledgeViewModel>>("", new List<ThirdKnowledgeViewModel>());
@@ -104,8 +111,10 @@ namespace MarketPlace.Web.ControllersApi
                                     return true;
                                 });
                                 if (Group != null)
-                                    oModel.RelatedSingleSearch = Group;
+                                {
 
+                                    oModel.RelatedSingleSearch = Group;
+                                }
 
                                 if (oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId != null)
                                 {
@@ -254,7 +263,7 @@ namespace MarketPlace.Web.ControllersApi
 
                 if (UploadFile != null && !string.IsNullOrEmpty(UploadFile.FileName))
                 {
-                    string oFileName = "ThirdKnowledgeFile_" +
+                    string oFileName = SessionModel.CurrentCompany.CompanyPublicId + "_" + "ThirdKnowledgeFile_" +
                             CompanyPublicId + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + "." +
                         UploadFile.FileName.Split('.').DefaultIfEmpty("xlsx").LastOrDefault();
                     oFileName = oFileName.Split('.').LastOrDefault() == "xls" ? oFileName.Replace("xls", "xlsx") : oFileName;
@@ -352,11 +361,7 @@ namespace MarketPlace.Web.ControllersApi
                 {
                     //Get file from S3 using File Name           
                     webClient.DownloadFile(Models.General.InternalSettings.Instance[
-                    Models.General.Constants.TK_File_S3FilePath].Value + FileName, strFolder + "ReSearch_" + FileName);
-
-                    ////Get file from S3 using File Name           
-                    //webClient.DownloadFile(ThirdKnowledge.Models.InternalSettings.Instance[
-                    //                    ProveedoresOnLine.ThirdKnowledge.Models.Constants.C_Setings_File_S3FilePath].Value + oQuery.FileName, strFolder + oQuery.FileName);
+                    Models.General.Constants.TK_File_S3FilePath].Value + FileName, strFolder + "ReSearch_" + FileName);                                     
                 }
 
                 string oFileName = "ReSearch_" + FileName;
@@ -477,6 +482,7 @@ namespace MarketPlace.Web.ControllersApi
         {
             var Excel = new FileInfo(FilePath);
 
+            Tuple<bool, string> oReturn = new Tuple<bool, string>(false, "");
             List<PlanModel> oCurrentPeriodList = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetCurrenPeriod(SessionModel.CurrentCompany.CompanyPublicId, true);
             using (var package = new ExcelPackage(Excel))
             {
@@ -489,29 +495,23 @@ namespace MarketPlace.Web.ControllersApi
 
                     string UncodifiedObj = new JavaScriptSerializer().Serialize(values);
                     if (UncodifiedObj.Contains(Models.General.InternalSettings.Instance
-                                    [Models.General.Constants.MP_CP_ColPersonType].Value)
-                        && UncodifiedObj.Contains(Models.General.InternalSettings.Instance
                                     [Models.General.Constants.MP_CP_ColIdNumber].Value)
                         && UncodifiedObj.Contains(Models.General.InternalSettings.Instance
                                     [Models.General.Constants.MP_CP_ColIdName].Value))
                     {
-                        bool isLoaded = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.AccessFTPClient(FileName, FilePath, PeriodPublicId);
-                        if (isLoaded)
-                        {
-                            //Get The Active Plan By Customer                            
-                            oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries += (workBook.Worksheets[1].Dimension.End.Row - 1);
-                            ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.PeriodoUpsert(oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault());
-                        }
+                        //Get The Active Plan By Customer                            
+                        oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries += (workBook.Worksheets[1].Dimension.End.Row - 1);
+                        ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.PeriodoUpsert(oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault());
 
-                        return new Tuple<bool, string>(true, oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries.ToString());
+                        oReturn = new Tuple<bool, string>(true, oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries.ToString());                        
                     }
                     else
                     {
-                        return new Tuple<bool, string>(false, oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries.ToString());
+                        oReturn = new Tuple<bool, string>(false, oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries.ToString());
                     }
                 }
             }
-            return new Tuple<bool, string>(true, oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries.ToString()); ;
+            return oReturn;            
         }
 
         #endregion Private Functions

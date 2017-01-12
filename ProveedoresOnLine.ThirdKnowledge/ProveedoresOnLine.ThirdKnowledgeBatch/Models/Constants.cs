@@ -29,5 +29,13 @@
         public const string C_Settings_TK_ReadyResultAgent = "TK_ReadyResultAgent";
 
         public const string C_Settings_TK_QueryUrl = "TK_QueryUrl";
+
+        public const string C_Settings_ElasticSearchUrl = "ElasticSearchUrl";
+
+        public const string C_Settings_ThirdKnowledgeIndex = "ThirdknowledgeIndex";
+
+        public const string C_Settings_ThirdKnowledgeNameCollumn = "ThirdKnowledgeName";
+
+        public const string C_Settings_ThirdKnowledgeIdNumberCollumn = "ThirdKnowledgeIdentificationNumber";
     }
 }
