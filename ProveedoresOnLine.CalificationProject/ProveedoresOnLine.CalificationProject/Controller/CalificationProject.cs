@@ -65,6 +65,60 @@ namespace ProveedoresOnLine.CalificationProject.Controller
             return DAL.Controller.CalificationProjectDataController.Instance.CalificationProjectConfig_GetByCalificationProjectConfigId(CalificationProjectConfigId);
         }
 
+        public static List<CalificationProjectConfigModel> CalificationProjectConfigGetByProvider(string ProviderPublicId)
+        {
+            return DAL.Controller.CalificationProjectDataController.Instance.CalificationProjectConfigGetByProvider(ProviderPublicId);
+        }
+        #endregion
+
+        #region ProjectConfigInfo
+
+        public static Models.CalificationProject.ConfigInfoModel CalificationProjectConfigInfoUpsert(ConfigInfoModel oConfigInfo)
+        {
+            LogManager.Models.LogModel oLog = Company.Controller.Company.GetGenericLogModel();
+            try
+            {
+                if (oConfigInfo != null)
+                {
+                    oConfigInfo.CalificationProjectConfigInfoId = DAL.Controller.CalificationProjectDataController.Instance.CalificationProjectConfigInfoUpsert
+                        (oConfigInfo.CalificationProjectConfigInfoId,
+                        oConfigInfo.RelatedProvider.CompanyPublicId,
+                        oConfigInfo.RelatedCalificationProjectConfig.CalificationProjectConfigId,
+                        oConfigInfo.Status,
+                        oConfigInfo.Enable
+                        );
+                    oLog.IsSuccess = true;
+                }
+            }
+            catch (Exception err)
+            {
+                oLog.IsSuccess = false;
+                oLog.Message = err.Message + "-" + err.StackTrace;
+                throw err;
+            }
+            finally
+            {
+                oLog.LogObject = oConfigInfo;
+                oLog.RelatedLogInfo.Add(new LogManager.Models.LogInfoModel()
+                {
+                    LogInfoType = "CalificationProjectCongfigInfo",
+                    Value = oConfigInfo.CalificationProjectConfigInfoId.ToString()
+                });
+                LogManager.ClientLog.AddLog(oLog);
+            }
+            return oConfigInfo;
+        }
+
+        public static List<ConfigInfoModel> CalificationProjectConfigInfoGetAll()
+        {
+            return DAL.Controller.CalificationProjectDataController.Instance.CalificationProjectConfigInfoGetAll();
+        }
+
+        public static List<ConfigInfoModel> CalificationProjectConfigInfoGetByProvider(string ProviderPublicId, bool Enable)
+        {
+            return DAL.Controller.CalificationProjectDataController.Instance.CalificationProjectConfigInfoGetByProvider(ProviderPublicId, Enable);
+        }
+
         #endregion
 
         #region ConfigItem

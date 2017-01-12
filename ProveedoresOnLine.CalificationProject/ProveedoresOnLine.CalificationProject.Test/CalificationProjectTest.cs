@@ -56,6 +56,57 @@ namespace ProveedoresOnLine.CalificationProject.Test
             Assert.AreEqual(true, oReturn != null);
         }
 
+        [TestMethod]
+        public void CalificationProjectGetByProvider()
+        {
+            var oReturn = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigGetByProvider("1EDD9449");
+
+            Assert.AreEqual(true, oReturn.Count > 0);
+        }
+        #endregion
+
+        #region ProjectConfigInfo
+        [TestMethod]
+        public void CalificationProjectConfigInfo()
+        {
+            ConfigInfoModel oReturn = new ConfigInfoModel()
+            {
+                CalificationProjectConfigInfoId = 0,
+                RelatedProvider = new Company.Models.Company.CompanyModel()
+                {
+                    CompanyPublicId = "1EDD9449"
+                },
+                RelatedCalificationProjectConfig = new CalificationProjectConfigModel()
+                {
+                    CalificationProjectConfigId = 1
+
+                },
+                Status = true,
+                Enable = true
+            };
+
+            ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoUpsert(oReturn);
+
+            Assert.AreEqual(true, oReturn.CalificationProjectConfigInfoId > 0 && oReturn != null);
+        }
+
+        [TestMethod]
+        public void CalificationProjectConfigInfoGetAll()
+        {
+            var oReturn = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoGetAll();
+
+
+            Assert.AreEqual(true, oReturn.Count > 0 && oReturn != null);
+
+        }
+
+        [TestMethod]
+        public void CalificationProjectConfigInfoGetByProvider()
+        {
+            var oReturn = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoGetByProvider("1EDD9449", true);
+
+            Assert.AreEqual(true, oReturn.Count > 0 && oReturn != null);
+        }
         #endregion
 
         #region ConfigItem

@@ -37,7 +37,7 @@ namespace BackOffice.Web.Controllers
 
             if (oModel.SearchFilter == null)
                 oModel.SearchFilter = new List<GenericFilterModel>();
-            
+
             return View(oModel);
         }
 
@@ -1731,6 +1731,60 @@ namespace BackOffice.Web.Controllers
 
         #endregion
 
+        #region CalificationProject
+
+        public virtual ActionResult CPCProviderCalificationProjectUpsert(string ProviderPublicId)
+        {
+            var oProjectConfigInfo = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoGetByProvider(ProviderPublicId, true);
+
+            var oProjectConfig = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigGetByProvider(ProviderPublicId);
+            BackOffice.Models.Provider.ProviderViewModel oModel = new ProviderViewModel();
+            var oCPCCompany = new List<CatalogModel>();
+            var oCPCConfig = new List<CatalogModel>();
+            List<Tuple<string, string>> items = new List<Tuple<string, string>>();
+            
+            oProjectConfig.All(x =>
+            {
+                items.Add(new Tuple<string, string>(x.CompanyId.ToString(), x.Company.CompanyName));
+                oCPCCompany.Add(new CatalogModel()
+                {
+                    CatalogId = x.CompanyId,
+                    ItemId = x.CompanyId,
+                    ItemName = x.Company.CompanyName
+
+                });
+
+                oCPCConfig.Add(new CatalogModel()
+                {
+                    CatalogId = x.CompanyId,
+                    ItemId = x.CalificationProjectConfigId,
+                    ItemName = x.CalificationProjectConfigName
+
+                });
+                
+                return true;
+            });
+            oCPCCompany = oCPCCompany.GroupBy(x => x.ItemName).Select(x => x.First()).ToList();
+            oModel.CPCCOmpanyddl = items;
+            oModel.CPCCompany = new List<CatalogModel>(oCPCCompany);            
+            oModel.CPCConfig = new List< CatalogModel >(oCPCConfig);
+
+            if (!string.IsNullOrEmpty(ProviderPublicId))
+            {
+                //get provider info
+                oModel.RelatedProvider = new ProveedoresOnLine.CompanyProvider.Models.Provider.ProviderModel()
+                {
+                    RelatedCompany = ProveedoresOnLine.Company.Controller.Company.CompanyGetBasicInfo(ProviderPublicId),
+                    //RelatedAditionalDocuments = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.AditionalDocumentGetByType(ProviderPublicId, null,true),                    
+                };
+
+            }
+            //get provider menu
+            oModel.ProviderMenu = GetProviderMenu(oModel);
+            return View(oModel);
+        }
+        #endregion
+
         #region Menu
 
         private List<BackOffice.Models.General.GenericMenu> GetProviderMenu
@@ -2215,6 +2269,38 @@ namespace BackOffice.Web.Controllers
                     //add menu
                     oReturn.Add(oMenuAux);
                 }
+
+                #endregion
+
+                #region CalificationProject
+
+                //header
+                oMenuAux = new Models.General.GenericMenu()
+                {
+                    Name = "Proceso de Calificación",
+                    Position = 8,
+                    ChildMenu = new List<Models.General.GenericMenu>(),
+                };
+
+                //CalificationProject
+                oMenuAux.ChildMenu.Add(new Models.General.GenericMenu()
+                {
+                    Name = "Asociar proceso de calificación",
+                    Url = Url.Action
+                        (MVC.Provider.ActionNames.CPCProviderCalificationProjectUpsert,
+                        MVC.Provider.Name,
+                        new { ProviderPublicId = vProviderInfo.RelatedProvider.RelatedCompany.CompanyPublicId }),
+                    Position = 0,
+                    IsSelected =
+                        (oCurrentAction == MVC.Provider.ActionNames.CPCProviderCalificationProjectUpsert &&
+                        oCurrentController == MVC.Provider.Name),
+                });
+
+                //get is selected menu
+                oMenuAux.IsSelected = oMenuAux.ChildMenu.Any(x => x.IsSelected);
+
+                //add menu
+                oReturn.Add(oMenuAux);
 
                 #endregion
 

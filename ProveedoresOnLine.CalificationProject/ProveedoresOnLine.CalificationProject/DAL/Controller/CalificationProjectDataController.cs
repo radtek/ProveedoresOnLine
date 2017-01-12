@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProveedoresOnLine.CalificationProject.Models.CalificationProject;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -58,6 +59,29 @@ namespace ProveedoresOnLine.CalificationProject.DAL.Controller
         public Models.CalificationProject.CalificationProjectConfigModel CalificationProjectConfig_GetByCalificationProjectConfigId(int CalificationProjectConfigId)
         {
             return DataFactory.CalificationProjectConfig_GetByCalificationProjectConfigId(CalificationProjectConfigId);
+        }
+
+        public List<CalificationProjectConfigModel> CalificationProjectConfigGetByProvider(string ProviderPublicId)
+        {
+            return DataFactory.CalificationProjectConfigGetByProvider(ProviderPublicId);
+        }
+        #endregion
+
+        #region ProjectConfigInfo
+
+        public int CalificationProjectConfigInfoUpsert(int CalificationProjectConfigInfoId, string ProviderPublicId, int CalificationProjectConfigId, bool Status, bool Enable)
+        {
+            return DataFactory.CalificationProjectConfigInfoUpsert(CalificationProjectConfigInfoId, ProviderPublicId, CalificationProjectConfigId, Status, Enable);
+        }
+
+        public List<ConfigInfoModel> CalificationProjectConfigInfoGetAll()
+        {
+            return DataFactory.CalificationProjectConfigInfoGetAll();
+        }
+
+        public List<ConfigInfoModel> CalificationProjectConfigInfoGetByProvider(string ProviderPublicId, bool Enable)
+        {
+            return DataFactory.CalificationProjectConfigInfoGetByProvider(ProviderPublicId,Enable);
         }
 
         #endregion

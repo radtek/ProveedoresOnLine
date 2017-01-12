@@ -30,7 +30,7 @@ namespace BackOffice.Web.ControllersApi
             oSearchFilter = string.IsNullOrEmpty(oSearchFilter) ? null : oSearchFilter;
 
             List<ProviderSearchViewModel> oReturn = new List<ProviderSearchViewModel>();
-                     
+
             string oCompanyType =
                     ((int)(BackOffice.Models.General.enumCompanyType.Provider)).ToString() + "," +
                     ((int)(BackOffice.Models.General.enumCompanyType.BuyerProvider)).ToString();
@@ -48,7 +48,7 @@ namespace BackOffice.Web.ControllersApi
             {
                 //lstSearchFilter = Models.Provider.ProviderSearchViewModel
             }
-            
+
             #region Search Result Company
             Uri node = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
             var settings = new ConnectionSettings(node);
@@ -68,7 +68,7 @@ namespace BackOffice.Web.ControllersApi
                             Aggregations(aggs => aggs.Terms("status", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().StatusId)
                             )
                         )
-                    )                
+                    )
                 .Terms("ica", aggv => aggv
                     .Field(fi => fi.ICAId))
                 .Terms("city", aggv => aggv
@@ -119,21 +119,21 @@ namespace BackOffice.Web.ControllersApi
 
                                 return true;
                             });
-                        }                        
-                       
+                        }
+
                     }
                     #endregion
-                                     
+
                     return qb;
                 }))));
-            
+
             #endregion
-           
+
             if (ElasticResult != null)
             {
                 ElasticResult.Documents.All(sr =>
                 {
-                    oReturn.Add(new Models.Provider.ProviderSearchViewModel(sr, (int)ElasticResult.Total));                    
+                    oReturn.Add(new Models.Provider.ProviderSearchViewModel(sr, (int)ElasticResult.Total));
                     return true;
                 });
             }
@@ -490,7 +490,7 @@ namespace BackOffice.Web.ControllersApi
                         Enable = true,
                     });
 
-                    
+
                 }
                 #endregion
 
@@ -628,7 +628,7 @@ namespace BackOffice.Web.ControllersApi
 
 
                 #region CompanyIndex
-                
+
 
                 Uri node = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
                 var settings = new ConnectionSettings(node);
@@ -689,7 +689,7 @@ namespace BackOffice.Web.ControllersApi
 
                 #endregion
 
-                if (oDataToUpsert.BR_IsPrincipal==true && oDataToUpsert.Enable ==true)
+                if (oDataToUpsert.BR_IsPrincipal == true && oDataToUpsert.Enable == true)
                 {
                     oCompanyIndexModel.CityId = Convert.ToInt32(oDataToUpsert.BR_City);
                     oCompanyIndexModel.City = oDataToUpsert.BR_CityName;
@@ -730,7 +730,7 @@ namespace BackOffice.Web.ControllersApi
 
 
                 #endregion
-               
+
                 #region SurveyIndex
                 Uri node2 = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
                 var settings2 = new ConnectionSettings(node2);
@@ -831,7 +831,7 @@ namespace BackOffice.Web.ControllersApi
                 }
 
                 #endregion
-               
+
 
                 #endregion
             }
@@ -2474,8 +2474,8 @@ namespace BackOffice.Web.ControllersApi
                 if (oDataToUpsert.Enable == true)
                 {
 
-                    oCompanyIndexModel.ICAId = !string.IsNullOrEmpty(oDataToUpsert.R_ICA)? Convert.ToInt32(oDataToUpsert.R_ICA):0;
-                    oCompanyIndexModel.ICA = !string.IsNullOrEmpty(oDataToUpsert.R_ICAName) ? oDataToUpsert.R_ICAName : "" ;
+                    oCompanyIndexModel.ICAId = !string.IsNullOrEmpty(oDataToUpsert.R_ICA) ? Convert.ToInt32(oDataToUpsert.R_ICA) : 0;
+                    oCompanyIndexModel.ICA = !string.IsNullOrEmpty(oDataToUpsert.R_ICAName) ? oDataToUpsert.R_ICAName : "";
 
 
                     ICreateIndexResponse oElasticResponse = client.CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value, c => c
@@ -2514,7 +2514,7 @@ namespace BackOffice.Web.ControllersApi
 
 
                 #endregion
-            
+
                 oProvider = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.LegalUpsert(oProvider);
 
                 //eval company partial index
@@ -2996,10 +2996,10 @@ namespace BackOffice.Web.ControllersApi
                     ElasticClient client2 = new ElasticClient(settings2);
 
                     //Getting Model from index
-                    Nest.ISearchResponse<ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel> oResult2 = client2.Search< ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel> (s => s
-                        .From(0)
-                        .Size(1)
-                        .Query(q => q.QueryString(qs => qs.Query(oProviderPublicId))));
+                    Nest.ISearchResponse<ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel> oResult2 = client2.Search<ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel>(s => s
+                      .From(0)
+                      .Size(1)
+                      .Query(q => q.QueryString(qs => qs.Query(oProviderPublicId))));
 
                     //Model to index 
                     #region Model
@@ -3444,8 +3444,8 @@ namespace BackOffice.Web.ControllersApi
                 };
                 #endregion
 
-                
-                
+
+
 
                 if (oCompanyIndexModel.oCustomerProviderIndexModel.Any(x => x.CustomerPublicId == oDataToUpsert.CP_CustomerPublicId))
                 {
@@ -3659,5 +3659,71 @@ namespace BackOffice.Web.ControllersApi
         }
 
         #endregion
+
+        #region CalificationProjectConfigInfo
+
+        [HttpPost]
+        [HttpGet]
+        public BackOffice.Models.Provider.CalificationProjectConfigInfoViewModel CPCCalificationProjectConfigInfoProviderGetbyProvider
+            (
+                string CPCCalificationProjectConfigInfoProviderGetbyProvider,
+                string ProviderPublicId,
+                string Enable
+            )
+        {
+            var oReturn = new CalificationProjectConfigInfoViewModel();
+
+            if (CPCCalificationProjectConfigInfoProviderGetbyProvider == "true")
+            {
+                var oConfigInfo = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoGetByProvider(ProviderPublicId, Enable == "true" ? true : false);
+
+                if (oConfigInfo.Count > 0)
+                {
+                    oConfigInfo.All
+                        (x =>
+                        {
+                            oReturn = new CalificationProjectConfigInfoViewModel(x);
+                            return true;
+                        });
+                }
+            }
+            return oReturn;
+        }
+
+
+        [HttpPost]
+        [HttpGet]
+        public void CPCCalificationProjectConfigInfoProviderUpsert(string CPCCalificationProjectConfigInfoProviderUpsert, string ProviderPublicId, string Enable)
+        {
+            BackOffice.Models.Provider.CalificationProjectConfigInfoViewModel oReturn = null;
+
+            if (CPCCalificationProjectConfigInfoProviderUpsert == "true" &&
+               !string.IsNullOrEmpty(System.Web.HttpContext.Current.Request["DataToUpsert"]) &&
+               !string.IsNullOrEmpty(ProviderPublicId))
+            {
+                BackOffice.Models.Provider.CalificationProjectConfigInfoViewModel oDataToUpsert =
+                    (BackOffice.Models.Provider.CalificationProjectConfigInfoViewModel)
+                    (new System.Web.Script.Serialization.JavaScriptSerializer()).
+                    Deserialize(System.Web.HttpContext.Current.Request["DataToUpsert"],
+                                typeof(BackOffice.Models.Provider.CalificationProjectConfigInfoViewModel));
+
+                ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoUpsert(new ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigInfoModel()
+                {
+                    CalificationProjectConfigInfoId = int.Parse(oDataToUpsert.CalificationProjectConfigInfoId),
+                    RelatedCalificationProjectConfig = new ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel()
+                    {
+                        CalificationProjectConfigId = oDataToUpsert.RelatedCalificationProjectConfigInfoModel.RelatedCalificationProjectConfig.CalificationProjectConfigId,
+                        Company = new CompanyModel()
+                        {
+                            CompanyPublicId = ProviderPublicId
+                        },
+                        Enable = Enable == "true" ? true : false
+                    }
+                });
+
+            }
+        }
+        #endregion
+
     }
 }

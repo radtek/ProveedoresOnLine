@@ -70,6 +70,7 @@
     <Compile Include="Models\CalificationProject\CalificationProjectCategoryModel.cs" />
     <Compile Include="Models\CalificationProject\CalificationProjectConfigModel.cs" />
     <Compile Include="Models\CalificationProject\CalificationProjectModel.cs" />
+    <Compile Include="Models\CalificationProject\ConfigInfoModel.cs" />
     <Compile Include="Models\CalificationProject\ConfigItemInfoModel.cs" />
     <Compile Include="Models\CalificationProject\ConfigItemModel.cs" />
     <Compile Include="Models\CalificationProject\ConfigValidateModel.cs" />

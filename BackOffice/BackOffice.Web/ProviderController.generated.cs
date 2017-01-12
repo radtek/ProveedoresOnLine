@@ -205,6 +205,12 @@ namespace BackOffice.Web.Controllers
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.ActionResult CPCProviderCalificationProjectUpsert()
+        {
+            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.CPCProviderCalificationProjectUpsert);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public virtual System.Web.Mvc.FileResult GetPdfFileBytes()
         {
             return new T4MVC_System_Web_Mvc_FileResult(Area, Name, ActionNames.GetPdfFileBytes);
@@ -250,6 +256,7 @@ namespace BackOffice.Web.Controllers
             public readonly string ADAditionalDocuments = "ADAditionalDocuments";
             public readonly string ADAditionalData = "ADAditionalData";
             public readonly string CDCustomData = "CDCustomData";
+            public readonly string CPCProviderCalificationProjectUpsert = "CPCProviderCalificationProjectUpsert";
             public readonly string GetPdfFileBytes = "GetPdfFileBytes";
         }
 
@@ -281,6 +288,7 @@ namespace BackOffice.Web.Controllers
             public const string ADAditionalDocuments = "ADAditionalDocuments";
             public const string ADAditionalData = "ADAditionalData";
             public const string CDCustomData = "CDCustomData";
+            public const string CPCProviderCalificationProjectUpsert = "CPCProviderCalificationProjectUpsert";
             public const string GetPdfFileBytes = "GetPdfFileBytes";
         }
 
@@ -478,6 +486,14 @@ namespace BackOffice.Web.Controllers
         {
             public readonly string ProviderPublicId = "ProviderPublicId";
         }
+        static readonly ActionParamsClass_CPCProviderCalificationProjectUpsert s_params_CPCProviderCalificationProjectUpsert = new ActionParamsClass_CPCProviderCalificationProjectUpsert();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_CPCProviderCalificationProjectUpsert CPCProviderCalificationProjectUpsertParams { get { return s_params_CPCProviderCalificationProjectUpsert; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_CPCProviderCalificationProjectUpsert
+        {
+            public readonly string ProviderPublicId = "ProviderPublicId";
+        }
         static readonly ActionParamsClass_GetPdfFileBytes s_params_GetPdfFileBytes = new ActionParamsClass_GetPdfFileBytes();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ActionParamsClass_GetPdfFileBytes GetPdfFileBytesParams { get { return s_params_GetPdfFileBytes; } }
@@ -500,6 +516,7 @@ namespace BackOffice.Web.Controllers
                 public readonly string ADAditionalDocuments = "ADAditionalDocuments";
                 public readonly string CDCustomData = "CDCustomData";
                 public readonly string CIExperiencesUpsert = "CIExperiencesUpsert";
+                public readonly string CPCProviderCalificationProjectUpsert = "CPCProviderCalificationProjectUpsert";
                 public readonly string CPCustomerProviderStatus = "CPCustomerProviderStatus";
                 public readonly string FIBalanceSheetUpsert = "FIBalanceSheetUpsert";
                 public readonly string FIBankUpsert = "FIBankUpsert";
@@ -525,6 +542,7 @@ namespace BackOffice.Web.Controllers
             public readonly string ADAditionalDocuments = "~/Views/Provider/ADAditionalDocuments.cshtml";
             public readonly string CDCustomData = "~/Views/Provider/CDCustomData.cshtml";
             public readonly string CIExperiencesUpsert = "~/Views/Provider/CIExperiencesUpsert.cshtml";
+            public readonly string CPCProviderCalificationProjectUpsert = "~/Views/Provider/CPCProviderCalificationProjectUpsert.cshtml";
             public readonly string CPCustomerProviderStatus = "~/Views/Provider/CPCustomerProviderStatus.cshtml";
             public readonly string FIBalanceSheetUpsert = "~/Views/Provider/FIBalanceSheetUpsert.cshtml";
             public readonly string FIBankUpsert = "~/Views/Provider/FIBankUpsert.cshtml";
@@ -850,6 +868,18 @@ namespace BackOffice.Web.Controllers
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.CDCustomData);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "ProviderPublicId", ProviderPublicId);
             CDCustomDataOverride(callInfo, ProviderPublicId);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void CPCProviderCalificationProjectUpsertOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string ProviderPublicId);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult CPCProviderCalificationProjectUpsert(string ProviderPublicId)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.CPCProviderCalificationProjectUpsert);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "ProviderPublicId", ProviderPublicId);
+            CPCProviderCalificationProjectUpsertOverride(callInfo, ProviderPublicId);
             return callInfo;
         }
 

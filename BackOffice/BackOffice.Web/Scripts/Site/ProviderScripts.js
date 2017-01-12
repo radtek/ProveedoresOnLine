@@ -358,6 +358,7 @@ var Provider_CompanyContactObject = {
                 title: 'Tipo de contacto',
                 width: '190px',
                 template: function (dataItem) {
+                    debugger;
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.CC_CompanyContactType != null) {
                         $.each(Provider_CompanyContactObject.ProviderOptions[209], function (item, value) {
@@ -440,7 +441,7 @@ var Provider_CompanyContactObject = {
                             ContactName: { editable: true },
                             Enable: { editable: true, type: 'boolean', defaultValue: true },
 
-                            CP_PersonContactType: { editable: true, validation: { required: false } },                            
+                            CP_PersonContactType: { editable: true, validation: { required: false } },
                             CP_PersonContactTypeId: { editable: false },
 
                             CP_IdentificationType: { editable: true, validation: { required: false } },
@@ -7113,3 +7114,230 @@ var Provider_CustomData = {
         });
     },
 }
+
+/*CalificationProjectConfigInfoObject*/
+var Provider_CalificationProjectConfigInfo = {
+    ObjectId: '',
+    ProviderPublicId: '',
+    Companies: new Array(),
+    CPCConfig: new Array(),
+    CalValueId: '',
+
+    Init: function (vInitObject) {
+        this.ObjectId = vInitObject.ObjectId;
+        this.ProviderPublicId = vInitObject.ProviderPublicId;
+        this.Companies = vInitObject.Companies;
+        this.CalValueId = vInitObject.CalValueId;
+        if (vInitObject.CPCConfig != null) {
+            debugger;
+            $.each(vInitObject.CPCConfig, function (item, value) {                
+                Provider_CalificationProjectConfigInfo.CPCConfig[value.Key] = value.Value;
+            });
+        }
+    },
+
+    RenderAsync: function () {
+
+        Provider_CalificationProjectConfigInfo.CalificationProjectConfigInfo();
+
+        Provider_CalificationProjectConfigInfo.ConfigKeyBoard();
+
+        Provider_CalificationProjectConfigInfo.ConfigEvents();
+    },
+
+    ConfigKeyBoard: function () {
+        //init keyboard tooltip
+        $('.divGrid_kbtooltip').tooltip();
+
+        $(document.body).keydown(function (e) {
+            if (e.altKey && e.shiftKey && e.keyCode == 71) {
+                //alt+shift+g
+
+                //save
+                $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data("kendoGrid").saveChanges();
+            }
+            else if (e.altKey && e.shiftKey && e.keyCode == 78) {
+                //alt+shift+n
+
+                //new field
+                $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data("kendoGrid").addRow();
+            }
+            else if (e.altKey && e.shiftKey && e.keyCode == 68) {
+                //alt+shift+d
+
+                //new field
+                $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data("kendoGrid").cancelChanges();
+            }
+        });
+    },
+
+    ConfigEvents: function () {
+        //config grid visible enables event
+        $('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnable').change(function () {
+            $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data('kendoGrid').dataSource.read();
+        });
+    },
+
+    GetViewEnable: function (CalificationProjectConfigType) {
+        return $('#' + Provider_CalificationProjectConfigInfo.ObjectId).find('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnable').length > 0 ? $('#' + Provider_CalificationProjectConfigInfo.ObjectId).find('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnable').is(':checked') : true;
+    },
+
+    CalificationProjectConfigInfo: function () {
+        var ddl;
+        $('#' + Provider_CalificationProjectConfigInfo.ObjectId).kendoGrid({
+            editable: true,
+            navigatable: true,
+            pageable: false,
+            scrollable: true,
+            toolbar: [
+                { name: 'create', text: 'Nuevo' },
+                { name: 'save', text: 'Guardar datos del listado' },
+                { name: 'cancel', text: 'Descartar' },
+                { name: 'ViewEnable', template: $('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnablesTemplate').html() },
+                { name: 'ShortcutToolTip', template: $('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ShortcutToolTipTemplate').html() },
+            ],
+            dataSource: {
+                serverPaging: false,
+                schema: {
+                    model: {
+                        id: "CalificationProjectConfigInfoId",
+                        fields: {
+                            CalificationProjectConfigInfoId: { editable: false, nullable: true },
+                            CalificationProjectConfigId: { editable: false, nullable: false },                            
+                            CompanyName: {defaultValue: { ItemId: 0, ItemName: "Seleccione una opción"}}, 
+                            CalificationProjectConfigName: { editable: true, validation: { required: true } },
+                            Enable: { editable: true, type: 'boolean', defaultValue: true },
+                        },
+                    }
+                },
+                transport: {
+                    read: function (options) {
+
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderGetbyProvider=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId + '&Enable=' + Provider_CalificationProjectConfigInfo.GetViewEnable(),
+                            dataType: 'json',
+                            success: function (result) {
+                                options.success(result);
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', result);
+                            },
+                        });
+                    },
+                    create: function (options) {
+                        debugger;
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderUpsert=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId + '&Enable=' + Provider_CalificationProjectConfigInfo.GetViewEnable(),
+                            dataType: 'json',
+                            type: 'post',
+                            data: {
+                                DataToUpsert: kendo.stringify(options.data)
+                            },
+                            success: function (result) {
+                                options.success(result);
+                                $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data('kendoGrid').dataSource.read();
+                                Message('success', 'Se creó el registro.');
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', result);
+                            },
+                        });
+                    },
+                    update: function (options) {
+                        debugger;
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderUpsert=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId + '&Enable=' + Provider_CalificationProjectConfigInfo.GetViewEnable(),
+                            dataType: 'json',
+                            type: 'post',
+                            data: {
+                                DataToUpsert: kendo.stringify(options.data)
+                            },
+                            success: function (result) {
+                                options.success(result);
+                                $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data('kendoGrid').dataSource.read();
+                                Message('success', 'Se editó la fila con el id ' + options.data.CalificationProjectConfigInfoId + '.');
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', 'Error en la fila con el id ' + options.data.CalificationProjectConfigInfoId + '.');
+                            },
+                        });
+                    },
+                },
+                requestStart: function () {
+                    kendo.ui.progress($("#loading"), true);
+                },
+                requestEnd: function () {
+                    kendo.ui.progress($("#loading"), false);
+                }
+            },
+            //editable: "popup",
+            columns: [{
+                field: 'CalificationProjectConfigInfoId',
+                title: 'Id',
+                width: '20px',
+            }, {
+                field: 'CalificationProjectConfigId',
+                title: 'Id',
+                width: '20px',
+                hidden: 'true',
+            }, {
+                field: 'CompanyName',
+                title: 'Comprador',
+                width: '200px',
+                editor: function (container, options) {
+                    $('<input required data-bind="value:' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            autoBind: false,
+                            dataSource: Provider_CalificationProjectConfigInfo.Companies,
+                            dataTextField: 'ItemName',
+                            dataValueField: 'ItemId',
+                            optionLabel: 'Seleccione una opción'
+                        });
+                },
+                template: '#=CompanyName#', //function (dataItem) {
+                //    debugger;
+                //    var oReturn = 'Seleccione una opción.';                    
+                //    if (dataItem != null) {
+                //        $.each(Provider_CalificationProjectConfigInfo.Companies, function (item, value) {
+                //            if (dataItem.CompanyName != null) {
+                //                if (dataItem.CompanyName.ItemId == value.ItemId)
+                //                    oReturn = value.ItemName;
+                //            } else {
+                //                if (dataItem.CompanyName == value.ItemName) {
+                //                    oReturn = value.ItemName;
+                //                }
+                //            }
+                //        });
+                //    }
+                //    return oReturn;
+                //},
+                
+            }, {
+
+                field: 'CalificationProjectConfigName',
+                title: 'Proceso de Calificación',
+                width: '200px',
+                
+            }, {
+                field: 'Enable',
+                title: 'Visible marketplace',
+                width: '80px',
+                template: function (dataItem) {
+                    var oReturn = '';
+
+                    if (dataItem.Enable == true) {
+                        oReturn = 'Si'
+                    }
+                    else {
+                        oReturn = 'No'
+                    }
+                    return oReturn;
+                },
+            }],
+        });
+    },
+};

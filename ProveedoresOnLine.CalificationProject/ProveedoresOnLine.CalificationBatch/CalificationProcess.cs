@@ -15,9 +15,18 @@ namespace ProveedoresOnLine.CalificationBatch
             {
                 LogFile("Start Process:::" + DateTime.Now);
                 //Get all calification project config
-                List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel> oCalificationProjectConfigModel =
-                    ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfig_GetAll();                
+                var oCalificationProjectConfigInfoModel = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoGetAll();
 
+                //Select All a la nueva tabla ObjNuevo
+                //cruzar ObjNuevo vs oCalificationProjectConfigModel oCalificationProjectConfigModel  == oCalificationProjectConfigModel  Cruzado
+                var oCalificationProjectConfigModel = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfig_GetAll();
+
+                oCalificationProjectConfigInfoModel.All(x=> 
+                {
+                    oCalificationProjectConfigModel.AddRange(oCalificationProjectConfigModel.Where(y => x.RelatedCalificationProjectConfig.CalificationProjectConfigId == y.CalificationProjectConfigId).Select(y=>y));
+                    return true;
+                });
+                
                 //validate calification project config list
                 if (oCalificationProjectConfigModel != null &&
                     oCalificationProjectConfigModel.Count > 0)
@@ -25,7 +34,7 @@ namespace ProveedoresOnLine.CalificationBatch
                     oCalificationProjectConfigModel.All(cnf =>
                     {
                         //Get all related provider by customer
-                        List<ProveedoresOnLine.Company.Models.Company.CompanyModel> oRelatedProvider =
+                        var  oRelatedProvider =
                             ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.GetAllProvidersByCustomerPublicId(cnf.Company.CompanyPublicId);
 
                         ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel oModelToUpsert = new Models.CalificationProjectBatch.CalificationProjectBatchModel();

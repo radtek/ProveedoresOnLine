@@ -14,16 +14,16 @@ namespace ProveedoresOnLine.CalificationProject.Test
     {
         [TestMethod]
         public void StartProcess()
-       { 
-           ProveedoresOnLine.CalificationBatch.CalificationProcess.StartProcess();
-       }
+        {
+            ProveedoresOnLine.CalificationBatch.CalificationProcess.StartProcess();
+        }
 
         #region CalificationBatch
 
         [TestMethod]
         public void CalificationProject_GetByCustomer()
         {
-            List<ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel> oReturn = 
+            List<ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel> oReturn =
                 ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProject_GetByCustomer("18C25804", "1BD9AD1B", true);
 
             Assert.AreEqual(true, oReturn.Count > 0);
@@ -183,7 +183,7 @@ namespace ProveedoresOnLine.CalificationProject.Test
         public void GetCalificationProjectConfigByCustomer()
         {
             List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel> oReturn =
-                ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectConfig_GetByCustomerPublicId("18C25804", true);
+                ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectConfig_GetByCustomerPublicId("DA5C572E", true);
 
             Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
         }
@@ -232,7 +232,7 @@ namespace ProveedoresOnLine.CalificationProject.Test
         #region Commercial Module
 
         [TestMethod]
-        public void CommercialModule() 
+        public void CommercialModule()
         {
             List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> oReturn = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CommercialModuleInfo("1351D3F3", 302001);
 
@@ -243,10 +243,10 @@ namespace ProveedoresOnLine.CalificationProject.Test
 
         #region HSEQ Module
         [TestMethod]
-        public void CertificationModule() 
+        public void CertificationModule()
         {
             List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> oReturn = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CertificationModuleInfo("1BD9AD1B", 702002);
-                
+
             Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
         }
 

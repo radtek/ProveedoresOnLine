@@ -1,0 +1,110 @@
+﻿@model BackOffice.Models.Provider.ProviderViewModel
+
+@{
+    ViewBag.Title = "Proceso de Calificación";
+    Layout = MVC.Shared.Views._Layout;
+
+    Model.RenderScripts = false;
+    Model.GridToSave = "divGridCalificationProjectConfigInfo";
+}
+@*ESTE ES EL ENVUELTO COMPLETO DE MENU LATERAL Y CONTENIDO*@
+<div class="POBOProviderWrapper">
+    @*ESTE ES QUE TRAE EL PARCIAL QUE PINTA EL MENU LATERAL*@
+    <div class="POBOProviderSideMenuWrapper">
+        @Html.Partial(MVC.Shared.Views._P_ProviderMenu, Model)
+    </div>
+    <div class="POBOProviderContentWrapper">
+        <div class="POBOProviderUpsertForm">
+            <label class="POBOSectionTitles">Asignación de proceso de calificación</label>
+            @{
+                Model.IsForm = false;
+                Html.RenderPartial(MVC.Shared.Views._P_ProviderActions, Model);
+            }
+            
+            <div id="loading"></div>
+            <div id="divGridCalificationProjectConfigInfo"></div>
+            <br />
+            @{
+                Model.IsForm = false;
+                Html.RenderPartial(MVC.Shared.Views._P_ProviderActions, Model);
+            }
+        </div>
+    </div>
+
+</div>
+<div style="display:none;">
+    <div id="divGridCalificationProjectConfigInfo_ShortcutToolTipTemplate">
+        <img class="divGrid_kbtooltip" src="@Url.Content(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_InfoTooltip].Value)" title=" Nuevo (alt+shift+n) -  Guardar (alt+shift+g) - Descartar (alt+shift+d) " />
+    </div>
+
+    <div id="divGridCalificationProjectConfigInfo_ViewEnablesTemplate">
+        <label class="POBOProviderGridVerSoloTrue">Ver solo los habilitados</label>
+        <input class="POBOProviderGridEnableContact" id="divGridCalificationProjectConfigInfot_ViewEnable" type="checkbox" checked="checked" />
+    </div>    
+</div>
+
+@{
+    Model.RenderScripts = true;
+}
+
+@section inlinescripts
+{
+    @Html.Partial(MVC.Shared.Views._P_ProviderMenu, Model)
+
+    @{
+        //get ContactTypeValues        
+        string oCompanies = "[]";
+        string oProjects = "[]";
+        
+        if (Model.CPCCompany !=null && Model.CPCCompany.Count > 0)
+        {
+            Dictionary<int, string> oCompany =
+            Model.CPCCompany.
+            GroupBy(x => x.CatalogId).
+            Select(x =>
+                new
+                {
+                    okey = x.Key,
+                    ovalue = Model.CPCCompany.Where(y => y.CatalogId == x.Key).Select(y=>y.ItemName).FirstOrDefault(),
+                }).ToDictionary(k => k.okey, v => v.ovalue);
+
+            oCompanies = (new System.Web.Script.Serialization.JavaScriptSerializer()).
+                        Serialize(oCompany.Select(x => new { ItemId = x.Key, ItemName = x.Value }));
+            
+        }
+
+        if (Model.CPCConfig != null && Model.CPCConfig.Count > 0)
+        {
+            Dictionary<int, List<ProveedoresOnLine.Company.Models.Util.CatalogModel>> oProject =
+            Model.CPCConfig.
+            GroupBy(x => x.CatalogId).
+            Select(x =>
+                new
+                {
+                    okey = x.Key,
+                    ovalue = Model.CPCConfig.Where(y => y.CatalogId == x.Key).OrderBy(y => y.ItemName).ToList(),
+                }).ToDictionary(k => k.okey, v => v.ovalue);
+
+            oProjects = (new System.Web.Script.Serialization.JavaScriptSerializer()).
+                            Serialize(oProject.Select(x => new { Key = x.Key, Value = x.Value }));
+        }
+    }
+    
+
+    <script type="text/javascript">
+        
+        var vCompanies = @(Html.Raw(oCompanies));
+        var vProjects = @(Html.Raw(oProjects));
+        $(document).ready(function () {
+                        
+            Provider_CalificationProjectConfigInfo.Init({
+                ObjectId: 'divGridCalificationProjectConfigInfo',
+                ProviderPublicId:'@Model.RelatedProvider.RelatedCompany.CompanyPublicId',
+                Companies: vCompanies,
+                CPCConfig:vProjects
+            });
+            Provider_CalificationProjectConfigInfo.RenderAsync();
+            
+        });
+    </script>
+}
