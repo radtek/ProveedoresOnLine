@@ -23,9 +23,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     if (Name.ToLower().Contains("sas"))                    
                         Name = Name.ToLower().Replace("sas", "");                    
                     else if (Name.ToLower().Contains("s.a.s"))
-                        Name = Name.ToLower().Replace("s.a.s", "");
-                    else if (Name.ToLower().Contains("sa"))
-                        Name = Name.ToLower().Replace("sa", "");
+                        Name = Name.ToLower().Replace("s.a.s", "");         
                     else if (Name.ToLower().Contains("s.a"))
                         Name = Name.ToLower().Replace("s.a", "");
                     else if (Name.ToLower().Contains("ltda"))
