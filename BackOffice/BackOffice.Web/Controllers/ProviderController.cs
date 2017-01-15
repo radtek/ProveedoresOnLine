@@ -1740,15 +1740,13 @@ namespace BackOffice.Web.Controllers
             var oProjectConfig = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigGetByProvider(ProviderPublicId);
             BackOffice.Models.Provider.ProviderViewModel oModel = new ProviderViewModel();
             var oCPCCompany = new List<CatalogModel>();
-            var oCPCConfig = new List<CatalogModel>();
-            List<Tuple<string, string>> items = new List<Tuple<string, string>>();
+            var oCPCConfig = new List<CatalogModel>();            
             
             oProjectConfig.All(x =>
-            {
-                items.Add(new Tuple<string, string>(x.CompanyId.ToString(), x.Company.CompanyName));
+            {                
                 oCPCCompany.Add(new CatalogModel()
                 {
-                    CatalogId = x.CompanyId,
+                    CatalogId = 1,
                     ItemId = x.CompanyId,
                     ItemName = x.Company.CompanyName
 
@@ -1764,8 +1762,7 @@ namespace BackOffice.Web.Controllers
                 
                 return true;
             });
-            oCPCCompany = oCPCCompany.GroupBy(x => x.ItemName).Select(x => x.First()).ToList();
-            oModel.CPCCOmpanyddl = items;
+            oCPCCompany = oCPCCompany.GroupBy(x => x.ItemName).Select(x => x.First()).ToList();            
             oModel.CPCCompany = new List<CatalogModel>(oCPCCompany);            
             oModel.CPCConfig = new List< CatalogModel >(oCPCConfig);
 

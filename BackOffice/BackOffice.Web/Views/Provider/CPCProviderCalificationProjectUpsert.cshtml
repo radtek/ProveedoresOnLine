@@ -55,22 +55,21 @@
         //get ContactTypeValues        
         string oCompanies = "[]";
         string oProjects = "[]";
-        
-        if (Model.CPCCompany !=null && Model.CPCCompany.Count > 0)
+
+        if (Model.CPCCompany != null && Model.CPCCompany.Count > 0)
         {
-            Dictionary<int, string> oCompany =
+            Dictionary<int, List<ProveedoresOnLine.Company.Models.Util.CatalogModel>> oCompany =
             Model.CPCCompany.
             GroupBy(x => x.CatalogId).
             Select(x =>
                 new
                 {
                     okey = x.Key,
-                    ovalue = Model.CPCCompany.Where(y => y.CatalogId == x.Key).Select(y=>y.ItemName).FirstOrDefault(),
+                    ovalue = Model.CPCCompany.Where(y => y.CatalogId == x.Key).OrderBy(y => y.ItemName).ToList(),
                 }).ToDictionary(k => k.okey, v => v.ovalue);
 
             oCompanies = (new System.Web.Script.Serialization.JavaScriptSerializer()).
-                        Serialize(oCompany.Select(x => new { ItemId = x.Key, ItemName = x.Value }));
-            
+                            Serialize(oCompany.Select(x => new { Key = x.Key, Value = x.Value }));
         }
 
         if (Model.CPCConfig != null && Model.CPCConfig.Count > 0)
