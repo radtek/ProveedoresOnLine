@@ -6668,7 +6668,7 @@ var Provider_LegalInfoObject = {
             }
         });
     },
-}
+};
 
 var Provider_CustomerInfoObject = {
 
@@ -7082,7 +7082,7 @@ var Provider_CustomerInfoObject = {
             }
         });
     },
-}
+};
 
 var Provider_CustomData = {
 
@@ -7113,10 +7113,237 @@ var Provider_CustomData = {
             },
         });
     },
-}
+};
 
 /*CalificationProjectConfigInfoObject*/
+//var Provider_CalificationProjectConfigInfo = {
+//    ObjectId: '',
+//    ProviderPublicId: '',
+//    Companies: new Array(),
+//    CPCConfig: new Array(),
+//    CalValueId: '',
+
+//    Init: function (vInitObject) {
+//        this.ObjectId = vInitObject.ObjectId;
+//        this.ProviderPublicId = vInitObject.ProviderPublicId;        
+//        this.CalValueId = vInitObject.CalValueId;
+//        if (vInitObject.Companies != null) {
+//            debugger;
+//            $.each(vInitObject.Companies, function (item, value) {
+//                Provider_CalificationProjectConfigInfo.Companies[value.Key] = value.Value;
+//            });
+//        }
+//        if (vInitObject.CPCConfig != null) {
+//            debugger;
+//            $.each(vInitObject.CPCConfig, function (item, value) {                
+//                Provider_CalificationProjectConfigInfo.CPCConfig[value.Key] = value.Value;
+//            });
+//        }
+//    },
+
+//    RenderAsync: function () {
+
+//        Provider_CalificationProjectConfigInfo.CalificationProjectConfigInfo();
+
+//        Provider_CalificationProjectConfigInfo.ConfigKeyBoard();
+
+//        Provider_CalificationProjectConfigInfo.ConfigEvents();
+//    },
+
+//    ConfigKeyBoard: function () {
+//        //init keyboard tooltip
+//        $('.divGrid_kbtooltip').tooltip();
+
+//        $(document.body).keydown(function (e) {
+//            if (e.altKey && e.shiftKey && e.keyCode == 71) {
+//                //alt+shift+g
+
+//                //save
+//                $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data("kendoGrid").saveChanges();
+//            }
+//            else if (e.altKey && e.shiftKey && e.keyCode == 78) {
+//                //alt+shift+n
+
+//                //new field
+//                $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data("kendoGrid").addRow();
+//            }
+//            else if (e.altKey && e.shiftKey && e.keyCode == 68) {
+//                //alt+shift+d
+
+//                //new field
+//                $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data("kendoGrid").cancelChanges();
+//            }
+//        });
+//    },
+
+//    ConfigEvents: function () {
+//        //config grid visible enables event
+//        $('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnable').change(function () {
+//            $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data('kendoGrid').dataSource.read();
+//        });
+//    },
+
+//    GetViewEnable: function (CalificationProjectConfigType) {
+//        return $('#' + Provider_CalificationProjectConfigInfo.ObjectId).find('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnable').length > 0 ? $('#' + Provider_CalificationProjectConfigInfo.ObjectId).find('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnable').is(':checked') : true;
+//    },
+
+//    CalificationProjectConfigInfo: function () {
+//        var ddl;
+//        $('#' + Provider_CalificationProjectConfigInfo.ObjectId).kendoGrid({
+//            editable: true,
+//            navigatable: true,
+//            pageable: false,
+//            scrollable: true,
+//            toolbar: [
+//                { name: 'create', text: 'Nuevo' },
+//                { name: 'save', text: 'Guardar datos del listado' },
+//                { name: 'cancel', text: 'Descartar' },
+//                { name: 'ViewEnable', template: $('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnablesTemplate').html() },
+//                { name: 'ShortcutToolTip', template: $('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ShortcutToolTipTemplate').html() },
+//            ],
+//            dataSource: {
+//                serverPaging: false,
+//                schema: {
+//                    model: {
+//                        id: "CalificationProjectConfigInfoId",
+//                        fields: {
+//                            CalificationProjectConfigInfoId: { editable: false, nullable: true },
+//                            CalificationProjectConfigId: { editable: false, nullable: false },
+
+//                            CompanyName: { editable: true },
+//                            CompanyId: { editable: false },
+
+//                            CalificationProjectConfigName: { editable: true, validation: { required: true } },
+//                            Enable: { editable: true, type: 'boolean', defaultValue: true },
+//                        },
+//                    }
+//                },
+//                transport: {
+//                    read: function (options) {
+
+//                        $.ajax({
+//                            url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderGetbyProvider=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId + '&Enable=' + Provider_CalificationProjectConfigInfo.GetViewEnable(),
+//                            dataType: 'json',
+//                            success: function (result) {
+//                                options.success(result);
+//                            },
+//                            error: function (result) {
+//                                options.error(result);
+//                                Message('error', result);
+//                            },
+//                        });
+//                    },
+//                    create: function (options) {
+//                        debugger;
+//                        $.ajax({
+//                            url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderUpsert=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId + '&Enable=' + Provider_CalificationProjectConfigInfo.GetViewEnable(),
+//                            dataType: 'json',
+//                            type: 'post',
+//                            data: {
+//                                DataToUpsert: kendo.stringify(options.data)
+//                            },
+//                            success: function (result) {
+//                                options.success(result);
+//                                $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data('kendoGrid').dataSource.read();
+//                                Message('success', 'Se creó el registro.');
+//                            },
+//                            error: function (result) {
+//                                options.error(result);
+//                                Message('error', result);
+//                            },
+//                        });
+//                    },
+//                    update: function (options) {
+//                        debugger;
+//                        $.ajax({
+//                            url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderUpsert=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId + '&Enable=' + Provider_CalificationProjectConfigInfo.GetViewEnable(),
+//                            dataType: 'json',
+//                            type: 'post',
+//                            data: {
+//                                DataToUpsert: kendo.stringify(options.data)
+//                            },
+//                            success: function (result) {
+//                                options.success(result);
+//                                $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data('kendoGrid').dataSource.read();
+//                                Message('success', 'Se editó la fila con el id ' + options.data.CalificationProjectConfigInfoId + '.');
+//                            },
+//                            error: function (result) {
+//                                options.error(result);
+//                                Message('error', 'Error en la fila con el id ' + options.data.CalificationProjectConfigInfoId + '.');
+//                            },
+//                        });
+//                    },
+//                },
+//                requestStart: function () {
+//                    kendo.ui.progress($("#loading"), true);
+//                },
+//                requestEnd: function () {
+//                    kendo.ui.progress($("#loading"), false);
+//                }
+//            },
+//            //editable: "popup",
+//            columns: [{
+//                field: 'CalificationProjectConfigInfoId',
+//                title: 'Id',
+//                width: '20px',
+//            }, {
+//                field: 'CalificationProjectConfigId',
+//                title: 'Id',
+//                width: '20px',
+//                hidden: 'true',
+//            }, {
+//                field: 'CompanyName',
+//                title: 'Comprador',
+//                width: '200px',
+//                template: function (dataItem) {
+//                    debugger;
+//                    var oReturn = 'Seleccione una opción.';
+//                    if (dataItem != null && dataItem.CompanyName != null) {
+//                        $.each(Provider_CalificationProjectConfigInfo.Companies[1], function (item, value) {
+//                            if (dataItem.CompanyName == value.ItemId) {
+//                                oReturn = value.ItemName;
+//                            }
+//                        });
+//                    }
+//                    return oReturn;
+//                },
+//                editor: function (container, options) {
+//                    $('<input required data-bind="value:' + options.field + '"/>')
+//                        .appendTo(container)
+//                        .kendoDropDownList({                            
+//                            dataSource: Provider_CalificationProjectConfigInfo.Companies[1],
+//                            dataTextField: 'ItemName',
+//                            dataValueField: 'ItemId',
+//                            optionLabel: 'Seleccione una opción'
+//                        });
+//                },                               
+//            }, {
+
+//                field: 'CalificationProjectConfigName',
+//                title: 'Proceso de Calificación',
+//                width: '200px',
+                
+//            }, {
+//                field: 'Enable',
+//                title: 'Visible marketplace',
+//                width: '80px',
+//                template: function (dataItem) {
+//                    var oReturn = '';
+
+//                    if (dataItem.Enable == true) {
+//                        oReturn = 'Si'
+//                    }
+//                    else {
+//                        oReturn = 'No'
+//                    }
+//                    return oReturn;
+//                },
+//            }],
+//        });
+//    },
+//}
 var Provider_CalificationProjectConfigInfo = {
+
     ObjectId: '',
     ProviderPublicId: '',
     Companies: new Array(),
@@ -7126,26 +7353,41 @@ var Provider_CalificationProjectConfigInfo = {
     Init: function (vInitObject) {
         this.ObjectId = vInitObject.ObjectId;
         this.ProviderPublicId = vInitObject.ProviderPublicId;
-        this.Companies = vInitObject.Companies;
-        this.CalValueId = vInitObject.CalValueId;
-        if (vInitObject.CPCConfig != null) {
-            debugger;
-            $.each(vInitObject.CPCConfig, function (item, value) {                
-                Provider_CalificationProjectConfigInfo.CPCConfig[value.Key] = value.Value;
+        this.ContactType = vInitObject.ContactType;
+        this.DateFormat = vInitObject.DateFormat;
+        if (vInitObject.ProviderOptions != null) {
+            $.each(vInitObject.ProviderOptions, function (item, value) {
+                Provider_CompanyContactObject.ProviderOptions[value.Key] = value.Value;
             });
         }
     },
 
     RenderAsync: function () {
+        if (Provider_CompanyContactObject.ContactType == 204001) {
+            Provider_CompanyContactObject.RenderCompanyContact();
+        }
+        else if (Provider_CompanyContactObject.ContactType == 204002) {
+            Provider_CompanyContactObject.RenderPersonContact();
+        }
+        else if (Provider_CompanyContactObject.ContactType == 204003) {
+            Provider_CompanyContactObject.RenderBranch();
+        }
+        else if (Provider_CompanyContactObject.ContactType == 204004) {
+            Provider_CompanyContactObject.RenderDistributor();
+        }
 
-        Provider_CalificationProjectConfigInfo.CalificationProjectConfigInfo();
+        //focus on the grid
+        $('#' + Provider_CompanyContactObject.ObjectId).data("kendoGrid").table.focus();
 
-        Provider_CalificationProjectConfigInfo.ConfigKeyBoard();
+        //config keyboard
+        Provider_CompanyContactObject.ConfigKeyBoard();
 
-        Provider_CalificationProjectConfigInfo.ConfigEvents();
+        //Config Events
+        Provider_CompanyContactObject.ConfigEvents();
     },
 
     ConfigKeyBoard: function () {
+
         //init keyboard tooltip
         $('.divGrid_kbtooltip').tooltip();
 
@@ -7154,67 +7396,71 @@ var Provider_CalificationProjectConfigInfo = {
                 //alt+shift+g
 
                 //save
-                $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data("kendoGrid").saveChanges();
+                $('#' + Provider_CompanyContactObject.ObjectId).data("kendoGrid").saveChanges();
             }
             else if (e.altKey && e.shiftKey && e.keyCode == 78) {
                 //alt+shift+n
 
                 //new field
-                $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data("kendoGrid").addRow();
+                $('#' + Provider_CompanyContactObject.ObjectId).data("kendoGrid").addRow();
             }
             else if (e.altKey && e.shiftKey && e.keyCode == 68) {
                 //alt+shift+d
 
                 //new field
-                $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data("kendoGrid").cancelChanges();
+                $('#' + Provider_CompanyContactObject.ObjectId).data("kendoGrid").cancelChanges();
             }
         });
     },
 
     ConfigEvents: function () {
+
         //config grid visible enables event
-        $('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnable').change(function () {
-            $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data('kendoGrid').dataSource.read();
+        $('#' + Provider_CompanyContactObject.ObjectId + '_ViewEnable').change(function () {
+            $('#' + Provider_CompanyContactObject.ObjectId).data('kendoGrid').dataSource.read();
         });
     },
 
-    GetViewEnable: function (CalificationProjectConfigType) {
-        return $('#' + Provider_CalificationProjectConfigInfo.ObjectId).find('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnable').length > 0 ? $('#' + Provider_CalificationProjectConfigInfo.ObjectId).find('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnable').is(':checked') : true;
+    GetViewEnable: function () {
+
+        return $('#' + Provider_CompanyContactObject.ObjectId + '_ViewEnable').length > 0 ? $('#' + Provider_CompanyContactObject.ObjectId + '_ViewEnable').is(':checked') : true;
     },
 
-    CalificationProjectConfigInfo: function () {
-        var ddl;
-        $('#' + Provider_CalificationProjectConfigInfo.ObjectId).kendoGrid({
+    RenderCompanyContact: function () {
+        $('#' + Provider_CompanyContactObject.ObjectId).kendoGrid({
             editable: true,
             navigatable: true,
             pageable: false,
             scrollable: true,
             toolbar: [
                 { name: 'create', text: 'Nuevo' },
-                { name: 'save', text: 'Guardar datos del listado' },
+                { name: 'save', text: 'Guardar' },
                 { name: 'cancel', text: 'Descartar' },
-                { name: 'ViewEnable', template: $('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnablesTemplate').html() },
-                { name: 'ShortcutToolTip', template: $('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ShortcutToolTipTemplate').html() },
+                { name: 'ViewEnable', template: $('#' + Provider_CompanyContactObject.ObjectId + '_ViewEnablesTemplate').html() },
+                { name: 'ShortcutToolTip', template: $('#' + Provider_CompanyContactObject.ObjectId + '_ShortcutToolTipTemplate').html() },
             ],
             dataSource: {
-                serverPaging: false,
                 schema: {
                     model: {
-                        id: "CalificationProjectConfigInfoId",
+                        id: 'ContactId',
                         fields: {
-                            CalificationProjectConfigInfoId: { editable: false, nullable: true },
-                            CalificationProjectConfigId: { editable: false, nullable: false },                            
-                            CompanyName: {defaultValue: { ItemId: 0, ItemName: "Seleccione una opción"}}, 
-                            CalificationProjectConfigName: { editable: true, validation: { required: true } },
+                            ContactId: { editable: false, nullable: true },
+                            ContactName: { editable: true },
                             Enable: { editable: true, type: 'boolean', defaultValue: true },
-                        },
+
+                            CC_CompanyContactType: { editable: true },
+                            CC_CompanyContactTypeId: { editable: false },
+
+                            CC_Value: { editable: true },
+                            CC_ValueId: { editable: false },
+                        }
                     }
                 },
                 transport: {
                     read: function (options) {
 
                         $.ajax({
-                            url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderGetbyProvider=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId + '&Enable=' + Provider_CalificationProjectConfigInfo.GetViewEnable(),
+                            url: BaseUrl.ApiUrl + '/ProviderApi?GIContactGetByType=true&ProviderPublicId=' + Provider_CompanyContactObject.ProviderPublicId + '&ContactType=' + Provider_CompanyContactObject.ContactType + '&ViewEnable=' + Provider_CompanyContactObject.GetViewEnable(),
                             dataType: 'json',
                             success: function (result) {
                                 options.success(result);
@@ -7222,13 +7468,12 @@ var Provider_CalificationProjectConfigInfo = {
                             error: function (result) {
                                 options.error(result);
                                 Message('error', result);
-                            },
+                            }
                         });
                     },
                     create: function (options) {
-                        debugger;
                         $.ajax({
-                            url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderUpsert=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId + '&Enable=' + Provider_CalificationProjectConfigInfo.GetViewEnable(),
+                            url: BaseUrl.ApiUrl + '/ProviderApi?GIContactUpsert=true&ProviderPublicId=' + Provider_CompanyContactObject.ProviderPublicId + '&ContactType=' + Provider_CompanyContactObject.ContactType,
                             dataType: 'json',
                             type: 'post',
                             data: {
@@ -7236,19 +7481,17 @@ var Provider_CalificationProjectConfigInfo = {
                             },
                             success: function (result) {
                                 options.success(result);
-                                $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data('kendoGrid').dataSource.read();
                                 Message('success', 'Se creó el registro.');
                             },
                             error: function (result) {
                                 options.error(result);
                                 Message('error', result);
-                            },
+                            }
                         });
                     },
                     update: function (options) {
-                        debugger;
                         $.ajax({
-                            url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderUpsert=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId + '&Enable=' + Provider_CalificationProjectConfigInfo.GetViewEnable(),
+                            url: BaseUrl.ApiUrl + '/ProviderApi?GIContactUpsert=true&ProviderPublicId=' + Provider_CompanyContactObject.ProviderPublicId + '&ContactType=' + Provider_CompanyContactObject.ContactType,
                             dataType: 'json',
                             type: 'post',
                             data: {
@@ -7256,13 +7499,12 @@ var Provider_CalificationProjectConfigInfo = {
                             },
                             success: function (result) {
                                 options.success(result);
-                                $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data('kendoGrid').dataSource.read();
-                                Message('success', 'Se editó la fila con el id ' + options.data.CalificationProjectConfigInfoId + '.');
+                                Message('success', 'Se editó la fila con el id ' + options.data.ContactId + '.');
                             },
                             error: function (result) {
                                 options.error(result);
-                                Message('error', 'Error en la fila con el id ' + options.data.CalificationProjectConfigInfoId + '.');
-                            },
+                                Message('error', 'Error en la fila con el id ' + options.data.ContactId + '.');
+                            }
                         });
                     },
                 },
@@ -7273,59 +7515,10 @@ var Provider_CalificationProjectConfigInfo = {
                     kendo.ui.progress($("#loading"), false);
                 }
             },
-            //editable: "popup",
             columns: [{
-                field: 'CalificationProjectConfigInfoId',
-                title: 'Id',
-                width: '20px',
-            }, {
-                field: 'CalificationProjectConfigId',
-                title: 'Id',
-                width: '20px',
-                hidden: 'true',
-            }, {
-                field: 'CompanyName',
-                title: 'Comprador',
-                width: '200px',
-                editor: function (container, options) {
-                    $('<input required data-bind="value:' + options.field + '"/>')
-                        .appendTo(container)
-                        .kendoDropDownList({
-                            autoBind: false,
-                            dataSource: Provider_CalificationProjectConfigInfo.Companies,
-                            dataTextField: 'ItemName',
-                            dataValueField: 'ItemId',
-                            optionLabel: 'Seleccione una opción'
-                        });
-                },
-                template: '#=CompanyName#', //function (dataItem) {
-                //    debugger;
-                //    var oReturn = 'Seleccione una opción.';                    
-                //    if (dataItem != null) {
-                //        $.each(Provider_CalificationProjectConfigInfo.Companies, function (item, value) {
-                //            if (dataItem.CompanyName != null) {
-                //                if (dataItem.CompanyName.ItemId == value.ItemId)
-                //                    oReturn = value.ItemName;
-                //            } else {
-                //                if (dataItem.CompanyName == value.ItemName) {
-                //                    oReturn = value.ItemName;
-                //                }
-                //            }
-                //        });
-                //    }
-                //    return oReturn;
-                //},
-                
-            }, {
-
-                field: 'CalificationProjectConfigName',
-                title: 'Proceso de Calificación',
-                width: '200px',
-                
-            }, {
                 field: 'Enable',
-                title: 'Visible marketplace',
-                width: '80px',
+                title: 'Habilitado',
+                width: '100px',
                 template: function (dataItem) {
                     var oReturn = '';
 
@@ -7337,6 +7530,1132 @@ var Provider_CalificationProjectConfigInfo = {
                     }
                     return oReturn;
                 },
+            }, {
+                field: 'ContactName',
+                title: 'Nombre',
+                width: '180px',
+            }, {
+                field: 'CC_CompanyContactType',
+                title: 'Tipo de contacto',
+                width: '190px',
+                template: function (dataItem) {
+                    debugger;
+                    var oReturn = 'Seleccione una opción.';
+                    if (dataItem != null && dataItem.CC_CompanyContactType != null) {
+                        $.each(Provider_CompanyContactObject.ProviderOptions[209], function (item, value) {
+                            if (dataItem.CC_CompanyContactType == value.ItemId) {
+                                oReturn = value.ItemName;
+                            }
+                        });
+                    }
+                    return oReturn;
+                },
+                editor: function (container, options) {
+                    $('<input required data-bind="value:' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataSource: Provider_CompanyContactObject.ProviderOptions[209],
+                            dataTextField: 'ItemName',
+                            dataValueField: 'ItemId',
+                            optionLabel: 'Seleccione una opción'
+                        });
+                },
+            }, {
+                field: 'CC_Value',
+                title: 'Información',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem.CC_Value == '') {
+                        if (dataItem.CC_CompanyContactType == "209001") {
+                            oReturn = '<label class="PlaceHolder">Ej: 7560000</label>'
+                        }
+                        else if (dataItem.CC_CompanyContactType == "209002") {
+                            oReturn = '<label class="PlaceHolder">Ej: 3161234567</label>'
+                        }
+                        else if (dataItem.CC_CompanyContactType == "209003") {
+                            oReturn = '<label class="PlaceHolder">Ej: www.prueba.com</label>'
+                        }
+                        else if (dataItem.CC_CompanyContactType == "209004") {
+                            oReturn = '<label class="PlaceHolder">Ej: 110221</label>'
+                        }
+                        else if (dataItem.CC_CompanyContactType == "209005") {
+                            oReturn = '<label class="PlaceHolder">Ej: 7560000</label>'
+                        }
+                        else if (dataItem.CC_CompanyContactType == "209006") {
+                            oReturn = '<label class="PlaceHolder">Ej: prueba@prueba.com</label>'
+                        }
+                    }
+                    else {
+                        oReturn = dataItem.CC_Value;
+                    }
+
+                    return oReturn;
+                },
+                width: '190px',
+            }, {
+                field: 'ContactId',
+                title: 'Id Interno',
+                width: '78px',
+            }],
+        });
+    },
+
+    RenderPersonContact: function () {
+        $('#' + Provider_CompanyContactObject.ObjectId).kendoGrid({
+            editable: true,
+            navigatable: true,
+            pageable: false,
+            scrollable: true,
+            toolbar: [
+                { name: 'create', text: 'Nuevo' },
+                { name: 'save', text: 'Guardar' },
+                { name: 'cancel', text: 'Descartar' },
+                { name: 'ViewEnable', template: $('#' + Provider_CompanyContactObject.ObjectId + '_ViewEnablesTemplate').html() },
+                { name: 'ShortcutToolTip', template: $('#' + Provider_CompanyContactObject.ObjectId + '_ShortcutToolTipTemplate').html() },
+            ],
+            dataSource: {
+                schema: {
+                    model: {
+                        id: 'ContactId',
+                        fields: {
+                            ContactId: { editable: false, nullable: true },
+                            ContactName: { editable: true },
+                            Enable: { editable: true, type: 'boolean', defaultValue: true },
+
+                            CP_PersonContactType: { editable: true, validation: { required: false } },
+                            CP_PersonContactTypeId: { editable: false },
+
+                            CP_IdentificationType: { editable: true, validation: { required: false } },
+                            CP_IdentificationTypeId: { editable: false },
+
+                            CP_IdentificationNumber: { editable: true, validation: { required: false } },
+                            CP_IdentificationNumberId: { editable: false },
+
+                            CP_IdentificationCity: { editable: true, validation: { required: false } },
+                            CP_IdentificationCityId: { editable: false },
+
+                            CP_IdentificationFile: { editable: true, validation: { required: false } },
+                            CP_IdentificationFileId: { editable: false },
+
+                            CP_Name: { editable: true, validation: { required: true } },
+                            CP_NameId: { editable: false },
+
+                            CP_Phone: { editable: true, validation: { required: false } },
+                            CP_PhoneId: { editable: false },
+
+                            CP_Extent: { editable: true, validation: { required: false } },
+                            CP_ExtentId: { editable: false },
+
+                            CP_Email: { editable: true, validation: { required: false, email: true } },
+                            CP_EmailId: { editable: false },
+
+                            CP_Negotiation: { editable: true, validation: { required: false } },
+                            CP_NegotiationId: { editable: false },
+                        }
+                    }
+                },
+                transport: {
+                    read: function (options) {
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/ProviderApi?GIContactGetByType=true&ProviderPublicId=' + Provider_CompanyContactObject.ProviderPublicId + '&ContactType=' + Provider_CompanyContactObject.ContactType + '&ViewEnable=' + Provider_CompanyContactObject.GetViewEnable(),
+                            dataType: 'json',
+                            success: function (result) {
+                                options.success(result);
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', result);
+                            }
+                        });
+                    },
+                    create: function (options) {
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/ProviderApi?GIContactUpsert=true&ProviderPublicId=' + Provider_CompanyContactObject.ProviderPublicId + '&ContactType=' + Provider_CompanyContactObject.ContactType,
+                            dataType: 'json',
+                            type: 'post',
+                            data: {
+                                DataToUpsert: kendo.stringify(options.data)
+                            },
+                            success: function (result) {
+                                options.success(result);
+                                Message('success', 'Se creó el registro.');
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', result);
+                            }
+                        });
+                    },
+                    update: function (options) {
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/ProviderApi?GIContactUpsert=true&ProviderPublicId=' + Provider_CompanyContactObject.ProviderPublicId + '&ContactType=' + Provider_CompanyContactObject.ContactType,
+                            dataType: 'json',
+                            type: 'post',
+                            data: {
+                                DataToUpsert: kendo.stringify(options.data)
+                            },
+                            success: function (result) {
+                                options.success(result);
+                                Message('success', 'Se editó la fila con el id ' + options.data.ContactId + '.');
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', 'Error en la fila con el id ' + options.data.ContactId + '.');
+                            }
+                        });
+                    },
+                },
+                requestStart: function () {
+                    kendo.ui.progress($("#loading"), true);
+                },
+                requestEnd: function () {
+                    kendo.ui.progress($("#loading"), false);
+                }
+            },
+            columns: [{
+                field: 'Enable',
+                title: 'Visible en Market Place',
+                width: '155px',
+                template: function (dataItem) {
+                    var oReturn = '';
+
+                    if (dataItem.Enable == true) {
+                        oReturn = 'Si'
+                    }
+                    else {
+                        oReturn = 'No'
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'ContactName',
+                title: 'Nombre',
+                width: '200px',
+                template: function (dataItem) {
+                    var oReturn = '';
+
+                    if (dataItem.ContactName == '') {
+                        oReturn = '<label class="PlaceHolder">Ej: Pedro Parker</label>';
+                    }
+                    else {
+                        oReturn = dataItem.ContactName;
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'CP_PersonContactType',
+                title: 'Tipo de representante',
+                width: '200px',
+                template: function (dataItem) {
+                    var oReturn = 'Seleccione una opción.';
+                    if (dataItem != null && dataItem.CP_PersonContactType != null) {
+                        $.each(Provider_CompanyContactObject.ProviderOptions[210], function (item, value) {
+                            if (dataItem.CP_PersonContactType == value.ItemId) {
+                                oReturn = value.ItemName;
+                            }
+                        });
+                    }
+                    return oReturn;
+                },
+                editor: function (container, options) {
+                    $('<input required data-bind="value:' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataSource: Provider_CompanyContactObject.ProviderOptions[210],
+                            dataTextField: 'ItemName',
+                            dataValueField: 'ItemId',
+                            optionLabel: 'Seleccione una opción'
+                        });
+                },
+            }, {
+                field: 'CP_IdentificationType',
+                title: 'Tipo de identificación',
+                width: '180px',
+                template: function (dataItem) {
+                    var oReturn = 'Seleccione una opción.';
+                    if (dataItem != null && dataItem.CP_IdentificationType != null) {
+                        $.each(Provider_CompanyContactObject.ProviderOptions[101], function (item, value) {
+                            if (dataItem.CP_IdentificationType == value.ItemId) {
+                                oReturn = value.ItemName;
+                            }
+                        });
+                    }
+                    return oReturn;
+                },
+                editor: function (container, options) {
+                    $('<input required data-bind="value:' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataSource: Provider_CompanyContactObject.ProviderOptions[101],
+                            dataTextField: 'ItemName',
+                            dataValueField: 'ItemId',
+                            optionLabel: 'Seleccione una opción'
+                        });
+                },
+            }, {
+                field: 'CP_IdentificationNumber',
+                title: 'Número de identificación',
+                width: '180px',
+                template: function (dataItem) {
+                    var oReturn = '';
+
+                    if (dataItem.CP_IdentificationNumber == '') {
+                        oReturn = '<label class="PlaceHolder">Ej: 79982877</label>';
+                    }
+                    else {
+                        oReturn = dataItem.CP_IdentificationNumber;
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'CP_IdentificationCity',
+                title: 'Ciudad de expedicion del documento',
+                width: '180px',
+                template: function (dataItem) {
+                    var oReturn = '';
+
+                    if (dataItem.CP_IdentificationCity == '') {
+                        oReturn = '<label class="PlaceHolder">Ej: Bogotá Distrito Capital</label>';
+                    }
+                    else {
+                        oReturn = dataItem.CP_IdentificationCity;
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'CP_Phone',
+                title: 'Telefono',
+                width: '150px',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem.CP_Phone == '') {
+                        oReturn = '<label class="PlaceHolder">Ej: (57) 3213232 ext 22</label>';
+                    }
+                    else {
+                        oReturn = dataItem.CP_Phone;
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'CP_Extent',
+                title: 'Extensión',
+                width: '150px',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem.CP_Extent == null) {
+                        oReturn = '<label class="PlaceHolder">Ej: ext 22</label>';
+                    }
+                    else {
+                        oReturn = dataItem.CP_Extent;
+                    }
+                    return oReturn;
+                }
+            }, {
+                field: 'CP_Email',
+                title: 'Correo electronico',
+                width: '200px',
+                template: function (dataItem) {
+                    var oReturn = '';
+
+                    if (dataItem.CP_Email == '') {
+                        oReturn = '<label class="PlaceHolder">Ej: contacto@publicar.com</label>';
+                    }
+                    else {
+                        oReturn = dataItem.CP_Email;
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'CP_Negotiation',
+                title: 'Capacidad de negociación',
+                width: '190px',
+                template: function (dataItem) {
+                    var oReturn = '';
+
+                    if (dataItem.CP_Negotiation == '') {
+                        oReturn = '<label class="PlaceHolder">Ej: COP 589500000</label>';
+                    }
+                    else {
+                        oReturn = dataItem.CP_Negotiation;
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'CP_IdentificationFile',
+                title: 'Doc representante legal.',
+                width: '292px',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem != null && dataItem.CP_IdentificationFile != null && dataItem.CP_IdentificationFile.length > 0) {
+                        if (dataItem.dirty != null && dataItem.dirty == true) {
+                            oReturn = '<span class="k-dirty"></span>';
+                        }
+                        oReturn = oReturn + $('#' + Provider_CompanyContactObject.ObjectId + '_File').html();
+                    }
+                    else {
+                        oReturn = $('#' + Provider_CompanyContactObject.ObjectId + '_NoFile').html();
+                    }
+
+                    oReturn = oReturn.replace(/\${CP_IdentificationFile}/gi, dataItem.CP_IdentificationFile);
+
+                    return oReturn;
+                },
+                editor: function (container, options) {
+                    var oFileExit = true;
+                    $('<input type="file" id="files" name="files"/>')
+                    .appendTo(container)
+                    .kendoUpload({
+                        multiple: false,
+                        async: {
+                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyContactObject.ProviderPublicId,
+                            autoUpload: true
+                        },
+                        success: function (e) {
+                            if (e.response != null && e.response.length > 0) {
+                                //set server fiel name
+                                options.model[options.field] = e.response[0].ServerName;
+                                //enable made changes
+                                options.model.dirty = true;
+                            }
+                        },
+                        complete: function (e) {
+                            //enable lost focus
+                            oFileExit = true;
+                        },
+                        select: function (e) {
+                            //disable lost focus while upload file
+                            oFileExit = false;
+                        },
+                    });
+                    $(container).focusout(function () {
+                        if (oFileExit == false) {
+                            //mantain file input focus
+                            $('#files').focus();
+                        }
+                    });
+                },
+            }, {
+                field: 'ContactId',
+                title: 'Id Interno',
+                width: '78px',
+            }],
+        });
+    },
+
+    RenderBranch: function () {
+        $('#' + Provider_CompanyContactObject.ObjectId).kendoGrid({
+            editable: true,
+            navigatable: true,
+            pageable: false,
+            scrollable: true,
+            toolbar: [
+                { name: 'create', text: 'Nuevo' },
+                { name: 'save', text: 'Guardar' },
+                { name: 'cancel', text: 'Descartar' },
+                { name: 'ViewEnable', template: $('#' + Provider_CompanyContactObject.ObjectId + '_ViewEnablesTemplate').html() },
+                { name: 'ShortcutToolTip', template: $('#' + Provider_CompanyContactObject.ObjectId + '_ShortcutToolTipTemplate').html() },
+            ],
+            dataSource: {
+                schema: {
+                    model: {
+                        id: 'ContactId',
+                        fields: {
+                            ContactId: { editable: false, nullable: true },
+                            ContactName: { editable: true },
+                            Enable: { editable: true, type: 'boolean', defaultValue: true },
+
+                            BR_Representative: { editable: true },
+                            BR_RepresentativeId: { editable: false },
+
+                            BR_Address: { editable: true, validation: { required: true } },
+                            BR_AddressId: { editable: false },
+
+                            BR_City: { editable: false },
+                            BR_CityId: { editable: false },
+                            BR_CityName: { editable: true, validation: { required: true } },
+
+                            BR_Phone: { editable: true, validation: { required: false } },
+                            BR_PhoneId: { editable: false },
+
+                            BR_Extent: { editable: true, type: 'number', validation: { required: false } },
+                            BR_ExtentId: { editable: false },
+
+                            BR_Cellphone: { editable: true, validation: { required: false } },
+                            BR_CellphoneId: { editable: false },
+
+                            BR_Fax: { editable: true },
+                            BR_FaxId: { editable: false, validation: { required: true } },
+
+                            BR_Email: { editable: true, validation: { required: false, email: true } },
+                            BR_EmailId: { editable: false },
+
+                            BR_Website: { editable: true, validation: { required: false } },
+                            BR_WebsiteId: { editable: false },
+
+                            BR_Latitude: { editable: true, validation: { required: false } },
+                            BR_LatitudeId: { editable: false },
+
+                            BR_Longitude: { editable: true, validation: { required: false } },
+                            BR_LongitudeId: { editable: false },
+
+                            BR_IsPrincipal: { editable: true, type: 'boolean', defaultValue: true },
+                            BR_IsPrincipalId: { editable: false },
+                        }
+                    }
+                },
+                transport: {
+                    read: function (options) {
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/ProviderApi?GIContactGetByType=true&ProviderPublicId=' + Provider_CompanyContactObject.ProviderPublicId + '&ContactType=' + Provider_CompanyContactObject.ContactType + '&ViewEnable=' + Provider_CompanyContactObject.GetViewEnable(),
+                            dataType: 'json',
+                            success: function (result) {
+                                options.success(result);
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', result);
+                            }
+                        });
+                    },
+                    create: function (options) {
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/ProviderApi?GIContactUpsert=true&ProviderPublicId=' + Provider_CompanyContactObject.ProviderPublicId + '&ContactType=' + Provider_CompanyContactObject.ContactType,
+                            dataType: 'json',
+                            type: 'post',
+                            data: {
+                                DataToUpsert: kendo.stringify(options.data)
+                            },
+                            success: function (result) {
+                                options.success(result);
+                                Message('success', 'Se creó el registro.');
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', result);
+                            }
+                        });
+                    },
+                    update: function (options) {
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/ProviderApi?GIContactUpsert=true&ProviderPublicId=' + Provider_CompanyContactObject.ProviderPublicId + '&ContactType=' + Provider_CompanyContactObject.ContactType,
+                            dataType: 'json',
+                            type: 'post',
+                            data: {
+                                DataToUpsert: kendo.stringify(options.data)
+                            },
+                            success: function (result) {
+                                options.success(result);
+                                Message('success', 'Se editó la fila con el id ' + options.data.ContactId + '.');
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', 'Error en la fila con el id ' + options.data.ContactId + '.');
+                            }
+                        });
+                    },
+                },
+                requestStart: function () {
+                    kendo.ui.progress($("#loading"), true);
+                },
+                requestEnd: function () {
+                    kendo.ui.progress($("#loading"), false);
+                }
+            },
+            columns: [{
+                field: 'Enable',
+                title: 'Visible en Market Place',
+                alt: 'Visible en Market Place',
+                width: '105px',
+                template: function (dataItem) {
+                    var oReturn = '';
+
+                    if (dataItem.Enable == true) {
+                        oReturn = 'Si'
+                    }
+                    else {
+                        oReturn = 'No'
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'BR_IsPrincipal',
+                title: 'Sucursal Principal',
+                width: '136px',
+                template: function (dataItem) {
+                    var oReturn = '';
+
+                    if (dataItem.BR_IsPrincipal == true) {
+                        oReturn = '<div class="POBOMainBranch">Si</div>';
+                    }
+                    else {
+                        oReturn = 'No'
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'BR_Representative',
+                title: 'Representante',
+                width: '229px',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem.BR_Representative == '') {
+                        oReturn = '<label class="PlaceHolder">Nombre Apellidos</label>';
+                    }
+                    else {
+                        oReturn = dataItem.BR_Representative;
+                    }
+                    return oReturn;
+                },
+
+            }, {
+                field: 'BR_Address',
+                title: 'Dirección',
+                width: '300px',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem.BR_Address == '') {
+                        oReturn = '<label class="PlaceHolder">Ej: Kr 66 # 66 - 66 Of.206</label>';
+                    }
+                    else {
+                        oReturn = dataItem.BR_Address;
+                    }
+                    return oReturn;
+                },
+
+            }, {
+                field: 'BR_CityName',
+                title: 'Ciudad',
+                width: '280px',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem != null && dataItem.BR_CityName != null) {
+                        if (dataItem.dirty != null && dataItem.dirty == true) {
+                            oReturn = '<span class="k-dirty"></span>';
+                        }
+                        else if (dataItem.BR_CityName == '') {
+                            oReturn = '<label class="PlaceHolder">Ej: Bogotá</label>';
+                        }
+                        else {
+                            oReturn = '';
+                        }
+                        oReturn = oReturn + dataItem.BR_CityName;
+                    }
+                    return oReturn;
+                },
+                editor: function (container, options) {
+
+                    // create an input element
+                    var input = $('<input/>');
+                    // set its name to the field to which the column is bound ('name' in this case)
+                    input.attr('value', options.model[options.field]);
+                    // append it to the container
+                    input.appendTo(container);
+                    // initialize a Kendo UI AutoComplete
+                    input.kendoAutoComplete({
+                        dataTextField: 'ItemName',
+                        select: function (e) {
+                            var selectedItem = this.dataItem(e.item.index());
+                            //set server fiel name
+                            options.model[options.field] = selectedItem.ItemName;
+                            options.model['BR_City'] = selectedItem.ItemId;
+                            //enable made changes
+                            options.model.dirty = true;
+                        },
+                        dataSource: {
+                            type: 'json',
+                            serverFiltering: true,
+                            transport: {
+                                read: function (options) {
+                                    $.ajax({
+                                        url: BaseUrl.ApiUrl + '/UtilApi?CategorySearchByGeography=true&SearchParam=' + options.data.filter.filters[0].value + '&CityId=',
+                                        dataType: 'json',
+                                        success: function (result) {
+                                            options.success(result);
+                                        },
+                                        error: function (result) {
+                                            options.error(result);
+                                        }
+                                    });
+                                },
+                            }
+                        }
+                    });
+                },
+            }, {
+                field: 'BR_Phone',
+                title: 'Teléfono',
+                width: '120px',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem.BR_Phone == '') {
+                        oReturn = '<label class="PlaceHolder">Ej: (57) 3213232 </label>';
+                    }
+                    else {
+                        oReturn = dataItem.BR_Phone;
+                    }
+                    return oReturn;
+                },
+            },
+            {
+                field: 'BR_Extent',
+                title: 'Extensión',
+                width: '140px',
+                type: 'number',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem.BR_Extent == '') {
+                        oReturn = '<label class="PlaceHolder">Ej: ext 22 </label>';
+                    }
+                    else {
+                        oReturn = dataItem.BR_Extent;
+                    }
+                    return oReturn;
+                }
+            },
+            {
+                field: 'BR_Cellphone',
+                title: 'Celular',
+                width: '120px',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem.BR_Cellphone == '') {
+                        oReturn = '<label class="PlaceHolder">Ej: 3001234567</label>';
+                    }
+                    else if (dataItem.BR_Cellphone == null) {
+                        oReturn = '';
+                    }
+                    else {
+                        oReturn = dataItem.BR_Cellphone;
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'BR_Fax',
+                title: 'Fax',
+                width: '120px',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem.BR_Fax == '') {
+                        oReturn = '<label class="PlaceHolder">Ej: 7666777</label>';
+                    }
+                    else {
+                        oReturn = dataItem.BR_Fax;
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'BR_Email',
+                title: 'Correo electrónico',
+                width: '290px',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem.BR_Email == '') {
+                        oReturn = '<label class="PlaceHolder">Ej: info.comercial@publicar.com</label>';
+                    }
+                    else {
+                        oReturn = dataItem.BR_Email;
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'BR_Website',
+                title: 'Página web',
+                width: '290px',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem.BR_Website == '') {
+                        oReturn = '<label class="PlaceHolder">Ej: www.publicarpublicidadm.com.co</label>';
+                    }
+                    else {
+                        oReturn = dataItem.BR_Website;
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'BR_Latitude',
+                title: 'Latitud',
+                width: '70px',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem.BR_Latitude == '') {
+                        oReturn = '<label class="PlaceHolder">Ej: 67.8557995</label>';
+                    }
+                    else {
+                        oReturn = dataItem.BR_Latitude;
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'BR_Longitude',
+                title: 'Longitud',
+                width: '80px',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem.BR_Longitude == '') {
+                        oReturn = '<label class="PlaceHolder">Ej: 20.2252820</label>';
+                    }
+                    else {
+                        oReturn = dataItem.BR_Longitude;
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'ContactName',
+                title: 'Nombre',
+                width: '160px',
+            }, {
+                field: 'ContactId',
+                title: 'Id Interno',
+                width: '78px',
+            }],
+        });
+    },
+
+    RenderDistributor: function () {
+        $('#' + Provider_CompanyContactObject.ObjectId).kendoGrid({
+            editable: true,
+            navigatable: true,
+            pageable: false,
+            scrollable: true,
+            toolbar: [
+                { name: 'create', text: 'Nuevo' },
+                { name: 'save', text: 'Guardar' },
+                { name: 'cancel', text: 'Descartar' },
+                { name: 'ViewEnable', template: $('#' + Provider_CompanyContactObject.ObjectId + '_ViewEnablesTemplate').html() },
+                { name: 'ShortcutToolTip', template: $('#' + Provider_CompanyContactObject.ObjectId + '_ShortcutToolTipTemplate').html() },
+            ],
+            dataSource: {
+                schema: {
+                    model: {
+                        id: 'ContactId',
+                        fields: {
+                            ContactId: { editable: false, nullable: true },
+                            ContactName: { editable: true },
+                            Enable: { editable: true, type: 'boolean', defaultValue: true },
+
+                            DT_DistributorType: { editable: true },
+                            DT_DistributorTypeId: { editable: false },
+
+                            DT_Representative: { editable: true },
+                            DT_RepresentativeId: { editable: false },
+
+                            DT_Email: { editable: true, validation: { required: false, email: true } },
+                            DT_EmailId: { editable: false },
+
+                            DT_Phone: { editable: true, validation: { required: false } },
+                            DT_PhoneId: { editable: false },
+
+                            DT_City: { editable: false },
+                            DT_CityId: { editable: false },
+                            DT_CityName: { editable: true, validation: { required: true } },
+
+                            DT_DateIssue: { editable: true, validation: { required: true } },
+                            DT_DateIssueId: { editable: false },
+
+                            DT_DueDate: { editable: true },
+                            DT_DueDateId: { editable: false, validation: { required: true } },
+
+                            DT_DistributorFile: { editable: true },
+                            DT_DistributorFileId: { editable: false },
+                        }
+                    }
+                },
+                transport: {
+                    read: function (options) {
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/ProviderApi?GIContactGetByType=true&ProviderPublicId=' + Provider_CompanyContactObject.ProviderPublicId + '&ContactType=' + Provider_CompanyContactObject.ContactType + '&ViewEnable=' + Provider_CompanyContactObject.GetViewEnable(),
+                            dataType: 'json',
+                            success: function (result) {
+                                options.success(result);
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', result);
+                            }
+                        });
+                    },
+                    create: function (options) {
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/ProviderApi?GIContactUpsert=true&ProviderPublicId=' + Provider_CompanyContactObject.ProviderPublicId + '&ContactType=' + Provider_CompanyContactObject.ContactType,
+                            dataType: 'json',
+                            type: 'post',
+                            data: {
+                                DataToUpsert: kendo.stringify(options.data)
+                            },
+                            success: function (result) {
+                                options.success(result);
+                                Message('success', 'Se creó el registro.');
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', result);
+                            }
+                        });
+                    },
+                    update: function (options) {
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/ProviderApi?GIContactUpsert=true&ProviderPublicId=' + Provider_CompanyContactObject.ProviderPublicId + '&ContactType=' + Provider_CompanyContactObject.ContactType,
+                            dataType: 'json',
+                            type: 'post',
+                            data: {
+                                DataToUpsert: kendo.stringify(options.data)
+                            },
+                            success: function (result) {
+                                options.success(result);
+                                Message('success', 'Se editó la fila con el id ' + options.data.ContactId + '.');
+
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', 'Error en la fila con el id ' + options.data.ContactId + '.');
+                            }
+                        });
+                    },
+                },
+                requestStart: function () {
+                    kendo.ui.progress($("#loading"), true);
+                },
+                requestEnd: function () {
+                    kendo.ui.progress($("#loading"), false);
+                }
+            },
+            columns: [{
+                field: 'Enable',
+                title: 'Visible en Market Place',
+                width: '155px',
+                template: function (dataItem) {
+                    var oReturn = '';
+
+                    if (dataItem.Enable == true) {
+                        oReturn = 'Si'
+                    }
+                    else {
+                        oReturn = 'No'
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'ContactName',
+                title: 'Razón social',
+                width: '200px',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem != null && dataItem.ContactName != null) {
+                        if (dataItem.dirty != null && dataItem.dirty == true) {
+                            oReturn = '<span class="k-dirty"></span>';
+                        }
+                        else if (dataItem.ContactName == '') {
+                            oReturn = '<label class="PlaceHolder">Ej: Publicar Multimedia S.A.S.</label>';
+                        }
+                        else {
+                            oReturn = '';
+                        }
+                        oReturn = oReturn + dataItem.ContactName;
+                    }
+                    return oReturn;
+                },
+
+            }, {
+                field: 'DT_DistributorType',
+                title: 'Tipo de distribuidor',
+                width: '180px',
+                template: function (dataItem) {
+                    var oReturn = 'Seleccione una opción.';
+                    if (dataItem != null && dataItem.DT_DistributorType != null) {
+                        $.each(Provider_CompanyContactObject.ProviderOptions[211], function (item, value) {
+                            if (dataItem.DT_DistributorType == value.ItemId) {
+                                oReturn = value.ItemName;
+                            }
+                        });
+                    }
+                    return oReturn;
+                },
+                editor: function (container, options) {
+                    $('<input required data-bind="value:' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataSource: Provider_CompanyContactObject.ProviderOptions[211],
+                            dataTextField: 'ItemName',
+                            dataValueField: 'ItemId',
+                            optionLabel: 'Seleccione una opción'
+                        });
+                },
+            }, {
+                field: 'DT_Representative',
+                title: 'Representante comercial',
+                width: '200px',
+                template: function (dataItem) {
+                    var oReturn = '';
+
+                    if (dataItem.DT_Representative == '') {
+                        oReturn = '<label class="PlaceHolder">Ej: Pedro Parker</label>';
+                    }
+                    else {
+                        oReturn = dataItem.DT_Representative;
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'DT_Email',
+                title: 'Correo electronico',
+                width: '200px',
+                template: function (dataItem) {
+                    var oReturn = '';
+
+                    if (dataItem.DT_Email == '') {
+                        oReturn = '<label class="PlaceHolder">Ej: contacto@publicar.com</label>';
+                    }
+                    else {
+                        oReturn = dataItem.DT_Email;
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'DT_Phone',
+                title: 'Telefono',
+                width: '170px',
+                template: function (dataItem) {
+                    var oReturn = '';
+
+                    if (dataItem.DT_Phone == '') {
+                        oReturn = '<label class="PlaceHolder">Ej: (57) 3213232 ext 22</label>';
+                    }
+                    else {
+                        oReturn = dataItem.DT_Phone;
+                    }
+                    return oReturn;
+                },
+            }, {
+                field: 'DT_CityName',
+                title: 'Ciudad',
+                width: '180px',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem != null && dataItem.DT_CityName != null) {
+                        if (dataItem.dirty != null && dataItem.dirty == true) {
+                            oReturn = '<span class="k-dirty"></span>';
+                        }
+                        else if (dataItem.DT_CityName == '') {
+                            oReturn = '<label class="PlaceHolder">Ej: Bogotá Distrito Capital</label>';
+                        }
+                        else {
+                            oReturn = '';
+                        }
+                        oReturn = oReturn + dataItem.DT_CityName;
+                    }
+                    return oReturn;
+                },
+                editor: function (container, options) {
+
+                    // create an input element
+                    var input = $('<input/>');
+                    // set its name to the field to which the column is bound ('name' in this case)
+                    input.attr('value', options.model[options.field]);
+                    // append it to the container
+                    input.appendTo(container);
+                    // initialize a Kendo UI AutoComplete
+                    input.kendoAutoComplete({
+                        dataTextField: 'ItemName',
+                        select: function (e) {
+                            var selectedItem = this.dataItem(e.item.index());
+                            //set server fiel name
+                            options.model[options.field] = selectedItem.ItemName;
+                            options.model['DT_City'] = selectedItem.ItemId;
+                            //enable made changes
+                            options.model.dirty = true;
+                        },
+                        dataSource: {
+                            type: 'json',
+                            serverFiltering: true,
+                            transport: {
+                                read: function (options) {
+                                    $.ajax({
+                                        url: BaseUrl.ApiUrl + '/UtilApi?CategorySearchByGeography=true&SearchParam=' + options.data.filter.filters[0].value + '&CityId=',
+                                        dataType: 'json',
+                                        success: function (result) {
+                                            options.success(result);
+                                        },
+                                        error: function (result) {
+                                            options.error(result);
+                                        }
+                                    });
+                                },
+                            }
+                        }
+                    });
+                },
+            }, {
+                field: 'DT_DateIssue',
+                title: 'Fecha de expedición',
+                width: '160px',
+                format: Provider_CompanyContactObject.DateFormat,
+                editor:
+                    function timeEditor(container, options) {
+                        var input = $('<input type="date" name="'
+                            + options.field
+                            + '" value="'
+                            + options.model.get(options.field)
+                            + '" />');
+                        input.appendTo(container);
+                    }
+            }, {
+                field: 'DT_DistributorFile',
+                title: 'Doc soporte.',
+                width: '292px',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem != null && dataItem.DT_DistributorFile != null && dataItem.DT_DistributorFile.length > 0) {
+                        if (dataItem.dirty != null && dataItem.dirty == true) {
+                            oReturn = '<span class="k-dirty"></span>';
+                        }
+                        oReturn = oReturn + $('#' + Provider_CompanyContactObject.ObjectId + '_File').html();
+                    }
+                    else {
+                        oReturn = $('#' + Provider_CompanyContactObject.ObjectId + '_NoFile').html();
+                    }
+
+                    oReturn = oReturn.replace(/\${DT_DistributorFile}/gi, dataItem.DT_DistributorFile);
+
+                    return oReturn;
+                },
+                editor: function (container, options) {
+                    var oFileExit = true;
+                    $('<input type="file" id="files" name="files"/>')
+                    .appendTo(container)
+                    .kendoUpload({
+                        multiple: false,
+                        async: {
+                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyContactObject.ProviderPublicId,
+                            autoUpload: true
+                        },
+                        success: function (e) {
+                            if (e.response != null && e.response.length > 0) {
+                                //set server fiel name
+                                options.model[options.field] = e.response[0].ServerName;
+                                //enable made changes
+                                options.model.dirty = true;
+                            }
+                        },
+                        complete: function (e) {
+                            //enable lost focus
+                            oFileExit = true;
+                        },
+                        select: function (e) {
+                            //disable lost focus while upload file
+                            oFileExit = false;
+                        },
+                    });
+                    $(container).focusout(function () {
+                        if (oFileExit == false) {
+                            //mantain file input focus
+                            $('#files').focus();
+                        }
+                    });
+                },
+            }, {
+                field: 'ContactId',
+                title: 'Id Interno',
+                width: '78px',
             }],
         });
     },

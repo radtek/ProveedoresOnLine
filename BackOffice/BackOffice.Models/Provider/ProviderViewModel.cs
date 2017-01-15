@@ -47,8 +47,7 @@ namespace BackOffice.Models.Provider
         public List<CalificationProjectConfigInfoViewModel> RelatedCalificationProjectConfigInfo { get; set; }
         public List<ProveedoresOnLine.Company.Models.Util.CatalogModel> CPCConfig { get; set; }
         public List<ProveedoresOnLine.Company.Models.Util.CatalogModel> CPCCompany { get; set; }
-
-        public List<Tuple<string, string>> CPCCOmpanyddl { get; set; }
+        
 
         #endregion
 

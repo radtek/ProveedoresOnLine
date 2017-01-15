@@ -632,7 +632,9 @@ var Customer_CalificationProjectObject = {
         this.CalificationProjectValidateUrl = vInitObject.CalificationProjectValidateUrl;
         this.CalificationProjectConfigType = vInitObject.CalificationProjectConfigType;
         this.PageSize = vInitObject.PageSize;
+        debugger;
         if (vInitObject.CustomerOptions != null) {
+            debugger;
             $.each(vInitObject.CustomerOptions, function (item, value) {
                 Customer_CalificationProjectObject.CustomerOptions[value.Key] = value.Value;
             });
