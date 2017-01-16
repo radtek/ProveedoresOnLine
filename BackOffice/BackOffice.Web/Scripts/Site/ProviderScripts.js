@@ -7219,12 +7219,11 @@ var Provider_CalificationProjectConfigInfo = {
                         return 0;
                     },
                     model: {
-                        id: "CalificationProjectConfigValidateId",
+                        id: "CalificationProjectConfigInfoId",
                         fields: {
-                            CalificationProjectConfigValidateId: { editable: false, nullable: true },
-                            CompanyName: { editable: true, validation: { required: true } },
-                            Value: { editable: true },
-                            Result: { editable: true },
+                            CalificationProjectConfigInfoId: { editable: false, nullable: true },
+                            CalificationProjectConfigId: { editable: false, nullable: true },
+                            CompanyId: { editable: false, nullable: true },                                                       
                             Enable: { editable: true, type: 'boolean', defaultValue: true },
                         },
                     }
