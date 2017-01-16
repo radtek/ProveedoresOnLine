@@ -958,6 +958,7 @@ var Customer_CalificationProjectObject = {
                 title: 'Operador',
                 width: '200px',              
                 template: function (dataItem) {
+                    debugger;
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.Operator != null) {
                         
@@ -970,7 +971,7 @@ var Customer_CalificationProjectObject = {
                     return oReturn;
                 },
                 editor: function (container, options) {
-                    
+                    debugger;
                     $('<input required data-bind="value:' + options.field + '"/>')                        
                         .appendTo(container)
                         .kendoDropDownList({

@@ -82,7 +82,7 @@ namespace ProveedoresOnLine.CalificationProject.Controller
                 {
                     oConfigInfo.CalificationProjectConfigInfoId = DAL.Controller.CalificationProjectDataController.Instance.CalificationProjectConfigInfoUpsert
                         (oConfigInfo.CalificationProjectConfigInfoId,
-                        oConfigInfo.RelatedProvider.CompanyPublicId,
+                        oConfigInfo.RelatedCalificationProjectConfig.Company.CompanyPublicId,
                         oConfigInfo.RelatedCalificationProjectConfig.CalificationProjectConfigId,
                         oConfigInfo.Status,
                         oConfigInfo.Enable

@@ -342,7 +342,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                           x.FiscalNumber + strSep +
                           x.Address + strSep +
                           x.City + strSep +
-                          x.Region + strSep +
+                          (x.Region != null? x.Region.PadLeft(2, '0') : "0") + strSep +
                           x.Country + strSep +
                           x.PhoneNumber.Replace("(","").Replace(")","").Replace("+","").Replace(" ","") + strSep +
                           x.Fax.Replace("(", "").Replace(")", "").Replace("+", "").Replace(" ", "") + strSep +

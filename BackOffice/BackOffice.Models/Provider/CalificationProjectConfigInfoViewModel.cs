@@ -10,21 +10,22 @@ namespace BackOffice.Models.Provider
     {
         public ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigInfoModel RelatedCalificationProjectConfigInfoModel { get; set; }
         public string CalificationProjectConfigInfoId { get; set; }    
-        public string CalificationProjectConfigId { get; set; }
-        public string CompanyId { get; set; }
+        public int CalificationProjectConfigId { get; set; }
+        public int CompanyId { get; set; }
         public string CompanyName { get; set; }
         public string CalificationProjectConfigName { get; set; }
         public ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel CalificationProjectConfig { get; set; }
         public bool Status { get; set; }
         public bool Enable { get; set; }
+
         public CalificationProjectConfigInfoViewModel() { }
         public CalificationProjectConfigInfoViewModel(ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigInfoModel oRelatedCalificationProjectConfigInfoModel)
         {
             CalificationProjectConfigInfoId = oRelatedCalificationProjectConfigInfoModel.CalificationProjectConfigInfoId.ToString();
 
-            CalificationProjectConfigId = oRelatedCalificationProjectConfigInfoModel.RelatedCalificationProjectConfig.CalificationProjectConfigId.ToString();
+            CalificationProjectConfigId = oRelatedCalificationProjectConfigInfoModel.RelatedCalificationProjectConfig.CalificationProjectConfigId;
 
-            CompanyId = oRelatedCalificationProjectConfigInfoModel.CompanyId.ToString();
+            CompanyId = oRelatedCalificationProjectConfigInfoModel.CompanyId;
 
             CompanyName = oRelatedCalificationProjectConfigInfoModel.RelatedCustomer.CompanyName;
 
