@@ -3709,16 +3709,16 @@ namespace BackOffice.Web.ControllersApi
 
                 ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoUpsert(new ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigInfoModel()
                 {
-                    CalificationProjectConfigInfoId = int.Parse(oDataToUpsert.CalificationProjectConfigInfoId),
+                    CalificationProjectConfigInfoId = oDataToUpsert.CalificationProjectConfigInfoId !=null? int.Parse(oDataToUpsert.CalificationProjectConfigInfoId):0,
                     RelatedCalificationProjectConfig = new ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel()
                     {
-                        CalificationProjectConfigId = oDataToUpsert.RelatedCalificationProjectConfigInfoModel.RelatedCalificationProjectConfig.CalificationProjectConfigId,
+                        CalificationProjectConfigId = oDataToUpsert.CalificationProjectConfigId,
                         Company = new CompanyModel()
                         {
                             CompanyPublicId = ProviderPublicId
-                        },
-                        Enable = Enable == "true" ? true : false
-                    }
+                        }                        
+                    },
+                    Enable = Enable == "true" ? true : false
                 });
 
             }
