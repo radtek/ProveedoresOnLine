@@ -3664,14 +3664,14 @@ namespace BackOffice.Web.ControllersApi
 
         [HttpPost]
         [HttpGet]
-        public BackOffice.Models.Provider.CalificationProjectConfigInfoViewModel CPCCalificationProjectConfigInfoProviderGetbyProvider
+        public List<BackOffice.Models.Provider.CalificationProjectConfigInfoViewModel> CPCCalificationProjectConfigInfoProviderGetbyProvider
             (
                 string CPCCalificationProjectConfigInfoProviderGetbyProvider,
                 string ProviderPublicId,
                 string Enable
             )
         {
-            var oReturn = new CalificationProjectConfigInfoViewModel();
+            var oReturn = new List<CalificationProjectConfigInfoViewModel>();
 
             if (CPCCalificationProjectConfigInfoProviderGetbyProvider == "true")
             {
@@ -3682,7 +3682,7 @@ namespace BackOffice.Web.ControllersApi
                     oConfigInfo.All
                         (x =>
                         {
-                            oReturn = new CalificationProjectConfigInfoViewModel(x);
+                            oReturn.Add( new CalificationProjectConfigInfoViewModel(x));
                             return true;
                         });
                 }
@@ -3693,10 +3693,8 @@ namespace BackOffice.Web.ControllersApi
 
         [HttpPost]
         [HttpGet]
-        public void CPCCalificationProjectConfigInfoProviderUpsert(string CPCCalificationProjectConfigInfoProviderUpsert, string ProviderPublicId, string Enable)
-        {
-            BackOffice.Models.Provider.CalificationProjectConfigInfoViewModel oReturn = null;
-
+        public void CPCCalificationProjectConfigInfoProviderUpsert(string CPCCalificationProjectConfigInfoProviderUpsert, string ProviderPublicId)
+        {                    
             if (CPCCalificationProjectConfigInfoProviderUpsert == "true" &&
                !string.IsNullOrEmpty(System.Web.HttpContext.Current.Request["DataToUpsert"]) &&
                !string.IsNullOrEmpty(ProviderPublicId))
@@ -3709,16 +3707,16 @@ namespace BackOffice.Web.ControllersApi
 
                 ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoUpsert(new ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigInfoModel()
                 {
-                    CalificationProjectConfigInfoId = oDataToUpsert.CalificationProjectConfigInfoId !=null? int.Parse(oDataToUpsert.CalificationProjectConfigInfoId):0,
+                    CalificationProjectConfigInfoId = oDataToUpsert.CalificationProjectConfigInfoId != null ? int.Parse(oDataToUpsert.CalificationProjectConfigInfoId) : 0,
                     RelatedCalificationProjectConfig = new ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel()
                     {
                         CalificationProjectConfigId = oDataToUpsert.CalificationProjectConfigId,
                         Company = new CompanyModel()
                         {
                             CompanyPublicId = ProviderPublicId
-                        }                        
+                        }
                     },
-                    Enable = Enable == "true" ? true : false
+                    Enable = oDataToUpsert.Enable,
                 });
 
             }

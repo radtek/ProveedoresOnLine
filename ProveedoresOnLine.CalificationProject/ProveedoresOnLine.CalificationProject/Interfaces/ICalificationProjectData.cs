@@ -32,6 +32,7 @@ namespace ProveedoresOnLine.CalificationProject.Interfaces
         List<ConfigInfoModel> CalificationProjectConfigInfoGetAll();
 
         List<ConfigInfoModel> CalificationProjectConfigInfoGetByProvider(string ProviderPublicId, bool Enable);
+        ConfigInfoModel CalificationProjectConfigInfoGetByProviderAndCustomer(string CustomerPublicId, string ProviderPublicId, bool Enable);
 
         
 

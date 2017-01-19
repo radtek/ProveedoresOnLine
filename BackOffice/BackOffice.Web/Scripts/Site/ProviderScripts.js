@@ -358,7 +358,7 @@ var Provider_CompanyContactObject = {
                 title: 'Tipo de contacto',
                 width: '190px',
                 template: function (dataItem) {
-                    debugger;
+                     
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.CC_CompanyContactType != null) {
                         $.each(Provider_CompanyContactObject.ProviderOptions[209], function (item, value) {
@@ -7143,19 +7143,13 @@ var Provider_CalificationProjectConfigInfo = {
     RenderAsync: function () {
 
         Provider_CalificationProjectConfigInfo.RenderRelatedCalificationConfig();
-
-        //focus on the grid
-        $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data("kendoGrid").table.focus();
-
-        //config keyboard
+               
         Provider_CalificationProjectConfigInfo.ConfigKeyBoard();
 
-        //Config Events
         Provider_CalificationProjectConfigInfo.ConfigEvents();
     },
 
     ConfigKeyBoard: function () {
-
         //init keyboard tooltip
         $('.divGrid_kbtooltip').tooltip();
 
@@ -7182,7 +7176,6 @@ var Provider_CalificationProjectConfigInfo = {
     },
 
     ConfigEvents: function () {
-
         //config grid visible enables event
         $('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnable').change(function () {
             $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data('kendoGrid').dataSource.read();
@@ -7208,8 +7201,7 @@ var Provider_CalificationProjectConfigInfo = {
                 { name: 'ViewEnable', template: $('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnablesTemplate').html() },
                 { name: 'ShortcutToolTip', template: $('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ShortcutToolTipTemplate').html() },
             ],
-            dataSource: {
-                pageSize: Provider_CalificationProjectConfigInfo.PageSize,
+            dataSource: {                
                 serverPaging: false,
                 schema: {
                     total: function (data) {
@@ -7222,15 +7214,16 @@ var Provider_CalificationProjectConfigInfo = {
                         id: "CalificationProjectConfigInfoId",
                         fields: {
                             CalificationProjectConfigInfoId: { editable: false, nullable: true },
-                            CalificationProjectConfigId: { editable: false, nullable: true },
-                            CompanyId: { editable: false, nullable: true },                                                       
+                            CompanyId: { editable: true, validation: { required: true } },
+                            CalificationProjectConfigId: { editable: true, validation: { required: true } },
                             Enable: { editable: true, type: 'boolean', defaultValue: true },
                         },
                     }
-                },
+                },                
                 transport: {
                     read: function (options) {
-                        $.ajax({
+                         
+                        $.ajax({                           
                             url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderGetbyProvider=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId + '&Enable=' + Provider_CalificationProjectConfigInfo.GetViewEnable(),
                             dataType: 'json',
                             success: function (result) {
@@ -7243,9 +7236,9 @@ var Provider_CalificationProjectConfigInfo = {
                         });
                     },
                     create: function (options) {
-                        debugger;
+                         
                         $.ajax({
-                            url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderUpsert=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId + '&Enable=' + Provider_CalificationProjectConfigInfo.GetViewEnable(),
+                            url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderUpsert=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId,
                             dataType: 'json',
                             type: 'post',
                             data: {
@@ -7263,9 +7256,9 @@ var Provider_CalificationProjectConfigInfo = {
                         });
                     },
                     update: function (options) {
-                        debugger;
+                         
                         $.ajax({
-                            url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderUpsert=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId + '&Enable=' + Provider_CalificationProjectConfigInfo.GetViewEnable(),
+                            url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderUpsert=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId,
                             dataType: 'json',
                             type: 'post',
                             data: {
@@ -7274,11 +7267,11 @@ var Provider_CalificationProjectConfigInfo = {
                             success: function (result) {
                                 options.success(result);
                                 $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data('kendoGrid').dataSource.read();
-                                Message('success', 'Se editó la fila con el id ' + options.data.CalificationProjectConfigValidateId + '.');
+                                Message('success', 'Se editó la fila con el id ' + options.data.CalificationProjectConfigInfoId + '.');
                             },
                             error: function (result) {
                                 options.error(result);
-                                Message('error', 'Error en la fila con el id ' + options.data.CalificationProjectConfigValidateId + '.');
+                                Message('error', 'Error en la fila con el id ' + options.data.CalificationProjectConfigInfoId + '.');
                             },
                         });
                     },
@@ -7289,7 +7282,7 @@ var Provider_CalificationProjectConfigInfo = {
                 requestEnd: function () {
                     kendo.ui.progress($("#loading"), false);
                 }
-            },
+            },                    
             //editable: "popup",
             columns: [{
                 field: 'Enable',
@@ -7306,46 +7299,51 @@ var Provider_CalificationProjectConfigInfo = {
                     }
                     return oReturn;
                 },
+            },{
+                field: 'CalificationProjectConfigInfoId',
+                title: 'ID',
+                width: '50px',                
             }, {
                 field: 'CompanyId',
                 title: 'Comprador',
                 width: '200px',
                 template: function (dataItem) {
-                    debugger;
+                     
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.CompanyId != null) {
 
                         $.each(Provider_CalificationProjectConfigInfo.Companies[1], function (item, value) {
-                            if (dataItem.CompanyId == value.ItemId) {
+                            if (dataItem.CompanyId == value.ItemId) {                               
                                 oReturn = value.ItemName;
-                                Provider_CalificationProjectConfigInfo.CalValueId = value.ItemId;
+                                Provider_CalificationProjectConfigInfo.CalValueId = value.ItemId;                                                                
                             }
                         });
+                        
                     }
                     return oReturn;
                 },
                 editor: function (container, options) {
-                    debugger;
-                    ddl = $('<input required data-bind="value:' + options.field + '"/>')
-                         .appendTo(container)
-                         .kendoDropDownList({
-                             dataSource: Provider_CalificationProjectConfigInfo.Companies[1],
-                             dataTextField: 'ItemName',
-                             dataValueField: 'ItemId',
-                             optionLabel: 'Seleccione una opción',                             
-                             change: function (e) {
-                                 if (ddl.val() != null && ddl.val() != "") {
-                                     Provider_CalificationProjectConfigInfo.CalValueId = ddl.val();
-                                 }
-                             }
-                         });
+                                         
+                        ddl = $('<input required data-bind="value:' + options.field + '"/>')
+                             .appendTo(container)
+                             .kendoDropDownList({
+                                 dataSource: Provider_CalificationProjectConfigInfo.Companies[1],
+                                 dataTextField: 'ItemName',
+                                 dataValueField: 'ItemId',
+                                 optionLabel: 'Seleccione una opción',
+                                 change: function (e) {                                     
+                                     if (ddl.val() != null && ddl.val() != "") {
+                                         Provider_CalificationProjectConfigInfo.CalValueId = ddl.val();
+                                     }                                     
+                                 },                                 
+                             });                    
                 }
             }, {
                 field: 'CalificationProjectConfigId',
                 title: 'Proceso de Calificación',
                 width: '200px',
                 template: function (dataItem) {
-                    debugger;
+                     
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.CalificationProjectConfigId != null && dataItem.CalificationProjectConfigId > 0) {
                         $.each(Provider_CalificationProjectConfigInfo.CPCConfig[parseInt(Provider_CalificationProjectConfigInfo.CalValueId)], function (item, value) {
@@ -7358,7 +7356,7 @@ var Provider_CalificationProjectConfigInfo = {
                     return oReturn;
                 },
                 editor: function (container, options) {
-                    debugger;
+                     
                     $('<input required data-bind="value:' + options.field + '"/>')
                         .appendTo(container)
                         .kendoDropDownList({
