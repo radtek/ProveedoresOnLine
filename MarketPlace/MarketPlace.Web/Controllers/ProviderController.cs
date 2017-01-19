@@ -568,11 +568,14 @@ namespace MarketPlace.Web.Controllers
                 #region CalificationProject
 
                 //Get related config by customer public id
-                List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel> oRelatedCalificationProjectConfig =
+                var oRelatedCalificationProjectConfig =
                     ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectConfig_GetByCustomerPublicId(SessionModel.CurrentCompany.CompanyPublicId, true);
-                List<ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel> oCalProject = new List<ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel>();
+
+                var oCalProject = new List<ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel>();
+
                 //Get relation between calification project and provider
-                var oCalProjectConfigInfo = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoGetByProviderAndCustomer(SessionModel.CurrentCompany.CompanyPublicId, ProviderPublicId, true);
+                var oCalProjectConfigInfo =
+                    ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoGetByProviderAndCustomer(SessionModel.CurrentCompany.CompanyPublicId, ProviderPublicId, true);
 
                 if (oCalProjectConfigInfo != null && oCalProjectConfigInfo.CalificationProjectConfigInfoId > 0)
                 {
@@ -584,12 +587,22 @@ namespace MarketPlace.Web.Controllers
                 {
                     oRelatedCalificationProjectConfig =
                   ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectConfig_GetByCustomerPublicId(Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, true);
-                    oCalProjectConfigInfo = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoGetByProviderAndCustomer(Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, ProviderPublicId, true);
-                    oRelatedCalificationProjectConfig = oRelatedCalificationProjectConfig.Where(x => x.CalificationProjectConfigId == oCalProjectConfigInfo.RelatedCalificationProjectConfig.CalificationProjectConfigId).Select(x => x).ToList();
-                    oCalProject = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.
-                                                        CalificationProject_GetByCustomer(Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, ProviderPublicId, true);
+
+                    oCalProjectConfigInfo =
+              ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoGetByProviderAndCustomer(Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, ProviderPublicId, true);
+
+                    if (oRelatedCalificationProjectConfig != null && oRelatedCalificationProjectConfig.Count > 0 && oCalProjectConfigInfo 
+                            != null && oCalProjectConfigInfo.CalificationProjectConfigInfoId > 0)
+                    {
+                        oRelatedCalificationProjectConfig =
+                      oRelatedCalificationProjectConfig.Where(x => x.CalificationProjectConfigId == oCalProjectConfigInfo.RelatedCalificationProjectConfig.CalificationProjectConfigId).Select(x => x).ToList();
+
+                        oCalProject =
+                        ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProject_GetByCustomer(Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, ProviderPublicId, true);
+                    }
+
                 }
-                                               
+
                 List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigValidateModel> oValidateModel = new List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigValidateModel>();
 
                 oModel.ProviderCalification = new ProviderCalificationViewModel();
@@ -1505,12 +1518,18 @@ namespace MarketPlace.Web.Controllers
                     oRelatedCalificationProjectConfig =
                   ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectConfig_GetByCustomerPublicId(Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, true);
 
-                    oCalProjectConfigInfo = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoGetByProviderAndCustomer(Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, ProviderPublicId, true);
+                    oCalProjectConfigInfo =
+              ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoGetByProviderAndCustomer(Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, ProviderPublicId, true);
 
-                    oRelatedCalificationProjectConfig = oRelatedCalificationProjectConfig.Where(x => x.CalificationProjectConfigId == oCalProjectConfigInfo.RelatedCalificationProjectConfig.CalificationProjectConfigId).Select(x => x).ToList();
+                    if (oRelatedCalificationProjectConfig != null && oRelatedCalificationProjectConfig.Count > 0 && oCalProjectConfigInfo
+                            != null && oCalProjectConfigInfo.CalificationProjectConfigInfoId > 0)
+                    {
+                        oRelatedCalificationProjectConfig =
+                      oRelatedCalificationProjectConfig.Where(x => x.CalificationProjectConfigId == oCalProjectConfigInfo.RelatedCalificationProjectConfig.CalificationProjectConfigId).Select(x => x).ToList();
 
-                    oCalProject = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.
-                                                        CalificationProject_GetByCustomer(Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, ProviderPublicId, true);
+                        oCalProject =
+                        ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProject_GetByCustomer(Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, ProviderPublicId, true);
+                    }
                 }
 
                 List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigValidateModel> oValidateModel = new List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigValidateModel>();
@@ -3772,7 +3791,7 @@ namespace MarketPlace.Web.Controllers
                         return true;
                     });
                 }
-                              
+
                 #endregion
 
                 var ProviderList = new List<ProveedoresOnLine.Reports.Models.Reports.GeneralProviderReportModel>();
@@ -3785,7 +3804,7 @@ namespace MarketPlace.Web.Controllers
                     });
                 }
                 #endregion
-               
+
                 #region CreateExcel
 
                 StringBuilder data = new StringBuilder();
@@ -3814,17 +3833,17 @@ namespace MarketPlace.Web.Controllers
                              "\"" + x.CompanyName + "\"" + strSep +
                              "\"" + x.ProviderStatus + "\"" + strSep +
                              "\"" + x.Country + "\"" + strSep +
-                             "\"" + x.City  + "\"" + strSep +
-                             "\"" + x.State  + "\"" + strSep +
+                             "\"" + x.City + "\"" + strSep +
+                             "\"" + x.State + "\"" + strSep +
                              "\"" + x.Address + "\"" + strSep +
-                             "\"" + x.PhoneNumber  + "\"" + strSep +
+                             "\"" + x.PhoneNumber + "\"" + strSep +
                              "\"" + x.LegalRepresentative + "\""
                         );
 
                         return true;
                     });
                 }
-                
+
 
                 byte[] buffer = Encoding.Default.GetBytes(data.ToString().ToCharArray());
 

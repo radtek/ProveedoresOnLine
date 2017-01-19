@@ -1749,7 +1749,6 @@ namespace BackOffice.Web.Controllers
                     CatalogId = 1,
                     ItemId = x.CompanyId,
                     ItemName = x.Company.CompanyName
-
                 });
 
                 oCPCConfig.Add(new CatalogModel()
@@ -1757,7 +1756,6 @@ namespace BackOffice.Web.Controllers
                     CatalogId = x.CompanyId,
                     ItemId = x.CalificationProjectConfigId,
                     ItemName = x.CalificationProjectConfigName
-
                 });
                 
                 return true;
@@ -1774,12 +1772,12 @@ namespace BackOffice.Web.Controllers
                     RelatedCompany = ProveedoresOnLine.Company.Controller.Company.CompanyGetBasicInfo(ProviderPublicId),
                     //RelatedAditionalDocuments = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.AditionalDocumentGetByType(ProviderPublicId, null,true),                    
                 };
-
             }
             //get provider menu
             oModel.ProviderMenu = GetProviderMenu(oModel);
             return View(oModel);
         }
+
         #endregion
 
         #region Menu
