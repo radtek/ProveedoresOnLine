@@ -175,7 +175,7 @@ namespace ProveedoresOnLine.CalificationBatch.Controller
 
         #endregion
 
-        #region Calification Project Barch Util
+        #region Calification Project Batch Util
 
         #region Legal Module
 

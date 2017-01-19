@@ -161,19 +161,24 @@
                 {
                     var CalificationProjectBatch = Model.ProviderCalification.ProRelatedCalificationProject.Where(x => x.ProjectConfigModel.CalificationProjectConfigId == CalificationProject.CalificationProjectConfigId).Select(x => x).FirstOrDefault();
 
+                    if (CalificationProjectBatch != null && CalificationProjectBatch.CalificationProjectId > 0)
+                    {
+
+
+
                     <div class="row POMPSectionTitlesBox">
                         <div class="col-xs-6">
                             <label>Calificación del Proveedor: @Model.ProviderCalification.TotalCalification </label>
                         </div>
                         <div class="col-sm-6 text-right">
                             <a class="POMPLinkDetail_Provider" href="@(Url.RouteUrl
-                                                                        (MarketPlace.Models.General.Constants.C_Routes_Default,
-                                                                        new
-                                                                        {
-                                                                            controller = MVC.Provider.Name,
-                                                                            action = MVC.Provider.ActionNames.GICalificationProjectDetail,
-                                                                            ProviderPublicId = Request["ProviderPublicId"]
-                                                                        }))">
+                               (MarketPlace.Models.General.Constants.C_Routes_Default,
+                               new
+                               {
+                                   controller = MVC.Provider.Name,
+                                   action = MVC.Provider.ActionNames.GICalificationProjectDetail,
+                                   ProviderPublicId = Request["ProviderPublicId"]
+                               }))">
                                 Ver Detalle
                             </a>
                         </div>
@@ -213,6 +218,7 @@
                             </div>
                         </div>
                     </div>
+                    }
                 }
             }
 

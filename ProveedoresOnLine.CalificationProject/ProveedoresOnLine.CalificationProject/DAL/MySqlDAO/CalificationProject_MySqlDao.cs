@@ -454,6 +454,67 @@ namespace ProveedoresOnLine.CalificationProject.DAL.MySqlDAO
             return oReturn;            
         }
 
+        public ConfigInfoModel CalificationProjectConfigInfoGetByProviderAndCustomer(string CustomerPublicId, string ProviderPublicId, bool Enable)
+        {
+            List<System.Data.IDbDataParameter> lstparams = new List<IDbDataParameter>();
+
+            lstparams.Add(DataInstance.CreateTypedParameter("vCustomerPublicId", CustomerPublicId));
+            lstparams.Add(DataInstance.CreateTypedParameter("vProviderPublicId", ProviderPublicId));
+            lstparams.Add(DataInstance.CreateTypedParameter("vEnable", (Enable == true) ? 1 : 0));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "CC_CalificationProjectConfigInfo_GetByProviderAndCustomer",
+                CommandType = System.Data.CommandType.StoredProcedure,
+                Parameters = lstparams,
+            });
+            var oReturn = new ConfigInfoModel();
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn = (from cpci in response.DataTableResult.AsEnumerable()
+                               where !cpci.IsNull("CalificationProjectConfigId")
+                               group cpci by new
+                               {
+                                   CalificationProjectConfigInfoId = cpci.Field<int>("CalificationProjectConfigInfoId"),
+                                   CompanyId = cpci.Field<int>("CompanyId"),
+                                   CustomerPublicId = cpci.Field<string>("CustomerPublicId"),
+                                   ProviderPublicId = cpci.Field<string>("ProviderPublicId"),
+                                   CalificationProjectConfigId = cpci.Field<int>("CalificationProjectConfigId"),
+                                   CompanyName = cpci.Field<string>("CompanyName"),
+                                   CalificationProjectConfigName = cpci.Field<string>("CalificationProjectConfigName"),
+                                   Status = cpci.Field<UInt64>("Status") == 1 ? true : false,
+                                   Enable = cpci.Field<UInt64>("Enable") == 1 ? true : false,
+                                   LastModify = cpci.Field<DateTime>("LastModify"),
+                                   CreateDate = cpci.Field<DateTime>("CreateDate")
+                               } into cpig
+                               select new ConfigInfoModel()
+                               {
+                                   CalificationProjectConfigInfoId = cpig.Key.CalificationProjectConfigInfoId,
+                                   CompanyId = cpig.Key.CompanyId,
+                                   RelatedCustomer = new Company.Models.Company.CompanyModel()
+                                   {
+                                       CompanyName = cpig.Key.CompanyName,
+                                       CompanyPublicId = cpig.Key.CustomerPublicId
+                                   },
+                                   RelatedProvider = new Company.Models.Company.CompanyModel()
+                                   {
+                                       CompanyPublicId = cpig.Key.ProviderPublicId
+                                   },
+                                   RelatedCalificationProjectConfig = new CalificationProjectConfigModel()
+                                   {
+                                       CalificationProjectConfigId = cpig.Key.CalificationProjectConfigId,
+                                       CalificationProjectConfigName = cpig.Key.CalificationProjectConfigName
+                                   },
+                                   Status = cpig.Key.Status,
+                                   Enable = cpig.Key.Enable,
+                                   LastModify = cpig.Key.LastModify,
+                                   CreateDate = cpig.Key.CreateDate
+                               }).FirstOrDefault();
+            }
+            return oReturn;
+        }
         #endregion
 
         #region ConfigItem

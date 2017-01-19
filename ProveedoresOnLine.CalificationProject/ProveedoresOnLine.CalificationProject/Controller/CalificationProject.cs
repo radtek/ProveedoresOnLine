@@ -118,6 +118,10 @@ namespace ProveedoresOnLine.CalificationProject.Controller
         {
             return DAL.Controller.CalificationProjectDataController.Instance.CalificationProjectConfigInfoGetByProvider(ProviderPublicId, Enable);
         }
+        public static ConfigInfoModel CalificationProjectConfigInfoGetByProviderAndCustomer(string CustomerPublicId, string ProviderPublicId, bool Enable)
+        {
+            return DAL.Controller.CalificationProjectDataController.Instance.CalificationProjectConfigInfoGetByProviderAndCustomer(CustomerPublicId,ProviderPublicId, Enable);
+        }
 
         #endregion
 

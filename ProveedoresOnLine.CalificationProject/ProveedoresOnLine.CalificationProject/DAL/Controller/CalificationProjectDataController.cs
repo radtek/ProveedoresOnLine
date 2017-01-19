@@ -81,9 +81,13 @@ namespace ProveedoresOnLine.CalificationProject.DAL.Controller
 
         public List<ConfigInfoModel> CalificationProjectConfigInfoGetByProvider(string ProviderPublicId, bool Enable)
         {
-            return DataFactory.CalificationProjectConfigInfoGetByProvider(ProviderPublicId,Enable);
+            return DataFactory.CalificationProjectConfigInfoGetByProvider(ProviderPublicId, Enable);
         }
 
+        public ConfigInfoModel CalificationProjectConfigInfoGetByProviderAndCustomer(string CustomerPublicId, string ProviderPublicId, bool Enable)
+        {
+            return DataFactory.CalificationProjectConfigInfoGetByProviderAndCustomer(CustomerPublicId, ProviderPublicId, Enable);
+        }
         #endregion
 
         #region ConfigItem
@@ -120,7 +124,7 @@ namespace ProveedoresOnLine.CalificationProject.DAL.Controller
         {
             return DataFactory.CalificationProjectConfigValidateUpsert(CalificationProjectConfigValidateId, CalificationProjectConfigId, Operator, Value, Result, Enable);
         }
-        
+
         public List<Models.CalificationProject.ConfigValidateModel> CalificationProjectConfigValidate_GetByProjectConfigId(int CalificationProjectConfigId, bool Enable)
         {
             return DataFactory.CalificationProjectConfigValidate_GetByProjectConfigId(CalificationProjectConfigId, Enable);

@@ -570,11 +570,26 @@ namespace MarketPlace.Web.Controllers
                 //Get related config by customer public id
                 List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel> oRelatedCalificationProjectConfig =
                     ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectConfig_GetByCustomerPublicId(SessionModel.CurrentCompany.CompanyPublicId, true);
-
                 List<ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel> oCalProject = new List<ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel>();
-                oCalProject = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.
-                                                        CalificationProject_GetByCustomer(SessionModel.CurrentCompany.CompanyPublicId, ProviderPublicId, true);
+                //Get relation between calification project and provider
+                var oCalProjectConfigInfo = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoGetByProviderAndCustomer(SessionModel.CurrentCompany.CompanyPublicId, ProviderPublicId, true);
 
+                if (oCalProjectConfigInfo != null && oCalProjectConfigInfo.CalificationProjectConfigInfoId > 0)
+                {
+                    oRelatedCalificationProjectConfig = oRelatedCalificationProjectConfig.Where(x => x.CalificationProjectConfigId == oCalProjectConfigInfo.RelatedCalificationProjectConfig.CalificationProjectConfigId).Select(x => x).ToList();
+                    oCalProject = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.
+                                                        CalificationProject_GetByCustomer(SessionModel.CurrentCompany.CompanyPublicId, ProviderPublicId, true);
+                }
+                else
+                {
+                    oRelatedCalificationProjectConfig =
+                  ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectConfig_GetByCustomerPublicId(Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, true);
+                    oCalProjectConfigInfo = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoGetByProviderAndCustomer(Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, ProviderPublicId, true);
+                    oRelatedCalificationProjectConfig = oRelatedCalificationProjectConfig.Where(x => x.CalificationProjectConfigId == oCalProjectConfigInfo.RelatedCalificationProjectConfig.CalificationProjectConfigId).Select(x => x).ToList();
+                    oCalProject = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.
+                                                        CalificationProject_GetByCustomer(Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, ProviderPublicId, true);
+                }
+                                               
                 List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigValidateModel> oValidateModel = new List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigValidateModel>();
 
                 oModel.ProviderCalification = new ProviderCalificationViewModel();
@@ -1471,13 +1486,34 @@ namespace MarketPlace.Web.Controllers
 
                 #endregion Basic Financial Info
 
-                List<ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel> oCalProject = new List<ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel>();
-                oCalProject = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProject_GetByCustomer(SessionModel.CurrentCompany.CompanyPublicId, ProviderPublicId, true);
+                //Get related config by customer public id
+                var oRelatedCalificationProjectConfig =
+                    ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectConfig_GetByCustomerPublicId(SessionModel.CurrentCompany.CompanyPublicId, true);
+                var oCalProject = new List<ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel>();
+                //Get relation between calification project and provider
+                var oCalProjectConfigInfo = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoGetByProviderAndCustomer(SessionModel.CurrentCompany.CompanyPublicId, ProviderPublicId, true);
+
+                if (oCalProjectConfigInfo != null && oCalProjectConfigInfo.CalificationProjectConfigInfoId > 0)
+                {
+                    oRelatedCalificationProjectConfig = oRelatedCalificationProjectConfig.Where(x => x.CalificationProjectConfigId == oCalProjectConfigInfo.RelatedCalificationProjectConfig.CalificationProjectConfigId).Select(x => x).ToList();
+
+                    oCalProject = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.
+                                                        CalificationProject_GetByCustomer(SessionModel.CurrentCompany.CompanyPublicId, ProviderPublicId, true);
+                }
+                else
+                {
+                    oRelatedCalificationProjectConfig =
+                  ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectConfig_GetByCustomerPublicId(Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, true);
+
+                    oCalProjectConfigInfo = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoGetByProviderAndCustomer(Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, ProviderPublicId, true);
+
+                    oRelatedCalificationProjectConfig = oRelatedCalificationProjectConfig.Where(x => x.CalificationProjectConfigId == oCalProjectConfigInfo.RelatedCalificationProjectConfig.CalificationProjectConfigId).Select(x => x).ToList();
+
+                    oCalProject = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.
+                                                        CalificationProject_GetByCustomer(Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value, ProviderPublicId, true);
+                }
 
                 List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigValidateModel> oValidateModel = new List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigValidateModel>();
-
-                List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel> oRelatedCalificationProjectConfig =
-                    ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectConfig_GetByCustomerPublicId(SessionModel.CurrentCompany.CompanyPublicId, true);
 
                 if (oCalProject != null &&
                     oCalProject.Count > 0)
