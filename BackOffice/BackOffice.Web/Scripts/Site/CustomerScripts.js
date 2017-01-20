@@ -990,14 +990,7 @@ var Customer_CalificationProjectObject = {
                 field: 'Result',
                 title: 'Resultado',
                 width: '50px',
-                format: '{0:n0}'
-            },{
-                title: "&nbsp;",
-                width: "200px",
-                command: [{
-                    name: 'edit',
-                    text: 'Editar'
-                }],
+                format: '{0:n0}'            
             }],
         });        
     },
