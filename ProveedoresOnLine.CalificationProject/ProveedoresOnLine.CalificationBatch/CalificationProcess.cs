@@ -15,7 +15,7 @@ namespace ProveedoresOnLine.CalificationBatch
             try
             {
                 LogFile("Start Process:::" + DateTime.Now);
-                //Get all calification project config
+                //Get all calification project configInfo
                 var oCalificationProjectConfigInfoModel = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoGetAll();
 
                 //Select All a la nueva tabla ObjNuevo
@@ -227,6 +227,21 @@ namespace ProveedoresOnLine.CalificationBatch
 
                                                 //Upsert
                                                 oModelToUpsert = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectUpsert(oModelToUpsert);
+
+                                                ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoUpsert(new CalificationProject.Models.CalificationProject.ConfigInfoModel()
+                                                {
+                                                    CalificationProjectConfigInfoId = oCalificationProjectConfigInfoModel.Where(x => x.RelatedCalificationProjectConfig.CalificationProjectConfigId == cp.ProjectConfigModel.CalificationProjectConfigId && x.RelatedProvider.CompanyPublicId == prv.CompanyPublicId).Select(x => x.CalificationProjectConfigInfoId).FirstOrDefault(),
+                                                    RelatedCalificationProjectConfig = new CalificationProject.Models.CalificationProject.CalificationProjectConfigModel()
+                                                    {
+                                                        Company = new CompanyModel()
+                                                        {
+                                                            CompanyPublicId = prv.CompanyPublicId
+                                                        },
+                                                        CalificationProjectConfigId = cp.ProjectConfigModel.CalificationProjectConfigId
+                                                    },
+                                                    Enable = true,
+                                                    Status = true
+                                                });
                                             }
                                             else
                                             {
@@ -309,12 +324,24 @@ namespace ProveedoresOnLine.CalificationBatch
                                                 });
 
                                                 //Upsert
-                                                oModelToUpsert = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectUpsert(oModelToUpsert);                                                
+                                                oModelToUpsert = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectUpsert(oModelToUpsert);
+                                                ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoUpsert(new CalificationProject.Models.CalificationProject.ConfigInfoModel()
+                                                {
+                                                    CalificationProjectConfigInfoId = oCalificationProjectConfigInfoModel.Where(x => x.RelatedCalificationProjectConfig.CalificationProjectConfigId == cp.ProjectConfigModel.CalificationProjectConfigId && x.RelatedProvider.CompanyPublicId == prv.CompanyPublicId).Select(x => x.CalificationProjectConfigInfoId).FirstOrDefault(),
+                                                    RelatedCalificationProjectConfig = new CalificationProject.Models.CalificationProject.CalificationProjectConfigModel()
+                                                    {
+                                                        Company = new CompanyModel()
+                                                        {
+                                                            CompanyPublicId = prv.CompanyPublicId
+                                                        },
+                                                        CalificationProjectConfigId = cp.ProjectConfigModel.CalificationProjectConfigId
+                                                    },
+                                                    Enable = true,
+                                                    Status = true
+                                                });
                                             }
-
                                             return true;
-                                        });
-
+                                        });                                        
                                         return true;
                                     });
 
@@ -427,9 +454,25 @@ namespace ProveedoresOnLine.CalificationBatch
                                     });
 
                                     //Upsert
-                                    oCalificationProjectUpsert = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectUpsert(oCalificationProjectUpsert);                                    
+                                    oCalificationProjectUpsert = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectUpsert(oCalificationProjectUpsert);
+
+                                    ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoUpsert(new CalificationProject.Models.CalificationProject.ConfigInfoModel()
+                                    {
+                                        CalificationProjectConfigInfoId = oCalificationProjectConfigInfoModel.Where(x => x.RelatedCalificationProjectConfig.CalificationProjectConfigId == oCalificationProjectUpsert.ProjectConfigModel.CalificationProjectConfigId && x.RelatedProvider.CompanyPublicId == prv.CompanyPublicId).Select(x => x.CalificationProjectConfigInfoId).FirstOrDefault(),
+                                        RelatedCalificationProjectConfig = new CalificationProject.Models.CalificationProject.CalificationProjectConfigModel()
+                                        {
+                                            Company = new CompanyModel()
+                                            {
+                                                CompanyPublicId = prv.CompanyPublicId
+                                            },
+                                            CalificationProjectConfigId = oCalificationProjectUpsert.ProjectConfigModel.CalificationProjectConfigId
+                                        },
+                                        Enable = true,
+                                        Status = true
+                                    });
                                     #endregion
                                 }
+                                
 
                                 LogFile("End provider Process::" + prv.CompanyPublicId + ":::" + DateTime.Now);
 

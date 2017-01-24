@@ -14,7 +14,7 @@ namespace ProveedoresOnLine.CalificationProject.Test
     {
         [TestMethod]
         public void StartProcess()
-       { 
+       {
             ProveedoresOnLine.CalificationBatch.CalificationProcess.StartProcess();
        }
 

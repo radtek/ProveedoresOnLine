@@ -273,7 +273,7 @@ namespace ProveedoresOnLine.CalificationBatch.DAL.MySqlDAO
                              },
                              RelatedProvider = new Company.Models.Company.CompanyModel()
                              {
-                                 CompanyPublicId = cpg.Key.CalificationProjectPublicId,
+                                 CompanyPublicId = cpg.Key.CompanyPublicId,
                              },
                              TotalScore = cpg.Key.TotalScore,
                              Enable = cpg.Key.Enable,
