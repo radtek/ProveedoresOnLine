@@ -46,7 +46,10 @@ namespace ProveedoresOnLine.IndexSearch.DAL.Controller
         {
             return DataFactory.GetCompanyIndex();
         }
-
+        public List<CompanyIndexModel> GetCompanyCustomerIndex()
+        {
+            return DataFactory.GetCompanyCustomerIndex();
+        }
         public List<CustomerProviderIndexModel> GetCustomerProviderIndex()
         {
             return DataFactory.GetCustomerProviderIndex();

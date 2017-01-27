@@ -31,8 +31,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
 
             int oTotalModuleScore = 0;
             int HSEQScore = 0;
-            int RuleScore = 0;
-            int oIntValue = 0;
+            int RuleScore = 0;            
             decimal oDecimalValue = 0;
             bool oBooleanValue = false;
             double oPercentValue = 0;

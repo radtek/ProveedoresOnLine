@@ -12,9 +12,15 @@ namespace ProveedoresOnLine.IndexSearch.Test
     public class CompanyIndexTest
     {
         [TestMethod]
-        public void StartProcess()
+        public void CompanyIndexationFunction()
         {
-            ProveedoresOnLine.CompanyIndexSearch.CompanyIndexSearchProcess.StartProcess();
+            ProveedoresOnLine.CompanyIndexSearch.CompanyIndexSearchProcess.CompanyIndexationFunction();
+        }
+
+        [TestMethod]
+        public void CompanyCustomerIndexationFunction()
+        {
+            ProveedoresOnLine.CompanyIndexSearch.CompanyIndexSearchProcess.CompanyCustomerIndexationFunction();
         }
     }
 }

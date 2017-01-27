@@ -27,6 +27,11 @@ namespace ProveedoresOnLine.IndexSearch.Controller
             return DAL.Controller.IndexSearchDataController.Instance.GetCustomerProviderIndex();
         }
 
+        public static List<CompanyIndexModel> GetCompanyCustomerIndex()
+        {
+            return DAL.Controller.IndexSearchDataController.Instance.GetCompanyCustomerIndex();
+        }
+
         public static bool CompanyIndexationFunction()
         {
             List<CompanyIndexModel> oCompanyToIndex = GetCompanyIndex();
@@ -58,6 +63,46 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                     );
                 client.Map<CompanyIndexModel>(m => m.AutoMap());
                 var Index = client.IndexMany(oCompanyToIndex, "prod_companyindex");
+            }
+            catch (Exception err)
+            {
+                LogFile("Index Process Failed for Company: " + err.Message + "Inner Exception::" + err.InnerException);
+            }
+            LogFile("Index Process Successfull for: " + oCompanyToIndex.Count());
+            return true;
+        }
+
+        public static bool CompanyCustomerIndexationFunction()
+        {
+            List<CompanyIndexModel> oCompanyToIndex = GetCompanyCustomerIndex();
+            try
+            {
+                LogFile("Start Process: " + "ProvidersToIndex:::" + oCompanyToIndex.Count());
+
+                Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+                var settings = new ConnectionSettings(node);
+                settings.DefaultIndex("prod_companycustomerindex");
+                ElasticClient client = new ElasticClient(settings);
+
+                ICreateIndexResponse oElasticResponse = client.
+                        CreateIndex("prod_companycustomerindex", c => c
+                        .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                        .Analysis(a => a.
+                            Analyzers(an => an.
+                                Custom("customWhiteSpace", anc => anc.
+                                    Filters("asciifolding", "lowercase").
+                                    Tokenizer("whitespace")
+                                        )
+                                    ).TokenFilters(tf => tf
+                                    .EdgeNGram("customEdgeNGram", engrf => engrf
+                                    .MinGram(1)
+                                    .MaxGram(10))
+                                )
+                            ).NumberOfShards(1)
+                        )
+                    );
+                client.Map<CompanyIndexModel>(m => m.AutoMap());
+                var Index = client.IndexMany(oCompanyToIndex, "prod_companycustomerindex");
             }
             catch (Exception err)
             {
