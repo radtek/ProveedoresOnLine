@@ -89,13 +89,12 @@ var Customer_SearchObject = {
                 title: 'Nombre',
                 width: '128px',
             }, {
-                field: 'CustomerType',
+                field: 'IdentificationType',
                 title: 'Tipo',
                 width: '36px',
             }, {
-                field: 'IdentificationType',
-                title: 'Identification',
-                template: '${IdentificationType} ${IdentificationNumber}',
+                field: 'IdentificationNumber',
+                title: 'Identification',                
                 width: '50px',
             }, {
                 title: 'Reporte',

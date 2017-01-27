@@ -25,6 +25,8 @@
     <key name="ElasticSearchUrl">http://192.168.0.94:9200/</key>
     
     <key name="CompanyIndex">prod_companyindex</key>
+    
+    <key name="CompanyCustomerIndex">prod_companycustomerindex</key>
 
     <key name="CompanySurveyIndex">prod_companysurveyindex</key>
       

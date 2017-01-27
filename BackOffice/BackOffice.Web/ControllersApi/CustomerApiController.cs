@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using Nest;
+using ProveedoresOnLine.Company.Models.Company;
 
 namespace BackOffice.Web.ControllersApi
 {
@@ -21,38 +23,33 @@ namespace BackOffice.Web.ControllersApi
             string PageNumber,
             string RowCount)
         {
-            string oCompanyType =
-                    ((int)(BackOffice.Models.General.enumCompanyType.Buyer)).ToString() + "," +
-                    ((int)(BackOffice.Models.General.enumCompanyType.BuyerProvider)).ToString();
-
-            int oPageNumber = string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber.Trim());
-
-            int oRowCount = Convert.ToInt32(string.IsNullOrEmpty(RowCount) ?
-                BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_Grid_RowCountDefault].Value :
-                RowCount.Trim());
-
-            int oTotalRows;
-
-            List<ProveedoresOnLine.Company.Models.Company.CompanyModel> oSearchResult =
-                ProveedoresOnLine.Company.Controller.Company.CompanySearch
-                    (oCompanyType,
-                    SearchParam,
-                    string.Empty,
-                    oPageNumber,
-                    oRowCount,
-                    out oTotalRows);
-
+           
             List<BackOffice.Models.Customer.CustomerSearchViewModel> oReturn = new List<Models.Customer.CustomerSearchViewModel>();
+            #region Search Result Company
+            Uri node = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
+            var settings = new ConnectionSettings(node);
 
-            if (oSearchResult != null && oSearchResult.Count > 0)
+            settings.DefaultIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyCustomerIndex].Value);
+            settings.DisableDirectStreaming(true);
+            ElasticClient client = new ElasticClient(settings);
+
+            Nest.ISearchResponse<CompanyIndexModel> ElasticResult = client.Search<CompanyIndexModel>(s => s
+            .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
+            .TrackScores(true)
+            .Size(20)                            
+            .Query(q => q.Term(t => t.IdentificationNumber, SearchParam) ||
+                    q.Term(t => t.CompanyName, SearchParam)));
+
+            if (ElasticResult != null)
             {
-                oSearchResult.All(sr =>
+                ElasticResult.Documents.All(sr =>
                 {
-                    oReturn.Add(new Models.Customer.CustomerSearchViewModel(sr, oTotalRows));
+                    oReturn.Add(new Models.Customer.CustomerSearchViewModel(sr, (int)ElasticResult.Total));
                     return true;
                 });
             }
 
+            #endregion
             return oReturn;
         }
 

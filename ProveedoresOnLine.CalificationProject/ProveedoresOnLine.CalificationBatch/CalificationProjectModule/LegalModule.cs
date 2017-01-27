@@ -10,9 +10,9 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
 {
     public class LegalModule
     {
-        public static ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectItemBatchModel LegalRule(string CompanyPublicId, ConfigItemModel oCalificationProjectItemModel, CalificationProjectItemBatchModel oRelatedCalificationProjectItemModel)
+        public static CalificationProjectItemBatchModel LegalRule(string CompanyPublicId, ConfigItemModel oCalificationProjectItemModel, CalificationProjectItemBatchModel oRelatedCalificationProjectItemModel)
         {
-            ProveedoresOnLine.CalificationBatch.CalificationProcess.LogFile("Legal Module in Process::");
+            CalificationProcess.LogFile("Legal Module in Process::");
 
             CalificationProjectItemBatchModel oReturn = new CalificationProjectItemBatchModel()
             {

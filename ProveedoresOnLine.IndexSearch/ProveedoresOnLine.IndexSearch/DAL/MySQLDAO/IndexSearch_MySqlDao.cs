@@ -111,6 +111,45 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
             return oReturn;
         }
 
+        public List<CompanyIndexModel> GetCompanyCustomerIndex()
+        {
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "C_IndexCustomerCompany",
+                CommandType = System.Data.CommandType.StoredProcedure,
+            });
+
+            List<Company.Models.Company.CompanyIndexModel> oReturn = null;
+
+            if (response.DataTableResult != null && response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn =
+                    (from ci in response.DataTableResult.AsEnumerable()
+                     where !ci.IsNull("CompanyPublicId")
+                     group ci by new
+                     {
+                         CompanyPublicId = ci.Field<string>("CompanyPublicId"),
+                         CompanyName = ci.Field<string>("CompanyName"),
+                         CompanyIdentificationType = ci.Field<string>("IdentificationType"),
+                         CompanyIdentificationNumber = ci.Field<string>("Identification"),
+                         CompanyEnable = ci.Field<UInt64>("Enable") == 1 ? true : false,
+                         LogoUrl = ci.Field<string>("LogoUrl"),                                                  
+                     }
+                     into cig
+                     select new CompanyIndexModel()
+                     {
+                         CompanyPublicId = cig.Key.CompanyPublicId,
+                         CompanyName = cig.Key.CompanyName,                         
+                         IdentificationType = cig.Key.CompanyIdentificationType,
+                         IdentificationNumber = cig.Key.CompanyIdentificationNumber,
+                         CompanyEnable = cig.Key.CompanyEnable,
+                         LogoUrl = cig.Key.LogoUrl,                                                     
+                     }).ToList();
+            }
+
+            return oReturn;
+        }
         public List<CustomerProviderIndexModel> GetCustomerProviderIndex()
         {
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()

@@ -8,10 +8,13 @@ namespace ProveedoresOnLine.CompanyIndexSearch
 {
     public class CompanyIndexSearchProcess
     {
-        public static void StartProcess()
+        public static void CompanyIndexationFunction()
         {
             ProveedoresOnLine.IndexSearch.Controller.IndexSearch.CompanyIndexationFunction();
-            
+        }
+        public static void CompanyCustomerIndexationFunction()
+        {
+            ProveedoresOnLine.IndexSearch.Controller.IndexSearch.CompanyCustomerIndexationFunction();
         }
     }
 }
