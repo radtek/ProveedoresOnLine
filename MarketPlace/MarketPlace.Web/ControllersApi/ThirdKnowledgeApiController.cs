@@ -84,6 +84,7 @@ namespace MarketPlace.Web.ControllersApi
                                 ItemGroup.Add(Item1.Where(x => x.Contains("Criticidad Alta")).Select(x => x).DefaultIfEmpty("").FirstOrDefault());
                                 ItemGroup.Add(Item1.Where(x => x.Contains("Criticidad Media")).Select(x => x).DefaultIfEmpty("").FirstOrDefault());
                                 ItemGroup.Add(Item1.Where(x => x.Contains("Criticidad Baja")).Select(x => x).DefaultIfEmpty("").FirstOrDefault());
+                                ItemGroup.Add(Item1.Where(x => x.Contains("SIN COINCIDENCIAS")).Select(x => x).DefaultIfEmpty("").FirstOrDefault());                                
 
                                 Item1 = ItemGroup.Where(x => !string.IsNullOrEmpty(x)).Select(x => x).ToList();
 
