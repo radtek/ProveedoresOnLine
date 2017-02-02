@@ -143,6 +143,15 @@ namespace IntegrationPlatform.Test
             Assert.AreEqual(true, oReturn.Count > 0 && oReturn != null);
         }
 
+        [TestMethod]
+        public void MP_CustomerProvider_GetCustomData()
+        {            
+
+            var oReturn = IntegrationPlatform.Controller.IntegrationPlatform.MP_CustomerProvider_GetCustomData("7BC27832", "A24EB150");
+
+            Assert.AreEqual(true, oReturn != null);
+        }
+
         #endregion
 
         #endregion
