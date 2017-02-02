@@ -187,6 +187,8 @@ namespace MarketPlace.Web.Controllers
 
         public virtual ActionResult TKThirdKnowledgeSearch(string PageNumber, string InitDate, string EndDate, string SearchType, string Status)
         {
+            if (SessionModel.CurrentURL != null)
+                SessionModel.CurrentURL = null;
             string RelatedUser = null;
 
             if (SessionModel.CurrentCompanyLoginUser.RelatedCompany.FirstOrDefault().RelatedUser.FirstOrDefault().RelatedCompanyRole.ParentRoleCompany != null)
@@ -245,6 +247,9 @@ namespace MarketPlace.Web.Controllers
 
         public virtual ActionResult TKThirdKnowledgeDetail(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess)
         {
+            if (SessionModel.CurrentURL != null)
+                SessionModel.CurrentURL = null;
+
             int oTotalRowsAux = Convert.ToInt32(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_Grid_RowCountDefault].Value.Trim());
             if (Request["DownloadReport"] == "true")
                 oTotalRowsAux = 10000;
