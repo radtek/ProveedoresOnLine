@@ -66,3 +66,13 @@ else if (Model.Item2.AditionalFieldTypeInfo.ItemId == 101007)
         }
     }
 }
+else if (Model.Item2.AditionalFieldTypeInfo.ItemId == 101009)
+{
+    foreach (var item in Model.Item1.ProviderOptions.Where(x => x.CatalogId == 207))
+    {
+        if (!string.IsNullOrEmpty(oCustomList) && Convert.ToInt32(oCustomList) == item.ItemId)
+        {
+            <span>@item.ItemName</span>
+        }
+    }
+}
