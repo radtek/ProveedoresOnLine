@@ -501,7 +501,7 @@ namespace ProveedoresOnLine.Reports.Controller
 
         #region ThirdKnowledgeReports
 
-        public static Tuple<byte[], string, string> TK_QueryReport(string FormatType, DataTable data_rst, DataTable data_dce, DataTable data_fnc, DataTable data_psp, DataTable data_snc, List<ReportParameter> ReportData, string FilePath)
+        public static Tuple<byte[], string, string> TK_QueryReport(string FormatType, DataTable data_rst, DataTable data_dce, DataTable data_psp, DataTable data_snc, List<ReportParameter> ReportData, string FilePath)
         {
             LocalReport localReport = new LocalReport();
 
@@ -516,8 +516,7 @@ namespace ProveedoresOnLine.Reports.Controller
             src_dce.Name = "DataSet_dce";
             src_dce.Value = data_dce != null ? data_dce : new DataTable();
             Microsoft.Reporting.WebForms.ReportDataSource src_fnc = new Microsoft.Reporting.WebForms.ReportDataSource();
-            src_fnc.Name = "DataSet_fnc";
-            src_fnc.Value = data_fnc != null ? data_fnc : new DataTable();
+            
             Microsoft.Reporting.WebForms.ReportDataSource src_psp = new Microsoft.Reporting.WebForms.ReportDataSource();
             src_psp.Name = "DataSet_psp";
             src_psp.Value = data_psp != null ? data_psp : new DataTable();
@@ -529,8 +528,7 @@ namespace ProveedoresOnLine.Reports.Controller
             source.Name = "DS_ThirdKnowledgeReport";
 
             localReport.DataSources.Add(src_rst);
-            localReport.DataSources.Add(src_dce);
-            localReport.DataSources.Add(src_fnc);
+            localReport.DataSources.Add(src_dce);            
             localReport.DataSources.Add(src_psp);
             localReport.DataSources.Add(src_snc);
 
