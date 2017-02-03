@@ -18,6 +18,7 @@ using OfficeOpenXml;
 using System.Data;
 using Nest;
 using ProveedoresOnLine.IndexSearch.Models;
+using System.Threading;
 
 
 namespace ProveedoresOnLine.ThirdKnowledgeBatch
@@ -35,6 +36,7 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
 
                 if (oQueryResult != null)
                 {
+                    LogFile("Start Process:: Date" + DateTime.Now ); 
                     //Set access
                     string S3path = ThirdKnowledge.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledge.Models.Constants.C_Setings_File_S3FilePath].Value;
                     string LocalPath = ThirdKnowledge.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledge.Models.Constants.C_Settings_File_TempDirectory].Value;
@@ -43,6 +45,7 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                     {
                         try
                         {
+                            LogFile("Start Process:: QueryPublicId::" + oQuery.QueryPublicId);
                             //Download File from S3                            
                             //Local Path
                             string strFolder = ThirdKnowledge.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledge.Models.Constants.C_Settings_File_TempDirectory].Value;
@@ -237,47 +240,50 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                     {
                         oExcelToProcessInfo.All(x =>
                         {
-                            //Create QueryInfo
-                            oQuery.RelatedQueryBasicInfoModel = new List<TDQueryInfoModel>();
+                             //Create QueryInfo
+                                oQuery.RelatedQueryBasicInfoModel = new List<TDQueryInfoModel>();
 
-                            TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
-                            oInfoCreate.QueryPublicId = oQuery.QueryPublicId;
-                            oInfoCreate.DetailInfo = new List<TDQueryDetailInfoModel>();
+                                TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
+                                oInfoCreate.QueryPublicId = oQuery.QueryPublicId;
+                                oInfoCreate.DetailInfo = new List<TDQueryDetailInfoModel>();
 
-                            #region Create Detail
+                                #region Create Detail
 
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                ItemInfoType = new TDCatalogModel()
+                                oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
                                 {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.RequestName,
-                                },
-                                Value = !string.IsNullOrEmpty(x.NOMBRES) ? x.NOMBRES : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                ItemInfoType = new TDCatalogModel()
+                                    ItemInfoType = new TDCatalogModel()
+                                    {
+                                        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.RequestName,
+                                    },
+                                    Value = !string.IsNullOrEmpty(x.NOMBRES) ? x.NOMBRES : string.Empty,
+                                    Enable = true,
+                                });
+                                oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
                                 {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdNumberRequest,
-                                },
-                                Value = !string.IsNullOrEmpty(x.NUMEIDEN) ? x.NUMEIDEN : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                           {
-                               ItemInfoType = new TDCatalogModel()
-                               {
-                                   ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.GroupName,
-                               },
-                               Value = "SIN COINCIDENCIAS",
-                               Enable = true,
-                           });
-                            #endregion
+                                    ItemInfoType = new TDCatalogModel()
+                                    {
+                                        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdNumberRequest,
+                                    },
+                                    Value = !string.IsNullOrEmpty(x.NUMEIDEN) ? x.NUMEIDEN : string.Empty,
+                                    Enable = true,
+                                });
+                                oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                                {
+                                    ItemInfoType = new TDCatalogModel()
+                                    {
+                                        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.GroupName,
+                                    },
+                                    Value = "SIN COINCIDENCIAS",
+                                    Enable = true,
+                                });
+                                #endregion
 
-                            oQuery.RelatedQueryBasicInfoModel.Add(oInfoCreate);
-
-                            ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryUpsert(oQuery);
+                                oQuery.RelatedQueryBasicInfoModel.Add(oInfoCreate);
+                                Monitor.Enter(oQuery);
+                                lock (oQuery)
+                                {
+                                    ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryUpsert(oQuery);
+                                } 
                             return true;
                         });
                     }

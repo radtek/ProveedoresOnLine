@@ -238,6 +238,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                                          || x.ListType == "ONU_RESOLUCION_2023"
                                          || x.ListType == "SECTORAL SANCTIONS IDENTIFICATIONS_LIST_EEUU"
                                          || x.ListType == "SPECIALLY DESIGNATED NATIONALS LIST_EEUU"
+                                         || x.ListType == "SUPER SOCIEDADES"
                                          || x.ListType == "UNVERIFIED_LIST_EEUU" ?
                                          x.ListType + " - Criticidad Media" :
                                          x.ListType == "ESTRUCTURA DE GOBIERNO"
