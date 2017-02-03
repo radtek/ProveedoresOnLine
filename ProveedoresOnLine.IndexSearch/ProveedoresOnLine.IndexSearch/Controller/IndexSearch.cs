@@ -245,6 +245,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                 ICreateIndexResponse oElasticResponse = client.
                         CreateIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ThirdKnowledgeIndex].Value, c => c
                         .Settings(s => s.NumberOfReplicas(1).NumberOfShards(1)
+                        .TotalShardsPerNode(2)
                         .Analysis(a => a.
                             Analyzers(an => an.
                                 Custom("customWhiteSpace", anc => anc.
@@ -260,8 +261,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                         )
                     );
 
-                client.Map<ThirdknowledgeIndexSearchModel>(m => m.AutoMap());
-                //var Index = client.IndexMany(oToIndex, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ThirdKnowledgeIndex].Value);
+                client.Map<ThirdknowledgeIndexSearchModel>(m => m.AutoMap());                
                 RowFrom = 0;
                 for (int i = 0; i < (oToIndex.FirstOrDefault().TotalRows / 10000); i++)
 			    {

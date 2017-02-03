@@ -329,11 +329,10 @@ namespace MarketPlace.Web.Controllers
 
                 List<Tuple<string, List<ThirdKnowledgeViewModel>>> oGroupOrder = new List<Tuple<string, List<ThirdKnowledgeViewModel>>>();
 
-                oGroupOrder.AddRange(oGroup.Where(x => x.Item1 == "LISTAS RESTRICTIVAS - Criticidad Alta"));
-                oGroupOrder.AddRange(oGroup.Where(x => x.Item1 == "DELITOS E INHABILIDADES CONTRA EL ESTADO - Criticidad Media"));
-                oGroupOrder.AddRange(oGroup.Where(x => x.Item1 == "LISTAS FINANCIERAS - Criticidad Media"));
-                oGroupOrder.AddRange(oGroup.Where(x => x.Item1 == "LISTAS PEPS - Criticidad Baja"));
-                oGroupOrder.AddRange(oGroup.Where(x => x.Item1 == "SIN COINCIDENCIAS"));
+                oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("Criticidad Alta")));
+                oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("Criticidad Media")));                
+                oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("Criticidad Baja")));
+                oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("SIN COINCIDENCIAS")));
                 oModel.Group = oGroupOrder;
             }
 
@@ -416,7 +415,7 @@ namespace MarketPlace.Web.Controllers
                 data_dce.Columns.Add("IdentificationSearch");
                 data_dce.Columns.Add("NameSearch");
                 DataRow row_dce;
-                List<ThirdKnowledgeViewModel> dce = oModel.Group.Where(x => x.Item1 == "DELITOS E INHABILIDADES CONTRA EL ESTADO - Criticidad Media").Select(x => x.Item2).FirstOrDefault();
+                List<ThirdKnowledgeViewModel> dce = oModel.Group.Where(x => x.Item1.Contains("Criticidad Media")).Select(x => x.Item2).FirstOrDefault();
                 if (dce != null)
                     dce.All(y =>
                     {
@@ -446,7 +445,7 @@ namespace MarketPlace.Web.Controllers
                 data_fnc.Columns.Add("IdentificationSearch");
                 data_fnc.Columns.Add("NameSearch");
                 DataRow row_fnc;
-                List<ThirdKnowledgeViewModel> fnc = oModel.Group.Where(x => x.Item1 == "LISTAS FINANCIERAS - Criticidad Media").Select(x => x.Item2).FirstOrDefault();
+                List<ThirdKnowledgeViewModel> fnc = oModel.Group.Where(x => x.Item1.Contains("Criticidad Media")).Select(x => x.Item2).FirstOrDefault();
                 if (fnc != null)
                     fnc.All(y =>
                     {
@@ -476,7 +475,7 @@ namespace MarketPlace.Web.Controllers
                 data_psp.Columns.Add("IdentificationSearch");
                 data_psp.Columns.Add("NameSearch");
                 DataRow row_psp;
-                List<ThirdKnowledgeViewModel> psp = oModel.Group.Where(x => x.Item1 == "LISTAS PEPS - Criticidad Baja").Select(x => x.Item2).FirstOrDefault();
+                List<ThirdKnowledgeViewModel> psp = oModel.Group.Where(x => x.Item1.Contains("Criticidad Baja")).Select(x => x.Item2).FirstOrDefault();
                 if (psp != null)
                     psp.All(y =>
                     {
@@ -502,7 +501,7 @@ namespace MarketPlace.Web.Controllers
                 data_snc.Columns.Add("IdentificationSearch");
                 data_snc.Columns.Add("NameSearch");
                 DataRow row_snc;
-                List<ThirdKnowledgeViewModel> snc = oModel.Group.Where(x => x.Item1 == "SIN COINCIDENCIAS").Select(x => x.Item2).FirstOrDefault();
+                List<ThirdKnowledgeViewModel> snc = oModel.Group.Where(x => x.Item1.Contains("SIN COINCIDENCIAS")).Select(x => x.Item2).FirstOrDefault();
                 if (snc != null)
                     snc.All(y =>
                     {

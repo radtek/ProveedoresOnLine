@@ -105,7 +105,6 @@ namespace MarketPlace.Web.ControllersApi
                                             oItem2.Add(new ThirdKnowledgeViewModel(d));
                                             return true;
                                         });
-                                        // new ThirdKnowledgeViewModel(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryBasicInfoModel.Where(td => td.DetailInfo.Any(inf => inf.Value == x)).Select(td => td.DetailInfo).ToList();
                                         oTupleItem = new Tuple<string, List<ThirdKnowledgeViewModel>>(x, oItem2);
                                         Group.Add(oTupleItem);
                                     }
