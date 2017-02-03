@@ -421,7 +421,8 @@ namespace MarketPlace.Web.Controllers
                     {
                         row_dce = data_dce.NewRow();
                         row_dce["IdentificationResult"] = y.IdentificationNumberResult;
-                        row_dce["NameResult"] = y.NameResult;
+                        parameters.Add(new ReportParameter("GroupNameDce", y.GroupName));
+                        row_dce["NameResult"] = y.NameResult; 
                         row_dce["Offense"] = y.Offense;
                         row_dce["Peps"] = y.Peps;
                         row_dce["Priority"] = y.Priority;
@@ -431,37 +432,7 @@ namespace MarketPlace.Web.Controllers
                         row_dce["NameSearch"] = y.RequestName; // SearchName Param
                         data_dce.Rows.Add(row_dce);
                         return true;
-                    });
-
-                /*data for fnc*/
-                DataTable data_fnc = new DataTable();
-                data_fnc.Columns.Add("IdentificationResult");
-                data_fnc.Columns.Add("NameResult");
-                data_fnc.Columns.Add("Offense");
-                data_fnc.Columns.Add("Peps");
-                data_fnc.Columns.Add("Priority");
-                data_fnc.Columns.Add("Status");
-                data_fnc.Columns.Add("ListName");
-                data_fnc.Columns.Add("IdentificationSearch");
-                data_fnc.Columns.Add("NameSearch");
-                DataRow row_fnc;
-                List<ThirdKnowledgeViewModel> fnc = oModel.Group.Where(x => x.Item1.Contains("Criticidad Media")).Select(x => x.Item2).FirstOrDefault();
-                if (fnc != null)
-                    fnc.All(y =>
-                    {
-                        row_fnc = data_fnc.NewRow();
-                        row_fnc["IdentificationResult"] = y.IdentificationNumberResult;
-                        row_fnc["NameResult"] = y.NameResult;
-                        row_fnc["Offense"] = y.Offense;
-                        row_fnc["Peps"] = y.Peps;
-                        row_fnc["Priority"] = y.Priority;
-                        row_fnc["Status"] = y.Status.ToLower() == "true" ? "Activo" : "Inactivo";
-                        row_fnc["ListName"] = y.ListName;
-                        row_fnc["IdentificationSearch"] = y.IdNumberRequest; // SearchId Param
-                        row_fnc["NameSearch"] = y.RequestName; // SearchName Param
-                        data_fnc.Rows.Add(row_fnc);
-                        return true;
-                    });
+                    });               
 
                 /*data for psp*/
                 DataTable data_psp = new DataTable();
@@ -480,7 +451,7 @@ namespace MarketPlace.Web.Controllers
                     psp.All(y =>
                     {
                         row_psp = data_psp.NewRow();
-                        row_psp["IdentificationResult"] = y.IdentificationNumberResult;
+                        row_psp["IdentificationResult"] = y.IdentificationNumberResult;                        
                         row_psp["NameResult"] = y.NameResult;
                         row_psp["Offense"] = y.Offense;
                         row_psp["Peps"] = y.Peps;
@@ -518,8 +489,7 @@ namespace MarketPlace.Web.Controllers
                 Tuple<byte[], string, string> ThirdKnowledgeReport = ProveedoresOnLine.Reports.Controller.ReportModule.TK_QueryReport(
                                                                 fileFormat,
                                                                 data_rst,
-                                                                data_dce,
-                                                                data_fnc,
+                                                                data_dce,                                                                
                                                                 data_psp,
                                                                 data_snc,
                                                                 parameters,
