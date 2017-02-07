@@ -36,6 +36,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
                 //Search Elastic
                 Uri node = new Uri(InternalSettings.Instance[Constants.C_Settings_ElasticSearchUrl].Value);
+
                 var settings = new ConnectionSettings(node);
                 settings.DefaultIndex(InternalSettings.Instance[Constants.C_Settings_ThirdKnowledgeIndex].Value);
                 settings.DisableDirectStreaming(true);
