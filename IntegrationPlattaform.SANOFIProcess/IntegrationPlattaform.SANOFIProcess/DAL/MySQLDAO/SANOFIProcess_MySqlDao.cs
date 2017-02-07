@@ -81,7 +81,7 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
                                 Email_OC = sgig.Key.Email_OC,
                                 Email_P = sgig.Key.Email_P,
                                 Email_Cert = sgig.Key.Email_Cert,
-                                Comentaries = sgig.Key.Comentaries,
+                                LastModified = sgig.Key.Comentaries,
                             }).ToList();
             }
             return oReturn;
@@ -203,6 +203,7 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
                 CommandText = "Sanofi_GetContableInfo",
                 CommandType = CommandType.StoredProcedure,
                 Parameters = lstparams,
+                
             });
 
             List<SanofiContableInfoModel> oReturn = new List<SanofiContableInfoModel>();

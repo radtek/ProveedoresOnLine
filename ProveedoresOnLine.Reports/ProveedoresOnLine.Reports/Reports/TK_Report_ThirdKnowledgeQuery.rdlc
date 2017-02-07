@@ -585,7 +585,6 @@
         </Paragraphs>
         <rd:DefaultName>Textbox19</rd:DefaultName>
         <Top>10.35684cm</Top>
-        <Left>0cm</Left>
         <Height>0.78521cm</Height>
         <Width>25.44798cm</Width>
         <ZIndex>16</ZIndex>
@@ -2926,58 +2925,6 @@
         <rd:DataSetName>DS_ThirdKnowledgeReport</rd:DataSetName>
         <rd:SchemaPath>D:\ProvedoresOnLine\ProveedoresOnLine.Reports\ProveedoresOnLine.Reports\Reports\DataSet\DS_ThirdKnowledgeReport.xsd</rd:SchemaPath>
         <rd:TableName>ThirdKnowledgeReport_dce</rd:TableName>
-        <rd:TableAdapterFillMethod />
-        <rd:TableAdapterGetDataMethod />
-        <rd:TableAdapterName />
-      </rd:DataSetInfo>
-    </DataSet>
-    <DataSet Name="DataSet_fnc">
-      <Query>
-        <DataSourceName>DS_ThirdKnowledgeReport</DataSourceName>
-        <CommandText>/* Local Query */</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="IdentificationResult">
-          <DataField>IdentificationResult</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="NameResult">
-          <DataField>NameResult</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Offense">
-          <DataField>Offense</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Peps">
-          <DataField>Peps</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Priority">
-          <DataField>Priority</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Status">
-          <DataField>Status</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ListName">
-          <DataField>ListName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="IdentificationSearch">
-          <DataField>IdentificationSearch</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="NameSearch">
-          <DataField>NameSearch</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
-      <rd:DataSetInfo>
-        <rd:DataSetName>DS_ThirdKnowledgeReport</rd:DataSetName>
-        <rd:SchemaPath>D:\ProvedoresOnLine\ProveedoresOnLine.Reports\ProveedoresOnLine.Reports\Reports\DataSet\DS_ThirdKnowledgeReport.xsd</rd:SchemaPath>
-        <rd:TableName>ThirdKnowledgeReport_fnc</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />
         <rd:TableAdapterName />

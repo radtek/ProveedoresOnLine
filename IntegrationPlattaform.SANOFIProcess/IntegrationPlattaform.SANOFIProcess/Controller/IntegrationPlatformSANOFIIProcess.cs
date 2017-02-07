@@ -85,6 +85,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
 
                             if (oGeneralRow != null && oComercialGeneralRow != null && oComercialBasicRow != null && oContableRow != null)
                             {
+                                oGeneralRow.Comentaries = "Creación Proveedor" + Convert.ToString(oGeneralRow.LastModified);
                                 oGeneralInfo.Add(oGeneralRow);
                                 oComercialInfo.Add(oComercialGeneralRow);
                                 oComercialBasicInfo.Add(oComercialBasicRow);
@@ -170,6 +171,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                                 //if not exists validate all modules information, like set up process
                                 if (oGeneralRow != null && oComercialGeneralRow != null && oComercialBasicRow != null && oContableRow != null)
                                 {
+                                    oGeneralRow.Comentaries = "Creación Proveedor" + Convert.ToString(oGeneralRow.LastModified);
                                     oGeneralInfo.Add(oGeneralRow);
                                     oComercialInfo.Add(oComercialGeneralRow);
                                     oComercialBasicInfo.Add(oComercialBasicRow);
@@ -196,8 +198,10 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                                 oContableRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetContableInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
 
                                 //if exists get modules information
-                                if (oGeneralRow != null)
+                                if (oGeneralRow != null) { 
+                                    oGeneralRow.Comentaries = "Actualización Proveedor" + Convert.ToString(oGeneralRow.LastModified);
                                     oGeneralInfo.Add(oGeneralRow);
+                                }
                                 if (oComercialGeneralRow != null && oComercialBasicRow != null)
                                 {
                                     oComercialInfo.Add(oComercialGeneralRow);
@@ -349,7 +353,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                           x.Email_OC + strSep +
                           x.Email_P + strSep +
                           x.Email_Cert + strSep +
-                          x.Comentaries.ToShortDateString() + strSep);
+                          x.Comentaries+ strSep);
 
                     #endregion
                     return true;
