@@ -4,7 +4,7 @@
     <label class="POMPSectionTitles">Reporte General De Evaluación De Desempeño</label>
     <div class="POMPResultInfoEvaluation">
         <p>Está a punto de descargar todas las evaluaciones de desempeño que usted ha programado. <br /><br /><strong>La operación podría tardar unos minutos, por favor espere.</strong></p>
-        <div id="POMPReportGenerator">
+        <div id="POMPReportGenerator" class="col-md-12">
             <a href="@(Url.RouteUrl
                         (MarketPlace.Models.General.Constants.C_Routes_Default,
                         new
@@ -13,8 +13,13 @@
                             action = MVC.Report.ActionNames.RP_SV_SurveyGeneralInfoReport,
                             SurveyGeneralInfoReport = true
                         }))"><img src="@MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.MP_Report_ExcelReportIcon].Value" alt="excel evaluaciones" /><br />Descargar</a>
-
         </div>
+    </div>
+    <div class="col-md-12">
+        @if (Model.ViewMessage != null)
+        {
+            <strong>@Model.ViewMessage</strong>
+        }
     </div>
 }
 
