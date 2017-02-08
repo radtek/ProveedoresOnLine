@@ -19,54 +19,56 @@ namespace ProveedoresOnLine.Reports.Controller
             List<SurveyModule.Models.SurveyModel> oSurveyParents = SurveyModule.Controller.SurveyModule.SurveyGetAllByCustomer(CustomerPublicId);
             List<Tuple<SurveyModel, List<GenericItemModel>, List<Tuple<SurveyModel, GenericItemModel>>, List<GenericItemModel>>> oReturn = new List<Tuple<SurveyModel, List<GenericItemModel>, List<Tuple<SurveyModel, GenericItemModel>>, List<GenericItemModel>>>();
 
-            oSurveyParents.All(x =>
+            if (oSurveyParents != null)
             {
-                x.ChildSurvey = new List<SurveyModel>();
-                List<Tuple<SurveyModel, List<GenericItemModel>, List<Tuple<SurveyModel, GenericItemModel>>, List<GenericItemModel>>> oChildReturn = new List<Tuple<SurveyModel, List<GenericItemModel>, List<Tuple<SurveyModel, GenericItemModel>>, List<GenericItemModel>>>();
-                x.ChildSurvey.AddRange(SurveyModule.Controller.SurveyModule.ReportAllSurvey(Convert.ToString(x.SurveyPublicId), CustomerPublicId));
-                
-                List<GenericItemModel> Areas = new List<GenericItemModel>();
-                List<GenericItemModel> Questions = new List<GenericItemModel>();
-                List<GenericItemModel> Answers = new List<GenericItemModel>();
-                List<Tuple<SurveyModel, GenericItemModel>> oSurveyQuestionsModel = new List<Tuple<SurveyModel, GenericItemModel>>();
-                x.ChildSurvey.All(m =>
+                oSurveyParents.All(x =>
                 {
-                    Areas.Add(m.RelatedSurveyConfig.RelatedSurveyConfigItem.Where(y => y.ItemType.ItemId == 1202001 && y.ParentItem == null).Select(z => z).FirstOrDefault());
+                    x.ChildSurvey = new List<SurveyModel>();
+                    List<Tuple<SurveyModel, List<GenericItemModel>, List<Tuple<SurveyModel, GenericItemModel>>, List<GenericItemModel>>> oChildReturn = new List<Tuple<SurveyModel, List<GenericItemModel>, List<Tuple<SurveyModel, GenericItemModel>>, List<GenericItemModel>>>();
+                    x.ChildSurvey.AddRange(SurveyModule.Controller.SurveyModule.ReportAllSurvey(Convert.ToString(x.SurveyPublicId), CustomerPublicId));
 
-                    Areas.All(ar =>
+                    List<GenericItemModel> Areas = new List<GenericItemModel>();
+                    List<GenericItemModel> Questions = new List<GenericItemModel>();
+                    List<GenericItemModel> Answers = new List<GenericItemModel>();
+                    List<Tuple<SurveyModel, GenericItemModel>> oSurveyQuestionsModel = new List<Tuple<SurveyModel, GenericItemModel>>();
+                    x.ChildSurvey.All(m =>
                     {
-                        Questions.AddRange(m.RelatedSurveyConfig.RelatedSurveyConfigItem.Where(e => e.ItemType.ItemId == 1202002 && e.ParentItem != null && e.ParentItem.ItemId == ar.ItemId).Select(e => e).ToList());
+                        Areas.Add(m.RelatedSurveyConfig.RelatedSurveyConfigItem.Where(y => y.ItemType.ItemId == 1202001 && y.ParentItem == null).Select(z => z).FirstOrDefault());
+
+                        Areas.All(ar =>
+                        {
+                            Questions.AddRange(m.RelatedSurveyConfig.RelatedSurveyConfigItem.Where(e => e.ItemType.ItemId == 1202002 && e.ParentItem != null && e.ParentItem.ItemId == ar.ItemId).Select(e => e).ToList());
+                            return true;
+                        });
+                        Questions.All(q =>
+                        {
+                            Answers.Add(m.RelatedSurveyItem.Where(e => e != null && e.RelatedSurveyConfigItem != null && e.RelatedSurveyConfigItem.ItemId == q.ItemId).Select(e => new GenericItemModel()
+                            {
+                                ItemId = e.ItemId,
+                                ItemInfo = e.ItemInfo,
+                                CreateDate = x.CreateDate,
+                                ItemName = m.RelatedSurveyConfig.RelatedSurveyConfigItem.
+                                                                                    Where(inf => inf.ItemId == int.Parse(e.ItemInfo.Where(subinf => subinf.ItemInfoType.ItemId == 1205003).
+                                                                                           Select(subinf => subinf.Value).FirstOrDefault())).Select(inf => inf.ItemName).FirstOrDefault(),
+                                ParentItem = new GenericItemModel()
+                                {
+                                    ItemId = e.RelatedSurveyConfigItem.ItemId
+                                }
+
+                            }).FirstOrDefault());
+
+                            oSurveyQuestionsModel.Add(new Tuple<SurveyModel, GenericItemModel>(m, q));
+                            return true;
+                        });
+
+                        oChildReturn.Add(new Tuple<SurveyModel, List<GenericItemModel>, List<Tuple<SurveyModel, GenericItemModel>>, List<GenericItemModel>>(x, Areas, oSurveyQuestionsModel, Answers));
+                        oReturn.AddRange(oChildReturn);
+
                         return true;
                     });
-                    Questions.All(q =>
-                    {
-                        Answers.Add(m.RelatedSurveyItem.Where(e => e != null && e.RelatedSurveyConfigItem != null && e.RelatedSurveyConfigItem.ItemId == q.ItemId).Select(e => new GenericItemModel()
-                        {
-                            ItemId = e.ItemId,
-                            ItemInfo = e.ItemInfo,
-                            CreateDate = x.CreateDate,
-                            ItemName = m.RelatedSurveyConfig.RelatedSurveyConfigItem.
-                                                                                Where(inf => inf.ItemId == int.Parse(e.ItemInfo.Where(subinf => subinf.ItemInfoType.ItemId == 1205003).
-                                                                                       Select(subinf => subinf.Value).FirstOrDefault())).Select(inf => inf.ItemName).FirstOrDefault(),
-                            ParentItem = new GenericItemModel()
-                            {
-                                ItemId = e.RelatedSurveyConfigItem.ItemId                                
-                            }
-                            
-                        }).FirstOrDefault());
-
-                        oSurveyQuestionsModel.Add(new Tuple<SurveyModel, GenericItemModel>(m, q));
-                        return true;
-                    });                    
-                    
-                    oChildReturn.Add(new Tuple<SurveyModel, List<GenericItemModel>, List<Tuple<SurveyModel, GenericItemModel>>, List<GenericItemModel>>(x, Areas, oSurveyQuestionsModel, Answers));
-                    oReturn.AddRange(oChildReturn);
-
                     return true;
                 });
-                return true;
-            });
-
+            }
             oReturn = oReturn.Distinct().ToList();
             return oReturn;
         }

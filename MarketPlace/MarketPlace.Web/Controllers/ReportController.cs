@@ -143,9 +143,17 @@ namespace MarketPlace.Web.Controllers
                     });
                     buffer = Encoding.Default.GetBytes(data.ToString().ToCharArray());
                 }
-                return File(buffer, "application/csv", "InformacionGeneral_" + DateTime.Now.ToString("yyyyMMddHHmm") + ".csv");
-                #endregion
+                if (buffer !=null)
+                {
+                    return File(buffer, "application/csv", "InformacionGeneral_" + DateTime.Now.ToString("yyyyMMddHHmm") + ".csv");
+                }
+                else
+                {
+                    oModel.ViewMessage = "No existen evaluciones para mostrar";
+                }
 
+                                   
+                #endregion
             }
             return View(oModel);
         }
