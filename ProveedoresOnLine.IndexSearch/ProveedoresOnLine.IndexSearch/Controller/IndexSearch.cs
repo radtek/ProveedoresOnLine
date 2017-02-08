@@ -121,29 +121,30 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                 List<CustomerProviderIndexModel> oCustomerProviderToIndex = GetCustomerProviderIndex();
                 LogFile("About to index: " + oCustomerProviderToIndex.Count + " CustomerProviders");
 
-                oCustomerProviderToIndex.All(cp =>
-                    {
-                        Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
-                        var settings = new ConnectionSettings(node);
-                        settings.DefaultIndex("stg_companyindex");
-                        ElasticClient client = new ElasticClient(settings);
-                        CustomerProviderId = cp.CustomerProviderId;
+                Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+                var settings = new ConnectionSettings(node);
+                settings.DefaultIndex("prod_customerproviderindex");
+                ElasticClient client = new ElasticClient(settings);
 
-                        ICreateIndexResponse oElasticResponse = client.CreateIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CustomerProviderIndex].Value, c => c
+                ICreateIndexResponse oElasticResponse = client.
+                        CreateIndex("prod_customerproviderindex", c => c
                         .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
-                        .Analysis(a => a.Analyzers(an => an.Custom("customWhiteSpace", anc => anc.Filters("asciifolding", "lowercase")
-                            .Tokenizer("whitespace")
-                            )).TokenFilters(tf => tf
+                        .Analysis(a => a.
+                            Analyzers(an => an.
+                                Custom("customWhiteSpace", anc => anc.
+                                    Filters("asciifolding", "lowercase").
+                                    Tokenizer("whitespace")
+                                        )
+                                    ).TokenFilters(tf => tf
                                     .EdgeNGram("customEdgeNGram", engrf => engrf
                                     .MinGram(1)
-                                    .MaxGram(10)))).NumberOfShards(1)
-                        ));
-                        Counter++;
-                        var Index = client.Index(cp);
-                        LogFile(Counter + "-Index Process for: " + cp.CustomerProviderId);
-
-                        return true;
-                    });
+                                    .MaxGram(10))
+                                )
+                            ).NumberOfShards(1)
+                        )
+                    );
+                client.Map<CustomerProviderIndexModel>(m => m.AutoMap());
+                var Index = client.IndexMany(oCustomerProviderToIndex, "prod_customerproviderindex");
             }
             catch (Exception err)
             {
