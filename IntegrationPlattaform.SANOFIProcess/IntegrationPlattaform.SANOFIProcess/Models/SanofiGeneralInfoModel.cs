@@ -38,6 +38,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Models
 
         public string Email_Cert { get; set; }
 
-        public DateTime Comentaries { get; set; }
+        public DateTime LastModified { get; set; }
+        public string Comentaries { get; set; }
     }
 }
