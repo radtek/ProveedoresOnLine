@@ -16,10 +16,10 @@ namespace ProveedoresOnLine.Company.Models.Company
         [Number]
         public int Id { get { return CustomerProviderId; } }
 
-        [Number]
+        [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
         public int CustomerProviderId { get; set; }
 
-        [String]
+        [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
         public string CustomerPublicId { get; set; }
 
         [String]
