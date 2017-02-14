@@ -291,7 +291,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox19</rd:DefaultName>
-        <Top>13.8388cm</Top>
+        <Top>14.78545cm</Top>
         <Height>0.78521cm</Height>
         <Width>25.44798cm</Width>
         <ZIndex>8</ZIndex>
@@ -392,7 +392,7 @@
         <Source>External</Source>
         <Value>=Parameters!ThirdKnowledgeText.Value</Value>
         <Sizing>Fit</Sizing>
-        <Top>16.67191cm</Top>
+        <Top>17.62441cm</Top>
         <Left>0.29413cm</Left>
         <Height>4.06364cm</Height>
         <Width>24.75658cm</Width>
@@ -484,7 +484,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>    LISTAS RESTRICTIVAS - Criticidad Alta</Value>
+                <Value>    Criticidad Alta</Value>
                 <Style>
                   <FontWeight>Bold</FontWeight>
                   <Color>DimGray</Color>
@@ -525,14 +525,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value xml:space="preserve">    </Value>
-                <Style>
-                  <FontWeight>Bold</FontWeight>
-                  <Color>DimGray</Color>
-                </Style>
-              </TextRun>
-              <TextRun>
-                <Value>=Parameters!GroupNameDce.Value</Value>
+                <Value>    Criticidad Media</Value>
                 <Style>
                   <FontWeight>Bold</FontWeight>
                   <Color>DimGray</Color>
@@ -543,7 +536,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox19</rd:DefaultName>
-        <Top>6.76419cm</Top>
+        <Top>7.08169cm</Top>
         <Height>0.78521cm</Height>
         <Width>25.44798cm</Width>
         <ZIndex>15</ZIndex>
@@ -573,7 +566,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>    LISTAS PEPS - Criticidad Baja</Value>
+                <Value>    Criticidad Baja</Value>
                 <Style>
                   <FontWeight>Bold</FontWeight>
                   <Color>DimGray</Color>
@@ -584,7 +577,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox19</rd:DefaultName>
-        <Top>10.35684cm</Top>
+        <Top>10.99184cm</Top>
         <Height>0.78521cm</Height>
         <Width>25.44798cm</Width>
         <ZIndex>16</ZIndex>
@@ -614,19 +607,19 @@
               <Width>3.7861cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.24079cm</Width>
+              <Width>2.96157cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>3.75829cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.79274cm</Width>
+              <Width>2.72963cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.62688cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.18792cm</Width>
+              <Width>3.46714cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>3.92875cm</Width>
@@ -1191,10 +1184,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>DataSet_rst</DataSetName>
-        <Top>4.69965cm</Top>
+        <Top>5.01715cm</Top>
         <Left>0.45719cm</Left>
         <Height>1.62333cm</Height>
-        <Width>24.53047cm</Width>
+        <Width>24.46736cm</Width>
         <ZIndex>17</ZIndex>
         <Visibility>
           <Hidden>= Iif (CountRows("DataSet_rst") &gt; 0, false, true)</Hidden>
@@ -1212,25 +1205,25 @@
               <Width>3.50692cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.24079cm</Width>
+              <Width>2.92329cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>3.75829cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.07194cm</Width>
+              <Width>2.79269cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.62688cm</Width>
+              <Width>1.88132cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.18792cm</Width>
+              <Width>3.53018cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.92875cm</Width>
+              <Width>4.05493cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.14594cm</Width>
+              <Width>2.01978cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1724,14 +1717,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Status1">
+                    <Textbox Name="Offense2">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Status.Value</Value>
+                              <Value>=Fields!Offense.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -1740,7 +1733,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Status1</rd:DefaultName>
+                      <rd:DefaultName>Offense2</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1781,10 +1774,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>DataSet_dce</DataSetName>
-        <Top>8.37884cm</Top>
+        <Top>9.01384cm</Top>
         <Left>0.45715cm</Left>
         <Height>1.57042cm</Height>
-        <Width>24.46743cm</Width>
+        <Width>24.4674cm</Width>
         <ZIndex>18</ZIndex>
         <Visibility>
           <Hidden>= Iif (CountRows("DataSet_dce") &gt; 0, false, true)</Hidden>
@@ -1802,22 +1795,22 @@
               <Width>3.50692cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.24079cm</Width>
+              <Width>2.89851cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>3.75829cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.07194cm</Width>
+              <Width>2.8175cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.62688cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.18792cm</Width>
+              <Width>3.72158cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.92875cm</Width>
+              <Width>4.11801cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>2.14594cm</Width>
@@ -2246,21 +2239,21 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Peps">
+                    <Textbox Name="ListName2">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Peps.Value</Value>
+                              <Value>=Fields!ListName.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Peps</rd:DefaultName>
+                      <rd:DefaultName>ListName2</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -2306,14 +2299,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Status3">
+                    <Textbox Name="Status2">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Status.Value</Value>
+                              <Value>Activo</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -2322,7 +2315,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Status3</rd:DefaultName>
+                      <rd:DefaultName>Status2</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -2363,10 +2356,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>DataSet_psp</DataSetName>
-        <Top>11.97149cm</Top>
+        <Top>12.92399cm</Top>
         <Left>0.45712cm</Left>
         <Height>1.54396cm</Height>
-        <Width>24.46743cm</Width>
+        <Width>24.59363cm</Width>
         <ZIndex>19</ZIndex>
         <Visibility>
           <Hidden>= Iif (CountRows("DataSet_psp") &gt; 0, false, true)</Hidden>
@@ -2381,7 +2374,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>3.7861cm</Width>
+              <Width>4.4211cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>5.27808cm</Width>
@@ -2543,10 +2536,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>DataSet_snc</DataSetName>
-        <Top>15.07412cm</Top>
+        <Top>16.02662cm</Top>
         <Left>0.45719cm</Left>
         <Height>1.2cm</Height>
-        <Width>9.06418cm</Width>
+        <Width>9.69918cm</Width>
         <ZIndex>20</ZIndex>
         <Visibility>
           <Hidden>= Iif (CountRows("DataSet_snc") &gt; 0, false, true)</Hidden>
@@ -2578,7 +2571,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox3</rd:DefaultName>
-        <Top>4.0466cm</Top>
+        <Top>4.3641cm</Top>
         <Left>0.45719cm</Left>
         <Height>0.47666cm</Height>
         <Width>18.39272cm</Width>
@@ -2618,7 +2611,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox3</rd:DefaultName>
-        <Top>7.72579cm</Top>
+        <Top>8.36079cm</Top>
         <Left>0.45719cm</Left>
         <Height>0.47666cm</Height>
         <Width>18.39272cm</Width>
@@ -2658,8 +2651,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox3</rd:DefaultName>
-        <Top>11.31844cm</Top>
-        <Left>0.45719cm</Left>
+        <Top>12.12983cm</Top>
+        <Left>0.45712cm</Left>
         <Height>0.47666cm</Height>
         <Width>18.39272cm</Width>
         <ZIndex>23</ZIndex>
@@ -2678,7 +2671,7 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>21.647cm</Height>
+    <Height>21.68805cm</Height>
     <Style />
   </Body>
   <Width>25.44798cm</Width>
