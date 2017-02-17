@@ -15,7 +15,7 @@ namespace ProveedoresOnLine.CompanyProvider.Test
         public void LegalGetBasicInfo()
         {
             List<Company.Models.Util.GenericItemModel> oReturn =
-                ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.LegalGetBasicInfo("22C8E7F9",null, true);
+                ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.LegalGetBasicInfo("9677120A", null, true);
 
             Assert.AreEqual(true, oReturn != null && oReturn.Count >= 1);
         }
@@ -2040,7 +2040,7 @@ namespace ProveedoresOnLine.CompanyProvider.Test
         public void MPLegalInfoGetBasicInfo()
         {
             List<Company.Models.Util.GenericItemModel> oReturn =
-                ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPReportGetBasicInfo("1D9B9580", null);
+                ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPReportGetBasicInfo("9677120A", null);
             Assert.AreEqual(true, oReturn.Count >= 1);
         }
 
@@ -2050,6 +2050,12 @@ namespace ProveedoresOnLine.CompanyProvider.Test
             List<BlackListModel> oReturn =
                ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.BlackListGetBasicInfo("50583E9D");
             Assert.AreEqual(true, oReturn.Count >= 1);
+        }
+
+        [TestMethod]
+        public void MPGetBasicInfo()
+        {
+            var oReturn = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPGetBasicInfo("9677120A");
         }
         #endregion
 

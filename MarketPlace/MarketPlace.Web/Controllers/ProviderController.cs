@@ -3461,10 +3461,12 @@ namespace MarketPlace.Web.Controllers
             parameters.Add(new ReportParameter("CustomerIdentificationType", SessionModel.CurrentCompany.IdentificationType.ItemName));
             parameters.Add(new ReportParameter("CustomerImage", SessionModel.CurrentCompany_CompanyLogo));
 
+
             //ProviderInfo
             parameters.Add(new ReportParameter("ProviderName", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName));
             parameters.Add(new ReportParameter("ProviderIdentificationType", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationType.ItemName));
             parameters.Add(new ReportParameter("ProviderIdentificationNumber", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationNumber));
+            parameters.Add(new ReportParameter("ProviderVerificationDigit", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCompanyInfoType.CheckDigit).Select(x => x.Value).FirstOrDefault()));
 
             #region Basic Info
 
@@ -3473,9 +3475,9 @@ namespace MarketPlace.Web.Controllers
             else
                 parameters.Add(new ReportParameter("Representant", "NA"));
 
-            if (oModel.RelatedLegalInfo.Count > 0 && !string.IsNullOrEmpty(oModel.RelatedLegalInfo.FirstOrDefault().CP_InscriptionNumber)
-                && !string.IsNullOrWhiteSpace(oModel.RelatedLegalInfo.FirstOrDefault().CP_InscriptionNumber))
-                parameters.Add(new ReportParameter("InscriptionNumber", oModel.RelatedLegalInfo.FirstOrDefault().CP_InscriptionNumber));
+            if (oModel.RelatedLegalInfo.Count > 0 && !string.IsNullOrEmpty(oModel.RelatedLegalInfo.Where(x => x.RelatedLegalInfo.ItemType.ItemId == (int)MarketPlace.Models.General.enumLegalType.ChaimberOfCommerce).Select(x => x.CP_InscriptionNumber).FirstOrDefault())
+                && !string.IsNullOrWhiteSpace(oModel.RelatedLegalInfo.Where(x => x.RelatedLegalInfo.ItemType.ItemId == (int)MarketPlace.Models.General.enumLegalType.ChaimberOfCommerce).Select(x => x.CP_InscriptionNumber).FirstOrDefault()))
+                parameters.Add(new ReportParameter("InscriptionNumber", oModel.RelatedLegalInfo.Where(x => x.RelatedLegalInfo.ItemType.ItemId == (int)MarketPlace.Models.General.enumLegalType.ChaimberOfCommerce).Select(x => x.CP_InscriptionNumber).FirstOrDefault()));
             else
                 parameters.Add(new ReportParameter("InscriptionNumber", "NA"));
 
@@ -3509,11 +3511,15 @@ namespace MarketPlace.Web.Controllers
             else
                 parameters.Add(new ReportParameter("Email", "NA"));
 
-            if (oModel.RelatedLegalInfo.Count > 0 && !string.IsNullOrWhiteSpace(oModel.RelatedLegalInfo.FirstOrDefault().CP_SocialObject))
-                parameters.Add(new ReportParameter("SocialObject", oModel.RelatedLegalInfo.FirstOrDefault().CP_SocialObject));
+            if (oModel.RelatedLegalInfo.Count > 0 && !string.IsNullOrWhiteSpace(oModel.RelatedLegalInfo.Where(x => x.RelatedLegalInfo.ItemType.ItemId == (int)MarketPlace.Models.General.enumLegalType.ChaimberOfCommerce).Select(x => x.CP_SocialObject).FirstOrDefault()))
+                parameters.Add(new ReportParameter("SocialObject", oModel.RelatedLegalInfo.Where(x => x.RelatedLegalInfo.ItemType.ItemId == (int)MarketPlace.Models.General.enumLegalType.ChaimberOfCommerce).Select(x => x.CP_SocialObject).FirstOrDefault()));
             else
                 parameters.Add(new ReportParameter("SocialObject", "NA"));
 
+            if (oModel.RelatedLegalInfo.Count > 0 && !string.IsNullOrWhiteSpace(oModel.RelatedLegalInfo.Where(x => x.RelatedLegalInfo.ItemType.ItemId == (int)MarketPlace.Models.General.enumLegalType.RUT).Select(x => x.R_ICAName).FirstOrDefault()))
+                parameters.Add(new ReportParameter("ICA", oModel.RelatedLegalInfo.Where(x => x.RelatedLegalInfo.ItemType.ItemId == (int)MarketPlace.Models.General.enumLegalType.RUT).Select(x => x.R_ICAName).FirstOrDefault()));
+            else
+                parameters.Add(new ReportParameter("ICA", "NA"));
             #endregion Basic Info
 
             #region Finacial Info
@@ -3731,6 +3737,7 @@ namespace MarketPlace.Web.Controllers
             DataTable data4 = new DataTable();
             data4.Columns.Add("ItemModuleName");
             data4.Columns.Add("ItemScore");
+            data4.Columns.Add("ModuleScore");
 
             DataRow row4;
 
@@ -3742,50 +3749,34 @@ namespace MarketPlace.Web.Controllers
                     if (CalificationProjectBatch.CalificationProjectItemBatchModel.Any(y => y.CalificationProjectConfigItem.CalificationProjectConfigItemId == CalificationProjectConfigItem.CalificationProjectConfigItemId))
                     {
                         var CalificaitonProjectItemBatch = CalificationProjectBatch.CalificationProjectItemBatchModel.Where(y => y.CalificationProjectConfigItem.CalificationProjectConfigItemId == CalificationProjectConfigItem.CalificationProjectConfigItemId).Select(x => x).FirstOrDefault();
-
+                        var Score=0;
                         row4 = data4.NewRow();
                         row4["ItemModuleName"] = CalificationProjectConfigItem.CalificationProjectConfigItemName != "" ? CalificationProjectConfigItem.CalificationProjectConfigItemName : CalificationProjectConfigItem.CalificationProjectConfigItemType.ItemName;
                         row4["ItemScore"] = CalificaitonProjectItemBatch.ItemScore;
+                        CalificationProjectConfigItem.CalificationProjectConfigItemInfoModel.All(z=> 
+                        {
+                            Score += int.Parse(z.Score);
+                            row4["ModuleScore"] = Score;
+                            return true; 
+                        });
                         data4.Rows.Add(row4);
                     }
                     else
                     {
+                        var Score = 0;
                         row4 = data4.NewRow();
                         row4["ItemModuleName"] = CalificationProjectConfigItem.CalificationProjectConfigItemName != "" ? CalificationProjectConfigItem.CalificationProjectConfigItemName : CalificationProjectConfigItem.CalificationProjectConfigItemType.ItemName;
                         row4["ItemScore"] = "0";
+                        CalificationProjectConfigItem.CalificationProjectConfigItemInfoModel.All(z =>
+                        {
+                            Score += int.Parse(z.Score);
+                            row4["ModuleScore"] = Score;
+                            return true;
+                        });
                         data4.Rows.Add(row4);
                     }
                 }
-            }
-            //    row4 = data4.NewRow();
-
-            //    row4["ItemModuleName"] = CalificationProjectConfigItem.CalificationProjectConfigItemName != "" ? CalificationProjectConfigItem.CalificationProjectConfigItemName : CalificationProjectConfigItem.CalificationProjectConfigItemType.ItemName;
-            //    row4["ItemScore"] = CalificaitonProjectItemBatch.ItemScore;
-
-            //    data4.Rows.Add(row4);
-            //}
-            //else
-            //{
-            //    row4 = data4.NewRow();
-
-            //    row4["ItemModuleName"] = CalificationProjectConfigItem.CalificationProjectConfigItemName != "" ? CalificationProjectConfigItem.CalificationProjectConfigItemName : CalificationProjectConfigItem.CalificationProjectConfigItemType.ItemName;
-            //    row4["ItemScore"] = "0";
-
-            //    data4.Rows.Add(row4);
-            //}
-            //            }
-            //        }
-            //        else
-            //        {
-            //            row4 = data4.NewRow();
-
-            //            row4["ItemModuleName"] = CalificationProjectConfigItem.CalificationProjectConfigItemName != "" ? CalificationProjectConfigItem.CalificationProjectConfigItemName : CalificationProjectConfigItem.CalificationProjectConfigItemType.ItemName;
-            //            row4["ItemScore"] = "0";
-
-            //            data4.Rows.Add(row4);
-            //        }
-            //    }
-            //}
+            }            
 
             parameters.Add(new ReportParameter("CalificationProjectName", oModel.ProviderCalification.ProRelatedCalificationProject != null && oModel.ProviderCalification.ProRelatedCalificationProject.Count > 0 ? oModel.ProviderCalification.ProRelatedCalificationProject.FirstOrDefault().ProjectConfigModel.CalificationProjectConfigName : " "));
             parameters.Add(new ReportParameter("CalificationProjectTotalScore", oModel.ProviderCalification.ProRelatedCalificationProject != null && oModel.ProviderCalification.ProRelatedCalificationProject.Count > 0 ? oModel.ProviderCalification.ProRelatedCalificationProject.FirstOrDefault().TotalScore.ToString() : " "));

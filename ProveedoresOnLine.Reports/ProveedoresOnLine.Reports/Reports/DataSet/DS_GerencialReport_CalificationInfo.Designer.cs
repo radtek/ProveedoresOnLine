@@ -283,6 +283,8 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
             
             private global::System.Data.DataColumn columnItemScore;
             
+            private global::System.Data.DataColumn columnModuleScore;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public DT_CalificatonInfoDataTable() {
@@ -334,6 +336,14 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ModuleScoreColumn {
+                get {
+                    return this.columnModuleScore;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -369,11 +379,12 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public DT_CalificatonInfoRow AddDT_CalificatonInfoRow(string ItemModuleName, string ItemScore) {
+            public DT_CalificatonInfoRow AddDT_CalificatonInfoRow(string ItemModuleName, string ItemScore, string ModuleScore) {
                 DT_CalificatonInfoRow rowDT_CalificatonInfoRow = ((DT_CalificatonInfoRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         ItemModuleName,
-                        ItemScore};
+                        ItemScore,
+                        ModuleScore};
                 rowDT_CalificatonInfoRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowDT_CalificatonInfoRow);
                 return rowDT_CalificatonInfoRow;
@@ -398,6 +409,7 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
             internal void InitVars() {
                 this.columnItemModuleName = base.Columns["ItemModuleName"];
                 this.columnItemScore = base.Columns["ItemScore"];
+                this.columnModuleScore = base.Columns["ModuleScore"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -407,6 +419,8 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
                 base.Columns.Add(this.columnItemModuleName);
                 this.columnItemScore = new global::System.Data.DataColumn("ItemScore", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnItemScore);
+                this.columnModuleScore = new global::System.Data.DataColumn("ModuleScore", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnModuleScore);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -581,6 +595,22 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string ModuleScore {
+                get {
+                    try {
+                        return ((string)(this[this.tableDT_CalificatonInfo.ModuleScoreColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ModuleScore\' in table \'DT_CalificatonInfo\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDT_CalificatonInfo.ModuleScoreColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsItemModuleNameNull() {
                 return this.IsNull(this.tableDT_CalificatonInfo.ItemModuleNameColumn);
             }
@@ -601,6 +631,18 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetItemScoreNull() {
                 this[this.tableDT_CalificatonInfo.ItemScoreColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsModuleScoreNull() {
+                return this.IsNull(this.tableDT_CalificatonInfo.ModuleScoreColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetModuleScoreNull() {
+                this[this.tableDT_CalificatonInfo.ModuleScoreColumn] = global::System.Convert.DBNull;
             }
         }
         
