@@ -56,13 +56,13 @@
                                 <span>@Model.RelatedGeneralInfo.Where(x => x.PC_RepresentantType == "Legal").Select(x => x.PC_ContactName).DefaultIfEmpty(string.Empty).FirstOrDefault()</span>
                             </div>
                         }
-                        @if (Model.RelatedLegalInfo.Count > 0 && !string.IsNullOrEmpty(Model.RelatedLegalInfo.FirstOrDefault().CP_InscriptionNumber) && !string.IsNullOrWhiteSpace(Model.RelatedLegalInfo.FirstOrDefault().CP_InscriptionNumber))
+                        @if (Model.RelatedLegalInfo.Count > 0 && !string.IsNullOrEmpty(Model.RelatedLegalInfo.Where(x => x.RelatedLegalInfo.ItemType.ItemId == (int)MarketPlace.Models.General.enumLegalType.ChaimberOfCommerce).Select(x => x.CP_InscriptionNumber).FirstOrDefault()) && !string.IsNullOrWhiteSpace(Model.RelatedLegalInfo.Where(x => x.RelatedLegalInfo.ItemType.ItemId == (int)MarketPlace.Models.General.enumLegalType.ChaimberOfCommerce).Select(x => x.CP_InscriptionNumber).FirstOrDefault()))
                         {
                             <div class="col-sm-4 POMPBorderbottom POMPProviderBoxInfo">
                                 <br />
                                 <label class="POMPProviderBoxInfo">Registro Mercantil</label>
                                 <br />
-                                <span>@Model.RelatedLegalInfo.FirstOrDefault().CP_InscriptionNumber</span>
+                                <span>@Model.RelatedLegalInfo.Where(x => x.RelatedLegalInfo.ItemType.ItemId == (int)MarketPlace.Models.General.enumLegalType.ChaimberOfCommerce).Select(x => x.CP_InscriptionNumber).FirstOrDefault()</span>
                             </div>
                         }
                         @if (!string.IsNullOrWhiteSpace(Model.RelatedGeneralInfo.Where(x => x.BR_IsPrincipal == true).Select(x => x.BR_Address).FirstOrDefault()))
@@ -141,13 +141,13 @@
                                 <span>@Model.RelatedGeneralInfo.Where(x => x.BR_IsPrincipal == true).Select(x => x.BR_Website).FirstOrDefault()</span>
                             </div>
                         }
-                        @if (Model.RelatedLegalInfo.Count > 0 && !string.IsNullOrWhiteSpace(Model.RelatedLegalInfo.FirstOrDefault().CP_SocialObject))
+                        @if (Model.RelatedLegalInfo.Count > 0 && !string.IsNullOrWhiteSpace(Model.RelatedLegalInfo.Where(x=>x.RelatedLegalInfo.ItemType.ItemId ==(int)MarketPlace.Models.General.enumLegalType.ChaimberOfCommerce).Select(x=>x.CP_SocialObject).FirstOrDefault()))
                         {
                             <div class="col-xs-12 POMPBorderbottom POMPProviderBoxInfo">
                                 <br />
                                 <label class="POMPProviderBoxInfo">Objeto Social</label>
                                 <br />
-                                <span>@Model.RelatedLegalInfo.FirstOrDefault().CP_SocialObject</span>
+                                <span>@Model.RelatedLegalInfo.Where(x => x.RelatedLegalInfo.ItemType.ItemId == (int)MarketPlace.Models.General.enumLegalType.ChaimberOfCommerce).Select(x => x.CP_SocialObject).FirstOrDefault()</span>
                             </div>
                         }
                     </div>

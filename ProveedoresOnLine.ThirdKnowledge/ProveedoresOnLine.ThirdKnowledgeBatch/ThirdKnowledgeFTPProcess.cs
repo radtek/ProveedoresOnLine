@@ -385,11 +385,11 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                                 oInfoCreate.Peps = "N/A";
 
                             #region Group by Priority
-                            if (!string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(IdentificationNumber) && x.TypeId == IdentificationNumber && x.CompleteName == Name)
+                            if (!string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(IdentificationNumber) && x.TypeId == IdentificationNumber.Trim() && x.CompleteName == Name.Trim())
                                 oInfoCreate.Priority = "1";
-                            else if (!string.IsNullOrEmpty(IdentificationNumber) && x.TypeId == IdentificationNumber && x.CompleteName != Name)
+                            else if (!string.IsNullOrEmpty(IdentificationNumber) && x.TypeId == IdentificationNumber.Trim() && x.CompleteName != Name.Trim())
                                 oInfoCreate.Priority = "2";
-                            else if (!string.IsNullOrEmpty(Name) && x.TypeId != IdentificationNumber && x.CompleteName == Name)
+                            else if (!string.IsNullOrEmpty(Name) && x.TypeId != IdentificationNumber.Trim() && x.CompleteName == Name.Trim())
                                 oInfoCreate.Priority = "3";
                             else
                                 oInfoCreate.Priority = "3";
