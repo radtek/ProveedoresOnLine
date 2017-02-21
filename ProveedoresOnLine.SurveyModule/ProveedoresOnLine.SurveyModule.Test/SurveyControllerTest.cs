@@ -39,7 +39,7 @@ namespace ProveedoresOnLine.SurveyModule.Test
         [TestMethod]
         public void GetSurveyByUser()
         {
-            Models.SurveyModel oReturn = Controller.SurveyModule.SurveyGetByUser("13B48042", "spenuela@alpina.com.co");
+            Models.SurveyModel oReturn = Controller.SurveyModule.SurveyGetByUser("225E339C", "derly.franco@publicar.com");
             List<GenericItemModel> Areas = new List<GenericItemModel>();
             List<GenericItemModel> Questions = new List<GenericItemModel>();
             List<GenericItemModel> Answers = new List<GenericItemModel>();
