@@ -2068,5 +2068,16 @@ namespace ProveedoresOnLine.CompanyProvider.Test
         }
 
         #endregion
+
+        #region Integration Platform
+
+        [TestMethod]
+        public void GetAllProvidersByCustomerPublicIdByStartDate()
+        {
+            DateTime date = new DateTime(2000, 01, 01);
+            var oReturn = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.GetAllProvidersByCustomerPublicIdByStartDate("7BC27832", date);
+        }
+
+        #endregion
     }
 }
