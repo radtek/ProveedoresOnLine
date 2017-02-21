@@ -49,7 +49,7 @@
                                     <label>Capacidad Organizacional S.M.M.L.V</label>
                                 </div>
                                 <div class="col-xs-12">
-                                    <label>Capacidad Legal de Contratación U.S.D</label>
+                                    <label>Capacidad Máxima de Contratación en S.M.M.L.V</label>
                                 </div>
                             </div>
                             foreach (var item in Model.RelatedFinancialInfo)
@@ -74,6 +74,7 @@
                                     @{string FK_TotalOrgCapacityScore = Convert.ToDecimal(item.FK_TotalOrgCapacityScore).ToString("#,0.##", System.Globalization.CultureInfo.CreateSpecificCulture("ES-co"));}
 
                                     <div class="col-xs-12">
+                                        <span></span>
                                         <span>@FK_TotalOrgCapacityScore</span>
                                     </div>
 

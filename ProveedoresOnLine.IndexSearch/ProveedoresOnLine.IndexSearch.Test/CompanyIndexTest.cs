@@ -22,5 +22,12 @@ namespace ProveedoresOnLine.IndexSearch.Test
         {
             ProveedoresOnLine.CompanyIndexSearch.CompanyIndexSearchProcess.CompanyCustomerIndexationFunction();
         }
+
+        [TestMethod]
+        public void CustomerProviderIdexationFunction()
+        {
+            ProveedoresOnLine.CompanyIndexSearch.CompanyIndexSearchProcess.CustomerProviderIdexationFunction();
+        }
+
     }
 }
