@@ -16,5 +16,10 @@ namespace ProveedoresOnLine.CompanyIndexSearch
         {
             ProveedoresOnLine.IndexSearch.Controller.IndexSearch.CompanyCustomerIndexationFunction();
         }
+        public static void CustomerProviderIdexationFunction()
+        {
+            ProveedoresOnLine.IndexSearch.Controller.IndexSearch.CustomerProviderIdexationFunction();
+        }
+
     }
 }
