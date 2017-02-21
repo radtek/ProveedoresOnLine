@@ -361,3 +361,9 @@ label.POMPProviderInfoContractName {
         min-height: 40px;
         padding: 9px 0px 0px 16px;
     }
+/*****K_Recruitment*****/
+
+.POMPProviderKDetailContainer > div{
+    margin-top:4px; 
+
+}
