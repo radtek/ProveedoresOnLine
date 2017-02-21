@@ -19,7 +19,7 @@ namespace IntegrationPlatform.SANOFIProcess.Test
         {
             List<SanofiGeneralInfoModel> oReturn = new List<SanofiGeneralInfoModel>();
             DateTime startdate = new DateTime(2000,01,01,00,00,00);
-            oReturn = IntegrationPlattaform.SANOFIProcess.Controller.IntegrationPlatformSANOFIIProcess.GetInfoByProvider("219DE278", startdate);
+            oReturn = IntegrationPlattaform.SANOFIProcess.Controller.IntegrationPlatformSANOFIIProcess.GetInfoByProvider("1AD3D1FA", startdate);
 
             Assert.AreEqual(true, oReturn.Count > 0);
         }

@@ -64,25 +64,25 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
                             Comentaries = sgi.Field<DateTime>("Comentaries"),
                         }
                             into sgig
-                            select new SanofiGeneralInfoModel()
-                            {
-                                CompanyId = sgig.Key.CompanyId,
-                                CompanyName = sgig.Key.CompanyName,
-                                ComercialName = sgig.Key.ComercialName,
-                                NaturalPersonName = sgig.Key.NaturalPersonName,
-                                IdentificationNumber = sgig.Key.IdentificationNumber,
-                                FiscalNumber = sgig.Key.FiscalNumber,
-                                Address = sgig.Key.Address,
-                                City = sgig.Key.City,
-                                Region = sgig.Key.Region,
-                                Country = sgig.Key.Country,
-                                PhoneNumber = sgig.Key.PhoneNumber,
-                                Fax = sgig.Key.Fax,
-                                Email_OC = sgig.Key.Email_OC,
-                                Email_P = sgig.Key.Email_P,
-                                Email_Cert = sgig.Key.Email_Cert,
-                                LastModified = sgig.Key.Comentaries,
-                            }).ToList();
+                        select new SanofiGeneralInfoModel()
+                        {
+                            CompanyId = sgig.Key.CompanyId,
+                            CompanyName = sgig.Key.CompanyName,
+                            ComercialName = sgig.Key.ComercialName,
+                            NaturalPersonName = sgig.Key.NaturalPersonName,
+                            IdentificationNumber = sgig.Key.IdentificationNumber,
+                            FiscalNumber = sgig.Key.FiscalNumber,
+                            Address = sgig.Key.Address,
+                            City = sgig.Key.City,
+                            Region = sgig.Key.Region,
+                            Country = sgig.Key.Country,
+                            PhoneNumber = sgig.Key.PhoneNumber,
+                            Fax = sgig.Key.Fax,
+                            Email_OC = sgig.Key.Email_OC,
+                            Email_P = sgig.Key.Email_P,
+                            Email_Cert = sgig.Key.Email_Cert,
+                            LastModified = sgig.Key.Comentaries,
+                        }).ToList();
             }
             return oReturn;
         }

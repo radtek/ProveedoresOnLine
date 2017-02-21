@@ -142,7 +142,7 @@ namespace ProveedoresOnLine.Reports.Test
         [TestMethod]
         public void ProviderGeneralReport()
         {
-            var oReturn = ProveedoresOnLine.Reports.Controller.ReportModule.R_ProviderGeneralReport("DA5C572E", "1FAF80D7");
+            var oReturn = ProveedoresOnLine.Reports.Controller.ReportModule.R_ProviderGeneralReport("1B40C887", "1FAC7D9E");
 
             Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
         }

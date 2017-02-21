@@ -31,11 +31,11 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                         IntegrationPlattaform.SANOFIProcess.Models.InternalSettings.Instance[
                         IntegrationPlattaform.SANOFIProcess.Models.Constants.C_SANOFI_ProviderPublicId].Value
                     );
-
+                //DateTime date = new DateTime(2000, 01, 01);
                 //List<CompanyModel> oProviders = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.GetAllProvidersByCustomerPublicIdByStartDate
                 //(
                 //     IntegrationPlattaform.SANOFIProcess.Models.InternalSettings.Instance[
-                //     IntegrationPlattaform.SANOFIProcess.Models.Constants.C_SANOFI_ProviderPublicId].Value, LastProcess != null && LastProcess.CompanyPublicId != null ? LastProcess.LastModify : DateTime.Now.AddYears(-50)
+                //     IntegrationPlattaform.SANOFIProcess.Models.Constants.C_SANOFI_ProviderPublicId].Value, date/*LastProcess != null && LastProcess.CompanyPublicId != null ? LastProcess.LastModify : DateTime.Now.AddYears(-50)*/
                 //);
 
                 #region Variables
@@ -148,10 +148,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                             else
                             {
                                 oNoExist.Add(p.CompanyPublicId);
-                            }
-
-                            //oExist = ids.Where(l => p.CompanyPublicId == l).ToList();
-                            //oNoExist = ids.Where(l => p.CompanyPublicId != l).Select(y => y).ToList();
+                            }                            
                             return true;
                         });
                         
@@ -171,7 +168,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                                 //if not exists validate all modules information, like set up process
                                 if (oGeneralRow != null && oComercialGeneralRow != null && oComercialBasicRow != null && oContableRow != null)
                                 {
-                                    oGeneralRow.Comentaries = "Creación Proveedor" + Convert.ToString(oGeneralRow.LastModified);
+                                    oGeneralRow.Comentaries = "Creación Proveedor: " + Convert.ToString(oGeneralRow.LastModified);
                                     oGeneralInfo.Add(oGeneralRow);
                                     oComercialInfo.Add(oComercialGeneralRow);
                                     oComercialBasicInfo.Add(oComercialBasicRow);
@@ -338,7 +335,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
 
                     #region Write Process
                     Header.AppendLine(
-                          (string.IsNullOrEmpty(NaturalName))? x.CompanyName : NaturalLastName + ", " + NaturalName + strSep +
+                          (!string.IsNullOrEmpty(NaturalName))? NaturalLastName + ", " + NaturalName : x.CompanyName  + strSep +
                           "" + strSep +
                           NaturalName + strSep +
                           NaturalLastName + strSep +

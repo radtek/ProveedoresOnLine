@@ -8,7 +8,7 @@
             <Top>0.86cm</Top>
             <Left>0.00904cm</Left>
             <Height>0cm</Height>
-            <Width>16.6cm</Width>
+            <Width>16.854cm</Width>
             <Style>
               <Border>
                 <Color>#f87b00</Color>
@@ -54,7 +54,7 @@
         <Top>1.40545cm</Top>
         <Left>0.05337cm</Left>
         <Height>0.86458cm</Height>
-        <Width>16.60904cm</Width>
+        <Width>16.86304cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -508,7 +508,7 @@
         <Top>31.32312cm</Top>
         <Left>0.74083cm</Left>
         <Height>0.72968cm</Height>
-        <Width>3.21546cm</Width>
+        <Width>4.79252cm</Width>
         <ZIndex>14</ZIndex>
         <Style>
           <Border>
@@ -627,7 +627,7 @@
             <Top>0.86cm</Top>
             <Left>0.00904cm</Left>
             <Height>0cm</Height>
-            <Width>16.6cm</Width>
+            <Width>16.88904cm</Width>
             <Style>
               <Border>
                 <Color>#f87b00</Color>
@@ -673,7 +673,7 @@
         <Top>29.51034cm</Top>
         <Left>0.01833cm</Left>
         <Height>0.89528cm</Height>
-        <Width>16.60904cm</Width>
+        <Width>16.89808cm</Width>
         <ZIndex>18</ZIndex>
         <Style>
           <Border>
@@ -723,7 +723,7 @@
           <Line Name="Line8">
             <Top>0.86cm</Top>
             <Height>0cm</Height>
-            <Width>16.6cm</Width>
+            <Width>16.88904cm</Width>
             <Style>
               <Border>
                 <Color>#f87b00</Color>
@@ -772,7 +772,7 @@
         <Top>24.44991cm</Top>
         <Left>0.02737cm</Left>
         <Height>0.86458cm</Height>
-        <Width>16.6cm</Width>
+        <Width>16.88904cm</Width>
         <ZIndex>20</ZIndex>
         <Visibility>
           <Hidden>= Iif (CountRows("DS_GerencialReport_CalificationInfo") &gt; 0, false, true)</Hidden>
@@ -1384,7 +1384,7 @@
             <Top>0.86cm</Top>
             <Left>0.02606cm</Left>
             <Height>0cm</Height>
-            <Width>16.6cm</Width>
+            <Width>16.84602cm</Width>
             <Style>
               <Border>
                 <Color>#f87b00</Color>
@@ -1430,7 +1430,7 @@
         <Top>5.44004cm</Top>
         <Left>0.04433cm</Left>
         <Height>0.86458cm</Height>
-        <Width>16.62606cm</Width>
+        <Width>16.87208cm</Width>
         <ZIndex>31</ZIndex>
         <Style>
           <Border>
@@ -1877,7 +1877,7 @@
             <Top>0.86cm</Top>
             <Left>0.06093cm</Left>
             <Height>0cm</Height>
-            <Width>16.6cm</Width>
+            <Width>16.80211cm</Width>
             <Style>
               <Border>
                 <Color>#f87b00</Color>
@@ -1923,7 +1923,7 @@
         <Top>7.8574cm</Top>
         <Left>0.05337cm</Left>
         <Height>0.86458cm</Height>
-        <Width>16.66093cm</Width>
+        <Width>16.86304cm</Width>
         <ZIndex>36</ZIndex>
         <Style>
           <Border>
@@ -2004,7 +2004,7 @@
             <Top>0.86cm</Top>
             <Left>0.0534cm</Left>
             <Height>0cm</Height>
-            <Width>16.6cm</Width>
+            <Width>16.83701cm</Width>
             <Style>
               <Border>
                 <Color>#f87b00</Color>
@@ -2050,7 +2050,7 @@
         <Top>12.05685cm</Top>
         <Left>0.026cm</Left>
         <Height>0.86458cm</Height>
-        <Width>16.6534cm</Width>
+        <Width>16.89041cm</Width>
         <ZIndex>39</ZIndex>
         <Style>
           <Border>
@@ -3114,7 +3114,7 @@
             <Top>0.86cm</Top>
             <Left>0.00904cm</Left>
             <Height>0cm</Height>
-            <Width>16.6cm</Width>
+            <Width>16.88cm</Width>
             <Style>
               <Border>
                 <Color>#f87b00</Color>
@@ -3197,7 +3197,7 @@
         <Top>15.72218cm</Top>
         <Left>0.02737cm</Left>
         <Height>0.86458cm</Height>
-        <Width>16.60904cm</Width>
+        <Width>16.88904cm</Width>
         <ZIndex>59</ZIndex>
         <Style>
           <Border>
@@ -3816,7 +3816,7 @@
             <Top>0.86cm</Top>
             <Left>0.00901cm</Left>
             <Height>0cm</Height>
-            <Width>16.6cm</Width>
+            <Width>16.88cm</Width>
             <Style>
               <Border>
                 <Color>#f87b00</Color>
@@ -3862,7 +3862,7 @@
         <Top>21.76903cm</Top>
         <Left>0.0274cm</Left>
         <Height>0.86458cm</Height>
-        <Width>16.60901cm</Width>
+        <Width>16.88901cm</Width>
         <ZIndex>66</ZIndex>
         <Visibility>
           <Hidden>= Iif (CountRows("DS_GerencialReport") &gt; 0, false, true)</Hidden>
@@ -4006,11 +4006,24 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
+      <Line Name="Line9">
+        <Top>32.41558cm</Top>
+        <Left>0.01369cm</Left>
+        <Height>0cm</Height>
+        <Width>16.88904cm</Width>
+        <ZIndex>71</ZIndex>
+        <Style>
+          <Border>
+            <Color>#f87b00</Color>
+            <Style>Solid</Style>
+          </Border>
+        </Style>
+      </Line>
     </ReportItems>
     <Height>13.52408in</Height>
     <Style />
   </Body>
-  <Width>6.58043in</Width>
+  <Width>6.66001in</Width>
   <Page>
     <PageHeader>
       <Height>1.5cm</Height>

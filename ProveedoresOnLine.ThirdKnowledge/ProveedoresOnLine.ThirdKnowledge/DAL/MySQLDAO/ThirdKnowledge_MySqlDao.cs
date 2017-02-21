@@ -857,7 +857,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
                       }).ToList();
             }
             return oReturn;
-        }
+        }       
 
         #endregion BatchProcess
     }
