@@ -455,7 +455,29 @@ namespace MarketPlace.Models.Survey
 
         public SurveyViewModel(ProveedoresOnLine.SurveyModule.Models.SurveyModel oRelatedSurvey)
         {
-            RelatedSurvey = oRelatedSurvey;
+            if (oRelatedSurvey !=null)
+            {
+                RelatedSurvey = new ProveedoresOnLine.SurveyModule.Models.SurveyModel()
+                {
+                    ChildSurvey = oRelatedSurvey.ChildSurvey,
+                    CreateDate = oRelatedSurvey.CreateDate,
+                    Enable = oRelatedSurvey.Enable,
+                    LastModify = oRelatedSurvey.LastModify,
+                    ParentSurveyPublicId = oRelatedSurvey.ParentSurveyPublicId,
+                    RelatedProvider = oRelatedSurvey.RelatedProvider,
+                    RelatedSurveyConfig = oRelatedSurvey.RelatedSurveyConfig,
+                    RelatedSurveyItem = oRelatedSurvey.RelatedSurveyItem,
+                    SurveyId = oRelatedSurvey.SurveyId,
+                    SurveyInfo = oRelatedSurvey.SurveyInfo,
+                    SurveyPublicId = oRelatedSurvey.SurveyPublicId,
+                    User = oRelatedSurvey.User
+                }; 
+            }
+            
+        }
+        public SurveyViewModel()
+        {
+
         }
 
         #region public methods

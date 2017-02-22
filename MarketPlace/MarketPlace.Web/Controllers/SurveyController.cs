@@ -31,14 +31,14 @@ namespace MarketPlace.Web.Controllers
 
             //get survey info
             if (oModel.RelatedSurvey.RelatedSurvey.ParentSurveyPublicId == null)
-            {
+            {            
                 oModel.RelatedSurvey = new SurveyViewModel(
                     ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetByUser
                     (SurveyPublicId, SessionModel.CurrentCompany.RelatedUser.FirstOrDefault().User));
             }
-
-
+            
             List<GenericItemInfoModel> oAssignedAreas = oModel.RelatedSurvey.RelatedSurvey.SurveyInfo.Where(inf => inf.ItemInfoType.ItemId == (int)enumSurveyInfoType.CurrentArea).Select(inf => inf).ToList();
+            oAssignedAreas = oAssignedAreas.GroupBy(x => x.ItemInfoId).Select(grp => grp.First()).ToList();
 
             //Get Only Rol Area's
             List<GenericItemModel> Areas = new List<GenericItemModel>();
