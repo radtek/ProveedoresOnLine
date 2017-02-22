@@ -135,6 +135,7 @@
     <Compile Include="ThirdKnowledgeBatchTest.cs" />
     <Compile Include="ThirdKnowledgeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ThisdKnowledgeOnLineSearchTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Rsx-SettingsConfig.xml" />
@@ -143,6 +144,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ProveedoresOnLine.OnlineSearch\ProveedoresOnLine.OnlineSearch.csproj">
+      <Project>{d5f0c337-b18a-4ae9-8275-298701210770}</Project>
+      <Name>ProveedoresOnLine.OnlineSearch</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ProveedoresOnLine.ThirdKnowledgeBatch\ProveedoresOnLine.ThirdKnowledgeBatch.csproj">
       <Project>{ce1c2ab5-f2a8-4a2f-9686-f5c7e25bf5ca}</Project>
       <Name>ProveedoresOnLine.ThirdKnowledgeBatch</Name>
