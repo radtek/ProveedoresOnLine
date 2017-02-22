@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProveedoresOnLine.ThirdKnow
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProveedoresOnLine.ThirdKnowledgeBatch", "ProveedoresOnLine.ThirdKnowledgeBatch\ProveedoresOnLine.ThirdKnowledgeBatch.csproj", "{CE1C2AB5-F2A8-4A2F-9686-F5C7E25BF5CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProveedoresOnLine.OnlineSearch", "ProveedoresOnLine.OnlineSearch\ProveedoresOnLine.OnlineSearch.csproj", "{D5F0C337-B18A-4AE9-8275-298701210770}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{CE1C2AB5-F2A8-4A2F-9686-F5C7E25BF5CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE1C2AB5-F2A8-4A2F-9686-F5C7E25BF5CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE1C2AB5-F2A8-4A2F-9686-F5C7E25BF5CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5F0C337-B18A-4AE9-8275-298701210770}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5F0C337-B18A-4AE9-8275-298701210770}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5F0C337-B18A-4AE9-8275-298701210770}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5F0C337-B18A-4AE9-8275-298701210770}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
