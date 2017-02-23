@@ -17,7 +17,7 @@
             Model.Item1.RelatedProject.RelatedProjectProvider != null &&
             Model.Item1.RelatedProject.RelatedProjectProvider.
                 Any(x => x.RelatedProvider.RelatedLiteProvider.RelatedProvider.RelatedCompany != null &&
-                    x.RelatedProvider.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyPublicId == Model.Item2.RelatedProvider.RelatedCompany.CompanyPublicId);
+                    x.RelatedProvider.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyPublicId == Model.Item2.ElasticRealtedProvider.CompanyPublicId);
     }
     else
     {
@@ -29,8 +29,8 @@
             Model.Item1.RelatedCompare != null &&
             Model.Item1.RelatedCompare.RelatedProvider != null &&
             Model.Item1.RelatedCompare.RelatedProvider.
-                Any(x => x.RelatedProvider.RelatedCompany != null &&
-                    x.RelatedProvider.RelatedCompany.CompanyPublicId == Model.Item2.RelatedProvider.RelatedCompany.CompanyPublicId);
+                Any(x => x.RelatedProvider.RelatedCompany.CompanyPublicId != null &&
+                    x.RelatedProvider.RelatedCompany.CompanyPublicId == Model.Item2.ElasticRealtedProvider.CompanyPublicId);
     }
 
     /*Get session modules by user*/
