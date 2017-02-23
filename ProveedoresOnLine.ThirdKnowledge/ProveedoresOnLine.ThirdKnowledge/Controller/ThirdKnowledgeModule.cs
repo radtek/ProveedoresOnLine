@@ -1,4 +1,5 @@
-﻿using Nest;
+﻿using Autofac;
+using Nest;
 using ProveedoresOnLine.ThirdKnowledge.DAL.Controller;
 using ProveedoresOnLine.ThirdKnowledge.Models;
 using System;
@@ -713,5 +714,15 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         }
 
         #endregion
+
+        public static void OnLnieSearch()
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterType<ProveedoresOnLine.OnlineSearch.Core.ProveedoresOnLineProcImplement>().As<ProveedoresOnLine.OnlineSearch.Interfaces.IOnLineSearch>();
+            //builder.RegisterType<EmailService>().As<IMailService>();
+            var container = builder.Build();
+
+            container.Resolve<ProveedoresOnLine.OnlineSearch.Interfaces.IOnLineSearch>().Search(0,"","");                        
+        }
     }
 }
