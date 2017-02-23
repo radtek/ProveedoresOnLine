@@ -44,7 +44,7 @@ var Compare_SearchObject = {
 
         //init search orient controls
         $('input[name="Search_rbOrder"]').change(function () {
-            if ($(this) != null && $(this).attr('searchordertype') != null && $(this).attr('orderorientation') != null) {
+            if ($(this) != null && $(this).attr('searchordertype') != null ) {
                 Compare_SearchObject.Search2({
                     SearchOrderType: $(this).attr('searchordertype'),
                     OrderOrientation: $(this).attr('orderorientation')
@@ -197,7 +197,9 @@ var Compare_DetailObject = {
 
     GetHeaderTemplate: function (vColumName) {
         var oItemHtml = '';
+        debugger;
         if (vColumName == 'EvaluationArea') {
+
             oItemHtml = 'ÁREA DE EVALUACIÓN';
         }
         else {
@@ -228,6 +230,7 @@ var Compare_DetailObject = {
                 oItemHtml = oItemHtml.replace(/{ProviderAlertRisk}/gi, '');
             }
         }
+        debugger;
         return oItemHtml;
     },
 
