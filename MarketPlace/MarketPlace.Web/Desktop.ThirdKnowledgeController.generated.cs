@@ -135,6 +135,7 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
         {
             public readonly string Name = "Name";
             public readonly string IdentificationNumber = "IdentificationNumber";
+            public readonly string ThirdKnowledgeIdType = "ThirdKnowledgeIdType";
         }
         static readonly ActionParamsClass_TKDetailSingleSearch s_params_TKDetailSingleSearch = new ActionParamsClass_TKDetailSingleSearch();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -221,15 +222,16 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
         }
 
         [NonAction]
-        partial void TKSingleSearchOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string Name, string IdentificationNumber);
+        partial void TKSingleSearchOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string Name, string IdentificationNumber, string ThirdKnowledgeIdType);
 
         [NonAction]
-        public override System.Web.Mvc.ActionResult TKSingleSearch(string Name, string IdentificationNumber)
+        public override System.Web.Mvc.ActionResult TKSingleSearch(string Name, string IdentificationNumber, string ThirdKnowledgeIdType)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.TKSingleSearch);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "Name", Name);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "IdentificationNumber", IdentificationNumber);
-            TKSingleSearchOverride(callInfo, Name, IdentificationNumber);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "ThirdKnowledgeIdType", ThirdKnowledgeIdType);
+            TKSingleSearchOverride(callInfo, Name, IdentificationNumber, ThirdKnowledgeIdType);
             return callInfo;
         }
 
