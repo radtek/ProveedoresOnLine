@@ -31,6 +31,16 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-4">
+                    <select name="ThirdKnowledgeIdType" class="form-control ThirdKnowledgeIdType">
+
+                        <option value="">Tipo Identificación</option>
+                        @foreach (var item in Model.ProviderOptions.Where(x => x.CatalogId == 101).Select(x => x))
+                        {
+                            <option value="@item.ItemId">@item.ItemName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-4">
                     @if (!string.IsNullOrEmpty(Model.RelatedThirdKnowledge.SearchNameParam))
                     {
                         <input class="ThirdKnowledgeSeachBox" type="text" name="Name" value="@Model.RelatedThirdKnowledge.SearchNameParam" placeholder="Buscar por Nombre y Apellidos" />
@@ -50,32 +60,37 @@
                         <input class="ThirdKnowledgeSeachBox" type="text" name="IdentificationNumber" value="" placeholder="Buscar por Número de identificación" />
                     }
                 </div>
-                @{
-                    if (Model.RelatedThirdKnowledge.HasPlan)
-                    {
-                        <div class="col-sm-2">
-                            <a class="ThirdKnowledgeButtom" href="javascript:Third_KnowledgeSimpleSearchObject.SimpleSearch();">Consultar</a>
-                        </div>
+            </div>
+
+            @{
+                if (Model.RelatedThirdKnowledge.HasPlan)
+                {
+                    <div class="col-sm-2 pull-right">
+                        <a class="ThirdKnowledgeButtom" href="javascript:Third_KnowledgeSimpleSearchObject.SimpleSearch();">Consultar</a>
+                    </div>
 
 
-                        List<int> oCurrentReport = MarketPlace.Models.General.SessionModel.CurrentReport();
-
-                        <div class="col-sm-2" style="display:none" id="ThirdKnowledge_showreport" name="ThirdKnowledge_showreport">
+                    List<int> oCurrentReport = MarketPlace.Models.General.SessionModel.CurrentReport();
+                    <div class="row">
+                        <div class="col-sm-2 pull-right" style="display:none" id="ThirdKnowledge_showreport" name="ThirdKnowledge_showreport">
                             @if (oCurrentReport.Any(x => x == (int)MarketPlace.Models.General.enumReports.TKReport))
                             {
                                 <a class="ThirdKnowledgeButtomReport" id="ThirdKnowledge_GenerateReport" name="ThirdKnowledge_GenerateReport" title="Generar Reporte"
                                    href="javascript:ThirdKnowledge_ReportViewerObj.RenderReportViewer({Options:['@MarketPlace.Models.General.enumCategoryInfoType.PDF.ToString()','@MarketPlace.Models.General.enumCategoryInfoType.Excel.ToString()'],ObjectId:'ThirdKnowledge',Tittle:'Reporte General'})">Generar Reporte</a>
                             }
                         </div>
-                    }
-                    else
-                    {
-                        <label>Usted no tiene ningún plan habilitado, Por favor comuniquese con nosotros al Tel: 6465555 Ext: 16602</label>
-                    }
+                    </div>
                 }
-            </div>
-            <input type="hidden" name="UpsertRequest" value="true" />
+                else
+                {
+                    <label>Usted no tiene ningún plan habilitado, Por favor comuniquese con nosotros al Tel: 6465555 Ext: 16602</label>
+                }
+            }
+
+
         </div>
+        <input type="hidden" name="UpsertRequest" value="true" />
+
         <div class="">
             <div id="ThirdKnowledge_DivResult" class="POMPProviderInfoMultipleValues"></div>
         </div>
@@ -114,7 +129,7 @@
             ObjectId: 'ThirdKnowledge',
             Url: '@UrlReturn',
             ReSearch: '@Model.RelatedThirdKnowledge.ReSearch',
-            QueryDetailsRoleOption:'@OptionRole',
+            QueryDetailsRoleOption: '@OptionRole',
         });
     });
 </script>
