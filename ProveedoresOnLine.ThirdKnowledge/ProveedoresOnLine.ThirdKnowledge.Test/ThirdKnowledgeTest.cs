@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProveedoresOnLine.ThirdKnowledge.Models;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace ProveedoresOnLine.ThirdKnowledge.Test
 {
@@ -10,10 +11,10 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
     public class ThirdKnowledgeTest
     {
         [TestMethod]
-        public void SimpleRequest()
+        public async Task SimpleRequest()
         {
             TDQueryModel oQuery = new TDQueryModel();
-            ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest("Customer", "70041053", "Alvaro Uribe", oQuery);
+            await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest("",1,"70041053","Alvaro Uribe", oQuery);
         }
 
         [TestMethod]

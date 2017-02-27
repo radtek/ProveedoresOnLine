@@ -103,6 +103,8 @@
     <Compile Include="Models\InternalSettings.cs" />
     <Compile Include="Models\PeriodModel.cs" />
     <Compile Include="Models\PlanModel.cs" />
+    <Compile Include="Models\TreeItemModel.cs" />
+    <Compile Include="Models\TreeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

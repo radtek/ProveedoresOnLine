@@ -8,6 +8,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
@@ -15,10 +16,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 {
     public class ThirdKnowledgeModule
     {
-        public static TDQueryModel SimpleRequest(string PeriodPublicId, string IdentificationNumber, string Name, TDQueryModel oQueryToCreate)
+        public static async Task<TDQueryModel> SimpleRequest(string PeriodPublicId, int IdType, string IdentificationNumber, string Name, TDQueryModel oQueryToCreate)
         {
             try
             {
+               await OnLnieSearch(IdType, IdentificationNumber);
                 if (!string.IsNullOrEmpty(Name))
                 {
                     if (Name.ToLower().Contains("sas"))                    
@@ -715,14 +717,14 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
         #endregion
 
-        public static void OnLnieSearch()
+        public static async Task<List<Tuple<string, List<string>, List<string>>>> OnLnieSearch(int IdType, string IndentificationNumber)
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<ProveedoresOnLine.OnlineSearch.Core.ProveedoresOnLineProcImplement>().As<ProveedoresOnLine.OnlineSearch.Interfaces.IOnLineSearch>();
             //builder.RegisterType<EmailService>().As<IMailService>();
             var container = builder.Build();
 
-            container.Resolve<ProveedoresOnLine.OnlineSearch.Interfaces.IOnLineSearch>().Search(0,"","");                        
+            return await container.Resolve<ProveedoresOnLine.OnlineSearch.Interfaces.IOnLineSearch>().SearchProc(IdType, "", IndentificationNumber);                        
         }
     }
 }

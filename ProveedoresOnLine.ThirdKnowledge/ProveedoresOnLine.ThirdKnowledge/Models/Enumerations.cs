@@ -31,6 +31,11 @@
         public enum enumNotificationType
         {
             ThirdKnowledgeNotification = 1801001,
-        }        
+        }
+
+        public enum enumTreeType
+        {
+            CaptchaProcTree = 102001,
+        }
     }
 }

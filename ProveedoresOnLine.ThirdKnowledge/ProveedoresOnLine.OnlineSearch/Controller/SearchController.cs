@@ -1,4 +1,6 @@
-﻿using ProveedoresOnLine.OnlineSearch.Interfaces;
+﻿using ProveedoresOnLine.OnlineSearch.DAL.Controller;
+using ProveedoresOnLine.OnlineSearch.Interfaces;
+using ProveedoresOnLine.OnlineSearch.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +20,12 @@ namespace ProveedoresOnLine.OnlineSearch.Controller
 
         public void Search(int IdentificationType, string Name, string IdentificationNumber)
         {
-            objSearch.Search(IdentificationType, Name, IdentificationNumber);
+            objSearch.SearchProc(0, "", "");
+        }
+
+        public static TreeModel GetAnswerByTreeidAndQuestion(int TreeType, string Question)
+        {
+            return OnLineSearchDataController.Instance.GetAnswerByTreeidAndQuestion(TreeType, Question);
         }
     }
 }

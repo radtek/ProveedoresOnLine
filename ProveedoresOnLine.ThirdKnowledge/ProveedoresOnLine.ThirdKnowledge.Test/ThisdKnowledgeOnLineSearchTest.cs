@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Autofac;
 
 namespace ProveedoresOnLine.ThirdKnowledge.Test
 {
@@ -7,9 +9,16 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
     public class ThisdKnowledgeOnLineSearchTest
     {
         [TestMethod]
-        public void Search()
+        public async Task Search()
         {
-            ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.OnLnieSearch();
+            await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.OnLnieSearch(1,"");
+            //return "";
+        }
+
+        [TestMethod]
+        public void GetAnswerByTreeidAndQuestion()
+        {
+            ProveedoresOnLine.OnlineSearch.Controller.SearchController.GetAnswerByTreeidAndQuestion(0,"");
         }
     }
 }
