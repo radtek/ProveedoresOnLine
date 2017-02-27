@@ -119,6 +119,5 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.Controller
         }      
 
         #endregion
-
     }
 }

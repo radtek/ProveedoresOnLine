@@ -50,6 +50,6 @@ namespace ProveedoresOnLine.ThirdKnowledge.Interfaces
         #region BatchProcess
 
         List<TDQueryModel> GetQueriesInProgress();
-        #endregion
+        #endregion       
     }
 }

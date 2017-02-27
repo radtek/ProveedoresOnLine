@@ -860,5 +860,66 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
         }       
 
         #endregion BatchProcess
+
+        public TreeModel GetAnswerByTreeidAndQuestion(int TreeType, string Question)
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
+
+            lstParams.Add(DataInstance.CreateTypedParameter("vTreeTypeId", TreeType));
+            lstParams.Add(DataInstance.CreateTypedParameter("vQuestion", Question));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "U_GetAnswerByTreeIdAndQuestion",
+                CommandType = CommandType.StoredProcedure,
+                Parameters = lstParams,
+            });
+
+            TreeModel oReturn = null;
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn = new TreeModel()
+                {
+                    TreeId = response.DataTableResult.Rows[0].Field<int>("TreeId"),
+                    TreeName = response.DataTableResult.Rows[0].Field<string>("TreeName"),
+                    TreeType = new TDCatalogModel()
+                    {
+                        ItemId = response.DataTableResult.Rows[0].Field<int>("TreeTypeId"),
+                        ItemName = response.DataTableResult.Rows[0].Field<string>("TreeTypeName"),
+                    },
+                    LastModify = response.DataTableResult.Rows[0].Field<DateTime>("LastModify"),
+                    CreateDate = response.DataTableResult.Rows[0].Field<DateTime>("CreateDate"),
+                    Enable = response.DataTableResult.Rows[0].Field<UInt64>("Enable") == 1 ? true : false,
+
+                    TreeItem = (from tinf in response.DataTableResult.AsEnumerable()
+                                group tinf by new
+                                {
+                                    ParentItemId = tinf.Field<int>(""),
+                                    ParentItemName = tinf.Field<string>(""),
+                                    ChildItemId = tinf.Field<int>(""),
+                                    ChildItemName = tinf.Field<string>(""),
+                                }
+                                    into gtinf
+                                    select new TreeItemModel()
+                                    {
+                                        ParentItem = new TDCatalogModel()
+                                        {
+                                            ItemId = gtinf.Key.ParentItemId,
+                                            ItemName = gtinf.Key.ParentItemName,
+                                        },
+                                        ChildItem = new TDCatalogModel() 
+                                        {
+                                            ItemId = gtinf.Key.ChildItemId,
+                                            ItemName = gtinf.Key.ChildItemName,
+                                        }
+                                    }
+                                ).ToList()
+                };
+            }
+            return oReturn;
+        }
     }
 }
