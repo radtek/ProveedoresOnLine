@@ -87,7 +87,8 @@
     {
         <div id="CompareDetail_NoResult">
             <label>Esta comparación no arrojo resultados.</label>
-            <span>Si desea agregar mas proveedores a la comparación por favor retorne a la pantalla de búsqueda haciendo
+            <span>
+                Si desea agregar mas proveedores a la comparación por favor retorne a la pantalla de búsqueda haciendo
                 <a href="@(Url.RouteUrl(MarketPlace.Models.General.Constants.C_Routes_Default,
                             new
                             {
@@ -105,15 +106,25 @@
 <div style="display:none;">
 
     <div id="CompareDetail_Company_Header_Template">
-        <div>
-            @Html.Partial(MVC.Desktop.Shared.Views._P_ProviderLite, new MarketPlace.Models.Provider.ProviderLiteViewModel(null))
+
+        <div class="col-md-12">
+            <div class="col-md-2">
+                <a href="@(Url.RouteUrl
+                        (MarketPlace.Models.General.Constants.C_Routes_Default,
+                        new
+                        {
+                            controller = MVC.Provider.Name,
+                            action = MVC.Provider.ActionNames.GIProviderInfo,
+                            ProviderPublicId = "{ProviderPublicId}" }
+                        ))">
+                    <img class="POMPComparisonResultProvLogo" src="{ProviderLogoUrl}" />
+                </a>
+            </div>
+            <div class="col-md-10">
+                 {CompanyName}<br />
+                {IdentificationType}: {IdentificationNumber}
+            </div>               
         </div>
-        <ul>
-            @foreach (string un in Model.UnitNames)
-            {
-                <li>@un</li>
-            }
-        </ul>
     </div>
     <div id="CompareDetail_EvaluationArea_Item_Template">
         <div>
@@ -122,7 +133,7 @@
     </div>
     <div id="CompareDetail_Company_Item_Template">
         <ul>
-            @if (Model.CompareType == MarketPlace.Models.General.enumCompareType.Certifications )
+            @if (Model.CompareType == MarketPlace.Models.General.enumCompareType.Certifications)
             {
                 for (int i = 1; i <= 1; i++)
                 {
@@ -136,7 +147,7 @@
                     <li>${_{ProviderPublicId}.Unit_@(i.ToString()).Before} ${_{ProviderPublicId}.Value_@(i.ToString())} ${_{ProviderPublicId}.Unit_@(i.ToString()).After}</li>
                 }
             }
-         
+
         </ul>
     </div>
 

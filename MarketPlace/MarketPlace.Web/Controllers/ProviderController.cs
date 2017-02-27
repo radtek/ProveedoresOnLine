@@ -19,6 +19,7 @@ using ProveedoresOnLine.Company.Models.Company;
 using MarketPlace.Models.ElasticSearchModels;
 using MarketPlace.Models.Survey;
 
+
 namespace MarketPlace.Web.Controllers
 {
     public partial class ProviderController : BaseController
@@ -6149,6 +6150,24 @@ namespace MarketPlace.Web.Controllers
                 });
             return oObjToReturn.Distinct().ToList();
         }
+
+        //public CompareViewModel GetCompareProcess()
+        //{
+        //    if (!string.IsNullOrEmpty(CompareId))
+        //    {
+        //        //get current compare
+        //        ProveedoresOnLine.CompareModule.Models.CompareModel oCompareResult = ProveedoresOnLine.CompareModule.Controller.CompareModule.
+        //            CompareGetCompanyBasicInfo
+        //            (Convert.ToInt32(CompareId.Replace(" ", "")),
+        //            SessionModel.CurrentLoginUser.Email,
+        //            SessionModel.CurrentCompany.CompanyPublicId);
+
+        //        if (oCompareResult != null && oCompareResult.CompareId > 0)
+        //        {
+        //            oModel.RelatedCompare = new Models.Compare.CompareViewModel(oCompareResult);
+        //        }
+        //    }
+        //}
 
         #endregion Pivate Functions
 

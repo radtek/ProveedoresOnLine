@@ -26,7 +26,7 @@ namespace MarketPlace.Web.Controllers
             return View();
         }
 
-        public virtual ActionResult TKSingleSearch(string Name, string IdentificationNumber)
+        public virtual ActionResult TKSingleSearch(string Name, string IdentificationNumber, string ThirdKnowledgeIdType)
         {
             ProviderViewModel oModel = new ProviderViewModel();
             oModel.RelatedThirdKnowledge = new ThirdKnowledgeViewModel();
@@ -62,6 +62,10 @@ namespace MarketPlace.Web.Controllers
                 {
                     oModel.RelatedThirdKnowledge.HasPlan = false;
                 }
+
+                //Get Provider Options
+                oModel.ProviderOptions = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.CatalogGetProviderOptions();
+
                 return View(oModel);
             }
             catch (Exception ex)
@@ -176,7 +180,7 @@ namespace MarketPlace.Web.Controllers
 
                     #endregion
                 }
-
+                
                 return View(oModel);
             }
             catch (Exception ex)

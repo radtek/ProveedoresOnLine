@@ -26,7 +26,7 @@ namespace MarketPlace.Web.ControllersApi
             ProviderViewModel oModel = new ProviderViewModel();
             oModel.RelatedThirdKnowledge = new ThirdKnowledgeViewModel();
             List<PlanModel> oCurrentPeriodList = new List<PlanModel>();
-
+            
             try
             {
                 //Get The Active Plan By Customer
@@ -65,6 +65,10 @@ namespace MarketPlace.Web.ControllersApi
                             oModel.RelatedThidKnowledgeSearch.CollumnsResult = new TDQueryModel();
 
                             //Get Result
+
+                            //Identification Type
+                            var IdType = System.Web.HttpContext.Current.Request["ThirdKnowledgeIdType"];
+
                             oModel.RelatedThidKnowledgeSearch.CollumnsResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(oCurrentPeriodList.FirstOrDefault().
                                             RelatedPeriodModel.FirstOrDefault().PeriodPublicId,
                                            System.Web.HttpContext.Current.Request["IdentificationNumber"], System.Web.HttpContext.Current.Request["Name"], oQueryToCreate);

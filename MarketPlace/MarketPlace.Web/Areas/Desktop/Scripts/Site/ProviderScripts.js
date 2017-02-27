@@ -156,6 +156,8 @@ var Provider_SearchObject = {
             dataType: 'json',
             success: function (result) {
                 if (result != null) {
+                    var oUrl = this.SearchUrl;
+                    debugger;
                     //set compare id
                     Provider_SearchObject.CompareId = result.CompareId;
 
@@ -214,6 +216,7 @@ var Provider_SearchObject = {
 
                     //init generic tooltip
                     Tooltip_InitGeneric();
+                    window.location = Provider_SearchObject.GetSearchUrl();
                 }
             },
             error: function (result) {
@@ -290,12 +293,14 @@ var Provider_SearchObject = {
                 transport: {
                     read: function (options) {
                         var oSearchParam = $('#' + Provider_SearchObject.ObjectId + '_Compare_Search_ToolTip_Grid').find('input[type=text]').val();
-
+                       
+                        debugger;
                         $.ajax({
                             url: BaseUrl.ApiUrl + '/CompareApi?CMCompareSearch=true&SearchParam=' + oSearchParam + '&PageNumber=' + (new Number(options.data.page) - 1) + '&RowCount=' + options.data.pageSize,
                             dataType: 'json',
                             success: function (result) {
                                 options.success(result);
+                                
                             },
                             error: function (result) {
                                 options.error(result);
@@ -357,6 +362,7 @@ var Provider_SearchObject = {
                 dataType: 'json',
                 success: function (result) {
                     if (result != null) {
+                        debugger;
                         Provider_SearchObject.OpenCompare(Provider_SearchObject.CompareId);
                     }
                 },
