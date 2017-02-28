@@ -78,12 +78,22 @@ namespace ProveedoresOnLine.OnlineSearch.Core
                     HtmlDocResponse.LoadHtml(resultContent);
 
                     oDivResult = HtmlDocResponse.GetElementbyId(ProveedoresOnLine.OnlineSearch.Models.InternalSettings.Instance[ProveedoresOnLine.OnlineSearch.Models.Constants.Proc_divSec].Value).InnerText;
-                                      
-                    
+
+                    string procName = "";
                     if (HtmlDocResponse.DocumentNode.SelectNodes("//table[contains(@class, 'tablas')]") != null)
                     {
                         HtmlDocResponse.DocumentNode.SelectNodes("//table[contains(@class, 'tablas')]").All(tbls =>
                             {
+                                if (HtmlDocResponse.DocumentNode.SelectNodes("//div[contains(@class, 'datosConsultado')]")[0].SelectNodes("span")  != null)
+                                {
+                                    procName = "";   
+                                    HtmlDocResponse.DocumentNode.SelectNodes("//div[contains(@class, 'datosConsultado')]")[0].SelectNodes("span").All(x =>
+                                        {
+                                            procName += x.InnerText + " "; 
+                                            return true;
+                                        });
+                                    
+                                } 
                                 List<string> hRows = new List<string>();
                                 HtmlNodeCollection hCells = tbls.SelectNodes("tr")[0].SelectNodes("th");
                                 hCells.All(x =>
@@ -102,7 +112,7 @@ namespace ProveedoresOnLine.OnlineSearch.Core
                                             dRows.Add(cells[i].InnerHtml);
                                         }
 
-                                        Tuple<string, List<string>, List<string>> oDetail = new Tuple<string, List<string>, List<string>>("Antecedentes", hRows, dRows);
+                                        Tuple<string, List<string>, List<string>> oDetail = new Tuple<string, List<string>, List<string>>(procName, hRows, dRows);
                                         oDetailinfo.Add(oDetail);
                                         return true;
                                     });
@@ -121,7 +131,7 @@ namespace ProveedoresOnLine.OnlineSearch.Core
                                                 dRows.Add(cells[c].InnerHtml);
                                             }
 
-                                            Tuple<string, List<string>, List<string>> oDetail = new Tuple<string, List<string>, List<string>>("Antecedentes", hRows, dRows);
+                                            Tuple<string, List<string>, List<string>> oDetail = new Tuple<string, List<string>, List<string>>(procName, hRows, dRows);
                                             oDetailinfo.Add(oDetail);                                        
                                         }                                        
                                     }                                    

@@ -11,7 +11,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
         [TestMethod]
         public async Task Search()
         {
-            await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.OnLnieSearch(1,"");
+            await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.OnLnieSearch(1, "71984381");
             //return "";
         }
 
