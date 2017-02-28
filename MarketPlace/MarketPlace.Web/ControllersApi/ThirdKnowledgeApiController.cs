@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Script.Serialization;
 
@@ -21,7 +22,7 @@ namespace MarketPlace.Web.ControllersApi
     {
         [HttpPost]
         [HttpGet]
-        public ProviderViewModel TKSingleSearch(string TKSingleSearch)
+        public async Task<ProviderViewModel> TKSingleSearch(string TKSingleSearch)
         {
             ProviderViewModel oModel = new ProviderViewModel();
             oModel.RelatedThirdKnowledge = new ThirdKnowledgeViewModel();
@@ -69,10 +70,12 @@ namespace MarketPlace.Web.ControllersApi
                             //Identification Type
                             var IdType = System.Web.HttpContext.Current.Request["ThirdKnowledgeIdType"];
 
-                            oModel.RelatedThidKnowledgeSearch.CollumnsResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(oCurrentPeriodList.FirstOrDefault().
-                                            RelatedPeriodModel.FirstOrDefault().PeriodPublicId,
-                                           System.Web.HttpContext.Current.Request["IdentificationNumber"], System.Web.HttpContext.Current.Request["Name"], oQueryToCreate);
-                            //Init Finally Tuple, Group by ItemGroup Name
+                            Task<TDQueryModel> qTask = Task.Run(() => ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(oCurrentPeriodList.FirstOrDefault().
+                                            RelatedPeriodModel.FirstOrDefault().PeriodPublicId,1,
+                                           System.Web.HttpContext.Current.Request["IdentificationNumber"], System.Web.HttpContext.Current.Request["Name"], oQueryToCreate));
+
+                            oModel.RelatedThidKnowledgeSearch.CollumnsResult = await qTask;
+
                             List<Tuple<string, List<ThirdKnowledgeViewModel>>> Group = new List<Tuple<string, List<ThirdKnowledgeViewModel>>>();
                             List<string> Item1 = new List<string>();
                             List<string> ItemGroup = new List<string>();
@@ -162,7 +165,7 @@ namespace MarketPlace.Web.ControllersApi
 
         [HttpPost]
         [HttpGet]
-        public ProviderViewModel TKSingleDetail(string QueryPublicId)
+        public async Task<ProviderViewModel> TKSingleDetail(string QueryPublicId)
         {
             ProviderViewModel oModel = new ProviderViewModel();
             oModel.RelatedThirdKnowledge = new ThirdKnowledgeViewModel();
@@ -202,11 +205,16 @@ namespace MarketPlace.Web.ControllersApi
                                     ItemId = (int)enumThirdKnowledgeQueryStatus.Finalized
                                 },
                             };
+
+                            Task<TDQueryModel> qTask = Task.Run(() =>  ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(oCurrentPeriodList.FirstOrDefault().
+                                            RelatedPeriodModel.FirstOrDefault().PeriodPublicId,1,
+                                           System.Web.HttpContext.Current.Request["IdentificationNumber"], System.Web.HttpContext.Current.Request["Name"], oQueryToCreate));
+
+                            oModel.RelatedThidKnowledgeSearch.CollumnsResult = await qTask;
+
                             oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel();
                             oModel.RelatedThidKnowledgeSearch.CollumnsResult = new TDQueryModel();
-                            oModel.RelatedThidKnowledgeSearch.CollumnsResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(oCurrentPeriodList.FirstOrDefault().
-                                            RelatedPeriodModel.FirstOrDefault().PeriodPublicId,
-                                           System.Web.HttpContext.Current.Request["IdentificationNumber"], System.Web.HttpContext.Current.Request["Name"], oQueryToCreate);
+                            
                             if (oModel.RelatedThidKnowledgeSearch.CollumnsResult.IsSuccess == true)
                             {
                                 //Set New Score
@@ -522,7 +530,7 @@ namespace MarketPlace.Web.ControllersApi
 
         [HttpPost]
         [HttpGet]
-        public ProviderViewModel TKSingleReSearch(string TKSingleReSearch, string IdentificationNumber, string Name)
+        public async Task<ProviderViewModel> TKSingleReSearch(string TKSingleReSearch, string IdentificationNumber, string Name)
         {
             ProviderViewModel oModel = new ProviderViewModel();
             oModel.RelatedThirdKnowledge = new ThirdKnowledgeViewModel();
@@ -566,9 +574,12 @@ namespace MarketPlace.Web.ControllersApi
                             oModel.RelatedThidKnowledgeSearch.CollumnsResult = new TDQueryModel();
 
                             //Get Reqsult
-                            oModel.RelatedThidKnowledgeSearch.CollumnsResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(oCurrentPeriodList.FirstOrDefault().
-                                            RelatedPeriodModel.FirstOrDefault().PeriodPublicId, IdentificationNumber, Name, oQueryToCreate);
 
+                            Task<TDQueryModel> qTask = Task.Run(() => ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(oCurrentPeriodList.FirstOrDefault().
+                                            RelatedPeriodModel.FirstOrDefault().PeriodPublicId, 1,IdentificationNumber, Name, oQueryToCreate));
+
+                            oModel.RelatedThidKnowledgeSearch.CollumnsResult = await qTask;
+                            
                             //Init Finally Tuple, Group by ItemGroup Name
                             List<Tuple<string, List<ThirdKnowledgeViewModel>>> Group = new List<Tuple<string, List<ThirdKnowledgeViewModel>>>();
                             List<string> Item1 = new List<string>();

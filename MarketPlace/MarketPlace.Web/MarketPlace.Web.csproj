@@ -47,6 +47,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Autofac, Version=4.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Autofac.4.3.0\lib\net45\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="AWSSDK">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\FileRepository.S3\developer\AWSSDK.dll</HintPath>
     </Reference>
@@ -192,6 +196,10 @@
     </Reference>
     <Reference Include="ProveedoresOnLine.IndexSearch">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.IndexSearch\developer\ProveedoresOnLine.IndexSearch.dll</HintPath>
+    </Reference>
+    <Reference Include="ProveedoresOnLine.OnlineSearch, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.OnlineSearch\developer\ProveedoresOnLine.OnlineSearch.dll</HintPath>
     </Reference>
     <Reference Include="ProveedoresOnLine.ProjectModule">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.ProjectModule\developer\ProveedoresOnLine.ProjectModule.dll</HintPath>

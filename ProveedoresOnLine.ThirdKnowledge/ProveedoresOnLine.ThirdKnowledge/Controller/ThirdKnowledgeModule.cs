@@ -19,8 +19,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         public static async Task<TDQueryModel> SimpleRequest(string PeriodPublicId, int IdType, string IdentificationNumber, string Name, TDQueryModel oQueryToCreate)
         {
             try
-            {
-               await OnLnieSearch(IdType, IdentificationNumber);
+            {                
+                //Proc Request
+                Task<List<Tuple<string, List<string>, List<string>>>> task = Task.Run(() => OnLnieSearch(IdType, IdentificationNumber));
+                List<Tuple<string, List<string>, List<string>>> procResult = await task;                
+                
                 if (!string.IsNullOrEmpty(Name))
                 {
                     if (Name.ToLower().Contains("sas"))                    
@@ -54,6 +57,172 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                  ).MinScore(2));
 
                 oQueryToCreate.RelatedQueryBasicInfoModel = new List<TDQueryInfoModel>();
+                if (procResult.Count > 0)
+                {
+                    TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
+                    oInfoCreate.Alias = string.Empty;
+                    oInfoCreate.IdentificationResult = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería": "";
+                    oInfoCreate.Offense = "Presenta Antecedentes Procuraduría Nacional";
+                    oInfoCreate.NameResult = procResult.FirstOrDefault().Item1;
+
+                    string detailMoreInfo = "";
+                    procResult.All(x =>
+                        {
+
+                            x.Item3.All(p => 
+                                {
+                                    detailMoreInfo += p + ", ";
+                                    return true;
+                                }) ;
+                            detailMoreInfo += " - ";                          
+
+                            return true;
+                        });
+                    #region Group by Priority
+                    oInfoCreate.Priority = "1";
+                    #endregion
+
+                    oInfoCreate.Status = "Vigente";
+                    oInfoCreate.Enable = true;
+                    oInfoCreate.QueryPublicId = oQueryToCreate.QueryPublicId;
+                    oInfoCreate.DetailInfo = new List<TDQueryDetailInfoModel>();
+
+                    #region Create Detail
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdNumberRequest,
+                        },
+                        Value = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty,
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.RequestName,
+                        },
+                        Value = !string.IsNullOrEmpty(Name) ? Name : string.Empty,
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdList,
+                        },
+                        Value = "Procuraduría General de la Nación",
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Priotity,
+                        },
+                        Value = !string.IsNullOrEmpty(oInfoCreate.Priority) ? oInfoCreate.Priority : string.Empty,
+                        Enable = true,
+                    });
+
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Offense,
+                        },
+                        Value = "Antecedentes reportados en la Procuraduría General de la Nación",
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdentificationNumberResult,
+                        },
+                        Value = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty,
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Status,
+                        },
+                        Value = "Vigente",
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.GroupName,
+                        },
+                        Value = "Procuraduría General de la Nación - Criticidad Media",
+                        Enable = true,
+                    });
+
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Link,
+                        },
+                        Value = InternalSettings.Instance[Constants.Proc_Url].Value,
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.NameResult,
+                        },
+                        Value = !string.IsNullOrEmpty(procResult.FirstOrDefault().Item1) ? procResult.FirstOrDefault().Item1 : string.Empty,
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.ListName,
+                        },
+                        Value = "Procuraduría General de la Nación",
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.MoreInfo,
+                        },
+                        Value = detailMoreInfo,
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Zone,
+                        },
+                        Value = "Colombia",
+                        Enable = true,
+                    });
+                    #endregion
+                    oQueryToCreate.RelatedQueryBasicInfoModel.Add(oInfoCreate);
+                }
 
                 if (oSearchResult.Documents.Count() > 0)
                 {

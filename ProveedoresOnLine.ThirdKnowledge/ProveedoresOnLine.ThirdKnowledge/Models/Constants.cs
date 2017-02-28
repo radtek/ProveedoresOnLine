@@ -39,8 +39,9 @@
         public const string C_Settings_ElasticSearchUrl = "ElasticSearchUrl";
 
         public const string C_Settings_ThirdKnowledgeIndex = "ThirdknowledgeIndex";
-
         #endregion
+
+        public const string Proc_Url = "Proc_Url";
 
         #region Notifications
 
