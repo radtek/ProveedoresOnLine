@@ -1000,7 +1000,7 @@ namespace ProveedoresOnLine.SurveyModule.DAL.MySQLDAO
                                 SurveyConfigInfoValue = scinf.Field<string>("SurveyConfigInfoValue"),
                                 SurveyConfigInfoLargeValue = scinf.Field<string>("SurveyConfigInfoLargeValue"),
                                 SurveyConfigInfoValueName = scinf.Field<string>("SurveyConfigInfoValueName"),
-                            } into scinfg
+                            } into scinfg   
                             select new GenericItemInfoModel()
                             {
                                 ItemInfoId = scinfg.Key.SurveyConfigInfoId,
