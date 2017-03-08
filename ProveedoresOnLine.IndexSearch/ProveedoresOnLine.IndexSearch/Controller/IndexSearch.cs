@@ -264,7 +264,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
 
                 client.Map<ThirdknowledgeIndexSearchModel>(m => m.AutoMap());                
                 RowFrom = 0;
-                for (int i = 0; i < (oToIndex.FirstOrDefault().TotalRows / 10000); i++)
+                for (int i = -1; i < (oToIndex.FirstOrDefault().TotalRows / 10000); i++)
 			    {
                     List<ThirdknowledgeIndexSearchModel> oToIterIndex = new List<ThirdknowledgeIndexSearchModel>();
                     LogFile("Index Process Count::: " + RowFrom + "__:::__" + RowTo);                   
