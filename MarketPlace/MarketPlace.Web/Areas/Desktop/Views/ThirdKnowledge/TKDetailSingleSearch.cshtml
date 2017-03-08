@@ -96,8 +96,24 @@
                                 <div class="col-sm-4 POMPProviderBoxInfo"><strong>Zona</strong></div>
                             </div>
                             <div class="row POMPBorderbottom">
-                                @*<div class="col-sm-4 POMPProviderBoxInfo"><span>@Model.RelatedThidKnowledgeSearch.RegisterDate  </span></div>*@
-                                <div class="col-sm-4 POMPProviderBoxInfo"><a target="_blank" href="@Model.RelatedThidKnowledgeSearch.Link">Ver Fuente</a></div>
+                                @if (Model.RelatedThidKnowledgeSearch.ListName != "SUPER SOCIEDADES")
+                                {
+                                    string oLink = Model.RelatedThidKnowledgeSearch.Link.ToLower();
+                                    if (!oLink.Contains("https://") && !oLink.Contains("http://"))
+                                    {
+                                        oLink = "http://" + oLink;
+                                    }
+                                    if (oLink.Contains("http//"))
+                                    {
+                                        oLink = oLink.Replace("http//", "http://");
+                                    }
+                                    
+                                    <div class="col-sm-4 POMPProviderBoxInfo"><a target="_blank" href="@oLink">Ver Fuente</a></div>
+                                }
+                                else
+                                {
+                                    <div class="col-sm-4 POMPProviderBoxInfo"><a target="_blank" href="@Model.RelatedThidKnowledgeSearch.Link">Ver Fuente</a></div>
+                                }
                                 <div class="col-sm-4 POMPProviderBoxInfo"><span><span>@Model.RelatedThidKnowledgeSearch.Zone</span></span></div>
                             </div>
                             <br />
