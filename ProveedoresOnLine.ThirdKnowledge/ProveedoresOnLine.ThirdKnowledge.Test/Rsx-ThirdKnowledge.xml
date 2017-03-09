@@ -40,6 +40,10 @@
     <key name="ThirdKnowledgeName">NOMBRES Y APELLIDOS</key>
     <key name="ThirdKnowledgeIdentificationNumber">NUMERO DE IDENTIFICACION</key>
 
+    <!--ChatUrl-->
+
+    <key name="TK_ChatUrl">https://uhchat.net/code.php?f=3bf4ae</key>
+    
     <!--Proc_PageStructure-->
     
     <key name="Proc_EVENTTARGET">__EVENTTARGET</key>

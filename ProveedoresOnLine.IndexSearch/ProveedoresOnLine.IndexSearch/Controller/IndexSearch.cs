@@ -41,7 +41,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
 
                 Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
                 var settings = new ConnectionSettings(node);
-                settings.DefaultIndex("prod_companyindex");
+                settings.DefaultIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanyIndex].Value);
                 ElasticClient client = new ElasticClient(settings);
 
                 ICreateIndexResponse oElasticResponse = client.
@@ -62,7 +62,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                         )
                     );
                 client.Map<CompanyIndexModel>(m => m.AutoMap());
-                var Index = client.IndexMany(oCompanyToIndex, "prod_companyindex");
+                var Index = client.IndexMany(oCompanyToIndex, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanyIndex].Value);
             }
             catch (Exception err)
             {
@@ -81,7 +81,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
 
                 Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
                 var settings = new ConnectionSettings(node);
-                settings.DefaultIndex("prod_companycustomerindex");
+                settings.DefaultIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanyCustomerIndex].Value);
                 ElasticClient client = new ElasticClient(settings);
 
                 ICreateIndexResponse oElasticResponse = client.
@@ -102,7 +102,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                         )
                     );
                 client.Map<CompanyIndexModel>(m => m.AutoMap());
-                var Index = client.IndexMany(oCompanyToIndex, "prod_companycustomerindex");
+                var Index = client.IndexMany(oCompanyToIndex, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanyCustomerIndex].Value);
             }
             catch (Exception err)
             {
@@ -127,7 +127,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                 ElasticClient client = new ElasticClient(settings);
 
                 ICreateIndexResponse oElasticResponse = client.
-                        CreateIndex("prod_customerproviderindex", c => c
+                        CreateIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CustomerProviderIndex].Value, c => c
                         .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
                         .Analysis(a => a.
                             Analyzers(an => an.
@@ -144,7 +144,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                         )
                     );
                 client.Map<CustomerProviderIndexModel>(m => m.AutoMap());
-                var Index = client.IndexMany(oCustomerProviderToIndex, "prod_customerproviderindex");
+                var Index = client.IndexMany(oCustomerProviderToIndex, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CustomerProviderIndex].Value);
             }
             catch (Exception err)
             {
