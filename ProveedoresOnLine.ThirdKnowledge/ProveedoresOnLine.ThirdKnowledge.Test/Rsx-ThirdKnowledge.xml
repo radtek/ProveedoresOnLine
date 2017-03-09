@@ -35,7 +35,7 @@
     <!--Elasticsearch-->
     <key name="ElasticSearchUrl">http://192.168.0.94:9200/</key>
 
-    <key name="ThirdknowledgeIndex">dev_thirdknowledgeindex</key>
+    <key name="ThirdknowledgeIndex">prod_thirdknowledgeindex</key>
 
     <key name="ThirdKnowledgeName">NOMBRES Y APELLIDOS</key>
     <key name="ThirdKnowledgeIdentificationNumber">NUMERO DE IDENTIFICACION</key>
