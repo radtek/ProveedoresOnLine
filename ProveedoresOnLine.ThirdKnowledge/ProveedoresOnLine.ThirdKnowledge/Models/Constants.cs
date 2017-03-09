@@ -34,6 +34,8 @@
 
         public const string C_Setings_File_S3FilePath = "File_S3FilePath";
 
+        public const string C_Setings_TKChatUrl = "TK_ChatUrl";
+
         #region Elasticsearch
 
         public const string C_Settings_ElasticSearchUrl = "ElasticSearchUrl";

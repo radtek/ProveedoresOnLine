@@ -6,7 +6,19 @@
     {
         ProviderStatus = 902,
         personContactType = 210,
+        PersonType = 213,
         ProjectStatus = 1406,
+    }
+
+    #endregion
+
+    #region PersonType
+    public enum enumPersonType
+    {
+        Juridica = 213001,
+        Natural = 213002,
+        PersonaExtranjera = 213003
+
     }
 
     #endregion

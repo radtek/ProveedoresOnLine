@@ -19,6 +19,8 @@ namespace ProveedoresOnLine.IndexSearch.Models
 
         public const string C_Settings_CompanyIndex = "CompanyIndex";
 
+        public const string C_Settings_CompanyCustomerIndex = "CompanyCustomerIndex";
+
         public const string C_Settings_CompanySurveyIndex = "CompanySurveyIndex";
 
         public const string C_Settings_CustomerProviderIndex = "CustomerProviderIndex";

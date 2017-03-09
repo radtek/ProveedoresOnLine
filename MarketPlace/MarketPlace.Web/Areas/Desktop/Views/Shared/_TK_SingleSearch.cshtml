@@ -34,7 +34,7 @@
                     <select name="ThirdKnowledgeIdType" class="form-control ThirdKnowledgeIdType">
 
                         <option value="">Tipo Identificación</option>
-                        @foreach (var item in Model.ProviderOptions.Where(x => x.CatalogId == 101).Select(x => x))
+                        @foreach (var item in Model.ProviderOptions.Where(x => x.CatalogId == (int)MarketPlace.Models.General.enumCatalog.PersonType).Select(x => x))
                         {
                             <option value="@item.ItemId">@item.ItemName</option>
                         }
