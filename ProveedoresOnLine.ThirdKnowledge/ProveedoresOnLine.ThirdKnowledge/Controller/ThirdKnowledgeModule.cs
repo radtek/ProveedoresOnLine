@@ -19,11 +19,13 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         public static async Task<TDQueryModel> SimpleRequest(string PeriodPublicId, int IdType, string IdentificationNumber, string Name, TDQueryModel oQueryToCreate)
         {
             try
-            {                
-                //Proc Request
+            {
                 Task<List<Tuple<string, List<string>, List<string>>>> task = Task.Run(() => OnLnieSearch(IdType, IdentificationNumber));
-                List<Tuple<string, List<string>, List<string>>> procResult = await task;                
-                
+                List<Tuple<string, List<string>, List<string>>> procResult = new List<Tuple<string, List<string>, List<string>>>();
+                //Proc Request
+                if (!string.IsNullOrEmpty(IdentificationNumber) && IdType != 0)                
+                    procResult = await task;
+
                 if (!string.IsNullOrEmpty(Name))
                 {
                     if (Name.ToLower().Contains("sas"))                    
@@ -224,7 +226,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     oQueryToCreate.RelatedQueryBasicInfoModel.Add(oInfoCreate);
                 }
 
-                if (oSearchResult.Documents.Count() > 0)
+                if (oSearchResult.Documents.Count() > 0 || procResult.Count > 0)
                 {
                     oSearchResult.Documents.All(x =>
                         {
