@@ -101,7 +101,7 @@ namespace MarketPlace.Models.ThirdKnowledge
             Status = oDetail.Where(x => x.ItemInfoType.ItemId == (int)enumThirdKnowledgeColls.Status).Select(x => x.Value).DefaultIfEmpty("").FirstOrDefault();
             Zone = oDetail.Where(x => x.ItemInfoType.ItemId == (int)enumThirdKnowledgeColls.Zone).Select(x => x.Value).DefaultIfEmpty("").FirstOrDefault();
             Link = oDetail.Where(x => x.ItemInfoType.ItemId == (int)enumThirdKnowledgeColls.Link).Select(x => x.Value).DefaultIfEmpty("").FirstOrDefault();
-            MoreInfo = oDetail.Where(x => x.ItemInfoType.ItemId == (int)enumThirdKnowledgeColls.MoreInfo).Select(x => x.Value).DefaultIfEmpty("").FirstOrDefault();
+            MoreInfo = oDetail.Where(x => x.ItemInfoType.ItemId == (int)enumThirdKnowledgeColls.MoreInfo).Select(x => !String.IsNullOrEmpty(x.Value) ? x.Value :  x.LargeValue).DefaultIfEmpty("").FirstOrDefault();
             RegisterDate = oDetail.Where(x => x.ItemInfoType.ItemId == (int)enumThirdKnowledgeColls.RegisterDate).Select(x => x.Value).DefaultIfEmpty("").FirstOrDefault();
             LastModifyDate = oDetail.Where(x => x.ItemInfoType.ItemId == (int)enumThirdKnowledgeColls.LastModifyDate).Select(x => x.Value).DefaultIfEmpty("").FirstOrDefault();
             Message = oDetail.Where(x => x.ItemInfoType.ItemId == (int)enumThirdKnowledgeColls.Message).Select(x => x.Value).DefaultIfEmpty("").FirstOrDefault();

@@ -16,8 +16,7 @@ var Third_KnowledgeSimpleSearchObject = {
         }
     },
 
-    SimpleSearch: function () {
-        debugger;
+    SimpleSearch: function () {        
         Third_KnowledgeSimpleSearchObject.Loading_Generic_Show();
         if ($('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_Form').length > 0) {
             $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_DivResult').html('')
@@ -144,7 +143,7 @@ var Third_KnowledgeSimpleSearchObject = {
 
     Loading_Generic_Hidden: function () {
         kendo.ui.progress($("#loading"), false);
-    },
+    },    
 };
 
 var Third_KnowledgeMasiveSearchObject = {

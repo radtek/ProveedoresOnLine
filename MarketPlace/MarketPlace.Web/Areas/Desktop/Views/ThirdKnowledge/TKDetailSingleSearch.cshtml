@@ -63,8 +63,11 @@
                                 <div class="col-sm-4 POMPProviderBoxInfo"><strong>Número de Identificación</strong></div>
                             </div>
                             <div class="row POMPBorderbottom">
+                                @{
+                                    string DocType = Model.RelatedThidKnowledgeSearch.TypeDocument == "1" ? "CC" : Model.RelatedThidKnowledgeSearch.TypeDocument == "2" ? "Nit" : "N/D";
+                                }
                                 <div class="col-sm-4 POMPProviderBoxInfo"><span>@Model.RelatedThidKnowledgeSearch.NameResult</span></div>
-                                <div class="col-sm-4 POMPProviderBoxInfo"><span>N/D</span></div>
+                                <div class="col-sm-4 POMPProviderBoxInfo"><span>@DocType</span></div>
                                 <div class="col-sm-4 POMPProviderBoxInfo"><span>@Model.RelatedThidKnowledgeSearch.IdentificationNumberResult</span></div>
                             </div>
                             <br />
