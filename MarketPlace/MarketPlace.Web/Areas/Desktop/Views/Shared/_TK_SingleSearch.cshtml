@@ -34,7 +34,13 @@
                     <select name="ThirdKnowledgeIdType" class="form-control ThirdKnowledgeIdType">
 
                         <option value="">Tipo de Persona</option>
-                        @{var selected = Model.ProviderOptions.Where(x => x.CatalogId == (int)MarketPlace.Models.General.enumCatalog.PersonType).Select(x => x).Where(x => x.ItemId == int.Parse(Model.RelatedThirdKnowledge.IdType)).Select(x => x).FirstOrDefault(); }
+                        @{
+                            var selected = new ProveedoresOnLine.Company.Models.Util.CatalogModel();
+                            if (!string.IsNullOrEmpty(Model.RelatedThirdKnowledge.IdType))
+                            {
+                                selected = Model.ProviderOptions.Where(x => x.CatalogId == (int)MarketPlace.Models.General.enumCatalog.PersonType).Select(x => x).Where(x => x.ItemId == int.Parse(Model.RelatedThirdKnowledge.IdType)).Select(x => x).FirstOrDefault();                                
+                            }
+                        }
                         @foreach (var item in Model.ProviderOptions.Where(x => x.CatalogId == (int)MarketPlace.Models.General.enumCatalog.PersonType).Select(x => x))
                         {
                             if (item.ItemId == selected.ItemId)
