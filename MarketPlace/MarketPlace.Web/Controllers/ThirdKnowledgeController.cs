@@ -50,6 +50,7 @@ namespace MarketPlace.Web.Controllers
                     {
                         oModel.RelatedThirdKnowledge.SearchNameParam = Name;
                         oModel.RelatedThirdKnowledge.SearchIdNumberParam = IdentificationNumber;
+                        oModel.RelatedThirdKnowledge.IdType = ThirdKnowledgeIdType;
                         oModel.RelatedThirdKnowledge.ReSearch = true;
                     }
                     else

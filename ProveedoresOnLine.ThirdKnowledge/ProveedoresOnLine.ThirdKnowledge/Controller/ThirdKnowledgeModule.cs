@@ -222,6 +222,16 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         Value = "Colombia",
                         Enable = true,
                     });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.TypeDocument,
+                        },
+                        Value = IdType.ToString(),
+                        Enable = true,
+                    });
                     #endregion
                     oQueryToCreate.RelatedQueryBasicInfoModel.Add(oInfoCreate);
                 }
