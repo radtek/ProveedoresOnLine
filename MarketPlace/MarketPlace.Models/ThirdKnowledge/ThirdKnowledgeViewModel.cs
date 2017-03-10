@@ -33,6 +33,7 @@ namespace MarketPlace.Models.ThirdKnowledge
         public string SearchNameParam { get; set; }
 
         public string SearchIdNumberParam { get; set; }
+        public string IdType { get; set; }
 
         public bool ReSearch { get; set; }
 

@@ -68,7 +68,7 @@ namespace MarketPlace.Web.ControllersApi
                             //Get Result
 
                             //Identification Type
-                            int IdType = System.Web.HttpContext.Current.Request["ThirdKnowledgeIdType"] == "101001" ? 1 : System.Web.HttpContext.Current.Request["ThirdKnowledgeIdType"] == "101002" ? 2 : System.Web.HttpContext.Current.Request["ThirdKnowledgeIdType"] == "101003" ? 3 : 0;
+                            int IdType = System.Web.HttpContext.Current.Request["ThirdKnowledgeIdType"] == "213002" ? 1 : System.Web.HttpContext.Current.Request["ThirdKnowledgeIdType"] == "213001" ? 2 : 0;
                             string rNamer = System.Web.HttpContext.Current.Request["Name"];
                             string rIdNumber = System.Web.HttpContext.Current.Request["IdentificationNumber"];
                                                                                     
@@ -532,7 +532,7 @@ namespace MarketPlace.Web.ControllersApi
 
         [HttpPost]
         [HttpGet]
-        public async Task<ProviderViewModel> TKSingleReSearch(string TKSingleReSearch, string IdentificationNumber, string Name)
+        public async Task<ProviderViewModel> TKSingleReSearch(string TKSingleReSearch, string IdentificationNumber, string Name, string IdType)
         {
             ProviderViewModel oModel = new ProviderViewModel();
             oModel.RelatedThirdKnowledge = new ThirdKnowledgeViewModel();
@@ -576,9 +576,10 @@ namespace MarketPlace.Web.ControllersApi
                             oModel.RelatedThidKnowledgeSearch.CollumnsResult = new TDQueryModel();
 
                             //Get Reqsult
+                            int IdNumberType = IdType == "213002" ? 1 : IdType == "213001" ? 2 : 0;
 
                             Task<TDQueryModel> qTask = Task.Run(() => ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(oCurrentPeriodList.FirstOrDefault().
-                                            RelatedPeriodModel.FirstOrDefault().PeriodPublicId, 1,IdentificationNumber, Name, oQueryToCreate));
+                                            RelatedPeriodModel.FirstOrDefault().PeriodPublicId, IdNumberType, IdentificationNumber, Name, oQueryToCreate));
 
                             oModel.RelatedThidKnowledgeSearch.CollumnsResult = await qTask;
                             
