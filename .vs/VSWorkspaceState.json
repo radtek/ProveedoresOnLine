@@ -1,7 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\MarketPlace"
+    "\\MarketPlace",
+    "\\MarketPlace\\MarketPlace.Web\\Areas",
+    "\\MarketPlace\\MarketPlace.Web\\Areas\\Desktop",
+    "\\MarketPlace\\MarketPlace.Web\\Areas\\Desktop\\Views",
+    "\\MarketPlace\\MarketPlace.Web\\Areas\\Desktop\\Views\\ThirdKnowledge"
   ],
   "SelectedNode": "\\MarketPlace\\MarketPlace.sln",
   "PreviewInSolutionExplorer": false
