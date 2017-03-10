@@ -14,7 +14,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
         public async Task SimpleRequest()
         {
             TDQueryModel oQuery = new TDQueryModel();
-            await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest("",1,"70041053","Alvaro Uribe", oQuery);
+            await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest("",1, "71984381", "Camilo Torres Martinez", oQuery);
         }
 
         [TestMethod]

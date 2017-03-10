@@ -208,8 +208,8 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         ItemInfoType = new TDCatalogModel()
                         {
                             ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.MoreInfo,
-                        },
-                        Value = detailMoreInfo,
+                        },                        
+                        LargeValue = detailMoreInfo,
                         Enable = true,
                     });
                     oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
