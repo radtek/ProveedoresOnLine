@@ -33,11 +33,19 @@
                 <div class="col-sm-4">
                     <select name="ThirdKnowledgeIdType" class="form-control ThirdKnowledgeIdType">
 
-                        <option value="">Tipo Identificación</option>
+                        <option value="">Tipo de Persona</option>
+                        @{var selected = Model.ProviderOptions.Where(x => x.CatalogId == (int)MarketPlace.Models.General.enumCatalog.PersonType).Select(x => x).Where(x => x.ItemId == int.Parse(Model.RelatedThirdKnowledge.IdType)).Select(x => x).FirstOrDefault(); }
                         @foreach (var item in Model.ProviderOptions.Where(x => x.CatalogId == (int)MarketPlace.Models.General.enumCatalog.PersonType).Select(x => x))
                         {
-                            <option value="@item.ItemId">@item.ItemName</option>
-                        }
+                            if (item.ItemId == selected.ItemId)
+                            {
+                                <option selected="selected" value="@item.ItemId">@item.ItemName</option>
+                            }
+                            else
+                            {
+                                <option value="@item.ItemId">@item.ItemName</option>
+                            }
+                        }                        
                     </select>
                 </div>
                 <div class="col-sm-4">
