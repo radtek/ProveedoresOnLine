@@ -23,15 +23,15 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                 Task<List<Tuple<string, List<string>, List<string>>>> task = Task.Run(() => OnLnieSearch(IdType, IdentificationNumber));
                 List<Tuple<string, List<string>, List<string>>> procResult = new List<Tuple<string, List<string>, List<string>>>();
                 //Proc Request
-                if (!string.IsNullOrEmpty(IdentificationNumber) && IdType != 0)                
+                if (!string.IsNullOrEmpty(IdentificationNumber) && IdType != 0)
                     procResult = await task;
 
                 if (!string.IsNullOrEmpty(Name))
                 {
-                    if (Name.ToLower().Contains("sas"))                    
-                        Name = Name.ToLower().Replace("sas", "");                    
+                    if (Name.ToLower().Contains("sas"))
+                        Name = Name.ToLower().Replace("sas", "");
                     else if (Name.ToLower().Contains("s.a.s"))
-                        Name = Name.ToLower().Replace("s.a.s", "");         
+                        Name = Name.ToLower().Replace("s.a.s", "");
                     else if (Name.ToLower().Contains("s.a"))
                         Name = Name.ToLower().Replace("s.a", "");
                     else if (Name.ToLower().Contains("ltda"))
@@ -59,11 +59,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                  ).MinScore(2));
 
                 oQueryToCreate.RelatedQueryBasicInfoModel = new List<TDQueryInfoModel>();
-                if (procResult.Count > 0)
+                if (procResult != null && procResult.Count > 0)
                 {
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
                     oInfoCreate.Alias = string.Empty;
-                    oInfoCreate.IdentificationResult = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería": "";
+                    oInfoCreate.IdentificationResult = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : "";
                     oInfoCreate.Offense = "Presenta Antecedentes Procuraduría Nacional";
                     oInfoCreate.NameResult = procResult.FirstOrDefault().Item1;
 
@@ -71,12 +71,12 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     procResult.All(x =>
                         {
 
-                            x.Item3.All(p => 
+                            x.Item3.All(p =>
                                 {
                                     detailMoreInfo += p + ", ";
                                     return true;
-                                }) ;
-                            detailMoreInfo += " - ";                          
+                                });
+                            detailMoreInfo += " - ";
 
                             return true;
                         });
@@ -208,7 +208,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         ItemInfoType = new TDCatalogModel()
                         {
                             ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.MoreInfo,
-                        },                        
+                        },
                         LargeValue = detailMoreInfo,
                         Enable = true,
                     });
@@ -899,13 +899,12 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         #endregion
 
         public static async Task<List<Tuple<string, List<string>, List<string>>>> OnLnieSearch(int IdType, string IndentificationNumber)
-        {
+        {            
             var builder = new ContainerBuilder();
             builder.RegisterType<ProveedoresOnLine.OnlineSearch.Core.ProveedoresOnLineProcImplement>().As<ProveedoresOnLine.OnlineSearch.Interfaces.IOnLineSearch>();
             //builder.RegisterType<EmailService>().As<IMailService>();
             var container = builder.Build();
-
-            return await container.Resolve<ProveedoresOnLine.OnlineSearch.Interfaces.IOnLineSearch>().SearchProc(IdType, "", IndentificationNumber);                        
+            return await container.Resolve<ProveedoresOnLine.OnlineSearch.Interfaces.IOnLineSearch>().SearchProc(IdType, "", IndentificationNumber);
         }
     }
 }

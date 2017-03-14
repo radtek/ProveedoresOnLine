@@ -32,6 +32,11 @@ namespace ProveedoresOnLine.OnlineSearch.Core
                     HtmlDocument HtmlDoc = new HtmlDocument();
                     HtmlDoc.LoadHtml(response.Content.ReadAsStringAsync().Result);
 
+                    if (response.StatusCode == System.Net.HttpStatusCode.BadRequest || response.StatusCode == System.Net.HttpStatusCode.BadGateway ||
+                        response.StatusCode == System.Net.HttpStatusCode.GatewayTimeout || response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+                    {
+                        return null;
+                    }
                     __VIEWSTATE = HtmlDoc.GetElementbyId(ProveedoresOnLine.OnlineSearch.Models.InternalSettings.Instance[ProveedoresOnLine.OnlineSearch.Models.Constants.Proc_VIEWSTATE].Value).GetAttributeValue("value", "");
                     __EVENTVALIDATION = HtmlDoc.GetElementbyId(ProveedoresOnLine.OnlineSearch.Models.InternalSettings.Instance[ProveedoresOnLine.OnlineSearch.Models.Constants.Proc_EVENTVALIDATION].Value).GetAttributeValue("value", "");
                     __Question = HtmlDoc.GetElementbyId(ProveedoresOnLine.OnlineSearch.Models.InternalSettings.Instance[ProveedoresOnLine.OnlineSearch.Models.Constants.Proc_Questionlbl].Value).InnerText;
@@ -62,15 +67,15 @@ namespace ProveedoresOnLine.OnlineSearch.Core
 
                     var Content = new FormUrlEncodedContent(new[]
                     {
-                        new KeyValuePair<string, string>(ProveedoresOnLine.OnlineSearch.Models.InternalSettings.Instance[ProveedoresOnLine.OnlineSearch.Models.Constants.Proc_EVENTTARGET].Value, ""),
-                        new KeyValuePair<string, string>(ProveedoresOnLine.OnlineSearch.Models.InternalSettings.Instance[ProveedoresOnLine.OnlineSearch.Models.Constants.Proc_EVENTARGUMENT].Value, ""),
-                        new KeyValuePair<string, string>(ProveedoresOnLine.OnlineSearch.Models.InternalSettings.Instance[ProveedoresOnLine.OnlineSearch.Models.Constants.Proc_VIEWSTATE].Value, __VIEWSTATE),
-                        new KeyValuePair<string, string>(ProveedoresOnLine.OnlineSearch.Models.InternalSettings.Instance[ProveedoresOnLine.OnlineSearch.Models.Constants.Proc_VIEWSTATEGENERATOR].Value, "D8335CE7"),
-                        new KeyValuePair<string, string>(ProveedoresOnLine.OnlineSearch.Models.InternalSettings.Instance[ProveedoresOnLine.OnlineSearch.Models.Constants.Proc_EVENTVALIDATION].Value, __EVENTVALIDATION),
-                        new KeyValuePair<string, string>(ProveedoresOnLine.OnlineSearch.Models.InternalSettings.Instance[ProveedoresOnLine.OnlineSearch.Models.Constants.Proc_TipoID].Value, IdentificationType.ToString()),
-                        new KeyValuePair<string, string>(ProveedoresOnLine.OnlineSearch.Models.InternalSettings.Instance[ProveedoresOnLine.OnlineSearch.Models.Constants.Proc_NumID].Value, IdentificationNumber),
-                        new KeyValuePair<string, string>(ProveedoresOnLine.OnlineSearch.Models.InternalSettings.Instance[ProveedoresOnLine.OnlineSearch.Models.Constants.Proc_QAnswer].Value, Answer),
-                        new KeyValuePair<string, string>(ProveedoresOnLine.OnlineSearch.Models.InternalSettings.Instance[ProveedoresOnLine.OnlineSearch.Models.Constants.Proc_btnSearch].Value, "Consultar"),
+                        new KeyValuePair<string, string>(InternalSettings.Instance[Constants.Proc_EVENTTARGET].Value, ""),
+                        new KeyValuePair<string, string>(InternalSettings.Instance[Constants.Proc_EVENTARGUMENT].Value, ""),
+                        new KeyValuePair<string, string>(InternalSettings.Instance[Constants.Proc_VIEWSTATE].Value, __VIEWSTATE),
+                        new KeyValuePair<string, string>(InternalSettings.Instance[Constants.Proc_VIEWSTATEGENERATOR].Value, "D8335CE7"),
+                        new KeyValuePair<string, string>(InternalSettings.Instance[Constants.Proc_EVENTVALIDATION].Value, __EVENTVALIDATION),
+                        new KeyValuePair<string, string>(InternalSettings.Instance[Constants.Proc_TipoID].Value, IdentificationType.ToString()),
+                        new KeyValuePair<string, string>(InternalSettings.Instance[Constants.Proc_NumID].Value, IdentificationNumber),
+                        new KeyValuePair<string, string>(InternalSettings.Instance[ProveedoresOnLine.OnlineSearch.Models.Constants.Proc_QAnswer].Value, Answer),
+                        new KeyValuePair<string, string>(InternalSettings.Instance[Constants.Proc_btnSearch].Value, "Consultar"),
                     });
                     var result = await client.PostAsync(Url, Content);
                     string resultContent = await result.Content.ReadAsStringAsync();
