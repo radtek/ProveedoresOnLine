@@ -204,6 +204,7 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
                 CommandType = CommandType.StoredProcedure,
                 Parameters = lstparams,
                 
+                
             });
 
             List<SanofiContableInfoModel> oReturn = new List<SanofiContableInfoModel>();
