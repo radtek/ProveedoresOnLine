@@ -10,7 +10,7 @@ namespace ProveedoresOnLine.Process.Implement
     {
         public void Execute(Quartz.IJobExecutionContext context)
         {
-            ProveedoresOnLine.CompanyIndexSearch.CompanyIndexSearchProcess.StartProcess();
+            ProveedoresOnLine.CompanyIndexSearch.CompanyIndexSearchProcess.CompanyIndexationFunction();
         }
     }
 }

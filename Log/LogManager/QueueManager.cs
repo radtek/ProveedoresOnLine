@@ -33,7 +33,7 @@ namespace LogManager
         {
             get
             {
-                return Convert.ToInt32(ConfigurationManager.AppSettings[Constants.C_LogTimer]);
+                return int.Parse(ConfigurationManager.AppSettings[Constants.C_LogTimer]);
             }
         }
 

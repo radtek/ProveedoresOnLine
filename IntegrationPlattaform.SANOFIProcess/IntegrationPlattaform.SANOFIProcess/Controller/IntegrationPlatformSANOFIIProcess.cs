@@ -196,7 +196,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
 
                                 //if exists get modules information
                                 if (oGeneralRow != null) { 
-                                    oGeneralRow.Comentaries = "Actualización Proveedor" + Convert.ToString(oGeneralRow.LastModified);
+                                    oGeneralRow.Comentaries = "Actualización Proveedor: " + Convert.ToString(oGeneralRow.LastModified);
                                     oGeneralInfo.Add(oGeneralRow);
                                 }
                                 if (oComercialGeneralRow != null && oComercialBasicRow != null)
@@ -258,6 +258,9 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
             catch (Exception err)
             {
                 LogFile("Fatal error::" + err.Message + " - " + err.StackTrace);
+            }
+            finally
+            {
             }
         }
 

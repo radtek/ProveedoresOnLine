@@ -38,7 +38,7 @@ namespace LogManager.DAL.MySqlDao
                 Parameters = lstParams
             });
 
-            return Convert.ToInt32(response.ScalarResult);
+            return Int32.Parse(response.ScalarResult.ToString());
         }
 
         public void LogInfoCreate(int LogId, string LogInfoType, string Value)

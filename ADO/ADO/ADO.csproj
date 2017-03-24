@@ -51,6 +51,7 @@
     <Compile Include="Interfaces\IADO.cs" />
     <Compile Include="Models\ADOModelRequest.cs" />
     <Compile Include="Models\ADOModelResponse.cs" />
+    <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\Enumerators.cs" />
     <Compile Include="MYSQL\MySqlImplement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
