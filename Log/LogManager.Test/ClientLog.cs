@@ -84,7 +84,7 @@ namespace LogManager.Test
                 IsSuccess = true,
                 Message = "Message",
 
-                LogObject = Convert.ToInt32(454545),
+                LogObject = Int32.Parse("454545"),
 
                 RelatedLogInfo = new System.Collections.Generic.List<Models.LogInfoModel>()
                 {
