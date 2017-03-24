@@ -9,16 +9,23 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
     public class ThisdKnowledgeOnLineSearchTest
     {
         [TestMethod]
-        public async Task Search()
+        public async Task ProcSearch()
         {
-            await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.OnLnieSearch(1, "71984381");
+            await Controller.ThirdKnowledgeModule.OnLnieSearch(1, "71984381");
+            //return "";
+        }
+
+        [TestMethod]
+        public async Task PanamaPSearch()
+        {
+            await Controller.ThirdKnowledgeModule.PPSearch(1, "OSCAR EDUARDO PALADINES MEJIA", "");
             //return "";
         }
 
         [TestMethod]
         public void GetAnswerByTreeidAndQuestion()
         {
-            ProveedoresOnLine.OnlineSearch.Controller.SearchController.GetAnswerByTreeidAndQuestion(0,"");
+           OnlineSearch.Controller.SearchController.GetAnswerByTreeidAndQuestion(0,"");
         }
     }
 }

@@ -59,6 +59,8 @@
     <key name="Proc_Questionlbl">lblPregunta</key>
     <key name="Proc_Url">https://www.procuraduria.gov.co/CertWEB/Certificado.aspx?tpo=1</key>
 
+    <!--PanamaPapers Estrucutre Page-->
+  <key name="PanamaPapers_Url">https://offshoreleaks.icij.org/search?cat=</key>
   </ThirdKnowledge>
 </Settings>
 

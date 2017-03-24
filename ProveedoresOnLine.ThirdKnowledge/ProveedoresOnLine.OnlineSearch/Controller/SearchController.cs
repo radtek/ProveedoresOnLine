@@ -20,7 +20,7 @@ namespace ProveedoresOnLine.OnlineSearch.Controller
 
         public void Search(int IdentificationType, string Name, string IdentificationNumber)
         {
-            objSearch.SearchProc(0, "", "");
+            objSearch.Search(0, "", "");
         }
 
         public static TreeModel GetAnswerByTreeidAndQuestion(int TreeType, string Question)

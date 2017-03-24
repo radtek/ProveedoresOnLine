@@ -14,7 +14,7 @@ namespace ProveedoresOnLine.OnlineSearch.Core
 {
     public class ProveedoresOnLineProcImplement : IOnLineSearch
     {
-        public async Task<List<Tuple<string, List<string>, List<string>>>> SearchProc(int IdentificationType, string Name, string IdentificationNumber)
+        public async Task<List<Tuple<string, List<string>, List<string>>>> Search(int IdentificationType, string Name, string IdentificationNumber)
         {
             try
             {

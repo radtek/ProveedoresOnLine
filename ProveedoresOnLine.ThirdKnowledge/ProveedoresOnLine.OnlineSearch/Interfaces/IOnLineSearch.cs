@@ -9,6 +9,6 @@ namespace ProveedoresOnLine.OnlineSearch.Interfaces
 {
     public interface IOnLineSearch 
     {
-        Task<List<Tuple<string, List<string>, List<string>>>> SearchProc(int IdentificationType, string Name, string IdentificationNumber);        
+        Task<List<Tuple<string, List<string>, List<string>>>> Search(int IdentificationType, string Name, string IdentificationNumber);        
     }
 }

@@ -901,10 +901,18 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         public static async Task<List<Tuple<string, List<string>, List<string>>>> OnLnieSearch(int IdType, string IndentificationNumber)
         {            
             var builder = new ContainerBuilder();
-            builder.RegisterType<ProveedoresOnLine.OnlineSearch.Core.ProveedoresOnLineProcImplement>().As<ProveedoresOnLine.OnlineSearch.Interfaces.IOnLineSearch>();
-            //builder.RegisterType<EmailService>().As<IMailService>();
+            builder.RegisterType<OnlineSearch.Core.ProveedoresOnLineProcImplement>().As<OnlineSearch.Interfaces.IOnLineSearch>();
+            
             var container = builder.Build();
-            return await container.Resolve<ProveedoresOnLine.OnlineSearch.Interfaces.IOnLineSearch>().SearchProc(IdType, "", IndentificationNumber);
+            return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, "", IndentificationNumber);
+        }
+
+        public static async Task<List<Tuple<string, List<string>, List<string>>>> PPSearch(int IdType, string Name, string IndentificationNumber)
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterType<OnlineSearch.Core.ProveedoresOnLinePPImplement>().As<OnlineSearch.Interfaces.IOnLineSearch>();            
+            var container = builder.Build();
+            return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber);
         }
     }
 }
