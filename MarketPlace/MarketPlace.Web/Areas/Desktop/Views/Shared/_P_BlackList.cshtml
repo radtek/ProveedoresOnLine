@@ -39,11 +39,10 @@
                     /*get company info*/
                     List<string> oOrderGroup = new List<string>();
 
-                    oOrderGroup.Add(oGroupListName.Where(x => x == "LISTAS RESTRICTIVAS - Criticidad Alta").Select(x => x).FirstOrDefault());
-                    oOrderGroup.Add(oGroupListName.Where(x => x == "DELITOS E INHABILIDADES CONTRA EL ESTADO - Criticidad Media").Select(x => x).FirstOrDefault());
-                    oOrderGroup.Add(oGroupListName.Where(x => x == "LISTAS FINANCIERAS - Criticidad Media").Select(x => x).FirstOrDefault());
-                    oOrderGroup.Add(oGroupListName.Where(x => x == "LISTAS PEPS - Criticidad Baja").Select(x => x).FirstOrDefault());
-                    oOrderGroup.Add(oGroupListName.Where(x => x == "SIN COINCIDENCIAS").Select(x => x).FirstOrDefault());
+                    oOrderGroup.Add(oGroupListName.Where(x => x.Contains("Criticidad Alta")).Select(x => x).FirstOrDefault());
+                    oOrderGroup.Add(oGroupListName.Where(x => x.Contains("Criticidad Media")).Select(x => x).FirstOrDefault());
+                    oOrderGroup.Add(oGroupListName.Where(x => x.Contains("Criticidad Baja")).Select(x => x).FirstOrDefault());                    
+                    oOrderGroup.Add(oGroupListName.Where(x => x.Contains("SIN COINCIDENCIAS")).Select(x => x).FirstOrDefault());
 
                     foreach (var grp in oOrderGroup)
                     {
@@ -130,9 +129,9 @@
                                         <div class="col-md-3">
                                             <strong>Prioridad</strong>
                                         </div>
-                                        <div class="col-md-3">
+                                        @*<div class="col-md-3">
                                             <strong>Estado</strong>
-                                        </div>
+                                        </div>*@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3">
@@ -141,7 +140,7 @@
                                         <div class="col-md-3">
                                             <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Prioridad").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault()</span>
                                         </div>
-                                        <div class="col-md-3">
+                                        @*<div class="col-md-3">
                                             @if (@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Estado").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault().ToLower() == "true")
                                             {
                                                 <span>Activo</span>
@@ -151,8 +150,8 @@
                                                 <span>Inactivo</span>
                                             }
 
-                                        </div>
-                                        <div class="col-md-3 text-right">
+                                        </div>*@
+                                        <div class="col-md-3 pull-right">
                                             <p>
                                                 <a href="@(Url.RouteUrl
                                                                     (MarketPlace.Models.General.Constants.C_Routes_Default,

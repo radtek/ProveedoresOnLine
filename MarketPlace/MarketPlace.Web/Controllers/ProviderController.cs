@@ -1259,11 +1259,10 @@ namespace MarketPlace.Web.Controllers
                 /*get company info*/
                 List<string> oOrderGroup = new List<string>();
 
-                oOrderGroup.Add(oGroupListName.Where(x => x == "LISTAS RESTRICTIVAS - Criticidad Alta").Select(x => x).FirstOrDefault());
-                oOrderGroup.Add(oGroupListName.Where(x => x == "DELITOS E INHABILIDADES CONTRA EL ESTADO - Criticidad Media").Select(x => x).FirstOrDefault());
-                oOrderGroup.Add(oGroupListName.Where(x => x == "LISTAS FINANCIERAS - Criticidad Media").Select(x => x).FirstOrDefault());
-                oOrderGroup.Add(oGroupListName.Where(x => x == "LISTAS PEPS - Criticidad Baja").Select(x => x).FirstOrDefault());
-                oOrderGroup.Add(oGroupListName.Where(x => x == "SIN COINCIDENCIAS").Select(x => x).FirstOrDefault());
+                oOrderGroup.Add(oGroupListName.Where(x => x.Contains("Criticidad Alta")).Select(x => x).FirstOrDefault());
+                oOrderGroup.Add(oGroupListName.Where(x => x.Contains("Criticidad Media")).Select(x => x).FirstOrDefault());
+                oOrderGroup.Add(oGroupListName.Where(x => x.Contains("Criticidad Baja")).Select(x => x).FirstOrDefault());                
+                oOrderGroup.Add(oGroupListName.Where(x => x.Contains("SIN COINCIDENCIAS")).Select(x => x).FirstOrDefault());
 
                 string searchName = "";
                 string searchIdentification = "--";
@@ -1300,7 +1299,7 @@ namespace MarketPlace.Web.Controllers
                     #region LISTAS RESTRICTIVAS - Criticidad Alta
 
                     //rst "LISTAS RESTRICTIVAS - Criticidad Alta"
-                    if (grp != null && grp.CompareTo("LISTAS RESTRICTIVAS - Criticidad Alta") == 0)
+                    if (grp != null && grp.Contains("Criticidad Alta"))
                     {
                         data_rst.Columns.Add("IdentificationResult");
                         data_rst.Columns.Add("NameResult");
@@ -1336,7 +1335,7 @@ namespace MarketPlace.Web.Controllers
                     #region  DELITOS E INHABILIDADES CONTRA EL ESTADO - Criticidad Media
 
                     //dce "DELITOS E INHABILIDADES CONTRA EL ESTADO - Criticidad Media"
-                    if (grp != null && grp.CompareTo("DELITOS E INHABILIDADES CONTRA EL ESTADO - Criticidad Media") == 0)
+                    if (grp != null && grp.Contains("Criticidad Media"))
                     {
                         data_dce.Columns.Add("IdentificationResult");
                         data_dce.Columns.Add("NameResult");
@@ -1406,7 +1405,7 @@ namespace MarketPlace.Web.Controllers
                     #region LISTAS PEPS - Criticidad Baja
 
                     //psp "LISTAS PEPS - Criticidad Baja"
-                    if (grp != null && grp.CompareTo("LISTAS PEPS - Criticidad Baja") == 0)
+                    if (grp != null && grp.Contains("Criticidad Baja"))
                     {
                         data_psp.Columns.Add("IdentificationResult");
                         data_psp.Columns.Add("NameResult");
@@ -1441,7 +1440,7 @@ namespace MarketPlace.Web.Controllers
                     #region Sin Coincidencias
 
                     //na "No hay coincidencias"
-                    if (grp != null && grp.CompareTo("SIN COINCIDENCIAS") == 0)
+                    if (grp != null && grp.Contains("SIN COINCIDENCIAS"))
                     {
                         data_na.Columns.Add("NameSearch");
                         data_na.Columns.Add("IdentificationSearch");
@@ -3596,7 +3595,7 @@ namespace MarketPlace.Web.Controllers
                 parameters.Add(new ReportParameter("LastUpdate", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == 203012).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault()));
             }
 
-            if (oModel.RelatedLiteProvider.ProviderAlertRisk == MarketPlace.Models.General.enumBlackListStatus.DontShowAlert)
+            if (oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCompanyInfoType.AlertRisk).Select(x => x.Value).FirstOrDefault() == MarketPlace.Models.General.enumBlackListStatus.DontShowAlert.ToString())
             {
                 parameters.Add(new ReportParameter("Alert", "No se encontraron coincidencias en listas restrictivas."));
             }
@@ -3627,19 +3626,19 @@ namespace MarketPlace.Web.Controllers
                     row3["PersonState"] = "N/A";
                     foreach (var info in item.BlackListInfo)
                     {
-                        if (info.ItemInfoType.ItemName == "RazonSocial")
+                        if (info.ItemInfoType.ItemName == "Nombre Completo")
                         {
                             row3["PersonName"] = info.Value;
                         }
                         else if (info.ItemInfoType.ItemName == "Cargo")
                         {
-                            row3["PersonCargo"] = info.Value;
+                            row3["PersonCargo"] = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(info.Value);
                         }
-                        else if (info.ItemInfoType.ItemName == "Lista")
+                        else if (info.ItemInfoType.ItemName == "Nombre de la Lista")
                         {
                             row3["PersonLista"] = info.Value;
                         }
-                        else if (info.ItemInfoType.ItemName == "Delito, cargo o resultado de la consulta")
+                        else if (info.ItemInfoType.ItemName == "Cargo o Delito")
                         {
                             row3["PersonDelito"] = info.Value;
                         }

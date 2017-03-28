@@ -21,10 +21,9 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch.Models
         }
 
         public ExcelModel(DataRow Row)
-        {
-            this.TIPOPERSONA = Row["TIPOPERSONA"].ToString();
-            this.NUMEIDEN = Row["NUMEIDEN"].ToString();
-            this.NOMBRES = Row["NOMBRES"].ToString();
+        {            
+            this.NUMEIDEN = Row["NUMERO DE IDENTIFICACION"].ToString();
+            this.NOMBRES = Row["NOMBRES Y APELLIDOS"].ToString();
         }
 
     }

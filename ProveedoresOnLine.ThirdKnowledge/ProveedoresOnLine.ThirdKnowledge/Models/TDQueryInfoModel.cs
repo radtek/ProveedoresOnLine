@@ -35,5 +35,23 @@ namespace ProveedoresOnLine.ThirdKnowledge.Models
         public DateTime LastModify { get; set; }
 
         public DateTime CreateDate { get; set; }
+        public TDQueryInfoModel() { }
+        public TDQueryInfoModel(TDQueryInfoModel oTDQueryInfoModel)
+        {
+            QueryBasicInfoId = oTDQueryInfoModel.QueryBasicInfoId;
+            QueryBasicPublicId = oTDQueryInfoModel.QueryBasicPublicId;
+            QueryPublicId = oTDQueryInfoModel.QueryPublicId;
+            NameResult = oTDQueryInfoModel.NameResult;
+            IdentificationResult = oTDQueryInfoModel.IdentificationResult;
+            Priority = oTDQueryInfoModel.Priority;
+            Peps = oTDQueryInfoModel.Peps;
+            Status = oTDQueryInfoModel.Status;
+            Alias = oTDQueryInfoModel.Alias;
+            Offense = oTDQueryInfoModel.Offense;
+            Enable = oTDQueryInfoModel.Enable;
+            DetailInfo = oTDQueryInfoModel.DetailInfo;
+            LastModify = oTDQueryInfoModel.LastModify;
+            CreateDate = oTDQueryInfoModel.CreateDate;
+        }
     }
 }

@@ -252,7 +252,7 @@
                         <br />
                         <div class="container-fluid POMPProviderDetailContainer">
                             <div class="row">
-                                @if (Model.RelatedLiteProvider.ProviderAlertRisk == MarketPlace.Models.General.enumBlackListStatus.DontShowAlert)
+                                @if (Model.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x=>x.ItemInfoType.ItemId== (int)MarketPlace.Models.General.enumCompanyInfoType.AlertRisk).Select(x=>x.Value).FirstOrDefault() == MarketPlace.Models.General.enumBlackListStatus.DontShowAlert.ToString())
                                 {
                                     <p>No se encontraron coincidencias en listas restrictivas.</p>
                                 }
