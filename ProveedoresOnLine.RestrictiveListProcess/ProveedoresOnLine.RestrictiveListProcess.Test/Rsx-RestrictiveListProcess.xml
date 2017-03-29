@@ -3,14 +3,14 @@
 <Settings>
   <RestrictiveListProcess>
     
-    <key name="TK_CP_ColPersonType">TIPOPERSONA</key>
-    <key name="TK_CP_ColIdNumber">NUMEIDEN</key>
-    <key name="TK_CP_ColIdName">NOMBRES</key>
+    <!--<key name="TK_CP_ColPersonType">TIPOPERSONA</key>-->
+    <key name="TK_CP_ColIdNumber">NUMERO DE IDENTIFICACION</key>
+    <key name="TK_CP_ColIdName">NOMBRES Y APELLIDOS</key>
 
     <key name="PublicarPublicId"><![CDATA[DA5C572E]]></key>
 
     <!--Temp Folder-->
-    <key name="TK_CP_File_TempDirectory">C:\Users\JOHMARVA\Source\Repos\ProveedoresOnLine\ProveedoresOnLine.RestrictiveListProcess\ProveedoresOnLine.RestrictiveListProcess.Test\TempDirectory\</key>
+    <key name="TK_CP_File_TempDirectory">D:\ProveedoresOnLine\Source\POL\ProveedoresOnLine.RestrictiveListProcess\ProveedoresOnLine.RestrictiveListProcess.Test\TempDirectory\</key>
 
     <!--S3 Path File-->
     <key name="TK_CP_File_ExcelDirectory">/BatchProcessFile</key>
