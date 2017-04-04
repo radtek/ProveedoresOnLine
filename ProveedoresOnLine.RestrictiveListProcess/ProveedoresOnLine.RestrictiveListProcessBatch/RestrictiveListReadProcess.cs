@@ -24,7 +24,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
     public class RestrictiveListReadProcess
     {
         public static void StartProcess()
-        {
+       {
             try
             {
                 //Start Process

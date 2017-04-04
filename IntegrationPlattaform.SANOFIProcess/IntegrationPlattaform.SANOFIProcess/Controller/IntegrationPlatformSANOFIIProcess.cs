@@ -30,13 +30,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                     (
                         IntegrationPlattaform.SANOFIProcess.Models.InternalSettings.Instance[
                         IntegrationPlattaform.SANOFIProcess.Models.Constants.C_SANOFI_ProviderPublicId].Value
-                    );
-                //DateTime date = new DateTime(2000, 01, 01);
-                //List<CompanyModel> oProviders = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.GetAllProvidersByCustomerPublicIdByStartDate
-                //(
-                //     IntegrationPlattaform.SANOFIProcess.Models.InternalSettings.Instance[
-                //     IntegrationPlattaform.SANOFIProcess.Models.Constants.C_SANOFI_ProviderPublicId].Value, date/*LastProcess != null && LastProcess.CompanyPublicId != null ? LastProcess.LastModify : DateTime.Now.AddYears(-50)*/
-                //);
+                    );                
 
                 #region Variables
 
@@ -77,7 +71,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                             //Modify Date against Last Created process
                             LogFile(count + " ProviderPublicId:::: " + p.CompanyPublicId.ToString());
 
-                            //TODO: Set lastmodify
+                            
                             oGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetInfoByProvider(p.CompanyPublicId, LastProcess.LastModify).FirstOrDefault();
                             oComercialGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialInfoByProvider(p.CompanyPublicId, LastProcess.LastModify).FirstOrDefault();
                             oComercialBasicRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialBasicInfoByProvider(p.CompanyPublicId, LastProcess.LastModify).FirstOrDefault();
@@ -96,6 +90,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                         });
 
                         LogFile("::::::::::::::Generating Files::::::::::::");
+
                         //Call Function to create the txt;
                         if (oGeneralInfo != null && oGeneralInfo.Count > 0)
                         {
@@ -158,6 +153,10 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                         {
                             LogFile("New Providers " + oNoExist.Count);
                             count = 0;
+
+                            //for testing purposes
+                            DateTime date = new DateTime(2000, 01, 01);
+
                             oNoExist.All(l =>
                             {
                                 oGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
@@ -189,7 +188,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                             count = 0;
                             oExist.All(l =>
                             {
-                                oGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
+                                oGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetInfoByProvider(l,  LastProcess.LastModify).FirstOrDefault();
                                 oComercialGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
                                 oComercialBasicRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialBasicInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
                                 oContableRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetContableInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
@@ -330,30 +329,52 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                             iLN++;
                             return true;
                         });
-                        NaturalName = string.Join(", ", NameWords);
-                        NaturalLastName = string.Join(", ", LastNameWords);
+                        NaturalName = string.Join("| ", NameWords);
+                        NaturalLastName = string.Join("| ", LastNameWords);
 
                     }
                     #endregion
 
                     #region Write Process
-                    Header.AppendLine(
-                          (!string.IsNullOrEmpty(NaturalName))? NaturalLastName + ", " + NaturalName : x.CompanyName  + strSep +
-                          "" + strSep +
-                          NaturalName + strSep +
-                          NaturalLastName + strSep +
+                    //For natural person
+                    if (!string.IsNullOrEmpty(NaturalLastName))
+                    {
+                        Header.AppendLine(
+                          NaturalLastName + strSep +                          
                           x.IdentificationNumber + strSep +
                           x.FiscalNumber + strSep +
                           x.Address + strSep +
                           x.City + strSep +
-                          (x.Region != null? x.Region.PadLeft(2, '0') : "0") + strSep +
+                          (x.Region != null ? x.Region.PadLeft(2, '0') : "0") + strSep +
                           x.Country + strSep +
-                          x.PhoneNumber.Replace("(","").Replace(")","").Replace("+","").Replace(" ","") + strSep +
+                          x.PhoneNumber.Replace("(", "").Replace(")", "").Replace("+", "").Replace(" ", "") + strSep +
                           x.Fax.Replace("(", "").Replace(")", "").Replace("+", "").Replace(" ", "") + strSep +
                           x.Email_OC + strSep +
                           x.Email_P + strSep +
                           x.Email_Cert + strSep +
-                          x.Comentaries+ strSep);
+                          x.Comentaries + strSep);
+                    }
+                    else
+                    {
+                        Header.AppendLine(
+                      x.CompanyName + strSep +
+                      "" + strSep +
+                      "" + strSep +
+                      ""+ strSep +
+                      x.IdentificationNumber + strSep +
+                      x.FiscalNumber + strSep +
+                      x.Address + strSep +
+                      x.City + strSep +
+                      (x.Region != null ? x.Region.PadLeft(2, '0') : "0") + strSep +
+                      x.Country + strSep +
+                      x.PhoneNumber.Replace("(", "").Replace(")", "").Replace("+", "").Replace(" ", "") + strSep +
+                      x.Fax.Replace("(", "").Replace(")", "").Replace("+", "").Replace(" ", "") + strSep +
+                      x.Email_OC + strSep +
+                      x.Email_P + strSep +
+                      x.Email_Cert + strSep +
+                      x.Comentaries + strSep);
+                    }
+                    
 
                     #endregion
                     return true;

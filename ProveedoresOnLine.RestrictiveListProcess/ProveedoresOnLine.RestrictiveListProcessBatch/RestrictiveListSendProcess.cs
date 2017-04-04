@@ -66,12 +66,14 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                 {
                                     y.RelatedLegal.All(z =>
                                     {
-                                        row++;
-
-                                        //Persons                                        
-                                        worksheet.Cells[row, 1].Value = z.ItemInfo.Where(n => n.ItemInfoType.ItemId == (int)enumLegalDesignationsInfoType.CD_PartnerIdentificationNumber).Select(n => n.Value).FirstOrDefault();
-                                        worksheet.Cells[row, 2].Value = z.ItemInfo.Where(n => n.ItemInfoType.ItemId == (int)enumLegalDesignationsInfoType.CD_PartnerName).Select(n => n.Value).FirstOrDefault();
-
+                                        if (!string.IsNullOrEmpty(z.ItemInfo.Where(n => n.ItemInfoType.ItemId == (int)enumLegalDesignationsInfoType.CD_PartnerIdentificationNumber).Select(n => n.Value).FirstOrDefault())
+                                            && !string.IsNullOrEmpty(z.ItemInfo.Where(n => n.ItemInfoType.ItemId == (int)enumLegalDesignationsInfoType.CD_PartnerName).Select(n => n.Value).FirstOrDefault()))
+                                        {
+                                            row++;
+                                            //Persons                                        
+                                            worksheet.Cells[row, 1].Value = z.ItemInfo.Where(n => n.ItemInfoType.ItemId == (int)enumLegalDesignationsInfoType.CD_PartnerIdentificationNumber).Select(n => n.Value).FirstOrDefault();
+                                            worksheet.Cells[row, 2].Value = z.ItemInfo.Where(n => n.ItemInfoType.ItemId == (int)enumLegalDesignationsInfoType.CD_PartnerName).Select(n => n.Value).FirstOrDefault();
+                                        }
                                         return true;
                                     });
                                 }
