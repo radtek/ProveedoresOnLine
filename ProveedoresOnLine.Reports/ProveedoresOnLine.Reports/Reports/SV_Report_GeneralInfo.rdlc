@@ -1567,7 +1567,7 @@
         <Top>8.07745cm</Top>
         <Left>0.51938cm</Left>
         <Height>1.2cm</Height>
-        <Width>25.75189cm</Width>
+        <Width>25.75187cm</Width>
         <ZIndex>19</ZIndex>
         <Style>
           <Border>
@@ -1668,7 +1668,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>="PROVEEDORES ONLINE - www.proveedoresonline.co - ©2016 Publicar S.A" + System.Environment.NewLine + Parameters!CustomerName.Value + System.Environment.NewLine + Parameters!CustomerIdentificationType.Value + " . " + Parameters!CustomerIdentification.Value</Value>
+                  <Value>="PROVEEDORES ONLINE - www.proveedoresonline.co - ©2017 Proveedores OnLine S.A" + System.Environment.NewLine + Parameters!CustomerName.Value + System.Environment.NewLine + Parameters!CustomerIdentificationType.Value + " . " + Parameters!CustomerIdentification.Value</Value>
                   <Style>
                     <FontFamily>Segoe UI Light</FontFamily>
                     <FontSize>8pt</FontSize>

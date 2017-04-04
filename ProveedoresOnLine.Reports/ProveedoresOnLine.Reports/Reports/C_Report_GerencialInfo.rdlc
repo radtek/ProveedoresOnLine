@@ -1762,7 +1762,7 @@
         <Top>6.48101cm</Top>
         <Left>0.6966cm</Left>
         <Height>1.2cm</Height>
-        <Width>15.77292cm</Width>
+        <Width>15.7729cm</Width>
         <ZIndex>32</ZIndex>
         <Style>
           <Border>
@@ -2586,7 +2586,7 @@
         <Top>14.22156cm</Top>
         <Left>0.6966cm</Left>
         <Height>1.2cm</Height>
-        <Width>15.77297cm</Width>
+        <Width>15.77438cm</Width>
         <ZIndex>44</ZIndex>
         <Visibility>
           <Hidden>= Iif (CountRows("DS_GerencialReport_Terceros") &gt; 0, false, true)</Hidden>
@@ -4099,7 +4099,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>= "PROVEEDORES ONLINE - www.proveedoresonline.co - ©2015 Publicar S.A" + System.Environment.NewLine  +
+                  <Value>= "PROVEEDORES ONLINE - www.proveedoresonline.co - ©2017 Proveedores OnLine S.A" + System.Environment.NewLine  +
 Parameters!CustomerName.Value + System.Environment.NewLine  + Parameters!CustomerIdentificationType.Value + " . " + Parameters!CustomerIdentification.Value</Value>
                   <Style>
                     <FontFamily>Segoe UI Light</FontFamily>

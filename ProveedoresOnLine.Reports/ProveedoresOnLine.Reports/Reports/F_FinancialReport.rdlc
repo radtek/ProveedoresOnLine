@@ -4632,7 +4632,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>= "PROVEEDORES ONLINE - www.proveedoresonline.co - ©2016 Publicar S.A" + System.Environment.NewLine  +
+                  <Value>= "PROVEEDORES ONLINE - www.proveedoresonline.co - ©2017 Proveedores OnLine S.A" + System.Environment.NewLine  +
 Parameters!CustomerName.Value + System.Environment.NewLine  + Parameters!CustomerIdentificationType.Value + " . " + Parameters!CustomerIdentification.Value</Value>
                   <Style>
                     <FontFamily>Segoe UI Light</FontFamily>
