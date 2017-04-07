@@ -228,20 +228,23 @@ namespace ProveedoresOnLine.CalificationBatch
                                                 //Upsert
                                                 oModelToUpsert = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectUpsert(oModelToUpsert);
 
-                                                ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoUpsert(new CalificationProject.Models.CalificationProject.ConfigInfoModel()
+                                                if (oCalificationProjectConfigInfoModel.Where(x => x.RelatedCalificationProjectConfig.CalificationProjectConfigId == cp.ProjectConfigModel.CalificationProjectConfigId && x.RelatedProvider.CompanyPublicId == prv.CompanyPublicId).Select(x => x.CalificationProjectConfigInfoId).FirstOrDefault()>0)
                                                 {
-                                                    CalificationProjectConfigInfoId = oCalificationProjectConfigInfoModel.Where(x => x.RelatedCalificationProjectConfig.CalificationProjectConfigId == cp.ProjectConfigModel.CalificationProjectConfigId && x.RelatedProvider.CompanyPublicId == prv.CompanyPublicId).Select(x => x.CalificationProjectConfigInfoId).FirstOrDefault(),
-                                                    RelatedCalificationProjectConfig = new CalificationProject.Models.CalificationProject.CalificationProjectConfigModel()
+                                                    ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoUpsert(new CalificationProject.Models.CalificationProject.ConfigInfoModel()
                                                     {
-                                                        Company = new CompanyModel()
+                                                        CalificationProjectConfigInfoId = oCalificationProjectConfigInfoModel.Where(x => x.RelatedCalificationProjectConfig.CalificationProjectConfigId == cp.ProjectConfigModel.CalificationProjectConfigId && x.RelatedProvider.CompanyPublicId == prv.CompanyPublicId).Select(x => x.CalificationProjectConfigInfoId).FirstOrDefault(),
+                                                        RelatedCalificationProjectConfig = new CalificationProject.Models.CalificationProject.CalificationProjectConfigModel()
                                                         {
-                                                            CompanyPublicId = prv.CompanyPublicId
+                                                            Company = new CompanyModel()
+                                                            {
+                                                                CompanyPublicId = prv.CompanyPublicId
+                                                            },
+                                                            CalificationProjectConfigId = cp.ProjectConfigModel.CalificationProjectConfigId
                                                         },
-                                                        CalificationProjectConfigId = cp.ProjectConfigModel.CalificationProjectConfigId
-                                                    },
-                                                    Enable = true,
-                                                    Status = true
-                                                });
+                                                        Enable = true,
+                                                        Status = true
+                                                    });
+                                                }                                                
                                             }
                                             else
                                             {
@@ -325,20 +328,24 @@ namespace ProveedoresOnLine.CalificationBatch
 
                                                 //Upsert
                                                 oModelToUpsert = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectUpsert(oModelToUpsert);
-                                                ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoUpsert(new CalificationProject.Models.CalificationProject.ConfigInfoModel()
+
+                                                if (oCalificationProjectConfigInfoModel.Where(x => x.RelatedCalificationProjectConfig.CalificationProjectConfigId == cp.ProjectConfigModel.CalificationProjectConfigId && x.RelatedProvider.CompanyPublicId == prv.CompanyPublicId).Select(x => x.CalificationProjectConfigInfoId).FirstOrDefault()>0)
                                                 {
-                                                    CalificationProjectConfigInfoId = oCalificationProjectConfigInfoModel.Where(x => x.RelatedCalificationProjectConfig.CalificationProjectConfigId == cp.ProjectConfigModel.CalificationProjectConfigId && x.RelatedProvider.CompanyPublicId == prv.CompanyPublicId).Select(x => x.CalificationProjectConfigInfoId).FirstOrDefault(),
-                                                    RelatedCalificationProjectConfig = new CalificationProject.Models.CalificationProject.CalificationProjectConfigModel()
+                                                    ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoUpsert(new CalificationProject.Models.CalificationProject.ConfigInfoModel()
                                                     {
-                                                        Company = new CompanyModel()
+                                                        CalificationProjectConfigInfoId = oCalificationProjectConfigInfoModel.Where(x => x.RelatedCalificationProjectConfig.CalificationProjectConfigId == cp.ProjectConfigModel.CalificationProjectConfigId && x.RelatedProvider.CompanyPublicId == prv.CompanyPublicId).Select(x => x.CalificationProjectConfigInfoId).FirstOrDefault(),
+                                                        RelatedCalificationProjectConfig = new CalificationProject.Models.CalificationProject.CalificationProjectConfigModel()
                                                         {
-                                                            CompanyPublicId = prv.CompanyPublicId
+                                                            Company = new CompanyModel()
+                                                            {
+                                                                CompanyPublicId = prv.CompanyPublicId
+                                                            },
+                                                            CalificationProjectConfigId = cp.ProjectConfigModel.CalificationProjectConfigId
                                                         },
-                                                        CalificationProjectConfigId = cp.ProjectConfigModel.CalificationProjectConfigId
-                                                    },
-                                                    Enable = true,
-                                                    Status = true
-                                                });
+                                                        Enable = true,
+                                                        Status = true
+                                                    });
+                                                }                                                
                                             }
                                             return true;
                                         });                                        

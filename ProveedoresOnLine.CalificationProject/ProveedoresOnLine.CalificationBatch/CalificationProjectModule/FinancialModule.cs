@@ -30,10 +30,10 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
 
             #region Variables
 
-            int oTotalModuleScore = 0;
-            int FinancialScore = 0;
-            int RuleScore = 0;
-            int oIntValue = 0;
+            Int32 oTotalModuleScore = 0;
+            Int32 FinancialScore = 0;
+            Int32 RuleScore = 0;
+            Int32 oIntValue = 0;
             decimal oDecimalValue = 0;
             bool oBooleanValue = true;
             double oPercentValue = 0;

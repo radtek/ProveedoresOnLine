@@ -30,10 +30,10 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
 
             #region Variables
 
-            int oTotalModuleScore = 0;
-            int LegalScore = 0;
-            int RuleScore = 0;
-            int oIntValue = 0;
+            Int32 oTotalModuleScore = 0;
+            Int32 LegalScore = 0;
+            Int32 RuleScore = 0;
+            Int32 oIntValue = 0;
             decimal oDecimalValue = 0;
             double oPercentValue = 0;
             DateTime oDateValue = new DateTime();
@@ -660,8 +660,13 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
 
                                                         oValue = rule.Value.Split(',');
 
-                                                        oMinValue = Convert.ToDateTime(oValue[0].Trim());
-                                                        oMaxValue = Convert.ToDateTime(oValue[1].Trim());
+                                                        System.Globalization.CultureInfo cultureinfo =
+                                                            new System.Globalization.CultureInfo("nl-NL");
+                                                        DateTime min = DateTime.Parse(oValue[0].Trim(), cultureinfo);
+                                                        DateTime max = DateTime.Parse(oValue[1].Trim(), cultureinfo);
+
+                                                        oMinValue = min;
+                                                        oMaxValue = max;
 
                                                         if (oDateValue < oMaxValue && oDateValue > oMinValue)
                                                         {
@@ -1549,9 +1554,13 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                     DateTime oMaxValue;
 
                                                     oValue = rule.Value.Split(',');
+                                                    System.Globalization.CultureInfo cultureinfo =
+                                                            new System.Globalization.CultureInfo("nl-NL");
+                                                    DateTime min = DateTime.Parse(oValue[0].Trim(), cultureinfo);
+                                                    DateTime max = DateTime.Parse(oValue[1].Trim(), cultureinfo);
 
-                                                    oMinValue = Convert.ToDateTime(oValue[0].Trim());
-                                                    oMaxValue = Convert.ToDateTime(oValue[1].Trim());
+                                                    oMinValue = min;
+                                                    oMaxValue = max;
 
                                                     if (oDateValue < oMaxValue && oDateValue > oMinValue)
                                                     {
@@ -2493,9 +2502,13 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                 DateTime oMaxValue;
 
                                                 oValue = cpitinf.Value.Split(',');
+                                                System.Globalization.CultureInfo cultureinfo =
+                                                            new System.Globalization.CultureInfo("nl-NL");
+                                                DateTime min = DateTime.Parse(oValue[0].Trim(), cultureinfo);
+                                                DateTime max = DateTime.Parse(oValue[1].Trim(), cultureinfo);
 
-                                                oMinValue = Convert.ToDateTime(oValue[0].Trim());
-                                                oMaxValue = Convert.ToDateTime(oValue[1].Trim());
+                                                oMinValue = min;
+                                                oMaxValue = max;
 
                                                 if (oDateValue < oMaxValue && oDateValue > oMinValue)
                                                 {
@@ -2700,7 +2713,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
             }
             catch (Exception err)
             {
-                ProveedoresOnLine.CalificationBatch.CalificationProcess.LogFile("Fatal error:: Legal Module :: " + err.Message + " - " + err.StackTrace);
+                ProveedoresOnLine.CalificationBatch.CalificationProcess.LogFile("Fatal error:: Legal Module :: " + err.Message + " - " + err.StackTrace +" InnerException: "+ err.InnerException);
             }
 
             //Get new score

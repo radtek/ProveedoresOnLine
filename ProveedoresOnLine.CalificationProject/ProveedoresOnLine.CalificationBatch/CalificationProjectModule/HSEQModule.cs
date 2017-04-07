@@ -29,9 +29,9 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
 
             #region Variables
 
-            int oTotalModuleScore = 0;
-            int HSEQScore = 0;
-            int RuleScore = 0;            
+            Int32 oTotalModuleScore = 0;
+            Int32 HSEQScore = 0;
+            Int32 RuleScore = 0;            
             decimal oDecimalValue = 0;
             bool oBooleanValue = false;
             double oPercentValue = 0;
