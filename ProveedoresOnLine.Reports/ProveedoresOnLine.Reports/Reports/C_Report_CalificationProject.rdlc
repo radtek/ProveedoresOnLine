@@ -4257,7 +4257,7 @@
         <Top>21.95179cm</Top>
         <Left>0.06664cm</Left>
         <Height>1.37639cm</Height>
-        <Width>16.67243cm</Width>
+        <Width>16.67244cm</Width>
         <ZIndex>39</ZIndex>
         <Visibility>
           <Hidden>= Iif (CountRows("DS_CalificationReport_Certification") &gt; 0, false, true)</Hidden>
@@ -4348,7 +4348,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>= "PROVEEDORES ONLINE - www.proveedoresonline.co - ©2015 Publicar S.A" + System.Environment.NewLine  +
+                  <Value>= "PROVEEDORES ONLINE - www.proveedoresonline.co - ©2017 Proveedores OnLine S.A" + System.Environment.NewLine  +
 Parameters!CustomerName.Value + System.Environment.NewLine  + Parameters!CustomerIdentificationType.Value + " . " + Parameters!CustomerIdentification.Value</Value>
                   <Style>
                     <FontFamily>Segoe UI Light</FontFamily>

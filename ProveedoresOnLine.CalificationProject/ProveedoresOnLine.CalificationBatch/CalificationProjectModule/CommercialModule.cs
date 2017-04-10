@@ -26,13 +26,13 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
             };
             
             List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> oCommercialProviderInfo;
-            
+
             #region Variables
 
-            int oTotalModuleScore = 0;
-            int CommercialScore = 0;
-            int RuleScore = 0;
-            int oIntValue = 0;
+            Int32 oTotalModuleScore = 0;
+            Int32 CommercialScore = 0;
+            Int32 RuleScore = 0;
+            Int32 oIntValue = 0;
             decimal oDecimalValue = 0;
             bool oBooleanValue = true;
             double oPercentValue = 0;

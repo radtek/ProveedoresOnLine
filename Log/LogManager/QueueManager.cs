@@ -29,11 +29,12 @@ namespace LogManager
 
         private Timer ProccessLogTimer { get; set; }
 
-        private int LogTimer
+        private Int32 LogTimer
         {
             get
             {
-                return int.Parse(ConfigurationManager.AppSettings[Constants.C_LogTimer]);
+                
+                return Int32.Parse(ConfigurationManager.AppSettings[Constants.C_LogTimer]);
             }
         }
 
