@@ -39,6 +39,7 @@ namespace ProveedoresOnLine.CalificationProject.Controller
             }
             finally
             {
+                oLog.User = "BatchProcess";
                 oLog.LogObject = oConfigProject;
                 oLog.RelatedLogInfo.Add(new LogManager.Models.LogInfoModel()
                 {
@@ -98,6 +99,7 @@ namespace ProveedoresOnLine.CalificationProject.Controller
             }
             finally
             {
+                oLog.User = "BatchProcess";
                 oLog.LogObject = oConfigInfo;
                 oLog.RelatedLogInfo.Add(new LogManager.Models.LogInfoModel()
                 {
@@ -157,6 +159,7 @@ namespace ProveedoresOnLine.CalificationProject.Controller
                     }
                     finally
                     {
+                        oLog.User = "BatchProcess";
                         oLog.LogObject = cit;
 
                         oLog.RelatedLogInfo.Add(new LogManager.Models.LogInfoModel()
@@ -216,6 +219,7 @@ namespace ProveedoresOnLine.CalificationProject.Controller
                     }
                     finally
                     {
+                        oLog.User = "BatchProcess";
                         oLog.LogObject = cinf;
 
                         oLog.RelatedLogInfo.Add(new LogManager.Models.LogInfoModel()
@@ -270,6 +274,7 @@ namespace ProveedoresOnLine.CalificationProject.Controller
             }
             finally
             {
+                oLog.User = "BatchProcess";
                 oLog.LogObject = oConfigValidateModel;
 
                 oLog.RelatedLogInfo.Add(new LogManager.Models.LogInfoModel()

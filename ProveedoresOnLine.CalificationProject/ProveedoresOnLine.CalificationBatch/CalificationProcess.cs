@@ -32,10 +32,11 @@ namespace ProveedoresOnLine.CalificationBatch
                     oCalificationProjectConfigModel.All(cnf =>
                     {
                         //Get all related provider by customer
+                        oRelatedProvider = new List<CompanyModel>();
                         oRelatedProvider.AddRange(oCalificationProjectConfigInfoModel.Where(x =>x.RelatedCalificationProjectConfig.CalificationProjectConfigId == cnf.CalificationProjectConfigId).Select(x=>x.RelatedProvider));
                             
                         var oModelToUpsert = new Models.CalificationProjectBatch.CalificationProjectBatchModel();
-
+                        LogFile("Running: "+ cnf.CalificationProjectConfigName);
                         //validate provider list
                         if (oRelatedProvider != null &&
                             oRelatedProvider.Count > 0 &&
@@ -492,9 +493,10 @@ namespace ProveedoresOnLine.CalificationBatch
                             //Provider list is empty
                             ProveedoresOnLine.CalificationBatch.CalificationProcess.LogFile("Error:: customer public id: " + cnf.Company.CompanyPublicId + " :: related provider list is empty.");
                         }
-
+                        LogFile("Finish: "+ cnf.CalificationProjectConfigName);
                         return true;
                     });
+                    
                 }
                 else
                 {
