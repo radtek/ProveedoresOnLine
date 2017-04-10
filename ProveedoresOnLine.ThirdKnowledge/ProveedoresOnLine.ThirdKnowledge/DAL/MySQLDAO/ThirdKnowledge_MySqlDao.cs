@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
+using ProveedoresOnLine.ThirdKnowledge.Interfaces;
 
 namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
 {
@@ -614,7 +616,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
 
         #region Queries
 
-        public string QueryUpsert(string QueryPublicId, string PeriodPublicId, int SearchType, string User, string FileName, bool isSuccess, int QueryStatusId, bool Enable)
+        public async Task<string> QueryUpsert(string QueryPublicId, string PeriodPublicId, int SearchType, string User, string FileName, bool isSuccess, int QueryStatusId, bool Enable)
         {
             List<IDbDataParameter> lstParams = new List<IDbDataParameter>();
 
@@ -669,7 +671,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
                 return null;
         }
 
-        public int QueryDetailInfoInsert(string QueryBasicPublicId, int ItemInfoType, string Value, string LargeValue, bool Enable)
+        public async Task<int> QueryDetailInfoInsert(string QueryBasicPublicId, int ItemInfoType, string Value, string LargeValue, bool Enable)
         {
             List<IDbDataParameter> lstParams = new List<IDbDataParameter>();
 
@@ -921,5 +923,6 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
             }
             return oReturn;
         }
+ 
     }
 }

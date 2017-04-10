@@ -1,6 +1,7 @@
 ﻿using ProveedoresOnLine.ThirdKnowledge.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProveedoresOnLine.ThirdKnowledge.Interfaces
 {
@@ -28,11 +29,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Interfaces
 
         #region Queries
 
-        string QueryUpsert(string QueryPublicId, string PeriodPublicId, int SearchType, string User, string FileName, bool isSuccess, int QueryStatusId, bool Enable);
+        Task<string> QueryUpsert(string QueryPublicId, string PeriodPublicId, int SearchType, string User, string FileName, bool isSuccess, int QueryStatusId, bool Enable);
 
         string QueryBasicInfoInsert(string QueryPublicId, string NameResult, string IdentificationResult, string Priority, string Peps, string Status, string Alias, string Offense, bool Enable);
 
-        int QueryDetailInfoInsert(string QueryBasicPublicId, int ItemInfoType, string Value, string LargeValue, bool Enable);
+        Task<int> QueryDetailInfoInsert(string QueryBasicPublicId, int ItemInfoType, string Value, string LargeValue, bool Enable);
 
         TDQueryInfoModel QueryDetailGetByBasicPublicID(string QueryBasicInfoPublicId);
         #endregion Queries

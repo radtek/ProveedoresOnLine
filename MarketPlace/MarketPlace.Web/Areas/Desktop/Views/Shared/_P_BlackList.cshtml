@@ -135,22 +135,11 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <span>@MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Cargo").Select(x => x.Value).FirstOrDefault())</span>
+                                            <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Cargo").Select(x => x.Value).FirstOrDefault()</span>
                                         </div>
                                         <div class="col-md-3">
                                             <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Prioridad").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault()</span>
-                                        </div>
-                                        @*<div class="col-md-3">
-                                            @if (@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Estado").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault().ToLower() == "true")
-                                            {
-                                                <span>Activo</span>
-                                            }
-                                            else
-                                            {
-                                                <span>Inactivo</span>
-                                            }
-
-                                        </div>*@
+                                        </div>                                       
                                         <div class="col-md-3 pull-right">
                                             <p>
                                                 <a href="@(Url.RouteUrl

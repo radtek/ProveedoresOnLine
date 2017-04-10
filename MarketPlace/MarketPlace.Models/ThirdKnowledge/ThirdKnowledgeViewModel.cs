@@ -65,7 +65,7 @@ namespace MarketPlace.Models.ThirdKnowledge
         public string MoreInfo { get; set; }
         public string RegisterDate { get; set; }
         public string LastModifyDate { get; set; }
-        public string Message { get; set; }
+        public string Message { get; set; } 
         public string FileURL { get; set; }        
 
         #region Third Knowledge Search

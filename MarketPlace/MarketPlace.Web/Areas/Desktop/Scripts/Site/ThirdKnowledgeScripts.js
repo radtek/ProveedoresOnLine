@@ -36,8 +36,9 @@ var Third_KnowledgeSimpleSearchObject = {
                     var tittlestDiv = '';
                     var resultDiv = '';
                     if (result.RelatedSingleSearch != null && result.RelatedSingleSearch.length > 0) {
-                        $.each(result.RelatedSingleSearch, function (item, value) {                            
-                            if (value.m_Item1 == "SIN COINCIDENCIAS") {
+                        debugger;
+                        $.each(result.RelatedSingleSearch, function (item, value) {                                   
+                            if (value.m_Item1 == "SIN COINCIDENCIAS") {                                
                                 resultDiv = '';
                                 resultDiv += '<div class="row">' +
                                 '<div class="col-sm-12 col-lg-12 POMPTKDetailTitle"><strong>SIN COINCIDENCIAS</strong></div>' +

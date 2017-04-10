@@ -2,6 +2,7 @@
 using ProveedoresOnLine.ThirdKnowledge.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProveedoresOnLine.ThirdKnowledge.DAL.Controller
 {
@@ -81,7 +82,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.Controller
 
         #region Query
 
-        public string QueryUpsert(string QueryPublicId, string PeriodPublicId, int SearchType, string User, string FileName, bool isSuccess, int QueryStatusId, bool Enable)
+        public Task<string> QueryUpsert(string QueryPublicId, string PeriodPublicId, int SearchType, string User, string FileName, bool isSuccess, int QueryStatusId, bool Enable)
         {
             return DataFactory.QueryUpsert(QueryPublicId, PeriodPublicId, SearchType, User, FileName, isSuccess, QueryStatusId, Enable);
         }
@@ -91,9 +92,9 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.Controller
             return DataFactory.QueryBasicInfoInsert(QueryPublicId, NameResult, IdentificationResult, Priority, Peps, Status, Alias,Offense, Enable);
         }
 
-        public int QueryDetailInfoInsert(string QueryBasicPublicId, int ItemInfoType, string Value, string LargeValue, bool Enable)
+        public async Task<int> QueryDetailInfoInsert(string QueryBasicPublicId, int ItemInfoType, string Value, string LargeValue, bool Enable)
         {
-            return DataFactory.QueryDetailInfoInsert(QueryBasicPublicId, ItemInfoType, Value, LargeValue, Enable); ;
+            return await DataFactory.QueryDetailInfoInsert(QueryBasicPublicId, ItemInfoType, Value, LargeValue, Enable);
         }
 
         public TDQueryInfoModel QueryDetailGetByBasicPublicID(string QueryBasicInfoPublicId)

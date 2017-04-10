@@ -76,12 +76,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
 
             Assert.AreEqual(true, oReturn != null);
         }
-
-        [TestMethod]
-        public void AccessFTPTest()
-        {
-            Assert.IsFalse(ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.AccessFTPClient("ThirdKnowledgeFile_DA5C572E_20150921112019.xlsx", "C:\\Users\\JOHMARVA\\Source\\Repos\\ProveedoresOnLine\\MarketPlace\\MarketPlace.Web\\TempDirectory\\ThirdKnowledgeFile_DA5C572E_20150921112019.xlsx", ""));
-        }
+              
 
         [TestMethod]
         public void GetQueriesInProgress()

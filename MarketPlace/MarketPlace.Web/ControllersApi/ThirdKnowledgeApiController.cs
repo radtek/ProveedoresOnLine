@@ -121,7 +121,6 @@ namespace MarketPlace.Web.ControllersApi
                                 });
                                 if (Group != null)
                                 {
-
                                     oModel.RelatedSingleSearch = Group;
                                 }
 
@@ -133,8 +132,9 @@ namespace MarketPlace.Web.ControllersApi
                                     //Period Upsert
                                     oModel.RelatedThirdKnowledge.CurrentPlanModel.RelatedPeriodModel.FirstOrDefault().PeriodPublicId = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.PeriodoUpsert(
                                         oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault());
-                                }
-                            }
+                                }                                                                 
+                                Task.Run(() => ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryDetailUpsert(oModel.RelatedThidKnowledgeSearch.CollumnsResult));
+                            }                            
                         }
                         else
                         {
@@ -258,7 +258,7 @@ namespace MarketPlace.Web.ControllersApi
 
         [HttpPost]
         [HttpGet]
-        public FileModel TKLoadFile(string TKLoadFile, string CompanyPublicId, string PeriodPublicId)
+        public async Task<FileModel> TKLoadFile(string TKLoadFile, string CompanyPublicId, string PeriodPublicId)
         {
             FileModel oReturn = new FileModel();
 
@@ -312,7 +312,7 @@ namespace MarketPlace.Web.ControllersApi
                             FileName = oFileName,
                         };
 
-                        oQueryToCreate = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryUpsert(oQueryToCreate);
+                        oQueryToCreate = await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryUpsert(oQueryToCreate);
 
                         //Send Message
                         MessageModule.Client.Models.NotificationModel oDataMessage = new MessageModule.Client.Models.NotificationModel();
@@ -356,7 +356,7 @@ namespace MarketPlace.Web.ControllersApi
 
         [HttpPost]
         [HttpGet]
-        public FileModel TKReSearchMasive(string TKReSearchMasive, string CompanyPublicId, string PeriodPublicId, string FileName)
+        public async Task<FileModel> TKReSearchMasive(string TKReSearchMasive, string CompanyPublicId, string PeriodPublicId, string FileName)
         {
             FileModel oReturn = new FileModel();
 
@@ -409,7 +409,7 @@ namespace MarketPlace.Web.ControllersApi
                         FileName = oFileName,
                     };
 
-                    oQueryToCreate = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryUpsert(oQueryToCreate);
+                    oQueryToCreate =  await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryUpsert(oQueryToCreate);
 
                     //Send Message
                     MessageModule.Client.Models.NotificationModel oDataMessage = new MessageModule.Client.Models.NotificationModel();

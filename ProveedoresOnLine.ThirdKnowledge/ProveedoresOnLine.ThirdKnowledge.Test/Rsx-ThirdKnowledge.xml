@@ -61,6 +61,7 @@
 
     <!--PanamaPapers Estrucutre Page-->
   <key name="PanamaPapers_Url">https://offshoreleaks.icij.org/search?cat=</key>
+  <key name="PanamaPapersResult_Url">https://offshoreleaks.icij.org/</key>
   </ThirdKnowledge>
 </Settings>
 

@@ -28,8 +28,9 @@ namespace ProveedoresOnLine.OnlineSearch.Models
         public const string Proc_Url = "Proc_Url";
         #endregion
         #region Panama Papers
-        public const string PanamaPaapers_Url = "PanamaPapers_Url";
+        public const string PanamaPapers_Url = "PanamaPapers_Url";
 
+        public const string PanamaPapersResult_Url = "PanamaPapersResult_Url";
         #endregion
     }
 }

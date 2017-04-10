@@ -20,11 +20,18 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         {
             try
             {
-                Task<List<Tuple<string, List<string>, List<string>>>> task = Task.Run(() => OnLnieSearch(IdType, IdentificationNumber));
+                Task<List<Tuple<string, List<string>, List<string>>>> taskProc = Task.Run(() => OnLnieSearch(IdType, IdentificationNumber));
                 List<Tuple<string, List<string>, List<string>>> procResult = new List<Tuple<string, List<string>, List<string>>>();
+
+                Task<List<Tuple<string, List<string>, List<string>>>> taskPP = Task.Run(() => PPSearch(IdType == 2 ? 0 : 1, Name, IdentificationNumber));
+                List<Tuple<string, List<string>, List<string>>> ppResult = new List<Tuple<string, List<string>, List<string>>>();
                 //Proc Request
                 if (!string.IsNullOrEmpty(IdentificationNumber) && IdType != 0)
-                    procResult = await task;
+                    procResult = await taskProc;
+
+                //PanamaPapers Search
+                if (!string.IsNullOrEmpty(Name))
+                    ppResult = await taskPP;
 
                 if (!string.IsNullOrEmpty(Name))
                 {
@@ -70,7 +77,6 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     string detailMoreInfo = "";
                     procResult.All(x =>
                         {
-
                             x.Item3.All(p =>
                                 {
                                     detailMoreInfo += p + ", ";
@@ -236,7 +242,173 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     oQueryToCreate.RelatedQueryBasicInfoModel.Add(oInfoCreate);
                 }
 
-                if (oSearchResult.Documents.Count() > 0 || procResult.Count > 0)
+                if (ppResult != null && ppResult.Count > 0)
+                {
+                    TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
+                    oInfoCreate.Alias = string.Empty;
+                    oInfoCreate.IdentificationResult = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : "";
+                    oInfoCreate.Offense = "Presenta Reporte en Panama Papers";
+                    oInfoCreate.NameResult = ppResult.FirstOrDefault().Item1;
+
+                    string detailMoreInfo = "Panama Papers no hace refierencia necesariamente un delito o una investigación.";
+
+                    #region Group by Priority
+                    oInfoCreate.Priority = "2";
+                    #endregion
+
+                    oInfoCreate.Status = "Vigente";
+                    oInfoCreate.Enable = true;
+                    oInfoCreate.QueryPublicId = oQueryToCreate.QueryPublicId;
+                    oInfoCreate.DetailInfo = new List<TDQueryDetailInfoModel>();
+
+                    #region Create Detail
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdNumberRequest,
+                        },
+                        Value = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty,
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.RequestName,
+                        },
+                        Value = !string.IsNullOrEmpty(Name) ? Name : string.Empty,
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdList,
+                        },
+                        Value = "Panama Papers",
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Priotity,
+                        },
+                        Value = !string.IsNullOrEmpty(oInfoCreate.Priority) ? oInfoCreate.Priority : string.Empty,
+                        Enable = true,
+                    });
+
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Offense,
+                        },
+                        Value = "Reporte en Panama Papers",
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdentificationNumberResult,
+                        },
+                        Value = "N/A",
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Status,
+                        },
+                        Value = "Vigente",
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.GroupName,
+                        },
+                        Value = "Panama Papers - Criticidad Baja",
+                        Enable = true,
+                    });
+
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Link,
+                        },
+                        Value = ppResult.FirstOrDefault().Item1,
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.NameResult,
+                        },
+                        Value = Name,
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.ListName,
+                        },
+                        Value = "Panama Papers",
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.MoreInfo,
+                        },
+                        LargeValue = detailMoreInfo,
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Zone,
+                        },
+                        Value = "N/A",
+                        Enable = true,
+                    });
+                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    {
+                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
+                        ItemInfoType = new TDCatalogModel()
+                        {
+                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.TypeDocument,
+                        },
+                        Value = IdType.ToString(),
+                        Enable = true,
+                    });
+                    #endregion
+                    oQueryToCreate.RelatedQueryBasicInfoModel.Add(oInfoCreate);
+                }
+
+                if (oSearchResult.Documents.Count() > 0 || procResult.Count > 0 || ppResult.Count > 0)
                 {
                     oSearchResult.Documents.All(x =>
                         {
@@ -510,7 +682,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             return true;
                         });
                     oQueryToCreate.IsSuccess = true;
-                    QueryUpsert(oQueryToCreate);
+                  await  QueryUpsert(oQueryToCreate);
                 }
                 else
                 {
@@ -553,11 +725,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
                     oQueryToCreate.RelatedQueryBasicInfoModel.Add(oInfoCreate);
 
-                    oQueryToCreate.IsSuccess = false;
-                    QueryUpsert(oQueryToCreate);
+                    oQueryToCreate.IsSuccess = false;                    
                 }
 
                 return oQueryToCreate;
+                await QueryUpsert(oQueryToCreate);
             }
             catch (Exception ex)
             {
@@ -724,62 +896,16 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
             return ThirdKnowledgeDataController.Instance.ThirdKnowledgeSearchByPublicId(CustomerPublicId, QueryPublic, Enable, PageNumber, RowCount, out TotalRows);
         }
 
-        public static bool AccessFTPClient(string FileName, string FilePath, string PeriodPublicId)
-        {
-            string ftpServerIP = ThirdKnowledge.Models.InternalSettings.Instance[Constants.C_Settings_FTPServerIP].Value;
-            string uploadToFolder = ThirdKnowledge.Models.InternalSettings.Instance[Constants.C_Settings_UploadFTPFileName].Value;
-            string UserName = ThirdKnowledge.Models.InternalSettings.Instance[Constants.C_Settings_FTPUserName].Value;
-            string UserPass = ThirdKnowledge.Models.InternalSettings.Instance[Constants.C_Settings_FTPPassworUser].Value;
-
-            FileInfo FileInf = new FileInfo(FilePath);
-
-            string uri = "ftp://" + ftpServerIP + "/" + uploadToFolder + "/" + FileInf.Name;
-
-            FtpWebRequest request = ((FtpWebRequest)FtpWebRequest.Create(new Uri(uri)));
-            request.Method = WebRequestMethods.Ftp.UploadFile;
-            request.Credentials = new NetworkCredential(UserName, UserPass, ftpServerIP);
-            request.UsePassive = true;
-            request.UseBinary = true;
-            request.KeepAlive = false;
-            request.ContentLength = FileInf.Length;
-
-            int buffLength = 64000;
-            byte[] buff = new byte[buffLength];
-            int contentLen;
-
-            FileStream fs = FileInf.OpenRead();
-            try
-            {
-                Stream strm = request.GetRequestStream();
-                contentLen = fs.Read(buff, 0, buffLength);
-
-                while (contentLen != 0)
-                {
-                    strm.Write(buff, 0, contentLen);
-                    contentLen = fs.Read(buff, 0, buffLength);
-                }
-
-                strm.Close();
-                fs.Close();
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            return true;
-        }
-
         #endregion MarketPlace
 
         #region Queries
 
-        public static TDQueryModel QueryUpsert(TDQueryModel QueryModelToUpsert)
+        public static async Task<TDQueryModel> QueryUpsert(TDQueryModel QueryModelToUpsert)
         {
             if (QueryModelToUpsert != null &&
                 !string.IsNullOrEmpty(QueryModelToUpsert.PeriodPublicId))
             {
-                QueryModelToUpsert.QueryPublicId = ThirdKnowledgeDataController.Instance.QueryUpsert(QueryModelToUpsert.QueryPublicId, QueryModelToUpsert.PeriodPublicId,
+                QueryModelToUpsert.QueryPublicId = await ThirdKnowledgeDataController.Instance.QueryUpsert(QueryModelToUpsert.QueryPublicId, QueryModelToUpsert.PeriodPublicId,
                     QueryModelToUpsert.SearchType.ItemId, QueryModelToUpsert.User, QueryModelToUpsert.FileName, QueryModelToUpsert.IsSuccess, QueryModelToUpsert.QueryStatus.ItemId, true);
 
                 if (QueryModelToUpsert.RelatedQueryBasicInfoModel != null)
@@ -795,14 +921,14 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                                 qInf.NameResult, qInf.IdentificationResult, qInf.Priority, qInf.Peps, qInf.Status, qInf.Alias
                                 , qInf.Offense, true);
 
-                            if (qInf.DetailInfo != null)
-                            {
-                                qInf.DetailInfo.All(det =>
-                                {
-                                    ThirdKnowledgeDataController.Instance.QueryDetailInfoInsert(qInf.QueryBasicPublicId, det.ItemInfoType.ItemId, det.Value, det.LargeValue, det.Enable);
-                                    return true;
-                                });
-                            }
+                            //if (qInf.DetailInfo != null)
+                            //{
+                            //    qInf.DetailInfo.All(det =>
+                            //    {
+                            //        Task.Run(() => ThirdKnowledgeDataController.Instance.QueryDetailInfoInsert(qInf.QueryBasicPublicId, det.ItemInfoType.ItemId, det.Value, det.LargeValue, det.Enable));                                                                        
+                            //        return true;
+                            //    });
+                            //}
                             oLog.IsSuccess = true;
                         }
                         catch (Exception err)
@@ -830,6 +956,49 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
             }
 
             return QueryModelToUpsert;
+        }
+
+        public static async void QueryDetailUpsert(TDQueryModel QueryModelToUpsert)
+        {
+            if (QueryModelToUpsert.RelatedQueryBasicInfoModel != null)
+            {
+                QueryModelToUpsert.RelatedQueryBasicInfoModel.All(qInf =>
+                {
+                    LogManager.Models.LogModel oLog = Company.Controller.Company.GetGenericLogModel();
+                    try
+                    {
+                        if (qInf.DetailInfo != null)
+                        {
+                            qInf.DetailInfo.All(det =>
+                            {
+                                Task.Run(() => ThirdKnowledgeDataController.Instance.QueryDetailInfoInsert(qInf.QueryBasicPublicId, det.ItemInfoType.ItemId, det.Value, det.LargeValue, det.Enable));
+                                return true;
+                            });
+                        }
+                        oLog.IsSuccess = true;
+                    }
+                    catch (Exception err)
+                    {
+                        oLog.IsSuccess = false;
+                        oLog.Message = err.Message + " - " + err.StackTrace;
+
+                        throw err;
+                    }
+                    finally
+                    {
+                        oLog.LogObject = qInf;
+
+                        oLog.RelatedLogInfo.Add(new LogManager.Models.LogInfoModel()
+                        {
+                            LogInfoType = "PeriodPublicId",
+                            Value = QueryModelToUpsert.PeriodPublicId,
+                        });
+
+                        LogManager.ClientLog.AddLog(oLog);
+                    }
+                    return true;
+                });
+            }
         }
 
         public static TDQueryInfoModel QueryDetailGetByBasicPublicID(string QueryBasicInfoPublicId)
@@ -899,10 +1068,10 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         #endregion
 
         public static async Task<List<Tuple<string, List<string>, List<string>>>> OnLnieSearch(int IdType, string IndentificationNumber)
-        {            
+        {
             var builder = new ContainerBuilder();
             builder.RegisterType<OnlineSearch.Core.ProveedoresOnLineProcImplement>().As<OnlineSearch.Interfaces.IOnLineSearch>();
-            
+
             var container = builder.Build();
             return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, "", IndentificationNumber);
         }
@@ -910,7 +1079,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         public static async Task<List<Tuple<string, List<string>, List<string>>>> PPSearch(int IdType, string Name, string IndentificationNumber)
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<OnlineSearch.Core.ProveedoresOnLinePPImplement>().As<OnlineSearch.Interfaces.IOnLineSearch>();            
+            builder.RegisterType<OnlineSearch.Core.ProveedoresOnLinePPImplement>().As<OnlineSearch.Interfaces.IOnLineSearch>();
             var container = builder.Build();
             return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber);
         }
