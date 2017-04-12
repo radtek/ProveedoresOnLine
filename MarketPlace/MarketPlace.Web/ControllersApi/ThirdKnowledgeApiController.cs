@@ -71,10 +71,10 @@ namespace MarketPlace.Web.ControllersApi
                             int IdType = System.Web.HttpContext.Current.Request["ThirdKnowledgeIdType"] == "213002" ? 1 : System.Web.HttpContext.Current.Request["ThirdKnowledgeIdType"] == "213001" ? 2 : 0;
                             string rNamer = System.Web.HttpContext.Current.Request["Name"];
                             string rIdNumber = System.Web.HttpContext.Current.Request["IdentificationNumber"];
-                                                                                    
-                            Task<TDQueryModel> qTask = Task.Run(() => ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(oCurrentPeriodList.FirstOrDefault().
+
+                            var qTask = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(oCurrentPeriodList.FirstOrDefault().
                                             RelatedPeriodModel.FirstOrDefault().PeriodPublicId, IdType,
-                                           rIdNumber, rNamer, oQueryToCreate));
+                                           rIdNumber, rNamer, oQueryToCreate);
 
                             oModel.RelatedThidKnowledgeSearch.CollumnsResult = await qTask;
 

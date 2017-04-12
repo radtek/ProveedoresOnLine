@@ -68,356 +68,84 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                 oQueryToCreate.RelatedQueryBasicInfoModel = new List<TDQueryInfoModel>();
                 if (procResult != null && procResult.Count > 0)
                 {
-                    TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
-                    oInfoCreate.Alias = string.Empty;
-                    oInfoCreate.IdentificationResult = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : "";
-                    oInfoCreate.Offense = "Presenta Antecedentes Procuraduría Nacional";
-                    oInfoCreate.NameResult = procResult.FirstOrDefault().Item1;
-
                     string detailMoreInfo = "";
                     procResult.All(x =>
+                    {
+                        x.Item3.All(p =>
                         {
-                            x.Item3.All(p =>
-                                {
-                                    detailMoreInfo += p + ", ";
-                                    return true;
-                                });
-                            detailMoreInfo += " - ";
-
+                            detailMoreInfo += p + ", ";
                             return true;
                         });
-                    #region Group by Priority
-                    oInfoCreate.Priority = "1";
-                    #endregion
+                        detailMoreInfo += " - ";
 
-                    oInfoCreate.Status = "Vigente";
-                    oInfoCreate.Enable = true;
-                    oInfoCreate.QueryPublicId = oQueryToCreate.QueryPublicId;
-                    oInfoCreate.DetailInfo = new List<TDQueryDetailInfoModel>();
-
-                    #region Create Detail
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdNumberRequest,
-                        },
-                        Value = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty,
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.RequestName,
-                        },
-                        Value = !string.IsNullOrEmpty(Name) ? Name : string.Empty,
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdList,
-                        },
-                        Value = "Procuraduría General de la Nación",
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Priotity,
-                        },
-                        Value = !string.IsNullOrEmpty(oInfoCreate.Priority) ? oInfoCreate.Priority : string.Empty,
-                        Enable = true,
+                        return true;
                     });
 
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
+                    TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
                     {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Offense,
-                        },
-                        Value = "Antecedentes reportados en la Procuraduría General de la Nación",
+                        AKA = string.Empty,
+                        IdentificationResult = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : "",
+                        Offense = "Presenta Antecedentes Procuraduría Nacional",
+                        NameResult = procResult.FirstOrDefault().Item1,
+                        MoreInfo = detailMoreInfo,
+                        Priority = "1",
+                        Status = "Vigente",
                         Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdentificationNumberResult,
-                        },
-                        Value = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty,
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Status,
-                        },
-                        Value = "Vigente",
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.GroupName,
-                        },
-                        Value = "Procuraduría General de la Nación - Criticidad Media",
-                        Enable = true,
-                    });
-
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Link,
-                        },
-                        Value = InternalSettings.Instance[Constants.Proc_Url].Value,
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.NameResult,
-                        },
-                        Value = !string.IsNullOrEmpty(procResult.FirstOrDefault().Item1) ? procResult.FirstOrDefault().Item1 : string.Empty,
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.ListName,
-                        },
-                        Value = "Procuraduría General de la Nación",
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.MoreInfo,
-                        },
-                        LargeValue = detailMoreInfo,
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Zone,
-                        },
-                        Value = "Colombia",
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.TypeDocument,
-                        },
-                        Value = IdType.ToString(),
-                        Enable = true,
-                    });
-                    #endregion
+                        QueryPublicId = oQueryToCreate.QueryPublicId,
+                        QueryIdentification = IdentificationNumber,
+                        QueryName = Name,
+                        IdList = "Procuraduría General de la Nación",
+                        IdentificationNumber = IdentificationNumber,
+                        GroupName = "Procuraduría General de la Nación - Criticidad Media",
+                        Link = InternalSettings.Instance[Constants.Proc_Url].Value,
+                        ListName = "Procuraduría General de la Nación",
+                        ChargeOffense = "Presenta antecedentes en la Prcuraduría General de la Nación.",
+                        Zone = "Colombia",
+                        ElasticId = 0,
+                        DocumentType = IdType.ToString(),
+                    };
+                    
                     oQueryToCreate.RelatedQueryBasicInfoModel.Add(oInfoCreate);
                 }
 
                 if (ppResult != null && ppResult.Count > 0)
                 {
-                    TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
-                    oInfoCreate.Alias = string.Empty;
-                    oInfoCreate.IdentificationResult = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : "";
-                    oInfoCreate.Offense = "Presenta Reporte en Panama Papers";
-                    oInfoCreate.NameResult = ppResult.FirstOrDefault().Item1;
-
-                    string detailMoreInfo = "Panama Papers no hace refierencia necesariamente un delito o una investigación.";
-
-                    #region Group by Priority
-                    oInfoCreate.Priority = "2";
-                    #endregion
-
-                    oInfoCreate.Status = "Vigente";
-                    oInfoCreate.Enable = true;
-                    oInfoCreate.QueryPublicId = oQueryToCreate.QueryPublicId;
-                    oInfoCreate.DetailInfo = new List<TDQueryDetailInfoModel>();
-
-                    #region Create Detail
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdNumberRequest,
-                        },
-                        Value = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty,
+                    TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
+                    {                         
+                        AKA = string.Empty,
+                        IdentificationResult = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : "",
+                        Offense = "Presenta Reporte en Panama Papers",
+                        NameResult = ppResult.FirstOrDefault().Item1,
+                        MoreInfo = "Panama Papers no hace refierencia necesariamente a un delito o una investigación por LA/FT.",
+                        Priority = "2",
+                        Status = "Vigente",
                         Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.RequestName,
-                        },
-                        Value = !string.IsNullOrEmpty(Name) ? Name : string.Empty,
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdList,
-                        },
-                        Value = "Panama Papers",
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Priotity,
-                        },
-                        Value = !string.IsNullOrEmpty(oInfoCreate.Priority) ? oInfoCreate.Priority : string.Empty,
-                        Enable = true,
-                    });
-
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Offense,
-                        },
-                        Value = "Reporte en Panama Papers",
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdentificationNumberResult,
-                        },
-                        Value = "N/A",
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Status,
-                        },
-                        Value = "Vigente",
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.GroupName,
-                        },
-                        Value = "Panama Papers - Criticidad Baja",
-                        Enable = true,
-                    });
-
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Link,
-                        },
-                        Value = ppResult.FirstOrDefault().Item1,
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.NameResult,
-                        },
-                        Value = Name,
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.ListName,
-                        },
-                        Value = "Panama Papers",
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.MoreInfo,
-                        },
-                        LargeValue = detailMoreInfo,
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Zone,
-                        },
-                        Value = "N/A",
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.TypeDocument,
-                        },
-                        Value = IdType.ToString(),
-                        Enable = true,
-                    });
-                    #endregion
+                        QueryPublicId = oQueryToCreate.QueryPublicId,
+                        QueryIdentification = "N/A",
+                        QueryName = Name,
+                        IdList = "Panama Papers",
+                        IdentificationNumber = IdentificationNumber,
+                        GroupName = "Panama Papers - Criticidad Baja",
+                        Link = ppResult.FirstOrDefault().Item1,
+                        ListName = "Panama Papers",
+                        Zone = "N/A",
+                        ChargeOffense = "Presenta antecedentes en la Prcuraduría General de la Nación.",
+                        ElasticId = 0,
+                        DocumentType = IdType.ToString(),
+                    };                                                                    
                     oQueryToCreate.RelatedQueryBasicInfoModel.Add(oInfoCreate);
                 }
 
-                if (oSearchResult.Documents.Count() > 0 || procResult.Count > 0 || ppResult.Count > 0)
+                if (oSearchResult.Documents.Count() > 0 || procResult.Count > 0 || ppResult != null && ppResult.Count > 0)
                 {
                     oSearchResult.Documents.All(x =>
                         {
                             TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
-                            oInfoCreate.Alias = x.AKA;
-                            oInfoCreate.IdentificationResult = x.TypeId;
+
+                            oInfoCreate.AKA = x.AKA;
+                            oInfoCreate.DocumentType = x.TypeId;
                             oInfoCreate.Offense = x.RelatedWiht;
                             oInfoCreate.NameResult = x.CompleteName;
-
                             if (x.ListType == "FIGURAS PUBLICAS" || x.ListType == "PEPS INTERNACIONALES")
                                 oInfoCreate.Peps = x.ListType;
                             else
@@ -437,127 +165,13 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             oInfoCreate.Status = x.Status;
                             oInfoCreate.Enable = true;
                             oInfoCreate.QueryPublicId = oQueryToCreate.QueryPublicId;
-                            oInfoCreate.DetailInfo = new List<TDQueryDetailInfoModel>();
-
-                            #region Create Detail
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdNumberRequest,
-                                },
-                                Value = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.RequestName,
-                                },
-                                Value = !string.IsNullOrEmpty(Name) ? Name : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Alias,
-                                },
-                                Value = !string.IsNullOrEmpty(x.AKA) ? x.AKA : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdList,
-                                },
-                                Value = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Priotity,
-                                },
-                                Value = !string.IsNullOrEmpty(oInfoCreate.Priority) ? oInfoCreate.Priority : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.RegisterDate,
-                                },
-                                Value = !string.IsNullOrEmpty(x.LastModify) ? x.LastModify : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.LastModifyDate,
-                                },
-                                Value = !string.IsNullOrEmpty(x.LastModify) ? x.LastModify : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Offense,
-                                },
-                                Value = !string.IsNullOrEmpty(x.RelatedWiht) ? x.RelatedWiht : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdentificationNumberResult,
-                                },
-                                Value = !string.IsNullOrEmpty(x.TypeId) ? x.TypeId : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Status,
-                                },
-                                Value = !string.IsNullOrEmpty(x.Status) ? x.Status : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.QueryId,
-                                },
-                                Value = !string.IsNullOrEmpty(x.Registry.ToString()) ? x.Registry.ToString() : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.GroupName,
-                                },
-                                Value = !string.IsNullOrEmpty(x.ListType) &&
+                            oInfoCreate.IdentificationNumber = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty;
+                            oInfoCreate.QueryName = !string.IsNullOrEmpty(Name) ? Name : string.Empty;
+                            oInfoCreate.LastModify = Convert.ToDateTime(!string.IsNullOrEmpty(x.LastModify) ? x.LastModify : string.Empty);
+                            oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(x.TypeId) ? x.TypeId : string.Empty;
+                            oInfoCreate.Status = !string.IsNullOrEmpty(x.Status) ? x.Status : string.Empty;
+                            oInfoCreate.GroupName =
+                             !string.IsNullOrEmpty(x.ListType) &&
                                          x.ListType.Contains("BOLETIN")
                                          || x.ListType == "FOREIGN CORRUPT PRACTICES ACT EEUU"
                                          || x.ListType == "FOREIGN FINANCIAL INSTITUTIONS PART 561_EEUU"
@@ -603,80 +217,14 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                                          || x.ListType == "PANAMA PAPERS"
                                          || x.ListType == "PARTIDOS Y MOVIMIENTOS POLITICOS"
                                          || x.ListType == "PEPS INTERNACIONALES" ?
-                                         x.ListType + " - Criticidad Baja" : "NA",
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.GroupId,
-                                },
-                                Value = !string.IsNullOrEmpty(x.Code) ? x.Code : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdList,
-                                },
-                                Value = !string.IsNullOrEmpty(x.TableCodeID) ? x.TableCodeID : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Link,
-                                },
-                                Value = !string.IsNullOrEmpty(x.Source) ? x.Source : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.NameResult,
-                                },
-                                Value = !string.IsNullOrEmpty(x.CompleteName) ? x.CompleteName : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.ListName,
-                                },
-                                Value = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.MoreInfo,
-                                },
-                                Value = !string.IsNullOrEmpty(x.ORoldescription1) || !string.IsNullOrEmpty(x.ORoldescription2) ? x.ORoldescription1 : string.Empty,
-                                Enable = true,
-                            });
-                            oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                            {
-                                QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                                ItemInfoType = new TDCatalogModel()
-                                {
-                                    ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Zone,
-                                },
-                                Value = !string.IsNullOrEmpty(x.NationalitySourceCountry) ? x.NationalitySourceCountry : string.Empty,
-                                Enable = true,
-                            });
-                            #endregion
+                                         x.ListType + " - Criticidad Baja" : "NA";
+                            oInfoCreate.GroupId = x.Code;
+                            oInfoCreate.IdList = x.TableCodeID;
+                            oInfoCreate.Link = !string.IsNullOrEmpty(x.Source) ? x.Source : string.Empty;
+                            oInfoCreate.NameResult = x.CompleteName;
+                            oInfoCreate.ListName = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;
+                            oInfoCreate.MoreInfo = x.RelatedWiht + " " + x.ORoldescription1 + " " + x.ORoldescription2;
+                            oInfoCreate.Zone = x.NationalitySourceCountry;                            
 
                             oQueryToCreate.RelatedQueryBasicInfoModel.Add(oInfoCreate);
                             return true;
@@ -688,48 +236,17 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                 {
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
                     oInfoCreate.QueryPublicId = oQueryToCreate.QueryPublicId;
-                    oInfoCreate.DetailInfo = new List<TDQueryDetailInfoModel>();
-
-                    #region Create Detail
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.RequestName,
-                        },
-                        Value = !string.IsNullOrEmpty(Name) ? Name : string.Empty,
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdNumberRequest,
-                        },
-                        Value = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty,
-                        Enable = true,
-                    });
-                    oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                    {
-                        QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        ItemInfoType = new TDCatalogModel()
-                        {
-                            ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.GroupName,
-                        },
-                        Value = "SIN COINCIDENCIAS",
-                        Enable = true,
-                    });
-                    #endregion
-
+                    oInfoCreate.QueryName = Name;
+                    oInfoCreate.QueryIdentification = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty;
+                    oInfoCreate.GroupName = "SIN COINCIDENCIAS";
+                    
                     oQueryToCreate.RelatedQueryBasicInfoModel.Add(oInfoCreate);
 
                     oQueryToCreate.IsSuccess = false;                    
                 }
 
-                return oQueryToCreate;
                 await QueryUpsert(oQueryToCreate);
+                return oQueryToCreate;                
             }
             catch (Exception ex)
             {
@@ -915,11 +432,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         LogManager.Models.LogModel oLog = Company.Controller.Company.GetGenericLogModel();
                         try
                         {
-                            qInf.QueryBasicPublicId =
-                               ThirdKnowledgeDataController.Instance.QueryBasicInfoInsert
-                                (QueryModelToUpsert.QueryPublicId,
-                                qInf.NameResult, qInf.IdentificationResult, qInf.Priority, qInf.Peps, qInf.Status, qInf.Alias
-                                , qInf.Offense, true);
+                            //qInf.QueryBasicPublicId =
+                            //   ThirdKnowledgeDataController.Instance.QueryBasicInfoInsert
+                            //    (QueryModelToUpsert.QueryPublicId,
+                            //    qInf.NameResult, qInf.IdentificationResult, qInf.Priority, qInf.Peps, qInf.Status, qInf.Alias
+                            //    , qInf.Offense, true);
 
                             //if (qInf.DetailInfo != null)
                             //{
@@ -958,48 +475,48 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
             return QueryModelToUpsert;
         }
 
-        public static async void QueryDetailUpsert(TDQueryModel QueryModelToUpsert)
-        {
-            if (QueryModelToUpsert.RelatedQueryBasicInfoModel != null)
-            {
-                QueryModelToUpsert.RelatedQueryBasicInfoModel.All(qInf =>
-                {
-                    LogManager.Models.LogModel oLog = Company.Controller.Company.GetGenericLogModel();
-                    try
-                    {
-                        if (qInf.DetailInfo != null)
-                        {
-                            qInf.DetailInfo.All(det =>
-                            {
-                                Task.Run(() => ThirdKnowledgeDataController.Instance.QueryDetailInfoInsert(qInf.QueryBasicPublicId, det.ItemInfoType.ItemId, det.Value, det.LargeValue, det.Enable));
-                                return true;
-                            });
-                        }
-                        oLog.IsSuccess = true;
-                    }
-                    catch (Exception err)
-                    {
-                        oLog.IsSuccess = false;
-                        oLog.Message = err.Message + " - " + err.StackTrace;
+        //public static async void QueryDetailUpsert(TDQueryModel QueryModelToUpsert)
+        //{
+        //    if (QueryModelToUpsert.RelatedQueryBasicInfoModel != null)
+        //    {
+        //        QueryModelToUpsert.RelatedQueryBasicInfoModel.All(qInf =>
+        //        {
+        //            LogManager.Models.LogModel oLog = Company.Controller.Company.GetGenericLogModel();
+        //            try
+        //            {
+        //                if (qInf.DetailInfo != null)
+        //                {
+        //                    qInf.DetailInfo.All(det =>
+        //                    {
+        //                        Task.Run(() => ThirdKnowledgeDataController.Instance.QueryDetailInfoInsert(qInf.QueryBasicPublicId, det.ItemInfoType.ItemId, det.Value, det.LargeValue, det.Enable));
+        //                        return true;
+        //                    });
+        //                }
+        //                oLog.IsSuccess = true;
+        //            }
+        //            catch (Exception err)
+        //            {
+        //                oLog.IsSuccess = false;
+        //                oLog.Message = err.Message + " - " + err.StackTrace;
 
-                        throw err;
-                    }
-                    finally
-                    {
-                        oLog.LogObject = qInf;
+        //                throw err;
+        //            }
+        //            finally
+        //            {
+        //                oLog.LogObject = qInf;
 
-                        oLog.RelatedLogInfo.Add(new LogManager.Models.LogInfoModel()
-                        {
-                            LogInfoType = "PeriodPublicId",
-                            Value = QueryModelToUpsert.PeriodPublicId,
-                        });
+        //                oLog.RelatedLogInfo.Add(new LogManager.Models.LogInfoModel()
+        //                {
+        //                    LogInfoType = "PeriodPublicId",
+        //                    Value = QueryModelToUpsert.PeriodPublicId,
+        //                });
 
-                        LogManager.ClientLog.AddLog(oLog);
-                    }
-                    return true;
-                });
-            }
-        }
+        //                LogManager.ClientLog.AddLog(oLog);
+        //            }
+        //            return true;
+        //        });
+        //    }
+        //}
 
         public static TDQueryInfoModel QueryDetailGetByBasicPublicID(string QueryBasicInfoPublicId)
         {
