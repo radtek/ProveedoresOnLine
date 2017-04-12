@@ -3,6 +3,7 @@ using OfficeOpenXml;
 using ProveedoresOnLine.Company.Models.Company;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -55,6 +56,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                 if (oProviders != null)
                 {
                     #region SET UP
+                    CultureInfo culture= CultureInfo.CreateSpecificCulture("es-ES");
                     //First time process SET UP
                     if (oProcessLog == null || oProcessLog.Count == 0)
                     {
@@ -79,7 +81,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
 
                             if (oGeneralRow != null && oComercialGeneralRow != null && oComercialBasicRow != null && oContableRow != null)
                             {
-                                oGeneralRow.Comentaries = "Creación Proveedor" + Convert.ToString(oGeneralRow.LastModified);
+                                oGeneralRow.Comentaries = "Creación Proveedor: " + DateTime.Now.Day + " " + DateTime.Now.ToString("MMMM", culture) + " " + DateTime.Now.Year;
                                 oGeneralInfo.Add(oGeneralRow);
                                 oComercialInfo.Add(oComercialGeneralRow);
                                 oComercialBasicInfo.Add(oComercialBasicRow);
@@ -167,7 +169,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                                 //if not exists validate all modules information, like set up process
                                 if (oGeneralRow != null && oComercialGeneralRow != null && oComercialBasicRow != null && oContableRow != null)
                                 {
-                                    oGeneralRow.Comentaries = "Creación Proveedor: " + Convert.ToString(oGeneralRow.LastModified);
+                                    oGeneralRow.Comentaries = "Creación Proveedor: " + DateTime.Now.Day + " " + DateTime.Now.ToString("MMMM", culture) + " " + DateTime.Now.Year;
                                     oGeneralInfo.Add(oGeneralRow);
                                     oComercialInfo.Add(oComercialGeneralRow);
                                     oComercialBasicInfo.Add(oComercialBasicRow);
@@ -195,7 +197,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
 
                                 //if exists get modules information
                                 if (oGeneralRow != null) { 
-                                    oGeneralRow.Comentaries = "Actualización Proveedor: " + Convert.ToString(oGeneralRow.LastModified);
+                                    oGeneralRow.Comentaries = "Actualización Proveedor: " + DateTime.Now.Day + " " + DateTime.Now.ToString("MMMM", culture) + " " + DateTime.Now.Year;
                                     oGeneralInfo.Add(oGeneralRow);
                                 }
                                 if (oComercialGeneralRow != null && oComercialBasicRow != null)
@@ -340,10 +342,10 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                     if (!string.IsNullOrEmpty(NaturalLastName))
                     {
                         Header.AppendLine(
-                          NaturalLastName + strSep +                          
+                          NaturalLastName.ToUpper() + strSep +                          
                           x.IdentificationNumber + strSep +
                           x.FiscalNumber + strSep +
-                          x.Address + strSep +
+                          x.Address.Replace("#"," ").Replace("-"," ") + strSep +
                           x.City + strSep +
                           (x.Region != null ? x.Region.PadLeft(2, '0') : "0") + strSep +
                           x.Country + strSep +
@@ -357,13 +359,13 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                     else
                     {
                         Header.AppendLine(
-                      x.CompanyName + strSep +
+                      x.CompanyName.ToUpper() + strSep +
                       "" + strSep +
                       "" + strSep +
                       ""+ strSep +
                       x.IdentificationNumber + strSep +
                       x.FiscalNumber + strSep +
-                      x.Address + strSep +
+                      x.Address.Replace("#", " ").Replace("-", " ") + strSep +
                       x.City + strSep +
                       (x.Region != null ? x.Region.PadLeft(2, '0') : "0") + strSep +
                       x.Country + strSep +
