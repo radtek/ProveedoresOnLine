@@ -662,12 +662,12 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
         {
             List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
 
-            lstParams.Add(DataInstance.CreateTypedParameter("vQueryBasicPublicId", QueryInfoPublicId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vQueryInfoPublicId", QueryInfoPublicId));
 
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
                 CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
-                CommandText = "TD_QueryDetailInfo_GetByBasicPublicId",
+                CommandText = "TD_QueryInfo_GetByInfoPublicId",
                 CommandType = CommandType.StoredProcedure,
                 Parameters = lstParams,
             });
@@ -698,7 +698,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
                     Message = response.DataTableResult.Rows[0].Field<string>("Message"),
                     QueryIdentification = response.DataTableResult.Rows[0].Field<string>("QueryIdentification"),
                     QueryName = response.DataTableResult.Rows[0].Field<string>("QueryName"),
-                    ElasticId = response.DataTableResult.Rows[0].Field<int>("ElasticId"),
+                    ElasticId = Convert.ToInt32(response.DataTableResult.Rows[0].Field<string>("ElasticId")),
                     GroupName = response.DataTableResult.Rows[0].Field<string>("GroupName"),
                     Link = response.DataTableResult.Rows[0].Field<string>("Link"),
                     MoreInfo = response.DataTableResult.Rows[0].Field<string>("MoreInfo"),
