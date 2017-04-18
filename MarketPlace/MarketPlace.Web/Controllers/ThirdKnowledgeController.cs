@@ -113,6 +113,12 @@ namespace MarketPlace.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Controller detail
+        /// </summary>
+        /// <param name="QueryBasicPublicId">This is the QueryInfo</param>
+        /// <param name="ReturnUrl">URL to go back</param>
+        /// <returns>Detail View</returns>
         public virtual ActionResult TKDetailSingleSearch(string QueryBasicPublicId, string ReturnUrl)
         {
             ProviderViewModel oModel = new ProviderViewModel();
@@ -128,11 +134,11 @@ namespace MarketPlace.Web.Controllers
                 int oTotalRows = 0;
 
                 //Get The Active Plan By Customer 
-                QueryDetailInfo = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryDetailGetByBasicPublicID(QueryBasicPublicId);
+                QueryDetailInfo = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByInfoPublicId(QueryBasicPublicId);
 
                 List<TDQueryModel> oQueryModel = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId(
                     SessionModel.CurrentCompany.CompanyPublicId, QueryDetailInfo != null ? QueryDetailInfo.QueryPublicId : string.Empty, true, 0, 20, out oTotalRows);
-                oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel(QueryDetailInfo.DetailInfo);
+                oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel(QueryDetailInfo);
 
                 if (ReturnUrl == "null")
                     oModel.RelatedThidKnowledgeSearch.ReturnUrl = ReturnUrl;
@@ -302,9 +308,9 @@ namespace MarketPlace.Web.Controllers
                 oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.All(
                 item =>
                 {
-                    item.RelatedQueryBasicInfoModel.All(x =>
+                    item.RelatedQueryInfoModel.All(x =>
                     {
-                        Item1.Add(x.DetailInfo.Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumThirdKnowledgeColls.GroupName).Select(y => y.Value).FirstOrDefault());
+                        Item1.Add(x.GroupName);
                         return true;
                     });
                     Item1 = Item1.GroupBy(x => x).Select(grp => grp.First()).ToList();
@@ -315,12 +321,11 @@ namespace MarketPlace.Web.Controllers
                     Item1.All(x =>
                     {
                         oItem2 = new List<ThirdKnowledgeViewModel>();
-                        if (item.RelatedQueryBasicInfoModel.Where(td => td.DetailInfo.Any(inf => inf.Value == x)) != null)
+                        if (item.RelatedQueryInfoModel.Where(td => td.GroupName == x) != null)
                         {
-                            item.RelatedQueryBasicInfoModel.Where(td => td.DetailInfo.Any(inf => inf.Value == x)).
-                            Select(td => td.DetailInfo).ToList().All(d =>
-                            {
-                                d.FirstOrDefault().QueryBasicPublicId = item.RelatedQueryBasicInfoModel.Where(y => y.DetailInfo == d).Select(y => y.QueryBasicPublicId).FirstOrDefault();
+                            item.RelatedQueryInfoModel.Where(td => td.GroupName == x).
+                            Select(td => td).ToList().All(d =>
+                            {                                
                                 oItem2.Add(new ThirdKnowledgeViewModel(d));
                                 return true;
                             });
@@ -348,16 +353,15 @@ namespace MarketPlace.Web.Controllers
                 #region Set Parameters
                 //Get Request
 
-                var objRelatedQueryBasicInfo = oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.RelatedQueryBasicInfoModel != null).FirstOrDefault().RelatedQueryBasicInfoModel.Where(i => i.DetailInfo != null).FirstOrDefault();
+                var objRelatedQueryBasicInfo = oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.RelatedQueryInfoModel != null).FirstOrDefault().RelatedQueryInfoModel.FirstOrDefault();
                 string searchName = "";
                 string searchIdentification = "";
-                if (objRelatedQueryBasicInfo.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)enumThirdKnowledgeColls.RequestName).Select(y => y.Value).DefaultIfEmpty(String.Empty).FirstOrDefault().ToString().Length > 0)
+                if (!string.IsNullOrEmpty(objRelatedQueryBasicInfo.QueryName))                
+                    searchName = objRelatedQueryBasicInfo.QueryName;
+                
+                if (!string.IsNullOrEmpty(objRelatedQueryBasicInfo.QueryIdentification))
                 {
-                    searchName = objRelatedQueryBasicInfo.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)enumThirdKnowledgeColls.RequestName).Select(y => y.Value).DefaultIfEmpty(String.Empty).FirstOrDefault().ToString();
-                }
-                if (objRelatedQueryBasicInfo.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)enumThirdKnowledgeColls.IdNumberRequest).Select(y => y.Value).DefaultIfEmpty(String.Empty).FirstOrDefault().ToString().Length > 0)
-                {
-                    searchIdentification += objRelatedQueryBasicInfo.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)enumThirdKnowledgeColls.IdNumberRequest).Select(y => y.Value).DefaultIfEmpty(String.Empty).FirstOrDefault().ToString();
+                    searchIdentification += objRelatedQueryBasicInfo.QueryIdentification;
                 }
 
                 List<ReportParameter> parameters = new List<ReportParameter>();

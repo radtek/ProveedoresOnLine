@@ -35,8 +35,7 @@ var Third_KnowledgeSimpleSearchObject = {
                     $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_DivResult').html('')
                     var tittlestDiv = '';
                     var resultDiv = '';
-                    if (result.RelatedSingleSearch != null && result.RelatedSingleSearch.length > 0) {
-                        debugger;
+                    if (result.RelatedSingleSearch != null && result.RelatedSingleSearch.length > 0) {                        
                         $.each(result.RelatedSingleSearch, function (item, value) {                                   
                             if (value.m_Item1 == "SIN COINCIDENCIAS") {                                
                                 resultDiv = '';
@@ -105,11 +104,9 @@ var Third_KnowledgeSimpleSearchObject = {
                                     }
                                     if (value.ListName != null) {
                                         resultDiv += '<div class="col-sm-2 POMPProviderBoxInfo">' + value.ListName + '</div>';
-                                    }
-                                    debugger;
-                                    if (value.QueryBasicPublicId != null && Third_KnowledgeSimpleSearchObject.QueryDetailsRoleOption == 'True') {
-                                        debugger;
-                                        resultDiv += '<div class="col-sm-1 POMPProviderBoxInfo">' + '<a target = "_blank" href="' + Third_KnowledgeSimpleSearchObject.Url + '?QueryBasicPublicId=' + value.QueryBasicPublicId + '&ReturnUrl=null">' + "Ver_Detalle" + '</a>' + '</div>';
+                                    }                                    
+                                    if (value.QueryId != null && Third_KnowledgeSimpleSearchObject.QueryDetailsRoleOption == 'True') {                                        
+                                        resultDiv += '<div class="col-sm-1 POMPProviderBoxInfo">' + '<a target = "_blank" href="' + Third_KnowledgeSimpleSearchObject.Url + '?QueryBasicPublicId=' + value.QueryId + '&ReturnUrl=null">' + "Ver_Detalle" + '</a>' + '</div>';
                                     }
                                     resultDiv += '</div>';
                                     resultDiv += '<div class="row text-center">';

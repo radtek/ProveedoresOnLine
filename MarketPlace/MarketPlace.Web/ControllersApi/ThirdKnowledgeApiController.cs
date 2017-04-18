@@ -77,16 +77,16 @@ namespace MarketPlace.Web.ControllersApi
                                            rIdNumber, rNamer, oQueryToCreate);
 
                             oModel.RelatedThidKnowledgeSearch.CollumnsResult = await qTask;
-
+                            
                             List<Tuple<string, List<ThirdKnowledgeViewModel>>> Group = new List<Tuple<string, List<ThirdKnowledgeViewModel>>>();
                             List<string> Item1 = new List<string>();
                             List<string> ItemGroup = new List<string>();
                             
                             if (oModel.RelatedThidKnowledgeSearch.CollumnsResult != null)
                             {
-                                oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryBasicInfoModel.All(x =>
+                                oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.All(x =>
                                 {
-                                    Item1.Add(x.DetailInfo.Where(y => y.ItemInfoType.ItemId == (int)enumThirdKnowledgeColls.GroupName).Select(y => y.Value).FirstOrDefault());
+                                    Item1.Add(x.GroupName);
                                     return true;
                                 });
 
@@ -103,14 +103,11 @@ namespace MarketPlace.Web.ControllersApi
                                 Item1.All(x =>
                                 {
                                     oItem2 = new List<ThirdKnowledgeViewModel>();
-                                    if (oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryBasicInfoModel.Where(td => td.DetailInfo.Any(inf => inf.Value == x)) != null)
+                                    if (oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(td => td.GroupName == x) != null)
                                     {
-                                        oModel.RelatedThidKnowledgeSearch.CollumnsResult.
-                                        RelatedQueryBasicInfoModel.Where(td => td.DetailInfo.Any(inf => inf.Value == x)).
-                                        Select(td => td.DetailInfo).ToList().All(d =>
+                                        oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(td => td.GroupName == x).All(d =>
                                         {
-                                            d.FirstOrDefault().QueryBasicPublicId = oModel.RelatedThidKnowledgeSearch.CollumnsResult.
-                                            RelatedQueryBasicInfoModel.Where(y => y.DetailInfo == d).Select(y => y.QueryBasicPublicId).FirstOrDefault();
+                                            d.QueryPublicId = oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId;
                                             oItem2.Add(new ThirdKnowledgeViewModel(d));
                                             return true;
                                         });
@@ -132,8 +129,7 @@ namespace MarketPlace.Web.ControllersApi
                                     //Period Upsert
                                     oModel.RelatedThirdKnowledge.CurrentPlanModel.RelatedPeriodModel.FirstOrDefault().PeriodPublicId = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.PeriodoUpsert(
                                         oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault());
-                                }                                                                 
-                                Task.Run(() => ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryDetailUpsert(oModel.RelatedThidKnowledgeSearch.CollumnsResult));
+                                }                                                                                                 
                             }                            
                         }
                         else
@@ -588,9 +584,9 @@ namespace MarketPlace.Web.ControllersApi
                             List<string> Item1 = new List<string>();
                             if (oModel.RelatedThidKnowledgeSearch.CollumnsResult != null && oModel.RelatedThidKnowledgeSearch.CollumnsResult.IsSuccess)
                             {
-                                oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryBasicInfoModel.All(x =>
+                                oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.All(x =>
                                 {
-                                    Item1.Add(x.DetailInfo.Where(y => y.ItemInfoType.ItemId == (int)enumThirdKnowledgeColls.GroupName).Select(y => y.Value).FirstOrDefault());
+                                    Item1.Add(x.GroupName);
                                     return true;
                                 });
                                 Item1 = Item1.GroupBy(x => x).Select(grp => grp.Last()).ToList();
@@ -600,12 +596,10 @@ namespace MarketPlace.Web.ControllersApi
 
                                 Item1.All(x =>
                                 {
-                                    if (oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryBasicInfoModel.Where(td => td.DetailInfo.Any(inf => inf.Value == x)) != null)
+                                    if (oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(td => td.GroupName == x) != null)
                                     {
                                         oItem2 = new List<ThirdKnowledgeViewModel>();
-                                        oItem2.Add(new ThirdKnowledgeViewModel(oModel.RelatedThidKnowledgeSearch.CollumnsResult.
-                                                                                         RelatedQueryBasicInfoModel.Where(td => td.DetailInfo.Any(inf => inf.Value == x)).
-                                                                                         Select(td => td.DetailInfo).FirstOrDefault())); // new ThirdKnowledgeViewModel(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryBasicInfoModel.Where(td => td.DetailInfo.Any(inf => inf.Value == x)).Select(td => td.DetailInfo).ToList();
+                                        oItem2.Add(new ThirdKnowledgeViewModel(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(td => td.GroupName == x).Select(td => td).FirstOrDefault()));
                                         oTupleItem = new Tuple<string, List<ThirdKnowledgeViewModel>>(x, oItem2);
                                         Group.Add(oTupleItem);
                                     }

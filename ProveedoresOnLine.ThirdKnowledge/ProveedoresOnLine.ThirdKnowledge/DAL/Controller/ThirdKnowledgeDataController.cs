@@ -87,19 +87,25 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.Controller
             return DataFactory.QueryUpsert(QueryPublicId, PeriodPublicId, SearchType, User, FileName, isSuccess, QueryStatusId, Enable);
         }
 
-        public string QueryBasicInfoInsert(string QueryPublicId, string NameResult, string IdentificationResult, string Priority, string Peps, string Status, string Alias, string Offense, bool Enable)
+        public Task<string> QueryInfoInsert(string vQueryPublicId, string vNameResult, string vIdentificationResult, string vPriority,
+                                    string vPeps, string vStatus, string vOffense, string vDocumentType,
+                                     string vIdentificationNumber, string vFullName, string vIdList, string vListName,
+                                     string vAKA, string vChargeOffense, string vMessage, string vQueryIdentification,
+                                     string vQueryName, int vElasticId, string vGroupName, string vGroupId,
+                                    string vLink, string vMoreInfo, string vZone, string vUrlFile,
+                                    bool Enable)
         {
-            return DataFactory.QueryBasicInfoInsert(QueryPublicId, NameResult, IdentificationResult, Priority, Peps, Status, Alias,Offense, Enable);
+            return DataFactory.QueryInfoInsert(vQueryPublicId, vNameResult, vIdentificationResult, vPriority,
+                                                vPeps, vStatus, vOffense, vDocumentType,
+                                                vIdentificationNumber, vFullName, vIdList, vListName,
+                                                vAKA, vChargeOffense, vMessage, vQueryIdentification,
+                                                vQueryName, vElasticId, vGroupName, vGroupId,
+                                                vLink, vMoreInfo, vZone, vUrlFile, Enable);
         }
 
-        public async Task<int> QueryDetailInfoInsert(string QueryBasicPublicId, int ItemInfoType, string Value, string LargeValue, bool Enable)
+        public TDQueryInfoModel GetQueryInfoByInfoPublicId(string QueryInfoPublicId)
         {
-            return await DataFactory.QueryDetailInfoInsert(QueryBasicPublicId, ItemInfoType, Value, LargeValue, Enable);
-        }
-
-        public TDQueryInfoModel QueryDetailGetByBasicPublicID(string QueryBasicInfoPublicId)
-        {
-            return DataFactory.QueryDetailGetByBasicPublicID(QueryBasicInfoPublicId);
+            return DataFactory.GetQueryInfoByInfoPublicId(QueryInfoPublicId);
         }
         #endregion Query
 
@@ -117,7 +123,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.Controller
         public List<TDQueryModel> GetQueriesInProgress()
         {
             return DataFactory.GetQueriesInProgress();
-        }      
+        }
 
         #endregion
     }

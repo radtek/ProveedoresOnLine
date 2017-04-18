@@ -31,11 +31,16 @@ namespace ProveedoresOnLine.ThirdKnowledge.Interfaces
 
         Task<string> QueryUpsert(string QueryPublicId, string PeriodPublicId, int SearchType, string User, string FileName, bool isSuccess, int QueryStatusId, bool Enable);
 
-        string QueryBasicInfoInsert(string QueryPublicId, string NameResult, string IdentificationResult, string Priority, string Peps, string Status, string Alias, string Offense, bool Enable);
+        Task<string> QueryInfoInsert(string vQueryPublicId, string vNameResult, string vIdentificationResult, string vPriority,
+                                   string vPeps, string vStatus, string vOffense, string vDocumentType,
+                                    string vIdentificationNumber, string vFullName, string vIdList, string vListName,
+                                    string vAKA, string vChargeOffense, string vMessage, string vQueryIdentification,
+                                    string vQueryName, int vElasticId, string vGroupName, string vGroupId,
+                                   string vLink, string vMoreInfo, string vZone, string vUrlFile,
+                                   bool Enable);
 
-        Task<int> QueryDetailInfoInsert(string QueryBasicPublicId, int ItemInfoType, string Value, string LargeValue, bool Enable);
+        TDQueryInfoModel GetQueryInfoByInfoPublicId(string QueryInfoPublicId);
 
-        TDQueryInfoModel QueryDetailGetByBasicPublicID(string QueryBasicInfoPublicId);
         #endregion Queries
 
         #region Utils

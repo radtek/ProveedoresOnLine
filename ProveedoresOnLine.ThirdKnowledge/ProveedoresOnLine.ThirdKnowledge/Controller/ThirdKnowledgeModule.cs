@@ -5,6 +5,7 @@ using ProveedoresOnLine.ThirdKnowledge.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -65,7 +66,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
                  ).MinScore(2));
 
-                oQueryToCreate.RelatedQueryBasicInfoModel = new List<TDQueryInfoModel>();
+                oQueryToCreate.RelatedQueryInfoModel = new List<TDQueryInfoModel>();
                 if (procResult != null && procResult.Count > 0)
                 {
                     string detailMoreInfo = "";
@@ -105,7 +106,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         DocumentType = IdType.ToString(),
                     };
                     
-                    oQueryToCreate.RelatedQueryBasicInfoModel.Add(oInfoCreate);
+                    oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                 }
 
                 if (ppResult != null && ppResult.Count > 0)
@@ -133,7 +134,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         ElasticId = 0,
                         DocumentType = IdType.ToString(),
                     };                                                                    
-                    oQueryToCreate.RelatedQueryBasicInfoModel.Add(oInfoCreate);
+                    oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                 }
 
                 if (oSearchResult.Documents.Count() > 0 || procResult.Count > 0 || ppResult != null && ppResult.Count > 0)
@@ -167,57 +168,60 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             oInfoCreate.QueryPublicId = oQueryToCreate.QueryPublicId;
                             oInfoCreate.IdentificationNumber = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty;
                             oInfoCreate.QueryName = !string.IsNullOrEmpty(Name) ? Name : string.Empty;
-                            oInfoCreate.LastModify = Convert.ToDateTime(!string.IsNullOrEmpty(x.LastModify) ? x.LastModify : string.Empty);
+                            oInfoCreate.UpdateDate = !string.IsNullOrEmpty(x.LastModify) ? x.LastModify : string.Empty; 
                             oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(x.TypeId) ? x.TypeId : string.Empty;
                             oInfoCreate.Status = !string.IsNullOrEmpty(x.Status) ? x.Status : string.Empty;
+                            #region GroupName
                             oInfoCreate.GroupName =
-                             !string.IsNullOrEmpty(x.ListType) &&
-                                         x.ListType.Contains("BOLETIN")
-                                         || x.ListType == "FOREIGN CORRUPT PRACTICES ACT EEUU"
-                                         || x.ListType == "FOREIGN FINANCIAL INSTITUTIONS PART 561_EEUU"
-                                         || x.ListType == "FOREIGN SANCTIONS EVADERS LIST_EEUU"
-                                         || x.ListType == "FOREIGN_TERRORIST_ORGANIZATIONS_EEUU_FTO"
-                                         || x.ListType == "INTERPOL"
-                                         || x.ListType == "MOST WANTED FBI"
-                                         || x.ListType == "NACIONES UNIDAS"
-                                         || x.ListType == "NON-SDN IRANIAN SANCTIONS ACT LIST (NS-ISA)_EEUU"
-                                         || x.ListType == "OFAC"
-                                         || x.ListType == "PALESTINIAN LEGISLATIVE COUNCIL LIST_EEUU"
-                                         || x.ListType == "VINCULADOS" ?
-                                         "LISTAS RESTRICTIVAS" + " - Criticidad Alta" :
-                                         x.ListType == "CONSEJO NACIONAL ELECTORAL"
-                                         || x.ListType == "CONSEJO SUPERIOR DE LA JUDICATURA"
-                                         || x.ListType == "CORTE CONSTITUCIONAL"
-                                         || x.ListType == "CORTE SUPREMA DE JUSTICIA"
-                                         || x.ListType == "DENIED PERSONS LIST_EEUU"
-                                         || x.ListType == "DESMOVILIZADOS"
-                                         || x.ListType == "EMBAJADAS EN COLOMBIA"
-                                         || x.ListType == "EMBAJADAS EN EL EXTERIOR"
-                                         || x.ListType == "ENTITY_LIST_EEUU"
-                                         || x.ListType == "FUERZAS MILITARES"
-                                         || x.ListType == "GOBIERNO DEPARTAMENTAL"
-                                         || x.ListType == "GOBIERNO MUNICIPAL"
-                                         || x.ListType == "GOBIERNO NACIONAL"
-                                         || x.ListType == "HM_TREASURY (BOE)"
-                                         || x.ListType == "ONU_RESOLUCION_1929"
-                                         || x.ListType == "ONU_RESOLUCION_1970"
-                                         || x.ListType == "ONU_RESOLUCION_1973"
-                                         || x.ListType == "ONU_RESOLUCION_1975"
-                                         || x.ListType == "ONU_RESOLUCION_1988"
-                                         || x.ListType == "ONU_RESOLUCION_1988"
-                                         || x.ListType == "ONU_RESOLUCION_1988"
-                                         || x.ListType == "ONU_RESOLUCION_2023"
-                                         || x.ListType == "SECTORAL SANCTIONS IDENTIFICATIONS_LIST_EEUU"
-                                         || x.ListType == "SPECIALLY DESIGNATED NATIONALS LIST_EEUU"
-                                         || x.ListType == "SUPER SOCIEDADES"
-                                         || x.ListType == "UNVERIFIED_LIST_EEUU" ?
-                                         x.ListType + " - Criticidad Media" :
-                                         x.ListType == "ESTRUCTURA DE GOBIERNO"
-                                         || x.ListType == "FIGURAS PUBLICAS"
-                                         || x.ListType == "PANAMA PAPERS"
-                                         || x.ListType == "PARTIDOS Y MOVIMIENTOS POLITICOS"
-                                         || x.ListType == "PEPS INTERNACIONALES" ?
-                                         x.ListType + " - Criticidad Baja" : "NA";
+                                                 !string.IsNullOrEmpty(x.ListType) &&
+                                                             x.ListType.Contains("BOLETIN")
+                                                             || x.ListType == "FOREIGN CORRUPT PRACTICES ACT EEUU"
+                                                             || x.ListType == "FOREIGN FINANCIAL INSTITUTIONS PART 561_EEUU"
+                                                             || x.ListType == "FOREIGN SANCTIONS EVADERS LIST_EEUU"
+                                                             || x.ListType == "FOREIGN_TERRORIST_ORGANIZATIONS_EEUU_FTO"
+                                                             || x.ListType == "INTERPOL"
+                                                             || x.ListType == "MOST WANTED FBI"
+                                                             || x.ListType == "NACIONES UNIDAS"
+                                                             || x.ListType == "NON-SDN IRANIAN SANCTIONS ACT LIST (NS-ISA)_EEUU"
+                                                             || x.ListType == "OFAC"
+                                                             || x.ListType == "PALESTINIAN LEGISLATIVE COUNCIL LIST_EEUU"
+                                                             || x.ListType == "VINCULADOS" ?
+                                                             "LISTAS RESTRICTIVAS" + " - Criticidad Alta" :
+                                                             x.ListType == "CONSEJO NACIONAL ELECTORAL"
+                                                             || x.ListType == "CONSEJO SUPERIOR DE LA JUDICATURA"
+                                                             || x.ListType == "CORTE CONSTITUCIONAL"
+                                                             || x.ListType == "CORTE SUPREMA DE JUSTICIA"
+                                                             || x.ListType == "DENIED PERSONS LIST_EEUU"
+                                                             || x.ListType == "DESMOVILIZADOS"
+                                                             || x.ListType == "EMBAJADAS EN COLOMBIA"
+                                                             || x.ListType == "EMBAJADAS EN EL EXTERIOR"
+                                                             || x.ListType == "ENTITY_LIST_EEUU"
+                                                             || x.ListType == "FUERZAS MILITARES"
+                                                             || x.ListType == "GOBIERNO DEPARTAMENTAL"
+                                                             || x.ListType == "GOBIERNO MUNICIPAL"
+                                                             || x.ListType == "GOBIERNO NACIONAL"
+                                                             || x.ListType == "HM_TREASURY (BOE)"
+                                                             || x.ListType == "ONU_RESOLUCION_1929"
+                                                             || x.ListType == "ONU_RESOLUCION_1970"
+                                                             || x.ListType == "ONU_RESOLUCION_1973"
+                                                             || x.ListType == "ONU_RESOLUCION_1975"
+                                                             || x.ListType == "ONU_RESOLUCION_1988"
+                                                             || x.ListType == "ONU_RESOLUCION_1988"
+                                                             || x.ListType == "ONU_RESOLUCION_1988"
+                                                             || x.ListType == "ONU_RESOLUCION_2023"
+                                                             || x.ListType == "SECTORAL SANCTIONS IDENTIFICATIONS_LIST_EEUU"
+                                                             || x.ListType == "SPECIALLY DESIGNATED NATIONALS LIST_EEUU"
+                                                             || x.ListType == "SUPER SOCIEDADES"
+                                                             || x.ListType == "UNVERIFIED_LIST_EEUU" ?
+                                                             x.ListType + " - Criticidad Media" :
+                                                             x.ListType == "ESTRUCTURA DE GOBIERNO"
+                                                             || x.ListType == "FIGURAS PUBLICAS"
+                                                             || x.ListType == "PANAMA PAPERS"
+                                                             || x.ListType == "PARTIDOS Y MOVIMIENTOS POLITICOS"
+                                                             || x.ListType == "PEPS INTERNACIONALES" ?
+                                                             x.ListType + " - Criticidad Baja" : "NA";
+                            #endregion
+                            oInfoCreate.ElasticId = Convert.ToInt32(x.Id);
                             oInfoCreate.GroupId = x.Code;
                             oInfoCreate.IdList = x.TableCodeID;
                             oInfoCreate.Link = !string.IsNullOrEmpty(x.Source) ? x.Source : string.Empty;
@@ -226,11 +230,10 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             oInfoCreate.MoreInfo = x.RelatedWiht + " " + x.ORoldescription1 + " " + x.ORoldescription2;
                             oInfoCreate.Zone = x.NationalitySourceCountry;                            
 
-                            oQueryToCreate.RelatedQueryBasicInfoModel.Add(oInfoCreate);
+                            oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                             return true;
                         });
-                    oQueryToCreate.IsSuccess = true;
-                  await  QueryUpsert(oQueryToCreate);
+                    oQueryToCreate.IsSuccess = true;                    
                 }
                 else
                 {
@@ -240,12 +243,14 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     oInfoCreate.QueryIdentification = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty;
                     oInfoCreate.GroupName = "SIN COINCIDENCIAS";
                     
-                    oQueryToCreate.RelatedQueryBasicInfoModel.Add(oInfoCreate);
+                    oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
 
                     oQueryToCreate.IsSuccess = false;                    
                 }
+                oQueryToCreate.QueryPublicId = await ThirdKnowledgeDataController.Instance.QueryUpsert(oQueryToCreate.QueryPublicId, oQueryToCreate.PeriodPublicId,
+                    oQueryToCreate.SearchType.ItemId, oQueryToCreate.User, oQueryToCreate.FileName, oQueryToCreate.IsSuccess, oQueryToCreate.QueryStatus.ItemId, true);
 
-                await QueryUpsert(oQueryToCreate);
+                Task.Run(async () => await QueryUpsert(oQueryToCreate));
                 return oQueryToCreate;                
             }
             catch (Exception ex)
@@ -421,31 +426,23 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         {
             if (QueryModelToUpsert != null &&
                 !string.IsNullOrEmpty(QueryModelToUpsert.PeriodPublicId))
-            {
-                QueryModelToUpsert.QueryPublicId = await ThirdKnowledgeDataController.Instance.QueryUpsert(QueryModelToUpsert.QueryPublicId, QueryModelToUpsert.PeriodPublicId,
-                    QueryModelToUpsert.SearchType.ItemId, QueryModelToUpsert.User, QueryModelToUpsert.FileName, QueryModelToUpsert.IsSuccess, QueryModelToUpsert.QueryStatus.ItemId, true);
-
-                if (QueryModelToUpsert.RelatedQueryBasicInfoModel != null)
+            {                
+                if (QueryModelToUpsert.RelatedQueryInfoModel != null)
                 {
-                    QueryModelToUpsert.RelatedQueryBasicInfoModel.All(qInf =>
+                    QueryModelToUpsert.RelatedQueryInfoModel.All( qInf =>
                     {
                         LogManager.Models.LogModel oLog = Company.Controller.Company.GetGenericLogModel();
+                        
                         try
                         {
-                            //qInf.QueryBasicPublicId =
-                            //   ThirdKnowledgeDataController.Instance.QueryBasicInfoInsert
-                            //    (QueryModelToUpsert.QueryPublicId,
-                            //    qInf.NameResult, qInf.IdentificationResult, qInf.Priority, qInf.Peps, qInf.Status, qInf.Alias
-                            //    , qInf.Offense, true);
-
-                            //if (qInf.DetailInfo != null)
-                            //{
-                            //    qInf.DetailInfo.All(det =>
-                            //    {
-                            //        Task.Run(() => ThirdKnowledgeDataController.Instance.QueryDetailInfoInsert(qInf.QueryBasicPublicId, det.ItemInfoType.ItemId, det.Value, det.LargeValue, det.Enable));                                                                        
-                            //        return true;
-                            //    });
-                            //}
+                            var response = Task.Run(() => ThirdKnowledgeDataController.Instance.QueryInfoInsert
+                                (QueryModelToUpsert.QueryPublicId, qInf.NameResult, qInf.IdentificationResult, qInf.Priority,
+                                qInf.Peps, qInf.Status, qInf.Offense, qInf.DocumentType, qInf.IdentificationNumber,
+                                qInf.FullName, qInf.IdList, qInf.ListName, qInf.AKA, qInf.ChargeOffense, qInf.Message,
+                                qInf.QueryIdentification, qInf.QueryName, qInf.ElasticId, qInf.GroupName, qInf.GroupId,
+                                qInf.Link, qInf.MoreInfo, qInf.Zone, qInf.UrlFile, true));
+                            qInf.QueryInfoPublicId = response.Result;
+                            
                             oLog.IsSuccess = true;
                         }
                         catch (Exception err)
@@ -475,53 +472,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
             return QueryModelToUpsert;
         }
 
-        //public static async void QueryDetailUpsert(TDQueryModel QueryModelToUpsert)
-        //{
-        //    if (QueryModelToUpsert.RelatedQueryBasicInfoModel != null)
-        //    {
-        //        QueryModelToUpsert.RelatedQueryBasicInfoModel.All(qInf =>
-        //        {
-        //            LogManager.Models.LogModel oLog = Company.Controller.Company.GetGenericLogModel();
-        //            try
-        //            {
-        //                if (qInf.DetailInfo != null)
-        //                {
-        //                    qInf.DetailInfo.All(det =>
-        //                    {
-        //                        Task.Run(() => ThirdKnowledgeDataController.Instance.QueryDetailInfoInsert(qInf.QueryBasicPublicId, det.ItemInfoType.ItemId, det.Value, det.LargeValue, det.Enable));
-        //                        return true;
-        //                    });
-        //                }
-        //                oLog.IsSuccess = true;
-        //            }
-        //            catch (Exception err)
-        //            {
-        //                oLog.IsSuccess = false;
-        //                oLog.Message = err.Message + " - " + err.StackTrace;
-
-        //                throw err;
-        //            }
-        //            finally
-        //            {
-        //                oLog.LogObject = qInf;
-
-        //                oLog.RelatedLogInfo.Add(new LogManager.Models.LogInfoModel()
-        //                {
-        //                    LogInfoType = "PeriodPublicId",
-        //                    Value = QueryModelToUpsert.PeriodPublicId,
-        //                });
-
-        //                LogManager.ClientLog.AddLog(oLog);
-        //            }
-        //            return true;
-        //        });
-        //    }
-        //}
-
-        public static TDQueryInfoModel QueryDetailGetByBasicPublicID(string QueryBasicInfoPublicId)
+        public static TDQueryInfoModel GetQueryInfoByInfoPublicId(string QueryInfoPublicId)
         {
-            return ThirdKnowledgeDataController.Instance.QueryDetailGetByBasicPublicID(QueryBasicInfoPublicId);
+            return ProveedoresOnLine.ThirdKnowledge.DAL.Controller.ThirdKnowledgeDataController.Instance.GetQueryInfoByInfoPublicId(QueryInfoPublicId);
         }
+
         #endregion Queries
 
         #region BatchProcess
@@ -584,6 +539,8 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
         #endregion
 
+        #region Async Methods
+
         public static async Task<List<Tuple<string, List<string>, List<string>>>> OnLnieSearch(int IdType, string IndentificationNumber)
         {
             var builder = new ContainerBuilder();
@@ -599,6 +556,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
             builder.RegisterType<OnlineSearch.Core.ProveedoresOnLinePPImplement>().As<OnlineSearch.Interfaces.IOnLineSearch>();
             var container = builder.Build();
             return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber);
-        }
+        } 
+        #endregion
     }
 }
