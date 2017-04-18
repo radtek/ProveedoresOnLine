@@ -241,7 +241,7 @@ namespace MarketPlace.Web.Controllers
             
             oQueryModel.All(x =>
             {
-                objQueryInfo.Add(ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByInfoPublicId(x.QueryPublicId));
+                objQueryInfo.AddRange(ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByQueryPublicId(x.QueryPublicId));
                 x.RelatedQueryInfoModel = new List<TDQueryInfoModel>(objQueryInfo);
                 return true;
             });

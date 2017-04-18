@@ -75,7 +75,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.Controller
 
         public List<Models.TDQueryModel> ThirdKnowledgeSearchByPublicId(string CustomerPublicId, string QueryPublic, bool Enable, int PageNumber, int RowCount, out int TotalRows)
         {
-            return DataFactory.ThirdKnowledgeSearchByPublicId(CustomerPublicId, QueryPublic, Enable,  PageNumber,  RowCount, out TotalRows);
+            return DataFactory.ThirdKnowledgeSearchByPublicId(CustomerPublicId, QueryPublic, Enable, PageNumber, RowCount, out TotalRows);
         }
 
         #endregion MarketPlace
@@ -110,7 +110,12 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.Controller
 
         public TDQueryInfoModel GetQueryInfoByQueryPublicIdAndElasticId(string vQueryPublicId, int vElasticId)
         {
-            return DataFactory.GetQueryInfoByQueryPublicIdAndElasticId(vQueryPublicId,vElasticId);
+            return DataFactory.GetQueryInfoByQueryPublicIdAndElasticId(vQueryPublicId, vElasticId);
+        }
+
+        public List<TDQueryInfoModel> GetQueryInfoByQueryPublicId(string QueryPublicId)
+        {
+            return DataFactory.GetQueryInfoByQueryPublicId(QueryPublicId);
         }
         #endregion Query
 

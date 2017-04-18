@@ -43,6 +43,8 @@ namespace ProveedoresOnLine.ThirdKnowledge.Interfaces
 
         TDQueryInfoModel GetQueryInfoByQueryPublicIdAndElasticId(string vQueryPublicId, int vElasticId);
 
+        List<TDQueryInfoModel> GetQueryInfoByQueryPublicId(string QueryPublicId);
+
         #endregion Queries
 
         #region Utils

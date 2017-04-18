@@ -482,6 +482,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
             return ThirdKnowledgeDataController.Instance.GetQueryInfoByQueryPublicIdAndElasticId(QueryPublicId, ElasticId);
         }
 
+        public static List<TDQueryInfoModel> GetQueryInfoByQueryPublicId(string QueryPublicId)
+        {
+            return ThirdKnowledgeDataController.Instance.GetQueryInfoByQueryPublicId(QueryPublicId);
+        }
+
         #endregion Queries
 
         #region BatchProcess
