@@ -130,9 +130,7 @@ namespace MarketPlace.Web.Controllers
                 //Clean the season url saved
                 if (SessionModel.CurrentURL != null)
                     SessionModel.CurrentURL = null;
-
-                int oTotalRows = 0;
-
+                
                 //Get The Active Plan By Customer 
                 QueryDetailInfo = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByQueryPublicIdAndElasticId(QueryBasicPublicId, Convert.ToInt32(ElasticId));
 
