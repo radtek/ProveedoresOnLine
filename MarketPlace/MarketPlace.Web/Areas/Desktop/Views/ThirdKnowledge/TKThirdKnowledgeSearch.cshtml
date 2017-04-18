@@ -53,12 +53,12 @@
             }
 
             <div class="row POMPTKSearchContainer">
-                <div class="col-sm-3 TKSearchRow">
+                <div class="col-sm-2 TKSearchRow">
                     <span>Desde:</span>
                     <br />
                     <input type="date" name="ThirdKnoledge_InitDate" id="ThirdKnowledge_InitDateId" class="form-control" value="@initDate" />
                 </div>
-                <div class="col-sm-3 TKSearchRow">
+                <div class="col-sm-2 TKSearchRow">
                     <span>Hasta:</span>
                     <br />
                     <input type="date" name="ThirdKnowledge_EndDate" id="ThirdKnowledge_EndDateId" class="form-control" value="@endDate" />
@@ -71,6 +71,7 @@
                         string selected_single = "";
                         string selected_single_tpy = "";
                         string selected_option_sts = "";
+                        string selected_user = "";
                         if (Request.Params["SearchType"] != null)
                         {
                             switch (Request.Params["SearchType"])
@@ -94,16 +95,16 @@
 
                     </select>
                 </div>
-                <div class="col-sm-2 TKSearchRow">
-                    <span>Estado:</span>
+                <div class="col-sm-3 TKSearchRow">
+                    <span>Usuario:</span>
                     @{ 
                         selected_masive = "";
                         selected_single = "";
                         selected_single_tpy = "";
                         selected_option_sts = "";
-                        if (Request.Params["Status"] != null)
+                        if (Request.Params["User"] != null)
                         {
-                            switch (Request.Params["Status"])
+                            switch (Request.Params["User"])
                             {
                                 case "":
                                     selected_option_sts = "selected";
@@ -118,9 +119,8 @@
                         }
                     }
                     <select id="ThirdKnowledge_QueryStatus" class="form-control">
-                        <option value="" @selected_option_sts>Seleccionar</option>
-                        <option value="@((int)MarketPlace.Models.General.enumThirdKnowledgeQueryStatus.Finalized)" @selected_single>Finalizada</option>
-                        <option value="@((int)MarketPlace.Models.General.enumThirdKnowledgeQueryStatus.InProcess)" @selected_masive>En Progreso</option>
+                        <option value="" @selected_option_sts>Seleccionar</option>                        
+                            <option value="diego.jaramillo@publicar.com" @selected_user>diego.jaramillo@publicar.com</option>                        
                     </select>
                 </div>
                 <div class="col-sm-2 TKSearchRow">
