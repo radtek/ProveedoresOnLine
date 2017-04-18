@@ -713,6 +713,62 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
             return oReturn;
         }
 
+        public TDQueryInfoModel GetQueryInfoByQueryPublicIdAndElasticId(string vQueryPublicId, int vElasticId)
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
+
+            lstParams.Add(DataInstance.CreateTypedParameter("vQueryPublicId", vQueryPublicId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vElasticId", vElasticId));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "MP_TK_GetQueryByQueryAndElasticId",
+                CommandType = CommandType.StoredProcedure,
+                Parameters = lstParams,
+            });
+
+            TDQueryInfoModel oReturn = null;
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn = new TDQueryInfoModel()
+                {
+                    QueryInfoId = response.DataTableResult.Rows[0].Field<int>("QueryInfoId"),
+                    QueryInfoPublicId = response.DataTableResult.Rows[0].Field<string>("QueryInfoPublicId"),
+                    QueryPublicId = response.DataTableResult.Rows[0].Field<string>("QueryPublicId"),
+                    NameResult = response.DataTableResult.Rows[0].Field<string>("NameResult"),
+                    IdentificationResult = response.DataTableResult.Rows[0].Field<string>("IdentificationResult"),
+                    Priority = response.DataTableResult.Rows[0].Field<string>("Priority"),
+                    Peps = response.DataTableResult.Rows[0].Field<string>("Peps"),
+                    Status = response.DataTableResult.Rows[0].Field<string>("Status"),
+                    Offense = response.DataTableResult.Rows[0].Field<string>("Offense"),
+                    DocumentType = response.DataTableResult.Rows[0].Field<string>("DocumentType"),
+                    IdentificationNumber = response.DataTableResult.Rows[0].Field<string>("IdentificationNumber"),
+                    FullName = response.DataTableResult.Rows[0].Field<string>("FullName"),
+                    IdList = response.DataTableResult.Rows[0].Field<string>("IdList"),
+                    ListName = response.DataTableResult.Rows[0].Field<string>("ListName"),
+                    AKA = response.DataTableResult.Rows[0].Field<string>("AKA"),
+                    ChargeOffense = response.DataTableResult.Rows[0].Field<string>("ChargeOffense"),
+                    Message = response.DataTableResult.Rows[0].Field<string>("Message"),
+                    QueryIdentification = response.DataTableResult.Rows[0].Field<string>("QueryIdentification"),
+                    QueryName = response.DataTableResult.Rows[0].Field<string>("QueryName"),
+                    ElasticId = Convert.ToInt32(response.DataTableResult.Rows[0].Field<string>("ElasticId")),
+                    GroupName = response.DataTableResult.Rows[0].Field<string>("GroupName"),
+                    Link = response.DataTableResult.Rows[0].Field<string>("Link"),
+                    MoreInfo = response.DataTableResult.Rows[0].Field<string>("MoreInfo"),
+                    Zone = response.DataTableResult.Rows[0].Field<string>("Zone"),
+                    UrlFile = response.DataTableResult.Rows[0].Field<string>("UrlFile"),
+                    GroupId = response.DataTableResult.Rows[0].Field<string>("GroupId"),
+                    LastModify = response.DataTableResult.Rows[0].Field<DateTime>("LastModify"),
+                    CreateDate = response.DataTableResult.Rows[0].Field<DateTime>("CreateDate"),
+                    Enable = response.DataTableResult.Rows[0].Field<UInt64>("Enable") == 1 ? true : false,
+                };
+            }
+            return oReturn;
+        }
+
         #endregion Queries
 
         #endregion MarketPlace

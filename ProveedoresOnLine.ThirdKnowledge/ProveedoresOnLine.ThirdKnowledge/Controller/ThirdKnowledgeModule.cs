@@ -12,6 +12,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using static ProveedoresOnLine.ThirdKnowledge.Models.Enumerations;
 
 namespace ProveedoresOnLine.ThirdKnowledge.Controller
 {
@@ -102,7 +103,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         ListName = "Procuraduría General de la Nación",
                         ChargeOffense = "Presenta antecedentes en la Prcuraduría General de la Nación.",
                         Zone = "Colombia",
-                        ElasticId = 0,
+                        ElasticId = (int)enumElasticGroupId.ProcElasticId,
                         DocumentType = IdType.ToString(),
                     };
                     
@@ -131,7 +132,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         ListName = "Panama Papers",
                         Zone = "N/A",
                         ChargeOffense = "Presenta antecedentes en la Prcuraduría General de la Nación.",
-                        ElasticId = 0,
+                        ElasticId = (int)enumElasticGroupId.PanamaPElasticId,
                         DocumentType = IdType.ToString(),
                     };                                                                    
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
@@ -162,8 +163,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             else
                                 oInfoCreate.Priority = "3";
                             #endregion
-
-                            oInfoCreate.Status = x.Status;
+                                                       
                             oInfoCreate.Enable = true;
                             oInfoCreate.QueryPublicId = oQueryToCreate.QueryPublicId;
                             oInfoCreate.IdentificationNumber = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty;
@@ -474,7 +474,12 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
         public static TDQueryInfoModel GetQueryInfoByInfoPublicId(string QueryInfoPublicId)
         {
-            return ProveedoresOnLine.ThirdKnowledge.DAL.Controller.ThirdKnowledgeDataController.Instance.GetQueryInfoByInfoPublicId(QueryInfoPublicId);
+            return ThirdKnowledgeDataController.Instance.GetQueryInfoByInfoPublicId(QueryInfoPublicId);
+        }
+
+        public static TDQueryInfoModel GetQueryInfoByQueryPublicIdAndElasticId(string QueryPublicId, int ElasticId)
+        {
+            return ThirdKnowledgeDataController.Instance.GetQueryInfoByQueryPublicIdAndElasticId(QueryPublicId, ElasticId);
         }
 
         #endregion Queries

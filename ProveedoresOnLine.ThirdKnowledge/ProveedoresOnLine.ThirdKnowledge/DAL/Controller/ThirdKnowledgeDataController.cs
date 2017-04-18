@@ -107,6 +107,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.Controller
         {
             return DataFactory.GetQueryInfoByInfoPublicId(QueryInfoPublicId);
         }
+
+        public TDQueryInfoModel GetQueryInfoByQueryPublicIdAndElasticId(string vQueryPublicId, int vElasticId)
+        {
+            return DataFactory.GetQueryInfoByQueryPublicIdAndElasticId(vQueryPublicId,vElasticId);
+        }
         #endregion Query
 
         #region Utils

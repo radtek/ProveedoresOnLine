@@ -144,6 +144,7 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
         public class ActionParamsClass_TKDetailSingleSearch
         {
             public readonly string QueryBasicPublicId = "QueryBasicPublicId";
+            public readonly string ElasticId = "ElasticId";
             public readonly string ReturnUrl = "ReturnUrl";
         }
         static readonly ActionParamsClass_TKThirdKnowledgeSearch s_params_TKThirdKnowledgeSearch = new ActionParamsClass_TKThirdKnowledgeSearch();
@@ -247,15 +248,16 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
         }
 
         [NonAction]
-        partial void TKDetailSingleSearchOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string QueryBasicPublicId, string ReturnUrl);
+        partial void TKDetailSingleSearchOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string QueryBasicPublicId, string ElasticId, string ReturnUrl);
 
         [NonAction]
-        public override System.Web.Mvc.ActionResult TKDetailSingleSearch(string QueryBasicPublicId, string ReturnUrl)
+        public override System.Web.Mvc.ActionResult TKDetailSingleSearch(string QueryBasicPublicId, string ElasticId, string ReturnUrl)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.TKDetailSingleSearch);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "QueryBasicPublicId", QueryBasicPublicId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "ElasticId", ElasticId);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "ReturnUrl", ReturnUrl);
-            TKDetailSingleSearchOverride(callInfo, QueryBasicPublicId, ReturnUrl);
+            TKDetailSingleSearchOverride(callInfo, QueryBasicPublicId, ElasticId, ReturnUrl);
             return callInfo;
         }
 
