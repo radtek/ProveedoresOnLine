@@ -37,5 +37,11 @@
         {
             CaptchaProcTree = 102001,
         }
+
+        public enum enumElasticGroupId
+        {
+            ProcElasticId = 001,
+            PanamaPElasticId = 002,
+        }
     }
 }

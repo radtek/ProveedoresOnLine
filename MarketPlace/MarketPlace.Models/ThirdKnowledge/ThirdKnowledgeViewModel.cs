@@ -66,7 +66,9 @@ namespace MarketPlace.Models.ThirdKnowledge
         public string RegisterDate { get; set; }
         public string LastModifyDate { get; set; }
         public string Message { get; set; } 
-        public string FileURL { get; set; }        
+        public string FileURL { get; set; }
+
+        public int ElasticId { get; set; }
 
         #region Third Knowledge Search
 
@@ -107,6 +109,7 @@ namespace MarketPlace.Models.ThirdKnowledge
             Message = oDetail.Message;
             FileURL = oDetail.UrlFile;
             Status = oDetail.Status;
+            ElasticId = oDetail.ElasticId;
         }
 
         public ThirdKnowledgeViewModel()

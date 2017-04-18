@@ -39,7 +39,7 @@ namespace MarketPlace.Web.Controllers
                 //Clean the season url saved
                 if (SessionModel.CurrentURL != null)
                     SessionModel.CurrentURL = null;
-                
+
                 //Get The Active Plan By Customer 
                 oCurrentPeriodList = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetCurrenPeriod(SessionModel.CurrentCompany.CompanyPublicId, true);
 
@@ -119,7 +119,7 @@ namespace MarketPlace.Web.Controllers
         /// <param name="QueryBasicPublicId">This is the QueryInfo</param>
         /// <param name="ReturnUrl">URL to go back</param>
         /// <returns>Detail View</returns>
-        public virtual ActionResult TKDetailSingleSearch(string QueryBasicPublicId, string ReturnUrl)
+        public virtual ActionResult TKDetailSingleSearch(string QueryBasicPublicId, string ElasticId, string ReturnUrl)
         {
             ProviderViewModel oModel = new ProviderViewModel();
 
@@ -134,17 +134,14 @@ namespace MarketPlace.Web.Controllers
                 int oTotalRows = 0;
 
                 //Get The Active Plan By Customer 
-                QueryDetailInfo = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByInfoPublicId(QueryBasicPublicId);
+                QueryDetailInfo = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByQueryPublicIdAndElasticId(QueryBasicPublicId, Convert.ToInt32(ElasticId));
 
-                List<TDQueryModel> oQueryModel = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId(
-                    SessionModel.CurrentCompany.CompanyPublicId, QueryDetailInfo != null ? QueryDetailInfo.QueryPublicId : string.Empty, true, 0, 20, out oTotalRows);
                 oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel(QueryDetailInfo);
 
                 if (ReturnUrl == "null")
                     oModel.RelatedThidKnowledgeSearch.ReturnUrl = ReturnUrl;
 
-                oModel.RelatedThidKnowledgeSearch.QueryBasicPublicId = QueryBasicPublicId;
-                oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult = oQueryModel;
+                oModel.RelatedThidKnowledgeSearch.QueryBasicPublicId = QueryBasicPublicId;               
 
                 //Get report generator
                 if (Request["DownloadReport"] == "true")
@@ -187,7 +184,7 @@ namespace MarketPlace.Web.Controllers
 
                     #endregion
                 }
-                
+
                 return View(oModel);
             }
             catch (Exception ex)
@@ -267,7 +264,7 @@ namespace MarketPlace.Web.Controllers
             return View(oModel);
         }
 
-        public virtual ActionResult TKThirdKnowledgeDetail(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess)
+        public virtual ActionResult TKThirdKnowledgeDetail(string QueryPublicId,  string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess)
         {
             if (SessionModel.CurrentURL != null)
                 SessionModel.CurrentURL = null;
@@ -287,6 +284,7 @@ namespace MarketPlace.Web.Controllers
                 PageNumber = !string.IsNullOrEmpty(PageNumber) ? Convert.ToInt32(PageNumber) : 0,
             };
             int TotalRows = 0;
+            
             List<ProveedoresOnLine.ThirdKnowledge.Models.TDQueryModel> oQueryResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId
                 (SessionModel.CurrentCompany.CompanyPublicId
                 , QueryPublicId
@@ -336,7 +334,7 @@ namespace MarketPlace.Web.Controllers
                         {
                             item.RelatedQueryInfoModel.Where(td => td.GroupName == x).
                             Select(td => td).ToList().All(d =>
-                            {                                
+                            {
                                 oItem2.Add(new ThirdKnowledgeViewModel(d));
                                 return true;
                             });
@@ -351,7 +349,7 @@ namespace MarketPlace.Web.Controllers
                 List<Tuple<string, List<ThirdKnowledgeViewModel>>> oGroupOrder = new List<Tuple<string, List<ThirdKnowledgeViewModel>>>();
 
                 oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("Criticidad Alta")));
-                oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("Criticidad Media")));                
+                oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("Criticidad Media")));
                 oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("Criticidad Baja")));
                 oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("SIN COINCIDENCIAS")));
                 oModel.Group = oGroupOrder;
@@ -367,9 +365,9 @@ namespace MarketPlace.Web.Controllers
                 var objRelatedQueryBasicInfo = oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.RelatedQueryInfoModel != null).FirstOrDefault().RelatedQueryInfoModel.FirstOrDefault();
                 string searchName = "";
                 string searchIdentification = "";
-                if (!string.IsNullOrEmpty(objRelatedQueryBasicInfo.QueryName))                
+                if (!string.IsNullOrEmpty(objRelatedQueryBasicInfo.QueryName))
                     searchName = objRelatedQueryBasicInfo.QueryName;
-                
+
                 if (!string.IsNullOrEmpty(objRelatedQueryBasicInfo.QueryIdentification))
                 {
                     searchIdentification += objRelatedQueryBasicInfo.QueryIdentification;
@@ -405,8 +403,8 @@ namespace MarketPlace.Web.Controllers
                 data_HighCritical.Columns.Add("IdentificationSearch");
                 data_HighCritical.Columns.Add("NameSearch");
                 DataRow row_HighCrit;
-               var lrs = new List<ThirdKnowledgeViewModel>();
-                oModel.Group.All(x=>
+                var lrs = new List<ThirdKnowledgeViewModel>();
+                oModel.Group.All(x =>
                 {
                     if (x.Item1.Contains("Criticidad Alta"))
                     {
@@ -414,7 +412,7 @@ namespace MarketPlace.Web.Controllers
                     }
                     return true;
                 });
-                    
+
                 if (lrs != null)
                     lrs.All(y =>
                     {
@@ -445,21 +443,21 @@ namespace MarketPlace.Web.Controllers
                 data_MediumCritical.Columns.Add("NameSearch");
                 DataRow row_MediumCrit;
                 var dce = new List<ThirdKnowledgeViewModel>();
-                    oModel.Group.All(x =>
+                oModel.Group.All(x =>
+                {
+                    if (x.Item1.Contains("Criticidad Media"))
                     {
-                        if (x.Item1.Contains("Criticidad Media"))
-                        {
-                            dce.AddRange(x.Item2);
-                        }
-                        return true;
-                    });
+                        dce.AddRange(x.Item2);
+                    }
+                    return true;
+                });
                 if (dce != null)
                     dce.All(y =>
                     {
                         row_MediumCrit = data_MediumCritical.NewRow();
                         row_MediumCrit["IdentificationResult"] = y.IdentificationNumberResult;
                         parameters.Add(new ReportParameter("GroupNameDce", y.GroupName));
-                        row_MediumCrit["NameResult"] = y.NameResult; 
+                        row_MediumCrit["NameResult"] = y.NameResult;
                         row_MediumCrit["Offense"] = y.Offense;
                         row_MediumCrit["Peps"] = y.Peps;
                         row_MediumCrit["Priority"] = y.Priority;
@@ -469,7 +467,7 @@ namespace MarketPlace.Web.Controllers
                         row_MediumCrit["NameSearch"] = y.RequestName; // SearchName Param
                         data_MediumCritical.Rows.Add(row_MediumCrit);
                         return true;
-                    });               
+                    });
 
                 /*data for Matches with Low Critical*/
                 DataTable data_LowCritical = new DataTable();
@@ -496,7 +494,7 @@ namespace MarketPlace.Web.Controllers
                     psp.All(y =>
                     {
                         row_LowCrit = data_LowCritical.NewRow();
-                        row_LowCrit["IdentificationResult"] = y.IdentificationNumberResult;                        
+                        row_LowCrit["IdentificationResult"] = y.IdentificationNumberResult;
                         row_LowCrit["NameResult"] = y.NameResult;
                         row_LowCrit["Offense"] = y.Offense;
                         row_LowCrit["Peps"] = y.Peps;
@@ -534,7 +532,7 @@ namespace MarketPlace.Web.Controllers
                 Tuple<byte[], string, string> ThirdKnowledgeReport = ProveedoresOnLine.Reports.Controller.ReportModule.TK_QueryReport(
                                                                 fileFormat,
                                                                 data_HighCritical,
-                                                                data_MediumCritical,                                                                
+                                                                data_MediumCritical,
                                                                 data_LowCritical,
                                                                 data_NoMatch,
                                                                 parameters,
@@ -630,7 +628,7 @@ namespace MarketPlace.Web.Controllers
                         (oCurrentAction == MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeSearch &&
                         oCurrentController == MVC.ThirdKnowledge.Name)
                     });
-                }               
+                }
                 #endregion
 
                 //get is selected menu
