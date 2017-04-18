@@ -12,7 +12,7 @@
             </div>
             @if (item.SearchType.ItemId == (int)MarketPlace.Models.General.enumThirdKnowledgeQueryType.Simple && Model.RelatedThidKnowledgeSearch.CurrentPlanModel != null && Model.RelatedThidKnowledgeSearch.CurrentPlanModel.Status.ItemId == 101001) //Consulta Simple
             {
-                string idType = item.RelatedQueryBasicInfoModel.Count > 0 && item.RelatedQueryBasicInfoModel != null ? item.RelatedQueryBasicInfoModel.FirstOrDefault().DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumThirdKnowledgeColls.TypeDocument).Select(x => x.Value).FirstOrDefault() != null ? item.RelatedQueryBasicInfoModel.FirstOrDefault().DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumThirdKnowledgeColls.TypeDocument).Select(x => x.Value).FirstOrDefault() : string.Empty : string.Empty;
+                string idType = item.RelatedQueryInfoModel.Count > 0 && item.RelatedQueryInfoModel != null ? item.RelatedQueryInfoModel.FirstOrDefault().DocumentType != null ? item.RelatedQueryInfoModel.FirstOrDefault().DocumentType : string.Empty : string.Empty;
                 idType = idType == "1" ? "213002" : idType == "2" ? "213001" : idType == "3" ? "" : "";
 
                     <div class="col-xs-2 text-right ThirdKnowledge_Detail">
@@ -22,8 +22,8 @@
                                 {
                                     controller = MVC.ThirdKnowledge.Name,
                                     action = MVC.ThirdKnowledge.ActionNames.TKSingleSearch,
-                                    Name = item.RelatedQueryBasicInfoModel.Count > 0 && item.RelatedQueryBasicInfoModel != null ?item.RelatedQueryBasicInfoModel.FirstOrDefault().DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumThirdKnowledgeColls.RequestName).Select(x => x.Value).FirstOrDefault() != null ? item.RelatedQueryBasicInfoModel.FirstOrDefault().DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumThirdKnowledgeColls.RequestName).Select(x => x.Value).FirstOrDefault() : string.Empty : string.Empty,
-                                    IdentificationNumber = item.RelatedQueryBasicInfoModel.Count > 0 && item.RelatedQueryBasicInfoModel != null ? item.RelatedQueryBasicInfoModel.FirstOrDefault().DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumThirdKnowledgeColls.IdNumberRequest).Select(x => x.Value).FirstOrDefault() != null ? item.RelatedQueryBasicInfoModel.FirstOrDefault().DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumThirdKnowledgeColls.IdNumberRequest).Select(x => x.Value).FirstOrDefault() : string.Empty : string.Empty,
+                                    Name = item.RelatedQueryInfoModel.Count > 0 && item.RelatedQueryInfoModel != null ?item.RelatedQueryInfoModel.FirstOrDefault().QueryName != null ? item.RelatedQueryInfoModel.FirstOrDefault().QueryName: string.Empty : string.Empty,
+                                    IdentificationNumber = item.RelatedQueryInfoModel.Count > 0 && item.RelatedQueryInfoModel != null ? item.RelatedQueryInfoModel.FirstOrDefault().QueryIdentification != null ? item.RelatedQueryInfoModel.FirstOrDefault().QueryIdentification : string.Empty : string.Empty,
                                     ThirdKnowledgeIdType = idType,
                                 }))" data-toggle="tooltip" data-placement="top" title="Volver a Consultar">
                         <i class="@MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.TK_Research_Image].Value"></i>&nbsp;&nbsp;&nbsp;
@@ -58,12 +58,12 @@
                     <div class="col-sm-2 POMPProviderBoxInfo">
                         @{
                             string strInfo = "";
-                            if (item.RelatedQueryBasicInfoModel.Count > 0 && item.RelatedQueryBasicInfoModel != null)
+                            if (item.RelatedQueryInfoModel.Count > 0 && item.RelatedQueryInfoModel != null)
                             {                                              
-                                if (item.RelatedQueryBasicInfoModel.FirstOrDefault().DetailInfo.Count > 0)
+                                if (item.RelatedQueryInfoModel.Count > 0)
                                 {
-                                    strInfo = item.RelatedQueryBasicInfoModel.FirstOrDefault().DetailInfo.Where(x => x != null && x.ItemInfoType.ItemId == 301013).Select(x => x.Value).DefaultIfEmpty("N/A").FirstOrDefault();
-                                    strInfo += item.RelatedQueryBasicInfoModel.FirstOrDefault().DetailInfo.Where(x => x != null && x.ItemInfoType.ItemId == 301012).Select(x =>  " - " + x.Value).DefaultIfEmpty("N/A").FirstOrDefault();
+                                    strInfo = item.RelatedQueryInfoModel.FirstOrDefault().QueryName;
+                                    strInfo += item.RelatedQueryInfoModel.FirstOrDefault().QueryIdentification;
                                 }
                                 else
                                 {
