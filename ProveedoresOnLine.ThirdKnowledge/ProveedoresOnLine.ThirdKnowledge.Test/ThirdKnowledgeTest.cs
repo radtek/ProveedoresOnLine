@@ -69,10 +69,8 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
 
         [TestMethod]
         public void ThirdKnowledgeDetailByPublicId()
-        {
-            int TotalRows = 0;
-            List<TDQueryModel> oReturn = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId
-                ("DA5C572E", "1F23540C", true, 0, 10, out TotalRows);
+        {            
+            List<TDQueryModel> oReturn = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId("A837B1AE");
 
             Assert.AreEqual(true, oReturn != null);
         }

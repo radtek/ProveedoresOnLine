@@ -86,7 +86,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
                     {
                         AKA = string.Empty,
-                        IdentificationResult = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : "",
+                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : "",
                         Offense = "Presenta Antecedentes Procuraduría Nacional",
                         NameResult = procResult.FirstOrDefault().Item1,
                         MoreInfo = detailMoreInfo,
@@ -95,6 +95,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         Enable = true,
                         QueryPublicId = oQueryToCreate.QueryPublicId,
                         QueryIdentification = IdentificationNumber,
+                        IdentificationResult = IdentificationNumber,
                         QueryName = Name,
                         IdList = "Procuraduría General de la Nación",
                         IdentificationNumber = IdentificationNumber,
@@ -103,8 +104,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         ListName = "Procuraduría General de la Nación",
                         ChargeOffense = "Presenta antecedentes en la Prcuraduría General de la Nación.",
                         Zone = "Colombia",
-                        ElasticId = (int)enumElasticGroupId.ProcElasticId,
-                        DocumentType = IdType.ToString(),
+                        ElasticId = (int)enumElasticGroupId.ProcElasticId,                        
                     };
                     
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
@@ -115,16 +115,16 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
                     {                         
                         AKA = string.Empty,
-                        IdentificationResult = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : "",
+                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : "",
                         Offense = "Presenta Reporte en Panama Papers",
-                        NameResult = ppResult.FirstOrDefault().Item1,
+                        NameResult = Name,
                         MoreInfo = "Panama Papers no hace refierencia necesariamente a un delito o una investigación por LA/FT.",
                         Priority = "2",
                         Status = "Vigente",
                         Enable = true,
                         QueryPublicId = oQueryToCreate.QueryPublicId,
                         QueryIdentification = "N/A",
-                        QueryName = Name,
+                        QueryName = Name,                        
                         IdList = "Panama Papers",
                         IdentificationNumber = IdentificationNumber,
                         GroupName = "Panama Papers - Criticidad Baja",
@@ -132,8 +132,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         ListName = "Panama Papers",
                         Zone = "N/A",
                         ChargeOffense = "Presenta antecedentes en la Prcuraduría General de la Nación.",
-                        ElasticId = (int)enumElasticGroupId.PanamaPElasticId,
-                        DocumentType = IdType.ToString(),
+                        ElasticId = (int)enumElasticGroupId.PanamaPElasticId,                        
                     };                                                                    
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                 }
@@ -228,7 +227,8 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             oInfoCreate.NameResult = x.CompleteName;
                             oInfoCreate.ListName = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;
                             oInfoCreate.MoreInfo = x.RelatedWiht + " " + x.ORoldescription1 + " " + x.ORoldescription2;
-                            oInfoCreate.Zone = x.NationalitySourceCountry;                            
+                            oInfoCreate.Zone = x.NationalitySourceCountry;
+                            oInfoCreate.QueryIdentification = IdentificationNumber;                            
 
                             oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                             return true;
@@ -413,9 +413,9 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
             return ThirdKnowledgeDataController.Instance.ThirdKnowledgeSearch(CustomerPublicId, RelatedUser, StartDate, EndtDate, PageNumber, RowCount, SearchType, Status, out TotalRows);
         }
 
-        public static List<Models.TDQueryModel> ThirdKnowledgeSearchByPublicId(string CustomerPublicId, string QueryPublic, bool Enable, int PageNumber, int RowCount, out int TotalRows)
+        public static List<Models.TDQueryModel> ThirdKnowledgeSearchByPublicId(string QueryPublicId)
         {
-            return ThirdKnowledgeDataController.Instance.ThirdKnowledgeSearchByPublicId(CustomerPublicId, QueryPublic, Enable, PageNumber, RowCount, out TotalRows);
+            return ThirdKnowledgeDataController.Instance.ThirdKnowledgeSearchByPublicId(QueryPublicId);
         }
 
         #endregion MarketPlace

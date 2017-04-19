@@ -132,15 +132,17 @@ namespace MarketPlace.Web.Controllers
                     SessionModel.CurrentURL = null;
                 
                 //Get The Active Plan By Customer 
-                QueryDetailInfo = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByQueryPublicIdAndElasticId(QueryBasicPublicId, Convert.ToInt32(ElasticId));
-
-                oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel(QueryDetailInfo);
+                QueryDetailInfo = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByQueryPublicIdAndElasticId(QueryBasicPublicId, Convert.ToInt32(ElasticId));                
+                if (QueryDetailInfo != null)                
+                    oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel(QueryDetailInfo);                
+                else                
+                    oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel();               
+                
 
                 if (ReturnUrl == "null")
                     oModel.RelatedThidKnowledgeSearch.ReturnUrl = ReturnUrl;
 
-                oModel.RelatedThidKnowledgeSearch.QueryBasicPublicId = QueryBasicPublicId;               
-
+                oModel.RelatedThidKnowledgeSearch.QueryBasicPublicId = QueryBasicPublicId;                
                 //Get report generator
                 if (Request["DownloadReport"] == "true")
                 {
@@ -295,6 +297,7 @@ namespace MarketPlace.Web.Controllers
             
             List<ProveedoresOnLine.ThirdKnowledge.Models.TDQueryModel> oQueryResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId
                 (QueryPublicId);
+            List<ProveedoresOnLine.ThirdKnowledge.Models.TDQueryModel> oQueryResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId(QueryPublicId);
 
             oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.TotalRows = TotalRows;
 
