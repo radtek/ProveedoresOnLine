@@ -308,6 +308,8 @@ namespace MarketPlace.Web.ControllersApi
                             FileName = oFileName,
                         };
 
+                        oQueryToCreate.QueryPublicId = await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryCreate(oQueryToCreate);
+
                         oQueryToCreate = await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryUpsert(oQueryToCreate);
 
                         //Send Message

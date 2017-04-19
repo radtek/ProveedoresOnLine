@@ -444,11 +444,13 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
             return oReturn;
         }
 
-        public List<Models.TDQueryModel> ThirdKnowledgeSearchByPublicId(string QueryPublicId)
+        public List<Models.TDQueryModel> ThirdKnowledgeSearchByPublicId(string QueryPublicId, int PageNumber, int RowCount, out int TotalRows)
         {
             List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
                         
             lstParams.Add(DataInstance.CreateTypedParameter("vQueryPublicId", QueryPublicId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vPageNumber", PageNumber));
+            lstParams.Add(DataInstance.CreateTypedParameter("vRowCount", RowCount));
 
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
@@ -457,13 +459,13 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
                 CommandType = CommandType.StoredProcedure,
                 Parameters = lstParams,
             });
-
+            TotalRows = 0;
             List<Models.TDQueryModel> oReturn = null;
 
             if (response.DataTableResult != null &&
                 response.DataTableResult.Rows.Count > 0)
-            {  
-
+            {
+                TotalRows = response.DataTableResult.Rows[0].Field<int>("TotalRows");
                 oReturn =
                     (from q in response.DataTableResult.AsEnumerable()
                      where !q.IsNull("QueryId")
@@ -666,12 +668,13 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
                 CommandType = CommandType.StoredProcedure,
                 Parameters = lstParams,
             });
-
+            
             TDQueryInfoModel oReturn = null;
 
             if (response.DataTableResult != null &&
                 response.DataTableResult.Rows.Count > 0)
             {
+               
                 oReturn = new TDQueryInfoModel()
                 {
                     QueryInfoId = response.DataTableResult.Rows[0].Field<int>("QueryInfoId"),

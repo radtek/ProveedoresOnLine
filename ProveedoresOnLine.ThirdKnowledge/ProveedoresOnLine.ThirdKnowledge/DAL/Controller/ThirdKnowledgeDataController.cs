@@ -73,9 +73,9 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.Controller
             return DataFactory.ThirdKnowledgeSearch(CustomerPublicId, RelatedUser, StartDate, EndtDate, PageNumber, RowCount, SearchType, Status, out TotalRows);
         }
 
-        public List<Models.TDQueryModel> ThirdKnowledgeSearchByPublicId(string QueryPublicId)
+        public List<Models.TDQueryModel> ThirdKnowledgeSearchByPublicId(string QueryPublicId, int PageNumber, int RowCount, out int TotalRows)
         {
-            return DataFactory.ThirdKnowledgeSearchByPublicId(QueryPublicId);
+            return DataFactory.ThirdKnowledgeSearchByPublicId(QueryPublicId, PageNumber,RowCount, out TotalRows);
         }
 
         #endregion MarketPlace

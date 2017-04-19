@@ -247,8 +247,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
                     oQueryToCreate.IsSuccess = false;                    
                 }
-                oQueryToCreate.QueryPublicId = await ThirdKnowledgeDataController.Instance.QueryUpsert(oQueryToCreate.QueryPublicId, oQueryToCreate.PeriodPublicId,
-                    oQueryToCreate.SearchType.ItemId, oQueryToCreate.User, oQueryToCreate.FileName, oQueryToCreate.IsSuccess, oQueryToCreate.QueryStatus.ItemId, true);
+                oQueryToCreate.QueryPublicId = await QueryCreate(oQueryToCreate);
 
                 Task.Run(async () => await QueryUpsert(oQueryToCreate));
                 return oQueryToCreate;                
@@ -301,6 +300,12 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         public static List<TDQueryModel> GetQueriesByPeriodPublicId(string PeriodPublicId, bool Enable)
         {
             return ThirdKnowledgeDataController.Instance.GetQueriesByPeriodPublicId(PeriodPublicId, Enable);
+        }
+
+        public async static Task<string> QueryCreate(TDQueryModel oQueryToCreate)
+        {
+            return await ThirdKnowledgeDataController.Instance.QueryUpsert(oQueryToCreate.QueryPublicId, oQueryToCreate.PeriodPublicId,
+                    oQueryToCreate.SearchType.ItemId, oQueryToCreate.User, oQueryToCreate.FileName, oQueryToCreate.IsSuccess, oQueryToCreate.QueryStatus.ItemId, true);
         }
 
         #endregion Config
@@ -413,9 +418,9 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
             return ThirdKnowledgeDataController.Instance.ThirdKnowledgeSearch(CustomerPublicId, RelatedUser, StartDate, EndtDate, PageNumber, RowCount, SearchType, Status, out TotalRows);
         }
 
-        public static List<Models.TDQueryModel> ThirdKnowledgeSearchByPublicId(string QueryPublicId)
+        public static List<Models.TDQueryModel> ThirdKnowledgeSearchByPublicId(string QueryPublicId, int PageNumber, int RowCount, out int TotalRows)
         {
-            return ThirdKnowledgeDataController.Instance.ThirdKnowledgeSearchByPublicId(QueryPublicId);
+            return ThirdKnowledgeDataController.Instance.ThirdKnowledgeSearchByPublicId(QueryPublicId, PageNumber,RowCount, out TotalRows);
         }
 
         #endregion MarketPlace
