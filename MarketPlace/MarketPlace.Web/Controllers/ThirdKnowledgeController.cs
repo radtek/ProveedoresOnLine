@@ -191,11 +191,13 @@ namespace MarketPlace.Web.Controllers
             }
         }
 
-        public virtual ActionResult TKThirdKnowledgeSearch(string PageNumber, string InitDate, string EndDate, string SearchType, string User)
+        public virtual ActionResult TKThirdKnowledgeSearch(string PageNumber, string InitDate, string EndDate, string SearchType, string Status)
         {
             if (SessionModel.CurrentURL != null)
                 SessionModel.CurrentURL = null;
             string RelatedUser = null;
+
+            
 
             if (SessionModel.CurrentCompanyLoginUser.RelatedCompany.FirstOrDefault().RelatedUser.FirstOrDefault().RelatedCompanyRole.ParentRoleCompany != null)
             {
@@ -205,9 +207,9 @@ namespace MarketPlace.Web.Controllers
             {
                 RelatedUser = null;
             }
-            if (User !=null)           
-                RelatedUser = User;
-            
+            if (Status != null)
+                RelatedUser = Status;
+
 
             ProviderViewModel oModel = new ProviderViewModel();
             oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel();
@@ -238,13 +240,19 @@ namespace MarketPlace.Web.Controllers
                 null,
                 out TotalRows);
             List<TDQueryInfoModel> objQueryInfo = new List<TDQueryInfoModel>();
-            
+            oModel.RelatedThirdKnowledge = new ThirdKnowledgeViewModel()
+            {
+                Users = new List<string>()
+            };
             oQueryModel.All(x =>
             {
                 objQueryInfo.AddRange(ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByQueryPublicId(x.QueryPublicId));
                 x.RelatedQueryInfoModel = new List<TDQueryInfoModel>(objQueryInfo);
+                
+
                 return true;
             });
+            oModel.RelatedThirdKnowledge.Users = oQueryModel.GroupBy(x=>x.User).Select(g =>g.First().User).ToList();
 
             oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.TotalRows = TotalRows;
 
@@ -257,6 +265,8 @@ namespace MarketPlace.Web.Controllers
                 oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult = new List<TDQueryModel>();
             }
 
+
+            
             oModel.ProviderMenu = GetThirdKnowledgeControllerMenu();
 
             return View(oModel);
@@ -284,12 +294,7 @@ namespace MarketPlace.Web.Controllers
             int TotalRows = 0;
             
             List<ProveedoresOnLine.ThirdKnowledge.Models.TDQueryModel> oQueryResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId
-                (SessionModel.CurrentCompany.CompanyPublicId
-                , QueryPublicId
-                , Enable == "1" ? true : false
-                , oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.PageNumber
-                , oTotalRowsAux
-                , out TotalRows);
+                (QueryPublicId);
 
             oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.TotalRows = TotalRows;
 
