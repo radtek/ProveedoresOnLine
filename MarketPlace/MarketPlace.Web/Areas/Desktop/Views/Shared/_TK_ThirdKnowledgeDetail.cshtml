@@ -36,23 +36,23 @@
                         <div class="col-sm-4 POMPProviderBoxInfo text-left"><p>@subItem.IdNumberRequest</p></div>
                         <div class="col-sm-4 POMPProviderBoxInfo text-right">
                             <p>
-                                @if (options.Any(x=>x == (int)MarketPlace.Models.General.enumProviderSubMenu.QueryDetails))
-                                {                                   
+                                @if (options.Any(x => x == (int)MarketPlace.Models.General.enumProviderSubMenu.QueryDetails))
+                                {
                                     <a href="@(Url.RouteUrl
                                            (MarketPlace.Models.General.Constants.C_Routes_Default,
                                            new
                                            {
                                                controller = MVC.ThirdKnowledge.Name,
                                                action = MVC.ThirdKnowledge.ActionNames.TKDetailSingleSearch,
-                                               QueryBasicPublicId = subItem.QueryBasicPublicId,
+                                               QueryBasicPublicId = subItem.QueryPublicId,
+                                               ElasticId = subItem.ElasticId,
                                                ReturnUrl = Url.Action
                                                        (MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeDetail,
                                                        MVC.ThirdKnowledge.Name,
                                                        new
                                                        {
-                                                           QueryPublicId = Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.QueryPublicId != null).Select(x => x.QueryPublicId).DefaultIfEmpty(string.Empty).FirstOrDefault(),
-                                                           InitDate = Model.RelatedThidKnowledgeSearch.InitDate.ToString("yyyy-MM-dd"),
-                                                           EndDate = Model.RelatedThidKnowledgeSearch.EndDate.ToString("yyyy-MM-dd"),
+                                                           QueryPublicId = subItem.QueryBasicPublicId,
+                                                           ElasticId = subItem.ElasticId,
                                                        })
                                            }))">Ver Detalle</a>
                                 }
@@ -97,22 +97,22 @@
                                 @if (options.Any(x => x == (int)MarketPlace.Models.General.enumProviderSubMenu.QueryDetails))
                                 {
                                     <a href="@(Url.RouteUrl
-           (MarketPlace.Models.General.Constants.C_Routes_Default,
-           new
-           {
-               controller = MVC.ThirdKnowledge.Name,
-               action = MVC.ThirdKnowledge.ActionNames.TKDetailSingleSearch,
-               QueryBasicPublicId = subItem.QueryBasicPublicId,
-               ReturnUrl = Url.Action
-                       (MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeDetail,
-                       MVC.ThirdKnowledge.Name,
-                       new
-                       {
-                           QueryPublicId = Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.QueryPublicId != null).Select(x => x.QueryPublicId).DefaultIfEmpty(string.Empty).FirstOrDefault(),
-                           InitDate = Model.RelatedThidKnowledgeSearch.InitDate.ToString("yyyy-MM-dd"),
-                           EndDate = Model.RelatedThidKnowledgeSearch.EndDate.ToString("yyyy-MM-dd"),
-                       })
-           }))">Ver_Detalle</a>
+                                   (MarketPlace.Models.General.Constants.C_Routes_Default,
+                                   new
+                                   {
+                                       controller = MVC.ThirdKnowledge.Name,
+                                       action = MVC.ThirdKnowledge.ActionNames.TKDetailSingleSearch,
+                                       QueryBasicPublicId = subItem.QueryPublicId,
+                                       ElasticId = subItem.ElasticId,
+                                       ReturnUrl = Url.Action
+                                               (MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeDetail,
+                                               MVC.ThirdKnowledge.Name,
+                                               new
+                                               {
+                                                   QueryPublicId = subItem.QueryBasicPublicId,
+                                                   ElasticId = subItem.ElasticId,
+                                               })
+                                   }))">Ver_Detalle</a>
                                 }
                             </p>
                         </div>
@@ -131,21 +131,21 @@
                 @{
                     if (Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Count > 0)
                     {
-                        var obbkRQB = Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.RelatedQueryBasicInfoModel != null).FirstOrDefault().RelatedQueryBasicInfoModel.Where(i => i.DetailInfo != null).FirstOrDefault();
+                        var obbkRQB = Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.RelatedQueryInfoModel != null).FirstOrDefault();
                         <br /><br />
                         <label>LA BÚSQUEDA POR</label>
                         <br />
-                        if (@obbkRQB.DetailInfo.Where(x => x.ItemInfoType.ItemId == 301013).Select(y => y.Value).DefaultIfEmpty(String.Empty).FirstOrDefault().ToString().Length > 0)
+                        if (!string.IsNullOrEmpty(obbkRQB.RelatedQueryInfoModel.Select(x => x.QueryName).FirstOrDefault()))
                         {
-                            <label class="POMPNoresultRequestText">Nombre:&nbsp;@obbkRQB.DetailInfo.Where(x => x.ItemInfoType.ItemId == 301013).Select(y => y.Value).DefaultIfEmpty(String.Empty).FirstOrDefault().ToString()</label>
+                            <label class="POMPNoresultRequestText">Nombre:&nbsp;@obbkRQB.RelatedQueryInfoModel.Select(x => x.QueryName).FirstOrDefault()</label>
                         }
-                        if (@obbkRQB.DetailInfo.Where(x => x.ItemInfoType.ItemId == 301013).Select(y => y.Value).DefaultIfEmpty(String.Empty).FirstOrDefault().ToString().Length > 0 && @obbkRQB.DetailInfo.Where(x => x.ItemInfoType.ItemId == 301012).Select(y => y.Value).DefaultIfEmpty(String.Empty).FirstOrDefault().ToString().Length > 0)
+                        if (!string.IsNullOrEmpty(obbkRQB.RelatedQueryInfoModel.Select(x => x.QueryName).FirstOrDefault()))
                         {
                             <label class="POMPNoresultRequestText">&nbsp; / &nbsp;</label>
                         }
-                        if (@obbkRQB.DetailInfo.Where(x => x.ItemInfoType.ItemId == 301012).Select(y => y.Value).DefaultIfEmpty(String.Empty).FirstOrDefault().ToString().Length > 0)
+                        if (!string.IsNullOrEmpty(obbkRQB.RelatedQueryInfoModel.Select(x => x.QueryIdentification).FirstOrDefault()))
                         {
-                            <label class="POMPNoresultRequestText">Identificación:&nbsp;@obbkRQB.DetailInfo.Where(x => x.ItemInfoType.ItemId == 301012).Select(y => y.Value).DefaultIfEmpty(String.Empty).FirstOrDefault().ToString()</label>
+                            <label class="POMPNoresultRequestText">Identificación:&nbsp;@obbkRQB.RelatedQueryInfoModel.Select(x => x.QueryName).FirstOrDefault()</label>
                         }
                         <br /><br />
                         <label class="POMPNoresultText">no arrojó coincidencias</label>

@@ -101,7 +101,7 @@
                             <div class="row POMPBorderbottom">
                                 @if (Model.RelatedThidKnowledgeSearch.ListName != "SUPER SOCIEDADES")
                                 {
-                                    string oLink = Model.RelatedThidKnowledgeSearch.Link.ToLower();
+                                    string oLink = !string.IsNullOrEmpty(Model.RelatedThidKnowledgeSearch.Link) ? Model.RelatedThidKnowledgeSearch.Link.ToLower() : string.Empty;
                                     if (!oLink.Contains("https://") && !oLink.Contains("http://"))
                                     {
                                         oLink = "http://" + oLink;

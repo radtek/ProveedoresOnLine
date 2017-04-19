@@ -47,7 +47,7 @@ namespace MarketPlace.Models.ThirdKnowledge
         //Cosl
         public string RequestName { get; set; }
         public string IdNumberRequest { get; set; }
-        public string QueryId { get; set; }
+        public string QueryPublicId { get; set; }
         public string IdGroup { get; set; }
         public string GroupName { get; set; }
         public string Priority { get; set; }
@@ -89,7 +89,7 @@ namespace MarketPlace.Models.ThirdKnowledge
             QueryBasicPublicId = oDetail.QueryInfoPublicId;
             RequestName = oDetail.QueryName;
             IdNumberRequest = oDetail.QueryIdentification;
-            QueryId = oDetail.QueryPublicId;
+            QueryPublicId = oDetail.QueryPublicId;            
             GroupName = oDetail.GroupName;
             Priority = oDetail.Priority;
             TypeDocument = oDetail.DocumentType;

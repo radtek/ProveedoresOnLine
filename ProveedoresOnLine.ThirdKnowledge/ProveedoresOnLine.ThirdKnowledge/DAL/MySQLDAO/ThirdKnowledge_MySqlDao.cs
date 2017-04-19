@@ -444,18 +444,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
             return oReturn;
         }
 
-        public List<Models.TDQueryModel> ThirdKnowledgeSearchByPublicId(string CustomerPublicId, string QueryPublicId, bool Enable, int PageNumber, int RowCount, out int TotalRows)
+        public List<Models.TDQueryModel> ThirdKnowledgeSearchByPublicId(string QueryPublicId)
         {
             List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
-
-            lstParams.Add(DataInstance.CreateTypedParameter("vCustomerPublicId", CustomerPublicId));
+                        
             lstParams.Add(DataInstance.CreateTypedParameter("vQueryPublicId", QueryPublicId));
-            lstParams.Add(DataInstance.CreateTypedParameter("vEnable", Enable));
-            lstParams.Add(DataInstance.CreateTypedParameter("vPageNumber", PageNumber));
-            lstParams.Add(DataInstance.CreateTypedParameter("vRowCount", RowCount));
-
-
-            TotalRows = 0;
 
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
@@ -469,28 +462,29 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
 
             if (response.DataTableResult != null &&
                 response.DataTableResult.Rows.Count > 0)
-            {
-                TotalRows = response.DataTableResult.Rows[0].Field<int>("TotalRows");
+            {  
 
                 oReturn =
                     (from q in response.DataTableResult.AsEnumerable()
-                     where !q.IsNull("QueryPublicId")
+                     where !q.IsNull("QueryId")
                      group q by new
                      {
+                         QueryId = q.Field<int>("QueryId"),
+                         QueryPublicId = q.Field<string>("QueryPublicId"),
+                         PeriodId = q.Field<int>("PeriodId"),
+                         PeriodPublicId = q.Field<string>("PeriodPublicId"),
                          SearchTypeId = q.Field<int>("SearchTypeId"),
                          SearchTypeName = q.Field<string>("SearchTypeName"),
                          User = q.Field<string>("User"),
-                         QueryStatusId = q.Field<int>("QueryStatusId"),
-                         QueryStatusName = q.Field<string>("QueryStatusName"),
+                         QueryStatusId = q.Field<int>("QueryStatusTypeId"),
+                         QueryStatusName = q.Field<string>("QueryStatusTypeName"),
                          IsSuccess = q.Field<UInt64>("IsSuccess"),
-                         QueryEnable = q.Field<UInt64>("QueryEnable"),
-                         PeriodPublicId = q.Field<string>("PeriodPublicId"),
-                         QueryPublicId = q.Field<string>("QueryPublicId"),
                          QueryCreateDate = q.Field<DateTime>("QueryCreateDate"),
-                     }
-                         into qg
+                         QueryLastModify = q.Field<DateTime>("QueryLastModify"),
+                         QueryEnable = q.Field<UInt64>("QueryEnable") == 1 ? true : false                         
+                     }into qg
                      select new Models.TDQueryModel()
-                     {
+                     {                         
                          QueryPublicId = qg.Key.QueryPublicId,
                          IsSuccess = qg.Key.IsSuccess == 1 ? true : false,
                          SearchType = new TDCatalogModel()
@@ -504,76 +498,77 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
                              ItemId = qg.Key.QueryStatusId,
                              ItemName = qg.Key.QueryStatusName,
                          },
-                         Enable = qg.Key.QueryEnable == 1 ? true : false,
+                         Enable = qg.Key.QueryEnable,
                          PeriodPublicId = qg.Key.PeriodPublicId,
                          CreateDate = qg.Key.QueryCreateDate,
                          RelatedQueryInfoModel =
                             (from qinf in response.DataTableResult.AsEnumerable()
-                             where !qinf.IsNull("QueryBasicInfoId") &&
-                                    qinf.Field<string>("QueryPublicId") == qg.Key.QueryPublicId
+                             where !qinf.IsNull("QueryInfoId") &&
+                                    qinf.Field<int>("InfoQueryId") == qg.Key.QueryId
                              group qinf by new
                              {
-                                 QueryBasicInfoId = qinf.Field<int>("QueryBasicInfoId"),
-                                 QueryBasicPublicId = qinf.Field<string>("QueryBasicPublicId"),
-                                 QueryPublicId = qinf.Field<string>("QueryPublicId"),
+                                 QueryInfoId = qinf.Field<int>("QueryInfoId"),
+                                 QueryInfoPublicId = qinf.Field<string>("QueryInfoPublicId"),
+                                 QueryPublicId = qinf.Field<string>("InfoQueryPublicId"),
                                  NameResult = qinf.Field<string>("NameResult"),
                                  IdentificationResult = qinf.Field<string>("IdentificationResult"),
                                  Priority = qinf.Field<string>("Priority"),
                                  Peps = qinf.Field<string>("Peps"),
                                  Status = qinf.Field<string>("Status"),
-                                 Alias = qinf.Field<string>("Alias"),
+                                 DocumentType = qinf.Field<string>("DocumentType"),
+                                 IdentificationNumber = qinf.Field<string>("IdentificationNumber"),
+                                 FullName = qinf.Field<string>("FullName"),
+                                 ListName = qinf.Field<string>("ListName"),                                
+                                 AKA = qinf.Field<string>("AKA"),
+                                 ChargeOffense = qinf.Field<string>("ChargeOffense"),
+                                 Message = qinf.Field<string>("Message"),
+                                 QueryIdentification = qinf.Field<string>("QueryIdentification"),
+                                 QueryName = qinf.Field<string>("QueryName"),
+                                 ElasticId = qinf.Field<string>("ElasticId"),
+                                 GroupName = qinf.Field<string>("GroupName"),
+                                 Link = qinf.Field<string>("Link"),
+                                 MoreInfo = qinf.Field<string>("MoreInfo"),
+                                 Zone = qinf.Field<string>("Zone"),
+                                 UrlFile = qinf.Field<string>("UrlFile"),
+                                 GroupId = qinf.Field<string>("GroupId"),
                                  Offense = qinf.Field<string>("Offense"),
-                                 InfoLastModify = qinf.Field<DateTime>("InfoLastModify"),
+                                 IdList = qinf.Field<string>("IdList"),
+                                 InfoLastModify = qinf.Field<DateTime>("InfoLastModify"),                                 
                                  InfoCreateDate = qinf.Field<DateTime>("InfoCreateDate"),
-                                 QueryInfoEnable = qinf.Field<UInt64>("QueryInfoEnable") == 1 ? true : false,
-                             }
-                                 into qinfg
-                             select new Models.TDQueryInfoModel()
-                             {
-                                 //QueryBasicInfoId = qinfg.Key.QueryBasicInfoId,
-                                 //QueryBasicPublicId = qinfg.Key.QueryBasicPublicId,
-                                 //QueryPublicId = qinfg.Key.QueryPublicId,
-                                 //NameResult = qinfg.Key.NameResult,
-                                 //IdentificationResult = qinfg.Key.IdentificationResult,
-                                 //Priority = qinfg.Key.Priority,
-                                 //Peps = qinfg.Key.Peps,
-                                 //Status = qinfg.Key.Status,
-                                 //Alias = qinfg.Key.Alias,
-                                 //Offense = qinfg.Key.Offense,
-                                 //LastModify = qinfg.Key.InfoLastModify,
-                                 //CreateDate = qinfg.Key.InfoCreateDate,
-                                 //DetailInfo =
-                                 //    (from qdinf in response.DataTableResult.AsEnumerable()
-                                 //     where !qdinf.IsNull("QueryDetailInfoId") &&
-                                 //     qdinf.Field<int>("QueryBasicInfoId") == qinfg.Key.QueryBasicInfoId
-                                 //     group qdinf by new
-                                 //     {
-                                 //         QueryDetailInfoId = qdinf.Field<int>("QueryDetailInfoId"),
-                                 //         QueryDetailInfoTypeId = qdinf.Field<int>("QueryDetailInfoTypeId"),
-                                 //         QueryDetailInfoTypeName = qdinf.Field<string>("QueryDetailInfoTypeName"),
-                                 //         QueryDetailInfoValue = qdinf.Field<string>("QueryDetailInfoValue"),
-                                 //         QueryDetailInfoLargeValue = qdinf.Field<string>("QueryDetailInfoLargeValue"),
-                                 //         QueryDetailInfoCreateDate = qdinf.Field<DateTime>("QueryDetailInfoCreateDate"),
-                                 //         QueryDetailInfoLastModify = qdinf.Field<DateTime>("QueryDetailInfoLastModify"),
-                                 //         QueryDetailInfoEnable = qdinf.Field<UInt64>("QueryDetailInfoEnable"),
-                                 //     }
-                                 //     into qdinfg
-                                 //     select new TDQueryDetailInfoModel()
-                                 //     {
-                                 //         QueryDetailInfoId = qdinfg.Key.QueryDetailInfoId,
-                                 //         QueryBasicPublicId = qinfg.Key.QueryBasicPublicId,
-                                 //         ItemInfoType = new TDCatalogModel()
-                                 //         {
-                                 //             ItemId = qdinfg.Key.QueryDetailInfoTypeId,
-                                 //             ItemName = qdinfg.Key.QueryDetailInfoTypeName,
-                                 //         },
-                                 //         Value = qdinfg.Key.QueryDetailInfoValue,
-                                 //         LargeValue = qdinfg.Key.QueryDetailInfoLargeValue,
-                                 //         LastModify = qdinfg.Key.QueryDetailInfoLastModify,
-                                 //         CreateDate = qdinfg.Key.QueryDetailInfoCreateDate,
-                                 //         Enable = qdinfg.Key.QueryDetailInfoEnable == 1 ? true : false,
-                                 //     }).ToList(),
-                             }).ToList()
+                                 QueryInfoEnable = qinf.Field<UInt64>("InfoEnable") == 1 ? true : false,
+                             }into qinfg
+                                 select new Models.TDQueryInfoModel()
+                                 {
+                                     QueryInfoId = qinfg.Key.QueryInfoId,
+                                     QueryInfoPublicId = qinfg.Key.QueryInfoPublicId,
+                                     QueryPublicId = qinfg.Key.QueryPublicId,
+                                     NameResult = qinfg.Key.NameResult,
+                                     IdentificationResult = qinfg.Key.NameResult,
+                                     Priority = qinfg.Key.Priority,
+                                     Peps = qinfg.Key.Peps,
+                                     Status = qinfg.Key.Status,
+                                     DocumentType = qinfg.Key.DocumentType,
+                                     IdentificationNumber = qinfg.Key.IdentificationNumber,
+                                     FullName = qinfg.Key.FullName,
+                                     ListName = qinfg.Key.ListName,
+                                     AKA = qinfg.Key.AKA,
+                                     ChargeOffense = qinfg.Key.ChargeOffense,
+                                     Message = qinfg.Key.Message,
+                                     QueryIdentification = qinfg.Key.QueryIdentification,
+                                     QueryName = qinfg.Key.QueryName,
+                                     ElasticId = int.Parse(qinfg.Key.ElasticId),
+                                     GroupName = qinfg.Key.GroupName,
+                                     Link = qinfg.Key.Link,
+                                     MoreInfo = qinfg.Key.MoreInfo,
+                                     Zone = qinfg.Key.Zone,
+                                     UrlFile = qinfg.Key.UrlFile,
+                                     GroupId = qinfg.Key.GroupId,
+                                     Offense = qinfg.Key.Offense,
+                                     IdList = qinfg.Key.IdList,
+                                     LastModify = qinfg.Key.InfoLastModify,
+                                     CreateDate = qinfg.Key.InfoCreateDate,
+                                     Enable = qinfg.Key.QueryInfoEnable,
+                                 }).ToList()
                      }).ToList();
             }
 

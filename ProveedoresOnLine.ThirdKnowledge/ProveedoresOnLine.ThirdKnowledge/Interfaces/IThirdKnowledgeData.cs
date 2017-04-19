@@ -23,7 +23,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Interfaces
 
         List<Models.TDQueryModel> ThirdKnowledgeSearch(string CustomerPublicId, string RelatedUser, string StartDate, string EndtDate, int PageNumber, int RowCount, string SearchType, string Status, out int TotalRows);
 
-        List<Models.TDQueryModel> ThirdKnowledgeSearchByPublicId(string CustomerPublicId, string QueryPublic, bool Enable, int PageNumber, int RowCount, out int TotalRows);
+        List<Models.TDQueryModel> ThirdKnowledgeSearchByPublicId(string QueryPublicId);
 
         #endregion MarketPlace
 
