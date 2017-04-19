@@ -15,6 +15,7 @@
     <div class="POMPProviderDataWrapper">
         <label class="POMPSectionTitles">Mis Consultas</label>
         <div class="container-fluid POMPContainerDetail">
+
             @if (Model.RelatedThidKnowledgeSearch.CurrentPlanModel != null)
             {
                 <div class="row POMPTKSearchInfoPlan">
@@ -70,8 +71,7 @@
                         string selected_masive = "";
                         string selected_single = "";
                         string selected_single_tpy = "";
-                        string selected_option_sts = "";
-                        string selected_user = "";
+                        string selected_option_sts = "";                        
                         if (Request.Params["SearchType"] != null)
                         {
                             switch (Request.Params["SearchType"])
@@ -97,14 +97,10 @@
                 </div>
                 <div class="col-sm-3 TKSearchRow">
                     <span>Usuario:</span>
-                    @{ 
-                        selected_masive = "";
-                        selected_single = "";
-                        selected_single_tpy = "";
-                        selected_option_sts = "";
-                        if (Request.Params["User"] != null)
+                    @{
+                        if (Request.Params["Status"] != null)
                         {
-                            switch (Request.Params["User"])
+                            switch (Request.Params["Status"])
                             {
                                 case "":
                                     selected_option_sts = "selected";
@@ -117,11 +113,24 @@
                                     break;
                             }
                         }
-                    }
+                    }                    
+                    @*<select id="ThirdKnowledge_QueryStatus" class="form-control" name="Status">
+                        <option value="" @selected_option_sts>Seleccionar</option>      
+                        @foreach (var item in @Model.RelatedThirdKnowledge.Users)
+                        {
+                            <option value="@User" @selected_single>@item</option>
+                        }*@
                     <select id="ThirdKnowledge_QueryStatus" class="form-control">
-                        <option value="" @selected_option_sts>Seleccionar</option>                        
-                            <option value="diego.jaramillo@publicar.com" @selected_user>diego.jaramillo@publicar.com</option>                        
+                        <option value="" @selected_option_sts>Seleccionar</option>
+                        @foreach (var item in @Model.RelatedThirdKnowledge.Users)
+                        {
+                            <option value="@item" @selected_single>@item</option>
+                        }
+                        @*<option value="@((int)MarketPlace.Models.General.enumThirdKnowledgeQueryStatus.Finalized)" @selected_single>Finalizada</option>
+                        <option value="@((int)MarketPlace.Models.General.enumThirdKnowledgeQueryStatus.InProcess)" @selected_masive>En Progreso</option>*@
                     </select>
+                            
+                    @*</select>*@
                 </div>
                 <div class="col-sm-2 TKSearchRow">
                     <input class="TKSearchButton" type="button" name="ThirdKnowledge_FilterId" id="ThirdKnowledge_FilterId" value="Filtrar" />

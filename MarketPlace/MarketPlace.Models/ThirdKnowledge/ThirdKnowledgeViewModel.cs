@@ -29,6 +29,9 @@ namespace MarketPlace.Models.ThirdKnowledge
 
         public bool HasPlan { get; set; }
 
+        //Params to Filter
+        public List<string> Users { get; set; }
+        
         //Params to Research
         public string SearchNameParam { get; set; }
 
