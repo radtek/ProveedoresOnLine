@@ -483,7 +483,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
                                  IdentificationResult = qinfg.Key.NameResult,
                                  Priority = qinfg.Key.Priority,
                                  Peps = qinfg.Key.Peps,
-                                 Status = qinfg.Key.Status,
+                                 Status = qinfg.Key.Status, 
                                  DocumentType = qinfg.Key.DocumentType,
                                  IdentificationNumber = qinfg.Key.IdentificationNumber,
                                  FullName = qinfg.Key.FullName,
