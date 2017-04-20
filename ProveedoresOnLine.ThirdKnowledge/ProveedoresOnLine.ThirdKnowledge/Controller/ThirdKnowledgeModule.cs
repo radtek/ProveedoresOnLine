@@ -423,6 +423,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
             return ThirdKnowledgeDataController.Instance.ThirdKnowledgeSearchByPublicId(QueryPublicId, PageNumber,RowCount, out TotalRows);
         }
 
+        public static List<string> GetUsersBycompanyPublicId(string CompanyPublicId)
+        {
+            return ThirdKnowledgeDataController.Instance.GetUsersBycompanyPublicId(CompanyPublicId);
+        }
+
         #endregion MarketPlace
 
         #region Queries

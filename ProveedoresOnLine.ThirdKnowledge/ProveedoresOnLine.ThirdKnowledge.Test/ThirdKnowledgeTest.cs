@@ -82,6 +82,13 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
         {
             List<TDQueryModel> oReturn = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueriesInProgress();
             Assert.AreEqual(true, oReturn != null);
-        }       
+        }
+
+        [TestMethod]
+        public void GetUserByCompanyPublicId ()
+        {
+            List<string> oReturn = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetUsersBycompanyPublicId("DA5C572E");
+            Assert.AreEqual(true, oReturn != null);
+        }
     }
 }

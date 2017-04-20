@@ -37,8 +37,7 @@ namespace MarketPlace.Models.ThirdKnowledge
             {
                 if (oUsers != null)
                 {
-                    //TODO:Put the function called by the companypublicId
-                    //oUsers =  
+                    oUsers = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetUsersBycompanyPublicId(SessionModel.CurrentCompany.CompanyPublicId);
                 }
                 return oUsers;
             }

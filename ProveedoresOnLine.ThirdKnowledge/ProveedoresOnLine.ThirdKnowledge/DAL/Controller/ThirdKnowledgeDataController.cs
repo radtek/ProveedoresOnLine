@@ -77,6 +77,10 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.Controller
         {
             return DataFactory.ThirdKnowledgeSearchByPublicId(QueryPublicId, PageNumber,RowCount, out TotalRows);
         }
+        public List<string> GetUsersBycompanyPublicId(string CompanyPublicId)
+        {
+            return DataFactory.GetUsersBycompanyPublicId(CompanyPublicId);
+        }
 
         #endregion MarketPlace
 
