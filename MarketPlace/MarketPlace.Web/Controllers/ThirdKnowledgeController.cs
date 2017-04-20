@@ -222,10 +222,8 @@ namespace MarketPlace.Web.Controllers
 
             List<PlanModel> oCurrentPeriodList = new List<PlanModel>();
             oCurrentPeriodList = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetCurrenPeriod(SessionModel.CurrentCompany.CompanyPublicId, true);
-            if (oCurrentPeriodList != null && oCurrentPeriodList.Count > 0)
-            {
+            if (oCurrentPeriodList != null && oCurrentPeriodList.Count > 0)            
                 oModel.RelatedThidKnowledgeSearch.CurrentPlanModel = oCurrentPeriodList.OrderByDescending(x => x.CreateDate).First();
-            }
 
             oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager = new Models.ThirdKnowledge.ThirdKnowledgeSearchViewModel()
             {
@@ -248,18 +246,7 @@ namespace MarketPlace.Web.Controllers
             oModel.RelatedThirdKnowledge = new ThirdKnowledgeViewModel()
             {
                 Users = new List<string>()
-            };
-            if (oQueryModel !=null)
-            {
-                oQueryModel.All(x =>
-                {
-                    objQueryInfo.AddRange(ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByQueryPublicId(x.QueryPublicId));
-                    x.RelatedQueryInfoModel = new List<TDQueryInfoModel>(objQueryInfo);
-
-
-                    return true;
-                });
-            }
+            };           
             
             oModel.RelatedThirdKnowledge.Users = oQueryModel.GroupBy(x=>x.User).Select(g =>g.First().User).ToList();
 

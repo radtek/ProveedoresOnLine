@@ -406,6 +406,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
                      where !q.IsNull("QueryPublicId")
                      group q by new
                      {
+                         QueryId = q.Field<int>("QueryId"),
                          SearchTypeId = q.Field<int>("SearchTypeId"),
                          SearchTypeName = q.Field<string>("SearchTypeName"),
                          User = q.Field<string>("User"),
@@ -417,8 +418,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
                          QueryPublicId = q.Field<string>("QueryPublicId"),
                          FileName = q.Field<string>("FileName"),
                          QueryCreateDate = q.Field<DateTime>("QueryCreateDate"),
-                     }
-                         into qg
+                     }into qg
                      select new Models.TDQueryModel()
                      {
                          QueryPublicId = qg.Key.QueryPublicId,
@@ -438,7 +438,75 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
                          Enable = qg.Key.QueryEnable == 1 ? true : false,
                          PeriodPublicId = qg.Key.PeriodPublicId,
                          CreateDate = qg.Key.QueryCreateDate,
-                         
+                         RelatedQueryInfoModel =
+                            (from qinf in response.DataTableResult.AsEnumerable()
+                             where !qinf.IsNull("QueryInfoId") &&
+                                    qinf.Field<int>("InfoQueryId") == qg.Key.QueryId
+                             group qinf by new
+                             {
+                                 QueryInfoId = qinf.Field<int>("QueryInfoId"),
+                                 QueryInfoPublicId = qinf.Field<string>("QueryInfoPublicId"),
+                                 QueryPublicId = qinf.Field<string>("InfoQueryPublicId"),
+                                 NameResult = qinf.Field<string>("NameResult"),
+                                 IdentificationResult = qinf.Field<string>("IdentificationResult"),
+                                 Priority = qinf.Field<string>("Priority"),
+                                 Peps = qinf.Field<string>("Peps"),
+                                 Status = qinf.Field<string>("Status"),
+                                 DocumentType = qinf.Field<string>("DocumentType"),
+                                 IdentificationNumber = qinf.Field<string>("IdentificationNumber"),
+                                 FullName = qinf.Field<string>("FullName"),
+                                 ListName = qinf.Field<string>("ListName"),
+                                 AKA = qinf.Field<string>("AKA"),
+                                 ChargeOffense = qinf.Field<string>("ChargeOffense"),
+                                 Message = qinf.Field<string>("Message"),
+                                 QueryIdentification = qinf.Field<string>("QueryIdentification"),
+                                 QueryName = qinf.Field<string>("QueryName"),
+                                 ElasticId = qinf.Field<string>("ElasticId"),
+                                 GroupName = qinf.Field<string>("GroupName"),
+                                 Link = qinf.Field<string>("Link"),
+                                 MoreInfo = qinf.Field<string>("MoreInfo"),
+                                 Zone = qinf.Field<string>("Zone"),
+                                 UrlFile = qinf.Field<string>("UrlFile"),
+                                 GroupId = qinf.Field<string>("GroupId"),
+                                 Offense = qinf.Field<string>("Offense"),
+                                 IdList = qinf.Field<string>("IdList"),
+                                 InfoLastModify = qinf.Field<DateTime>("InfoLastModify"),
+                                 InfoCreateDate = qinf.Field<DateTime>("InfoCreateDate"),
+                                 QueryInfoEnable = qinf.Field<UInt64>("InfoEnable") == 1 ? true : false,
+                             } into qinfg
+                             select new Models.TDQueryInfoModel()
+                             {
+                                 QueryInfoId = qinfg.Key.QueryInfoId,
+                                 QueryInfoPublicId = qinfg.Key.QueryInfoPublicId,
+                                 QueryPublicId = qinfg.Key.QueryPublicId,
+                                 NameResult = qinfg.Key.NameResult,
+                                 IdentificationResult = qinfg.Key.NameResult,
+                                 Priority = qinfg.Key.Priority,
+                                 Peps = qinfg.Key.Peps,
+                                 Status = qinfg.Key.Status,
+                                 DocumentType = qinfg.Key.DocumentType,
+                                 IdentificationNumber = qinfg.Key.IdentificationNumber,
+                                 FullName = qinfg.Key.FullName,
+                                 ListName = qinfg.Key.ListName,
+                                 AKA = qinfg.Key.AKA,
+                                 ChargeOffense = qinfg.Key.ChargeOffense,
+                                 Message = qinfg.Key.Message,
+                                 QueryIdentification = qinfg.Key.QueryIdentification,
+                                 QueryName = qinfg.Key.QueryName,
+                                 ElasticId = int.Parse(qinfg.Key.ElasticId),
+                                 GroupName = qinfg.Key.GroupName,
+                                 Link = qinfg.Key.Link,
+                                 MoreInfo = qinfg.Key.MoreInfo,
+                                 Zone = qinfg.Key.Zone,
+                                 UrlFile = qinfg.Key.UrlFile,
+                                 GroupId = qinfg.Key.GroupId,
+                                 Offense = qinfg.Key.Offense,
+                                 IdList = qinfg.Key.IdList,
+                                 LastModify = qinfg.Key.InfoLastModify,
+                                 CreateDate = qinfg.Key.InfoCreateDate,
+                                 Enable = qinfg.Key.QueryInfoEnable,
+                             }).ToList()
+
                      }).ToList();
             }
             return oReturn;
