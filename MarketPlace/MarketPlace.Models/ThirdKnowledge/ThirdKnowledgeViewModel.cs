@@ -30,7 +30,19 @@ namespace MarketPlace.Models.ThirdKnowledge
         public bool HasPlan { get; set; }
 
         //Params to Filter
-        public List<string> Users { get; set; }
+        public List<string> oUsers { get; set; }
+        public List<string> Users
+        {
+            get
+            {
+                if (oUsers != null)
+                {
+                    //TODO:Put the function called by the companypublicId
+                    //oUsers =  
+                }
+                return oUsers;
+            }
+        }
         
         //Params to Research
         public string SearchNameParam { get; set; }
