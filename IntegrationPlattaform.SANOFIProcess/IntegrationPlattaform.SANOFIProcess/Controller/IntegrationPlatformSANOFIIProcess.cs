@@ -51,6 +51,8 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
 
                 var count = 0;
 
+                //for testing purposes
+                DateTime date = new DateTime(2000, 01, 01);
                 #endregion
 
                 if (oProviders != null)
@@ -156,15 +158,14 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                             LogFile("New Providers " + oNoExist.Count);
                             count = 0;
 
-                            //for testing purposes
-                            DateTime date = new DateTime(2000, 01, 01);
+                            
 
                             oNoExist.All(l =>
                             {
-                                oGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
-                                oComercialGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
-                                oComercialBasicRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialBasicInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
-                                oContableRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetContableInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
+                                oGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetInfoByProvider(l, date).FirstOrDefault();
+                                oComercialGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialInfoByProvider(l, date).FirstOrDefault();
+                                oComercialBasicRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialBasicInfoByProvider(l, date).FirstOrDefault();
+                                oContableRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetContableInfoByProvider(l, date).FirstOrDefault();
 
                                 //if not exists validate all modules information, like set up process
                                 if (oGeneralRow != null && oComercialGeneralRow != null && oComercialBasicRow != null && oContableRow != null)
@@ -307,42 +308,18 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                 oGeneralInfoModel.All(x =>
                 {
                     #region Name3 and Name4 Field
-                    string NaturalName = "";
-                    string NaturalLastName = "";
+                    
 
-                    if (!string.IsNullOrWhiteSpace(x.NaturalPersonName))
-                    {
-                        string[] words = x.NaturalPersonName.Split(' ');
-                        List<string> NameWords = new List<string>();
-                        List<string> LastNameWords = new List<string>();
-                        int iN = 1;
-                        int iLN = 1;
-                        words.All(na =>
-                        {
-                            if (iN <= 2)
-                                NameWords.Add(na);
-                            iN++;
-                            return true;
-                        });
-                        words.All(na =>
-                        {
-                            if (iLN >= 2)
-                                LastNameWords.Add(na);
-                            iLN++;
-                            return true;
-                        });
-                        NaturalName = string.Join("| ", NameWords);
-                        NaturalLastName = string.Join("| ", LastNameWords);
-
-                    }
+                    
                     #endregion
 
                     #region Write Process
                     //For natural person
-                    if (!string.IsNullOrEmpty(NaturalLastName))
+                    if (!string.IsNullOrEmpty(x.NaturalPersonName))
                     {
                         Header.AppendLine(
-                          NaturalLastName.ToUpper() + strSep +                          
+                          NameProcessing(x.NaturalPersonName).Item2.ToUpper() + strSep +
+                          NameProcessing(x.NaturalPersonName).Item1.ToUpper() + strSep +
                           x.IdentificationNumber + strSep +
                           x.FiscalNumber + strSep +
                           x.Address.Replace("#"," ").Replace("-"," ") + strSep +
@@ -740,6 +717,68 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
         public static SanofiProcessLogModel GetSanofiLastProcessLog()
         {
             return DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetSanofiLastProcessLog();
+        }
+
+        public static Tuple<string,string>NameProcessing(string Name)
+        {
+            string NaturalName = "";
+            string NaturalLastName = "";
+            Tuple<string, string> FullName = null;
+
+            
+
+            if (!string.IsNullOrWhiteSpace(Name))
+            {
+                if (Name.Contains("DEL"))
+                {
+
+                }
+                string[] words = Name.Split(' ');
+                List<string> NameWords = new List<string>();
+                List<string> LastNameWords = new List<string>();
+
+                switch (words.Length)
+                {
+                    case 2:
+                        int iN = 0;
+                        words.All(na =>
+                        {
+                            if (iN < 2)
+                            {
+                                LastNameWords.Add(na);
+                            }
+                            else
+                            {
+                                NameWords.Add(na);
+                            }
+
+                            iN++;
+                            return true;
+                        });
+                        break;
+                }
+               
+                if (words.Length>3)
+                {
+                    
+                    
+                }
+                else
+                {
+                    NameWords.Add(words[3]);
+                    NameWords.Add(words[2]);
+                    LastNameWords.Add(words[1]);
+                    LastNameWords.Add(words[0]);
+                }
+                
+
+                
+
+                NaturalName = string.Join("| ", NameWords);
+                NaturalLastName = string.Join("| ", LastNameWords);
+            }
+            FullName = new Tuple<string, string>(NaturalName, NaturalLastName);  
+            return FullName;
         }
 
         #region Log File
