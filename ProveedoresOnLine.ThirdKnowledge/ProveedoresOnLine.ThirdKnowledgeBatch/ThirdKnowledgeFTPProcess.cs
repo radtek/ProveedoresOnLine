@@ -76,6 +76,7 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                                 {
                                     ItemId = (int)ProveedoresOnLine.ThirdKnowledgeBatch.Models.Enumerations.enumThirdKnowledgeQueryStatus.Finalized,
                                 };
+                                oResult.Item2.QueryPublicId  = Task.Run(async () => await ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryCreate(oResult.Item2)).Result;
                                 ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryUpsert(oResult.Item2);
                                 CreateQueryInfo(oQuery, oResult.Item1);
                                 CreateReadyResultNotification(oQuery);
@@ -371,7 +372,7 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                             oInfoCreate.QueryIdentification = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty;
                             oInfoCreate.QueryName = !string.IsNullOrEmpty(Name) ? Name : string.Empty;
                             oInfoCreate.IdList = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;
-                            oInfoCreate.LastModify = Convert.ToDateTime(!string.IsNullOrEmpty(x.LastModify) ? x.LastModify : string.Empty);
+                            oInfoCreate.UpdateDate = !string.IsNullOrEmpty(x.LastModify) ? x.LastModify : string.Empty;
                             oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(x.TypeId) ? x.TypeId : string.Empty;
                             oInfoCreate.Status = !string.IsNullOrEmpty(x.Status) ? x.Status : string.Empty;
                             oInfoCreate.GroupName = !string.IsNullOrEmpty(x.ListType) &&

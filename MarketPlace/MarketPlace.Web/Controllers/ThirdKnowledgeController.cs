@@ -132,17 +132,22 @@ namespace MarketPlace.Web.Controllers
                     SessionModel.CurrentURL = null;
                 
                 //Get The Active Plan By Customer 
-                QueryDetailInfo = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByQueryPublicIdAndElasticId(QueryBasicPublicId, Convert.ToInt32(ElasticId));                
-                if (QueryDetailInfo != null)                
-                    oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel(QueryDetailInfo);                
-                else                
-                    oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel();               
-                
+                QueryDetailInfo = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByQueryPublicIdAndElasticId(QueryBasicPublicId, Convert.ToInt32(ElasticId));
+                int TotalRows = 0;
+
+                List<TDQueryModel> oQueryResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId(QueryBasicPublicId,
+                    0, 20, out TotalRows);
+                if (QueryDetailInfo != null)
+                    oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel(QueryDetailInfo);
+                else
+                    oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel();
+
 
                 if (ReturnUrl == "null")
                     oModel.RelatedThidKnowledgeSearch.ReturnUrl = ReturnUrl;
 
-                oModel.RelatedThidKnowledgeSearch.QueryBasicPublicId = QueryBasicPublicId;                
+                oModel.RelatedThidKnowledgeSearch.QueryBasicPublicId = QueryBasicPublicId;
+                oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult = oQueryResult;
                 //Get report generator
                 if (Request["DownloadReport"] == "true")
                 {
@@ -198,8 +203,6 @@ namespace MarketPlace.Web.Controllers
             if (SessionModel.CurrentURL != null)
                 SessionModel.CurrentURL = null;
             string RelatedUser = null;
-
-            
 
             if (SessionModel.CurrentCompanyLoginUser.RelatedCompany.FirstOrDefault().RelatedUser.FirstOrDefault().RelatedCompanyRole.ParentRoleCompany != null)
             {
@@ -271,8 +274,6 @@ namespace MarketPlace.Web.Controllers
                 oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult = new List<TDQueryModel>();
             }
 
-
-            
             oModel.ProviderMenu = GetThirdKnowledgeControllerMenu();
 
             return View(oModel);
@@ -298,8 +299,8 @@ namespace MarketPlace.Web.Controllers
                 PageNumber = !string.IsNullOrEmpty(PageNumber) ? Convert.ToInt32(PageNumber) : 0,
             };
             int TotalRows = 0;
-                        
-            List<ProveedoresOnLine.ThirdKnowledge.Models.TDQueryModel> oQueryResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId(QueryPublicId);
+            
+            List<TDQueryModel> oQueryResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId(QueryPublicId, oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.PageNumber, oTotalRowsAux, out TotalRows);
 
             oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.TotalRows = TotalRows;
 
