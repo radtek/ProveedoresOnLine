@@ -246,14 +246,18 @@ namespace MarketPlace.Web.Controllers
             {
                 Users = new List<string>()
             };
-            oQueryModel.All(x =>
+            if (oQueryModel !=null)
             {
-                objQueryInfo.AddRange(ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByQueryPublicId(x.QueryPublicId));
-                x.RelatedQueryInfoModel = new List<TDQueryInfoModel>(objQueryInfo);
-                
+                oQueryModel.All(x =>
+                {
+                    objQueryInfo.AddRange(ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByQueryPublicId(x.QueryPublicId));
+                    x.RelatedQueryInfoModel = new List<TDQueryInfoModel>(objQueryInfo);
 
-                return true;
-            });
+
+                    return true;
+                });
+            }
+            
             oModel.RelatedThirdKnowledge.Users = oQueryModel.GroupBy(x=>x.User).Select(g =>g.First().User).ToList();
 
             oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.TotalRows = TotalRows;
@@ -294,9 +298,7 @@ namespace MarketPlace.Web.Controllers
                 PageNumber = !string.IsNullOrEmpty(PageNumber) ? Convert.ToInt32(PageNumber) : 0,
             };
             int TotalRows = 0;
-            
-            List<ProveedoresOnLine.ThirdKnowledge.Models.TDQueryModel> oQueryResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId
-                (QueryPublicId);
+                        
             List<ProveedoresOnLine.ThirdKnowledge.Models.TDQueryModel> oQueryResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId(QueryPublicId);
 
             oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.TotalRows = TotalRows;
