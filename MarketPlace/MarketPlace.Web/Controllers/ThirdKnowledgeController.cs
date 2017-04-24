@@ -242,8 +242,7 @@ namespace MarketPlace.Web.Controllers
                 null,
                 out TotalRows);
             List<TDQueryInfoModel> objQueryInfo = new List<TDQueryInfoModel>();
-            oModel.RelatedThirdKnowledge = new ThirdKnowledgeViewModel();
-            //oModel.RelatedThirdKnowledge.Users = oQueryModel.GroupBy(x=>x.User).Select(g =>g.First().User).ToList();
+            oModel.RelatedThirdKnowledge = new ThirdKnowledgeViewModel();            
 
             oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.TotalRows = TotalRows;
 

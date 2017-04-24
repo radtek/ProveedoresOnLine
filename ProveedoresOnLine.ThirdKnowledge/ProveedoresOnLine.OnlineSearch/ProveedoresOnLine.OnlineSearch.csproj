@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\SearchController.cs" />
+    <Compile Include="Core\ProveedoresOnLineJudicialProcess.cs" />
     <Compile Include="Core\ProveedoresOnLinePPImplement.cs" />
     <Compile Include="Core\ProveedoresOnLineProcImplement.cs" />
     <Compile Include="DAL\Controller\OnLineSearchDataController.cs" />

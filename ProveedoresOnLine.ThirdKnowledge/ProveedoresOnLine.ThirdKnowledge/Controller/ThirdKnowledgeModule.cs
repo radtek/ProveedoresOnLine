@@ -576,7 +576,15 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
             builder.RegisterType<OnlineSearch.Core.ProveedoresOnLinePPImplement>().As<OnlineSearch.Interfaces.IOnLineSearch>();
             var container = builder.Build();
             return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber);
-        } 
+        }
+
+        public static async Task<List<Tuple<string, List<string>, List<string>>>> JudicialProcessSearch(int IdType, string Name, string IndentificationNumber)
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterType<OnlineSearch.Core.ProveedoresOnLineJudicialProcess>().As<OnlineSearch.Interfaces.IOnLineSearch>();
+            var container = builder.Build();
+            return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber);
+        }
         #endregion
     }
 }

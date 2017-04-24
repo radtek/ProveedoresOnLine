@@ -23,6 +23,13 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
         }
 
         [TestMethod]
+        public async Task JudicialProcess()
+        {
+            await Controller.ThirdKnowledgeModule.JudicialProcessSearch(1, "","71984381");
+            //return "";
+        }
+
+        [TestMethod]
         public void GetAnswerByTreeidAndQuestion()
         {
            OnlineSearch.Controller.SearchController.GetAnswerByTreeidAndQuestion(0,"");
