@@ -97,40 +97,14 @@
                 </div>
                 <div class="col-sm-3 TKSearchRow">
                     <span>Usuario:</span>
-                    @{
-                        if (Request.Params["Status"] != null)
-                        {
-                            switch (Request.Params["Status"])
-                            {
-                                case "":
-                                    selected_option_sts = "selected";
-                                    break;
-                                case "501001":
-                                    selected_single = "selected";
-                                    break;
-                                case "501002":
-                                    selected_masive = "selected";
-                                    break;
-                            }
-                        }
-                    }                    
-                    @*<select id="ThirdKnowledge_QueryStatus" class="form-control" name="Status">
-                        <option value="" @selected_option_sts>Seleccionar</option>      
+                                                            
+                    <select id="ThirdKnowledge_QueryStatus" class="form-control">                       
+                        <option value="">Seleccionar</option>                        
                         @foreach (var item in @Model.RelatedThirdKnowledge.Users)
                         {
-                            <option value="@User" @selected_single>@item</option>
-                        }*@
-                    <select id="ThirdKnowledge_QueryStatus" class="form-control">
-                        <option value="" @selected_option_sts>Seleccionar</option>
-                        @foreach (var item in @Model.RelatedThirdKnowledge.Users)
-                        {
-                            <option value="@item" @selected_single>@item</option>
+                            <option value="@item">@item</option>
                         }
-                        @*<option value="@((int)MarketPlace.Models.General.enumThirdKnowledgeQueryStatus.Finalized)" @selected_single>Finalizada</option>
-                        <option value="@((int)MarketPlace.Models.General.enumThirdKnowledgeQueryStatus.InProcess)" @selected_masive>En Progreso</option>*@
-                    </select>
-                            
-                    @*</select>*@
+                    </select>                                           
                 </div>
                 <div class="col-sm-2 TKSearchRow">
                     <input class="TKSearchButton" type="button" name="ThirdKnowledge_FilterId" id="ThirdKnowledge_FilterId" value="Filtrar" />
