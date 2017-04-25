@@ -88,8 +88,7 @@ namespace MarketPlace.Web.ControllersApi
                                 {
                                     Item1.Add(x.GroupName);
                                     return true;
-                                });
-
+                                });                             
                                 ItemGroup.Add(Item1.Where(x => x.Contains("Criticidad Alta")).Select(x => x).DefaultIfEmpty("").FirstOrDefault());
                                 ItemGroup.Add(Item1.Where(x => x.Contains("Criticidad Media")).Select(x => x).DefaultIfEmpty("").FirstOrDefault());
                                 ItemGroup.Add(Item1.Where(x => x.Contains("Criticidad Baja")).Select(x => x).DefaultIfEmpty("").FirstOrDefault());
@@ -103,14 +102,45 @@ namespace MarketPlace.Web.ControllersApi
                                 Item1.All(x =>
                                 {
                                     oItem2 = new List<ThirdKnowledgeViewModel>();
-                                    if (oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(td => td.GroupName == x) != null)
+                                    if (oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(td => td.GroupName.Contains(x)) != null)
                                     {
-                                        oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(td => td.GroupName == x).All(d =>
+                                        if (x.Contains("Criticidad Alta"))
                                         {
-                                            d.QueryPublicId = oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId;
-                                            oItem2.Add(new ThirdKnowledgeViewModel(d));
-                                            return true;
-                                        });
+                                            oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(td => td.GroupName.Contains("Criticidad Alta")).All(d =>
+                                            {
+                                                d.QueryPublicId = oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId;
+                                                oItem2.Add(new ThirdKnowledgeViewModel(d));
+                                                return true;
+                                            });
+                                        }
+                                        else if (x.Contains("Criticidad Media"))
+                                        {
+                                            oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(td => td.GroupName.Contains("Criticidad Media")).All(d =>
+                                            {
+                                                d.QueryPublicId = oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId;
+                                                oItem2.Add(new ThirdKnowledgeViewModel(d));
+                                                return true;
+                                            });
+                                        }
+                                        else if (x.Contains("Criticidad Baja"))
+                                        {
+                                            oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(td => td.GroupName.Contains("Criticidad Baja")).All(d =>
+                                            {
+                                                d.QueryPublicId = oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId;
+                                                oItem2.Add(new ThirdKnowledgeViewModel(d));
+                                                return true;
+                                            });
+                                        }
+                                        else if (x.Contains("SIN COINCIDENCIAS"))
+                                        {
+                                            oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(td => td.GroupName.Contains("SIN COINCIDENCIAS")).All(d =>
+                                            {
+                                                d.QueryPublicId = oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId;
+                                                oItem2.Add(new ThirdKnowledgeViewModel(d));
+                                                return true;
+                                            });
+                                        }
+
                                         oTupleItem = new Tuple<string, List<ThirdKnowledgeViewModel>>(x, oItem2);
                                         Group.Add(oTupleItem);
                                     }

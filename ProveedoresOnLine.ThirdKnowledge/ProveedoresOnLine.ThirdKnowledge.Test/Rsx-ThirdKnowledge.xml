@@ -43,9 +43,9 @@
     <!--ChatUrl-->
 
     <key name="TK_ChatUrl"></key>
-    
+
     <!--Proc_PageStructure-->
-    
+
     <key name="Proc_EVENTTARGET">__EVENTTARGET</key>
     <key name="Proc_EVENTARGUMENT">__EVENTARGUMENT</key>
     <key name="Proc_VIEWSTATE">__VIEWSTATE</key>
@@ -60,8 +60,13 @@
     <key name="Proc_Url">https://www.procuraduria.gov.co/CertWEB/Certificado.aspx?tpo=1</key>
 
     <!--PanamaPapers Estrucutre Page-->
-  <key name="PanamaPapers_Url">https://offshoreleaks.icij.org/search?cat=</key>
-  <key name="PanamaPapersResult_Url">https://offshoreleaks.icij.org/</key>
+    <key name="PanamaPapers_Url">https://offshoreleaks.icij.org/search?cat=</key>
+    <key name="PanamaPapersResult_Url">https://offshoreleaks.icij.org/</key>
+
+    <!--Judicial Process Estrucutre Page-->
+    <key name="JudicialP_Url">http://procesos.ramajudicial.gov.co/jepms/bogotajepms/lista.asp</key>
+    <key name="JudicialPResult_Url"><![CDATA[http://procesos.ramajudicial.gov.co/jepms/bogotajepms/adju.asp?cp4={link}&fecha_r={datetime}_02:38:26%20p.m.]]></key>
+
   </ThirdKnowledge>
 </Settings>
 

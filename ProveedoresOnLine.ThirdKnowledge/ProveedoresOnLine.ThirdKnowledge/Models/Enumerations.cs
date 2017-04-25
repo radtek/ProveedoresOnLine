@@ -42,6 +42,7 @@
         {
             ProcElasticId = 001,
             PanamaPElasticId = 002,
+            JudicialProces = 003,
         }
     }
 }

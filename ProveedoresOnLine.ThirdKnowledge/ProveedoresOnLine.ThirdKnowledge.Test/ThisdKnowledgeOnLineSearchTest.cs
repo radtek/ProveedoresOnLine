@@ -25,7 +25,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
         [TestMethod]
         public async Task JudicialProcess()
         {
-            await Controller.ThirdKnowledgeModule.JudicialProcessSearch(1, "","71984381");
+            await Controller.ThirdKnowledgeModule.JudicialProcessSearch(3, "","71984381");
             //return "";
         }
 

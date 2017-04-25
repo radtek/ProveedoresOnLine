@@ -32,5 +32,13 @@ namespace ProveedoresOnLine.OnlineSearch.Models
 
         public const string PanamaPapersResult_Url = "PanamaPapersResult_Url";
         #endregion
+
+        #region Judicial Process
+
+        public const string JudicialProcess_Url = "JudicialP_Url";
+
+        public const string JudicialProcessResult_Url = "JudicialPResult_Url";
+
+        #endregion
     }
 }

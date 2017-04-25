@@ -27,13 +27,20 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
                 Task<List<Tuple<string, List<string>, List<string>>>> taskPP = Task.Run(() => PPSearch(IdType == 2 ? 0 : 1, Name, IdentificationNumber));
                 List<Tuple<string, List<string>, List<string>>> ppResult = new List<Tuple<string, List<string>, List<string>>>();
+
+                Task<List<Tuple<string, List<string>, List<string>>>> taskJudicialP = Task.Run(() => JudicialProcessSearch(3, Name, IdentificationNumber));
+                List<Tuple<string, List<string>, List<string>>> judProcResult = new List<Tuple<string, List<string>, List<string>>>();
+
                 //Proc Request
                 if (!string.IsNullOrEmpty(IdentificationNumber) && IdType != 0)
                     procResult = await taskProc;
 
                 //PanamaPapers Search
                 if (!string.IsNullOrEmpty(Name))
-                    ppResult = await taskPP;
+                        ppResult = await taskPP;
+
+                if (!string.IsNullOrEmpty(IdentificationNumber))
+                    judProcResult = await taskJudicialP;
 
                 if (!string.IsNullOrEmpty(Name))
                 {
@@ -137,7 +144,37 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                 }
 
-                if (oSearchResult.Documents.Count() > 0 || procResult.Count > 0 || ppResult != null && ppResult.Count > 0)
+                if (judProcResult != null && judProcResult.Count > 0)
+                {
+                    TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
+                    {
+                        AKA = string.Empty,
+                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : "",
+                        Offense = "El tercero " + judProcResult.FirstOrDefault().Item2[1]+ "Con Identificación No. " + judProcResult.FirstOrDefault().Item2[0] + "Presenta Antecedentes Judiciales",
+                        NameResult = judProcResult.FirstOrDefault().Item2[1],
+                        MoreInfo = "El tercero " + judProcResult.FirstOrDefault().Item2[1] + "Con Identificación No. " + judProcResult.FirstOrDefault().Item2[0] + "Presenta Antecedentes Judiciales vigentes de acuerdo a la Fuente oficial de la RAMA JUDICIAL DEL PODER PUBLICO, CONSEJO SUPERIOR DE LA JUDICATURA y/o JUZGADOS DE EJECUCION DE PENAS Y MEDIDAS DE SEGURIDAD",
+                        Priority = "2",
+                        Status = "Vigente",
+                        Enable = true,
+                        QueryPublicId = oQueryToCreate.QueryPublicId,
+                        QueryIdentification = IdentificationNumber,
+                        IdentificationResult = IdentificationNumber,
+                        FullName = judProcResult.FirstOrDefault().Item2[1],                        
+                        QueryName = Name,
+                        IdList = "RAMA JUDICIAL DEL PODER PUBLICO",
+                        IdentificationNumber = IdentificationNumber,
+                        GroupName = "RAMA JUDICIAL DEL PODER PUBLICO - Criticidad Media",
+                        Link = judProcResult.FirstOrDefault().Item1,
+                        ListName = "RAMA JUDICIAL DEL PODER PUBLICO, CONSEJO SUPERIOR DE LA JUDICATURA y/o JUZGADOS DE EJECUCION DE PENAS Y MEDIDAS DE SEGURIDAD",
+                        Zone = "N/A",
+                        ChargeOffense = "El tercero " + judProcResult.FirstOrDefault().Item2[1] + "Con Identificación No. " + judProcResult.FirstOrDefault().Item2[0] + "Presenta Antecedentes Judiciales",
+                        ElasticId = (int)enumElasticGroupId.JudicialProces,
+                    };
+                    oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
+                }
+
+                if (oSearchResult.Documents.Count() > 0 || procResult.Count > 0 || ppResult != null && ppResult.Count > 0
+                    || judProcResult != null && judProcResult.Count > 0)
                 {
                     oSearchResult.Documents.All(x =>
                         {
