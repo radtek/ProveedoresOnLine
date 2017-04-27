@@ -39,6 +39,8 @@ namespace ProveedoresOnLine.OnlineSearch.Models
 
         public const string JudicialProcessResult_Url = "JudicialPResult_Url";
 
+        public const string JudicialP_Proxy = "JudicialP_Proxy";
+
         #endregion
     }
 }

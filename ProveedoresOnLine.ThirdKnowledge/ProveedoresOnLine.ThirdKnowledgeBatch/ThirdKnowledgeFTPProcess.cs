@@ -245,9 +245,9 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                             oQuery.RelatedQueryInfoModel = new List<TDQueryInfoModel>();
 
                             TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
-                            oInfoCreate.QueryPublicId = oQuery.QueryPublicId;
-                            oInfoCreate.IdentificationNumber = !string.IsNullOrEmpty(x.NOMBRES) ? x.NOMBRES : string.Empty;
-                            oInfoCreate.QueryName = !string.IsNullOrEmpty(x.NUMEIDEN) ? x.NUMEIDEN : string.Empty;
+                            oInfoCreate.QueryPublicId = oQuery.QueryPublicId;                              
+                            oInfoCreate.QueryIdentification = !string.IsNullOrEmpty(x.NUMEIDEN) ? x.NUMEIDEN : string.Empty;
+                            oInfoCreate.QueryName = !string.IsNullOrEmpty(x.NOMBRES) ? x.NOMBRES : string.Empty;
                             oInfoCreate.GroupName = "SIN COINCIDENCIAS";
                             oQuery.RelatedQueryInfoModel.Add(oInfoCreate);
                             Monitor.Enter(oQuery);

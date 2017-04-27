@@ -22,25 +22,20 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         {
             try
             {
-                Task<List<Tuple<string, List<string>, List<string>>>> taskProc = Task.Run(() => OnLnieSearch(IdType, IdentificationNumber));
                 List<Tuple<string, List<string>, List<string>>> procResult = new List<Tuple<string, List<string>, List<string>>>();
-
-                Task<List<Tuple<string, List<string>, List<string>>>> taskPP = Task.Run(() => PPSearch(IdType == 2 ? 0 : 1, Name, IdentificationNumber));
                 List<Tuple<string, List<string>, List<string>>> ppResult = new List<Tuple<string, List<string>, List<string>>>();
-
-                Task<List<Tuple<string, List<string>, List<string>>>> taskJudicialP = Task.Run(() => JudicialProcessSearch(3, Name, IdentificationNumber));
                 List<Tuple<string, List<string>, List<string>>> judProcResult = new List<Tuple<string, List<string>, List<string>>>();
+
+                if (!string.IsNullOrEmpty(IdentificationNumber))
+                    judProcResult = await JudicialProcessSearch(3, Name, IdentificationNumber);
 
                 //Proc Request
                 if (!string.IsNullOrEmpty(IdentificationNumber) && IdType != 0)
-                    procResult = await taskProc;
+                    procResult = await OnLnieSearch(IdType, IdentificationNumber);
 
                 //PanamaPapers Search
                 if (!string.IsNullOrEmpty(Name))
-                        ppResult = await taskPP;
-
-                if (!string.IsNullOrEmpty(IdentificationNumber))
-                    judProcResult = await taskJudicialP;
+                    ppResult = await PPSearch(IdType == 2 ? 0 : 1, Name, IdentificationNumber);
 
                 if (!string.IsNullOrEmpty(Name))
                 {
@@ -111,16 +106,16 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         ListName = "Procuraduría General de la Nación",
                         ChargeOffense = "Presenta antecedentes en la Prcuraduría General de la Nación.",
                         Zone = "Colombia",
-                        ElasticId = (int)enumElasticGroupId.ProcElasticId,                        
+                        ElasticId = (int)enumElasticGroupId.ProcElasticId,
                     };
-                    
+
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                 }
 
                 if (ppResult != null && ppResult.Count > 0)
                 {
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
-                    {                         
+                    {
                         AKA = string.Empty,
                         DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : "",
                         Offense = "Presenta Reporte en Panama Papers",
@@ -131,7 +126,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         Enable = true,
                         QueryPublicId = oQueryToCreate.QueryPublicId,
                         QueryIdentification = "N/A",
-                        QueryName = Name,                        
+                        QueryName = Name,
                         IdList = "Panama Papers",
                         IdentificationNumber = IdentificationNumber,
                         GroupName = "Panama Papers - Criticidad Baja",
@@ -139,8 +134,8 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         ListName = "Panama Papers",
                         Zone = "N/A",
                         ChargeOffense = "Presenta antecedentes en la Prcuraduría General de la Nación.",
-                        ElasticId = (int)enumElasticGroupId.PanamaPElasticId,                        
-                    };                                                                    
+                        ElasticId = (int)enumElasticGroupId.PanamaPElasticId,
+                    };
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                 }
 
@@ -150,7 +145,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     {
                         AKA = string.Empty,
                         DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : "",
-                        Offense = "El tercero " + judProcResult.FirstOrDefault().Item2[1]+ "Con Identificación No. " + judProcResult.FirstOrDefault().Item2[0] + "Presenta Antecedentes Judiciales",
+                        Offense = "El tercero " + judProcResult.FirstOrDefault().Item2[1] + "Con Identificación No. " + judProcResult.FirstOrDefault().Item2[0] + "Presenta Antecedentes Judiciales",
                         NameResult = judProcResult.FirstOrDefault().Item2[1],
                         MoreInfo = "El tercero " + judProcResult.FirstOrDefault().Item2[1] + "Con Identificación No. " + judProcResult.FirstOrDefault().Item2[0] + "Presenta Antecedentes Judiciales vigentes de acuerdo a la Fuente oficial de la RAMA JUDICIAL DEL PODER PUBLICO, CONSEJO SUPERIOR DE LA JUDICATURA y/o JUZGADOS DE EJECUCION DE PENAS Y MEDIDAS DE SEGURIDAD",
                         Priority = "2",
@@ -159,7 +154,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         QueryPublicId = oQueryToCreate.QueryPublicId,
                         QueryIdentification = IdentificationNumber,
                         IdentificationResult = IdentificationNumber,
-                        FullName = judProcResult.FirstOrDefault().Item2[1],                        
+                        FullName = judProcResult.FirstOrDefault().Item2[1],
                         QueryName = Name,
                         IdList = "RAMA JUDICIAL DEL PODER PUBLICO",
                         IdentificationNumber = IdentificationNumber,
@@ -199,12 +194,12 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             else
                                 oInfoCreate.Priority = "3";
                             #endregion
-                                                       
+
                             oInfoCreate.Enable = true;
                             oInfoCreate.QueryPublicId = oQueryToCreate.QueryPublicId;
                             oInfoCreate.IdentificationNumber = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty;
                             oInfoCreate.QueryName = !string.IsNullOrEmpty(Name) ? Name : string.Empty;
-                            oInfoCreate.UpdateDate = !string.IsNullOrEmpty(x.LastModify) ? x.LastModify : string.Empty; 
+                            oInfoCreate.UpdateDate = !string.IsNullOrEmpty(x.LastModify) ? x.LastModify : string.Empty;
                             oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(x.TypeId) ? x.TypeId : string.Empty;
                             oInfoCreate.Status = !string.IsNullOrEmpty(x.Status) ? x.Status : string.Empty;
                             #region GroupName
@@ -265,12 +260,12 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             oInfoCreate.ListName = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;
                             oInfoCreate.MoreInfo = x.RelatedWiht + " " + x.ORoldescription1 + " " + x.ORoldescription2;
                             oInfoCreate.Zone = x.NationalitySourceCountry;
-                            oInfoCreate.QueryIdentification = IdentificationNumber;                            
+                            oInfoCreate.QueryIdentification = IdentificationNumber;
 
                             oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                             return true;
                         });
-                    oQueryToCreate.IsSuccess = true;                    
+                    oQueryToCreate.IsSuccess = true;
                 }
                 else
                 {
@@ -279,15 +274,15 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     oInfoCreate.QueryName = Name;
                     oInfoCreate.QueryIdentification = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty;
                     oInfoCreate.GroupName = "SIN COINCIDENCIAS";
-                    
+
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
 
-                    oQueryToCreate.IsSuccess = false;                    
+                    oQueryToCreate.IsSuccess = false;
                 }
                 oQueryToCreate.QueryPublicId = await QueryCreate(oQueryToCreate);
 
                 Task.Run(async () => await QueryUpsert(oQueryToCreate));
-                return oQueryToCreate;                
+                return oQueryToCreate;
             }
             catch (Exception ex)
             {
@@ -300,28 +295,21 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         public static PlanModel PlanUpsert(PlanModel oPlanModelToUpsert)
         {
             //LogManager.Models.LogModel oLog = Company.Controller.Company.GetGenericLogModel();
-            try
+            if (oPlanModelToUpsert != null)
             {
-                if (oPlanModelToUpsert != null)
-                {
-                    oPlanModelToUpsert.PlanPublicId = ThirdKnowledgeDataController.Instance.PlanUpsert
-                                                      (oPlanModelToUpsert.PlanPublicId,
-                                                      oPlanModelToUpsert.CompanyPublicId,
-                                                      oPlanModelToUpsert.QueriesByPeriod,
-                                                      oPlanModelToUpsert.IsLimited,
-                                                      oPlanModelToUpsert.DaysByPeriod,
-                                                      oPlanModelToUpsert.Status,
-                                                      oPlanModelToUpsert.InitDate,
-                                                      oPlanModelToUpsert.EndDate,
-                                                      oPlanModelToUpsert.Enable);
-                    oPlanModelToUpsert.RelatedPeriodModel = CalculatePeriods(oPlanModelToUpsert);
-                }
-                return oPlanModelToUpsert;
+                oPlanModelToUpsert.PlanPublicId = ThirdKnowledgeDataController.Instance.PlanUpsert
+                                                  (oPlanModelToUpsert.PlanPublicId,
+                                                  oPlanModelToUpsert.CompanyPublicId,
+                                                  oPlanModelToUpsert.QueriesByPeriod,
+                                                  oPlanModelToUpsert.IsLimited,
+                                                  oPlanModelToUpsert.DaysByPeriod,
+                                                  oPlanModelToUpsert.Status,
+                                                  oPlanModelToUpsert.InitDate,
+                                                  oPlanModelToUpsert.EndDate,
+                                                  oPlanModelToUpsert.Enable);
+                oPlanModelToUpsert.RelatedPeriodModel = CalculatePeriods(oPlanModelToUpsert);
             }
-            catch (Exception)
-            {
-                throw;
-            }
+            return oPlanModelToUpsert;
         }
 
         public static List<PlanModel> GetAllPlanByCustomer(string CustomerPublicId, bool Enable)
@@ -457,7 +445,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
         public static List<Models.TDQueryModel> ThirdKnowledgeSearchByPublicId(string QueryPublicId, int PageNumber, int RowCount, out int TotalRows)
         {
-            return ThirdKnowledgeDataController.Instance.ThirdKnowledgeSearchByPublicId(QueryPublicId, PageNumber,RowCount, out TotalRows);
+            return ThirdKnowledgeDataController.Instance.ThirdKnowledgeSearchByPublicId(QueryPublicId, PageNumber, RowCount, out TotalRows);
         }
 
         public static List<string> GetUsersBycompanyPublicId(string CompanyPublicId)
@@ -473,46 +461,46 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         {
             if (QueryModelToUpsert != null &&
                 !string.IsNullOrEmpty(QueryModelToUpsert.PeriodPublicId))
-            {                
+            {
                 if (QueryModelToUpsert.RelatedQueryInfoModel != null)
                 {
-                    QueryModelToUpsert.RelatedQueryInfoModel.All( qInf =>
-                    {
-                        LogManager.Models.LogModel oLog = Company.Controller.Company.GetGenericLogModel();
-                        
-                        try
-                        {
-                            var response = Task.Run(() => ThirdKnowledgeDataController.Instance.QueryInfoInsert
-                                (QueryModelToUpsert.QueryPublicId, qInf.NameResult, qInf.IdentificationResult, qInf.Priority,
-                                qInf.Peps, qInf.Status, qInf.Offense, qInf.DocumentType, qInf.IdentificationNumber,
-                                qInf.FullName, qInf.IdList, qInf.ListName, qInf.AKA, qInf.ChargeOffense, qInf.Message,
-                                qInf.QueryIdentification, qInf.QueryName, qInf.ElasticId, qInf.GroupName, qInf.GroupId,
-                                qInf.Link, qInf.MoreInfo, qInf.Zone, qInf.UrlFile, true));
-                            qInf.QueryInfoPublicId = response.Result;
-                            
-                            oLog.IsSuccess = true;
-                        }
-                        catch (Exception err)
-                        {
-                            oLog.IsSuccess = false;
-                            oLog.Message = err.Message + " - " + err.StackTrace;
+                    QueryModelToUpsert.RelatedQueryInfoModel.All(qInf =>
+                   {
+                       LogManager.Models.LogModel oLog = Company.Controller.Company.GetGenericLogModel();
 
-                            throw err;
-                        }
-                        finally
-                        {
-                            oLog.LogObject = qInf;
+                       try
+                       {
+                           var response = Task.Run(() => ThirdKnowledgeDataController.Instance.QueryInfoInsert
+                               (QueryModelToUpsert.QueryPublicId, qInf.NameResult, qInf.IdentificationResult, qInf.Priority,
+                               qInf.Peps, qInf.Status, qInf.Offense, qInf.DocumentType, qInf.IdentificationNumber,
+                               qInf.FullName, qInf.IdList, qInf.ListName, qInf.AKA, qInf.ChargeOffense, qInf.Message,
+                               qInf.QueryIdentification, qInf.QueryName, qInf.ElasticId, qInf.GroupName, qInf.GroupId,
+                               qInf.Link, qInf.MoreInfo, qInf.Zone, qInf.UrlFile, true));
+                           qInf.QueryInfoPublicId = response.Result;
 
-                            oLog.RelatedLogInfo.Add(new LogManager.Models.LogInfoModel()
-                            {
-                                LogInfoType = "PeriodPublicId",
-                                Value = QueryModelToUpsert.PeriodPublicId,
-                            });
+                           oLog.IsSuccess = true;
+                       }
+                       catch (Exception err)
+                       {
+                           oLog.IsSuccess = false;
+                           oLog.Message = err.Message + " - " + err.StackTrace;
 
-                            LogManager.ClientLog.AddLog(oLog);
-                        }
-                        return true;
-                    });
+                           throw err;
+                       }
+                       finally
+                       {
+                           oLog.LogObject = qInf;
+
+                           oLog.RelatedLogInfo.Add(new LogManager.Models.LogInfoModel()
+                           {
+                               LogInfoType = "PeriodPublicId",
+                               Value = QueryModelToUpsert.PeriodPublicId,
+                           });
+
+                           LogManager.ClientLog.AddLog(oLog);
+                       }
+                       return true;
+                   });
                 }
             }
 

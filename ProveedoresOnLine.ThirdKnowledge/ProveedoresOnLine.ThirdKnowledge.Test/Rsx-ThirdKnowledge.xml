@@ -66,6 +66,7 @@
     <!--Judicial Process Estrucutre Page-->
     <key name="JudicialP_Url">http://procesos.ramajudicial.gov.co/jepms/bogotajepms/lista.asp</key>
     <key name="JudicialPResult_Url"><![CDATA[http://procesos.ramajudicial.gov.co/jepms/bogotajepms/adju.asp?cp4={link}&fecha_r={datetime}_02:38:26%20p.m.]]></key>
+    <key name="JudicialP_Proxy">http://127.0.0.1:9666</key>  
 
   </ThirdKnowledge>
 </Settings>

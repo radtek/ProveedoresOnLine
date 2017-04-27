@@ -4,13 +4,19 @@ using ProveedoresOnLine.SurveyModule.Models.Index;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MarketPlace.Models.Provider
 {
+    [DataContract]
     public class ProviderLiteViewModel
     {
+        public ProviderLiteViewModel()
+        {
+
+        }
         public ProveedoresOnLine.CompanyProvider.Models.Provider.ProviderModel RelatedProvider { get; private set; }
 
         public CompanyIndexModel ElasticRealtedProvider { get; private set; }
