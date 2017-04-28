@@ -31,7 +31,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                     (
                         IntegrationPlattaform.SANOFIProcess.Models.InternalSettings.Instance[
                         IntegrationPlattaform.SANOFIProcess.Models.Constants.C_SANOFI_ProviderPublicId].Value
-                    );                
+                    );
 
                 #region Variables
 
@@ -58,7 +58,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                 if (oProviders != null)
                 {
                     #region SET UP
-                    CultureInfo culture= CultureInfo.CreateSpecificCulture("es-ES");
+                    CultureInfo culture = CultureInfo.CreateSpecificCulture("es-ES");
                     //First time process SET UP
                     if (oProcessLog == null || oProcessLog.Count == 0)
                     {
@@ -75,7 +75,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                             //Modify Date against Last Created process
                             LogFile(count + " ProviderPublicId:::: " + p.CompanyPublicId.ToString());
 
-                            
+
                             oGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetInfoByProvider(p.CompanyPublicId, LastProcess.LastModify).FirstOrDefault();
                             oComercialGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialInfoByProvider(p.CompanyPublicId, LastProcess.LastModify).FirstOrDefault();
                             oComercialBasicRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialBasicInfoByProvider(p.CompanyPublicId, LastProcess.LastModify).FirstOrDefault();
@@ -120,7 +120,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
 
                         LogFile("Set Up Process finish " + DateTime.Now);
 
-                    #endregion
+                        #endregion
                     }
                     else
                     {
@@ -147,25 +147,25 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                             else
                             {
                                 oNoExist.Add(p.CompanyPublicId);
-                            }                            
+                            }
                             return true;
                         });
-                        
-                        
+
+
 
                         if (oNoExist != null && oNoExist.Count > 0)
                         {
                             LogFile("New Providers " + oNoExist.Count);
                             count = 0;
 
-                            
+
 
                             oNoExist.All(l =>
                             {
-                                oGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetInfoByProvider(l, date).FirstOrDefault();
-                                oComercialGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialInfoByProvider(l, date).FirstOrDefault();
-                                oComercialBasicRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialBasicInfoByProvider(l, date).FirstOrDefault();
-                                oContableRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetContableInfoByProvider(l, date).FirstOrDefault();
+                                oGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
+                                oComercialGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
+                                oComercialBasicRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialBasicInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
+                                oContableRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetContableInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
 
                                 //if not exists validate all modules information, like set up process
                                 if (oGeneralRow != null && oComercialGeneralRow != null && oComercialBasicRow != null && oContableRow != null)
@@ -178,7 +178,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
 
                                     LogFile("New Provider: " + l + "Succesfully validated");
                                 }
-                                LogFile(count+1 + " New Provider: " + l);
+                                LogFile(count + 1 + " New Provider: " + l);
                                 count++;
                                 return true;
                             });
@@ -191,14 +191,15 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                             count = 0;
                             oExist.All(l =>
                             {
-                                oGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetInfoByProvider(l,  LastProcess.LastModify).FirstOrDefault();
+                                oGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
                                 oComercialGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
                                 oComercialBasicRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialBasicInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
                                 oContableRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetContableInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
 
                                 //if exists get modules information
-                                if (oGeneralRow != null) { 
-                                    oGeneralRow.Comentaries = "Actualización Proveedor: " + DateTime.Now.Day + " " + DateTime.Now.ToString("MMMM", culture) + " " + DateTime.Now.Year;
+                                if (oGeneralRow != null)
+                                {
+                                    oGeneralRow.Comentaries = "Actualizacion Proveedor: " + DateTime.Now.Day + " " + DateTime.Now.ToString("MMMM", culture) + " " + DateTime.Now.Year;
                                     oGeneralInfo.Add(oGeneralRow);
                                 }
                                 if (oComercialGeneralRow != null && oComercialBasicRow != null)
@@ -209,7 +210,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                                 if (oContableRow != null)
                                     oContableInfo.Add(oContableRow);
 
-                                LogFile(count+1 + " Update info for Provider: " + l);
+                                LogFile(count + 1 + " Update info for Provider: " + l);
                                 count++;
                                 return true;
                             });
@@ -242,7 +243,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                         LogFile("Start Process finish " + DateTime.Now);
                     }
 
-                        #endregion
+                    #endregion
                 }
                 else
                 {
@@ -308,9 +309,9 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                 oGeneralInfoModel.All(x =>
                 {
                     #region Name3 and Name4 Field
-                    
 
-                    
+
+
                     #endregion
 
                     #region Write Process
@@ -322,7 +323,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                           NameProcessing(x.NaturalPersonName).Item1.ToUpper() + strSep +
                           x.IdentificationNumber + strSep +
                           x.FiscalNumber + strSep +
-                          x.Address.Replace("#"," ").Replace("-"," ") + strSep +
+                          x.Address.Replace("#", " ").Replace("-", " ") + strSep +
                           x.City + strSep +
                           (x.Region != null ? x.Region.PadLeft(2, '0') : "0") + strSep +
                           x.Country + strSep +
@@ -339,7 +340,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                       x.CompanyName.ToUpper() + strSep +
                       "" + strSep +
                       "" + strSep +
-                      ""+ strSep +
+                      "" + strSep +
                       x.IdentificationNumber + strSep +
                       x.FiscalNumber + strSep +
                       x.Address.Replace("#", " ").Replace("-", " ") + strSep +
@@ -353,7 +354,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                       x.Email_Cert + strSep +
                       x.Comentaries + strSep);
                     }
-                    
+
 
                     #endregion
                     return true;
@@ -585,7 +586,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                           "0010" + strSep +
                           "1" + strSep +
                           "01" + strSep +
-                          ""+ strSep);
+                          "" + strSep);
                     #endregion
 
                     return true;
@@ -719,65 +720,55 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
             return DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetSanofiLastProcessLog();
         }
 
-        public static Tuple<string,string>NameProcessing(string Name)
+        public static Tuple<string, string> NameProcessing(string Name)
         {
-            string NaturalName = "";
-            string NaturalLastName = "";
-            Tuple<string, string> FullName = null;
+            var words = Name.Split(' ');
 
-            
+            List<string> NameWords = new List<string>();
+            List<string> LastNameWords = new List<string>();
 
-            if (!string.IsNullOrWhiteSpace(Name))
+            switch (words.Length)
             {
-                if (Name.Contains("DEL"))
-                {
-
-                }
-                string[] words = Name.Split(' ');
-                List<string> NameWords = new List<string>();
-                List<string> LastNameWords = new List<string>();
-
-                switch (words.Length)
-                {
-                    case 2:
-                        int iN = 0;
-                        words.All(na =>
-                        {
-                            if (iN < 2)
-                            {
-                                LastNameWords.Add(na);
-                            }
-                            else
-                            {
-                                NameWords.Add(na);
-                            }
-
-                            iN++;
-                            return true;
-                        });
-                        break;
-                }
-               
-                if (words.Length>3)
-                {
-                    
-                    
-                }
-                else
-                {
-                    NameWords.Add(words[3]);
-                    NameWords.Add(words[2]);
-                    LastNameWords.Add(words[1]);
+                case 2:
+                    NameWords.Add(words[1]);
+                    NameWords.Add(string.Empty);
                     LastNameWords.Add(words[0]);
-                }
-                
+                    LastNameWords.Add(string.Empty);
+                    break;
+                case 3:
 
-                
-
-                NaturalName = string.Join("| ", NameWords);
-                NaturalLastName = string.Join("| ", LastNameWords);
+                    NameWords.Add(words[2]);
+                    NameWords.Add(string.Empty);
+                    LastNameWords.Add(words[0]);
+                    LastNameWords.Add(words[1]);
+                    break;
+                case 4:
+                    NameWords.Add(words[2]);
+                    NameWords.Add(words[3]);
+                    LastNameWords.Add(words[0]);
+                    LastNameWords.Add(words[1]);
+                    break;
+                case 5:
+                    NameWords.Add(Name);
+                    NameWords.Add(string.Empty);
+                    LastNameWords.Add(string.Empty);
+                    LastNameWords.Add(string.Empty);
+                    LastNameWords.Add(string.Empty);
+                    break;
             }
-            FullName = new Tuple<string, string>(NaturalName, NaturalLastName);  
+            if (words.Length > 5)
+            {
+                NameWords.Add(Name);
+                NameWords.Add(string.Empty);
+                LastNameWords.Add(string.Empty);
+                LastNameWords.Add(string.Empty);
+                LastNameWords.Add(string.Empty);
+            }
+
+            var NaturalName = string.Join("| ", NameWords);
+            var NaturalLastName = string.Join("| ", LastNameWords);
+
+            var FullName = new Tuple<string, string>(NaturalName, NaturalLastName);
             return FullName;
         }
 

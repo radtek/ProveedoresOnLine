@@ -75,7 +75,12 @@ namespace IntegrationPlatform.SANOFIProcess.Test
         {
             Assert.IsNotNull(IntegrationPlattaform.SANOFIProcess.Controller.IntegrationPlatformSANOFIIProcess.GetSanofiLastProcessLog());
         }
-     
+        [TestMethod]
+        public void NameProccessing()
+        {
+            var name =IntegrationPlattaform.SANOFIProcess.Controller.IntegrationPlatformSANOFIIProcess.NameProcessing("Ruiz Morales Alvaro de Jesus");
+            Assert.IsNotNull(name);
+        }
 
         #region Sanofi Message Proccess
 
