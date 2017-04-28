@@ -119,7 +119,7 @@ namespace MarketPlace.Web.Controllers
         /// <param name="QueryBasicPublicId">This is the QueryInfo</param>
         /// <param name="ReturnUrl">URL to go back</param>
         /// <returns>Detail View</returns>
-        public virtual ActionResult TKDetailSingleSearch(string QueryBasicPublicId, string ElasticId, string ReturnUrl)
+        public virtual ActionResult TKDetailSingleSearch(string QueryPublicId, string QueryInfoPublicId, string ElasticId, string ReturnUrl)
         {
             ProviderViewModel oModel = new ProviderViewModel();
 
@@ -129,13 +129,17 @@ namespace MarketPlace.Web.Controllers
                 oModel.ProviderMenu = GetThirdKnowledgeControllerMenu();
                 //Clean the season url saved
                 if (SessionModel.CurrentURL != null)
-                    SessionModel.CurrentURL = null;
-                
+                    SessionModel.CurrentURL = null;               
+
                 //Get The Active Plan By Customer 
-                QueryDetailInfo = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByQueryPublicIdAndElasticId(QueryBasicPublicId, Convert.ToInt32(ElasticId));
+                if (!string.IsNullOrEmpty(QueryInfoPublicId))                
+                    QueryDetailInfo = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByInfoPublicId(QueryInfoPublicId);                
+                else
+                    QueryDetailInfo = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByQueryPublicIdAndElasticId(QueryPublicId, Convert.ToInt32(ElasticId));
+
                 int TotalRows = 0;
 
-                List<TDQueryModel> oQueryResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId(QueryBasicPublicId,
+                List<TDQueryModel> oQueryResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId(QueryPublicId,
                     0, 20, out TotalRows);
                 if (QueryDetailInfo != null)
                     oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel(QueryDetailInfo);
@@ -146,7 +150,7 @@ namespace MarketPlace.Web.Controllers
                 if (ReturnUrl == "null")
                     oModel.RelatedThidKnowledgeSearch.ReturnUrl = ReturnUrl;
 
-                oModel.RelatedThidKnowledgeSearch.QueryBasicPublicId = QueryBasicPublicId;
+                oModel.RelatedThidKnowledgeSearch.QueryBasicPublicId = QueryInfoPublicId;
                 oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult = oQueryResult;
                 //Get report generator
                 if (Request["DownloadReport"] == "true")

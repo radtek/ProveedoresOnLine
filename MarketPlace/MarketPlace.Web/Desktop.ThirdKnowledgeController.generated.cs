@@ -143,7 +143,8 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionParamsClass_TKDetailSingleSearch
         {
-            public readonly string QueryBasicPublicId = "QueryBasicPublicId";
+            public readonly string QueryPublicId = "QueryPublicId";
+            public readonly string QueryInfoPublicId = "QueryInfoPublicId";
             public readonly string ElasticId = "ElasticId";
             public readonly string ReturnUrl = "ReturnUrl";
         }
@@ -157,7 +158,7 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             public readonly string InitDate = "InitDate";
             public readonly string EndDate = "EndDate";
             public readonly string SearchType = "SearchType";
-            public readonly string User = "User";
+            public readonly string Status = "Status";
         }
         static readonly ActionParamsClass_TKThirdKnowledgeDetail s_params_TKThirdKnowledgeDetail = new ActionParamsClass_TKThirdKnowledgeDetail();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -248,32 +249,33 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
         }
 
         [NonAction]
-        partial void TKDetailSingleSearchOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string QueryBasicPublicId, string ElasticId, string ReturnUrl);
+        partial void TKDetailSingleSearchOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string QueryPublicId, string QueryInfoPublicId, string ElasticId, string ReturnUrl);
 
         [NonAction]
-        public override System.Web.Mvc.ActionResult TKDetailSingleSearch(string QueryBasicPublicId, string ElasticId, string ReturnUrl)
+        public override System.Web.Mvc.ActionResult TKDetailSingleSearch(string QueryPublicId, string QueryInfoPublicId, string ElasticId, string ReturnUrl)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.TKDetailSingleSearch);
-            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "QueryBasicPublicId", QueryBasicPublicId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "QueryPublicId", QueryPublicId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "QueryInfoPublicId", QueryInfoPublicId);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "ElasticId", ElasticId);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "ReturnUrl", ReturnUrl);
-            TKDetailSingleSearchOverride(callInfo, QueryBasicPublicId, ElasticId, ReturnUrl);
+            TKDetailSingleSearchOverride(callInfo, QueryPublicId, QueryInfoPublicId, ElasticId, ReturnUrl);
             return callInfo;
         }
 
         [NonAction]
-        partial void TKThirdKnowledgeSearchOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string PageNumber, string InitDate, string EndDate, string SearchType, string User);
+        partial void TKThirdKnowledgeSearchOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string PageNumber, string InitDate, string EndDate, string SearchType, string Status);
 
         [NonAction]
-        public override System.Web.Mvc.ActionResult TKThirdKnowledgeSearch(string PageNumber, string InitDate, string EndDate, string SearchType, string User)
+        public override System.Web.Mvc.ActionResult TKThirdKnowledgeSearch(string PageNumber, string InitDate, string EndDate, string SearchType, string Status)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.TKThirdKnowledgeSearch);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "PageNumber", PageNumber);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "InitDate", InitDate);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "EndDate", EndDate);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "SearchType", SearchType);
-            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "User", User);
-            TKThirdKnowledgeSearchOverride(callInfo, PageNumber, InitDate, EndDate, SearchType, User);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "Status", Status);
+            TKThirdKnowledgeSearchOverride(callInfo, PageNumber, InitDate, EndDate, SearchType, Status);
             return callInfo;
         }
 
