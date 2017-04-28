@@ -44,15 +44,18 @@
                                            {
                                                controller = MVC.ThirdKnowledge.Name,
                                                action = MVC.ThirdKnowledge.ActionNames.TKDetailSingleSearch,
-                                               QueryBasicPublicId = subItem.QueryPublicId,
+                                               QueryPublicId = subItem.QueryPublicId,
+                                               QueryInfoPublicId = subItem.QueryBasicPublicId,
                                                ElasticId = subItem.ElasticId,
                                                ReturnUrl = Url.Action
                                                        (MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeDetail,
                                                        MVC.ThirdKnowledge.Name,
                                                        new
                                                        {
-                                                           QueryPublicId = subItem.QueryBasicPublicId,
-                                                           ElasticId = subItem.ElasticId,
+                                                          QueryPublicId = subItem.QueryPublicId,
+                                                          QueryInfoPublicId =subItem.QueryBasicPublicId,
+                                                          ElasticId = subItem.ElasticId,
+
                                                        })
                                            }))">Ver Detalle</a>
                                 }
@@ -102,14 +105,16 @@
                                    {
                                        controller = MVC.ThirdKnowledge.Name,
                                        action = MVC.ThirdKnowledge.ActionNames.TKDetailSingleSearch,
-                                       QueryBasicPublicId = subItem.QueryPublicId,
+                                       QueryPublicId = subItem.QueryPublicId,
+                                       QueryInfoPublicId = subItem.QueryBasicPublicId,
                                        ElasticId = subItem.ElasticId,
                                        ReturnUrl = Url.Action
                                                (MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeDetail,
                                                MVC.ThirdKnowledge.Name,
                                                new
                                                {
-                                                   QueryPublicId = subItem.QueryBasicPublicId,
+                                                   QueryPublicId = subItem.QueryPublicId,
+                                                   QueryInfoPublicId =subItem.QueryBasicPublicId,
                                                    ElasticId = subItem.ElasticId,
                                                })
                                    }))">Ver_Detalle</a>

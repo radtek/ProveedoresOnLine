@@ -46,10 +46,13 @@ namespace ProveedoresOnLine.OnlineSearch.Core
                         if (__Question != null)
                         {
                             TreeModel oQuestionResult = new TreeModel();
-                            oQuestionResult = ProveedoresOnLine.OnlineSearch.Controller.SearchController.GetAnswerByTreeidAndQuestion(102001, __Question);
-                            Answer = oQuestionResult.TreeItem.FirstOrDefault().ChildItem.ItemName;
+                            oQuestionResult = ProveedoresOnLine.OnlineSearch.Controller.SearchController.GetAnswerByTreeidAndQuestion(102001, __Question);                           
 
-                            if (string.IsNullOrEmpty(Answer))
+                            if (oQuestionResult != null)
+                            {
+                                Answer = oQuestionResult.TreeItem.FirstOrDefault().ChildItem.ItemName;                               
+                            }
+                            else
                             {
                                 response = await client.GetAsync(Url);
                                 HtmlDoc = new HtmlDocument();
@@ -88,73 +91,73 @@ namespace ProveedoresOnLine.OnlineSearch.Core
                     if (HtmlDocResponse.DocumentNode.SelectNodes("//table[contains(@class, 'tablas')]") != null)
                     {
                         HtmlDocResponse.DocumentNode.SelectNodes("//table[contains(@class, 'tablas')]").All(tbls =>
+                        {
+                            if (HtmlDocResponse.DocumentNode.SelectNodes("//div[contains(@class, 'datosConsultado')]")[0].SelectNodes("span") != null)
                             {
-                                if (HtmlDocResponse.DocumentNode.SelectNodes("//div[contains(@class, 'datosConsultado')]")[0].SelectNodes("span")  != null)
+                                procName = "";
+                                HtmlDocResponse.DocumentNode.SelectNodes("//div[contains(@class, 'datosConsultado')]")[0].SelectNodes("span").All(x =>
                                 {
-                                    procName = "";   
-                                    HtmlDocResponse.DocumentNode.SelectNodes("//div[contains(@class, 'datosConsultado')]")[0].SelectNodes("span").All(x =>
-                                        {
-                                            procName += x.InnerText + " "; 
-                                            return true;
-                                        });
-                                    
-                                } 
-                                List<string> hRows = new List<string>();
-                                HtmlNodeCollection hCells = tbls.SelectNodes("tr")[0].SelectNodes("th");
-                                hCells.All(x =>
-                                {
-                                    hRows.Add(x.InnerText);
+                                    procName += x.InnerText + " ";
                                     return true;
                                 });
-                                if (tbls.SelectNodes("tbody/tr") != null)
+
+                            }
+                            List<string> hRows = new List<string>();
+                            HtmlNodeCollection hCells = tbls.SelectNodes("tr")[0].SelectNodes("th");
+                            hCells.All(x =>
+                            {
+                                hRows.Add(x.InnerText);
+                                return true;
+                            });
+                            if (tbls.SelectNodes("tbody/tr") != null)
+                            {
+                                tbls.SelectNodes("tbody/tr").All(row =>
                                 {
-                                    tbls.SelectNodes("tbody/tr").All(row =>
+                                    List<string> dRows = new List<string>();
+                                    HtmlNodeCollection cells = row.SelectNodes("td");
+                                    for (int i = 0; i < cells.Count; i++)
+                                    {
+                                        dRows.Add(cells[i].InnerHtml);
+                                    }
+
+                                    Tuple<string, List<string>, List<string>> oDetail = new Tuple<string, List<string>, List<string>>(procName, hRows, dRows);
+                                    oDetailinfo.Add(oDetail);
+                                    return true;
+                                });
+                                return true;
+                            }
+                            else if (tbls.SelectNodes("tr") != null)
+                            {
+                                for (int i = 0; i < tbls.SelectNodes("tr").Count; i++)
+                                {
+                                    if (i != 0)
                                     {
                                         List<string> dRows = new List<string>();
-                                        HtmlNodeCollection cells = row.SelectNodes("td");
-                                        for (int i = 0; i < cells.Count; i++)
+                                        HtmlNodeCollection cells = tbls.SelectNodes("tr")[i].SelectNodes("td");
+                                        for (int c = 0; c < cells.Count; c++)
                                         {
-                                            dRows.Add(cells[i].InnerHtml);
+                                            dRows.Add(cells[c].InnerHtml);
                                         }
 
                                         Tuple<string, List<string>, List<string>> oDetail = new Tuple<string, List<string>, List<string>>(procName, hRows, dRows);
                                         oDetailinfo.Add(oDetail);
-                                        return true;
-                                    });
-                                    return true;
-                                }
-                                else if (tbls.SelectNodes("tr") != null)
-                                {
-                                    for (int i = 0; i < tbls.SelectNodes("tr").Count; i++)
-                                    {
-                                        if (i != 0)
-                                        {
-                                            List<string> dRows = new List<string>();
-                                            HtmlNodeCollection cells = tbls.SelectNodes("tr")[i].SelectNodes("td");
-                                            for (int c = 0; c < cells.Count; c++)
-                                            {
-                                                dRows.Add(cells[c].InnerHtml);
-                                            }
-
-                                            Tuple<string, List<string>, List<string>> oDetail = new Tuple<string, List<string>, List<string>>(procName, hRows, dRows);
-                                            oDetailinfo.Add(oDetail);                                        
-                                        }                                        
-                                    }                                    
-                                    return true;
+                                    }
                                 }
                                 return true;
-                            });                        
-                    }                    
+                            }
+                            return true;
+                        });
+                    }
                 }
                 Thread.Sleep(1000);
                 //Todo
                 return oDetailinfo;
             }
-            catch (System.Threading.ThreadAbortException ex)
+            catch (Exception ex)
             {
 
                 throw ex.InnerException;
-            }
+            }   
         }
     }
 }

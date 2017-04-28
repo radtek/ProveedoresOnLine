@@ -72,11 +72,11 @@ namespace MarketPlace.Web.ControllersApi
                             string rNamer = System.Web.HttpContext.Current.Request["Name"];
                             string rIdNumber = System.Web.HttpContext.Current.Request["IdentificationNumber"];
 
-                            var qTask = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(oCurrentPeriodList.FirstOrDefault().
+                            var qTask = await Task.WhenAll(ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(oCurrentPeriodList.FirstOrDefault().
                                             RelatedPeriodModel.FirstOrDefault().PeriodPublicId, IdType,
-                                           rIdNumber, rNamer, oQueryToCreate);
+                                           rIdNumber, rNamer, oQueryToCreate)).ConfigureAwait(false);
 
-                            oModel.RelatedThidKnowledgeSearch.CollumnsResult = await qTask;
+                            oModel.RelatedThidKnowledgeSearch.CollumnsResult = qTask.FirstOrDefault();
                             
                             List<Tuple<string, List<ThirdKnowledgeViewModel>>> Group = new List<Tuple<string, List<ThirdKnowledgeViewModel>>>();
                             List<string> Item1 = new List<string>();
