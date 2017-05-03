@@ -35,8 +35,7 @@ var Third_KnowledgeSimpleSearchObject = {
                     $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_DivResult').html('')
                     var tittlestDiv = '';
                     var resultDiv = '';
-                    if (result.RelatedSingleSearch != null && result.RelatedSingleSearch.length > 0) {     
-                        debugger;
+                    if (result.RelatedSingleSearch != null && result.RelatedSingleSearch.length > 0) {                             
                         $.each(result.RelatedSingleSearch, function (item, value) {                                   
                             if (value.m_Item1 == "SIN COINCIDENCIAS") {                                
                                 resultDiv = '';
