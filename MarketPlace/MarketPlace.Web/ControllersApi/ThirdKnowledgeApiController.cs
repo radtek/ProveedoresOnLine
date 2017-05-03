@@ -90,7 +90,7 @@ namespace MarketPlace.Web.ControllersApi
                                     return true;
                                 });                             
                                 ItemGroup.Add(Item1.Where(x => x.Contains("Criticidad Alta")).Select(x => x).DefaultIfEmpty("").FirstOrDefault());
-                                ItemGroup.Add(Item1.Where(x => x.Contains("Criticidad Media")).Select(x => x).DefaultIfEmpty("").FirstOrDefault());
+                                ItemGroup.AddRange(Item1.Where(x => x.Contains("Criticidad Media")).Select(x => x).DefaultIfEmpty("").Distinct().ToList());
                                 ItemGroup.Add(Item1.Where(x => x.Contains("Criticidad Baja")).Select(x => x).DefaultIfEmpty("").FirstOrDefault());
                                 ItemGroup.Add(Item1.Where(x => x.Contains("SIN COINCIDENCIAS")).Select(x => x).DefaultIfEmpty("").FirstOrDefault());                                
 
@@ -115,7 +115,7 @@ namespace MarketPlace.Web.ControllersApi
                                         }
                                         else if (x.Contains("Criticidad Media"))
                                         {
-                                            oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(td => td.GroupName.Contains("Criticidad Media")).All(d =>
+                                            oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(td => td.GroupName == x).All(d =>
                                             {
                                                 d.QueryPublicId = oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId;
                                                 oItem2.Add(new ThirdKnowledgeViewModel(d));

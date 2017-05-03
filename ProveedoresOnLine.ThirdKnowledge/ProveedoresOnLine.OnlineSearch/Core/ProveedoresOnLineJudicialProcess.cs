@@ -23,8 +23,8 @@ namespace ProveedoresOnLine.OnlineSearch.Core
                 string urlResult = Models.InternalSettings.Instance[Models.Constants.JudicialProcessResult_Url].Value;
                 HttpClientHandler handler = new HttpClientHandler();
                 handler.UseCookies = true;
-                handler.Proxy = new WebProxy(Models.InternalSettings.Instance[Models.Constants.JudicialP_Proxy].Value, true);
-                handler.UseProxy = true;
+                //handler.Proxy = new WebProxy(Models.InternalSettings.Instance[Models.Constants.JudicialP_Proxy].Value, true);
+                //handler.UseProxy = true;
 
                 using (var client = new HttpClient(handler as HttpMessageHandler))
                 {
