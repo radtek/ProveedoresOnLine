@@ -5,6 +5,7 @@ using ProveedoresOnLine.Company.Models.Company;
 using ProveedoresOnLine.Company.Models.Util;
 using ProveedoresOnLine.CompanyCustomer.Models.Customer;
 using ProveedoresOnLine.CompanyProvider.Models.Provider;
+using ProveedoresOnLine.SurveyModule.Models.Index;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,8 +100,10 @@ namespace BackOffice.Web.Controllers
 
                     #region Model to index
 
-                    ProveedoresOnLine.Company.Models.Company.CompanyIndexModel oCompanyToIndex = new ProveedoresOnLine.Company.Models.Company.CompanyIndexModel()
+                    List<ProveedoresOnLine.Company.Models.Company.CompanyIndexModel> oCompanyToIndex = new List<ProveedoresOnLine.Company.Models.Company.CompanyIndexModel>()
                     {
+                        new CompanyIndexModel()
+                        {
                         CompanyPublicId = CompanyToUpsert.CompanyPublicId,
                         CompanyName = CompanyToUpsert.CompanyName,
                         CommercialCompanyName = CompanyToUpsert.CompanyInfo.
@@ -112,6 +115,8 @@ namespace BackOffice.Web.Controllers
                         IdentificationTypeId = CompanyToUpsert.IdentificationType.ItemId,
                         ProviderStatus = BackOffice.Models.General.enumProviderCustomerStatus.Creation.ToString(),
                         ProviderStatusId = Convert.ToInt32(BackOffice.Models.General.enumProviderCustomerStatus.Creation),
+                        CompanyEnable = true,
+                        LogoUrl =   BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DefaultImage].Value,
                         oCustomerProviderIndexModel = new List<CustomerProviderIndexModel>()
                         {
                             new CustomerProviderIndexModel(){
@@ -123,6 +128,7 @@ namespace BackOffice.Web.Controllers
                                 Status = oModel.ProviderOptions.Where(x => x.ItemId == oCustomerModel.RelatedProvider.Where(y => y.RelatedProvider.CompanyPublicId == CompanyToUpsert.CompanyPublicId).Select(y => y.Status.ItemId).DefaultIfEmpty(0).FirstOrDefault()).Select(x => x.ItemName).DefaultIfEmpty(string.Empty).FirstOrDefault(),
                             }
                         },
+                       }
                     };
 
                     #endregion
@@ -141,13 +147,13 @@ namespace BackOffice.Web.Controllers
                                     .MinGram(1)
                                     .MaxGram(10)))).NumberOfShards(1)
                         ));
-
-                    var Index = client.Index(oCompanyToIndex);
+                    client.Map<CompanyIndexModel>(m => m.AutoMap());
+                    var Index = client.IndexMany(oCompanyToIndex, BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value);
 
                     #endregion
 
                     #region Index CustomerProvider
-                    
+
                     Uri node2 = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
                     var settings2 = new ConnectionSettings(node2);
                     settings2.DefaultIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CustomerProviderIndex].Value);
@@ -172,7 +178,7 @@ namespace BackOffice.Web.Controllers
                         );
                     client2.Map<CustomerProviderIndexModel>(m => m.AutoMap());
 
-                    var Index2 = client2.Index(oCompanyToIndex.oCustomerProviderIndexModel.FirstOrDefault());
+                    var Index2 = client2.Index(oCompanyToIndex.FirstOrDefault().oCustomerProviderIndexModel.FirstOrDefault());
 
                     #endregion
 
@@ -180,8 +186,9 @@ namespace BackOffice.Web.Controllers
 
                     #region Model to index
 
-                    ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel oCompanySurveyIndexModel = new ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel()
-                    {                        
+                    List<ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel> oCompanySurveyIndexModel = new List<ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel>()
+                    {
+                        new CompanySurveyIndexModel() {
                         CompanyPublicId = CompanyToUpsert.CompanyPublicId,
                         CompanyName = CompanyToUpsert.CompanyName,
                         CommercialCompanyName = CompanyToUpsert.CompanyInfo.
@@ -193,6 +200,8 @@ namespace BackOffice.Web.Controllers
                         IdentificationTypeId = CompanyToUpsert.CompanyType.ItemId,
                         ProviderStatus = BackOffice.Models.General.enumProviderCustomerStatus.Creation.ToString(),
                         ProviderStatusId = Convert.ToInt32(BackOffice.Models.General.enumProviderCustomerStatus.Creation),
+                        CompanyEnable= true,
+                        LogoUrl =   BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DefaultImage].Value,
                         oCustomerProviderIndexModel = new List<CustomerProviderIndexModel>()
                         {
                             new CustomerProviderIndexModel(){
@@ -204,6 +213,7 @@ namespace BackOffice.Web.Controllers
                                 Status = oModel.ProviderOptions.Where(x => x.ItemId == oCustomerModel.RelatedProvider.Where(y => y.RelatedProvider.CompanyPublicId == CompanyToUpsert.CompanyPublicId).Select(y => y.Status.ItemId).DefaultIfEmpty(0).FirstOrDefault()).Select(x => x.ItemName).DefaultIfEmpty(string.Empty).FirstOrDefault(),
                             }
                         },
+                        }
                     };
 
                     #endregion
@@ -222,8 +232,8 @@ namespace BackOffice.Web.Controllers
                                     .MinGram(1)
                                     .MaxGram(10)))).NumberOfShards(1)
                         ));
-
-                    Index = client.Index(oCompanySurveyIndexModel);
+                    client.Map<CompanySurveyIndexModel>(m => m.AutoMap());
+                    Index = client.IndexMany(oCompanySurveyIndexModel, BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanySurveyIndex].Value);
 
                     #endregion
                 }
@@ -303,8 +313,8 @@ namespace BackOffice.Web.Controllers
                     #endregion
 
                     #region Index CustomerProvider
-                    
-                      var  oCustomerProviderToIndex = oResult.Documents.FirstOrDefault().oCustomerProviderIndexModel;                                                                      
+
+                    var oCustomerProviderToIndex = oResult.Documents.FirstOrDefault().oCustomerProviderIndexModel;
 
                     Uri node2 = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
                     var settings2 = new ConnectionSettings(node2);
@@ -348,38 +358,39 @@ namespace BackOffice.Web.Controllers
                         .From(0)
                         .Size(1)
                         .Query(q => q.QueryString(qs => qs.Query(ProviderPublicId))));
+                    if (oResultSurvey.Documents != null && oResultSurvey.Documents.Count() > 0)
+                    {
+                        ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel oCompanySurveyIndexModel = new ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel(oResultSurvey.Documents.FirstOrDefault());
 
-                    ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel oCompanySurveyIndexModel = new ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel(oResultSurvey.Documents.FirstOrDefault());
+                        #region Model to upsert
 
-                    #region Model to upsert
+                        oCompanySurveyIndexModel.CommercialCompanyName = CompanyToUpsert.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.ComercialName).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault();
 
-                    oCompanySurveyIndexModel.CommercialCompanyName = CompanyToUpsert.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.ComercialName).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault();
+                        oCompanySurveyIndexModel.CompanyEnable = CompanyToUpsert.Enable;
 
-                    oCompanySurveyIndexModel.CompanyEnable = CompanyToUpsert.Enable;
+                        oCompanySurveyIndexModel.CompanyName = CompanyToUpsert.CompanyName;
 
-                    oCompanySurveyIndexModel.CompanyName = CompanyToUpsert.CompanyName;
+                        oCompanySurveyIndexModel.IdentificationNumber = CompanyToUpsert.IdentificationNumber;
 
-                    oCompanySurveyIndexModel.IdentificationNumber = CompanyToUpsert.IdentificationNumber;
+                        oCompanySurveyIndexModel.IdentificationType = oModel.ProviderOptions.Where(x => x.ItemId == CompanyToUpsert.IdentificationType.ItemId).Select(x => x.ItemName).DefaultIfEmpty(string.Empty).FirstOrDefault();
+                        oCompanySurveyIndexModel.IdentificationTypeId = CompanyToUpsert.IdentificationType.ItemId;
 
-                    oCompanySurveyIndexModel.IdentificationType = oModel.ProviderOptions.Where(x => x.ItemId == CompanyToUpsert.IdentificationType.ItemId).Select(x => x.ItemName).DefaultIfEmpty(string.Empty).FirstOrDefault();
-                    oCompanySurveyIndexModel.IdentificationTypeId = CompanyToUpsert.IdentificationType.ItemId;
+                        oCompanySurveyIndexModel.LogoUrl = CompanyToUpsert.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.CompanyLogo).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault();
 
-                    oCompanySurveyIndexModel.LogoUrl = CompanyToUpsert.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.CompanyLogo).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault();
+                        #endregion
 
-                    #endregion
+                        oElasticResponse = client.CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanySurveyIndex].Value, c => c
+                            .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                            .Analysis(a => a.Analyzers(an => an.Custom("customWhiteSpace", anc => anc.Filters("asciifolding", "lowercase")
+                                .Tokenizer("whitespace")
+                                )).TokenFilters(tf => tf
+                                        .EdgeNGram("customEdgeNGram", engrf => engrf
+                                        .MinGram(1)
+                                        .MaxGram(10)))).NumberOfShards(1)
+                            ));
 
-                    oElasticResponse = client.CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanySurveyIndex].Value, c => c
-                        .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
-                        .Analysis(a => a.Analyzers(an => an.Custom("customWhiteSpace", anc => anc.Filters("asciifolding", "lowercase")
-                            .Tokenizer("whitespace")
-                            )).TokenFilters(tf => tf
-                                    .EdgeNGram("customEdgeNGram", engrf => engrf
-                                    .MinGram(1)
-                                    .MaxGram(10)))).NumberOfShards(1)
-                        ));
-
-                    Index = client.Index(oCompanySurveyIndexModel);
-
+                        Index = client.Index(oCompanySurveyIndexModel);
+                    }
                     #endregion
                 }
 
@@ -1803,10 +1814,10 @@ namespace BackOffice.Web.Controllers
             var oProjectConfig = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigGetByProvider(ProviderPublicId);
             BackOffice.Models.Provider.ProviderViewModel oModel = new ProviderViewModel();
             var oCPCCompany = new List<CatalogModel>();
-            var oCPCConfig = new List<CatalogModel>();            
-            
+            var oCPCConfig = new List<CatalogModel>();
+
             oProjectConfig.All(x =>
-            {                
+            {
                 oCPCCompany.Add(new CatalogModel()
                 {
                     CatalogId = 1,
@@ -1820,12 +1831,12 @@ namespace BackOffice.Web.Controllers
                     ItemId = x.CalificationProjectConfigId,
                     ItemName = x.CalificationProjectConfigName
                 });
-                
+
                 return true;
             });
-            oCPCCompany = oCPCCompany.GroupBy(x => x.ItemName).Select(x => x.First()).ToList();            
-            oModel.CPCCompany = new List<CatalogModel>(oCPCCompany);            
-            oModel.CPCConfig = new List< CatalogModel >(oCPCConfig);
+            oCPCCompany = oCPCCompany.GroupBy(x => x.ItemName).Select(x => x.First()).ToList();
+            oModel.CPCCompany = new List<CatalogModel>(oCPCCompany);
+            oModel.CPCConfig = new List<CatalogModel>(oCPCConfig);
 
             if (!string.IsNullOrEmpty(ProviderPublicId))
             {

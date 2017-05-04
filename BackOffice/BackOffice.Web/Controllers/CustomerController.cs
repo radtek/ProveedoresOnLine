@@ -1,4 +1,6 @@
 ﻿using BackOffice.Models.General;
+using Nest;
+using ProveedoresOnLine.Company.Models.Company;
 using ProveedoresOnLine.Company.Models.Util;
 using ProveedoresOnLine.CompanyProvider.Models.Provider;
 using System;
@@ -52,23 +54,65 @@ namespace BackOffice.Web.Controllers
 
             if (!string.IsNullOrEmpty(CustomerPublicId))
             {
-                //get provider info
+                //get Customer info
                 oModel.RelatedCustomer = new ProveedoresOnLine.CompanyCustomer.Models.Customer.CustomerModel()
                 {
                     RelatedCompany = ProveedoresOnLine.Company.Controller.Company.CompanyGetBasicInfo(CustomerPublicId),
                 };
 
-                //get provider menu
+                //get Customer menu
                 oModel.CustomerMenu = GetCustomerMenu(oModel);
             }
             //eval upsert action
             if (!string.IsNullOrEmpty(Request["UpsertAction"]) && Request["UpsertAction"].Trim() == "true")
             {
-                //get provider request info
+                //get Customer request info
                 ProveedoresOnLine.Company.Models.Company.CompanyModel CompanyToUpsert = GetCustomerRequest();
 
-                //upsert provider
+                //upsert Customer
                 CompanyToUpsert = ProveedoresOnLine.Company.Controller.Company.CompanyUpsert(CompanyToUpsert);
+
+                #region Index Customer
+
+                var oCompanyToIndex = new List<CompanyIndexModel>()
+                {
+                    new CompanyIndexModel()
+                    {
+                        CompanyPublicId = CompanyToUpsert.CompanyPublicId,
+                        CompanyName = CompanyToUpsert.CompanyName,
+                        IdentificationNumber = CompanyToUpsert.IdentificationNumber,                                              
+                        IdentificationType = oModel.CustomerOptions.Where(x=>x.ItemId == CompanyToUpsert.CompanyType.ItemId).Select(x=>x.ItemName).FirstOrDefault(),
+                        LogoUrl = BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DefaultImage].Value,
+                        CompanyEnable = CompanyToUpsert.Enable,
+                    }
+                };
+
+                Uri node = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
+                var settings = new ConnectionSettings(node);
+                settings.DefaultIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyCustomerIndex].Value);
+                ElasticClient client = new ElasticClient(settings);
+
+                ICreateIndexResponse oElasticResponse = client.
+                        CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyCustomerIndex].Value, c => c
+                        .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                        .Analysis(a => a.
+                            Analyzers(an => an.
+                                Custom("customWhiteSpace", anc => anc.
+                                    Filters("asciifolding", "lowercase").
+                                    Tokenizer("whitespace")
+                                        )
+                                    ).TokenFilters(tf => tf
+                                    .EdgeNGram("customEdgeNGram", engrf => engrf
+                                    .MinGram(1)
+                                    .MaxGram(10))
+                                )
+                            ).NumberOfShards(1)
+                        )
+                    );
+                client.Map<CompanyIndexModel>(m => m.AutoMap());
+                var Index = client.IndexMany(oCompanyToIndex, BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyCustomerIndex].Value);
+
+                #endregion
 
                 //eval redirect url
                 if (!string.IsNullOrEmpty(Request["StepAction"]) &&
