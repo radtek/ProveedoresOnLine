@@ -144,29 +144,17 @@ namespace BackOffice.Web.Controllers
 
                     var Index = client.Index(oCompanyToIndex);
 
-
-
                     #endregion
 
                     #region Index CustomerProvider
-
-                    CustomerProviderIndexModel
-                        oCustomerProviderToIndex = new CustomerProviderIndexModel()
-                        {
-                            CustomerProviderId = oCustomerModel.RelatedProvider.Where(x => x.RelatedProvider.CompanyPublicId == CompanyToUpsert.CompanyPublicId).Select(x => x.CustomerProviderId).DefaultIfEmpty(0).FirstOrDefault(),
-                            CustomerPublicId = oCustomerModel.RelatedCompany.CompanyPublicId,
-                            ProviderPublicId = oCustomerModel.RelatedProvider.Where(x => x.RelatedProvider.CompanyPublicId == CompanyToUpsert.CompanyPublicId).Select(x => x.RelatedProvider.CompanyPublicId).DefaultIfEmpty(string.Empty).FirstOrDefault(),
-                            CustomerProviderEnable = oCustomerModel.RelatedProvider.Where(x => x.RelatedProvider.CompanyPublicId == CompanyToUpsert.CompanyPublicId).Select(x => x.Enable).DefaultIfEmpty(false).FirstOrDefault(),
-                            StatusId = oCustomerModel.RelatedProvider.Where(x => x.RelatedProvider.CompanyPublicId == CompanyToUpsert.CompanyPublicId).Select(x => x.Status.ItemId).DefaultIfEmpty(0).FirstOrDefault(),
-                            Status = oModel.ProviderOptions.Where(x => x.ItemId == oCustomerModel.RelatedProvider.Where(y => y.RelatedProvider.CompanyPublicId == CompanyToUpsert.CompanyPublicId).Select(y => y.Status.ItemId).DefaultIfEmpty(0).FirstOrDefault()).Select(x => x.ItemName).DefaultIfEmpty(string.Empty).FirstOrDefault(),
-                        };
-                            Uri node2 = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+                    
+                    Uri node2 = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
                     var settings2 = new ConnectionSettings(node2);
-                    settings.DefaultIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CustomerProviderIndex].Value);
+                    settings2.DefaultIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CustomerProviderIndex].Value);
                     ElasticClient client2 = new ElasticClient(settings2);
 
                     ICreateIndexResponse oElasticResponse2 = client2.
-                            CreateIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CustomerProviderIndex].Value, c => c
+                            CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CustomerProviderIndex].Value, c => c
                             .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
                             .Analysis(a => a.
                                 Analyzers(an => an.
@@ -184,7 +172,7 @@ namespace BackOffice.Web.Controllers
                         );
                     client2.Map<CustomerProviderIndexModel>(m => m.AutoMap());
 
-                    var Index2 = client2.Index(oCustomerProviderToIndex);
+                    var Index2 = client2.Index(oCompanyToIndex.oCustomerProviderIndexModel.FirstOrDefault());
 
                     #endregion
 
@@ -193,7 +181,7 @@ namespace BackOffice.Web.Controllers
                     #region Model to index
 
                     ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel oCompanySurveyIndexModel = new ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel()
-                    {
+                    {                        
                         CompanyPublicId = CompanyToUpsert.CompanyPublicId,
                         CompanyName = CompanyToUpsert.CompanyName,
                         CommercialCompanyName = CompanyToUpsert.CompanyInfo.
@@ -315,16 +303,16 @@ namespace BackOffice.Web.Controllers
                     #endregion
 
                     #region Index CustomerProvider
+                    
+                      var  oCustomerProviderToIndex = oResult.Documents.FirstOrDefault().oCustomerProviderIndexModel;                                                                      
 
-                    List<CustomerProviderIndexModel> oCustomerProviderToIndex = ProveedoresOnLine.IndexSearch.Controller.IndexSearch.GetCustomerProviderIndex();
-
-                    Uri node2 = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+                    Uri node2 = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
                     var settings2 = new ConnectionSettings(node2);
                     settings.DefaultIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CustomerProviderIndex].Value);
                     ElasticClient client2 = new ElasticClient(settings2);
 
                     ICreateIndexResponse oElasticResponse2 = client2.
-                            CreateIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CustomerProviderIndex].Value, c => c
+                            CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CustomerProviderIndex].Value, c => c
                             .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
                             .Analysis(a => a.
                                 Analyzers(an => an.
@@ -342,7 +330,7 @@ namespace BackOffice.Web.Controllers
                         );
                     client2.Map<CustomerProviderIndexModel>(m => m.AutoMap());
 
-                    var Index2 = client2.IndexMany(oCustomerProviderToIndex, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CustomerProviderIndex].Value);
+                    var Index2 = client2.IndexMany(oCustomerProviderToIndex, BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CustomerProviderIndex].Value);
 
                     #endregion
 

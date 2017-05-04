@@ -41,13 +41,10 @@ namespace BackOffice.Web.ControllersApi
                 BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_Grid_RowCountDefault].Value :
                 RowCount.Trim());
 
-            int oTotalRows;
+            
 
             List<Tuple<string, string, string>> lstSearchFilter = new List<Tuple<string, string, string>>();
-            if (!string.IsNullOrEmpty(SearchFilter))
-            {
-                //lstSearchFilter = Models.Provider.ProviderSearchViewModel
-            }
+            
 
             #region Search Result Company
             Uri node = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
@@ -125,7 +122,9 @@ namespace BackOffice.Web.ControllersApi
                     #endregion
 
                     return qb;
-                }))));
+                }
+        )
+        )));
 
             #endregion
 
