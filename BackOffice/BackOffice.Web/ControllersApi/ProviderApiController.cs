@@ -2986,6 +2986,36 @@ namespace BackOffice.Web.ControllersApi
                     }
                     #endregion
 
+                    #region CustomerProviderIndex
+
+                    Uri node3 = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
+                    var settings3 = new ConnectionSettings(node3);
+                    settings3.DefaultIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CustomerProviderIndex].Value);
+                    ElasticClient client3 = new ElasticClient(settings3);
+
+                    ICreateIndexResponse oElasticResponse3 = client3.
+                            CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CustomerProviderIndex].Value, c => c
+                            .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                            .Analysis(a => a.
+                                Analyzers(an => an.
+                                    Custom("customWhiteSpace", anc => anc.
+                                        Filters("asciifolding", "lowercase").
+                                        Tokenizer("whitespace")
+                                            )
+                                        ).TokenFilters(tf => tf
+                                        .EdgeNGram("customEdgeNGram", engrf => engrf
+                                        .MinGram(1)
+                                        .MaxGram(10))
+                                    )
+                                ).NumberOfShards(1)
+                            )
+                        );
+                    client3.Map<CustomerProviderIndexModel>(m => m.AutoMap());
+
+                    var Index3 = client3.IndexMany(oCompanyIndexModel.oCustomerProviderIndexModel, BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CustomerProviderIndex].Value);
+
+                    #endregion
+
                     #region SurveyIndex
                     Uri node2 = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
                     var settings2 = new ConnectionSettings(node2);

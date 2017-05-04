@@ -38,6 +38,13 @@ namespace MarketPlace.Models.ThirdKnowledge
                 if (oUsers == null)
                 {
                     oUsers = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetUsersBycompanyPublicId(SessionModel.CurrentCompany.CompanyPublicId);
+                    if (SessionModel.CurrentCompanyLoginUser.RelatedCompany.FirstOrDefault().RelatedUser.FirstOrDefault().RelatedCompanyRole.ParentRoleCompany != null)
+                    {
+                        oUsers = new List<string>();
+                        oUsers.Add(SessionModel.CurrentCompanyLoginUser.RelatedUser.Email);
+                        
+                    }
+                   
                 }
                 return oUsers;
             }
