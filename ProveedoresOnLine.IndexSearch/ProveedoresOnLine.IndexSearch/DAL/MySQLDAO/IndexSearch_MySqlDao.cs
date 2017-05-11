@@ -15,11 +15,13 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
     {
         private ADO.Interfaces.IADO DataInstance;
         private ADO.Interfaces.IADO DataInstanceTopbls;
+        private ADO.Interfaces.IADO DataInstanceThirdKnowledge;
 
         public IndexSearch_MySqlDao()
         {
             DataInstance = new ADO.MYSQL.MySqlImplement(Models.Constants.C_POL_SearchConnectionName);
             DataInstanceTopbls = new ADO.MYSQL.MySqlImplement(Models.Constants.C_Topbls_SearchConnectionName);
+            DataInstanceThirdKnowledge = new ADO.MYSQL.MySqlImplement(Models.Constants.C_ThirdKnowledge_ConnectionName);
         }
 
         #region Company Index
@@ -473,6 +475,59 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                          Status = thkg.Key.Status,
                          ImageKey = thkg.Key.ImageKey,
 
+                     }).ToList();
+            }
+
+            return oReturn;
+        }
+
+        public List<TK_QueryIndexModel> GetAllQueryModelIndex()
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
+            
+            ADO.Models.ADOModelResponse response = DataInstanceThirdKnowledge.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "MP_TK_GetThirdknowledgeIndex",
+                CommandType = CommandType.StoredProcedure,
+                Parameters = lstParams,
+            });
+            List<TK_QueryIndexModel> oReturn = null;
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn =
+                    (from thk in response.DataTableResult.AsEnumerable()
+                     where !thk.IsNull("QueryId")
+                     group thk by new
+                     {
+                         QueryId = thk.Field<int>("QueryId"),
+                         QueryPublicId = thk.Field<string>("QueryPublicId"),
+                         PeriodId = thk.Field<int>("PeriodId"),
+                         SearchType = thk.Field<int>("SearchType"),
+                         User = thk.Field<string>("User"),
+                         QueryStatus = thk.Field<int>("QueryStatus"),
+                         FileName = thk.Field<string>("FileName"),
+                         IsSuccess = thk.Field<UInt64>("IsSuccess"),
+                         CreateDate = thk.Field<DateTime>("CreateDate"),
+                         LastModify = thk.Field<DateTime>("LastModify"),
+                         Enable = thk.Field<UInt64>("Enable"),
+                     }
+                     into thkg
+                     select new TK_QueryIndexModel()
+                     {
+                         QueryId = thkg.Key.QueryId,
+                         QueryPublicId = thkg.Key.QueryPublicId,
+                         PeriodId = thkg.Key.PeriodId,
+                         SearchType = thkg.Key.SearchType.ToString(),
+                         User = thkg.Key.User,
+                         QueryStatus = thkg.Key.QueryStatus.ToString(),
+                         FileName = thkg.Key.FileName,
+                         IsSuccess = thkg.Key.IsSuccess == 1 ? true : false,
+                         CreateDate = thkg.Key.CreateDate,
+                         LastModify = thkg.Key.LastModify,
+                         Enable = thkg.Key.Enable == 1 ? true : false
                      }).ToList();
             }
 
