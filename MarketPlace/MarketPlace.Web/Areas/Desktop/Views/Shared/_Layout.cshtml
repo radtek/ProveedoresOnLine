@@ -16,14 +16,9 @@
 
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-12 col-md-12">
+    <div class="container-fluid">       
                 <!--Render header-->
-                @Html.Partial(MVC.Desktop.Shared.Views.ViewNames._L_Header)
-            </div>
-        </div>
-
+                @Html.Partial(MVC.Desktop.Shared.Views.ViewNames._L_Header)           
         <div class="row">
             <div class="col-xs-12 col-md-12 POMPHeaderMenuSeparator"></div>
         </div>
@@ -59,7 +54,9 @@
     @Scripts.Render("~/site/scripts/bootstrap")
     @Scripts.Render("~/site/scripts/kendo")
     @Scripts.Render("~/site/scripts/rateit")
+    @Scripts.Render("~/site/scripts/angular")
     @Scripts.Render("~/site/scripts")
+    
     
     <script type="text/javascript">
         $(document).ready(function () {

@@ -16,15 +16,17 @@
     margin: 21px 0px 11px -11px;
     border: none;
 }
-#POMPLogoPositionTop{
+
+#POMPLogoPositionTop {
     margin-top: -19px;
 }
 /*************** USER MENU ***************/
 
 #POMPMenuIconHand {
-    cursor:pointer;
+    cursor: pointer;
     font-weight: lighter;
 }
+
 .POMPUserLogo {
     width: 20px;
 }
@@ -85,39 +87,40 @@
     z-index: 5;
 }
 
-#POMPMenuPositionTop{
+#POMPMenuPositionTop {
     margin-top: -19px;
 }
 
-    .POMPUserMenuOptions ul {
-        margin: 0px !important;
-        padding: 0 !important;
+.POMPUserMenuOptions ul {
+    margin: 0px !important;
+    padding: 0 !important;
+}
+
+    .POMPUserMenuOptions ul li {
+        border-top: 1px solid #3f3f3f;
+        display: block;
+        margin: 0px;
+        text-align: left;
+        min-width: 140px;
     }
 
-        .POMPUserMenuOptions ul li {
-            border-top: 1px solid #3f3f3f;
-            display: block;
-            margin: 0px;
-            text-align: left;
-            min-width: 140px;
+        .POMPUserMenuOptions ul li:first-child {
+            border-top: none;
         }
 
-            .POMPUserMenuOptions ul li:first-child {
-                border-top: none;
-            }
+        .POMPUserMenuOptions ul li:hover {
+            background-color: #ececec;
+            cursor: pointer;
+        }
 
-            .POMPUserMenuOptions ul li:hover {
-                background-color: #ececec;
-                cursor: pointer;
-            }
-
-            .POMPUserMenuOptions ul li a,
-            .POMPUserMenuOptions ul li a:hover {
-                margin: 0px 0px 0px 8px;
-                color: #666;
-                text-decoration: none;
-            }
+        .POMPUserMenuOptions ul li a,
+        .POMPUserMenuOptions ul li a:hover {
+            margin: 0px 0px 0px 8px;
+            color: #666;
+            text-decoration: none;
+        }
 /*************** MAIN MENU *************/
+
 .POMPMainMenuWrapper {
     border: none;
     height: auto;
@@ -125,7 +128,7 @@
     display: block;
     width: auto;
     padding: 0;
-    font-size:0.9em;
+    font-size: 0.9em;
 }
 
     .POMPMainMenuWrapper li {
@@ -149,10 +152,11 @@
             letter-spacing: -0.4px;
         }
 
-            .POMPMainMenuWrapper li a:hover, .POMPMainMenuWrapper > li.selected {
+            .POMPMainMenu li a:hover, .POMPMainMenu > li.selected {
                 text-decoration: none;
                 border-bottom: 2px solid #ff8300;
                 font-weight: normal !important;
+                color:#f35800;
             }
 
 li.spacers {
@@ -164,7 +168,7 @@ li.spacers {
 
 /**********************Notifications***********************/
 div#POMPNotifications {
-   /* width: 22px;
+    /* width: 22px;
     position: absolute;
     margin-left: 44%;
     height: 24px;*/
@@ -173,8 +177,8 @@ div#POMPNotifications {
 div#Notification img {
     width: 30px;
     height: 30px;
-    cursor:pointer;
-    color:white;
+    cursor: pointer;
+    color: white;
 }
 
 #POMPNotificationsList {
@@ -190,25 +194,29 @@ div#Notification img {
     border-radius: 3px;
     color: #ff8300;*/
 }
+
 .POMP_NotifyItemList {
     padding-bottom: 2px;
     padding-top: 2px;
-    border-color:#ddd;
+    border-color: #ddd;
 }
+
     .POMP_NotifyItemList > a {
-       cursor: pointer;
+        cursor: pointer;
         text-decoration: none;
         color: #C76600;
         margin: 0 0 0 6px;
-        font-size:11px;
+        font-size: 11px;
     }
-.POMP_NotifyItemList > a:hover{
-    cursor:pointer;
-    color:#ff8300;
-}
+
+        .POMP_NotifyItemList > a:hover {
+            cursor: pointer;
+            color: #ff8300;
+        }
+
 .POMP_NotifyItemListIcon {
     top: 3.3px;
-    color:#337ab7;
+    color: #337ab7;
 }
 
 
@@ -217,6 +225,46 @@ div#Notification img {
 /* LINE SEPARATOR HEADER */
 .POMPHeaderMenuSeparator {
     position: absolute;
-    top: 85px;
+    top: 89px;
     border-bottom: 1px solid #ff8300;
+}
+
+.navbar-brand {
+    height: 80px;
+}
+
+.nav > li > a {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding: 10px 5px;
+    font-size:0.93em;
+    color:#666;    
+}
+.navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus
+{
+    color:orange;
+}
+.navbar-toggle {
+    padding: 10px;
+    margin: 25px 15px 25px 0;
+    background-color:orange;
+}
+
+.navbar-inverse {
+    background-color: white;
+    border-color: white;
+}
+
+.navbar-brand>img {
+    height: 100%;
+    padding: 1px;
+    width: auto;
+}
+
+.POMPNavbar{
+    min-height:10px;
+    margin-bottom:1px;
+}
+.POMPMainMenu li> a:hover{
+
 }

@@ -883,127 +883,19 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
 
 
                         #region Create Detail
-                        oInfoCreate.IdentificationNumber = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty;
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = Query.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdNumberRequest,
-                        //    },
-                        //    Value = 
-                        //    Enable = true,
-                        //});
-                        oInfoCreate.QueryName = !string.IsNullOrEmpty(Name) ? Name : string.Empty;
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = Query.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.RequestName,
-                        //    },
-                        //    Value =
-                        //    Enable = true,
-                        //});
-                        oInfoCreate.AKA = !string.IsNullOrEmpty(x.AKA) ? x.AKA : string.Empty;
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = Query.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Alias,
-                        //    },
-                        //    Value = !string.IsNullOrEmpty(x.AKA) ? x.AKA : string.Empty,
-                        //    Enable = true,
-                        //});
-                        oInfoCreate.IdList = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = Query.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdList,
-                        //    },
-                        //    Value = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty,
-                        //    Enable = true,
-                        //});
+                        oInfoCreate.IdentificationNumber = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty;                        
+                        oInfoCreate.QueryName = !string.IsNullOrEmpty(Name) ? Name : string.Empty;                        
+                        oInfoCreate.AKA = !string.IsNullOrEmpty(x.AKA) ? x.AKA : string.Empty;                        
+                        oInfoCreate.IdList = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;                        
                         oInfoCreate.Priority = !string.IsNullOrEmpty(oInfoCreate.Priority) ? oInfoCreate.Priority : string.Empty;
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = Query.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Priotity,
-                        //    },
-                        //    Value = !string.IsNullOrEmpty(oInfoCreate.Priority) ? oInfoCreate.Priority : string.Empty,
-                        //    Enable = true,
-                        //});
-                        oInfoCreate.CreateDate = !string.IsNullOrEmpty(x.LastModify) ? DateTime.ParseExact(x.LastModify, "yyyyMMdd", CultureInfo.InvariantCulture) : new DateTime(0, 0, 0);
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = Query.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.RegisterDate,
-                        //    },
-                        //    Value = !string.IsNullOrEmpty(x.LastModify) ? x.LastModify : string.Empty,
-                        //    Enable = true,
-                        //});
-                        oInfoCreate.LastModify = !string.IsNullOrEmpty(x.LastModify) ? DateTime.ParseExact(x.LastModify,"yyyyMMdd",CultureInfo.InvariantCulture) : new DateTime(0, 0, 0);
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = Query.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.LastModifyDate,
-                        //    },
-                        //    Value = !string.IsNullOrEmpty(x.LastModify) ? x.LastModify : string.Empty,
-                        //    Enable = true,
-                        //});
-                        oInfoCreate.Offense = !string.IsNullOrEmpty(x.RelatedWiht) ? x.RelatedWiht : string.Empty;
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = Query.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Offense,
-                        //    },
-                        //    Value = !string.IsNullOrEmpty(x.RelatedWiht) ? x.RelatedWiht : string.Empty,
-                        //    Enable = true,
-                        //});
-                        oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(x.TypeId) ? x.TypeId : string.Empty;
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = Query.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdentificationNumberResult,
-                        //    },
-                        //    Value = !string.IsNullOrEmpty(x.TypeId) ? x.TypeId : string.Empty,
-                        //    Enable = true,
-                        //});
-                        oInfoCreate.Status = !string.IsNullOrEmpty(x.Status) ? x.Status : string.Empty;
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = Query.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Status,
-                        //    },
-                        //    Value = !string.IsNullOrEmpty(x.Status) ? x.Status : string.Empty,
-                        //    Enable = true,
-                        //});
 
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.QueryId,
-                        //    },
-                        //    Value = !string.IsNullOrEmpty(x.Registry.ToString()) ? x.Registry.ToString() : string.Empty,
-                        //    Enable = true,
-                        //});
+                        var createDate = new DateTime();
+                        oInfoCreate.CreateDate = DateTime.TryParseExact(x.LastModify, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out createDate)? createDate: new DateTime();
+                        oInfoCreate.LastModify = DateTime.TryParseExact(x.LastModify, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out createDate) ? createDate : new DateTime();
+
+                        oInfoCreate.Offense = !string.IsNullOrEmpty(x.RelatedWiht) ? x.RelatedWiht : string.Empty;                        
+                        oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(x.TypeId) ? x.TypeId : string.Empty;                        
+                        oInfoCreate.Status = !string.IsNullOrEmpty(x.Status) ? x.Status : string.Empty;                                                
                         oInfoCreate.GroupName = !string.IsNullOrEmpty(x.ListType) &&
                                      x.ListType.Contains("BOLETIN")
                                      || x.ListType == "FOREIGN CORRUPT PRACTICES ACT EEUU"
@@ -1051,93 +943,15 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                      || x.ListType == "PARTIDOS Y MOVIMIENTOS POLITICOS"
                                      || x.ListType == "PEPS INTERNACIONALES" ?
                                      x.ListType + " - Criticidad Baja" : "NA";
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.GroupName,
-                        //    },
-                        //    Value =
-                        //    Enable = true,
-                        //});
-                        oInfoCreate.GroupId = !string.IsNullOrEmpty(x.Code) ? x.Code : string.Empty;
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.GroupId,
-                        //    },
-                        //    Value = !string.IsNullOrEmpty(x.Code) ? x.Code : string.Empty,
-                        //    Enable = true,
-                        //});
-                        oInfoCreate.IdList = !string.IsNullOrEmpty(x.TableCodeID) ? x.TableCodeID : string.Empty;
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdList,
-                        //    },
-                        //    Value = !string.IsNullOrEmpty(x.TableCodeID) ? x.TableCodeID : string.Empty,
-                        //    Enable = true,
-                        //});
-                        oInfoCreate.Link = !string.IsNullOrEmpty(x.Source) ? x.Source : string.Empty;
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Link,
-                        //    },
-                        //    Value = !string.IsNullOrEmpty(x.Source) ? x.Source : string.Empty,
-                        //    Enable = true,
-                        //});
-                        oInfoCreate.FullName = !string.IsNullOrEmpty(x.CompleteName) ? x.CompleteName : string.Empty;
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.NameResult,
-                        //    },
-                        //    Value = !string.IsNullOrEmpty(x.CompleteName) ? x.CompleteName : string.Empty,
-                        //    Enable = true,
-                        //});
-                        oInfoCreate.ListName = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.ListName,
-                        //    },
-                        //    Value = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty,
-                        //    Enable = true,
-                        //});
-                        oInfoCreate.MoreInfo = !string.IsNullOrEmpty(x.ORoldescription1) || !string.IsNullOrEmpty(x.ORoldescription2) ? x.ORoldescription1 : string.Empty;
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.MoreInfo,
-                        //    },
-                        //    Value = !string.IsNullOrEmpty(x.ORoldescription1) || !string.IsNullOrEmpty(x.ORoldescription2) ? x.ORoldescription1 : string.Empty,
-                        //    Enable = true,
-                        //});
+                        
+                        oInfoCreate.GroupId = !string.IsNullOrEmpty(x.Code) ? x.Code : string.Empty;                        
+                        oInfoCreate.IdList = !string.IsNullOrEmpty(x.TableCodeID) ? x.TableCodeID : string.Empty;                        
+                        oInfoCreate.Link = !string.IsNullOrEmpty(x.Source) ? x.Source : string.Empty;                        
+                        oInfoCreate.FullName = !string.IsNullOrEmpty(x.CompleteName) ? x.CompleteName : string.Empty;                        
+                        oInfoCreate.ListName = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;                        
+                        oInfoCreate.MoreInfo = !string.IsNullOrEmpty(x.ORoldescription1) || !string.IsNullOrEmpty(x.ORoldescription2) ? x.ORoldescription1 : string.Empty;                        
                         oInfoCreate.Zone = !string.IsNullOrEmpty(x.NationalitySourceCountry) ? x.NationalitySourceCountry : string.Empty;
-                        //oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        //{
-                        //    QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                        //    ItemInfoType = new TDCatalogModel()
-                        //    {
-                        //        ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Zone,
-                        //    },
-                        //    Value = !string.IsNullOrEmpty(x.NationalitySourceCountry) ? x.NationalitySourceCountry : string.Empty,
-                        //    Enable = true,
-                        //});
+                        
                         #endregion
 
                         //Create Info Conincidences                                        
