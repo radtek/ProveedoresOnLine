@@ -85,6 +85,7 @@
     <Compile Include="Models\SurveyIndexSearchModel.cs" />
     <Compile Include="Models\SurveyInfoIndexSearchModel.cs" />
     <Compile Include="Models\ThirdknowledgeIndexSearchModel.cs" />
+    <Compile Include="Models\TK_QueryIndexModel.cs" />
     <Compile Include="Models\Util\InternalSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

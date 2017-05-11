@@ -286,6 +286,87 @@ namespace ProveedoresOnLine.IndexSearch.Controller
             return true;
         }
 
+        public static void QueryModelIndeAll()
+        {
+            List<TK_QueryIndexModel> oToIndex = DAL.Controller.IndexSearchDataController.Instance.GetAllQueryModelIndex();
+            try
+            {
+                LogFile("Start Process: " + "QueryIndex:::" + oToIndex.Count());
+
+                Uri node = new Uri(Models.Util.InternalSettings.Instance[Constants.C_Settings_ElasticSearchUrl].Value);
+                var settings = new ConnectionSettings(node);
+                settings.DefaultIndex(Models.Util.InternalSettings.Instance[Constants.C_Settings_TD_QueryIndex].Value);
+                ElasticClient client = new ElasticClient(settings);
+
+                ICreateIndexResponse oElasticResponse = client.
+                        CreateIndex(Models.Util.InternalSettings.Instance[Constants.C_Settings_TD_QueryIndex].Value, c => c
+                        .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                        .Analysis(a => a.
+                            Analyzers(an => an.
+                                Custom("customWhiteSpace", anc => anc.
+                                    Filters("asciifolding", "lowercase").
+                                    Tokenizer("whitespace")
+                                        )
+                                    ).TokenFilters(tf => tf
+                                    .EdgeNGram("customEdgeNGram", engrf => engrf
+                                    .MinGram(1)
+                                    .MaxGram(10))
+                                )
+                            ).NumberOfShards(1)
+                        )
+                    );
+                client.Map<TK_QueryIndexModel>(m => m.AutoMap());
+                var Index = client.IndexMany(oToIndex,Models.Util.InternalSettings.Instance[Constants.C_Settings_TD_QueryIndex].Value);
+            }
+            catch (Exception err)
+            {
+                LogFile("Index Process Failed for Company: " + err.Message + "Inner Exception::" + err.InnerException);
+            }
+            LogFile("Index Process Successfull for: " + oToIndex.Count());
+
+        }
+
+        public static void QueryModelIndexByItem(TK_QueryIndexModel oModelToIndex)
+        {            
+            try
+            {
+                if (oModelToIndex != null)
+                {
+                    LogFile("Start Process::: FunctionName::: QueryModelIndexByItem::: " + "QueryIndex By Item:::" + oModelToIndex.QueryPublicId);
+
+                    Uri node = new Uri(Models.Util.InternalSettings.Instance[Constants.C_Settings_ElasticSearchUrl].Value);
+                    var settings = new ConnectionSettings(node);
+                    settings.DefaultIndex(Models.Util.InternalSettings.Instance[Constants.C_Settings_TD_QueryIndex].Value);
+                    ElasticClient client = new ElasticClient(settings);
+
+                    ICreateIndexResponse oElasticResponse = client.
+                            CreateIndex(Models.Util.InternalSettings.Instance[Constants.C_Settings_TD_QueryIndex].Value, c => c
+                            .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                            .Analysis(a => a.
+                                Analyzers(an => an.
+                                    Custom("customWhiteSpace", anc => anc.
+                                        Filters("asciifolding", "lowercase").
+                                        Tokenizer("whitespace")
+                                            )
+                                        ).TokenFilters(tf => tf
+                                        .EdgeNGram("customEdgeNGram", engrf => engrf
+                                        .MinGram(1)
+                                        .MaxGram(10))
+                                    )
+                                ).NumberOfShards(1)
+                            )
+                        );
+                    client.Map<TK_QueryIndexModel>(m => m.AutoMap());
+                    var Index = client.Index(oModelToIndex);
+                }                
+            }
+            catch (Exception err)
+            {
+                LogFile("Index Process Failed for Company: " + err.Message + "Inner Exception::" + err.InnerException);
+            }
+            LogFile("Index Process Successfull for: " + oModelToIndex.QueryPublicId);
+        }
+
         #endregion
 
         #region LogFile

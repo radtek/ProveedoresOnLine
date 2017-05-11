@@ -8,5 +8,7 @@
     <key name="SurveyIndex">prod_surveyindex</key>
     <key name="CustomerProviderIndex">prod_customerproviderindex</key>
     <key name="ThirdknowledgeIndex">stg_thirdknowledgeindex</key>
+    <key name="QueryIndex">dev_queryindex</key>
   </IndexSearch>
 </Settings>
+

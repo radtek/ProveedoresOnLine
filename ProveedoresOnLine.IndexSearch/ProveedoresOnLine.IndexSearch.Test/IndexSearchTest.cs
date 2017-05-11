@@ -349,16 +349,7 @@ namespace ProveedoresOnLine.IndexSearch.Test
                 .From(0)
                 .Size(1)
                 .Query(q => q.QueryString(qs => qs.Query("1B686E34"))));
-
-            //Nest.ISearchResponse<CompanyIndexModel> oResult = CustomerProviderClient.Search<CompanyIndexModel>(s => s
-            //    .From(0)
-            //    .TrackScores(true)
-            //    .Size(1)
-            //    .Query(query => query.Filtered(filtered => filtered
-            //        .Query(q => q.MatchAll())
-            //        .Filter(f => f.Nested(nf => nf
-            //            .InnerHits()
-            //            .Path(p => p.CompanyPublicId == "1CA3A147"))))));
+           
         }
 
         #region Survey
@@ -555,6 +546,15 @@ namespace ProveedoresOnLine.IndexSearch.Test
             var Index = client.IndexMany(SurveyndexModelList, "prod_surveyindex");
         }
 
+
+        #endregion
+
+        #region Third Knowledge
+        [TestMethod]
+        public void QueryModelIndeAll()
+        {
+           Controller.IndexSearch.QueryModelIndeAll();            
+        }       
 
         #endregion
     }
