@@ -242,12 +242,12 @@ div#Notification img {
 }
 .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus
 {
-    color:orange;
+    color:#fb6d1a;
 }
 .navbar-toggle {
     padding: 10px;
     margin: 25px 15px 25px 0;
-    background-color:orange;
+    background-color:#ff8300;
 }
 
 .navbar-inverse {
@@ -265,6 +265,9 @@ div#Notification img {
     min-height:10px;
     margin-bottom:1px;
 }
-.POMPMainMenu li> a:hover{
-
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form{
+    
+    border:solid 1px #ff8300;
+    border-color:rgba(255,255,255,.4);
+    
 }
