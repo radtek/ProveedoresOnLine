@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using ProveedoresOnLine.Company.Models.Company;
+using ProveedoresOnLine.CalificationProject.Models.CalificationProject;
 
 namespace ProveedoresOnLine.CalificationBatch
 {
@@ -20,7 +21,7 @@ namespace ProveedoresOnLine.CalificationBatch
 
                 //Select All a la nueva tabla ObjNuevo
                 //cruzar ObjNuevo vs oCalificationProjectConfigModel oCalificationProjectConfigModel  == oCalificationProjectConfigModel  Cruzado
-                var oCalificationProjectConfigModel = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfig_GetAll();
+                List<CalificationProjectConfigModel> oCalificationProjectConfigModel = CalificationProject.Controller.CalificationProject.CalificationProjectConfig_GetAll();
                 var oRelatedProvider = new List<CompanyModel>();
 
                 oCalificationProjectConfigModel = oCalificationProjectConfigModel.Where(x => oCalificationProjectConfigInfoModel.Any(y => x.CalificationProjectConfigId == y.RelatedCalificationProjectConfig.CalificationProjectConfigId)).Select(x=>x).ToList();

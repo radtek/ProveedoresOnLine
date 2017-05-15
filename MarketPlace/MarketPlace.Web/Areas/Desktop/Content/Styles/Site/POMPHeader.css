@@ -262,7 +262,7 @@ div#Notification img {
 }
 
 .POMPNavbar{
-    min-height:10px;
+    min-height:10px;   
     margin-bottom:1px;
 }
 .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form{
@@ -270,4 +270,11 @@ div#Notification img {
     border:solid 1px #ff8300;
     border-color:rgba(255,255,255,.4);
     
+}
+.POMPHr
+{
+    border-color: white;
+    color: white;
+    margin-top: 20px;
+    width: auto;
 }
