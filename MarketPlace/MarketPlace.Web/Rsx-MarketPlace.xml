@@ -51,6 +51,8 @@
     <key name="SurveyIndex">prod_surveyindex</key>
 
     <key name="ProviderGeneralReportSize">20000000</key>
+    
+    <key name="QueryIndex">dev_queryindex</key>
       
     <key name="Desktop_Analytics">
       <![CDATA[

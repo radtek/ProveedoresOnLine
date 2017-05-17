@@ -112,9 +112,9 @@
 
         public const string C_Settings_CompanySurveyIndex = "CompanySurveyIndex";
 
-        public const string C_Settings_SurveyIndex = "SurveyIndex";
+        public const string C_Settings_SurveyIndex = "SurveyIndex";        
 
-        public const string C_Settings_ProviderGeneralReport = "ProviderGeneralReportSize";
+        public const string C_Settings_QueryModelIndex = "QueryIndex";
 
         #endregion
 
@@ -143,6 +143,8 @@
         #endregion
 
         #region Report
+
+        public const string C_Settings_ProviderGeneralReport = "ProviderGeneralReportSize";
 
         public const string MP_CP_ReportPath = "MP_CP_ReportPath";
 

@@ -548,15 +548,7 @@ namespace ProveedoresOnLine.IndexSearch.Test
 
 
         #endregion
-
-        #region Third Knowledge
-        [TestMethod]
-        public void QueryModelIndeAll()
-        {
-           Controller.IndexSearch.QueryModelIndeAll();            
-        }       
-
-        #endregion
+       
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿using MarketPlace.Models.General;
 using MarketPlace.Models.ThirdKnowledge;
+using ProveedoresOnLine.IndexSearch.Models;
 using ProveedoresOnLine.ThirdKnowledge.Models;
 using System;
 using System.Collections.Generic;
@@ -90,6 +91,6 @@ namespace MarketPlace.Models.Provider
         public ProviderCalificationViewModel ProviderCalification { get; set; }
 
         public string RelatedSurveyProviders { get; set; }
-        public string ViewMessage { get; set; }
+        public string ViewMessage { get; set; }       
     }
 }

@@ -10,7 +10,7 @@
     @*ESTE ES QUE TRAE EL PARCIAL QUE PINTA EL MENU LATERAL*@
     <div class="POMPProviderSideMenuWrapper">
         @Html.Partial(MVC.Desktop.Shared.Views._P_ProviderMenu, Model)
-    </div>
+    </div>   
 
     <div class="POMPProviderDataWrapper">
         <label class="POMPSectionTitles">Mis Consultas</label>
@@ -53,7 +53,7 @@
                 }
             }
 
-            <div class="row POMPTKSearchContainer">
+            @*<div class="row POMPTKSearchContainer">
                 <div class="col-sm-2 TKSearchRow">
                     <span>Desde:</span>
                     <br />
@@ -109,7 +109,7 @@
                 <div class="col-sm-2 TKSearchRow">
                     <input class="TKSearchButton" type="button" name="ThirdKnowledge_FilterId" id="ThirdKnowledge_FilterId" value="Filtrar" />
                 </div>
-            </div>
+            </div>*@
             <div class="row POMPSearchResultsPager POMPTKSearchPager">
                 <div class="col-sm-12 text-right">
                     <!--Pager-->

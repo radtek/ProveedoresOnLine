@@ -18,8 +18,12 @@ namespace ProveedoresOnLine.IndexSearch.Models
         [String]
         public string SearchType { get; set; }
 
-        [String]
+        [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
         public string User { get; set; }
+
+
+        [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
+        public string CustomerPublicId { get; set; }
 
         [String]
         public string QueryStatus { get; set; }

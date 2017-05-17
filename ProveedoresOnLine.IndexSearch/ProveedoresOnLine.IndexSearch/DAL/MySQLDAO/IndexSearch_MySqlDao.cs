@@ -503,6 +503,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                      group thk by new
                      {
                          QueryId = thk.Field<int>("QueryId"),
+                         CustomerPublicId = thk.Field<string>("CustomerPublicId"),
                          QueryPublicId = thk.Field<string>("QueryPublicId"),
                          PeriodId = thk.Field<int>("PeriodId"),
                          SearchType = thk.Field<int>("SearchType"),
@@ -518,10 +519,11 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                      select new TK_QueryIndexModel()
                      {
                          QueryId = thkg.Key.QueryId,
+                         CustomerPublicId = thkg.Key.CustomerPublicId,
                          QueryPublicId = thkg.Key.QueryPublicId,
                          PeriodId = thkg.Key.PeriodId,
                          SearchType = thkg.Key.SearchType.ToString(),
-                         User = thkg.Key.User,
+                         User = thkg.Key.User.ToString(),
                          QueryStatus = thkg.Key.QueryStatus.ToString(),
                          FileName = thkg.Key.FileName,
                          IsSuccess = thkg.Key.IsSuccess == 1 ? true : false,

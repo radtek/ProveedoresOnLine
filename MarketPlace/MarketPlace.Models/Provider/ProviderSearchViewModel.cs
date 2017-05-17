@@ -54,7 +54,7 @@ namespace MarketPlace.Models.Provider
 
         public Nest.ISearchResponse<CustomerProviderIndexModel> ElasticCustomerProviderModel { get; set; }
      
-        public Nest.ISearchResponse<CompanySurveyIndexModel> ElasticCompanySurveyModel { get; set; }
+        public Nest.ISearchResponse<CompanySurveyIndexModel> ElasticCompanySurveyModel { get; set; }        
 
         public string RelatedSurveyProviders { get; set; }
 

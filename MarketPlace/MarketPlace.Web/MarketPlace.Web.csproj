@@ -698,6 +698,9 @@
     <Content Include="Areas\Desktop\Content\rateit\delete.gif" />
     <Content Include="Areas\Desktop\Content\rateit\rateit.css" />
     <Content Include="Areas\Desktop\Content\rateit\star.gif" />
+    <Content Include="Areas\Desktop\Views\ThirdKnowledge\TK_App\TK_Controller.js" />
+    <Content Include="Areas\Desktop\Views\ThirdKnowledge\TK_App\TK_Module.js" />
+    <Content Include="Areas\Desktop\Views\ThirdKnowledge\TK_App\TK_Service.js" />
     <Content Include="Content\ui-bootstrap-csp.css" />
     <Content Include="favicon.ico" />
     <Content Include="Areas\Desktop\fonts\glyphicons-halflings-regular.svg" />
@@ -1291,6 +1294,7 @@
     <Content Include="Areas\Desktop\Views\Shared\_CD_CustomField_101003.cshtml" />
     <Content Include="Areas\Desktop\Views\Shared\_P_Search_Survey.cshtml" />
     <Content Include="Areas\Desktop\Views\Survey\SurveySearchProgram.cshtml" />
+    <Content Include="Areas\Desktop\Views\Shared\_TK_Search_Filter.cshtml" />
     <None Include="Properties\PublishProfiles\Alex-JP MP.pubxml" />
     <None Include="Properties\PublishProfiles\David MP.pubxml" />
     <None Include="Properties\PublishProfiles\DiegoF.pubxml" />
