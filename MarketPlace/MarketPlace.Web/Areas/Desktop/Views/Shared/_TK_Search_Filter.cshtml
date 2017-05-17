@@ -1,0 +1,107 @@
+﻿@model MarketPlace.Models.ThirdKnowledge.ThirdKnowledgeViewModel
+
+@{
+    List<Tuple<string, string, string>> lstSearchFilter = Model.GetlstSearchFilter();
+
+    //new function
+    List<int> oCurrentModule = MarketPlace.Models.General.SessionModel.CurrentUserModules();
+    List<int> oCurrentMenu = MarketPlace.Models.General.SessionModel.CurrentProviderMenu();
+    List<int> oCurrentSubMenu = MarketPlace.Models.General.SessionModel.CurrentProviderSubMenu((int)MarketPlace.Models.General.enumProviderMenu.GeneralInfo);
+}
+
+@if (!Model.RenderScripts)
+{
+    <span class="POMPSideBlockTitle">Filtrar Por:</span>
+    <ul class="POMPFilterCategoryList">
+        @*new funtion*@
+        @*//User Filter*@
+        @{
+            if (Model.UserFilter != null && Model.UserFilter.Count > 0)
+            {
+                <li>
+                    <span>Usuario</span>
+                    <ul>
+                        @foreach (var oFilterItem in Model.UserFilter)
+                        {
+                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
+                            {
+                        <li>
+                            <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
+                            <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                        </li>
+                            }
+                            else
+                            {
+                                if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
+                                {
+                        <li>
+                            <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
+                            <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                        </li>
+                                }
+                            }
+                        }
+                    </ul>
+                </li>
+            }
+
+            if (Model.QueryStatusFilter != null && Model.QueryStatusFilter.Count > 0)
+            {
+                <li>
+                    <span>Estado</span>
+                    <ul>
+                        @foreach (var oFilterItem in Model.QueryStatusFilter)
+                        {
+                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
+                            {
+                                <li>
+                                    <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
+                                    <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                </li>
+                            }
+                            else
+                            {
+                                if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
+                                {
+                                    <li>
+                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
+                                        <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                    </li>
+                                }
+                            }
+                        }
+                    </ul>
+                </li>
+            }
+
+            if (Model.QueryTypeFilter != null && Model.QueryTypeFilter.Count > 0)
+            {
+                <li>
+                    <span>Tipo de Consulta</span>
+                    <ul>
+                        @foreach (var oFilterItem in Model.QueryTypeFilter)
+                        {
+                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
+                            {
+                                <li>
+                                    <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
+                                    <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                </li>
+                            }
+                            else
+                            {
+                                if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
+                                {
+                                    <li>
+                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
+                                        <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                    </li>
+                                }
+                            }
+                        }
+                    </ul>
+                </li>
+            }
+        }
+    </ul>
+}

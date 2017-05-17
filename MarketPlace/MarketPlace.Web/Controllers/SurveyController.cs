@@ -31,12 +31,12 @@ namespace MarketPlace.Web.Controllers
 
             //get survey info
             if (oModel.RelatedSurvey.RelatedSurvey.ParentSurveyPublicId == null)
-            {            
+            {
                 oModel.RelatedSurvey = new SurveyViewModel(
                     ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetByUser
                     (SurveyPublicId, SessionModel.CurrentCompany.RelatedUser.FirstOrDefault().User));
             }
-            
+
             List<GenericItemInfoModel> oAssignedAreas = oModel.RelatedSurvey.RelatedSurvey.SurveyInfo.Where(inf => inf.ItemInfoType.ItemId == (int)enumSurveyInfoType.CurrentArea).Select(inf => inf).ToList();
             oAssignedAreas = oAssignedAreas.GroupBy(x => x.ItemInfoId).Select(grp => grp.First()).ToList();
 
@@ -192,11 +192,12 @@ namespace MarketPlace.Web.Controllers
                         .Field(fi => fi.SurveyTypeId)))
                 .Query(q => q.
                     Filtered(f => f
-                     .Query(qi => qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId)))
+                    //.Query(qi => qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId)))
                     .Filter(f2 =>
                     {
                         QueryContainer qb = null;
 
+                        qb &= q.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId));
                         #region Status Srv Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y).FirstOrDefault() != null)
                         {

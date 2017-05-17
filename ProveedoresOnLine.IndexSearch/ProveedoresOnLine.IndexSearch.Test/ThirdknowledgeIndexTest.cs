@@ -16,6 +16,12 @@ namespace ProveedoresOnLine.IndexSearch.Test
         public void IndexThirdKnowledge()
         {
             ProveedoresOnline.ThirdknowledgeIndexSearch.ThirdknowledgeIndexProcess.StartProcess();           
+        }
+        
+        [TestMethod]
+        public void QueryModelIndeAll()
+        {
+            Controller.IndexSearch.QueryModelIndeAll();
         }        
     }
 }

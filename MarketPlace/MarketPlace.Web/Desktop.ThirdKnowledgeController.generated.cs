@@ -204,6 +204,17 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             public readonly string TKSingleSearch = "~/Areas/Desktop/Views/ThirdKnowledge/TKSingleSearch.cshtml";
             public readonly string TKThirdKnowledgeDetail = "~/Areas/Desktop/Views/ThirdKnowledge/TKThirdKnowledgeDetail.cshtml";
             public readonly string TKThirdKnowledgeSearch = "~/Areas/Desktop/Views/ThirdKnowledge/TKThirdKnowledgeSearch.cshtml";
+            static readonly _TK_AppClass s_TK_App = new _TK_AppClass();
+            public _TK_AppClass TK_App { get { return s_TK_App; } }
+            [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+            public partial class _TK_AppClass
+            {
+                static readonly _ViewNamesClass s_ViewNames = new _ViewNamesClass();
+                public _ViewNamesClass ViewNames { get { return s_ViewNames; } }
+                public class _ViewNamesClass
+                {
+                }
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using MarketPlace.Models.General;
 using MarketPlace.Models.ThirdKnowledge;
+using ProveedoresOnLine.IndexSearch.Models;
 using ProveedoresOnLine.ThirdKnowledge.Models;
 using System;
 using System.Collections.Generic;
@@ -136,6 +137,38 @@ namespace MarketPlace.Models.ThirdKnowledge
         public ThirdKnowledgeViewModel()
         {
 
-        }      
+        }
+
+        #region Indexation properties
+
+        public Nest.ISearchResponse<TK_QueryIndexModel> ElasticQueryModel { get; set; }
+
+        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> QueryStatusFilter { get; set; }
+        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> InitDateFilter { get; set; }
+        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> EndDateFilter { get; set; }
+        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> DomainFilter { get; set; }
+        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> UserFilter { get; set; }
+        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> QueryTypeFilter { get; set; }
+        #endregion
+
+        public string SearchFilter { get; set; }
+
+        public List<Tuple<string, string, string>> GetlstSearchFilter()
+        {
+            List<Tuple<string, string, string>> oReturn = new List<Tuple<string, string, string>>();
+
+            if (!string.IsNullOrEmpty(SearchFilter))
+            {
+                oReturn = SearchFilter.Replace(" ", "").
+                    Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).
+                    Where(x => x.IndexOf(';') >= 0).
+                    Select(x => new Tuple<string, string, string>(x.Split(';')[0], x.Split(';')[1], x.Split(';')[2])).
+                    Where(x => !string.IsNullOrEmpty(x.Item1) && !string.IsNullOrEmpty(x.Item2) && !string.IsNullOrEmpty(x.Item3)).
+                    ToList();
+            }
+
+            return oReturn;
+        }
+
     }
 }
