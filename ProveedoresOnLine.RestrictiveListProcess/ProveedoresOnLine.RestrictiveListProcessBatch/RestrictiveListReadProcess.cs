@@ -889,9 +889,9 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                         oInfoCreate.IdList = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;                        
                         oInfoCreate.Priority = !string.IsNullOrEmpty(oInfoCreate.Priority) ? oInfoCreate.Priority : string.Empty;
 
-                        var createDate = new DateTime();
-                        oInfoCreate.CreateDate = DateTime.TryParseExact(x.LastModify, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out createDate)? createDate: new DateTime();
-                        oInfoCreate.LastModify = DateTime.TryParseExact(x.LastModify, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out createDate) ? createDate : new DateTime();
+                        
+                        oInfoCreate.CreateDate = DateTime.Now;
+                        oInfoCreate.LastModify = DateTime.Now;
 
                         oInfoCreate.Offense = !string.IsNullOrEmpty(x.RelatedWiht) ? x.RelatedWiht : string.Empty;                        
                         oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(x.TypeId) ? x.TypeId : string.Empty;                        

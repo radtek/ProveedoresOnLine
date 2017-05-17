@@ -264,6 +264,7 @@ div#Notification img {
 .POMPNavbar{
     min-height:10px;   
     margin-bottom:1px;
+    list-style: none;
 }
 .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form{
     

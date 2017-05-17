@@ -96,7 +96,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                         {
                             oRelatedCalificationProjectItemModel.CalificatioProjectItemInfoModel.Where(mprule => mprule.CalificationProjectConfigItemInfoModel.CalificationProjectConfigItemInfoId == rule.CalificationProjectConfigItemInfoId).All(mprule =>
                             {
-                                //add mp rule
+                                //update mp rule
                                 oFinancialProviderInfo = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.FinancialModuleInfo(CompanyPublicId, rule.Question.ItemId);
 
                                 oFinancialProviderInfo.Where(pinf => pinf != null).All(pinf =>
@@ -123,7 +123,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                 }
                                                 else
                                                 {
-                                                    FinancialScore = 0;
+                                                    mprule.ItemInfoScore = 0;
                                                 }
 
                                                 break;
@@ -148,7 +148,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                 }
                                                 else
                                                 {
-                                                    FinancialScore = 0;
+                                                    mprule.ItemInfoScore = 0;
                                                 }
 
                                                 break;
@@ -179,7 +179,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -204,7 +204,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -229,7 +229,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -265,7 +265,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -290,7 +290,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -315,7 +315,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -351,7 +351,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -376,7 +376,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -401,7 +401,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -437,7 +437,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -462,7 +462,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -487,7 +487,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -523,7 +523,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -548,7 +548,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -573,7 +573,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -593,7 +593,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                             mprule.ItemInfoScore = FinancialScore;
                                                         }
                                                         else
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         break;
 
                                                     #endregion
@@ -635,7 +635,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -668,7 +668,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -701,7 +701,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -737,7 +737,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -760,7 +760,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -787,7 +787,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            FinancialScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -810,7 +810,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                         }
                         else
                         {
-                            //run rule
+                            //run new update rule
                             oFinancialProviderInfo = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.FinancialModuleInfo(CompanyPublicId, rule.Question.ItemId);
 
                             oFinancialProviderInfo.Where(pinf => pinf != null).All(pinf =>
@@ -1746,6 +1746,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                 }
                 else
                 {
+                    //run new mp rule
                     oReturn.CalificatioProjectItemInfoModel = new List<CalificationProjectItemInfoBatchModel>();
 
                     oCalificationProjectItemModel.CalificationProjectConfigItemInfoModel.All(cpitinf =>
