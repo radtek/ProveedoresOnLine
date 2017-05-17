@@ -6,14 +6,8 @@ namespace ProveedoresOnLine.IndexSearch.Models
     [ElasticsearchType(Name = "queryindexmodel_model")]
     public class TK_QueryIndexModel
     {
-        [Number]
-        public int QueryId { get; set; }
-
         [String]
         public string QueryPublicId { get; set; }
-
-        [Number]
-        public int PeriodId { get; set; }
 
         [String]
         public string SearchType { get; set; }
