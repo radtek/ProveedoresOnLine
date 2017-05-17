@@ -1,5 +1,5 @@
 ﻿@if (MarketPlace.Models.General.SessionModel.UserIsLoggedIn &&
-                                                                                        MarketPlace.Models.General.SessionModel.IsUserAuthorized())
+                                                                                                    MarketPlace.Models.General.SessionModel.IsUserAuthorized())
 {
     //get company logo
     string strCompanyLogo = MarketPlace.Models.General.SessionModel.CurrentCompany_CompanyLogo;
@@ -15,62 +15,51 @@
 
     //get header menu
     List<MarketPlace.Models.General.GenericMenu> oHeaderMenu = (ViewContext.Controller as MarketPlace.Web.Controllers.BaseController).GetHeaderMenu();
-    
-    <div class="example3">
-        <nav class="navbar navbar-inverse navbar-static-top">
-            
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar3">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/Customer">
-                    <img src="@strCompanyLogo">
-                </a>
-            </div>
-            <div id="navbar3" class="navbar-collapse collapse">
-                
-                   <ul class="navbar navbar-right POMPNavbar">
-                       <li class="dropdown">
-                           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><img class="POMPUserLogo" src="@strUserLogo" /><span>  Bienvenido: </span>@MarketPlace.Models.General.SessionModel.CurrentLoginUser.Name<span class="caret"></span></a>
-                           <ul class="dropdown-menu" role="menu">
-                               <li><a href="@(Url.RouteUrl(MarketPlace.Models.General.Constants.C_Routes_Default,
-                                    new
-                                    {
-                                        controller = MVC.Home.Name,
-                                        action = MVC.Home.ActionNames.LogOutUser
-                                    }))">Salir</a></li>
-                               
-                           </ul>
-</ul>                
-                <ul class="nav navbar-nav navbar-right POMPMainMenu">
-                    @foreach (MarketPlace.Models.General.GenericMenu oMenuItem in oHeaderMenu.OrderBy(x => x.Position))
-                    {
-                        string strSelectedClass = string.Empty;
-                        if (oMenuItem.IsSelected)
-                        {
-                            strSelectedClass = "selected";
-                        }
-                        <li class="@strSelectedClass"><a href="@oMenuItem.Url">@oMenuItem.Name</a></li>
-                    }                    
-                </ul>
-            </div>
-            <!--/.nav-collapse -->
-        </nav>
-        <div class="POMPUserMenuOptions" id="divHeader_UserMenu" style="display:none;">
-            <ul>
-                <li>
-                    <a href="@(Url.RouteUrl(MarketPlace.Models.General.Constants.C_Routes_Default,
+
+    <nav class="navbar navbar-inverse navbar-static-top">
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar3">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/Customer">
+                <img src="@strCompanyLogo">
+            </a>
+        </div>
+        <div id="navbar3" class="navbar-collapse collapse">
+
+            <ul class="navbar navbar-right POMPNavbar">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><img class="POMPUserLogo" src="@strUserLogo" /><span>  Bienvenido: </span>@MarketPlace.Models.General.SessionModel.CurrentLoginUser.Name<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="@(Url.RouteUrl(MarketPlace.Models.General.Constants.C_Routes_Default,
                                     new
                                     {
                                         controller = MVC.Home.Name,
                                         action = MVC.Home.ActionNames.LogOutUser
                                     }))">Salir</a>
-                </li>
+                        </li>
+
+                    </ul>
+            </ul>
+            <hr class="POMPHr"/>
+            <ul class="nav navbar-nav navbar-right POMPMainMenu">
+                @foreach (MarketPlace.Models.General.GenericMenu oMenuItem in oHeaderMenu.OrderBy(x => x.Position))
+                {
+                    string strSelectedClass = string.Empty;
+                    if (oMenuItem.IsSelected)
+                    {
+                        strSelectedClass = "selected";
+                    }
+                    <li class="@strSelectedClass"><a href="@oMenuItem.Url">@oMenuItem.Name</a></li>
+                }
             </ul>
         </div>
-    </div>
+        <!--/.nav-collapse -->
+    </nav>
 
 }

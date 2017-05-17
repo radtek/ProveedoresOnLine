@@ -156,7 +156,7 @@ namespace MarketPlace.Web.Controllers
                             controller = MVC.Stats.Name,
                             action = MVC.Stats.ActionNames.STProviderStats
                         }),
-                    IsSelected = (CurrentControllerName == MVC.Stats.ActionNames.STProviderStats),
+                    IsSelected = (CurrentActionName == MVC.Stats.ActionNames.STProviderStats),
                 });
                 oPosition++;
             }
@@ -175,7 +175,7 @@ namespace MarketPlace.Web.Controllers
                             controller = MVC.ThirdKnowledge.Name,
                             action = MVC.ThirdKnowledge.ActionNames.TKSingleSearch
                         }),
-                    IsSelected = (CurrentControllerName == MVC.ThirdKnowledge.ActionNames.TKSingleSearch),
+                    IsSelected = (CurrentActionName == MVC.ThirdKnowledge.ActionNames.TKSingleSearch),
                 });
                 oPosition++;
             }
@@ -194,7 +194,7 @@ namespace MarketPlace.Web.Controllers
                             controller = MVC.Report.Name,
                             action = MVC.Report.ActionNames.RP_SV_SurveyGeneralInfoReport
                         }),
-                    IsSelected = (CurrentControllerName == MVC.Report.ActionNames.PRGeneral),
+                    IsSelected = (CurrentActionName == MVC.Report.ActionNames.RP_SV_SurveyGeneralInfoReport),
                 });
                 oPosition++;
             }

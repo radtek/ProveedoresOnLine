@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MarketPlace.Models.Provider
 {
-    [DataContract]
+    
     public class ProviderLiteViewModel
     {
         public ProviderLiteViewModel()

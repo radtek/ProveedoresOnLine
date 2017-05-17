@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nest;
+using ProveedoresOnLine.IndexSearch.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
