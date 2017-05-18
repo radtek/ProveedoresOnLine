@@ -105,17 +105,49 @@
 
             <li>
                 <span>Filtro por fechas</span>
-                <ul>
-                    <li>
-                        <span>Desde </span>
-                        <input type="date" id="dt_Filter_From" name="name" value="" />
-                    </li>
-                    <li>
-                        <span>Hasta </span>
-                        <input type="date" id="dt_Filter_To" name="name" value="" />
-                    </li>
-                </ul>
+                <form action="/" method="post">
+                    <ul>
+                        <li>
+                            <span>Desde </span>
+                            <input type="date" id="dt_Filter_From" name="name" value="" />
+                        </li>
+                        <li>
+                            <span>Hasta </span>
+                            <input type="date" id="dt_Filter_To" name="name" value="" />
+                        </li>
+                    </ul>
+                    <input type="submit" name="frm_DateFilter" value="" />
+                </form>
             </li>
+
+            if (Model.DomainFilter != null && Model.DomainFilter.Count > 0)
+            {
+                <li>
+                    <span>Dominio</span>
+                    <ul>
+                        @foreach (var oFilterItem in Model.DomainFilter)
+                        {
+                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
+                            {
+                                <li>
+                                    <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
+                                    <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                </li>
+                            }
+                            else
+                            {
+                                if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
+                                {
+                                    <li>
+                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
+                                        <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                    </li>
+                                }
+                            }
+                        }
+                    </ul>
+                </li>
+            }
         }
     </ul>
 }
