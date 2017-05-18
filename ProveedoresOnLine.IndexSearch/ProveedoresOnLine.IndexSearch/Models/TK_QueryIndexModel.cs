@@ -3,6 +3,7 @@ using System;
 
 namespace ProveedoresOnLine.IndexSearch.Models
 {
+    
     [ElasticsearchType(Name = "queryindexmodel_model")]
     public class TK_QueryIndexModel
     {
@@ -34,5 +35,23 @@ namespace ProveedoresOnLine.IndexSearch.Models
         public DateTime LastModify { get; set; }
 
         public bool Enable { get; set; }
+
+        public TK_QueryIndexModel()
+        {
+        }
+
+        public TK_QueryIndexModel(ProveedoresOnLine.ThirdKnowledge.Models.TDQueryModel oTDQueryModel)
+        {
+            this.QueryPublicId = oTDQueryModel.QueryPublicId;
+            this.SearchType = oTDQueryModel.SearchType.ItemId.ToString();
+            this.CustomerPublicId = oTDQueryModel.CompayPublicId;
+            this.QueryStatus = oTDQueryModel.QueryStatus.ItemId.ToString();
+            this.FileName = oTDQueryModel.FileName;
+            this.IsSuccess = oTDQueryModel.IsSuccess;
+            this.CreateDate = oTDQueryModel.CreateDate;
+            this.LastModify = oTDQueryModel.LastModify;
+            this.Enable = oTDQueryModel.Enable;
+            this.User = oTDQueryModel.User;
+        }
     }
 }
