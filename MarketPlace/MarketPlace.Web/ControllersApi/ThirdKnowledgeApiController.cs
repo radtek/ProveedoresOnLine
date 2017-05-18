@@ -2,10 +2,12 @@
 using MarketPlace.Models.General;
 using MarketPlace.Models.Provider;
 using MarketPlace.Models.ThirdKnowledge;
+using Nest;
 using NetOffice.ExcelApi;
 using NetOffice.ExcelApi.Enums;
 using OfficeOpenXml;
 using ProveedoresOnLine.Company.Models.Util;
+using ProveedoresOnLine.IndexSearch.Models;
 using ProveedoresOnLine.ThirdKnowledge.Models;
 using System;
 using System.Collections.Generic;
@@ -50,6 +52,7 @@ namespace MarketPlace.Web.ControllersApi
                             //Save Query
                             TDQueryModel oQueryToCreate = new TDQueryModel()
                             {
+                                CompayPublicId = SessionModel.CurrentCompany.CompanyPublicId,
                                 IsSuccess = true,
                                 PeriodPublicId = oModel.RelatedThirdKnowledge.CurrentPlanModel.RelatedPeriodModel.FirstOrDefault().PeriodPublicId,
                                 SearchType = new TDCatalogModel()
@@ -75,6 +78,37 @@ namespace MarketPlace.Web.ControllersApi
                             var qTask = await Task.WhenAll(ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(oCurrentPeriodList.FirstOrDefault().
                                             RelatedPeriodModel.FirstOrDefault().PeriodPublicId, IdType,
                                            rIdNumber, rNamer, oQueryToCreate)).ConfigureAwait(false);
+                            #region Index TDQueryInfo
+
+                            var oModelToIndex = new ProveedoresOnLine.IndexSearch.Models.TK_QueryIndexModel(oQueryToCreate);
+
+                            Uri node = new Uri(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
+                            var settings = new ConnectionSettings(node);
+                            settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_QueryModelIndex].Value);
+                            ElasticClient client = new ElasticClient(settings);
+
+                            ICreateIndexResponse oElasticResponse = client.
+                                    CreateIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_QueryModelIndex].Value, c => c
+                                    .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                                    .Analysis(a => a.
+                                        Analyzers(an => an.
+                                            Custom("customWhiteSpace", anc => anc.
+                                                Filters("asciifolding", "lowercase").
+                                                Tokenizer("whitespace")
+                                                    )
+                                                ).TokenFilters(tf => tf
+                                                .EdgeNGram("customEdgeNGram", engrf => engrf
+                                                .MinGram(1)
+                                                .MaxGram(10))
+                                            )
+                                        ).NumberOfShards(1)
+                                    )
+                                );
+                            client.Map<TK_QueryIndexModel>(m => m.AutoMap());
+                            var Index = client.Index(oModelToIndex);
+
+                            #endregion
+
 
                             oModel.RelatedThidKnowledgeSearch.CollumnsResult = qTask.FirstOrDefault();
                             
