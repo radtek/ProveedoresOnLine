@@ -16,6 +16,8 @@ namespace ProveedoresOnLine.IndexSearch.Models
         [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
         public string User { get; set; }
 
+        [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
+        public string Domain { get; set; }
 
         [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
         public string CustomerPublicId { get; set; }
