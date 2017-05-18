@@ -501,9 +501,9 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                     (from thk in response.DataTableResult.AsEnumerable()
                      where !thk.IsNull("QueryId")
                      group thk by new
-                     {   
+                     {
                          CustomerPublicId = thk.Field<string>("CustomerPublicId"),
-                         QueryPublicId = thk.Field<string>("QueryPublicId"),                         
+                         QueryPublicId = thk.Field<string>("QueryPublicId"),
                          SearchType = thk.Field<int>("SearchType"),
                          User = thk.Field<string>("User"),
                          QueryStatus = thk.Field<int>("QueryStatus"),
@@ -512,6 +512,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                          CreateDate = thk.Field<DateTime>("CreateDate"),
                          LastModify = thk.Field<DateTime>("LastModify"),
                          Enable = thk.Field<UInt64>("Enable"),
+                         Domain = thk.Field<string>("User").Split('@')[1],                         
                      }
                      into thkg
                      select new TK_QueryIndexModel()
@@ -520,6 +521,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                          QueryPublicId = thkg.Key.QueryPublicId,                      
                          SearchType = thkg.Key.SearchType.ToString(),
                          User = thkg.Key.User.ToString(),
+                         Domain = thkg.Key.Domain,
                          QueryStatus = thkg.Key.QueryStatus.ToString(),
                          FileName = thkg.Key.FileName,
                          IsSuccess = thkg.Key.IsSuccess == 1 ? true : false,
