@@ -82,6 +82,8 @@ namespace MarketPlace.Web.ControllersApi
 
                             var oModelToIndex = new ProveedoresOnLine.IndexSearch.Models.TK_QueryIndexModel(oQueryToCreate);
 
+                            oModelToIndex.Domain = oQueryToCreate.User.Split('@')[1];
+
                             Uri node = new Uri(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
                             var settings = new ConnectionSettings(node);
                             settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_QueryModelIndex].Value);
