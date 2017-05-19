@@ -1,7 +1,7 @@
 ﻿@model MarketPlace.Models.Provider.ProviderViewModel
 
 @if (Model.ProviderMenu != null &&
-                            Model.ProviderMenu.Count > 0)
+                                        Model.ProviderMenu.Count > 0)
 {
     if (!Model.RenderScripts)
     {
@@ -46,10 +46,8 @@
                                     //Validation for My Queries
                                     if (sm.IsSelected && sm.Name == "Mis Consultas")
                                     {
-                                        <div class="POMPProviderFilterMenuWrapper">
-                                            <!--SearchFilter-->
-                                            @Html.Partial(MVC.Desktop.Shared.Views._TK_Search_Filter, Model.RelatedThidKnowledgeSearch)
-                                        </div>
+                                    <!--SearchFilter-->
+                                        @Html.Partial(MVC.Desktop.Shared.Views._TK_Search_Filter, Model.RelatedThidKnowledgeSearch)
                                     }
                                 }
                             </ul>

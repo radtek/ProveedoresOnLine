@@ -378,6 +378,39 @@ namespace MarketPlace.Web.ControllersApi
 
                         oQueryToCreate = await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryUpsert(oQueryToCreate);
 
+                        #region Index TDQueryInfo
+
+                        var oModelToIndex = new ProveedoresOnLine.IndexSearch.Models.TK_QueryIndexModel(oQueryToCreate);
+
+                        oModelToIndex.Domain = oQueryToCreate.User.Split('@')[1];
+
+                        Uri node = new Uri(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
+                        var settings = new ConnectionSettings(node);
+                        settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_QueryModelIndex].Value);
+                        ElasticClient client = new ElasticClient(settings);
+
+                        ICreateIndexResponse oElasticResponse = client.
+                                CreateIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_QueryModelIndex].Value, c => c
+                                .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                                .Analysis(a => a.
+                                    Analyzers(an => an.
+                                        Custom("customWhiteSpace", anc => anc.
+                                            Filters("asciifolding", "lowercase").
+                                            Tokenizer("whitespace")
+                                                )
+                                            ).TokenFilters(tf => tf
+                                            .EdgeNGram("customEdgeNGram", engrf => engrf
+                                            .MinGram(1)
+                                            .MaxGram(10))
+                                        )
+                                    ).NumberOfShards(1)
+                                )
+                            );
+                        client.Map<TK_QueryIndexModel>(m => m.AutoMap());
+                        var Index = client.Index(oModelToIndex);
+
+                        #endregion
+
                         //Send Message
                         MessageModule.Client.Models.NotificationModel oDataMessage = new MessageModule.Client.Models.NotificationModel();
                         oDataMessage.CompanyPublicId = CompanyPublicId;
@@ -474,6 +507,39 @@ namespace MarketPlace.Web.ControllersApi
                     };
 
                     oQueryToCreate =  await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryUpsert(oQueryToCreate);
+
+                    #region Index TDQueryInfo
+
+                    var oModelToIndex = new ProveedoresOnLine.IndexSearch.Models.TK_QueryIndexModel(oQueryToCreate);
+
+                    oModelToIndex.Domain = oQueryToCreate.User.Split('@')[1];
+
+                    Uri node = new Uri(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
+                    var settings = new ConnectionSettings(node);
+                    settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_QueryModelIndex].Value);
+                    ElasticClient client = new ElasticClient(settings);
+
+                    ICreateIndexResponse oElasticResponse = client.
+                            CreateIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_QueryModelIndex].Value, c => c
+                            .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                            .Analysis(a => a.
+                                Analyzers(an => an.
+                                    Custom("customWhiteSpace", anc => anc.
+                                        Filters("asciifolding", "lowercase").
+                                        Tokenizer("whitespace")
+                                            )
+                                        ).TokenFilters(tf => tf
+                                        .EdgeNGram("customEdgeNGram", engrf => engrf
+                                        .MinGram(1)
+                                        .MaxGram(10))
+                                    )
+                                ).NumberOfShards(1)
+                            )
+                        );
+                    client.Map<TK_QueryIndexModel>(m => m.AutoMap());
+                    var Index = client.Index(oModelToIndex);
+
+                    #endregion
 
                     //Send Message
                     MessageModule.Client.Models.NotificationModel oDataMessage = new MessageModule.Client.Models.NotificationModel();
