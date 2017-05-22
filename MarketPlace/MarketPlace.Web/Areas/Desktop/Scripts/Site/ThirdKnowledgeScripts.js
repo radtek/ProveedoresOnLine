@@ -336,3 +336,25 @@ var ThirdKnowledge_ReportViewerObj = {
         });
     }
 }
+
+var MyQueriesSearchObj = {
+
+    Search: function (vSearchParam)
+    {   
+        debugger;
+        var userFlter = document.getElementById("UserFilter").checked;
+        var userValue = vSearchParam.vSearchParam.User;
+
+        var StatusFilter = document.getElementById("StatusFilter").checked;
+        var statusValue = vSearchParam.vSearchParam.Status;
+
+        var QueryTypeFilter = document.getElementById("QueryTypeFilter").checked;
+        var queryTypeValue = vSearchParam.vSearchParam.QueryType;
+
+        var dt_Filter_From = document.getElementById("dt_Filter_From").value 
+        var dt_Filter_To = document.getElementById("dt_Filter_To").value 
+
+        var DomainFilter = document.getElementById("DomainFilter").checked;
+        var domainValue = vSearchParam.vSearchParam.Domain;
+    }
+}
