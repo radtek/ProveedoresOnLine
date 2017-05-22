@@ -448,7 +448,8 @@
     margin: 15px 0px 5px 0px;
     padding-left: 20px;
 }
-.ThirdKnowledgeIdType{
+
+.ThirdKnowledgeIdType {
     width: 100%;
     height: 34px;
     margin: 15px 0px 5px 0px;
@@ -492,3 +493,55 @@
 .TKSearchRow {
     margin: 10px 0px 15px 0px;
 }
+/*Filter Styles*/
+.POMPFilterMenu {
+    display: inline-block;
+    height: 100%;
+    min-height: 490px;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    vertical-align: top;
+    width: 24.4%;
+    min-width: 100%;
+}
+.POMPFilterButton{
+        color: #4d4d4d;
+    background-color: #ecf0f1;
+    border-color: #006cbf;
+}
+
+/*Date Control Styles*/
+input[type="date"]::-webkit-clear-button {
+    display: none;
+}
+
+/* Removes the spin button */
+input[type="date"]::-webkit-inner-spin-button {
+    display: none;
+}
+
+/* Always display the drop down caret */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    color: #2c3e50;
+}
+
+/* A few custom styles for date inputs */
+input[type="date"] {
+    -webkit-appearance: none;
+    color: #4d4d4d;
+    font-family: "Helvetica", arial, sans-serif;
+    font-size: 18px;
+    border: 1px solid #ecf0f1;
+    background: #ecf0f1;
+    padding: 5px;
+    display: inline-block !important;
+    visibility: visible !important;
+}
+
+input[type="date"], focus {
+    color: #95a5a6;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+}
+
