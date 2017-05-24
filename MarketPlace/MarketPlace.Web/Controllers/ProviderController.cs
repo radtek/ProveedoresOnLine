@@ -609,8 +609,6 @@ namespace MarketPlace.Web.Controllers
                     oModel.SearchFilter = newFilterUrl;
                 }
             }
-
-
             return View(oModel);
         }
 

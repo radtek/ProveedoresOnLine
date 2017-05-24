@@ -7,10 +7,10 @@ namespace ProveedoresOnLine.IndexSearch.Models
     [ElasticsearchType(Name = "queryindexmodel_model")]
     public class TK_QueryIndexModel
     {
-        [String]
+        [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
         public string QueryPublicId { get; set; }
 
-        [String]
+        [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
         public string SearchType { get; set; }
 
         [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]

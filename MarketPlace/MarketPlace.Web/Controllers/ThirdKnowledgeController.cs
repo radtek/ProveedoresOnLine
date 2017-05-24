@@ -132,11 +132,11 @@ namespace MarketPlace.Web.Controllers
                 oModel.ProviderMenu = GetThirdKnowledgeControllerMenu();
                 //Clean the season url saved
                 if (SessionModel.CurrentURL != null)
-                    SessionModel.CurrentURL = null;               
+                    SessionModel.CurrentURL = null;
 
                 //Get The Active Plan By Customer 
-                if (!string.IsNullOrEmpty(QueryInfoPublicId))                
-                    QueryDetailInfo = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByInfoPublicId(QueryInfoPublicId);                
+                if (!string.IsNullOrEmpty(QueryInfoPublicId))
+                    QueryDetailInfo = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByInfoPublicId(QueryInfoPublicId);
                 else
                     QueryDetailInfo = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetQueryInfoByQueryPublicIdAndElasticId(QueryPublicId, Convert.ToInt32(ElasticId));
 
@@ -205,7 +205,7 @@ namespace MarketPlace.Web.Controllers
             }
         }
 
-        public virtual ActionResult TKThirdKnowledgeSearch(string PageNumber, string InitDate, string EndDate, string SearchType, string Status)
+        public virtual ActionResult TKThirdKnowledgeSearch(string PageNumber, string InitDate, string EndDate, string SearchType, string Status, string User, string Domain)
         {
             if (SessionModel.CurrentURL != null)
                 SessionModel.CurrentURL = null;
@@ -219,8 +219,10 @@ namespace MarketPlace.Web.Controllers
             {
                 RelatedUser = null;
             }
-            if (!string.IsNullOrEmpty(Status))
-                RelatedUser = Status;
+            if (!string.IsNullOrEmpty(User))
+            {
+                RelatedUser = User;
+            }
 
             ProviderViewModel oModel = new ProviderViewModel();
             oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel();
@@ -228,7 +230,7 @@ namespace MarketPlace.Web.Controllers
 
             List<PlanModel> oCurrentPeriodList = new List<PlanModel>();
             oCurrentPeriodList = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetCurrenPeriod(SessionModel.CurrentCompany.CompanyPublicId, true);
-            if (oCurrentPeriodList != null && oCurrentPeriodList.Count > 0)            
+            if (oCurrentPeriodList != null && oCurrentPeriodList.Count > 0)
                 oModel.RelatedThidKnowledgeSearch.CurrentPlanModel = oCurrentPeriodList.OrderByDescending(x => x.CreateDate).First();
 
             oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager = new Models.ThirdKnowledge.ThirdKnowledgeSearchViewModel()
@@ -238,28 +240,31 @@ namespace MarketPlace.Web.Controllers
             int TotalRows = 0;
             oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.PageNumber = !string.IsNullOrEmpty(PageNumber) ? Convert.ToInt32(PageNumber) : 0;
 
-            
+
             oQueryModel = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearch(
                 SessionModel.CurrentCompany.CompanyPublicId,
                 RelatedUser,
+                Domain,
                 !string.IsNullOrEmpty(InitDate) ? InitDate : "",
                 !string.IsNullOrEmpty(EndDate) ? EndDate : "",
                 oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.PageNumber,
                 Convert.ToInt32(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_Grid_RowCountDefault].Value.Trim()),
                 SearchType,
-                null,
+                Status,                                
                 out TotalRows);
 
-            //TODO: Build Aggs Filters
+            oModel.RelatedThidKnowledgeSearch.FilterList = new Dictionary<string, int>();
+            if (!string.IsNullOrEmpty(InitDate))
+                oModel.RelatedThidKnowledgeSearch.FilterList.Add(InitDate, (int)enumTKFilter.DateFromFilter);
+            if (!string.IsNullOrEmpty(EndDate))
+                oModel.RelatedThidKnowledgeSearch.FilterList.Add(EndDate, (int)enumTKFilter.DateToFilter);
 
             #region ElasticSearch
 
             Uri node = new Uri(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
             var settings = new ConnectionSettings(node);
-
-            List<Tuple<string, string, string>> lstSearchFilter = new List<Tuple<string, string, string>>();
-
-            #region Search Result Company 
+            
+            #region Search 
 
             settings.DefaultIndex(Models.General.InternalSettings.Instance[Models.General.Constants.C_Settings_QueryModelIndex].Value);
             settings.DisableDirectStreaming(true);
@@ -281,7 +286,49 @@ namespace MarketPlace.Web.Controllers
                     .Field(fi => fi.Domain))
                 .Terms("useremail", bl => bl
                     .Field(fi => fi.User)))
-                .Query(q => q.QueryString(t => t.Fields(f => f.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId))
+                .Query(q => q.Filtered(f => f.
+                    Filter(f2 =>
+                        {
+                            QueryContainer qb = null;                           
+
+                            qb &= f2.Terms(tms => tms
+                            .Field(fi => fi.CustomerPublicId.ToLower())
+                             .Terms<string>(SessionModel.CurrentCompany.CompanyPublicId.ToLower())
+                            );
+
+                            if (!string.IsNullOrEmpty(Status))
+                            {
+                                qb &= q.Term(m => m.QueryStatus, Status);
+                                oModel.RelatedThidKnowledgeSearch.FilterList.Add(Status, (int)enumTKFilter.StatusFilter);
+                            }
+                            if (!string.IsNullOrEmpty(SearchType))
+                            {
+                                qb &= q.Term(m => m.SearchType, SearchType);
+                                oModel.RelatedThidKnowledgeSearch.FilterList.Add(SearchType, (int)enumTKFilter.QueryTypeFilter);
+                            }
+                            if (!string.IsNullOrEmpty(User))
+                            {
+                                qb &= q.Term(m => m.User, User);
+                                oModel.RelatedThidKnowledgeSearch.FilterList.Add(User, (int)enumTKFilter.UserFilter);
+                            }
+                            if (!string.IsNullOrEmpty(Domain))
+                            {
+                                qb &= q.Term(m => m.Domain, Domain);
+                                oModel.RelatedThidKnowledgeSearch.FilterList.Add(Domain, (int)enumTKFilter.DomainFilter);
+                            }
+                            if (!string.IsNullOrEmpty(InitDate) && !string.IsNullOrEmpty(EndDate))
+                            {
+                                qb &= q.DateRange(dr => dr
+                                        .Field(t2 => t2.CreateDate)
+                                        .GreaterThanOrEquals(InitDate).LessThan(EndDate)                                        
+                                    );
+                            }
+                              
+                            
+                            return qb;
+                        }
+                    )
+                )
                 )
             );
             #region Status Aggregation
@@ -350,7 +397,7 @@ namespace MarketPlace.Web.Controllers
             #endregion ElasticSearch          
 
             List<TDQueryInfoModel> objQueryInfo = new List<TDQueryInfoModel>();
-            oModel.RelatedThirdKnowledge = new ThirdKnowledgeViewModel();            
+            oModel.RelatedThirdKnowledge = new ThirdKnowledgeViewModel();
 
             oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.TotalRows = TotalRows;
 
@@ -368,7 +415,7 @@ namespace MarketPlace.Web.Controllers
             return View(oModel);
         }
 
-        public virtual ActionResult TKThirdKnowledgeDetail(string QueryPublicId,  string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess)
+        public virtual ActionResult TKThirdKnowledgeDetail(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess)
         {
             if (SessionModel.CurrentURL != null)
                 SessionModel.CurrentURL = null;
@@ -388,7 +435,7 @@ namespace MarketPlace.Web.Controllers
                 PageNumber = !string.IsNullOrEmpty(PageNumber) ? Convert.ToInt32(PageNumber) : 0,
             };
             int TotalRows = 0;
-            
+
             List<TDQueryModel> oQueryResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId(QueryPublicId, oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.PageNumber, oTotalRowsAux, out TotalRows);
 
             oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.TotalRows = TotalRows;

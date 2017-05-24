@@ -170,5 +170,7 @@ namespace MarketPlace.Models.ThirdKnowledge
             return oReturn;
         }
 
+        public Dictionary<string,int> FilterList { get; set; }
+
     }
 }
