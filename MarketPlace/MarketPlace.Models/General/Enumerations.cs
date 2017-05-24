@@ -766,6 +766,16 @@
         InProcess = 501002,
     }
 
+    public enum enumTKFilter
+    {
+        UserFilter = 701001,
+        QueryTypeFilter = 701002,
+        StatusFilter = 701003,
+        DomainFilter = 701004,
+        DateFromFilter = 701005,
+        DateToFilter = 701006,        
+    }
+
     #endregion
 
     #region Aditional Document

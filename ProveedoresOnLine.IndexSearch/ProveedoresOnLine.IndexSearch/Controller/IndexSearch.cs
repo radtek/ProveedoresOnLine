@@ -10,6 +10,7 @@ using System.IO;
 using System.Configuration;
 using ProveedoresOnLine.SurveyModule.Models.Index;
 using Newtonsoft.Json;
+using ProveedoresOnLine.ThirdKnowledge.Models;
 
 namespace ProveedoresOnLine.IndexSearch.Controller
 {
@@ -293,13 +294,13 @@ namespace ProveedoresOnLine.IndexSearch.Controller
             {
                 LogFile("Start Process: " + "QueryIndex:::" + oToIndex.Count());
 
-                Uri node = new Uri(Models.Util.InternalSettings.Instance[Constants.C_Settings_ElasticSearchUrl].Value);
+                Uri node = new Uri(Models.Util.InternalSettings.Instance[Models.Constants.C_Settings_ElasticSearchUrl].Value);
                 var settings = new ConnectionSettings(node);
-                settings.DefaultIndex(Models.Util.InternalSettings.Instance[Constants.C_Settings_TD_QueryIndex].Value);
+                settings.DefaultIndex(Models.Util.InternalSettings.Instance[Models.Constants.C_Settings_TD_QueryIndex].Value);
                 ElasticClient client = new ElasticClient(settings);
 
                 ICreateIndexResponse oElasticResponse = client.
-                        CreateIndex(Models.Util.InternalSettings.Instance[Constants.C_Settings_TD_QueryIndex].Value, c => c
+                        CreateIndex(Models.Util.InternalSettings.Instance[Models.Constants.C_Settings_TD_QueryIndex].Value, c => c
                         .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
                         .Analysis(a => a.
                             Analyzers(an => an.
@@ -316,7 +317,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                         )
                     );
                 client.Map<TK_QueryIndexModel>(m => m.AutoMap());
-                var Index = client.IndexMany(oToIndex,Models.Util.InternalSettings.Instance[Constants.C_Settings_TD_QueryIndex].Value);
+                var Index = client.IndexMany(oToIndex,Models.Util.InternalSettings.Instance[Models.Constants.C_Settings_TD_QueryIndex].Value);
             }
             catch (Exception err)
             {
@@ -334,13 +335,13 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                 {
                     LogFile("Start Process::: FunctionName::: QueryModelIndexByItem::: " + "QueryIndex By Item:::" + oModelToIndex.QueryPublicId);
 
-                    Uri node = new Uri(Models.Util.InternalSettings.Instance[Constants.C_Settings_ElasticSearchUrl].Value);
+                    Uri node = new Uri(Models.Util.InternalSettings.Instance[Models.Constants.C_Settings_ElasticSearchUrl].Value);
                     var settings = new ConnectionSettings(node);
-                    settings.DefaultIndex(Models.Util.InternalSettings.Instance[Constants.C_Settings_TD_QueryIndex].Value);
+                    settings.DefaultIndex(Models.Util.InternalSettings.Instance[Models.Constants.C_Settings_TD_QueryIndex].Value);
                     ElasticClient client = new ElasticClient(settings);
 
                     ICreateIndexResponse oElasticResponse = client.
-                            CreateIndex(Models.Util.InternalSettings.Instance[Constants.C_Settings_TD_QueryIndex].Value, c => c
+                            CreateIndex(Models.Util.InternalSettings.Instance[Models.Constants.C_Settings_TD_QueryIndex].Value, c => c
                             .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
                             .Analysis(a => a.
                                 Analyzers(an => an.
@@ -365,6 +366,73 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                 LogFile("Index Process Failed for Company: " + err.Message + "Inner Exception::" + err.InnerException);
             }
             LogFile("Index Process Successfull for: " + oModelToIndex.QueryPublicId);
+        }
+
+        public static bool QueryModelIndexSearch()
+        {
+            Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+            var settings = new ConnectionSettings(node);
+
+            settings.DefaultIndex("dev_queryindex");
+            settings.DisableDirectStreaming(true);
+            ElasticClient client = new ElasticClient(settings);
+
+            var result  = client.Search<TK_QueryIndexModel>(s => s 
+            .From(string.IsNullOrEmpty("0") ? 0 : Convert.ToInt32(0) * 20)
+            .TrackScores(true)
+            .Size(20)
+            .Aggregations
+                (agg => agg
+                .Terms("status", aggv => aggv
+                    .Field(fi => fi.QueryStatus))
+                .Terms("date", aggv => aggv
+                    .Field(fi => fi.LastModify))
+                .Terms("searchtype", c => c
+                    .Field(fi => fi.SearchType))
+                .Terms("domain", c => c
+                    .Field(fi => fi.Domain))
+                .Terms("useremail", bl => bl
+                    .Field(fi => fi.User)))               
+                .Query(q => q.Filtered(f => f.
+                    Filter(f2 =>
+                    {                        
+                        QueryContainer qb = null;
+                        //qb &= q.Term(m => m.CustomerPublicId, "26D388E3");
+                        //qb &= q.Term(m => m.CustomerPublicId, "DA5C572E");
+
+                        qb &= f2.Terms(tms => tms
+                            .Field(fi => fi.CustomerPublicId.ToLower())
+                             .Terms<string>("da5c572e")
+                            );
+                        //if (!string.IsNullOrEmpty("")
+                        // || !string.IsNullOrEmpty("")
+                        // || !string.IsNullOrEmpty("")
+                        // || !string.IsNullOrEmpty("sebastian.martinez@")
+                        // || !string.IsNullOrEmpty("")
+                        // || !string.IsNullOrEmpty(""))
+                        //{
+                        //    //qb &= q.Terms(tms => tms
+                        //    //    .Field(fi => fi.QueryPublicId.ToLower())
+                        //    //     .Terms<string>(oQueryModel.Select(x => x.QueryPublicId.ToLower()).ToList())
+                        //    //    );
+                        //}
+                        //else
+                        //{
+                        //    qb &= q.Term(t => t.CustomerPublicId, "DA5C572E");
+                        //}
+
+                        return qb;
+                    }
+                    )
+                )
+                )
+            );
+
+            if (result.Documents != null)
+            {
+                return true;
+            }
+            return false;
         }
 
         #endregion

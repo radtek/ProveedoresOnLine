@@ -10,7 +10,7 @@
     @*ESTE ES QUE TRAE EL PARCIAL QUE PINTA EL MENU LATERAL*@
     <div class="POMPProviderSideMenuWrapper">
         @Html.Partial(MVC.Desktop.Shared.Views._P_ProviderMenu, Model)
-    </div>   
+    </div>
 
     <div class="POMPProviderDataWrapper">
         <label class="POMPSectionTitles">Mis Consultas</label>
@@ -40,7 +40,7 @@
                 </div>
                 <br />
             }
-            @{ 
+            @{
                 string initDate = "";
                 string endDate = "";
                 if (Request.Params["InitDate"] != null)
@@ -53,63 +53,6 @@
                 }
             }
 
-            @*<div class="row POMPTKSearchContainer">
-                <div class="col-sm-2 TKSearchRow">
-                    <span>Desde:</span>
-                    <br />
-                    <input type="date" name="ThirdKnoledge_InitDate" id="ThirdKnowledge_InitDateId" class="form-control" value="@initDate" />
-                </div>
-                <div class="col-sm-2 TKSearchRow">
-                    <span>Hasta:</span>
-                    <br />
-                    <input type="date" name="ThirdKnowledge_EndDate" id="ThirdKnowledge_EndDateId" class="form-control" value="@endDate" />
-                </div>
-                <div class="col-sm-2 TKSearchRow">
-                    <span>Tipo:</span>
-                    <br />
-                    @{ 
-                        string selected_masive = "";
-                        string selected_single = "";
-                        string selected_single_tpy = "";
-                        string selected_option_sts = "";                        
-                        if (Request.Params["SearchType"] != null)
-                        {
-                            switch (Request.Params["SearchType"])
-                            {
-                                case "":
-                                    selected_single_tpy = "selected";
-                                    break;
-                                case "201001":
-                                    selected_single = "selected";
-                                    break;
-                                case "201002":
-                                    selected_masive = "selected";
-                                    break;
-                            }
-                        }
-                    }
-                    <select id="ThirdKnowledge_QueryType" class="form-control">
-                        <option value="" @selected_single_tpy>Seleccionar</option>
-                        <option value="@((int)MarketPlace.Models.General.enumThirdKnowledgeQueryType.Simple)" @selected_single>Individual</option>
-                        <option value="@((int)MarketPlace.Models.General.enumThirdKnowledgeQueryType.Masive)" @selected_masive>Masiva</option>
-
-                    </select>
-                </div>
-                <div class="col-sm-3 TKSearchRow">
-                    <span>Usuario:</span>
-                                                            
-                    <select id="ThirdKnowledge_QueryStatus" class="form-control">                       
-                        <option value="">Seleccionar</option>                        
-                        @foreach (var item in @Model.RelatedThirdKnowledge.Users)
-                        {
-                            <option value="@item">@item</option>
-                        }
-                    </select>                                           
-                </div>
-                <div class="col-sm-2 TKSearchRow">
-                    <input class="TKSearchButton" type="button" name="ThirdKnowledge_FilterId" id="ThirdKnowledge_FilterId" value="Filtrar" />
-                </div>
-            </div>*@
             <div class="row POMPSearchResultsPager POMPTKSearchPager">
                 <div class="col-sm-12 text-right">
                     <!--Pager-->
@@ -137,7 +80,7 @@
 }
 @section inlinescripts
 {
-    @Html.Partial(MVC.Desktop.Shared.Views._P_ProviderMenu, Model)
+    @Html.Partial(MVC.Desktop.Shared.Views._P_ProviderMenu, Model)   
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -151,6 +94,15 @@
                                 }))',
             });
             Third_KnowledgeSearch.RenderAsync();
+            MyQueriesSearchObj.Init({
+                ObjectId: 'Search',
+                SearchUrl: '@(Url.RouteUrl(MarketPlace.Models.General.Constants.C_Routes_Default,
+                            new
+                            {
+                                controller = MVC.ThirdKnowledge.Name,
+                                action = MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeSearch
+                            }))',                
+              });
         });
     </script>
 }

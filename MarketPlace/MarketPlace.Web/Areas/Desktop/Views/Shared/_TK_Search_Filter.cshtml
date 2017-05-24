@@ -1,7 +1,6 @@
 ﻿@model MarketPlace.Models.ThirdKnowledge.ThirdKnowledgeViewModel
 
 @{
-    List<Tuple<string, string, string>> lstSearchFilter = Model.GetlstSearchFilter();
 
     //new function
     List<int> oCurrentModule = MarketPlace.Models.General.SessionModel.CurrentUserModules();
@@ -12,11 +11,22 @@
 @if (!Model.RenderScripts)
 {
     <hr />
-    <div class="POMPFilterMenu">        
+    <div class="POMPFilterMenu">
         <ul class="POMPFilterCategoryList">
             @*new funtion*@
             @*//User Filter*@
             @{
+                string Filters = "";
+
+                if (Model.FilterList != null && Model.FilterList.Count > 0)
+                {
+                    Model.FilterList.All(x =>
+                    {
+                        Filters += x.Key + ";" + x.Value + ",";
+                        return true;
+                    });
+                }
+
                 if (Model.UserFilter != null && Model.UserFilter.Count > 0)
                 {
                     <li>
@@ -24,48 +34,54 @@
                         <ul>
                             @foreach (var oFilterItem in Model.UserFilter)
                             {
-                                if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
+                                if (Model.FilterList.Any(x => x.Value == (int)MarketPlace.Models.General.enumTKFilter.UserFilter))
                                 {
                                     <li>
-                                        <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
+                                        <input id="UserFilter" name="UserFilter" type="checkbox" checked="checked" onchange="javascript: MyQueriesSearchObj.Search({vSearchParam:{UserEnable:false, User:'@(oFilterItem.FilterName)' , Filters: '@Filters' }})" />
+                                        <input type="hidden" id="UserCheck" name="UserCheck" value="false" />
                                         <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
                                     </li>
                                 }
                                 else
                                 {
                                     if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
+
                                     {
                                         <li>
-                                            <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
+                                            <input id="UserFilter" name="UserFilter" type="checkbox"  onchange="javascript: MyQueriesSearchObj.Search({vSearchParam:{UserEnable:true, User:'@(oFilterItem.FilterName)', Filters: '@Filters' }})" />
+                                            <input type="hidden" id="UserCheck" name="UserCheck" value="true" />
                                             <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
                                         </li>
-                                    }
+                                    }                                    
                                 }
                             }
                         </ul>
                     </li>
-                }
-
+                }                
                 if (Model.QueryStatusFilter != null && Model.QueryStatusFilter.Count > 0)
                 {
                     <li>
                         <span>Estado</span>
                         <ul>
+
                             @foreach (var oFilterItem in Model.QueryStatusFilter)
                             {
-                                if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
+                                if (Model.FilterList.Any(x => x.Value == (int)MarketPlace.Models.General.enumTKFilter.StatusFilter))
                                 {
                                     <li>
-                                        <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
+                                        <input type="checkbox" id="StatusFilter" name="StatusFilter" checked="checked" onchange="javascript:MyQueriesSearchObj.Search({vSearchParam:{StatusEnable:false, Status:'@(oFilterItem.FilterType)', Filters: '@Filters' }})" />
+                                        <input type="hidden" id="StatusCheck" name="StatusCheck" value="false" />
                                         <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
                                     </li>
                                 }
                                 else
                                 {
                                     if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
+
                                     {
                                         <li>
-                                            <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
+                                            <input type="checkbox" id="StatusFilter" name="StatusFilter" onchange="javascript:MyQueriesSearchObj.Search({vSearchParam:{StatusEnable:true, Status:'@(oFilterItem.FilterType)' , Filters: '@Filters' }})" />
+                                            <input type="hidden" id="StatusCheck" name="StatusCheck" value="true" />
                                             <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
                                         </li>
                                     }
@@ -74,7 +90,6 @@
                         </ul>
                     </li>
                 }
-
                 if (Model.QueryTypeFilter != null && Model.QueryTypeFilter.Count > 0)
                 {
                     <li>
@@ -82,47 +97,62 @@
                         <ul>
                             @foreach (var oFilterItem in Model.QueryTypeFilter)
                             {
-                                if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
+                                if (Model.FilterList.Any(x => x.Value == (int)MarketPlace.Models.General.enumTKFilter.QueryTypeFilter))
                                 {
                                     <li>
-                                        <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
+                                        <input type="checkbox" id="QueryTypeFilter" name="QueryTypeFilter" checked="checked" onchange="javascript:MyQueriesSearchObj.Search({vSearchParam:{QueryTypeEnable:false, QueryType:'@(oFilterItem.FilterType)', Filters: '@Filters' }})" />                                        
+                                        <input type="hidden" id="QueryTypeCheck" name="QueryTypeCheck" value="false" />
                                         <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
                                     </li>
                                 }
                                 else
                                 {
                                     if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
+
                                     {
-                                        <li>
-                                            <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
+                                        <li>                                            
+                                            <input type="checkbox" id="QueryTypeFilter" name="QueryTypeFilter" onchange="javascript:MyQueriesSearchObj.Search({vSearchParam:{QueryTypeEnable:true, QueryType:'@(oFilterItem.FilterType)' , Filters: '@Filters' }})" />
+                                            <input type="hidden" id="QueryTypeCheck" name="QueryTypeCheck" value="true" />
                                             <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
                                         </li>
-                                    }
+                                    }                                    
                                 }
                             }
                         </ul>
                     </li>
                 }
-
                 <li>
                     <span>Filtro por fechas</span>
-                    <form action="/" method="post">
+                    <form action="javascript:MyQueriesSearchObj.Search({vSearchParam:''})" method="post">
                         <ul>
                             <li>
                                 <span>Desde </span>
-                                <input type="date" id="dt_Filter_From" name="name" value="" />
+                                @if (Model.FilterList.Where(x => x.Value == (int)MarketPlace.Models.General.enumTKFilter.DateFromFilter).Select(x => x.Key).FirstOrDefault() != null)
+                                {
+                                    <input type="date" id="dt_Filter_From" name="name" value="@Model.FilterList.Where(x => x.Value == (int)MarketPlace.Models.General.enumTKFilter.DateFromFilter).Select(x => x.Key).FirstOrDefault()" />
+                                }
+                                else
+                                {
+                                    <input type="date" id="dt_Filter_From" name="name" value="" />
+                                }
                             </li>
                             <li>
                                 <span>Hasta </span>
-                                <input type="date" id="dt_Filter_To" name="name" value="" />
+                                @if (Model.FilterList.Where(x => x.Value == (int)MarketPlace.Models.General.enumTKFilter.DateToFilter).Select(x => x.Key).FirstOrDefault() != null)
+                                {
+                                    <input type="date" id="dt_Filter_To" name="name" value="@Model.FilterList.Where(x => x.Value == (int)MarketPlace.Models.General.enumTKFilter.DateToFilter).Select(x => x.Key).FirstOrDefault()" />
+                                }
+                                else
+                                {
+                                    <input type="date" id="dt_Filter_To" name="name" value="" />
+                                }
                             </li>
                         </ul>
                         <div class="text-right">
                             <input class="btn btn-primary POMPFilterButton" type="submit" name="frm_DateFilter" value="Filtrar" />
-                        </div>
+                        </div>                        
                     </form>
-                </li>
-
+                </li>                
                 if (Model.DomainFilter != null && Model.DomainFilter.Count > 0)
                 {
                     <li>
@@ -130,19 +160,22 @@
                         <ul>
                             @foreach (var oFilterItem in Model.DomainFilter)
                             {
-                                if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
+                                if (Model.FilterList.Any(x => x.Value == (int)MarketPlace.Models.General.enumTKFilter.DomainFilter))
                                 {
                                     <li>
-                                        <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
+                                        <input type="checkbox" id="DomainFilter" name="DomainFilter" checked="checked" onchange="javascript:MyQueriesSearchObj.Search({vSearchParam:{DomainEnable:false, Domain:'@(oFilterItem.FilterName)' , Filters: '@Filters' }})" />
                                         <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                        <input type="hidden" id="DomainCheck" name="DomainCheck" value="false" />
                                     </li>
                                 }
                                 else
                                 {
                                     if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
+
                                     {
                                         <li>
-                                            <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
+                                            <input type="checkbox" id="DomainFilter" name="DomainFilter" onchange="javascript: MyQueriesSearchObj.Search({vSearchParam:{DomainEnable:true, Domain:'@(oFilterItem.FilterName)' , Filters: '@Filters' }})" />
+                                            <input type="hidden" id="DomainCheck" name="DomainCheck" value="true" />
                                             <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
                                         </li>
                                     }
@@ -154,4 +187,5 @@
             }
         </ul>
     </div>
-                }
+}
+

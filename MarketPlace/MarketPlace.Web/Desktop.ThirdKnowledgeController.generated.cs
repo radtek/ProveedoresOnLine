@@ -159,6 +159,8 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             public readonly string EndDate = "EndDate";
             public readonly string SearchType = "SearchType";
             public readonly string Status = "Status";
+            public readonly string User = "User";
+            public readonly string Domain = "Domain";
         }
         static readonly ActionParamsClass_TKThirdKnowledgeDetail s_params_TKThirdKnowledgeDetail = new ActionParamsClass_TKThirdKnowledgeDetail();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -275,10 +277,10 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
         }
 
         [NonAction]
-        partial void TKThirdKnowledgeSearchOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string PageNumber, string InitDate, string EndDate, string SearchType, string Status);
+        partial void TKThirdKnowledgeSearchOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string PageNumber, string InitDate, string EndDate, string SearchType, string Status, string User, string Domain);
 
         [NonAction]
-        public override System.Web.Mvc.ActionResult TKThirdKnowledgeSearch(string PageNumber, string InitDate, string EndDate, string SearchType, string Status)
+        public override System.Web.Mvc.ActionResult TKThirdKnowledgeSearch(string PageNumber, string InitDate, string EndDate, string SearchType, string Status, string User, string Domain)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.TKThirdKnowledgeSearch);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "PageNumber", PageNumber);
@@ -286,7 +288,9 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "EndDate", EndDate);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "SearchType", SearchType);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "Status", Status);
-            TKThirdKnowledgeSearchOverride(callInfo, PageNumber, InitDate, EndDate, SearchType, Status);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "User", User);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "Domain", Domain);
+            TKThirdKnowledgeSearchOverride(callInfo, PageNumber, InitDate, EndDate, SearchType, Status, User, Domain);
             return callInfo;
         }
 

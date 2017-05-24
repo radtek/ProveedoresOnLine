@@ -22,6 +22,13 @@ namespace ProveedoresOnLine.IndexSearch.Test
         public void QueryModelIndeAll()
         {
             Controller.IndexSearch.QueryModelIndeAll();
-        }        
+        }
+
+        [TestMethod]
+        public void QueryModelIndexSearch()
+        {
+             Controller.IndexSearch.QueryModelIndexSearch();
+        }
+
     }
 }

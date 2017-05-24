@@ -234,7 +234,7 @@ var Third_KnowledgeSearch = {
     , SearchType: ''
     , Status: ''
 
-    , Init: function (vInitObject) {
+    , Init: function (vInitObject) {        
         this.ObjectId = vInitObject.ObjectId;
         this.SearchUrl = vInitObject.SearchUrl;
         this.CustomerPublicId = vInitObject.CustomerPublicId;
@@ -334,5 +334,117 @@ var ThirdKnowledge_ReportViewerObj = {
                 }
             }
         });
+    }
+}
+
+var MyQueriesSearchObj = {
+     SearchUrl: ''
+    ,FilterList:''
+
+    ,Init: function(vInitObject) {        
+        debugger;
+        this.SearchUrl = vInitObject.SearchUrl;
+        this.FilterList = vInitObject.FilterList;
+    }
+
+    ,Search: function (vSearchParam)
+    {   
+        debugger;
+        var ListToParse = '';
+        var userFromList = '';
+        var queryTypeFromList = '';
+        var statusFromList = '';
+        var dateFFromList = '';
+        var dateToFromList = '';
+        var domainFromList = '';
+        if (vSearchParam.vSearchParam.Filters != "" && vSearchParam.vSearchParam.Filters != null) {
+            ListToParse = vSearchParam.vSearchParam.Filters.split(',');
+            for (var i = 0; i < ListToParse.length; i++) {
+                if (ListToParse[i].split(';')[1] != '' && ListToParse[i].split(';')[1] == "701001") {
+                    if (vSearchParam.vSearchParam.UserEnable == null) {
+                        userFromList = ListToParse[i].split(';')[0];                    
+                    }                    
+                }
+                if (ListToParse[i].split(';')[1] != '' && ListToParse[i].split(';')[1] == "701002") {
+                    if (vSearchParam.vSearchParam.QueryTypeEnable == null) {
+                        queryTypeFromList = ListToParse[i].split(';')[0];
+                    }                    
+                }
+                if (ListToParse[i].split(';')[1] != '' && ListToParse[i].split(';')[1] == "701003") {
+                    if (vSearchParam.vSearchParam.StatusEnable == null) {
+                        statusFromList = ListToParse[i].split(';')[0];
+                    }                    
+                }
+                if (ListToParse[i].split(';')[1] != '' && ListToParse[i].split(';')[1] == "701004") {
+                    if (vSearchParam.vSearchParam.DomainEnable == null) {
+                        domainFromList = ListToParse[i].split(';')[0];
+                    }
+                }
+                if (ListToParse[i].split(';')[1] != '' && ListToParse[i].split(';')[1] == "701005") {
+                    dateFFromList = ListToParse[i].split(';')[0];
+                }
+                if (ListToParse[i].split(';')[1] != '' && ListToParse[i].split(';')[1] == "701006") {
+                    dateToFromList = ListToParse[i].split(';')[0];
+                }               
+            }
+        }
+
+        var url = this.SearchUrl;
+        url = '?PageNumber=' + '0';
+        if (document.getElementById("dt_Filter_From").value != '') {
+            url += '&InitDate=' + document.getElementById("dt_Filter_From").value;
+        }
+        else if (dateFFromList != '') {
+            url += '&InitDate=' + dateFFromList;
+        }
+        else{
+            url += '&InitDate=' + '';
+        }
+        if (document.getElementById("dt_Filter_To").value != '') {
+            url += '&EndDate=' + document.getElementById("dt_Filter_To").value;
+        } 
+        else if (dateToFromList != '') {
+            url += '&EndDate=' + dateToFromList
+        }   
+        else {
+            url += '&EndDate=' + '';
+        }
+        if (vSearchParam.vSearchParam.QueryType != null && vSearchParam.vSearchParam.QueryTypeEnable != null && vSearchParam.vSearchParam.QueryTypeEnable  == true) {
+            url += '&SearchType=' + vSearchParam.vSearchParam.QueryType
+        }
+        else if (queryTypeFromList != '') {
+            url += '&SearchType=' + queryTypeFromList
+        }
+        else {
+            url += '&SearchType=' + '';
+        }
+        if (vSearchParam.vSearchParam.Status != null && vSearchParam.vSearchParam.StatusEnable != null && vSearchParam.vSearchParam.StatusEnable == true) {
+            url += '&Status=' + vSearchParam.vSearchParam.Status
+        }
+        else if (statusFromList != '') {
+            url += '&Status=' + statusFromList;
+        }
+        else {
+            url += '&Status=' + '';
+        }        
+        if (vSearchParam.vSearchParam.User != null && vSearchParam.vSearchParam.UserEnable != null && vSearchParam.vSearchParam.UserEnable  == true) {
+            url += '&User=' + vSearchParam.vSearchParam.User
+        }
+        else if (userFromList != '') {
+            url += '&User=' + userFromList;
+        }
+        else {
+            url += '&User=' + '';
+        }
+        if (vSearchParam.vSearchParam.Domain != null && vSearchParam.vSearchParam.DomainEnable != null && vSearchParam.vSearchParam.DomainEnable  == true) {
+            url += '&Domain=' + vSearchParam.vSearchParam.Domain
+        }
+        else if (domainFromList != '') {
+            url += '&Domain=' + domainFromList;
+        }
+        else {
+            url += '&Domain=' + '';
+        }
+        window.location = url;
     }
 }
