@@ -837,124 +837,130 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                 string Name = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeNameCollumn].Value].ToString();
                 string IdentificationNumber = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeIdNumberCollumn].Value].ToString();
 
-                Nest.ISearchResponse<ThirdknowledgeIndexSearchModel> result = ThirdKnowledgeClient.Search<ThirdknowledgeIndexSearchModel>(s => s
+                if (!string.IsNullOrEmpty(Name)&&!string.IsNullOrEmpty(IdentificationNumber))
+                {
+                    Nest.ISearchResponse<ThirdknowledgeIndexSearchModel> result = ThirdKnowledgeClient.Search<ThirdknowledgeIndexSearchModel>(s => s
                .From(0)
                    .TrackScores(true)
                    .From(page)
                    .Size(10)
-                    .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Name)) ||
+                    .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Name)) &&
                             q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
                  ).MinScore(2));
-
-                if (result.Documents.Count() > 0)
-                {
-                    result.Documents.All(x =>
+                    if (result.Documents.Count() > 0)
                     {
-                        TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
-                        oInfoCreate.AKA = x.AKA;
-                        oInfoCreate.IdentificationResult = x.TypeId;
-                        oInfoCreate.Offense = x.RelatedWiht;
-                        oInfoCreate.NameResult = x.CompleteName;
+                        result.Documents.All(x =>
+                        {
+                            TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
+                            oInfoCreate.AKA = x.AKA;
+                            oInfoCreate.IdentificationResult = x.TypeId;
+                            oInfoCreate.Offense = x.RelatedWiht;
+                            oInfoCreate.NameResult = x.CompleteName;
 
-                        if (x.ListType == "FIGURAS PUBLICAS" || x.ListType == "PEPS INTERNACIONALES")
-                            oInfoCreate.Peps = x.ListType;
-                        else
-                            oInfoCreate.Peps = "N/A";
+                            if (x.ListType == "FIGURAS PUBLICAS" || x.ListType == "PEPS INTERNACIONALES")
+                                oInfoCreate.Peps = x.ListType;
+                            else
+                                oInfoCreate.Peps = "N/A";
 
-                        #region Group by Priority
-                        if (!string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(IdentificationNumber) && x.TypeId == IdentificationNumber.Trim() && x.CompleteName == Name.Trim())
-                            oInfoCreate.Priority = "1";
-                        else if (!string.IsNullOrEmpty(IdentificationNumber) && x.TypeId == IdentificationNumber.Trim() && x.CompleteName != Name.Trim())
-                            oInfoCreate.Priority = "2";
-                        else if (!string.IsNullOrEmpty(Name) && x.TypeId != IdentificationNumber.Trim() && x.CompleteName == Name.Trim())
-                            oInfoCreate.Priority = "3";
-                        else
-                            oInfoCreate.Priority = "3";
-                        #endregion
+                            #region Group by Priority
+                            if (!string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(IdentificationNumber) && x.TypeId == IdentificationNumber.Trim() && x.CompleteName == Name.Trim())
+                                oInfoCreate.Priority = "1";
+                            else if (!string.IsNullOrEmpty(IdentificationNumber) && x.TypeId == IdentificationNumber.Trim() && x.CompleteName != Name.Trim())
+                                oInfoCreate.Priority = "2";
+                            else if (!string.IsNullOrEmpty(Name) && x.TypeId != IdentificationNumber.Trim() && x.CompleteName == Name.Trim())
+                                oInfoCreate.Priority = "3";
+                            else
+                                oInfoCreate.Priority = "3";
+                            #endregion
 
-                        oInfoCreate.Status = x.Status;
-                        oInfoCreate.Enable = true;
-                        oInfoCreate.QueryPublicId = Query.QueryPublicId;
+                            oInfoCreate.Status = x.Status;
+                            oInfoCreate.Enable = true;
+                            oInfoCreate.QueryPublicId = Query.QueryPublicId;
 
 
-                        #region Create Detail
-                        oInfoCreate.IdentificationNumber = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty;                        
-                        oInfoCreate.QueryName = !string.IsNullOrEmpty(Name) ? Name : string.Empty;                        
-                        oInfoCreate.AKA = !string.IsNullOrEmpty(x.AKA) ? x.AKA : string.Empty;                        
-                        oInfoCreate.IdList = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;                        
-                        oInfoCreate.Priority = !string.IsNullOrEmpty(oInfoCreate.Priority) ? oInfoCreate.Priority : string.Empty;
+                            #region Create Detail
+                            oInfoCreate.IdentificationNumber = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty;
+                            oInfoCreate.QueryName = !string.IsNullOrEmpty(Name) ? Name : string.Empty;
+                            oInfoCreate.AKA = !string.IsNullOrEmpty(x.AKA) ? x.AKA : string.Empty;
+                            oInfoCreate.IdList = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;
+                            oInfoCreate.Priority = !string.IsNullOrEmpty(oInfoCreate.Priority) ? oInfoCreate.Priority : string.Empty;
 
-                        
-                        oInfoCreate.CreateDate = DateTime.Now;
-                        oInfoCreate.LastModify = DateTime.Now;
 
-                        oInfoCreate.Offense = !string.IsNullOrEmpty(x.RelatedWiht) ? x.RelatedWiht : string.Empty;                        
-                        oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(x.TypeId) ? x.TypeId : string.Empty;                        
-                        oInfoCreate.Status = !string.IsNullOrEmpty(x.Status) ? x.Status : string.Empty;                                                
-                        oInfoCreate.GroupName = !string.IsNullOrEmpty(x.ListType) &&
-                                     x.ListType.Contains("BOLETIN")
-                                     || x.ListType == "FOREIGN CORRUPT PRACTICES ACT EEUU"
-                                     || x.ListType == "FOREIGN FINANCIAL INSTITUTIONS PART 561_EEUU"
-                                     || x.ListType == "FOREIGN SANCTIONS EVADERS LIST_EEUU"
-                                     || x.ListType == "FOREIGN_TERRORIST_ORGANIZATIONS_EEUU_FTO"
-                                     || x.ListType == "INTERPOL"
-                                     || x.ListType == "MOST WANTED FBI"
-                                     || x.ListType == "NACIONES UNIDAS"
-                                     || x.ListType == "NON-SDN IRANIAN SANCTIONS ACT LIST (NS-ISA)_EEUU"
-                                     || x.ListType == "OFAC"
-                                     || x.ListType == "PALESTINIAN LEGISLATIVE COUNCIL LIST_EEUU"
-                                     || x.ListType == "VINCULADOS" ?
-                                     "LISTAS RESTRICTIVAS" + " - Criticidad Alta" :
-                                     x.ListType == "CONSEJO NACIONAL ELECTORAL"
-                                     || x.ListType == "CONSEJO SUPERIOR DE LA JUDICATURA"
-                                     || x.ListType == "CORTE CONSTITUCIONAL"
-                                     || x.ListType == "CORTE SUPREMA DE JUSTICIA"
-                                     || x.ListType == "DENIED PERSONS LIST_EEUU"
-                                     || x.ListType == "DESMOVILIZADOS"
-                                     || x.ListType == "EMBAJADAS EN COLOMBIA"
-                                     || x.ListType == "EMBAJADAS EN EL EXTERIOR"
-                                     || x.ListType == "ENTITY_LIST_EEUU"
-                                     || x.ListType == "FUERZAS MILITARES"
-                                     || x.ListType == "GOBIERNO DEPARTAMENTAL"
-                                     || x.ListType == "GOBIERNO MUNICIPAL"
-                                     || x.ListType == "GOBIERNO NACIONAL"
-                                     || x.ListType == "HM_TREASURY (BOE)"
-                                     || x.ListType == "ONU_RESOLUCION_1929"
-                                     || x.ListType == "ONU_RESOLUCION_1970"
-                                     || x.ListType == "ONU_RESOLUCION_1973"
-                                     || x.ListType == "ONU_RESOLUCION_1975"
-                                     || x.ListType == "ONU_RESOLUCION_1988"
-                                     || x.ListType == "ONU_RESOLUCION_1988"
-                                     || x.ListType == "ONU_RESOLUCION_1988"
-                                     || x.ListType == "ONU_RESOLUCION_2023"
-                                     || x.ListType == "SECTORAL SANCTIONS IDENTIFICATIONS_LIST_EEUU"
-                                     || x.ListType == "SPECIALLY DESIGNATED NATIONALS LIST_EEUU"
-                                     || x.ListType == "SUPER SOCIEDADES"
-                                     || x.ListType == "UNVERIFIED_LIST_EEUU" ?
-                                     x.ListType + " - Criticidad Media" :
-                                     x.ListType == "ESTRUCTURA DE GOBIERNO"
-                                     || x.ListType == "FIGURAS PUBLICAS"
-                                     || x.ListType == "PANAMA PAPERS"
-                                     || x.ListType == "PARTIDOS Y MOVIMIENTOS POLITICOS"
-                                     || x.ListType == "PEPS INTERNACIONALES" ?
-                                     x.ListType + " - Criticidad Baja" : "NA";
-                        
-                        oInfoCreate.GroupId = !string.IsNullOrEmpty(x.Code) ? x.Code : string.Empty;                        
-                        oInfoCreate.IdList = !string.IsNullOrEmpty(x.TableCodeID) ? x.TableCodeID : string.Empty;                        
-                        oInfoCreate.Link = !string.IsNullOrEmpty(x.Source) ? x.Source : string.Empty;                        
-                        oInfoCreate.FullName = !string.IsNullOrEmpty(x.CompleteName) ? x.CompleteName : string.Empty;                        
-                        oInfoCreate.ListName = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;                        
-                        oInfoCreate.MoreInfo = !string.IsNullOrEmpty(x.ORoldescription1) || !string.IsNullOrEmpty(x.ORoldescription2) ? x.ORoldescription1 : string.Empty;                        
-                        oInfoCreate.Zone = !string.IsNullOrEmpty(x.NationalitySourceCountry) ? x.NationalitySourceCountry : string.Empty;
-                        
-                        #endregion
+                            oInfoCreate.CreateDate = DateTime.Now;
+                            oInfoCreate.LastModify = DateTime.Now;
 
-                        //Create Info Conincidences                                        
-                        oCoincidences.Add(new Tuple<string, string>(IdentificationNumber, Name));
-                        Query.RelatedQueryInfoModel.Add(oInfoCreate);
-                        return true;
-                    });
+                            oInfoCreate.Offense = !string.IsNullOrEmpty(x.RelatedWiht) ? x.RelatedWiht : string.Empty;
+                            oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(x.TypeId) ? x.TypeId : string.Empty;
+                            oInfoCreate.Status = !string.IsNullOrEmpty(x.Status) ? x.Status : string.Empty;
+                            oInfoCreate.GroupName = !string.IsNullOrEmpty(x.ListType) &&
+                                         x.ListType.Contains("BOLETIN")
+                                         || x.ListType == "FOREIGN CORRUPT PRACTICES ACT EEUU"
+                                         || x.ListType == "FOREIGN FINANCIAL INSTITUTIONS PART 561_EEUU"
+                                         || x.ListType == "FOREIGN SANCTIONS EVADERS LIST_EEUU"
+                                         || x.ListType == "FOREIGN_TERRORIST_ORGANIZATIONS_EEUU_FTO"
+                                         || x.ListType == "INTERPOL"
+                                         || x.ListType == "MOST WANTED FBI"
+                                         || x.ListType == "NACIONES UNIDAS"
+                                         || x.ListType == "NON-SDN IRANIAN SANCTIONS ACT LIST (NS-ISA)_EEUU"
+                                         || x.ListType == "OFAC"
+                                         || x.ListType == "PALESTINIAN LEGISLATIVE COUNCIL LIST_EEUU"
+                                         || x.ListType == "VINCULADOS" ?
+                                         "LISTAS RESTRICTIVAS" + " - Criticidad Alta" :
+                                         x.ListType == "CONSEJO NACIONAL ELECTORAL"
+                                         || x.ListType == "CONSEJO SUPERIOR DE LA JUDICATURA"
+                                         || x.ListType == "CORTE CONSTITUCIONAL"
+                                         || x.ListType == "CORTE SUPREMA DE JUSTICIA"
+                                         || x.ListType == "DENIED PERSONS LIST_EEUU"
+                                         || x.ListType == "DESMOVILIZADOS"
+                                         || x.ListType == "EMBAJADAS EN COLOMBIA"
+                                         || x.ListType == "EMBAJADAS EN EL EXTERIOR"
+                                         || x.ListType == "ENTITY_LIST_EEUU"
+                                         || x.ListType == "FUERZAS MILITARES"
+                                         || x.ListType == "GOBIERNO DEPARTAMENTAL"
+                                         || x.ListType == "GOBIERNO MUNICIPAL"
+                                         || x.ListType == "GOBIERNO NACIONAL"
+                                         || x.ListType == "HM_TREASURY (BOE)"
+                                         || x.ListType == "ONU_RESOLUCION_1929"
+                                         || x.ListType == "ONU_RESOLUCION_1970"
+                                         || x.ListType == "ONU_RESOLUCION_1973"
+                                         || x.ListType == "ONU_RESOLUCION_1975"
+                                         || x.ListType == "ONU_RESOLUCION_1988"
+                                         || x.ListType == "ONU_RESOLUCION_1988"
+                                         || x.ListType == "ONU_RESOLUCION_1988"
+                                         || x.ListType == "ONU_RESOLUCION_2023"
+                                         || x.ListType == "SECTORAL SANCTIONS IDENTIFICATIONS_LIST_EEUU"
+                                         || x.ListType == "SPECIALLY DESIGNATED NATIONALS LIST_EEUU"
+                                         || x.ListType == "SUPER SOCIEDADES"
+                                         || x.ListType == "UNVERIFIED_LIST_EEUU" ?
+                                         x.ListType + " - Criticidad Media" :
+                                         x.ListType == "ESTRUCTURA DE GOBIERNO"
+                                         || x.ListType == "FIGURAS PUBLICAS"
+                                         || x.ListType == "PANAMA PAPERS"
+                                         || x.ListType == "PARTIDOS Y MOVIMIENTOS POLITICOS"
+                                         || x.ListType == "PEPS INTERNACIONALES" ?
+                                         x.ListType + " - Criticidad Baja" : "NA";
+
+                            oInfoCreate.GroupId = !string.IsNullOrEmpty(x.Code) ? x.Code : string.Empty;
+                            oInfoCreate.IdList = !string.IsNullOrEmpty(x.TableCodeID) ? x.TableCodeID : string.Empty;
+                            oInfoCreate.Link = !string.IsNullOrEmpty(x.Source) ? x.Source : string.Empty;
+                            oInfoCreate.FullName = !string.IsNullOrEmpty(x.CompleteName) ? x.CompleteName : string.Empty;
+                            oInfoCreate.ListName = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;
+                            oInfoCreate.MoreInfo = !string.IsNullOrEmpty(x.ORoldescription1) || !string.IsNullOrEmpty(x.ORoldescription2) ? x.ORoldescription1 : string.Empty;
+                            oInfoCreate.Zone = !string.IsNullOrEmpty(x.NationalitySourceCountry) ? x.NationalitySourceCountry : string.Empty;
+
+                            #endregion
+
+                            //Create Info Conincidences                                        
+                            oCoincidences.Add(new Tuple<string, string>(IdentificationNumber, Name));
+                            Query.RelatedQueryInfoModel.Add(oInfoCreate);
+                            return true;
+                        });
+                    }
                 }
+
+                
+
+                
             }
             oReturn = new Tuple<List<Tuple<string, string>>, TDQueryModel>(oCoincidences, Query);
             return oReturn;

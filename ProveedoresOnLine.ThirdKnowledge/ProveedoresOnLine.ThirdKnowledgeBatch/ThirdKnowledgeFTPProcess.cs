@@ -80,6 +80,40 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                                 ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryUpsert(oResult.Item2);
                                 CreateQueryInfo(oQuery, oResult.Item1);
                                 CreateReadyResultNotification(oQuery);
+
+                                #region Index TDQueryInfo
+
+                                var oModelToIndex = new ProveedoresOnLine.IndexSearch.Models.TK_QueryIndexModel(oQuery);
+
+                                oModelToIndex.Domain = oQuery.User.Split('@')[1];
+
+                                Uri node = new Uri(ThirdKnowledge.Models.InternalSettings.Instance[ThirdKnowledge.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+                                var settings = new ConnectionSettings(node);
+                                settings.DefaultIndex(ThirdKnowledge.Models.InternalSettings.Instance[ThirdKnowledge.Models.Constants.C_Settings_TD_QueryIndex].Value);
+                                ElasticClient client = new ElasticClient(settings);
+
+                                ICreateIndexResponse oElasticResponse = client.
+                                        CreateIndex(ThirdKnowledge.Models.InternalSettings.Instance[ThirdKnowledge.Models.Constants.C_Settings_TD_QueryIndex].Value, c => c
+                                        .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                                        .Analysis(a => a.
+                                            Analyzers(an => an.
+                                                Custom("customWhiteSpace", anc => anc.
+                                                    Filters("asciifolding", "lowercase").
+                                                    Tokenizer("whitespace")
+                                                        )
+                                                    ).TokenFilters(tf => tf
+                                                    .EdgeNGram("customEdgeNGram", engrf => engrf
+                                                    .MinGram(1)
+                                                    .MaxGram(10))
+                                                )
+                                            ).NumberOfShards(1)
+                                        )
+                                    );
+                                client.Map<TK_QueryIndexModel>(m => m.AutoMap());
+                                var Index = client.Index(oModelToIndex);
+
+                                #endregion
+
                                 LogFile("Success:: QueryPublicId '" + oQuery.QueryPublicId + "' :: Validation is success");
                             }
                             else
