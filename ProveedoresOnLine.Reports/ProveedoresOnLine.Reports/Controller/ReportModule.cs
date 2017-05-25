@@ -565,11 +565,11 @@ namespace ProveedoresOnLine.Reports.Controller
             localReport.SetParameters(ReportData);
 
             Microsoft.Reporting.WebForms.ReportDataSource src_query = new Microsoft.Reporting.WebForms.ReportDataSource();
-            src_query.Name = "DS_ThirdnowledgeMyQueries";
+            src_query.Name = "DS_ThirdKnowledgeMyQueries";
             src_query.Value = DT_Query != null ? DT_Query : new DataTable();
 
             ReportDataSource source = new ReportDataSource();
-            source.Name = "DS_ThirnowledgeMyQueries";
+            source.Name = "DS_ThirdKnowledgeMyQueries";
 
             localReport.DataSources.Add(src_query);
 

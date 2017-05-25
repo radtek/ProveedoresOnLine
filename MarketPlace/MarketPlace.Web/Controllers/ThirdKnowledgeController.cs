@@ -451,8 +451,8 @@ namespace MarketPlace.Web.Controllers
                     row_Query = data_Query.NewRow();
                     row_Query["User"] = x.User;
                     row_Query["QueryDate"] = x.CreateDate;
-                    row_Query["Staus"] = x.QueryStatus;
-                    row_Query["QueryType"] = x.SearchType;
+                    row_Query["Status"] = x.QueryStatus == Convert.ToString((int)MarketPlace.Models.General.enumThirdKnowledgeQueryStatus.Finalized) ? "Finalizada":"En Progreso";
+                    row_Query["QueryType"] = x.SearchType == Convert.ToString((int)MarketPlace.Models.General.enumThirdKnowledgeQueryType.Simple) ? "Individual" : "Masiva";
 
                     data_Query.Rows.Add(row_Query);
                     return true;
