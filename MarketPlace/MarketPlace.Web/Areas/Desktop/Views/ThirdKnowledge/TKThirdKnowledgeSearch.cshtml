@@ -4,6 +4,8 @@
     Layout = MVC.Desktop.Shared.Views._Layout;
 
     Model.RenderScripts = false;
+
+    string user = Request.Params["User"] == null ? "" : user = Request.Params["User"].ToString().Replace(",", "");
 }
 @*ESTE ES EL ENVUELTO COMPLETO DE MENU LATERAL Y CONTENIDO*@
 <div class="POMPProviderGreatWrapper">
@@ -55,6 +57,10 @@
 
             <div class="row POMPSearchResultsPager POMPTKSearchPager">
                 <div class="col-sm-12 text-right">
+                    <div class="col-md-3 text-left">
+                        <a class="glyphicon glyphicon-list-alt POMPReportButton" id="ThirdKnowledge_GenerateReport" name="ThirdKnowledge_GenerateReport" title="Generar Reporte"
+                           href="javascript:ThirdKnowledge_ReportViewerObj.RenderReportViewer({Options:['@MarketPlace.Models.General.enumCategoryInfoType.PDF.ToString()','@MarketPlace.Models.General.enumCategoryInfoType.Excel.ToString()'],ObjectId:'ThirdKnowledge',Tittle:'Reporte General'})"></a>
+                    </div>
                     <!--Pager-->
                     @Html.Partial(MVC.Desktop.Shared.Views._TK_ThirdKnowledgeSearch_Pager, Model.RelatedThidKnowledgeSearch)&nbsp;|&nbsp;
                     <span class="POMPTKTotalPagesText">Total Páginas: @(Model.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.TotalPages)</span>
@@ -73,6 +79,18 @@
 @*Templates*@
 <div id="loading"></div>
 
+<input type="hidden" name="ThirdKnowledge_FormQueryPublicId" id="ThirdKnowledge_FormQueryPublicId" value="" />
+@* Report Viewer*@
+@{
+    <div id="ThirdKnowledge_Dialog">
+        <form id="ThirdKnowledge_DialogForm" action="@Url.Action(MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeSearch,MVC.ThirdKnowledge.Name,new
+        {
+            QueryPublicId = "",
+            InitDate = "",
+            EndDate = "",
+        })" method="post"></form>
+    </div>
+}
 
 
 @{
