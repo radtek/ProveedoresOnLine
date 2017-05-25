@@ -191,13 +191,13 @@ namespace MarketPlace.Web.Controllers
                     .Terms("srv_type", c => c
                         .Field(fi => fi.SurveyTypeId)))
                 .Query(q => q.
-                    Filtered(f => f
+                    Bool(f => f
                     //.Query(qi => qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId)))
                     .Filter(f2 =>
                     {
                         QueryContainer qb = null;
 
-                        qb &= q.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId));
+                        qb &= f2.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId));
                         #region Status Srv Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y).FirstOrDefault() != null)
                         {

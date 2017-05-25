@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -259,6 +262,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DS_SurveyGeneralInfoAreas.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\DataSet\DS_ThirdKnowledgeMyQueries.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DS_ThirdKnowledgeMyQueries.xsd</DependentUpon>
     </Compile>
     <Compile Include="Reports\DataSet\DS_ThirdKnowledgeReport.cs">
       <DependentUpon>DS_ThirdKnowledgeReport.xsd</DependentUpon>
@@ -524,6 +532,17 @@
     <None Include="Reports\DataSet\DS_SurveyGeneralInfoAreas.xss">
       <DependentUpon>DS_SurveyGeneralInfoAreas.xsd</DependentUpon>
     </None>
+    <None Include="Reports\DataSet\DS_ThirdKnowledgeMyQueries.xsc">
+      <DependentUpon>DS_ThirdKnowledgeMyQueries.xsd</DependentUpon>
+    </None>
+    <None Include="Reports\DataSet\DS_ThirdKnowledgeMyQueries.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DS_ThirdKnowledgeMyQueries.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reports\DataSet\DS_ThirdKnowledgeMyQueries.xss">
+      <DependentUpon>DS_ThirdKnowledgeMyQueries.xsd</DependentUpon>
+    </None>
     <None Include="Reports\DataSet\DS_ThirdKnowledgeReport.xsc">
       <DependentUpon>DS_ThirdKnowledgeReport.xsd</DependentUpon>
     </None>
@@ -540,6 +559,7 @@
     <EmbeddedResource Include="Reports\C_Report_CalificationProject.rdlc" />
     <EmbeddedResource Include="Reports\C_Report_GerencialInfo.rdlc" />
     <EmbeddedResource Include="Reports\F_FinancialReport.rdlc" />
+    <EmbeddedResource Include="Reports\TK_Report_ThirdKnowledgeMyQueries.rdlc" />
     <EmbeddedResource Include="Reports\PJ_Report_SelectionProcessDetail.rdlc" />
     <EmbeddedResource Include="Reports\SV_Report_GeneralInfo.rdlc" />
     <EmbeddedResource Include="Reports\PJ_Report_SelectionProcess.rdlc" />
@@ -554,6 +574,11 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>XCOPY "$(ProjectDir)$(OutDir)*.dll" "\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.Reports\developer\" /y</PostBuildEvent>
+  </PropertyGroup>
+  <Import Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="'$(SQLDBExtensionsRefPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="'$(SQLDBExtensionsRefPath)' == ''" />
+  <PropertyGroup>
+    <SsdtUnitTestVersion>2.0</SsdtUnitTestVersion>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

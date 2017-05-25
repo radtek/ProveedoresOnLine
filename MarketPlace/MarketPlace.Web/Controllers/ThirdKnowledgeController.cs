@@ -122,6 +122,8 @@ namespace MarketPlace.Web.Controllers
         /// <param name="QueryBasicPublicId">This is the QueryInfo</param>
         /// <param name="ReturnUrl">URL to go back</param>
         /// <returns>Detail View</returns>
+        /// 
+
         public virtual ActionResult TKDetailSingleSearch(string QueryPublicId, string QueryInfoPublicId, string ElasticId, string ReturnUrl)
         {
             ProviderViewModel oModel = new ProviderViewModel();
@@ -250,20 +252,22 @@ namespace MarketPlace.Web.Controllers
                 oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.PageNumber,
                 Convert.ToInt32(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_Grid_RowCountDefault].Value.Trim()),
                 SearchType,
-                Status,                                
+                Status,
                 out TotalRows);
 
             oModel.RelatedThidKnowledgeSearch.FilterList = new Dictionary<string, int>();
             if (!string.IsNullOrEmpty(InitDate))
                 oModel.RelatedThidKnowledgeSearch.FilterList.Add(InitDate, (int)enumTKFilter.DateFromFilter);
             if (!string.IsNullOrEmpty(EndDate))
+            {
                 oModel.RelatedThidKnowledgeSearch.FilterList.Add(EndDate, (int)enumTKFilter.DateToFilter);
+            }
 
             #region ElasticSearch
 
             Uri node = new Uri(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
             var settings = new ConnectionSettings(node);
-            
+
             #region Search 
 
             settings.DefaultIndex(Models.General.InternalSettings.Instance[Models.General.Constants.C_Settings_QueryModelIndex].Value);
@@ -289,7 +293,7 @@ namespace MarketPlace.Web.Controllers
                 .Query(q => q.Filtered(f => f.
                     Filter(f2 =>
                         {
-                            QueryContainer qb = null;                           
+                            QueryContainer qb = null;
 
                             qb &= f2.Terms(tms => tms
                             .Field(fi => fi.CustomerPublicId.ToLower())
@@ -320,11 +324,11 @@ namespace MarketPlace.Web.Controllers
                             {
                                 qb &= q.DateRange(dr => dr
                                         .Field(t2 => t2.CreateDate)
-                                        .GreaterThanOrEquals(InitDate).LessThan(EndDate)                                        
+                                        .GreaterThanOrEquals(InitDate).LessThan(EndDate)
                                     );
                             }
-                              
-                            
+
+
                             return qb;
                         }
                     )
@@ -412,6 +416,60 @@ namespace MarketPlace.Web.Controllers
 
             oModel.ProviderMenu = GetThirdKnowledgeControllerMenu();
 
+            #region Report
+
+            // Get report generator
+            if (Request["DownloadReport"] == "true")
+            {
+
+                #region SetParameters
+
+                List<ReportParameter> parameters = new List<ReportParameter>();
+
+                //Customer Info Parameters
+                parameters.Add(new ReportParameter("CustomerName", SessionModel.CurrentCompany.CompanyName));
+                parameters.Add(new ReportParameter("CustomerIdentification", SessionModel.CurrentCompany.IdentificationNumber));
+                parameters.Add(new ReportParameter("CustomerIdentificationType", SessionModel.CurrentCompany.IdentificationType.ItemName));
+                parameters.Add(new ReportParameter("CustomerImage", SessionModel.CurrentCompany_CompanyLogo));
+
+                parameters.Add(new ReportParameter("ThirdKnowledgeText", MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.MP_TK_TextImage].Value));
+
+
+
+
+                #endregion
+
+                var data_Query = new DataTable();
+                data_Query.Columns.Add("User");
+                data_Query.Columns.Add("QueryDate");
+                data_Query.Columns.Add("Status");
+                data_Query.Columns.Add("QueryType");
+                DataRow row_Query;
+
+                oModel.RelatedThidKnowledgeSearch.ElasticQueryModel.Documents.All(x =>
+                {
+                    row_Query = data_Query.NewRow();
+                    row_Query["User"] = x.User;
+                    row_Query["QueryDate"] = x.CreateDate;
+                    row_Query["Staus"] = x.QueryStatus;
+                    row_Query["QueryType"] = x.SearchType;
+
+                    data_Query.Rows.Add(row_Query);
+                    return true;
+                });
+
+                string fileFormat = Request["ThirdKnowledge_cmbFormat"] != null ? Request["ThirdKnowledge_cmbFormat"].ToString() : "pdf";
+                Tuple<byte[], string, string> ThirdKnowledgeReport = ProveedoresOnLine.Reports.Controller.ReportModule.TK_MyQueriesReport(
+                                                                fileFormat,parameters,
+                                                                data_Query,
+                                                                Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim() + "TK_Report_ThirdKnowledgeMyQueries.rdlc");
+                parameters = null;
+                return File(ThirdKnowledgeReport.Item1, ThirdKnowledgeReport.Item2, ThirdKnowledgeReport.Item3);
+
+            }
+
+            #endregion
+
             return View(oModel);
         }
 
@@ -421,6 +479,7 @@ namespace MarketPlace.Web.Controllers
                 SessionModel.CurrentURL = null;
 
             int oTotalRowsAux = Convert.ToInt32(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_Grid_RowCountDefault].Value.Trim());
+
             if (Request["DownloadReport"] == "true")
                 oTotalRowsAux = 10000;
 

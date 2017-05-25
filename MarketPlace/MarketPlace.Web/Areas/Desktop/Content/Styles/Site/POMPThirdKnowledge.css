@@ -528,6 +528,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 /* A few custom styles for date inputs */
 input[type="date"] {
+    width:80px;
     -webkit-appearance: none;
     color: #4d4d4d;
     font-family: "Helvetica", arial, sans-serif;
@@ -537,7 +538,7 @@ input[type="date"] {
     padding: 2px;
     display: inline-block !important;
     visibility: visible !important;
-    line-height:15px;
+    line-height:20px;
 }
 
 input[type="date"], focus {
@@ -546,4 +547,8 @@ input[type="date"], focus {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
 }
-
+/*TK Report Button Massive Search*/
+.POMPReportButton{
+    color:orange;
+    font-size:20px;
+}

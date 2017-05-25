@@ -126,31 +126,32 @@
                     <form action="javascript:MyQueriesSearchObj.Search({vSearchParam:''})" method="post">
                         <ul>
                             <li>
-                                <span>Desde </span>
-                                @if (Model.FilterList.Where(x => x.Value == (int)MarketPlace.Models.General.enumTKFilter.DateFromFilter).Select(x => x.Key).FirstOrDefault() != null)
-                                {
-                                    <input type="date" id="dt_Filter_From" name="name" value="@Model.FilterList.Where(x => x.Value == (int)MarketPlace.Models.General.enumTKFilter.DateFromFilter).Select(x => x.Key).FirstOrDefault()" />
-                                }
-                                else
-                                {
-                                    <input type="date" id="dt_Filter_From" name="name" value="" />
-                                }
-                            </li>
-                            <li>
-                                <span>Hasta </span>
-                                @if (Model.FilterList.Where(x => x.Value == (int)MarketPlace.Models.General.enumTKFilter.DateToFilter).Select(x => x.Key).FirstOrDefault() != null)
-                                {
-                                    <input type="date" id="dt_Filter_To" name="name" value="@Model.FilterList.Where(x => x.Value == (int)MarketPlace.Models.General.enumTKFilter.DateToFilter).Select(x => x.Key).FirstOrDefault()" />
-                                }
-                                else
-                                {
-                                    <input type="date" id="dt_Filter_To" name="name" value="" />
-                                }
+                                <fieldset>
+                                    @if (Model.FilterList.Where(x => x.Value == (int)MarketPlace.Models.General.enumTKFilter.DateFromFilter).Select(x => x.Key).FirstOrDefault() != null)
+                                    {
+                                        <input type="date" id="dt_Filter_From" name="name" value="@Model.FilterList.Where(x => x.Value == (int)MarketPlace.Models.General.enumTKFilter.DateFromFilter).Select(x => x.Key).FirstOrDefault()" />
+                                    }
+                                    else
+                                    {
+                                        <input type="date" id="dt_Filter_From" name="name" value="" />
+                                    }
+
+                                    @if (Model.FilterList.Where(x => x.Value == (int)MarketPlace.Models.General.enumTKFilter.DateToFilter).Select(x => x.Key).FirstOrDefault() != null)
+                                    {
+                                        <input type="date" id="dt_Filter_To" name="name" value="@Model.FilterList.Where(x => x.Value == (int)MarketPlace.Models.General.enumTKFilter.DateToFilter).Select(x => x.Key).FirstOrDefault()" />
+                                    }
+                                    else
+                                    {
+                                        <input type="date" id="dt_Filter_To" name="name" value="" />
+                                    }
+                                    
+                                        <button class="btn btn-sm POMPFilterButton" type="submit" name="frm_DateFilter" value="Filtrar">
+                                            <span class="glyphicon glyphicon-chevron-right"></span>
+                                        </button>                                    
+                                </fieldset>
                             </li>
                         </ul>
-                        <div class="text-right">
-                            <input class="btn btn-primary POMPFilterButton" type="submit" name="frm_DateFilter" value="Filtrar" />
-                        </div>                        
+                                              
                     </form>
                 </li>                
                 if (Model.DomainFilter != null && Model.DomainFilter.Count > 0)

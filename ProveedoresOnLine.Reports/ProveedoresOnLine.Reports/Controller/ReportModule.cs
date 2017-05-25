@@ -556,6 +556,47 @@ namespace ProveedoresOnLine.Reports.Controller
             return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_ThirdKnowledgeQueryDetailReport + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
 
         }
+
+        public static Tuple<byte[],string, string>TK_MyQueriesReport(string FormatType, List<ReportParameter> ReportData,DataTable DT_Query, string FilePath)
+        {
+            LocalReport localReport = new LocalReport();
+            localReport.EnableExternalImages = true;
+            localReport.ReportPath = FilePath;
+            localReport.SetParameters(ReportData);
+
+            Microsoft.Reporting.WebForms.ReportDataSource src_query = new Microsoft.Reporting.WebForms.ReportDataSource();
+            src_query.Name = "DS_ThirdnowledgeMyQueries";
+            src_query.Value = DT_Query != null ? DT_Query : new DataTable();
+
+            ReportDataSource source = new ReportDataSource();
+            source.Name = "DS_ThirnowledgeMyQueries";
+
+            localReport.DataSources.Add(src_query);
+
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            string deviceInfo =
+                       "<DeviceInfo>" +
+                       "  <OutputFormat>" + FormatType + "</OutputFormat>" +
+
+                       "</DeviceInfo>";
+            Warning[] warnings;
+            string[] streams;
+            byte[] renderedBytes;
+
+            renderedBytes = localReport.Render(
+                FormatType,
+                deviceInfo,
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings);
+            if (FormatType == "Excel") { FormatType = "xls"; }
+            return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_ThirdKnowledgeMyQueriesReport + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
+
+        }
         #endregion
 
         #region CustomerProviderReport
