@@ -1,6 +1,7 @@
 ﻿@model MarketPlace.Models.ThirdKnowledge.ThirdKnowledgeViewModel
 @{
     Tuple<int, int> oPageInfo = Model.RelatedThidKnowledgePager.GetStartEndPage();
+        
     string initdate = Request.Params["InitDate"] == null ? "" : Request.Params["InitDate"].ToString().Replace(",", "") ;
     string endate = Request.Params["EndDate"] == null ? "" : endate = Request.Params["EndDate"].ToString().Replace(",", "");
     string searchtype = Request.Params["SearchType"] == null ? "" : searchtype = Request.Params["SearchType"].ToString().Replace(",", "");

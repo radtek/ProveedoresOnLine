@@ -6,16 +6,16 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>6.67188cm</Width>
+              <Width>10.7784cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>5.84735cm</Width>
+              <Width>5.76136cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>6.64407cm</Width>
+              <Width>4.41496cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>5.61541cm</Width>
+              <Width>3.86255cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -32,7 +32,10 @@
                           <TextRuns>
                             <TextRun>
                               <Value>Usuario</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
@@ -65,7 +68,10 @@
                           <TextRuns>
                             <TextRun>
                               <Value>Fecha Consulta</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
@@ -98,7 +104,10 @@
                           <TextRuns>
                             <TextRun>
                               <Value>Estado</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
@@ -131,7 +140,10 @@
                           <TextRuns>
                             <TextRun>
                               <Value>Tipo Consulta</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
@@ -169,7 +181,9 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Fields!User.Value</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
@@ -201,7 +215,9 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Fields!QueryDate.Value</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
@@ -233,7 +249,9 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Fields!Status.Value</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
@@ -265,7 +283,9 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Fields!QueryType.Value</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI Light</FontFamily>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
@@ -309,10 +329,10 @@
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
-        <Top>1.37941cm</Top>
+        <Top>4.87191cm</Top>
         <Left>0.45719cm</Left>
         <Height>1.62333cm</Height>
-        <Width>24.77872cm</Width>
+        <Width>24.81727cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -326,7 +346,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>    Consultas</Value>
+                <Value>    Resumen de Consultas</Value>
                 <Style>
                   <FontWeight>Bold</FontWeight>
                   <Color>DimGray</Color>
@@ -337,7 +357,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox19</rd:DefaultName>
-        <Top>0.17226cm</Top>
+        <Top>3.66476cm</Top>
         <Height>0.78521cm</Height>
         <Width>25.61842cm</Width>
         <ZIndex>1</ZIndex>
@@ -357,14 +377,224 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
+      <Textbox Name="Textbox20">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Email:</Value>
+                <Style>
+                  <FontFamily>Segoe UI Light</FontFamily>
+                  <FontSize>9pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                  <Color>DimGray</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox19</rd:DefaultName>
+        <Top>1.48013cm</Top>
+        <Left>1.06762cm</Left>
+        <Height>0.57354cm</Height>
+        <Width>3.7861cm</Width>
+        <ZIndex>2</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox24">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Fecha de generación:</Value>
+                <Style>
+                  <FontFamily>Segoe UI Light</FontFamily>
+                  <FontSize>9pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                  <Color>DimGray</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox19</rd:DefaultName>
+        <Top>2.25708cm</Top>
+        <Left>1.0676cm</Left>
+        <Height>0.57354cm</Height>
+        <Width>3.7861cm</Width>
+        <ZIndex>3</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox21">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!User.Value</Value>
+                <Style>
+                  <FontFamily>Segoe UI Light</FontFamily>
+                  <FontSize>9pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                  <Color>DimGray</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox19</rd:DefaultName>
+        <Top>1.48013cm</Top>
+        <Left>5.03011cm</Left>
+        <Height>0.57354cm</Height>
+        <Width>9.79214cm</Width>
+        <ZIndex>4</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox25">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!CreateDate.Value</Value>
+                <Style>
+                  <FontFamily>Segoe UI Light</FontFamily>
+                  <FontSize>9pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                  <Color>DimGray</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox19</rd:DefaultName>
+        <Top>2.23006cm</Top>
+        <Left>5.03011cm</Left>
+        <Height>0.57354cm</Height>
+        <Width>9.79214cm</Width>
+        <ZIndex>5</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox22">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Nombre:</Value>
+                <Style>
+                  <FontFamily>Segoe UI Light</FontFamily>
+                  <FontSize>9pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                  <Color>DimGray</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox19</rd:DefaultName>
+        <Top>0.7302cm</Top>
+        <Left>1.06762cm</Left>
+        <Height>0.57354cm</Height>
+        <Width>3.7861cm</Width>
+        <ZIndex>6</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox23">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!LastName.Value + " " + Parameters!FirstName.Value</Value>
+                <Style>
+                  <FontFamily>Segoe UI Light</FontFamily>
+                  <FontSize>9pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                  <Color>DimGray</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox19</rd:DefaultName>
+        <Top>0.7302cm</Top>
+        <Left>5.03011cm</Left>
+        <Height>0.57354cm</Height>
+        <Width>9.79214cm</Width>
+        <ZIndex>7</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
-    <Height>1.4375in</Height>
+    <Height>2.66667in</Height>
     <Style />
   </Body>
   <Width>10.08599in</Width>
   <Page>
     <PageHeader>
-      <Height>2.11667cm</Height>
+      <Height>2.01167cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -372,7 +602,7 @@
           <Source>External</Source>
           <Value>=Parameters!CustomerImage.Value</Value>
           <Sizing>FitProportional</Sizing>
-          <Top>0.0635cm</Top>
+          <Top>0.3175cm</Top>
           <Left>0.46456cm</Left>
           <Height>1.63067cm</Height>
           <Width>3.39354cm</Width>
@@ -391,7 +621,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>="REPORTE MIS CONSULTAS"</Value>
+                      <Value>="Reporte de Consultas"</Value>
                       <Style>
                         <FontFamily>Calibri</FontFamily>
                         <FontSize>16pt</FontSize>
@@ -565,6 +795,30 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="ThirdKnowledgeText">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="User">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CreateDate">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="FirstName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="LastName">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

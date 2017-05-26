@@ -433,8 +433,9 @@ namespace MarketPlace.Web.Controllers
                 parameters.Add(new ReportParameter("CustomerImage", SessionModel.CurrentCompany_CompanyLogo));
 
                 parameters.Add(new ReportParameter("ThirdKnowledgeText", MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.MP_TK_TextImage].Value));
-
-
+                parameters.Add(new ReportParameter("User", SessionModel.CurrentLoginUser.Email));
+                parameters.Add(new ReportParameter("FirstName", SessionModel.CurrentLoginUser.Name));
+                parameters.Add(new ReportParameter("LastName", SessionModel.CurrentLoginUser.LastName));
 
 
                 #endregion
