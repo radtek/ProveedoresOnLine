@@ -5,7 +5,13 @@
 
     Model.RenderScripts = false;
 
+    string pageNumber = Request.Params["PageNumber"] == null ? "" : Request.Params["PageNumber"].ToString().Replace(",", "");
+    string initdate = Request.Params["InitDate"] == null ? "" : Request.Params["InitDate"].ToString().Replace(",", "");
+    string endate = Request.Params["EndDate"] == null ? "" : endate = Request.Params["EndDate"].ToString().Replace(",", "");
+    string searchtype = Request.Params["SearchType"] == null ? "" : searchtype = Request.Params["SearchType"].ToString().Replace(",", "");
+    string status = Request.Params["Status"] == null ? "" : status = Request.Params["Status"].ToString().Replace(",", "");
     string user = Request.Params["User"] == null ? "" : user = Request.Params["User"].ToString().Replace(",", "");
+    string domain = Request.Params["Domain"] == null ? "" : domain = Request.Params["Domain"].ToString().Replace(",", "");
 }
 @*ESTE ES EL ENVUELTO COMPLETO DE MENU LATERAL Y CONTENIDO*@
 <div class="POMPProviderGreatWrapper">
@@ -84,10 +90,14 @@
 @{
     <div id="ThirdKnowledge_Dialog">
         <form id="ThirdKnowledge_DialogForm" action="@Url.Action(MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeSearch,MVC.ThirdKnowledge.Name,new
-        {
-            QueryPublicId = "",
-            InitDate = "",
-            EndDate = "",
+        {   
+            PageNumber = pageNumber,
+            InitDate = initdate,
+            EndDate = endate,
+            SearchType = searchtype,
+            Status = status, 
+            user = user,
+            Domain = domain,
         })" method="post"></form>
     </div>
 }
