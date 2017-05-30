@@ -421,6 +421,86 @@ namespace MarketPlace.Web.Controllers
             // Get report generator
             if (Request["DownloadReport"] == "true")
             {
+                #region ElasticSearch
+                oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel();
+                oModel.RelatedThidKnowledgeSearch.FilterList = new Dictionary<string, int>();
+                if (!string.IsNullOrEmpty(InitDate))
+                    oModel.RelatedThidKnowledgeSearch.FilterList.Add(InitDate, (int)enumTKFilter.DateFromFilter);
+                if (!string.IsNullOrEmpty(EndDate))
+                {
+                    oModel.RelatedThidKnowledgeSearch.FilterList.Add(EndDate, (int)enumTKFilter.DateToFilter);
+                }
+
+                Uri node2 = new Uri(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
+                var settings2 = new ConnectionSettings(node2);
+                
+
+                settings2.DefaultIndex(Models.General.InternalSettings.Instance[Models.General.Constants.C_Settings_QueryModelIndex].Value);
+                settings2.DisableDirectStreaming(true);
+                ElasticClient client2 = new ElasticClient(settings2);
+
+                oModel.RelatedThidKnowledgeSearch.ElasticQueryModel = client2.Search<TK_QueryIndexModel>(s => s
+                .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
+                .TrackScores(true)
+                .Size(2000000)
+                .Aggregations
+                    (agg => agg
+                    .Terms("status", aggv => aggv
+                        .Field(fi => fi.QueryStatus))
+                    .Terms("date", aggv => aggv
+                        .Field(fi => fi.LastModify))
+                    .Terms("searchtype", c => c
+                        .Field(fi => fi.SearchType))
+                    .Terms("domain", c => c
+                        .Field(fi => fi.Domain))
+                    .Terms("useremail", bl => bl
+                        .Field(fi => fi.User)))
+                    .Query(q => q.Filtered(f => f.
+                        Filter(f2 =>
+                        {
+                            QueryContainer qb = null;
+
+                            qb &= f2.Terms(tms => tms
+                        .Field(fi => fi.CustomerPublicId.ToLower())
+                         .Terms<string>(SessionModel.CurrentCompany.CompanyPublicId.ToLower())
+                        );
+
+                            if (!string.IsNullOrEmpty(Status))
+                            {
+                                qb &= q.Term(m => m.QueryStatus, Status);
+                                oModel.RelatedThidKnowledgeSearch.FilterList.Add(Status, (int)enumTKFilter.StatusFilter);
+                            }
+                            if (!string.IsNullOrEmpty(SearchType))
+                            {
+                                qb &= q.Term(m => m.SearchType, SearchType);
+                                oModel.RelatedThidKnowledgeSearch.FilterList.Add(SearchType, (int)enumTKFilter.QueryTypeFilter);
+                            }
+                            if (!string.IsNullOrEmpty(User))
+                            {
+                                qb &= q.Term(m => m.User, User);
+                                oModel.RelatedThidKnowledgeSearch.FilterList.Add(User, (int)enumTKFilter.UserFilter);
+                            }
+                            if (!string.IsNullOrEmpty(Domain))
+                            {
+                                qb &= q.Term(m => m.Domain, Domain);
+                                oModel.RelatedThidKnowledgeSearch.FilterList.Add(Domain, (int)enumTKFilter.DomainFilter);
+                            }
+                            if (!string.IsNullOrEmpty(InitDate) && !string.IsNullOrEmpty(EndDate))
+                            {
+                                qb &= q.DateRange(dr => dr
+                                    .Field(t2 => t2.CreateDate)
+                                    .GreaterThanOrEquals(InitDate).LessThan(EndDate)
+                                );
+                            }
+
+
+                            return qb;
+                        }
+                        )
+                    )
+                    )
+                );
+                #endregion
 
                 #region SetParameters
 
@@ -452,7 +532,7 @@ namespace MarketPlace.Web.Controllers
                     row_Query = data_Query.NewRow();
                     row_Query["User"] = x.User;
                     row_Query["QueryDate"] = x.CreateDate;
-                    row_Query["Status"] = x.QueryStatus == Convert.ToString((int)MarketPlace.Models.General.enumThirdKnowledgeQueryStatus.Finalized) ? "Finalizada":"En Progreso";
+                    row_Query["Status"] = x.QueryStatus == Convert.ToString((int)MarketPlace.Models.General.enumThirdKnowledgeQueryStatus.Finalized) ? "Finalizada" : "En Progreso";
                     row_Query["QueryType"] = x.SearchType == Convert.ToString((int)MarketPlace.Models.General.enumThirdKnowledgeQueryType.Simple) ? "Individual" : "Masiva";
 
                     data_Query.Rows.Add(row_Query);
@@ -461,7 +541,7 @@ namespace MarketPlace.Web.Controllers
 
                 string fileFormat = Request["ThirdKnowledge_cmbFormat"] != null ? Request["ThirdKnowledge_cmbFormat"].ToString() : "pdf";
                 Tuple<byte[], string, string> ThirdKnowledgeReport = ProveedoresOnLine.Reports.Controller.ReportModule.TK_MyQueriesReport(
-                                                                fileFormat,parameters,
+                                                                fileFormat, parameters,
                                                                 data_Query,
                                                                 Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim() + "TK_Report_ThirdKnowledgeMyQueries.rdlc");
                 parameters = null;
