@@ -61,6 +61,7 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
                             Email_OC = sgi.Field<string>("Email_OC"),
                             Email_P = sgi.Field<string>("Email_P"),
                             Email_Cert = sgi.Field<string>("Email_Cert"),
+                            ProviderType = sgi.Field<string>("ProviderType"),
                             Comentaries = sgi.Field<DateTime>("Comentaries"),
                         }
                             into sgig
@@ -81,6 +82,7 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
                             Email_OC = sgig.Key.Email_OC,
                             Email_P = sgig.Key.Email_P,
                             Email_Cert = sgig.Key.Email_Cert,
+                            ProviderType = sgig.Key.ProviderType,
                             LastModified = sgig.Key.Comentaries,
                         }).ToList();
             }
@@ -223,7 +225,7 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
                           Country = sconi.Field<string>("Country"),
                           BankPassword = sconi.Field<string>("BankPassword"),
                           BankCountNumber = sconi.Field<string>("BankCountNumber"),
-                          CountType = sconi.Field<Int64>("CountType"),
+                          CountType = sconi.Field<int>("CountType"),
                           IBAN = sconi.Field<string>("IBAN"),
                           PayWay = sconi.Field<string>("PayWay"),
                           PayCondition = sconi.Field<string>("PayCondition"),
@@ -377,19 +379,19 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
                             Enable = spl.Field<UInt64>("Enable") == 1 ? true : false
                         }
                             into splg
-                            select new SanofiProcessLogModel
-                            {
-                                SanofiProcessLogId = splg.Key.SanofiProcessLogId,
-                                ProviderId = splg.Key.ProviderId,
-                                CompanyPublicId = splg.Key.CompanyPublicId,
-                                ProcessName = splg.Key.ProcessName,
-                                FileName = splg.Key.FileName,
-                                SendStatus = splg.Key.SendStatus,
-                                IsSucces = splg.Key.IsSuccess,
-                                CreateDate = splg.Key.CreateDate,
-                                LastModify = splg.Key.LastModify,
-                                Enable = splg.Key.Enable
-                            }).FirstOrDefault();
+                        select new SanofiProcessLogModel
+                        {
+                            SanofiProcessLogId = splg.Key.SanofiProcessLogId,
+                            ProviderId = splg.Key.ProviderId,
+                            CompanyPublicId = splg.Key.CompanyPublicId,
+                            ProcessName = splg.Key.ProcessName,
+                            FileName = splg.Key.FileName,
+                            SendStatus = splg.Key.SendStatus,
+                            IsSucces = splg.Key.IsSuccess,
+                            CreateDate = splg.Key.CreateDate,
+                            LastModify = splg.Key.LastModify,
+                            Enable = splg.Key.Enable
+                        }).FirstOrDefault();
             }
 
             if(oReturn ==null)
@@ -403,12 +405,12 @@ namespace IntegrationPlattaform.SANOFIProcess.DAL.MySQLDAO
                     FileName = string.Empty,
                     SendStatus = false,
                     IsSucces = false,
-                    CreateDate = new DateTime(0001,01,01),
+                    CreateDate = new DateTime(0001, 01, 01),
                     LastModify = new DateTime(0001, 01, 01),
                     Enable = false
                 };
-                    
-                 
+
+
             }
             return oReturn;
         }

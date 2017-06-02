@@ -2048,7 +2048,7 @@ namespace ProveedoresOnLine.CompanyProvider.Test
         public void MPBlackListGetBasicInfo()
         {
             List<BlackListModel> oReturn =
-               ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.BlackListGetBasicInfo("50583E9D");
+               ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.BlackListGetBasicInfo("A118B4DE");
             Assert.AreEqual(true, oReturn.Count >= 1);
         }
 
