@@ -196,10 +196,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                                 oGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
                                 oComercialGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
                                 oComercialBasicRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialBasicInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
-                                oContableRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetContableInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
-                                if (int.Parse(oGeneralRow.ProviderType) == (int)IntegrationPlattaform.SANOFIProcess.Models.enumProviderType.Provider)
-                                {
-
+                                oContableRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetContableInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();                                
 
                                     //if exists get modules information
                                     if (oGeneralRow != null)
@@ -214,7 +211,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                                     }
                                     if (oContableRow != null)
                                         oContableInfo.Add(oContableRow);
-                                }
+                                                                    
                                 LogFile(count + 1 + " Update info for Provider: " + l);
                                 count++;
                                 return true;
