@@ -211,9 +211,11 @@ namespace MarketPlace.Web.Controllers
         {
             if (SessionModel.CurrentURL != null)
                 SessionModel.CurrentURL = null;
-            string RelatedUser = null;
 
-            if (SessionModel.CurrentCompanyLoginUser.RelatedCompany.FirstOrDefault().RelatedUser.FirstOrDefault().RelatedCompanyRole.ParentRoleCompany != null)
+            string RelatedUser = null;
+            var ParentRole = SessionModel.CurrentCompanyLoginUser.RelatedCompany.FirstOrDefault().RelatedUser.FirstOrDefault().RelatedCompanyRole.ParentRoleCompany;
+
+            if ( ParentRole!= null && ParentRole!=0)
             {
                 RelatedUser = SessionModel.CurrentCompanyLoginUser.RelatedUser.Email;
             }
@@ -310,10 +312,10 @@ namespace MarketPlace.Web.Controllers
                                 qb &= q.Term(m => m.SearchType, SearchType);
                                 oModel.RelatedThidKnowledgeSearch.FilterList.Add(SearchType, (int)enumTKFilter.QueryTypeFilter);
                             }
-                            if (!string.IsNullOrEmpty(User))
+                            if (!string.IsNullOrEmpty(RelatedUser))
                             {
-                                qb &= q.Term(m => m.User, User);
-                                oModel.RelatedThidKnowledgeSearch.FilterList.Add(User, (int)enumTKFilter.UserFilter);
+                                qb &= q.Term(m => m.User, RelatedUser);
+                                oModel.RelatedThidKnowledgeSearch.FilterList.Add(RelatedUser, (int)enumTKFilter.UserFilter);
                             }
                             if (!string.IsNullOrEmpty(Domain))
                             {
