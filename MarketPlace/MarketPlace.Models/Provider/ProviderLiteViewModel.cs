@@ -49,7 +49,10 @@ namespace MarketPlace.Models.Provider
                     {
                         return IsProviderCustomer &&
                          RelatedProvider != null &&
-                         RelatedProvider.RelatedCustomerInfo != null ?
+                         RelatedProvider.RelatedCustomerInfo != null &&
+                         RelatedProvider.RelatedCustomerInfo.Where(s => s.Key == Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value).Select(s => s).ToList().Count > 0
+                         ?
+
                              RelatedProvider.
                              RelatedCustomerInfo[Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value].
                              ItemType.
