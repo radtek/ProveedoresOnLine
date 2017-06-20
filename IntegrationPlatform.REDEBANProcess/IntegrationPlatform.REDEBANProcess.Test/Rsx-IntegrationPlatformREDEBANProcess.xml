@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Settings>
+  <IntegrationPlatformREDEBANProcess>
+    <!--Default Currency-->
+    <key name="REDEBAN_ProviderPublicId">26D388E3</key>
+
+    <!--Temp Folder-->
+    <key name="REDEBAN_File_TempDirectory">D:\ProveedoresOnLine\Source\ProveedoresOnLine\ProveedoresOnLine\IntegrationPlatform.REDEBANProcess\IntegrationPlatform.REDEBANProcess.Test\TempDirectory</key>
+
+    <!--S3 Path File-->
+    <key name="REDEBAN_File_ExcelDirectory">REDEBAN_Process</key>
+
+  </IntegrationPlatformREDEBANProcess>
+</Settings>

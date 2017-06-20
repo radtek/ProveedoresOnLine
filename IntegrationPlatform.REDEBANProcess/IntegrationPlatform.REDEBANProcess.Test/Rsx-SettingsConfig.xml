@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SettingsConfig>
+  <Module name="IntegrationPlatformREDEBANProcess">
+    <key name="location">D:\ProveedoresOnLine\Source\ProveedoresOnLine\ProveedoresOnLine\IntegrationPlatform.REDEBANProcess\IntegrationPlatform.REDEBANProcess.Test\Rsx-IntegrationPlatformREDEBANProcess.xml</key>
+  </Module>
+
+  <Module name="FileRepository">
+    <key name="location">\\ProjectConfigFiles\ConfigFiles\ProveedoresOnLine\BackOffice\Rsx-FileRepository.xml</key>
+  </Module>
+
+  <Module name="REDEBANMessage">
+    <key name="location">D:\ProveedoresOnLine\Source\ProveedoresOnLine\ProveedoresOnLine\IntegrationPlatform.REDEBANProcess\IntegrationPlatform.REDEBANProcess.Test\Rsx-IntegrationPlatformREDEBANProcess.xml</key>
+  </Module>
+</SettingsConfig>
