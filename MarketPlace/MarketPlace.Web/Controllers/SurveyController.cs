@@ -5,6 +5,7 @@ using Microsoft.Reporting.WebForms;
 using Nest;
 using ProveedoresOnLine.Company.Models.Company;
 using ProveedoresOnLine.Company.Models.Util;
+using ProveedoresOnLine.CompanyProvider.Controller;
 using ProveedoresOnLine.CompanyProvider.Models.Provider;
 using ProveedoresOnLine.IndexSearch.Models;
 using ProveedoresOnLine.SurveyModule.Models;
@@ -620,6 +621,10 @@ namespace MarketPlace.Web.Controllers
                 Where(x => SessionModel.CurrentCompany.CompanyType.ItemId == (int)enumCompanyType.BuyerProvider ?
                             (x.RelatedCompany.CompanyPublicId == ProviderPublicId) :
                             x.RelatedCompany.CompanyPublicId == ProviderPublicId).FirstOrDefault();
+
+            //Get all 
+            oModel.ContactCompanyInfo = new List<GenericItemModel>();
+            oModel.ContactCompanyInfo = CompanyProvider.MPContactGetBasicInfo(oProvider.RelatedCompany.CompanyPublicId, (int)enumContactType.PersonContact);
 
             //validate provider permisions
             if (oProvider == null)

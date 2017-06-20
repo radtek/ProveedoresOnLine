@@ -18,6 +18,62 @@
                             <textarea id="Survey_SurveyReport_ActionPlan" class="form-control" rows="4" cols="40" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_ImprovementPlan).ToString())_"></textarea>
                         </div>
                     </li>
+                    @{
+                        List<Tuple<string, string>> oEmailToDraw = new List<Tuple<string, string>>();
+                        Model.ContactCompanyInfo.All(x =>
+                        {
+                            if (x.ItemInfo.Where(inf => inf.Value == "210001").Select(inf => inf).ToList() != null &&
+                                x.ItemInfo.Where(inf => inf.Value == "210001").Select(inf => inf).ToList().Count > 0
+                             || x.ItemInfo.Where(inf => inf.Value == "210006").Select(inf => inf).ToList() != null &&
+                                x.ItemInfo.Where(inf => inf.Value == "210006").Select(inf => inf).ToList().Count > 0
+                             || x.ItemInfo.Where(inf => inf.Value == "210009").Select(inf => inf).ToList() != null &&
+                                x.ItemInfo.Where(inf => inf.Value == "210009").Select(inf => inf).ToList().Count > 0)
+                            {
+                                oEmailToDraw.Add(new Tuple<string, string>(x.ItemInfo.Where(inf => inf.ItemInfoType.ItemId == 206007).Select(inf => inf.Value).FirstOrDefault(), x.ItemInfo.Where(s => s.ItemInfoType.ItemId == 206001).Select(s => s.Value).FirstOrDefault()));
+                            }
+                            return true;
+                        });
+                        if (oEmailToDraw.Count > 0)
+                        {
+                            <li>
+                                <label>Enviar Reporte de Evaluación a</label>
+                            </li>
+                            foreach (var item in oEmailToDraw)
+                            {
+                                if (item.Item2 == "210001")
+                                {
+                                    <li>
+                                        <label>Contacto Comercial</label>
+                                    </li>
+                                    <li>
+                                        <label>@item.Item1</label>
+                                        <input type="checkbox" name="ComercialEmail" id="ComercialEmail" />
+                                    </li>
+                                }
+                                if (item.Item2 == "210006")
+                                {
+                                    <li>
+                                        <label>Contacto HSEQ</label>
+                                    </li>
+                                    <li>
+                                        <label>@item.Item1</label>
+                                        <input type="checkbox" name="HSEQEmail" id="HSEQEmail" />
+                                    </li>
+                                }
+                                if (item.Item2 == "210009")
+                                {
+                                    <li>
+                                        <label>Contacto Compras</label>
+                                    </li>
+                                    <li>
+                                        <label>@item.Item1</label>
+                                        <input type="checkbox" name="BuyerEmail" id="BuyerEmail" />
+                                    </li>
+                                }
+                            }
+                        }
+                    }
+
                 </ul>
                 @{
                     if (Model.RelatedSurveySearch.SurveySearchResult != null && Model.RelatedSurveySearch.SurveySearchResult.Count > 0)
@@ -35,18 +91,18 @@
                         </div>
                     }
                 }
-                
+
             </form>
         </div>
     </div>
-}
-else
-{
-    <script type="text/javascript">
-        $(document).ready(function () {
-            Provider_SurveyReports.Init({
-                ObjectId: 'Survey_SurveyReport',
-            });
-        });
-    </script>
-}
+                    }
+                    else
+                    {
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                Provider_SurveyReports.Init({
+                                    ObjectId: 'Survey_SurveyReport',
+                                });
+                            });
+                        </script>
+                    }
