@@ -379,3 +379,21 @@
     padding: 8px 0px;
     font-weight: normal !important;
 }
+/*.SurveyPanel{
+        margin-bottom: 20px;
+    background-color: rgba(0, 0, 0, .075);
+    border: 1px solid #f35800;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    font-weight:normal;
+
+}*/
+.panel-yellow {
+    border-color: #ff8300;
+}
+.panel-yellow > .panel-heading {
+    border-color: #ff8300;
+    color: white;
+    background-color: #ff8300;
+}

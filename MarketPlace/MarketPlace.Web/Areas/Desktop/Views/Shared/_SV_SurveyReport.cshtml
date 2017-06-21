@@ -3,78 +3,76 @@
 @if (!Model.RenderScripts)
 {
     <div id="Survey_SurveyReport">
-        <div id="Survey_SurveyReport_Dialog" >
-            <form id="Survey_SurveyReport_Form" action="@Url.Content("~/Desktop/Provider/SVSurveySearch?RPSurveyFilterReport=true&ProviderPublicId=" + Model.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyPublicId)" method="post">
-                <ul>
-                    <li>
-                        <div class="form-group">
-                            <label for="Survey_SurveyReport_Observation">Observación</label>
-                            <textarea id="Survey_SurveyReport_Observation" class="form-control" rows="4" cols="40" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_Observation).ToString())_"></textarea>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="form-group">
-                            <label for="Survey_SurveyReport_ActionPlan">Plan de Acción</label>
-                            <textarea id="Survey_SurveyReport_ActionPlan" class="form-control" rows="4" cols="40" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_ImprovementPlan).ToString())_"></textarea>
-                        </div>
-                    </li>
-                    @{
-                        List<Tuple<string, string>> oEmailToDraw = new List<Tuple<string, string>>();
-                        Model.ContactCompanyInfo.All(x =>
-                        {
-                            if (x.ItemInfo.Where(inf => inf.Value == "210001").Select(inf => inf).ToList() != null &&
-                                x.ItemInfo.Where(inf => inf.Value == "210001").Select(inf => inf).ToList().Count > 0
-                             || x.ItemInfo.Where(inf => inf.Value == "210006").Select(inf => inf).ToList() != null &&
-                                x.ItemInfo.Where(inf => inf.Value == "210006").Select(inf => inf).ToList().Count > 0
-                             || x.ItemInfo.Where(inf => inf.Value == "210009").Select(inf => inf).ToList() != null &&
-                                x.ItemInfo.Where(inf => inf.Value == "210009").Select(inf => inf).ToList().Count > 0)
-                            {
-                                oEmailToDraw.Add(new Tuple<string, string>(x.ItemInfo.Where(inf => inf.ItemInfoType.ItemId == 206007).Select(inf => inf.Value).FirstOrDefault(), x.ItemInfo.Where(s => s.ItemInfoType.ItemId == 206001).Select(s => s.Value).FirstOrDefault()));
-                            }
-                            return true;
-                        });
-                        if (oEmailToDraw.Count > 0)
-                        {
-                            <li>
-                                <label>Enviar Reporte de Evaluación a</label>
-                            </li>
-                            foreach (var item in oEmailToDraw)
-                            {
-                                if (item.Item2 == "210001")
-                                {
-                                    <li>
-                                        <label>Contacto Comercial</label>
-                                    </li>
-                                    <li>
-                                        <label>@item.Item1</label>
-                                        <input type="checkbox" name="ComercialEmail" id="ComercialEmail" />
-                                    </li>
-                                }
-                                if (item.Item2 == "210006")
-                                {
-                                    <li>
-                                        <label>Contacto HSEQ</label>
-                                    </li>
-                                    <li>
-                                        <label>@item.Item1</label>
-                                        <input type="checkbox" name="HSEQEmail" id="HSEQEmail" />
-                                    </li>
-                                }
-                                if (item.Item2 == "210009")
-                                {
-                                    <li>
-                                        <label>Contacto Compras</label>
-                                    </li>
-                                    <li>
-                                        <label>@item.Item1</label>
-                                        <input type="checkbox" name="BuyerEmail" id="BuyerEmail" />
-                                    </li>
-                                }
-                            }
-                        }
-                    }
+        <div id="Survey_SurveyReport_Dialog">
+            <form id="Survey_SurveyReport_Form" class="SurveyReportDialog" action="@Url.Content("~/Desktop/Provider/SVSurveySearch?RPSurveyFilterReport=true&ProviderPublicId=" + Model.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyPublicId)" method="post">
 
-                </ul>
+                <div class="form-group">
+                    <label for="Survey_SurveyReport_Observation">Observación</label>
+                    <textarea id="Survey_SurveyReport_Observation" class="form-control" rows="4" cols="40" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_Observation).ToString())_"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="Survey_SurveyReport_ActionPlan">Plan de Acción</label>
+                    <textarea id="Survey_SurveyReport_ActionPlan" class="form-control" rows="4" cols="40" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_ImprovementPlan).ToString())_"></textarea>
+                </div>
+
+                @{
+                    List<Tuple<string, string>> oEmailToDraw = new List<Tuple<string, string>>();
+                    Model.ContactCompanyInfo.All(x =>
+                    {
+                        if (x.ItemInfo.Where(inf => inf.Value == "210001").Select(inf => inf).ToList() != null &&
+                            x.ItemInfo.Where(inf => inf.Value == "210001").Select(inf => inf).ToList().Count > 0
+                         || x.ItemInfo.Where(inf => inf.Value == "210006").Select(inf => inf).ToList() != null &&
+                            x.ItemInfo.Where(inf => inf.Value == "210006").Select(inf => inf).ToList().Count > 0
+                         || x.ItemInfo.Where(inf => inf.Value == "210009").Select(inf => inf).ToList() != null &&
+                            x.ItemInfo.Where(inf => inf.Value == "210009").Select(inf => inf).ToList().Count > 0)
+                        {
+                            oEmailToDraw.Add(new Tuple<string, string>(x.ItemInfo.Where(inf => inf.ItemInfoType.ItemId == 206007).Select(inf => inf.Value).FirstOrDefault(), x.ItemInfo.Where(s => s.ItemInfoType.ItemId == 206001).Select(s => s.Value).FirstOrDefault()));
+                        }
+                        return true;
+                    });
+
+                    if (oEmailToDraw.Count > 0)
+                    {
+                        <div class="panel panel-yellow">
+                            <div class="panel-heading">Enviar Reporte de Evaluación</div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    @{
+                                        foreach (var item in oEmailToDraw)
+                                        {
+                                            if (item.Item2 == "210001")
+                                            {
+                                                <h5>Contacto Comercial</h5>
+                                                <label for="ComercialEmail">
+                                                    <input type="checkbox" name="ComercialEmail" id="ComercialEmail" />
+                                                    @item.Item1
+                                                </label>
+                                            }
+                                            if (item.Item2 == "210006")
+                                            {
+                                                <h5>Contacto HSEQ</h5>
+                                                <label for="HSEQEmail">
+                                                    <input type="checkbox" name="HSEQEmail" id="HSEQEmail" />
+                                                    @item.Item1
+                                                </label>
+                                            }
+                                            if (item.Item2 == "210009")
+                                            {
+                                                <h5>Contacto Compras</h5>
+                                                <label for="BuyerEmail">
+                                                    <input type="checkbox" name="BuyerEmail" id="BuyerEmail" />
+                                                    @item.Item1
+                                                </label>
+                                            }
+                                        }
+                                    }
+                                </div>
+                            </div>                         
+                        </div>
+                                    }
+                }
+
                 @{
                     if (Model.RelatedSurveySearch.SurveySearchResult != null && Model.RelatedSurveySearch.SurveySearchResult.Count > 0)
                     {

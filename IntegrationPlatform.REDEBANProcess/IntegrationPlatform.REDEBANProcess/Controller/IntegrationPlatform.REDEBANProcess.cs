@@ -1,4 +1,5 @@
 ﻿using IntegrationPlatform.REDEBANProcess.Models;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,11 @@ namespace IntegrationPlatform.REDEBANProcess
         {
             var providers = GetAllProviders();
             var InfoToExcel = new List<REDEBANInfoModel>();
+            var oRowExcel = new REDEBANInfoModel();
+            var oFileExcel = new StringBuilder();
+            //oFileExcel.AppendLine
+            //    ("CompanyName"+
+            //    );
             if (providers != null)
             {
                 providers.All(x =>
@@ -20,13 +26,20 @@ namespace IntegrationPlatform.REDEBANProcess
                     var prvInfo = GetProviderInfo(REDEBANProcess.Models.Constants.C_REDEBAN_ProviderPublicId,x.CompanyPublicId);
                     if (prvInfo != null)
                     {
-                        //TO DO: fill list to put in excel file
+                        oRowExcel.Provider.CompanyName = prvInfo.Provider.CompanyName;
+                        
+
                     }
                     
                     return true;
                 });
             }
         }
+
+        //private static ExcelWorksheet CreateExcelFile(ExcelPackage p, string SheetName)
+        //{
+        //    p.Workbook.Worksheets.Add
+        //}
 
         public static List<CompanyModel> GetAllProviders()
         {

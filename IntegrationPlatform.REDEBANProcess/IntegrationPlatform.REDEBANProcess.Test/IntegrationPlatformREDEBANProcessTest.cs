@@ -1,4 +1,5 @@
 ﻿using System;
+using OfficeOpenXml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace IntegrationPlatform.REDEBANProcess.Test
@@ -21,5 +22,23 @@ namespace IntegrationPlatform.REDEBANProcess.Test
 
             Assert.AreEqual(true, oReturn != null);
         }
+        [TestMethod]
+        public void CreateExcelFile()
+        {
+            var sheetName = "Hoja1";
+            var p = new ExcelPackage();
+
+            p.Workbook.Worksheets.Add(sheetName);
+            ExcelWorksheet ws = p.Workbook.Worksheets[1];
+            ws.Name = sheetName; //Setting Sheet's name
+            ws.Cells.Style.Font.Size = 11; //Default font size for whole sheet
+            ws.Cells.Style.Font.Name = "Calibri"; //Default Font name for whole sheet
+
+
+
+            Assert.AreEqual(true, ws != null);
+        }
+        [TestMethod]
+        public void 
     }
 }
