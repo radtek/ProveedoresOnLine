@@ -252,7 +252,7 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.MySQLDAO
 
                         FinancialInfo_BankCert =
                         (
-                            from fn in response.DataSetResult.Tables[4].AsEnumerable()
+                            from fn in response.DataSetResult.Tables[5].AsEnumerable()
                             where !fn.IsNull("FinancialId")
                             group fn by new
                             {
