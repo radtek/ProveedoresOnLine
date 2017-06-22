@@ -1,12 +1,20 @@
 ﻿using System;
 using OfficeOpenXml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics;
+using System.IO;
 
 namespace IntegrationPlatform.REDEBANProcess.Test
 {
     [TestClass]
     public class IntegrationPlatformREDEBANProcessTest
     {
+        [TestMethod]
+        public void StartProcess()
+        {
+            REDEBANProcess.IntegrationPlatformREDEBANProcess.StartProcess();
+        }
+
         [TestMethod]
         public void GetAllProviders()
         {
@@ -23,7 +31,7 @@ namespace IntegrationPlatform.REDEBANProcess.Test
             Assert.AreEqual(true, oReturn != null);
         }
         [TestMethod]
-        public void CreateExcelFile()
+        public void CreateExcelWorkBook()
         {
             var sheetName = "Hoja1";
             var p = new ExcelPackage();
@@ -39,6 +47,16 @@ namespace IntegrationPlatform.REDEBANProcess.Test
             Assert.AreEqual(true, ws != null);
         }
         [TestMethod]
-        public void 
+        public void CreateExcelFile()
+        {
+            var p = new ExcelPackage();
+            Byte[] bin = p.GetAsByteArray();
+            string file = Guid.NewGuid().ToString() + ".xlsx";
+            File.WriteAllBytes(file, bin);
+
+            //These lines will open it in Excel
+            ProcessStartInfo pi = new ProcessStartInfo(file);
+            Process.Start(pi);
+        }
     }
 }
