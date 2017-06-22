@@ -58,5 +58,12 @@ namespace IntegrationPlatform.REDEBANProcess.Test
             ProcessStartInfo pi = new ProcessStartInfo(file);
             Process.Start(pi);
         }
+        [TestMethod]
+        public void ProcessLogUpsert()
+        {
+            var oReturn = REDEBANProcess.IntegrationPlatformREDEBANProcess.RedebanProcessLogUpsert(0, "Providers Files Report", "file.xls", false, true, true);
+
+            Assert.AreEqual(true, oReturn !=0);
+        }
     }
 }

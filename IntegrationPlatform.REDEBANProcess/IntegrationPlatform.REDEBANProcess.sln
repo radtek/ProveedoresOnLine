@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationPlatform.REDEBAN
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationPlatform.REDEBANProcess.Test", "IntegrationPlatform.REDEBANProcess.Test\IntegrationPlatform.REDEBANProcess.Test.csproj", "{21630C8A-1A5B-4EDA-938A-8522C92CFBB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationPlatformREDEBANMessage", "IntegrationPlatformREDEBANMessage\IntegrationPlatformREDEBANMessage.csproj", "{7632F147-730D-4CAC-B5C2-97BCBF390954}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{21630C8A-1A5B-4EDA-938A-8522C92CFBB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21630C8A-1A5B-4EDA-938A-8522C92CFBB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21630C8A-1A5B-4EDA-938A-8522C92CFBB8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7632F147-730D-4CAC-B5C2-97BCBF390954}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7632F147-730D-4CAC-B5C2-97BCBF390954}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7632F147-730D-4CAC-B5C2-97BCBF390954}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7632F147-730D-4CAC-B5C2-97BCBF390954}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

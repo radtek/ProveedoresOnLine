@@ -37,6 +37,15 @@
       <HintPath>..\packages\EPPlus.4.0.5\lib\net20\EPPlus.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MessageModule.Client">
+      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.ThirdKnowledge\developer\MessageModule.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="ProveedoresOnLine.FileManager">
+      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.ThirdKnowledge\developer\ProveedoresOnLine.FileManager.dll</HintPath>
+    </Reference>
+    <Reference Include="SettingsManager">
+      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.ThirdKnowledge\developer\SettingsManager.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -55,6 +64,8 @@
     <Compile Include="Interfaces\IIntegrationPlatformREDEBANProcessData.cs" />
     <Compile Include="Models\CompanyModel.cs" />
     <Compile Include="Models\Constants.cs" />
+    <Compile Include="Models\Enumerations.cs" />
+    <Compile Include="Models\InternalSettings.cs" />
     <Compile Include="Models\REDEBANInfoModel.cs" />
     <Compile Include="Models\Utils\CatalogModel.cs" />
     <Compile Include="Models\Utils\GenericItemInfoModel.cs" />

@@ -5,10 +5,12 @@
     <key name="REDEBAN_ProviderPublicId">26D388E3</key>
 
     <!--Temp Folder-->
-    <key name="REDEBAN_File_TempDirectory">D:\ProveedoresOnLine\Source\ProveedoresOnLine\ProveedoresOnLine\IntegrationPlatform.REDEBANProcess\IntegrationPlatform.REDEBANProcess.Test\TempDirectory</key>
+    <key name="REDEBAN_File_TempDirectory">D:\ProveedoresOnLine\Source\ProveedoresOnLine\ProveedoresOnLine\IntegrationPlatform.REDEBANProcess\IntegrationPlatform.REDEBANProcess.Test\TempDirectory\</key>
 
     <!--S3 Path File-->
-    <key name="REDEBAN_File_ExcelDirectory">REDEBAN_Process</key>
+    <key name="REDEBAN_File_ExcelDirectory">/REDEBAN_Process</key>
 
+    <key name="N_RedebanReportMessage"><![CDATA[Envio de reporte general de proveedores en proceso]]></key>
+    
   </IntegrationPlatformREDEBANProcess>
 </Settings>

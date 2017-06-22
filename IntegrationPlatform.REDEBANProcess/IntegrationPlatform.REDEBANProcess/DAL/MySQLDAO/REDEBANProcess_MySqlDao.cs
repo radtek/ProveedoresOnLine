@@ -496,7 +496,7 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.MySQLDAO
                         #endregion                        
                         #region HSEQ Accidents
 
-                        HSEQ_Acc = 
+                        HSEQ_Acc =
                         (
                                       from fn in response.DataSetResult.Tables[10].AsEnumerable()
                                       where !fn.IsNull("CertificationId")
@@ -552,14 +552,27 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.MySQLDAO
             return oReturn;
         }
 
-        public int RedebanProcessLogInsert(string CompanyPublicId, string ProceesName, string FileName, bool SendStatus, bool IsSucces, bool Enable)
+        public int RedebanProcessLogUpsert(int RedebanProcessLogId, string ProceesName, string FileName, bool SendStatus, bool IsSucces, bool Enable)
         {
-            throw new NotImplementedException();
-        }
+            List<IDbDataParameter> lstparams = new List<IDbDataParameter>();
 
-        public int RedebanProcessUpdateLog(int RedebanProcessLogId, string CompanyPublicId, string ProceesName, string FileName, bool SendStatus, bool IsSucces, bool Enable)
-        {
-            throw new NotImplementedException();
+            lstparams.Add(DataInstance.CreateTypedParameter("vRedebanProcessLogId", RedebanProcessLogId));
+            lstparams.Add(DataInstance.CreateTypedParameter("vProcessName", ProceesName));
+            lstparams.Add(DataInstance.CreateTypedParameter("vFileName", FileName));
+            lstparams.Add(DataInstance.CreateTypedParameter("vSendStatus", SendStatus == true ? 1 : 0));
+            lstparams.Add(DataInstance.CreateTypedParameter("vIsSucces", IsSucces == true ? 1 : 0));
+            lstparams.Add(DataInstance.CreateTypedParameter("vEnable", Enable == true ? 1 : 0));
+
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.Scalar,
+                CommandText = "Redeban_ProcessLog_Upsert",
+                CommandType = CommandType.StoredProcedure,
+                Parameters = lstparams
+            });
+
+            return Convert.ToInt32(response.ScalarResult);
         }
     }
 }
