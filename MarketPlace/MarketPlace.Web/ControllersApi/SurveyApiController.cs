@@ -239,7 +239,7 @@ namespace MarketPlace.Web.ControllersApi
             string SurveyConfigId,
             string SurveyConfigItemType)
         {
-            List<MarketPlace.Models.Survey.SurveyConfigItemViewModel> oReturn = new List<Models.Survey.SurveyConfigItemViewModel>();
+           List<MarketPlace.Models.Survey.SurveyConfigItemViewModel> oReturn = new List<Models.Survey.SurveyConfigItemViewModel>();
 
             if (SCSurveyConfigItemGetBySurveyConfigId == "true" && SurveyConfigId != null)
             {
