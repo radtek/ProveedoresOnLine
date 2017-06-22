@@ -148,5 +148,13 @@ namespace ProveedoresOnLine.Reports.Test
         }
 
         #endregion
+
+        [TestMethod]
+        public void SurveyReportGenerator()
+        {
+            var oReturn = ProveedoresOnLine.Reports.Controller.ReportModule.SurveyReportGenerator(new List<string>(), "DA5C572E");
+
+            Assert.AreEqual(true, oReturn != null);
+        }
     }
 }

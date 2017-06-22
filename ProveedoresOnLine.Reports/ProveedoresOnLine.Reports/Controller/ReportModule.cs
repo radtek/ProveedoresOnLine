@@ -7,6 +7,8 @@ using System.Text;
 using ProveedoresOnLine.Company.Models.Util;
 using ProveedoresOnLine.SurveyModule.Models;
 using ProveedoresOnLine.Reports.Models.Reports;
+using System.IO.MemoryMappedFiles;
+using System.IO;
 
 namespace ProveedoresOnLine.Reports.Controller
 {
@@ -344,8 +346,7 @@ namespace ProveedoresOnLine.Reports.Controller
             return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_SelectionProcess + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
 
         }
-
-
+        
         public static Tuple<byte[], string, string> PJ_SelectionProcessReportDetail(DataTable DtHSEQ, DataTable DtExperiences, DataTable DtFinancial, DataTable DtLegal, DataTable DtTotal, List<ReportParameter> ReportData, string FormatType, string FilePath)
         {
             LocalReport localReport = new LocalReport();
@@ -890,5 +891,27 @@ namespace ProveedoresOnLine.Reports.Controller
 
         #endregion
 
+        public static byte[] SurveyReportGenerator(List<string> Params, string CustomerPublicId)
+        {
+            string SettingFile = Models.Constants.R_SVFileReport.Replace("{CustomerPublicId}", CustomerPublicId);
+            //Obtain the Report to replace
+            using (var mappedFile1 = MemoryMappedFile.CreateFromFile(ProveedoresOnLine.Reports.Models.Util.InternalSettings.Instance[SettingFile].Value))
+            {
+                using (Stream mmStream = mappedFile1.CreateViewStream())
+                {
+                    using (StreamReader sr = new StreamReader(mmStream, ASCIIEncoding.ASCII))
+                    {
+                        while (!sr.EndOfStream)
+                        {
+                            var line = sr.ReadLine();
+                            var lineWords = line.Split(' ');
+                        }
+                    }
+                }
+            }
+
+
+            return null;
+        }
     }
 }
