@@ -292,14 +292,14 @@ namespace IntegrationPlatform.REDEBANProcess
                                 //Generate the report
                                 Byte[] bin = p.GetAsByteArray();
                                 string file = "REDEBAN_ProviderInfo_" + DateTime.Now.ToString("yyyy_MM_dd_hhmmss")  + ".xlsx";
-                                File.WriteAllBytes(file, bin);
+                                File.WriteAllBytes(strFolder + file, bin);
 
                                 #region UploadFileToS3
 
                                 //Send to S3
                                 string oFileCompleteName = strFolder + file;
                                 //UpLoad file to s3                
-                                string strRemoteFile = ProveedoresOnLine.FileManager.FileController.LoadFile(oFileCompleteName,InternalSettings.Instance[IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_File_ExcelDirectory].Value);
+                                string strRemoteFile = ProveedoresOnLine.FileManager.FileController.LoadFile(oFileCompleteName, "/REDEBAN_Process");
 
                                 //remove temporal file
                                 if (System.IO.File.Exists(oFileCompleteName))
@@ -312,13 +312,13 @@ namespace IntegrationPlatform.REDEBANProcess
                                 #endregion
 
 
-                                RedebanProcessLogUpsert(0, "Provider Files Report", file, false, true, true);
+                                RedebanProcessLogUpsert(0, "Provider Files Report", strRemoteFile, false, true, true);
                                 //TODO: setting
                                 //Send Message
                                 MessageModule.Client.Models.NotificationModel oDataMessage = new MessageModule.Client.Models.NotificationModel();
                                 oDataMessage.CompanyPublicId = "26D388E3";
-                                oDataMessage.User = "REDEBAN Process";
-                                oDataMessage.CompanyLogo = "";
+                                oDataMessage.User = "diego.jaramillo@proveedoresonline.co";
+                                oDataMessage.CompanyLogo = "http://proveedoresonline.s3-website-us-east-1.amazonaws.com/BackOffice/CompanyFile/26D388E3/CompanyFile_26D388E3_20160609142707.png";
                                 oDataMessage.CompanyName = "REDEBAN";
                                 oDataMessage.IdentificationType = "NIT";
                                 oDataMessage.IdentificationNumber = "123";
@@ -327,8 +327,7 @@ namespace IntegrationPlatform.REDEBANProcess
 
                                 oDataMessage.Label = Models.InternalSettings.Instance
                                         [Models.Constants.N_RedebanReportMessage].Value;
-                                oDataMessage.Url = Models.InternalSettings.Instance
-                                        [Models.Constants.N_RedebanReportMessage].Value.Replace("{{InfoFileUrl}}", file);
+                                oDataMessage.Url = strRemoteFile;
                                 oDataMessage.NotificationType = (int)IntegrationPlatform.REDEBANProcess.Models.Enumerations.enumNotificationType.RedebanNotification;
                                 oDataMessage.Enable = true;
 
@@ -388,14 +387,15 @@ namespace IntegrationPlatform.REDEBANProcess
                 //Create message object
                 MessageModule.Client.Models.ClientMessageModel oMessageToSend = new MessageModule.Client.Models.ClientMessageModel()
                 {
-                    Agent = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance[Constants.N_RedebanReportMessage].Value,
+                    Agent = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance[Constants.C_Settings_REDEBAN_Mail].Value,
                     User = oDataMessage.User,
                     ProgramTime = DateTime.Now,
                     MessageQueueInfo = new List<Tuple<string, string>>(),
                 };
 
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("To", oDataMessage.User));
-
+                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("To", "diego.jaramillo@proveedoresonline.co"));
+                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("InfoFileUrl", oDataMessage.Url));
+                
                 //get customer info
                 oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
                     ("CustomerLogo", oDataMessage.CompanyLogo));

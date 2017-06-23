@@ -60,6 +60,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\FileRepository.S3\developer\FileRepository.S3.dll</HintPath>
     </Reference>
+    <Reference Include="IntegrationPlatform.REDEBANProcess">
+      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\IntegrationPlatform.REDEBANProcess\developer\IntegrationPlatform.REDEBANProcess.dll</HintPath>
+    </Reference>
     <Reference Include="IntegrationPlatform.SANOFIMessage">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\IntegrationPlatform.SANOFIMessage\developer\IntegrationPlatform.SANOFIMessage.dll</HintPath>
     </Reference>
@@ -169,6 +172,7 @@
     <Compile Include="Implement\CompanyIndexProcessJob.cs" />
     <Compile Include="Implement\CompanyProviderProcessJob.cs" />
     <Compile Include="Implement\CompanySurveyIndexProcessJob.cs" />
+    <Compile Include="Implement\REDEBANProcess.cs" />
     <Compile Include="Implement\RestrictiveListReadProcess.cs" />
     <Compile Include="Implement\RestrictiveListSendProcess.cs" />
     <Compile Include="Implement\SANOFIProcess.cs" />

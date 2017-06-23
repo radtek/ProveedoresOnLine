@@ -37,14 +37,28 @@
       <HintPath>..\packages\EPPlus.4.0.5\lib\net20\EPPlus.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MessageModule.Client">
-      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.ThirdKnowledge\developer\MessageModule.Client.dll</HintPath>
+    <Reference Include="FileRepository.Manager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\FileRepository.S3\developer\FileRepository.Manager.dll</HintPath>
     </Reference>
-    <Reference Include="ProveedoresOnLine.FileManager">
-      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.ThirdKnowledge\developer\ProveedoresOnLine.FileManager.dll</HintPath>
+    <Reference Include="FileRepository.S3">
+      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\FileRepository.S3\developer\FileRepository.S3.dll</HintPath>
     </Reference>
-    <Reference Include="SettingsManager">
-      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.ThirdKnowledge\developer\SettingsManager.dll</HintPath>
+    <Reference Include="LogManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\LogManager\developer\LogManager.dll</HintPath>
+    </Reference>
+    <Reference Include="MessageModule.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\MessageModule.Client\developer\MessageModule.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="ProveedoresOnLine.FileManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.FileManager\developer\ProveedoresOnLine.FileManager.dll</HintPath>
+    </Reference>
+    <Reference Include="SettingsManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\SettingsManager\developer\SettingsManager.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -76,6 +90,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>XCOPY "$(ProjectDir)$(OutDir)*.dll" "\\ProjectAssemblies\Assemblies\ProveedoresOnLine\IntegrationPlatform.REDEBANProcess\developer\" /y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

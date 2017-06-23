@@ -11,6 +11,8 @@
     <key name="REDEBAN_File_ExcelDirectory">/REDEBAN_Process</key>
 
     <key name="N_RedebanReportMessage"><![CDATA[Envio de reporte general de proveedores en proceso]]></key>
+
+    <key name="REDEBAN_Mail">POL_Redeban_Mail</key>
     
   </IntegrationPlatformREDEBANProcess>
 </Settings>

@@ -22,6 +22,8 @@ namespace IntegrationPlatform.REDEBANProcess.Models
 
         public const string C_Settings_File_ExcelDirectory = "REDEBAN_File_ExcelDirectory";
 
+        public const string C_Settings_REDEBAN_Mail = "REDEBAN_Mail";
+
         #region Notifications
 
         public const string N_RedebanReportMessage = "N_RedebanReportMessage";

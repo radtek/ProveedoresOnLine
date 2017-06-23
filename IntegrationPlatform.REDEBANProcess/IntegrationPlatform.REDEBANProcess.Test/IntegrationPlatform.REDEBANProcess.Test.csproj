@@ -45,19 +45,26 @@
     </Reference>
     <Reference Include="FileRepository.Manager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.ThirdKnowledge\developer\FileRepository.Manager.dll</HintPath>
+      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\FileRepository.S3\developer\FileRepository.Manager.dll</HintPath>
+    </Reference>
+    <Reference Include="FileRepository.S3">
+      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\FileRepository.S3\developer\FileRepository.S3.dll</HintPath>
+    </Reference>
+    <Reference Include="LogManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\LogManager\developer\LogManager.dll</HintPath>
     </Reference>
     <Reference Include="MessageModule.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.ThirdKnowledge\developer\MessageModule.Client.dll</HintPath>
+      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\MessageModule.Client\developer\MessageModule.Client.dll</HintPath>
     </Reference>
     <Reference Include="ProveedoresOnLine.FileManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.ThirdKnowledge\developer\ProveedoresOnLine.FileManager.dll</HintPath>
+      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.FileManager\developer\ProveedoresOnLine.FileManager.dll</HintPath>
     </Reference>
     <Reference Include="SettingsManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.ThirdKnowledge\developer\SettingsManager.dll</HintPath>
+      <HintPath>\\projectassemblies\Assemblies\ProveedoresOnLine\SettingsManager\developer\SettingsManager.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
