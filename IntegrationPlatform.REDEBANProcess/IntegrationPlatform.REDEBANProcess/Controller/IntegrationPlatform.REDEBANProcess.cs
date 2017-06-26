@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace IntegrationPlatform.REDEBANProcess
 {
@@ -18,6 +19,7 @@ namespace IntegrationPlatform.REDEBANProcess
     {
         public static void StartProcess()
         {
+            LogFile("REDEBAN Integration Process Init");
             var providers = GetAllProviders();
             var InfoToExcel = new List<REDEBANInfoModel>();
             var oRowExcel = new REDEBANInfoModel();
@@ -97,7 +99,7 @@ namespace IntegrationPlatform.REDEBANProcess
                             {
                                 var MainCell = ws.Cells[rowIndex, i];
                                 MainCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                                MainCell.Style.Fill.BackgroundColor.SetColor(Color.Gray);
+                                MainCell.Style.Fill.BackgroundColor.SetColor(Color.Orange);
                                 
                             }
 
@@ -283,6 +285,7 @@ namespace IntegrationPlatform.REDEBANProcess
 
                             if (proCount >= providers.Count)
                             {
+                                LogFile("REDEBAN Integration Process File Generation");
                                 string strFolder = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
                                     [IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_File_TempDirectory].Value;
 
@@ -305,13 +308,9 @@ namespace IntegrationPlatform.REDEBANProcess
                                 if (System.IO.File.Exists(oFileCompleteName))
                                     System.IO.File.Delete(oFileCompleteName);
 
+                                LogFile("REDEBAN Integration Process File Upload");
                                 #endregion
-
-                                #region Notification
-
-                                #endregion
-
-
+                             
                                 RedebanProcessLogUpsert(0, "Provider Files Report", strRemoteFile, false, true, true);
                                 //TODO: setting
                                 //Send Message
@@ -335,6 +334,7 @@ namespace IntegrationPlatform.REDEBANProcess
 
                                 IntegrationPlatform.REDEBANProcess.IntegrationPlatformREDEBANProcess.SendMessage(oDataMessage);
 
+                                LogFile("REDEBAN Integration Process File Queue Message");
                                 //These lines will open it in Excel, for test purposes
                                 //ProcessStartInfo pi = new ProcessStartInfo(file);
                                 //Process.Start(pi);
@@ -441,6 +441,31 @@ namespace IntegrationPlatform.REDEBANProcess
             return DAL.Controller.IntegrationPlatformREDEBANDataController.Instance.RedebanProcessLogUpsert(RedebanProcessLogId, ProceesName, FileName, SendStatus, IsSucces, Enable);
         }
 
+        #region Log File
+
+        private static void LogFile(string LogMessage)
+        {
+            try
+            {
+                //get file Log
+                string LogFile = AppDomain.CurrentDomain.BaseDirectory.Trim().TrimEnd(new char[] { '\\' }) + "\\" +
+                    System.Configuration.ConfigurationManager.AppSettings
+                    [IntegrationPlatform.REDEBANProcess.Models.Constants.C_AppSettings_LogFile].Trim().TrimEnd(new char[] { '\\' });
+
+                if (!System.IO.Directory.Exists(LogFile))
+                    System.IO.Directory.CreateDirectory(LogFile);
+
+                LogFile += "\\" + "Log_REDEBANProcess_" + DateTime.Now.ToString("yyyyMMdd") + ".log";
+
+                using (System.IO.StreamWriter sw = System.IO.File.AppendText(LogFile))
+                {
+                    sw.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + "::" + LogMessage);
+                    sw.Close();
+                }
+            }
+            catch { }
+        }
+        #endregion
 
     }
 }
