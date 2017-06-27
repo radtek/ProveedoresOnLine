@@ -14,5 +14,7 @@ namespace IntegrationPlatform.REDEBANProcess.Interfaces
         REDEBANInfoModel GetProviderInfo(string CompanyPublicId, string ProviderPublicId);        
 
         int RedebanProcessLogUpsert(int RedebanProcessLogId,string ProceesName, string FileName, bool SendStatus, bool IsSucces, bool Enable);
+
+        RedebanLogModel GetLogBySendStatus(bool SendStatus);        
     }
 }

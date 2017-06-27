@@ -52,5 +52,10 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.Controller
         {
             return DataFactory.RedebanProcessLogUpsert(RedebanProcessLogId, ProceesName, FileName, SendStatus, IsSucces, Enable);
         }
+
+        public RedebanLogModel GetLogBySendStatus(bool SendStatus)
+        {
+            return DataFactory.GetLogBySendStatus(SendStatus);
+        }
     }
 }

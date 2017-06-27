@@ -26,6 +26,7 @@ namespace IntegrationPlatform.REDEBANProcess.Models
 
         #region Notifications
 
+        public const string N_Redeban_Mail_To = "N_Redeban_Mail_TO";
         public const string N_RedebanReportMessage = "N_RedebanReportMessage";
         public const string N_RedebanCompanyName = "N_RedebanCompanyName";
         public const string N_RedebanCompanyLogo = "N_RedebanCompanyLogo";
@@ -37,6 +38,8 @@ namespace IntegrationPlatform.REDEBANProcess.Models
         public const string C_Settings_ExcelFile_Title = "ExcelTitle";
 
         public const string C_Settings_ExcelFile_Author = "ExcelAuthor";
+
+        public const string C_Settings_ExcelFile_NoAnswer = "NoAnwser";
 
         #endregion
     }

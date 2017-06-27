@@ -83,6 +83,7 @@
     <Compile Include="Models\Enumerations.cs" />
     <Compile Include="Models\InternalSettings.cs" />
     <Compile Include="Models\REDEBANInfoModel.cs" />
+    <Compile Include="Models\RedebanLogModel.cs" />
     <Compile Include="Models\Utils\CatalogModel.cs" />
     <Compile Include="Models\Utils\GenericItemInfoModel.cs" />
     <Compile Include="Models\Utils\GenericItemModel.cs" />

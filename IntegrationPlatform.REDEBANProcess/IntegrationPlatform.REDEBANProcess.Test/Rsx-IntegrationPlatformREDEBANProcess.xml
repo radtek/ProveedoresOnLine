@@ -11,6 +11,8 @@
     <key name="REDEBAN_File_ExcelDirectory">/REDEBAN_Process</key>
 
     <!--Notification-->
+    <key name="N_Redeban_Mail_TO">diego.jaramillo@publicar.com</key>
+    
     <key name="N_RedebanReportMessage"><![CDATA[Envio de reporte general de proveedores en proceso]]></key>
 
     <key name="REDEBAN_Mail">POL_Redeban_Mail</key>
@@ -23,5 +25,7 @@
     <key name="ExcelAuthor">ProveedoresOnLine S.A.S</key>
     
     <key name="ExcelTitle">Informe Gerencial de Proveedores REDEBAN</key>
+
+    <key name="NoAnwser">N/A</key>
   </IntegrationPlatformREDEBANProcess>
 </Settings>

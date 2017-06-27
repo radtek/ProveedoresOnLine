@@ -597,5 +597,56 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.MySQLDAO
 
             return Convert.ToInt32(response.ScalarResult);
         }
+
+        public RedebanLogModel GetLogBySendStatus(bool SendStatus)
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
+
+            lstParams.Add(DataInstance.CreateTypedParameter("vSendStatus", (SendStatus == true) ? 1 : 0));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "Redeban_GetLogBySendStatus",
+                CommandType = CommandType.StoredProcedure,
+                Parameters = lstParams,
+            });
+
+            RedebanLogModel oReturn = null;
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn =
+                    (from pl in response.DataTableResult.AsEnumerable()
+                     where !pl.IsNull("RedebanProcessLogId")
+                     group pl by new
+                     {
+                         SanofiProcessLogId = pl.Field<int>("RedebanProcessLogId"),                        
+                         ProcessName = pl.Field<string>("ProcessName"),
+                         FileName = pl.Field<string>("FileName"),
+                         SendStatus = pl.Field<UInt64>("SendStatus") == 1 ? true : false,
+                         IsSuccess = pl.Field<UInt64>("IsSucces") == 1 ? true : false,
+                         CreateDate = pl.Field<DateTime>("CreateDate"),
+                         LastModify = pl.Field<DateTime>("LastModify"),
+                         Enable = pl.Field<UInt64>("Enable") == 1 ? true : false,
+                     }
+                         into plg
+                     select new RedebanLogModel()
+                     {
+                         RedebanProcessLogId = plg.Key.SanofiProcessLogId,                         
+                         ProcessName = plg.Key.ProcessName,
+                         FileName = plg.Key.FileName,
+                         SendStatus = plg.Key.SendStatus,
+                         IsSucces = plg.Key.IsSuccess,
+                         CreateDate = plg.Key.CreateDate,
+                         LastModify = plg.Key.LastModify,
+                         Enable = plg.Key.Enable,
+                     }).FirstOrDefault();
+            }
+
+            return oReturn;
+        }
+        
     }
 }
