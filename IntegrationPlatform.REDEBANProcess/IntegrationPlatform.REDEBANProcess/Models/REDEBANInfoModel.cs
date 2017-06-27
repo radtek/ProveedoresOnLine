@@ -8,7 +8,9 @@ namespace IntegrationPlatform.REDEBANProcess.Models
 {
     public class REDEBANInfoModel
     {
-        public CompanyModel Provider { get; set; }
+        public CompanyModel ProviderBasicInfo { get; set; }
+
+        public CompanyModel ProviderFullInfo { get; set; }
 
         public List<GenericItemModel> LegalInfo_ChaimberOfCommerce { get; set; }
 

@@ -88,7 +88,7 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.MySQLDAO
                     into pig
                     select new REDEBANInfoModel()
                     {
-                        Provider = new CompanyModel()
+                        ProviderBasicInfo = new CompanyModel()
                         {
                             CompanyName = response.DataSetResult.Tables[0].Rows[0].Field<string>("CompanyName"),
                             CompanyPublicId = response.DataSetResult.Tables[0].Rows[0].Field<string>("CompanyPublicId"),
@@ -98,6 +98,11 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.MySQLDAO
                             Telephone = response.DataSetResult.Tables[1].Rows[0].Field<string>("Tel"),
                             City = response.DataSetResult.Tables[1].Rows[0].Field<string>("City"),
                             Enable = response.DataSetResult.Tables[0].Rows[0].Field<UInt64>("Enable") == 1 ? true : false
+                        },
+
+                        ProviderFullInfo = new CompanyModel()
+                        {
+                            
                         },
 
                         #region Legal Information-Chaimber Of Commerce
