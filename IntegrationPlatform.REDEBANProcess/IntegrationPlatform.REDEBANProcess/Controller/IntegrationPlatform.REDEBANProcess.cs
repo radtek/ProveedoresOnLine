@@ -38,7 +38,7 @@ namespace IntegrationPlatform.REDEBANProcess
                     var ws = CreateExcelFile(p, "Proveedores");
 
                     #region Headers
-                    
+
                     ws.Cells[1, 1].Value = "Razón Social";
                     ws.Cells[1, 2].Value = "No Identificación";
                     ws.Cells[1, 3].Value = "Estado";
@@ -54,10 +54,10 @@ namespace IntegrationPlatform.REDEBANProcess
                     ws.Cells[1, 13].Value = "Salud, Medio Ambiente y Seguridad";
                     ws.Cells[1, 14].Value = "Sistema de Riesgos Laborales";
                     ws.Cells[1, 15].Value = "Certificado de Accidentalidad";
-                    
+
                     //Freeze HeadLine
-                    ws.View.FreezePanes(2,1);
-                    
+                    ws.View.FreezePanes(2, 1);
+
                     //Some Style for the header line
                     for (int i = 1; i < 16; i++)
                     {
@@ -65,7 +65,7 @@ namespace IntegrationPlatform.REDEBANProcess
                         HeaderLine.Style.Font.Bold = true;
                         HeaderLine.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     }
-                    
+
 
                     #endregion
 
@@ -87,12 +87,25 @@ namespace IntegrationPlatform.REDEBANProcess
 
 
                             //Provider Info
-                            ws.Cells[rowIndex, 1].Value = prvInfo.Provider.CompanyName;
-                            ws.Cells[rowIndex, 2].Value = prvInfo.Provider.IdentificationNumber;
-                            ws.Cells[rowIndex, 3].Value = prvInfo.Provider.Status;
-                            ws.Cells[rowIndex, 4].Value = prvInfo.Provider.Representant;
-                            ws.Cells[rowIndex, 5].Value = prvInfo.Provider.Telephone;
-                            ws.Cells[rowIndex, 6].Value = prvInfo.Provider.City;
+                            if (prvInfo.ProviderFullInfo != null)
+                            {
+                                ws.Cells[rowIndex, 1].Value = prvInfo.ProviderFullInfo.CompanyName;
+                                ws.Cells[rowIndex, 2].Value = prvInfo.ProviderFullInfo.IdentificationNumber;
+                                ws.Cells[rowIndex, 3].Value = prvInfo.ProviderFullInfo.Status;
+                                ws.Cells[rowIndex, 4].Value = prvInfo.ProviderFullInfo.Representant;
+                                ws.Cells[rowIndex, 5].Value = prvInfo.ProviderFullInfo.Telephone;
+                                ws.Cells[rowIndex, 6].Value = prvInfo.ProviderFullInfo.City;
+                            }
+                            else
+                            {
+                                ws.Cells[rowIndex, 1].Value = prvInfo.ProviderBasicInfo.CompanyName;
+                                ws.Cells[rowIndex, 2].Value = prvInfo.ProviderBasicInfo.IdentificationNumber;
+                                ws.Cells[rowIndex, 3].Value = prvInfo.ProviderBasicInfo.Status;
+                                ws.Cells[rowIndex, 4].Value = "N/A";
+                                ws.Cells[rowIndex, 5].Value = "N/A";
+                                ws.Cells[rowIndex, 6].Value = "N/A";
+                            }
+
 
                             //Fill Backgorund Color Main Line
                             for (int i = 1; i < 16; i++)
@@ -100,7 +113,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                 var MainCell = ws.Cells[rowIndex, i];
                                 MainCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
                                 MainCell.Style.Fill.BackgroundColor.SetColor(Color.Orange);
-                                
+
                             }
 
                             //TODO: setting
@@ -294,7 +307,7 @@ namespace IntegrationPlatform.REDEBANProcess
 
                                 //Generate the report
                                 Byte[] bin = p.GetAsByteArray();
-                                string file = "REDEBAN_ProviderInfo_" + DateTime.Now.ToString("yyyy_MM_dd_hhmmss")  + ".xlsx";
+                                string file = "REDEBAN_ProviderInfo_" + DateTime.Now.ToString("yyyy_MM_dd_hhmmss") + ".xlsx";
                                 File.WriteAllBytes(strFolder + file, bin);
 
                                 #region UploadFileToS3
@@ -310,7 +323,7 @@ namespace IntegrationPlatform.REDEBANProcess
 
                                 LogFile("REDEBAN Integration Process File Upload");
                                 #endregion
-                             
+
                                 RedebanProcessLogUpsert(0, "Provider Files Report", strRemoteFile, false, true, true);
                                 //TODO: setting
                                 //Send Message
@@ -395,7 +408,7 @@ namespace IntegrationPlatform.REDEBANProcess
 
                 oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("To", "diego.jaramillo@proveedoresonline.co"));
                 oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("InfoFileUrl", oDataMessage.Url));
-                
+
                 //get customer info
                 oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
                     ("CustomerLogo", oDataMessage.CompanyLogo));
