@@ -19,16 +19,12 @@ namespace IntegrationPlatform.REDEBANProcess
         public static void StartProcess()
         {
             var providers = GetAllProviders();
-            var InfoToExcel = new List<REDEBANInfoModel>();
-            var oRowExcel = new REDEBANInfoModel();
-            var oFileExcel = new StringBuilder();
-            var PrvInfo_DS = new DataSet();
-
             var rowIndex = 2;
             var maxIndex = 0;
             var MinRowIndex = rowIndex;
             var ColIndex = 0;
             var proCount = 0;
+
             if (providers != null)
             {
                 using (ExcelPackage p = new ExcelPackage())
@@ -70,8 +66,9 @@ namespace IntegrationPlatform.REDEBANProcess
                     providers.All(x =>
                     {
                         ColIndex = 1;
-                        //TODO: setting
-                        var prvInfo = GetProviderInfo("26D388E3", x.CompanyPublicId);
+                        
+                        var prvInfo = GetProviderInfo(IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                    [IntegrationPlatform.REDEBANProcess.Models.Constants.C_REDEBAN_ProviderPublicId].Value, x.CompanyPublicId);
                         MinRowIndex = rowIndex;
 
                         maxIndex += GetMaxIndex(prvInfo);
@@ -80,8 +77,10 @@ namespace IntegrationPlatform.REDEBANProcess
                         if (prvInfo != null)
                         {
                             //Properties for Excel 
-                            p.Workbook.Properties.Author = "ProveedoresOnLine S.A.S";
-                            p.Workbook.Properties.Title = "Informe Gerencial de Proveedores REDEBAN";
+                            p.Workbook.Properties.Author = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                    [IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_ExcelFile_Author].Value;
+                            p.Workbook.Properties.Title = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                    [IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_ExcelFile_Title].Value;
 
 
                             //Provider Info
@@ -100,8 +99,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                 MainCell.Style.Fill.BackgroundColor.SetColor(Color.Gray);
                                 
                             }
-
-                            //TODO: setting
+                            
                             #region LegalInfo - ChaimberOfCommerce
                             if (prvInfo.LegalInfo_ChaimberOfCommerce.Count > 0 && prvInfo.LegalInfo_ChaimberOfCommerce != null)
                             {
@@ -109,7 +107,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                 prvInfo.LegalInfo_ChaimberOfCommerce.All(y =>
                                 {
                                     var Cell = ws.Cells[legalRowIndex, 7];
-                                    Cell.Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == 602006).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
+                                    Cell.Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumLegalInfoType.ChaimberOfCommerceFile).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
 
                                     legalRowIndex++;
                                     return true;
@@ -120,7 +118,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                 ws.Cells[rowIndex, 7].Value = "N/A";
                             }
                             #endregion
-                            //TODO: setting
+                            
                             #region LegalInfo - RUT
                             if (prvInfo.LegalInfo_RUT.Count > 0 && prvInfo.LegalInfo_RUT != null)
                             {
@@ -128,7 +126,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                 prvInfo.LegalInfo_RUT.All(y =>
                                 {
 
-                                    ws.Cells[legalRowIndex, 8].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == 603012).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
+                                    ws.Cells[legalRowIndex, 8].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumLegalInfoType.RUTFile).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
 
                                     legalRowIndex++;
                                     return true;
@@ -142,7 +140,7 @@ namespace IntegrationPlatform.REDEBANProcess
 
 
                             #endregion
-                            //TODO: setting
+                            
                             #region FinancialInfo - Financial Stats
                             if (prvInfo.FinancialInfo_FinStats.Count > 0 && prvInfo.FinancialInfo_FinStats != null)
                             {
@@ -150,7 +148,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                 prvInfo.FinancialInfo_FinStats.All(y =>
                                 {
 
-                                    ws.Cells[FinRowIndex, 9].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == 502002).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
+                                    ws.Cells[FinRowIndex, 9].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumFinancialInfoType.FinancialStatsFile).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
 
                                     FinRowIndex++;
                                     return true;
@@ -162,7 +160,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                 ws.Cells[rowIndex, 9].Value = "N/A";
                             }
                             #endregion
-                            //TODO: setting
+                            
                             #region FinancialInfo - Bank Certification
 
                             if (prvInfo.FinancialInfo_BankCert.Count > 0 && prvInfo.FinancialInfo_BankCert != null)
@@ -170,7 +168,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                 var FinRowIndex = rowIndex;
                                 prvInfo.FinancialInfo_BankCert.All(y =>
                                 {
-                                    ws.Cells[FinRowIndex, 10].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == 505010).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
+                                    ws.Cells[FinRowIndex, 10].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumFinancialInfoType.BankCertificationFile).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
                                     FinRowIndex++;
                                     return true;
                                 });
@@ -181,14 +179,14 @@ namespace IntegrationPlatform.REDEBANProcess
                             }
 
                             #endregion
-                            //TODO: setting
+                            
                             #region CommercialInfo - Experience Certification
                             if (prvInfo.Commercial_CertExp.Count > 0 && prvInfo.Commercial_CertExp != null)
                             {
                                 var CommRowIndex = rowIndex;
                                 prvInfo.Commercial_CertExp.All(y =>
                                 {
-                                    ws.Cells[CommRowIndex, 11].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == 302011).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
+                                    ws.Cells[CommRowIndex, 11].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCommercialInfoType.ExpereienceCertificationFile).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
                                     CommRowIndex++;
                                     return true;
                                 });
@@ -200,14 +198,14 @@ namespace IntegrationPlatform.REDEBANProcess
 
 
                             #endregion
-                            //TODO: setting
+                            
                             #region CertificationInfo - Certifications
                             if (prvInfo.HSEQ_Cert.Count > 0 && prvInfo.HSEQ_Cert != null)
                             {
                                 var CertRowIndex = rowIndex;
                                 prvInfo.HSEQ_Cert.All(y =>
                                 {
-                                    ws.Cells[CertRowIndex, 12].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == 702006).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
+                                    ws.Cells[CertRowIndex, 12].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.C_CertificationFile).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
                                     CertRowIndex++;
                                     return true;
                                 });
@@ -218,16 +216,25 @@ namespace IntegrationPlatform.REDEBANProcess
                             }
 
                             #endregion
-                            //TODO: setting
+                            
                             #region CertificationInfo - Health, Enviroment, Security
                             if (prvInfo.HSEQ_Health.Count > 0 && prvInfo.HSEQ_Health != null)
                             {
                                 var CertRowIndex = rowIndex;
                                 prvInfo.HSEQ_Health.All(y =>
                                 {
-                                    ws.Cells[CertRowIndex, 13].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == 703002 ||
-                                    z.ItemInfoType.ItemId == 703003 || z.ItemInfoType.ItemId == 703004 || z.ItemInfoType.ItemId == 703005
-                                    || z.ItemInfoType.ItemId == 703005 || z.ItemInfoType.ItemId == 703006).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
+                                    ws.Cells[CertRowIndex, 13].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId ==
+                                    (int)Models.Enumerations.enumCertificationInfoType.CH_PoliticsSecurity ||
+                                    z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.CH_PoliticsNoAlcohol ||
+                                    z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.CH_ProgramOccupationalHealth || 
+                                    z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.CH_RuleIndustrialSecurity|| 
+                                    z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.CH_MatrixRiskControl ||
+                                    z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.CH_CorporateSocialResponsability ||
+                                    z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.CH_ProgramEnterpriseSecurity ||
+                                    z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.CH_PoliticsRecruiment ||
+                                    z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.CH_CertificationsForm ||
+                                    z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.CH_PoliticIntegral                                    
+                                    ).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
 
                                     CertRowIndex++;
                                     return true;
@@ -240,17 +247,14 @@ namespace IntegrationPlatform.REDEBANProcess
 
 
                             #endregion
-                            //TODO: setting
+                            
                             #region CertificationInfo - System Risk Work
                             if (prvInfo.HSEQ_Riskes.Count > 0 && prvInfo.HSEQ_Riskes != null)
                             {
                                 var CertRowIndex = rowIndex;
                                 prvInfo.HSEQ_Riskes.All(y =>
                                 {
-                                    ws.Cells[CertRowIndex, 14].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == 703002 ||
-                                    z.ItemInfoType.ItemId == 703003 || z.ItemInfoType.ItemId == 703004 || z.ItemInfoType.ItemId == 703005
-                                    || z.ItemInfoType.ItemId == 703005 || z.ItemInfoType.ItemId == 703006 || z.ItemInfoType.ItemId == 703007
-                                    || z.ItemInfoType.ItemId == 703008 || z.ItemInfoType.ItemId == 703009 || z.ItemInfoType.ItemId == 703010).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
+                                    ws.Cells[CertRowIndex, 14].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.CR_CertificateAffiliateARL).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
 
                                     CertRowIndex++;
                                     return true;
@@ -261,14 +265,14 @@ namespace IntegrationPlatform.REDEBANProcess
                                 ws.Cells[rowIndex, 14].Value = "N/A";
                             }
                             #endregion
-                            //TODO: setting
+                            
                             #region CertificationInfo - Accidental Certification
                             if (prvInfo.HSEQ_Acc.Count > 0 && prvInfo.HSEQ_Acc != null)
                             {
                                 var CertRowIndex = rowIndex;
                                 prvInfo.HSEQ_Acc.All(y =>
                                 {
-                                    ws.Cells[CertRowIndex, 15].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == 705007).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
+                                    ws.Cells[CertRowIndex, 15].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.CA_CertificateAccidentARL).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
                                     CertRowIndex++;
                                     return true;
                                 });
@@ -307,21 +311,23 @@ namespace IntegrationPlatform.REDEBANProcess
 
                                 #endregion
 
-                                #region Notification
-
-                                #endregion
-
+                                #region Message
 
                                 RedebanProcessLogUpsert(0, "Provider Files Report", strRemoteFile, false, true, true);
                                 //TODO: setting
                                 //Send Message
                                 MessageModule.Client.Models.NotificationModel oDataMessage = new MessageModule.Client.Models.NotificationModel();
-                                oDataMessage.CompanyPublicId = "26D388E3";
-                                oDataMessage.User = "diego.jaramillo@proveedoresonline.co";
-                                oDataMessage.CompanyLogo = "http://proveedoresonline.s3-website-us-east-1.amazonaws.com/BackOffice/CompanyFile/26D388E3/CompanyFile_26D388E3_20160609142707.png";
-                                oDataMessage.CompanyName = "REDEBAN";
+                                oDataMessage.CompanyPublicId = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                    [IntegrationPlatform.REDEBANProcess.Models.Constants.C_REDEBAN_ProviderPublicId].Value;
+                                oDataMessage.User = "REDEBAN Process";
+                                oDataMessage.CompanyLogo = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                    [IntegrationPlatform.REDEBANProcess.Models.Constants.N_RedebanCompanyLogo].Value;
+                                oDataMessage.CompanyName = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                    [IntegrationPlatform.REDEBANProcess.Models.Constants.N_RedebanCompanyName].Value;
                                 oDataMessage.IdentificationType = "NIT";
-                                oDataMessage.IdentificationNumber = "123";
+                                oDataMessage.IdentificationNumber = "830070527";
+
+                                #endregion
 
                                 #region Notification
 

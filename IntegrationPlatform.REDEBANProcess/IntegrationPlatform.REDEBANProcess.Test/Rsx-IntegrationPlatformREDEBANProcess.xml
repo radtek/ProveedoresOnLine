@@ -10,9 +10,18 @@
     <!--S3 Path File-->
     <key name="REDEBAN_File_ExcelDirectory">/REDEBAN_Process</key>
 
+    <!--Notification-->
     <key name="N_RedebanReportMessage"><![CDATA[Envio de reporte general de proveedores en proceso]]></key>
 
     <key name="REDEBAN_Mail">POL_Redeban_Mail</key>
+
+    <key name="N_RedebanCompanyName">REDEBAN MULTICOLOR SA</key>
+
+    <key name="N_RedebanCompanyLogo">http://proveedoresonline.s3-website-us-east-1.amazonaws.com/BackOffice/CompanyFile/26D388E3/CompanyFile_26D388E3_20160609142707.png</key>
     
+    <!--Excel Properties-->
+    <key name="ExcelAuthor">ProveedoresOnLine S.A.S</key>
+    
+    <key name="ExcelTitle">Informe Gerencial de Proveedores REDEBAN</key>
   </IntegrationPlatformREDEBANProcess>
 </Settings>
