@@ -24,7 +24,7 @@ namespace IntegrationPlatform.REDEBANProcess.Models
             get { return SettingsManager.SettingsController.SettingsInstance.ModulesParams[IntegrationPlatform.REDEBANProcess.Models.Constants.C_SettingsModuleName][SettingName]; }
         }
 
-        public int Count
+        public new int Count
         {
             get
             {

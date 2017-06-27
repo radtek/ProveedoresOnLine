@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace IntegrationPlatform.REDEBANProcess
 {
@@ -18,6 +19,7 @@ namespace IntegrationPlatform.REDEBANProcess
     {
         public static void StartProcess()
         {
+            LogFile("REDEBAN Integration Process Init");
             var providers = GetAllProviders();
             var rowIndex = 2;
             var maxIndex = 0;
@@ -32,7 +34,7 @@ namespace IntegrationPlatform.REDEBANProcess
                     var ws = CreateExcelFile(p, "Proveedores");
 
                     #region Headers
-                    
+
                     ws.Cells[1, 1].Value = "Razón Social";
                     ws.Cells[1, 2].Value = "No Identificación";
                     ws.Cells[1, 3].Value = "Estado";
@@ -48,10 +50,10 @@ namespace IntegrationPlatform.REDEBANProcess
                     ws.Cells[1, 13].Value = "Salud, Medio Ambiente y Seguridad";
                     ws.Cells[1, 14].Value = "Sistema de Riesgos Laborales";
                     ws.Cells[1, 15].Value = "Certificado de Accidentalidad";
-                    
+
                     //Freeze HeadLine
-                    ws.View.FreezePanes(2,1);
-                    
+                    ws.View.FreezePanes(2, 1);
+
                     //Some Style for the header line
                     for (int i = 1; i < 16; i++)
                     {
@@ -59,7 +61,7 @@ namespace IntegrationPlatform.REDEBANProcess
                         HeaderLine.Style.Font.Bold = true;
                         HeaderLine.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     }
-                    
+
 
                     #endregion
 
@@ -84,20 +86,33 @@ namespace IntegrationPlatform.REDEBANProcess
 
 
                             //Provider Info
-                            ws.Cells[rowIndex, 1].Value = prvInfo.Provider.CompanyName;
-                            ws.Cells[rowIndex, 2].Value = prvInfo.Provider.IdentificationNumber;
-                            ws.Cells[rowIndex, 3].Value = prvInfo.Provider.Status;
-                            ws.Cells[rowIndex, 4].Value = prvInfo.Provider.Representant;
-                            ws.Cells[rowIndex, 5].Value = prvInfo.Provider.Telephone;
-                            ws.Cells[rowIndex, 6].Value = prvInfo.Provider.City;
+                            if (prvInfo.ProviderFullInfo != null)
+                            {
+                                ws.Cells[rowIndex, 1].Value = prvInfo.ProviderFullInfo.CompanyName;
+                                ws.Cells[rowIndex, 2].Value = prvInfo.ProviderFullInfo.IdentificationNumber;
+                                ws.Cells[rowIndex, 3].Value = prvInfo.ProviderFullInfo.Status;
+                                ws.Cells[rowIndex, 4].Value = prvInfo.ProviderFullInfo.Representant;
+                                ws.Cells[rowIndex, 5].Value = prvInfo.ProviderFullInfo.Telephone;
+                                ws.Cells[rowIndex, 6].Value = prvInfo.ProviderFullInfo.City;
+                            }
+                            else
+                            {
+                                ws.Cells[rowIndex, 1].Value = prvInfo.ProviderBasicInfo.CompanyName;
+                                ws.Cells[rowIndex, 2].Value = prvInfo.ProviderBasicInfo.IdentificationNumber;
+                                ws.Cells[rowIndex, 3].Value = prvInfo.ProviderBasicInfo.Status;
+                                ws.Cells[rowIndex, 4].Value = "N/A";
+                                ws.Cells[rowIndex, 5].Value = "N/A";
+                                ws.Cells[rowIndex, 6].Value = "N/A";
+                            }
+
 
                             //Fill Backgorund Color Main Line
                             for (int i = 1; i < 16; i++)
                             {
                                 var MainCell = ws.Cells[rowIndex, i];
                                 MainCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                                MainCell.Style.Fill.BackgroundColor.SetColor(Color.Gray);
-                                
+                                MainCell.Style.Fill.BackgroundColor.SetColor(Color.Orange);
+
                             }
                             
                             #region LegalInfo - ChaimberOfCommerce
@@ -287,6 +302,7 @@ namespace IntegrationPlatform.REDEBANProcess
 
                             if (proCount >= providers.Count)
                             {
+                                LogFile("REDEBAN Integration Process File Generation");
                                 string strFolder = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
                                     [IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_File_TempDirectory].Value;
 
@@ -295,7 +311,7 @@ namespace IntegrationPlatform.REDEBANProcess
 
                                 //Generate the report
                                 Byte[] bin = p.GetAsByteArray();
-                                string file = "REDEBAN_ProviderInfo_" + DateTime.Now.ToString("yyyy_MM_dd_hhmmss")  + ".xlsx";
+                                string file = "REDEBAN_ProviderInfo_" + DateTime.Now.ToString("yyyy_MM_dd_hhmmss") + ".xlsx";
                                 File.WriteAllBytes(strFolder + file, bin);
 
                                 #region UploadFileToS3
@@ -309,9 +325,8 @@ namespace IntegrationPlatform.REDEBANProcess
                                 if (System.IO.File.Exists(oFileCompleteName))
                                     System.IO.File.Delete(oFileCompleteName);
 
+                                LogFile("REDEBAN Integration Process File Upload");
                                 #endregion
-
-                                #region Message
 
                                 RedebanProcessLogUpsert(0, "Provider Files Report", strRemoteFile, false, true, true);
                                 //TODO: setting
@@ -341,6 +356,7 @@ namespace IntegrationPlatform.REDEBANProcess
 
                                 IntegrationPlatform.REDEBANProcess.IntegrationPlatformREDEBANProcess.SendMessage(oDataMessage);
 
+                                LogFile("REDEBAN Integration Process File Queue Message");
                                 //These lines will open it in Excel, for test purposes
                                 //ProcessStartInfo pi = new ProcessStartInfo(file);
                                 //Process.Start(pi);
@@ -401,7 +417,7 @@ namespace IntegrationPlatform.REDEBANProcess
 
                 oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("To", "diego.jaramillo@proveedoresonline.co"));
                 oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("InfoFileUrl", oDataMessage.Url));
-                
+
                 //get customer info
                 oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
                     ("CustomerLogo", oDataMessage.CompanyLogo));
@@ -447,6 +463,31 @@ namespace IntegrationPlatform.REDEBANProcess
             return DAL.Controller.IntegrationPlatformREDEBANDataController.Instance.RedebanProcessLogUpsert(RedebanProcessLogId, ProceesName, FileName, SendStatus, IsSucces, Enable);
         }
 
+        #region Log File
+
+        private static void LogFile(string LogMessage)
+        {
+            try
+            {
+                //get file Log
+                string LogFile = AppDomain.CurrentDomain.BaseDirectory.Trim().TrimEnd(new char[] { '\\' }) + "\\" +
+                    System.Configuration.ConfigurationManager.AppSettings
+                    [IntegrationPlatform.REDEBANProcess.Models.Constants.C_AppSettings_LogFile].Trim().TrimEnd(new char[] { '\\' });
+
+                if (!System.IO.Directory.Exists(LogFile))
+                    System.IO.Directory.CreateDirectory(LogFile);
+
+                LogFile += "\\" + "Log_REDEBANProcess_" + DateTime.Now.ToString("yyyyMMdd") + ".log";
+
+                using (System.IO.StreamWriter sw = System.IO.File.AppendText(LogFile))
+                {
+                    sw.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + "::" + LogMessage);
+                    sw.Close();
+                }
+            }
+            catch { }
+        }
+        #endregion
 
     }
 }

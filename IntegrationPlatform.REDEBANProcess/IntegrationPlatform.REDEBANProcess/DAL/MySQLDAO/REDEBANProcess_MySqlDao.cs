@@ -84,21 +84,44 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.MySQLDAO
                     group pi by new
                     {
                         CompanyId = pi.Field<int>("CompanyId"),
+                        CompnayName = pi.Field<string>("CompanyName"),
+                        IdentificationNumber = pi.Field<string>("IdentificationNumber"),
+                        Status = pi.Field<string>("Status"),
+                        Enable = pi.Field<UInt64>("Enable") == 1 ? true : false
                     }
                     into pig
                     select new REDEBANInfoModel()
                     {
-                        Provider = new CompanyModel()
+                        ProviderBasicInfo = new CompanyModel()
                         {
-                            CompanyName = response.DataSetResult.Tables[0].Rows[0].Field<string>("CompanyName"),
-                            CompanyPublicId = response.DataSetResult.Tables[0].Rows[0].Field<string>("CompanyPublicId"),
-                            IdentificationNumber = response.DataSetResult.Tables[1].Rows[0].Field<string>("IdentificationNumber"),
-                            Status = response.DataSetResult.Tables[0].Rows[0].Field<string>("Status"),
-                            Representant = response.DataSetResult.Tables[1].Rows[0].Field<string>("Representant"),
-                            Telephone = response.DataSetResult.Tables[1].Rows[0].Field<string>("Tel"),
-                            City = response.DataSetResult.Tables[1].Rows[0].Field<string>("City"),
-                            Enable = response.DataSetResult.Tables[0].Rows[0].Field<UInt64>("Enable") == 1 ? true : false
+                            CompanyName = pig.Key.CompnayName,
+                            IdentificationNumber = pig.Key.IdentificationNumber,
+                            Status = pig.Key.Status,
+                            Enable = pig.Key.Enable,
                         },
+
+                        ProviderFullInfo = (from pf in response.DataSetResult.Tables[1].AsEnumerable()
+                                            where !pf.IsNull("CompanyId")
+                                            group pf by new
+                                            {
+                                                CompanyName = pf.Field<string>("CompanyName"),
+                                                IdentificationNumber = pf.Field<string>("IdentificationNumber"),
+                                                Status = pf.Field<string>("Status"),
+                                                Representant = pf.Field<string>("Representant"),
+                                                Tel = pf.Field<string>("Tel"),
+                                                City = pf.Field<string>("City")
+                                            }
+                                            into pfg
+                                            select new CompanyModel()
+                                            {
+                                                CompanyName = pfg.Key.CompanyName,
+                                                IdentificationNumber = pfg.Key.IdentificationNumber,
+                                                Status = pfg.Key.Status,
+                                                Representant = pfg.Key.Representant,
+                                                Telephone = pfg.Key.Tel,
+                                                City = pfg.Key.City
+
+                                            }).FirstOrDefault(),
 
                         #region Legal Information-Chaimber Of Commerce
 
