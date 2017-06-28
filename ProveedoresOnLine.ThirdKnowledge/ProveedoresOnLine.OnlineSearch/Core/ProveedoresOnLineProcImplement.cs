@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Threading;
 using ProveedoresOnLine.OnlineSearch.Models;
 using Autofac;
+using System.Net;
 
 namespace ProveedoresOnLine.OnlineSearch.Core
 {
@@ -27,7 +28,10 @@ namespace ProveedoresOnLine.OnlineSearch.Core
                 using (var client = new HttpClient())
                 {
                     string Url = ProveedoresOnLine.OnlineSearch.Models.InternalSettings.Instance[ProveedoresOnLine.OnlineSearch.Models.Constants.Proc_Url].Value;
-                    client.BaseAddress = new Uri(Url);
+                    HttpWebRequest request = HttpWebRequest.CreateHttp(Url);
+                    request.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
+
+                    client.BaseAddress = new Uri(Url);                    
                     HttpResponseMessage response = await client.GetAsync(Url);
                     HtmlDocument HtmlDoc = new HtmlDocument();
                     HtmlDoc.LoadHtml(response.Content.ReadAsStringAsync().Result);

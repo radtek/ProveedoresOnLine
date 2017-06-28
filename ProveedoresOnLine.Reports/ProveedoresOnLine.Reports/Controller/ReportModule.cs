@@ -894,19 +894,22 @@ namespace ProveedoresOnLine.Reports.Controller
         public static byte[] SurveyReportGenerator(List<string> Params, string CustomerPublicId)
         {
             string SettingFile = Models.Constants.R_SVFileReport.Replace("{CustomerPublicId}", CustomerPublicId);
+
+            FileStream fStream = new FileStream(SettingFile, FileMode.Open, FileAccess.Read);
+            using (StreamReader sr = new StreamReader(fStream, ASCIIEncoding.ASCII))
+            {
+                while (!sr.EndOfStream)
+                {
+                    var line = sr.ReadLine();
+                    var lineWords = line.Split(' ');
+                }
+            }
             //Obtain the Report to replace
             using (var mappedFile1 = MemoryMappedFile.CreateFromFile(ProveedoresOnLine.Reports.Models.Util.InternalSettings.Instance[SettingFile].Value))
             {
                 using (Stream mmStream = mappedFile1.CreateViewStream())
                 {
-                    using (StreamReader sr = new StreamReader(mmStream, ASCIIEncoding.ASCII))
-                    {
-                        while (!sr.EndOfStream)
-                        {
-                            var line = sr.ReadLine();
-                            var lineWords = line.Split(' ');
-                        }
-                    }
+                    
                 }
             }
 
