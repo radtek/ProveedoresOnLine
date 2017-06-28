@@ -84,21 +84,44 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.MySQLDAO
                     group pi by new
                     {
                         CompanyId = pi.Field<int>("CompanyId"),
+                        CompnayName = pi.Field<string>("CompanyName"),
+                        IdentificationNumber = pi.Field<string>("IdentificationNumber"),
+                        Status = pi.Field<string>("Status"),
+                        Enable = pi.Field<UInt64>("Enable") == 1 ? true : false
                     }
                     into pig
                     select new REDEBANInfoModel()
                     {
-                        Provider = new CompanyModel()
+                        ProviderBasicInfo = new CompanyModel()
                         {
-                            CompanyName = response.DataSetResult.Tables[0].Rows[0].Field<string>("CompanyName"),
-                            CompanyPublicId = response.DataSetResult.Tables[0].Rows[0].Field<string>("CompanyPublicId"),
-                            IdentificationNumber = response.DataSetResult.Tables[1].Rows[0].Field<string>("IdentificationNumber"),
-                            Status = response.DataSetResult.Tables[0].Rows[0].Field<string>("Status"),
-                            Representant = response.DataSetResult.Tables[1].Rows[0].Field<string>("Representant"),
-                            Telephone = response.DataSetResult.Tables[1].Rows[0].Field<string>("Tel"),
-                            City = response.DataSetResult.Tables[1].Rows[0].Field<string>("City"),
-                            Enable = response.DataSetResult.Tables[0].Rows[0].Field<UInt64>("Enable") == 1 ? true : false
+                            CompanyName = pig.Key.CompnayName,
+                            IdentificationNumber = pig.Key.IdentificationNumber,
+                            Status = pig.Key.Status,
+                            Enable = pig.Key.Enable,
                         },
+
+                        ProviderFullInfo = (from pf in response.DataSetResult.Tables[1].AsEnumerable()
+                                            where !pf.IsNull("CompanyId")
+                                            group pf by new
+                                            {
+                                                CompanyName = pf.Field<string>("CompanyName"),
+                                                IdentificationNumber = pf.Field<string>("IdentificationNumber"),
+                                                Status = pf.Field<string>("Status"),
+                                                Representant = pf.Field<string>("Representant"),
+                                                Tel = pf.Field<string>("Tel"),
+                                                City = pf.Field<string>("City")
+                                            }
+                                            into pfg
+                                            select new CompanyModel()
+                                            {
+                                                CompanyName = pfg.Key.CompanyName,
+                                                IdentificationNumber = pfg.Key.IdentificationNumber,
+                                                Status = pfg.Key.Status,
+                                                Representant = pfg.Key.Representant,
+                                                Telephone = pfg.Key.Tel,
+                                                City = pfg.Key.City
+
+                                            }).FirstOrDefault(),
 
                         #region Legal Information-Chaimber Of Commerce
 
@@ -496,7 +519,7 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.MySQLDAO
                         #endregion                        
                         #region HSEQ Accidents
 
-                        HSEQ_Acc = 
+                        HSEQ_Acc =
                         (
                                       from fn in response.DataSetResult.Tables[10].AsEnumerable()
                                       where !fn.IsNull("CertificationId")
@@ -552,14 +575,78 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.MySQLDAO
             return oReturn;
         }
 
-        public int RedebanProcessLogInsert(string CompanyPublicId, string ProceesName, string FileName, bool SendStatus, bool IsSucces, bool Enable)
+        public int RedebanProcessLogUpsert(int RedebanProcessLogId, string ProceesName, string FileName, bool SendStatus, bool IsSucces, bool Enable)
         {
-            throw new NotImplementedException();
+            List<IDbDataParameter> lstparams = new List<IDbDataParameter>();
+
+            lstparams.Add(DataInstance.CreateTypedParameter("vRedebanProcessLogId", RedebanProcessLogId));
+            lstparams.Add(DataInstance.CreateTypedParameter("vProcessName", ProceesName));
+            lstparams.Add(DataInstance.CreateTypedParameter("vFileName", FileName));
+            lstparams.Add(DataInstance.CreateTypedParameter("vSendStatus", SendStatus == true ? 1 : 0));
+            lstparams.Add(DataInstance.CreateTypedParameter("vIsSucces", IsSucces == true ? 1 : 0));
+            lstparams.Add(DataInstance.CreateTypedParameter("vEnable", Enable == true ? 1 : 0));
+
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.Scalar,
+                CommandText = "Redeban_ProcessLog_Upsert",
+                CommandType = CommandType.StoredProcedure,
+                Parameters = lstparams
+            });
+
+            return Convert.ToInt32(response.ScalarResult);
         }
 
-        public int RedebanProcessUpdateLog(int RedebanProcessLogId, string CompanyPublicId, string ProceesName, string FileName, bool SendStatus, bool IsSucces, bool Enable)
+        public RedebanLogModel GetLogBySendStatus(bool SendStatus)
         {
-            throw new NotImplementedException();
+            List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
+
+            lstParams.Add(DataInstance.CreateTypedParameter("vSendStatus", (SendStatus == true) ? 1 : 0));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "Redeban_GetLogBySendStatus",
+                CommandType = CommandType.StoredProcedure,
+                Parameters = lstParams,
+            });
+
+            RedebanLogModel oReturn = null;
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn =
+                    (from pl in response.DataTableResult.AsEnumerable()
+                     where !pl.IsNull("RedebanProcessLogId")
+                     group pl by new
+                     {
+                         SanofiProcessLogId = pl.Field<int>("RedebanProcessLogId"),                        
+                         ProcessName = pl.Field<string>("ProcessName"),
+                         FileName = pl.Field<string>("FileName"),
+                         SendStatus = pl.Field<UInt64>("SendStatus") == 1 ? true : false,
+                         IsSuccess = pl.Field<UInt64>("IsSucces") == 1 ? true : false,
+                         CreateDate = pl.Field<DateTime>("CreateDate"),
+                         LastModify = pl.Field<DateTime>("LastModify"),
+                         Enable = pl.Field<UInt64>("Enable") == 1 ? true : false,
+                     }
+                         into plg
+                     select new RedebanLogModel()
+                     {
+                         RedebanProcessLogId = plg.Key.SanofiProcessLogId,                         
+                         ProcessName = plg.Key.ProcessName,
+                         FileName = plg.Key.FileName,
+                         SendStatus = plg.Key.SendStatus,
+                         IsSucces = plg.Key.IsSuccess,
+                         CreateDate = plg.Key.CreateDate,
+                         LastModify = plg.Key.LastModify,
+                         Enable = plg.Key.Enable,
+                     }).FirstOrDefault();
+            }
+
+            return oReturn;
         }
+        
     }
 }

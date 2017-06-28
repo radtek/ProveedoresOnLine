@@ -48,14 +48,14 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.Controller
             return DataFactory.GetProviderInfo(CustomerPublicId, ProviderPublicId);
         }
 
-        public int RedebanProcessLogInsert(string CompanyPublicId, string ProceesName, string FileName, bool SendStatus, bool IsSucces, bool Enable)
+        public int RedebanProcessLogUpsert(int RedebanProcessLogId, string ProceesName, string FileName, bool SendStatus, bool IsSucces, bool Enable)
         {
-            throw new NotImplementedException();
+            return DataFactory.RedebanProcessLogUpsert(RedebanProcessLogId, ProceesName, FileName, SendStatus, IsSucces, Enable);
         }
 
-        public int RedebanProcessUpdateLog(int RedebanProcessLogId, string CompanyPublicId, string ProceesName, string FileName, bool SendStatus, bool IsSucces, bool Enable)
+        public RedebanLogModel GetLogBySendStatus(bool SendStatus)
         {
-            throw new NotImplementedException();
+            return DataFactory.GetLogBySendStatus(SendStatus);
         }
     }
 }

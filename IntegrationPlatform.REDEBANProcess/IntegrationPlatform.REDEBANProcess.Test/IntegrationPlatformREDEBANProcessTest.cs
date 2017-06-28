@@ -3,6 +3,7 @@ using OfficeOpenXml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.IO;
+using IntegrationPlatform.REDEBANProcess.Models;
 
 namespace IntegrationPlatform.REDEBANProcess.Test
 {
@@ -11,7 +12,7 @@ namespace IntegrationPlatform.REDEBANProcess.Test
     {
         [TestMethod]
         public void StartProcess()
-        {
+       { 
             REDEBANProcess.IntegrationPlatformREDEBANProcess.StartProcess();
         }
 
@@ -57,6 +58,23 @@ namespace IntegrationPlatform.REDEBANProcess.Test
             //These lines will open it in Excel
             ProcessStartInfo pi = new ProcessStartInfo(file);
             Process.Start(pi);
+        }
+        [TestMethod]
+        public void ProcessLogUpsert()
+        {
+            var oRedebanLogModel = new RedebanLogModel()
+            {
+                RedebanProcessLogId = 0,
+                ProcessName = "Redeban Provider Files Report Process",
+                FileName = string.Empty,
+                SendStatus = false,
+                IsSucces = false,
+                Enable = true
+
+            };
+            var oReturn = REDEBANProcess.IntegrationPlatformREDEBANProcess.RedebanProcessLogUpsert(oRedebanLogModel);
+
+            Assert.AreEqual(true, oReturn !=0);
         }
     }
 }
