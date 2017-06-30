@@ -62,11 +62,11 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.MySQLDAO
 
         public REDEBANInfoModel GetProviderInfo(string CustomerPublicId, string ProviderPublicId)
         {
-            List<IDbDataParameter> lstparams = new List<IDbDataParameter>();
-
-            lstparams.Add(DataInstance.CreateTypedParameter("vCustomerPublicId", CustomerPublicId));
-            lstparams.Add(DataInstance.CreateTypedParameter("vProviderPublicId", ProviderPublicId));
-
+            List<IDbDataParameter> lstparams = new List<IDbDataParameter>
+            {
+                DataInstance.CreateTypedParameter("vCustomerPublicId", CustomerPublicId),
+                DataInstance.CreateTypedParameter("vProviderPublicId", ProviderPublicId)
+            };
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
                 CommandExecutionType = ADO.Models.enumCommandExecutionType.DataSet,
@@ -108,6 +108,7 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.MySQLDAO
                                                 IdentificationNumber = pf.Field<string>("IdentificationNumber"),
                                                 Status = pf.Field<string>("Status"),
                                                 Representant = pf.Field<string>("Representant"),
+                                                IdFile = pf.Field<string>("IdFile"),
                                                 Tel = pf.Field<string>("Tel"),
                                                 City = pf.Field<string>("City")
                                             }
@@ -118,6 +119,7 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.MySQLDAO
                                                 IdentificationNumber = pfg.Key.IdentificationNumber,
                                                 Status = pfg.Key.Status,
                                                 Representant = pfg.Key.Representant,
+                                                IdFile = pfg.Key.IdFile,
                                                 Telephone = pfg.Key.Tel,
                                                 City = pfg.Key.City
 
@@ -566,8 +568,106 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.MySQLDAO
                                             }).ToList(),
                                       }).ToList(),
                         #endregion
-                        #region Aditional Documents
-                        AditionalDocuments = new List<GenericItemModel>()
+
+                        #region Aditional Documents - Provider Knowledge
+                        AditionalDocuments = (
+                                      from fn in response.DataSetResult.Tables[11].AsEnumerable()
+                                      where !fn.IsNull("AditionalDocumentId")
+                                      group fn by new
+                                      {
+                                          AditionalDocumentId = fn.Field<int>("AditionalDocumentId"),
+                                          AditionalDocumentTypeId = fn.Field<int>("AditionalDocumentTypeId"),
+                                          AditionalDocumentTypeName = fn.Field<string>("AditionalDocumentTypeName"),
+                                      }
+                            into fng
+                                      select new GenericItemModel()
+                                      {
+                                          ItemId = fng.Key.AditionalDocumentId,
+                                          ItemName = fng.Key.AditionalDocumentTypeName,
+                                          ItemInfo =
+                                          (
+                                            from fni in response.DataSetResult.Tables[11].AsEnumerable()
+                                            where !fni.IsNull("AditionalDocumentId") && fni.Field<int>("AditionalDocumentId") == fng.Key.AditionalDocumentId
+                                            group fni by new
+                                            {
+                                                AditionalDocumentId = fni.Field<int>("AditionalDocumentId"),
+                                                AditionalDocumentInfoId = fni.Field<int>("AditionalDocumentInfoId"),
+                                                AditionalDocumentInfoTypeId = fni.Field<int>("AditionalDocumentInfoTypeId"),
+                                                AditionalDocumentTypeInfoName = fni.Field<string>("AditionalDocumentInfoTypeName"),
+                                                ItemId = fni.Field<int>("AditionalDocumentInfoTypeId"),
+                                                Value = fni.Field<string>("Value"),
+                                                Enable = fni.Field<UInt64>("AditionalDocumentInfoEnable") == 1 ? true : false,
+                                                LastModify = fni.Field<DateTime>("AditionalDocumentInfoLastModify"),
+                                                CreateDate = fni.Field<DateTime>("AditionalDocumentInfoCreateDate")
+                                            }
+                                            into fnig
+                                            select new GenericItemInfoModel()
+                                            {
+                                                ItemInfoId = fnig.Key.AditionalDocumentInfoId,
+                                                ItemInfoType = new CatalogModel()
+                                                {
+                                                    ItemId = fnig.Key.ItemId,
+                                                    ItemName = fnig.Key.AditionalDocumentTypeInfoName,
+                                                },
+                                                Value = fnig.Key.Value,
+                                                CreateDate = fnig.Key.CreateDate,
+                                                LastModify = fnig.Key.LastModify,
+                                                Enable = fnig.Key.Enable,
+                                            }).ToList(),
+                                      }).ToList(),
+                        #endregion
+
+                        #region FinancialInfo - Income Statement
+
+
+                        FinancialInfo_IncomeStatement =
+                        (
+                            from fn in response.DataSetResult.Tables[12].AsEnumerable()
+                            where !fn.IsNull("FinancialId")
+                            group fn by new
+                            {
+                                FinancialId = fn.Field<int>("FinancialId"),
+                                FinancialTypeId = fn.Field<int>("FinancialTypeId"),
+                                FinancialTypeName = fn.Field<string>("FinancialTypeName"),
+                            }
+                            into fng
+                            select new GenericItemModel()
+                            {
+                                ItemId = fng.Key.FinancialId,
+                                ItemName = fng.Key.FinancialTypeName,
+
+                                ItemInfo =
+                                (
+                                  from fni in response.DataSetResult.Tables[12].AsEnumerable()
+                                  where !fni.IsNull("FinancialId") && fni.Field<int>("FinancialId") == fng.Key.FinancialId
+                                  group fni by new
+                                  {
+                                      FinancialId = fni.Field<int>("FinancialId"),
+                                      FinancialInfoId = fni.Field<int>("FinancialInfoId"),
+                                      FinancialInfoTypeId = fni.Field<int>("FinancialInfoTypeId"),
+                                      FinancialTypeInfoName = fni.Field<string>("FinancialInfoTypeName"),
+                                      ItemId = fni.Field<int>("FinancialInfoTypeId"),
+                                      Value = fni.Field<string>("Value"),
+                                      Enable = fni.Field<UInt64>("FinancialInfoEnable") == 1 ? true : false,
+                                      LastModify = fni.Field<DateTime>("FinancialInfoLastModify"),
+                                      CreateDate = fni.Field<DateTime>("FinancialInfoCreateDate")
+                                  }
+                                  into fnig
+                                  select new GenericItemInfoModel()
+                                  {
+                                      ItemInfoId = fnig.Key.FinancialInfoId,
+                                      ItemInfoType = new CatalogModel()
+                                      {
+                                          ItemId = fnig.Key.ItemId,
+                                          ItemName = fnig.Key.FinancialTypeInfoName,
+                                      },
+                                      Value = fnig.Key.Value,
+                                      CreateDate = fnig.Key.CreateDate,
+                                      LastModify = fnig.Key.LastModify,
+                                      Enable = fnig.Key.Enable,
+                                  }).ToList(),
+                            }).ToList()
+
                         #endregion
 
                     }).First();
@@ -600,10 +700,10 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.MySQLDAO
 
         public RedebanLogModel GetLogBySendStatus(bool SendStatus)
         {
-            List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
-
-            lstParams.Add(DataInstance.CreateTypedParameter("vSendStatus", (SendStatus == true) ? 1 : 0));
-
+            List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>
+            {
+                DataInstance.CreateTypedParameter("vSendStatus", (SendStatus == true) ? 1 : 0)
+            };
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
                 CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
@@ -622,7 +722,7 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.MySQLDAO
                      where !pl.IsNull("RedebanProcessLogId")
                      group pl by new
                      {
-                         SanofiProcessLogId = pl.Field<int>("RedebanProcessLogId"),                        
+                         SanofiProcessLogId = pl.Field<int>("RedebanProcessLogId"),
                          ProcessName = pl.Field<string>("ProcessName"),
                          FileName = pl.Field<string>("FileName"),
                          SendStatus = pl.Field<UInt64>("SendStatus") == 1 ? true : false,
@@ -634,7 +734,7 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.MySQLDAO
                          into plg
                      select new RedebanLogModel()
                      {
-                         RedebanProcessLogId = plg.Key.SanofiProcessLogId,                         
+                         RedebanProcessLogId = plg.Key.SanofiProcessLogId,
                          ProcessName = plg.Key.ProcessName,
                          FileName = plg.Key.FileName,
                          SendStatus = plg.Key.SendStatus,
@@ -647,6 +747,6 @@ namespace IntegrationPlatform.REDEBANProcess.DAL.MySQLDAO
 
             return oReturn;
         }
-        
+
     }
 }

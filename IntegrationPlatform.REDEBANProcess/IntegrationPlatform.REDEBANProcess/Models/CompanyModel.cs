@@ -16,6 +16,7 @@ namespace IntegrationPlatform.REDEBANProcess.Models
         public string IdentificationNumber { get; set; }
 
         public string Representant { get; set; }
+        public string IdFile { get; set; }
 
         public string Status { get; set; }
 

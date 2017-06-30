@@ -12,7 +12,7 @@ namespace IntegrationPlatform.REDEBANProcess.Test
     {
         [TestMethod]
         public void StartProcess()
-       { 
+        { 
             REDEBANProcess.IntegrationPlatformREDEBANProcess.StartProcess();
         }
 

@@ -24,7 +24,8 @@ namespace IntegrationPlatform.REDEBANProcess.Models
         public enum enumFinancialInfoType
         {
             FinancialStatsFile = 502002,
-            BankCertificationFile = 505010           
+            BankCertificationFile = 505010,
+            IS_FileIncomeStatement = 504006
         }
 
         //CommercialInfoType
@@ -35,10 +36,10 @@ namespace IntegrationPlatform.REDEBANProcess.Models
 
         //CertificationInfoType
         public enum enumCertificationInfoType
-        {            
+        {
             //Certifications                        
             C_CertificationFile = 702006,
-            
+
             //CompanyHealtyPolitic            
             CH_PoliticsSecurity = 703002,
             CH_PoliticsNoAlcohol = 703003,
@@ -53,10 +54,15 @@ namespace IntegrationPlatform.REDEBANProcess.Models
 
             //CompanyRiskPolicies            
             CR_CertificateAffiliateARL = 704003,
-        
+
             //CertficatesAccident                      
             CA_CertificateAccidentARL = 705007,
 
+        }
+
+        public enum enumAditionalDocumentInfoType
+        {
+            AD_File = 1702001
         }
     }
 }
