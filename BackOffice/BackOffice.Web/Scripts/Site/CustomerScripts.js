@@ -94,7 +94,7 @@ var Customer_SearchObject = {
                 width: '36px',
             }, {
                 field: 'IdentificationNumber',
-                title: 'Identification',                
+                title: 'Identification',
                 width: '50px',
             }, {
                 title: 'Reporte',
@@ -325,7 +325,7 @@ var Customer_RulesObject = {
                 field: 'UserCompanyId',
                 title: 'Id',
                 width: '100px',
-            }, ],
+            },],
         });
     },
 };
@@ -616,7 +616,7 @@ var Customer_CalificationProjectObject = {
     CustomerPublicId: '',
     CalificationProjectItemUrl: '',
     CalificationProjectConfigId: '',
-    CalificationProjectConfigValidateId:'',
+    CalificationProjectConfigValidateId: '',
     CalificationProjectValidateUrl: '',
     CalificationProjectConfigType: '',
     CustomerOptions: new Array(),
@@ -631,7 +631,6 @@ var Customer_CalificationProjectObject = {
         this.CalificationProjectValidateUrl = vInitObject.CalificationProjectValidateUrl;
         this.CalificationProjectConfigType = vInitObject.CalificationProjectConfigType;
         this.PageSize = vInitObject.PageSize;
-        debugger;
         if (vInitObject.CustomerOptions != null) {
             debugger;
             $.each(vInitObject.CustomerOptions, function (item, value) {
@@ -826,7 +825,7 @@ var Customer_CalificationProjectObject = {
                     name: '',
                     text: 'Agregar Validación',
                     click: function (e) {
-                        
+
                         // e.target is the DOM element representing the button
                         var tr = $(e.target).closest("tr"); // get the current table row (tr)
                         // get the data bound to the current table row
@@ -870,8 +869,8 @@ var Customer_CalificationProjectObject = {
                         fields: {
                             CalificationProjectConfigValidateId: { editable: false, nullable: true },
                             Operator: { editable: true, validation: { required: true } },
-                            Value: { editable: true},
-                            Result: {editable: true},
+                            Value: { editable: true },
+                            Result: { editable: true },
                             Enable: { editable: true, type: 'boolean', defaultValue: true },
                         },
                     }
@@ -955,12 +954,12 @@ var Customer_CalificationProjectObject = {
             }, {
                 field: 'Operator',
                 title: 'Operador',
-                width: '200px',              
+                width: '200px',
                 template: function (dataItem) {
                     debugger;
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.Operator != null) {
-                        
+
                         $.each(Customer_CalificationProjectObject.CustomerOptions[2001], function (item, value) {
                             if (dataItem.Operator == value.ItemId) {
                                 oReturn = value.ItemName;
@@ -971,7 +970,7 @@ var Customer_CalificationProjectObject = {
                 },
                 editor: function (container, options) {
                     debugger;
-                    $('<input required data-bind="value:' + options.field + '"/>')                        
+                    $('<input required data-bind="value:' + options.field + '"/>')
                         .appendTo(container)
                         .kendoDropDownList({
                             dataSource: Customer_CalificationProjectObject.CustomerOptions[2001],
@@ -989,9 +988,9 @@ var Customer_CalificationProjectObject = {
                 field: 'Result',
                 title: 'Resultado',
                 width: '50px',
-                format: '{0:n0}'            
+                format: '{0:n0}'
             }],
-        });        
+        });
     },
 };
 
@@ -1004,6 +1003,7 @@ var Customer_CalificationProjectItemObject = {
     CustomerOptions: new Array(),
     CalificationProjectConfigOptions: new Array(),
     CalificationProjectConfigCategoryOptions: new Array(),
+    CalificationProjectConfigAditionalDocumentsOptions: new Array(),
 
     Init: function (vInitObject) {
         this.ObjectId = vInitObject.ObjectId;
@@ -1023,6 +1023,12 @@ var Customer_CalificationProjectItemObject = {
         if (vInitObject.CalificationProjectConfigCategoryOptions != null) {
             $.each(vInitObject.CalificationProjectConfigCategoryOptions, function (item, value) {
                 Customer_CalificationProjectItemObject.CalificationProjectConfigCategoryOptions[value.Key] = value.Value;
+            });
+        }
+        if (vInitObject.CalificationProjectConfigAditionalDocumentsOptions != null) {
+
+            $.each(vInitObject.CalificationProjectConfigAditionalDocumentsOptions, function (item, value) {
+                Customer_CalificationProjectItemObject.CalificationProjectConfigAditionalDocumentsOptions[value.Key] = value.Value;
             });
         }
     },
@@ -1209,6 +1215,7 @@ var Customer_CalificationProjectItemObject = {
                 title: 'Módulo',
                 width: '190px',
                 template: function (dataItem) {
+                    debugger;
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.CalificationProjectModule != null) {
                         $.each(Customer_CalificationProjectItemObject.CustomerOptions[2003], function (item, value) {
@@ -1403,12 +1410,20 @@ var Customer_CalificationProjectItemObject = {
                     if (dataItem != null && dataItem.Question != null) {
                         var oModule = 0;
                         if (vRenderObject.Module == 2003005) /*Balance*/ {
-                            
+                            debugger;
                             $.each(Customer_CalificationProjectItemObject.CalificationProjectConfigCategoryOptions[10], function (item, value) {
                                 if (dataItem.Question == value.CategoryId) {
                                     oReturn = value.CategoryName;
                                 }
                             });
+                        }
+                            if (vRenderObject.Module == 2003006)/*Aditional Documents*/ {
+                                $.each(Customer_CalificationProjectItemObject.CalificationProjectConfigAditionalDocumentsOptions[1], function (item, value) {
+                                    if (dataItem.Question == value.ItemId) {
+                                        oReturn = value.ItemName;
+                                    }
+                                });
+                            }
                         }
                         else {
                             if (vRenderObject.Module == 2003001) /*Legal info*/ {
@@ -1423,20 +1438,18 @@ var Customer_CalificationProjectItemObject = {
                             else if (vRenderObject.Module == 2003004) /*HSEQ info*/ {
                                 oModule = 701;
                             }
-
                             $.each(Customer_CalificationProjectItemObject.CalificationProjectConfigOptions[oModule], function (item, value) {
                                 if (dataItem.Question == value.ItemId) {
                                     oReturn = value.ItemName;
                                 }
                             });
-                        }                        
-                    }
+                        }                    
                     return oReturn;
                 },
                 editor: function (container, options) {
-                    
-                    var oModule = 0;
 
+                    var oModule = 0;
+                    
                     if (vRenderObject.Module == 2003005) /*Balance*/ {
                         // create an input element
                         var input = $('<input/>');
@@ -1458,6 +1471,27 @@ var Customer_CalificationProjectItemObject = {
                             },
                             dataSource: Customer_CalificationProjectItemObject.CalificationProjectConfigCategoryOptions[10],
                         });
+                    } else if (vRenderObject.Module == 2003006) {
+                        // create an input element
+                        var input = $('<input/>');
+                        // set its name to the field to which the column is bound ('name' in this case)
+                        input.attr('value', options.model[options.field]);
+                        // append it to the container
+                        input.appendTo(container);
+                        // initialize a Kendo UI AutoComplete
+                        input.kendoAutoComplete({
+                            dataTextField: 'ItemName',
+                            select: function (e) {
+                                var selectedItem = this.dataItem(e.item.index());
+                                //set server fiel name
+                                options.model[options.field] = selectedItem.ItemName;
+                                options.model['QuestionName'] = selectedItem.ItemName;
+                                options.model['Question'] = selectedItem.ItemId;
+                                //enable made changes
+                                options.model.dirty = true;
+                            },
+                            dataSource: Customer_CalificationProjectItemObject.CalificationProjectConfigAditionalDocumentsOptions[1],
+                        });
                     }
                     else {
                         if (vRenderObject.Module == 2003001) /*Legal info*/ {
@@ -1471,6 +1505,8 @@ var Customer_CalificationProjectItemObject = {
                         }
                         else if (vRenderObject.Module == 2003004) /*HSEQ info*/ {
                             oModule = 701;
+                        } else if (vRenderObject.Module == 2003006)/*Aditional Documents*/ {
+                            oModule = 1701;
                         }
 
                         // create an input element
@@ -1483,7 +1519,7 @@ var Customer_CalificationProjectItemObject = {
                         input.kendoAutoComplete({
                             dataTextField: 'ItemName',
                             select: function (e) {
-                                
+
                                 var selectedItem = this.dataItem(e.item.index());
                                 //set server fiel name
                                 options.model[options.field] = selectedItem.ItemName;
@@ -2923,17 +2959,17 @@ var Customer_ProjectModule = {
                 editor: function (container, options) {
                     if (options.model.EA_EvaluatorType == '1405001') {
                         $('<input required data-bind="value:' + options.field + '"/>')
-                                .appendTo(container)
-                                .kendoDropDownList({
-                                    dataSource: Customer_ProjectModule.RoleCompanyList,
-                                    dataTextField: 'RoleName',
-                                    dataValueField: 'RoleId',
-                                    optionLabel: 'Seleccione una opción'
-                                });
+                            .appendTo(container)
+                            .kendoDropDownList({
+                                dataSource: Customer_ProjectModule.RoleCompanyList,
+                                dataTextField: 'RoleName',
+                                dataValueField: 'RoleId',
+                                optionLabel: 'Seleccione una opción'
+                            });
                     }
                     else {
                         $('<input type="text" class="k-input k-textbox" name="EA_Evaluator" required data-bind="value:' + options.field + '"/>')
-                        .appendTo(container);
+                            .appendTo(container);
                     }
                 },
                 width: '190px',
@@ -3025,7 +3061,7 @@ var Customer_ProjectModule = {
                         }
                     },
                 }],
-            }, ],
+            },],
         });
     },
 };
@@ -3041,9 +3077,9 @@ var ThirdKnowledgeObject = {
 
     Init: function (vInitObject) {
         this.ObjectId = vInitObject.ObjectId,
-        this.CustomerPublicId = vInitObject.CustomerPublicId,
-        this.IsEnable = vInitObject.Enable,
-        this.DateFormat = vInitObject.DateFormat
+            this.CustomerPublicId = vInitObject.CustomerPublicId,
+            this.IsEnable = vInitObject.Enable,
+            this.DateFormat = vInitObject.DateFormat
 
         if (vInitObject.ThirdKnowledgeOptions != null) {
             $.each(vInitObject.ThirdKnowledgeOptions, function (item, value) {
@@ -3266,30 +3302,30 @@ var ThirdKnowledgeObject = {
                     return oReturn;
                 },
             },
-                 {
-                     title: "Acciones",
-                     width: "200px",
-                     command: [{
-                         name: 'edit',
-                         text: 'Editar',
-                     }, {
-                         name: 'Detail',
-                         text: 'Ver Detalle',
-                         click: function (e) {
-                             // e.target is the DOM element representing the button
-                             var tr = $(e.target).closest("tr"); // get the current table row (tr)
-                             // get the data bound to the current table row
-                             var data = this.dataItem(tr);
+            {
+                title: "Acciones",
+                width: "200px",
+                command: [{
+                    name: 'edit',
+                    text: 'Editar',
+                }, {
+                    name: 'Detail',
+                    text: 'Ver Detalle',
+                    click: function (e) {
+                        // e.target is the DOM element representing the button
+                        var tr = $(e.target).closest("tr"); // get the current table row (tr)
+                        // get the data bound to the current table row
+                        var data = this.dataItem(tr);
 
-                             //validate Plan attribute
-                             if (data.PlanPublicId != null) {
-                                 vRenderObject.PlanPublicId = data.PlanPublicId;
-                                 vRenderObject.ThirdKnowledgeType = '1601002';
-                                 ThirdKnowledgeObject.RenderAsync(vRenderObject);
-                             }
-                         }
-                     }, ],
-                 }
+                        //validate Plan attribute
+                        if (data.PlanPublicId != null) {
+                            vRenderObject.PlanPublicId = data.PlanPublicId;
+                            vRenderObject.ThirdKnowledgeType = '1601002';
+                            ThirdKnowledgeObject.RenderAsync(vRenderObject);
+                        }
+                    }
+                },],
+            }
             ]
         })
     },
@@ -3306,7 +3342,7 @@ var ThirdKnowledgeObject = {
                     return $('#' + ThirdKnowledgeObject.ObjectId + '_TitleTemplate').html().replace(/\${Title}/gi, vRenderObject.Title);
                 }
             },
-                { name: 'ViewEnable', template: $('#' + ThirdKnowledgeObject.ObjectId + '_ViewEnablesTemplate').html() },
+            { name: 'ViewEnable', template: $('#' + ThirdKnowledgeObject.ObjectId + '_ViewEnablesTemplate').html() },
             ],
             dataSource: {
                 pageSize: ThirdKnowledgeObject.PageSize,
@@ -3420,28 +3456,28 @@ var ThirdKnowledgeObject = {
                 width: '170px',
                 format: ThirdKnowledgeObject.DateFormat,
                 editor:
-                    function timeEditor(container, options) {
-                        var input = $('<input type="date" name="'
-                            + options.field
-                            + '" value="'
-                            + options.model.get(options.field)
-                            + '" />');
-                        input.appendTo(container);
-                    }
+                function timeEditor(container, options) {
+                    var input = $('<input type="date" name="'
+                        + options.field
+                        + '" value="'
+                        + options.model.get(options.field)
+                        + '" />');
+                    input.appendTo(container);
+                }
             }, {
                 field: 'PeriodEndDate',
                 title: 'Fin',
                 width: '170px',
                 format: ThirdKnowledgeObject.DateFormat,
                 editor:
-                    function timeEditor(container, options) {
-                        var input = $('<input type="date" name="'
-                            + options.field
-                            + '" value="'
-                            + options.model.get(options.field)
-                            + '" />');
-                        input.appendTo(container);
-                    }
+                function timeEditor(container, options) {
+                    var input = $('<input type="date" name="'
+                        + options.field
+                        + '" value="'
+                        + options.model.get(options.field)
+                        + '" />');
+                    input.appendTo(container);
+                }
             }, {
                 field: 'TotalQueries',
                 title: 'Consultas Realizadas',
@@ -3466,19 +3502,19 @@ var ThirdKnowledgeObject = {
                 width: '170px',
                 format: ThirdKnowledgeObject.DateFormat,
                 editor:
-                    function timeEditor(container, options) {
-                        var input = $('<input type="date" name="'
-                            + options.field
-                            + '" value="'
-                            + options.model.get(options.field)
-                            + '" />');
-                        input.appendTo(container);
-                    }
+                function timeEditor(container, options) {
+                    var input = $('<input type="date" name="'
+                        + options.field
+                        + '" value="'
+                        + options.model.get(options.field)
+                        + '" />');
+                    input.appendTo(container);
+                }
             },
-                {
-                    title: "Acciones",
-                    width: "200px",
-                    command: [
+            {
+                title: "Acciones",
+                width: "200px",
+                command: [
                     {
                         name: 'Detail',
                         text: 'Ver Detalle',
@@ -3497,8 +3533,8 @@ var ThirdKnowledgeObject = {
                                 ThirdKnowledgeObject.RenderAsync(vRenderObject);
                             }
                         }
-                    }, ],
-                }
+                    },],
+            }
             ]
         })
     },
@@ -3564,14 +3600,14 @@ var ThirdKnowledgeObject = {
                 width: '170px',
                 format: ThirdKnowledgeObject.DateFormat,
                 editor:
-                    function timeEditor(container, options) {
-                        var input = $('<input type="date" name="'
-                            + options.field
-                            + '" value="'
-                            + options.model.get(options.field)
-                            + '" />');
-                        input.appendTo(container);
-                    }
+                function timeEditor(container, options) {
+                    var input = $('<input type="date" name="'
+                        + options.field
+                        + '" value="'
+                        + options.model.get(options.field)
+                        + '" />');
+                    input.appendTo(container);
+                }
             }]
         })
     },
@@ -3755,7 +3791,7 @@ var Customer_AditionalDocumentsObject = {
                 field: 'AditionalDataId',
                 title: 'Id',
                 width: '100px',
-            }, ],
+            },],
         });
     },
 };

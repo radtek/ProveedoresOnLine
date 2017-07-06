@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using ProveedoresOnLine.Company.Models.Util;
 
 namespace ProveedoresOnLine.CalificationBatch.DAL.MySqlDAO
 {
@@ -57,172 +58,172 @@ namespace ProveedoresOnLine.CalificationBatch.DAL.MySqlDAO
                             CreateDate = cpb.Field<DateTime>("CreateDate"),
                         }
                             into cpbg
-                            select new Models.CalificationProjectBatch.CalificationProjectBatchModel()
-                                {
-                                    //CalificationProjectItemBatch
-                                    CalificationProjectId = cpbg.Key.CalificationProjectId,
-                                    CalificationProjectPublicId = cpbg.Key.CalificationProjectPublicId,
-                                    ProjectConfigModel =
-                                        (from cpc in response.DataTableResult.AsEnumerable()
-                                         where !cpc.IsNull("CalificationProjectConfigId") &&
-                                                cpc.Field<int>("CalificationProjectId") == cpbg.Key.CalificationProjectId &&
-                                                cpc.Field<int>("CalificationProjectConfigId") == cpbg.Key.CalificationProjectConfigId
-                                         group cpc by new
+                        select new Models.CalificationProjectBatch.CalificationProjectBatchModel()
+                        {
+                            //CalificationProjectItemBatch
+                            CalificationProjectId = cpbg.Key.CalificationProjectId,
+                            CalificationProjectPublicId = cpbg.Key.CalificationProjectPublicId,
+                            ProjectConfigModel =
+                                    (from cpc in response.DataTableResult.AsEnumerable()
+                                     where !cpc.IsNull("CalificationProjectConfigId") &&
+                                            cpc.Field<int>("CalificationProjectId") == cpbg.Key.CalificationProjectId &&
+                                            cpc.Field<int>("CalificationProjectConfigId") == cpbg.Key.CalificationProjectConfigId
+                                     group cpc by new
+                                     {
+                                         CalificationProjectConfigId = cpc.Field<int>("CalificationProjectConfigId"),
+                                         CustomerPublicId = cpc.Field<string>("CustomerPublicId"),
+                                         CalificationProjectconfigName = cpc.Field<string>("CalificationProjectconfigName"),
+                                         ProjectConfigEnable = cpc.Field<UInt64>("ProjectConfigEnable") == 1 ? true : false,
+                                         ProjectConfigLastModify = cpc.Field<DateTime>("ProjectConfigLastModify"),
+                                         ProjectConfigCreateDate = cpc.Field<DateTime>("ProjectConfigCreateDate"),
+                                     }
+                                         into cpcg
+                                     select new ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel()
+                                     {
+                                         CalificationProjectConfigId = cpcg.Key.CalificationProjectConfigId,
+                                         Company = new Company.Models.Company.CompanyModel()
                                          {
-                                             CalificationProjectConfigId = cpc.Field<int>("CalificationProjectConfigId"),
-                                             CustomerPublicId = cpc.Field<string>("CustomerPublicId"),
-                                             CalificationProjectconfigName = cpc.Field<string>("CalificationProjectconfigName"),
-                                             ProjectConfigEnable = cpc.Field<UInt64>("ProjectConfigEnable") == 1 ? true : false,
-                                             ProjectConfigLastModify = cpc.Field<DateTime>("ProjectConfigLastModify"),
-                                             ProjectConfigCreateDate = cpc.Field<DateTime>("ProjectConfigCreateDate"),
-                                         }
-                                             into cpcg
-                                             select new ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel()
-                                             {
-                                                 CalificationProjectConfigId = cpcg.Key.CalificationProjectConfigId,
-                                                 Company = new Company.Models.Company.CompanyModel()
+                                             CompanyPublicId = cpcg.Key.CustomerPublicId,
+                                         },
+                                         CalificationProjectConfigName = cpcg.Key.CalificationProjectconfigName,
+                                         Enable = cpcg.Key.ProjectConfigEnable,
+                                         LastModify = cpcg.Key.ProjectConfigLastModify,
+                                         CreateDate = cpcg.Key.ProjectConfigCreateDate,
+                                     }).FirstOrDefault(),
+                            RelatedProvider = new Company.Models.Company.CompanyModel
+                            {
+                                CompanyPublicId = cpbg.Key.CompanyPublicId
+                            },
+                            TotalScore = cpbg.Key.TotalScore,
+                            Enable = cpbg.Key.Enable,
+                            LastModify = cpbg.Key.LastModify,
+                            CreateDate = cpbg.Key.CreateDate,
+
+                            //CalificationProjectItemBatchModel
+
+                            CalificationProjectItemBatchModel =
+                                    (from cpit in response.DataTableResult.AsEnumerable()
+                                     where !cpit.IsNull("CalificationProjectItemId") &&
+                                            cpit.Field<int>("CalificationProjectId") == cpbg.Key.CalificationProjectId
+                                     group cpit by new
+                                     {
+                                         //CalificationProjectItemBatch
+
+                                         CalificationProjectItemId = cpit.Field<int>("CalificationProjectItemId"),
+                                         CalificationProjectConfigItemId = cpit.Field<int>("CalificationProjectConfigItemId"),
+                                         ItemScore = cpit.Field<int>("ItemScore"),
+                                         ItemEnable = cpit.Field<UInt64>("ItemEnable") == 1 ? true : false,
+                                         ItemLastModify = cpit.Field<DateTime>("ItemLastModify"),
+                                         ItemCreateDate = cpit.Field<DateTime>("ItemCreateDate"),
+                                     }
+                                         into cpitg
+                                     select new Models.CalificationProjectBatch.CalificationProjectItemBatchModel()
+                                     {
+                                         CalificationProjectItemId = cpitg.Key.CalificationProjectItemId,
+                                         CalificationProjectConfigItem =
+                                                (from cpci in response.DataTableResult.AsEnumerable()
+                                                 where !cpci.IsNull("CalificationProjectConfigItemId") &&
+                                                        cpci.Field<int>("CalificationProjectItemId") == cpitg.Key.CalificationProjectItemId &&
+                                                        cpci.Field<int>("CalificationProjectConfigItemId") == cpitg.Key.CalificationProjectConfigItemId
+                                                 group cpci by new
                                                  {
-                                                     CompanyPublicId = cpcg.Key.CustomerPublicId,
-                                                 },
-                                                 CalificationProjectConfigName = cpcg.Key.CalificationProjectconfigName,
-                                                 Enable = cpcg.Key.ProjectConfigEnable,
-                                                 LastModify = cpcg.Key.ProjectConfigLastModify,
-                                                 CreateDate = cpcg.Key.ProjectConfigCreateDate,
-                                             }).FirstOrDefault(),
-                                    RelatedProvider = new Company.Models.Company.CompanyModel
-                                    {
-                                        CompanyPublicId = cpbg.Key.CompanyPublicId
-                                    },
-                                    TotalScore = cpbg.Key.TotalScore,
-                                    Enable = cpbg.Key.Enable,
-                                    LastModify = cpbg.Key.LastModify,
-                                    CreateDate = cpbg.Key.CreateDate,
-
-                                    //CalificationProjectItemBatchModel
-
-                                    CalificationProjectItemBatchModel =
-                                        (from cpit in response.DataTableResult.AsEnumerable()
-                                         where !cpit.IsNull("CalificationProjectItemId") &&
-                                                cpit.Field<int>("CalificationProjectId") == cpbg.Key.CalificationProjectId
-                                         group cpit by new
-                                         {
-                                             //CalificationProjectItemBatch
-
-                                             CalificationProjectItemId = cpit.Field<int>("CalificationProjectItemId"),
-                                             CalificationProjectConfigItemId = cpit.Field<int>("CalificationProjectConfigItemId"),
-                                             ItemScore = cpit.Field<int>("ItemScore"),
-                                             ItemEnable = cpit.Field<UInt64>("ItemEnable") == 1 ? true : false,
-                                             ItemLastModify = cpit.Field<DateTime>("ItemLastModify"),
-                                             ItemCreateDate = cpit.Field<DateTime>("ItemCreateDate"),
-                                         }
-                                             into cpitg
-                                             select new Models.CalificationProjectBatch.CalificationProjectItemBatchModel()
-                                             {
-                                                 CalificationProjectItemId = cpitg.Key.CalificationProjectItemId,
-                                                 CalificationProjectConfigItem =
-                                                    (from cpci in response.DataTableResult.AsEnumerable()
-                                                     where !cpci.IsNull("CalificationProjectConfigItemId") &&
-                                                            cpci.Field<int>("CalificationProjectItemId") == cpitg.Key.CalificationProjectItemId &&
-                                                            cpci.Field<int>("CalificationProjectConfigItemId") == cpitg.Key.CalificationProjectConfigItemId
-                                                     group cpci by new
+                                                     CalificationProjectConfigItemId = cpci.Field<int>("CalificationProjectConfigItemId"),
+                                                     CalificationProjectConfigItemName = cpci.Field<string>("CalificationProjectConfigItemName"),
+                                                     CalificationProjectConfigItemType = cpci.Field<int>("CalificationProjectConfigItemType"),
+                                                     CalificationProjectConfigItemTypeName = cpci.Field<string>("CalificationProjectConfigItemTypeName"),
+                                                     ProjectConfigItemEnable = cpci.Field<UInt64>("ProjectConfigItemEnable") == 1 ? true : false,
+                                                     ProjectConfigItemLastModify = cpci.Field<DateTime>("ProjectConfigItemLastModify"),
+                                                     ProjectConfigItemCreateDate = cpci.Field<DateTime>("ProjectConfigItemCreateDate")
+                                                 }
+                                                     into cpcig
+                                                 select new ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigItemModel()
+                                                 {
+                                                     CalificationProjectConfigItemId = cpcig.Key.CalificationProjectConfigItemId,
+                                                     CalificationProjectConfigItemName = cpcig.Key.CalificationProjectConfigItemName,
+                                                     CalificationProjectConfigItemType = new Company.Models.Util.CatalogModel()
                                                      {
-                                                         CalificationProjectConfigItemId = cpci.Field<int>("CalificationProjectConfigItemId"),
-                                                         CalificationProjectConfigItemName = cpci.Field<string>("CalificationProjectConfigItemName"),
-                                                         CalificationProjectConfigItemType = cpci.Field<int>("CalificationProjectConfigItemType"),
-                                                         CalificationProjectConfigItemTypeName = cpci.Field<string>("CalificationProjectConfigItemTypeName"),
-                                                         ProjectConfigItemEnable = cpci.Field<UInt64>("ProjectConfigItemEnable") == 1 ? true : false,
-                                                         ProjectConfigItemLastModify = cpci.Field<DateTime>("ProjectConfigItemLastModify"),
-                                                         ProjectConfigItemCreateDate = cpci.Field<DateTime>("ProjectConfigItemCreateDate")
-                                                     }
-                                                         into cpcig
-                                                         select new ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigItemModel()
-                                                             {
-                                                                 CalificationProjectConfigItemId = cpcig.Key.CalificationProjectConfigItemId,
-                                                                 CalificationProjectConfigItemName = cpcig.Key.CalificationProjectConfigItemName,
-                                                                 CalificationProjectConfigItemType = new Company.Models.Util.CatalogModel()
-                                                                 {
-                                                                     ItemId = cpcig.Key.CalificationProjectConfigItemType,
-                                                                     ItemName = cpcig.Key.CalificationProjectConfigItemTypeName,
-                                                                 },
-                                                                 Enable = cpcig.Key.ProjectConfigItemEnable,
-                                                                 LastModify = cpcig.Key.ProjectConfigItemLastModify,
-                                                                 CreateDate = cpcig.Key.ProjectConfigItemCreateDate
-                                                             }).FirstOrDefault(),
-                                                 ItemScore = cpitg.Key.ItemScore,
-                                                 Enable = cpitg.Key.ItemEnable,
-                                                 LastModify = cpitg.Key.ItemLastModify,
-                                                 CreateDate = cpitg.Key.ItemCreateDate,
-                                                 CalificatioProjectItemInfoModel =
-                                                     (from cpitinf in response.DataTableResult.AsEnumerable()
-                                                      where !cpitinf.IsNull("CalificationProjectItemInfoId") &&
-                                                            cpitinf.Field<int>("CalificationProjectItemId") == cpitg.Key.CalificationProjectItemId
-                                                      group cpitinf by new
-                                                      {
-                                                          //CalificationProjectItemInfoBatch
+                                                         ItemId = cpcig.Key.CalificationProjectConfigItemType,
+                                                         ItemName = cpcig.Key.CalificationProjectConfigItemTypeName,
+                                                     },
+                                                     Enable = cpcig.Key.ProjectConfigItemEnable,
+                                                     LastModify = cpcig.Key.ProjectConfigItemLastModify,
+                                                     CreateDate = cpcig.Key.ProjectConfigItemCreateDate
+                                                 }).FirstOrDefault(),
+                                         ItemScore = cpitg.Key.ItemScore,
+                                         Enable = cpitg.Key.ItemEnable,
+                                         LastModify = cpitg.Key.ItemLastModify,
+                                         CreateDate = cpitg.Key.ItemCreateDate,
+                                         CalificatioProjectItemInfoModel =
+                                                 (from cpitinf in response.DataTableResult.AsEnumerable()
+                                                  where !cpitinf.IsNull("CalificationProjectItemInfoId") &&
+                                                        cpitinf.Field<int>("CalificationProjectItemId") == cpitg.Key.CalificationProjectItemId
+                                                  group cpitinf by new
+                                                  {
+                                                      //CalificationProjectItemInfoBatch
 
-                                                          CalificationProjectItemInfoId = cpitinf.Field<int>("CalificationProjectItemInfoId"),
-                                                          CalificationProjectConfigItemInfoId = cpitinf.Field<int>("CalificationProjectConfigItemInfoId"),
-                                                          ItemInfoScore = cpitinf.Field<int>("ItemInfoScore"),
-                                                          ItemInfoEnable = cpitinf.Field<UInt64>("ItemInfoEnable") == 1 ? true : false,
-                                                          ItemInfoLastModify = cpitinf.Field<DateTime>("ItemInfoLastModify"),
-                                                          ItemInfoCreateDate = cpitinf.Field<DateTime>("ItemInfoCreateDate")
-                                                      }
-                                                          into cpitinfg
-                                                          select new Models.CalificationProjectBatch.CalificationProjectItemInfoBatchModel()
-                                                          {
-                                                              CalificationProjectItemInfoId = cpitinfg.Key.CalificationProjectItemInfoId,
-                                                              CalificationProjectConfigItemInfoModel =
-                                                                  (from cpcii in response.DataTableResult.AsEnumerable()
-                                                                   where !cpcii.IsNull("CalificationProjectConfigItemInfoId")
-                                                                        && cpcii.Field<int>("CalificationProjectItemInfoId") == cpitinfg.Key.CalificationProjectItemInfoId
-                                                                        && cpcii.Field<int>("CalificationProjectConfigItemInfoId") == cpitinfg.Key.CalificationProjectConfigItemInfoId
-                                                                   group cpcii by new
+                                                      CalificationProjectItemInfoId = cpitinf.Field<int>("CalificationProjectItemInfoId"),
+                                                      CalificationProjectConfigItemInfoId = cpitinf.Field<int>("CalificationProjectConfigItemInfoId"),
+                                                      ItemInfoScore = cpitinf.Field<int>("ItemInfoScore"),
+                                                      ItemInfoEnable = cpitinf.Field<UInt64>("ItemInfoEnable") == 1 ? true : false,
+                                                      ItemInfoLastModify = cpitinf.Field<DateTime>("ItemInfoLastModify"),
+                                                      ItemInfoCreateDate = cpitinf.Field<DateTime>("ItemInfoCreateDate")
+                                                  }
+                                                      into cpitinfg
+                                                  select new Models.CalificationProjectBatch.CalificationProjectItemInfoBatchModel()
+                                                  {
+                                                      CalificationProjectItemInfoId = cpitinfg.Key.CalificationProjectItemInfoId,
+                                                      CalificationProjectConfigItemInfoModel =
+                                                              (from cpcii in response.DataTableResult.AsEnumerable()
+                                                               where !cpcii.IsNull("CalificationProjectConfigItemInfoId")
+                                                                    && cpcii.Field<int>("CalificationProjectItemInfoId") == cpitinfg.Key.CalificationProjectItemInfoId
+                                                                    && cpcii.Field<int>("CalificationProjectConfigItemInfoId") == cpitinfg.Key.CalificationProjectConfigItemInfoId
+                                                               group cpcii by new
+                                                               {
+                                                                   CalificationProjectConfigItemInfoId = cpcii.Field<int>("CalificationProjectConfigItemInfoId"),
+                                                                   Question = cpcii.Field<int>("Question"),
+                                                                   QuestionName = cpcii.Field<string>("QuestionName"),
+                                                                   ConfigItemInfoRule = cpcii.Field<int>("ConfigItemInfoRule"),
+                                                                   ConfigItemInfoRuleName = cpcii.Field<string>("ConfigItemInfoRuleName"),
+                                                                   ValueType = cpcii.Field<int>("ValueType"),
+                                                                   ValueTypeName = cpcii.Field<string>("ValueTypeName"),
+                                                                   ConfigitemInfoValue = cpcii.Field<string>("ConfigitemInfoValue"),
+                                                                   Score = cpcii.Field<string>("Score"),
+                                                                   ConfigItemInfoEnable = cpcii.Field<UInt64>("ConfigItemInfoEnable") == 1 ? true : false,
+                                                                   ConfigItemInfoLastModify = cpcii.Field<DateTime>("ConfigItemInfoLastModify"),
+                                                                   ConfigItemInfoCreateDate = cpcii.Field<DateTime>("ConfigItemInfoCreateDate"),
+                                                               }
+                                                                   into cpciig
+                                                               select new ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigItemInfoModel()
+                                                               {
+                                                                   CalificationProjectConfigItemInfoId = cpciig.Key.CalificationProjectConfigItemInfoId,
+                                                                   Question = new Company.Models.Util.CatalogModel()
                                                                    {
-                                                                       CalificationProjectConfigItemInfoId = cpcii.Field<int>("CalificationProjectConfigItemInfoId"),
-                                                                       Question = cpcii.Field<int>("Question"),
-                                                                       QuestionName = cpcii.Field<string>("QuestionName"),
-                                                                       ConfigItemInfoRule = cpcii.Field<int>("ConfigItemInfoRule"),
-                                                                       ConfigItemInfoRuleName = cpcii.Field<string>("ConfigItemInfoRuleName"),
-                                                                       ValueType = cpcii.Field<int>("ValueType"),
-                                                                       ValueTypeName = cpcii.Field<string>("ValueTypeName"),
-                                                                       ConfigitemInfoValue = cpcii.Field<string>("ConfigitemInfoValue"),
-                                                                       Score = cpcii.Field<string>("Score"),
-                                                                       ConfigItemInfoEnable = cpcii.Field<UInt64>("ConfigItemInfoEnable") == 1 ? true : false,
-                                                                       ConfigItemInfoLastModify = cpcii.Field<DateTime>("ConfigItemInfoLastModify"),
-                                                                       ConfigItemInfoCreateDate = cpcii.Field<DateTime>("ConfigItemInfoCreateDate"),
-                                                                   }
-                                                                       into cpciig
-                                                                       select new ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigItemInfoModel()
-                                                                           {
-                                                                               CalificationProjectConfigItemInfoId = cpciig.Key.CalificationProjectConfigItemInfoId,
-                                                                               Question = new Company.Models.Util.CatalogModel()
-                                                                               {
-                                                                                   ItemId = cpciig.Key.Question,
-                                                                                   ItemName = cpciig.Key.QuestionName,
-                                                                               },
-                                                                               Rule = new Company.Models.Util.CatalogModel
-                                                                               {
-                                                                                   ItemId = cpciig.Key.ConfigItemInfoRule,
-                                                                                   ItemName = cpciig.Key.ConfigItemInfoRuleName,
-                                                                               },
-                                                                               ValueType = new Company.Models.Util.CatalogModel()
-                                                                               {
-                                                                                   ItemId = cpciig.Key.ValueType,
-                                                                                   ItemName = cpciig.Key.ValueTypeName,
-                                                                               },
-                                                                               Value = cpciig.Key.ConfigitemInfoValue,
-                                                                               Score = cpciig.Key.Score,
-                                                                               Enable = cpciig.Key.ConfigItemInfoEnable,
-                                                                               LastModify = cpciig.Key.ConfigItemInfoLastModify,
-                                                                               CreateDate = cpciig.Key.ConfigItemInfoCreateDate,
-                                                                           }).FirstOrDefault(),
-                                                              ItemInfoScore = cpitinfg.Key.ItemInfoScore,
-                                                              Enable = cpitinfg.Key.ItemInfoEnable,
-                                                              LastModify = cpitinfg.Key.ItemInfoLastModify,
-                                                              CreateDate = cpitinfg.Key.ItemInfoCreateDate,
-                                                          }).ToList(),
-                                             }).ToList(),
-                                }
+                                                                       ItemId = cpciig.Key.Question,
+                                                                       ItemName = cpciig.Key.QuestionName,
+                                                                   },
+                                                                   Rule = new Company.Models.Util.CatalogModel
+                                                                   {
+                                                                       ItemId = cpciig.Key.ConfigItemInfoRule,
+                                                                       ItemName = cpciig.Key.ConfigItemInfoRuleName,
+                                                                   },
+                                                                   ValueType = new Company.Models.Util.CatalogModel()
+                                                                   {
+                                                                       ItemId = cpciig.Key.ValueType,
+                                                                       ItemName = cpciig.Key.ValueTypeName,
+                                                                   },
+                                                                   Value = cpciig.Key.ConfigitemInfoValue,
+                                                                   Score = cpciig.Key.Score,
+                                                                   Enable = cpciig.Key.ConfigItemInfoEnable,
+                                                                   LastModify = cpciig.Key.ConfigItemInfoLastModify,
+                                                                   CreateDate = cpciig.Key.ConfigItemInfoCreateDate,
+                                                               }).FirstOrDefault(),
+                                                      ItemInfoScore = cpitinfg.Key.ItemInfoScore,
+                                                      Enable = cpitinfg.Key.ItemInfoEnable,
+                                                      LastModify = cpitinfg.Key.ItemInfoLastModify,
+                                                      CreateDate = cpitinfg.Key.ItemInfoCreateDate,
+                                                  }).ToList(),
+                                     }).ToList(),
+                        }
                     ).ToList();
             }
             return oReturn;
@@ -263,75 +264,75 @@ namespace ProveedoresOnLine.CalificationBatch.DAL.MySqlDAO
                          CreateDate = cp.Field<DateTime>("CreateDate"),
                      }
                          into cpg
-                         select new ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel()
+                     select new ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel()
+                     {
+                         CalificationProjectId = cpg.Key.CalificationProjectId,
+                         CalificationProjectPublicId = cpg.Key.CalificationProjectPublicId,
+                         ProjectConfigModel = new CalificationProject.Models.CalificationProject.CalificationProjectConfigModel()
                          {
-                             CalificationProjectId = cpg.Key.CalificationProjectId,
-                             CalificationProjectPublicId = cpg.Key.CalificationProjectPublicId,
-                             ProjectConfigModel = new CalificationProject.Models.CalificationProject.CalificationProjectConfigModel()
+                             CalificationProjectConfigId = cpg.Key.CalificationProjectConfigId,
+                         },
+                         RelatedProvider = new Company.Models.Company.CompanyModel()
+                         {
+                             CompanyPublicId = cpg.Key.CompanyPublicId,
+                         },
+                         TotalScore = cpg.Key.TotalScore,
+                         Enable = cpg.Key.Enable,
+                         LastModify = cpg.Key.LastModify,
+                         CreateDate = cpg.Key.CreateDate,
+                         CalificationProjectItemBatchModel =
+                            (from cpi in response.DataTableResult.AsEnumerable()
+                             where !cpi.IsNull("CalificationProjectItemId") &&
+                                    cpi.Field<int>("CalificationProjectId") == cpg.Key.CalificationProjectId
+                             group cpi by new
                              {
-                                 CalificationProjectConfigId = cpg.Key.CalificationProjectConfigId,
-                             },
-                             RelatedProvider = new Company.Models.Company.CompanyModel()
+                                 CalificationProjectItemId = cpi.Field<int>("CalificationProjectItemId"),
+                                 CalificationProjectId = cpi.Field<int>("CalificationProjectId"),
+                                 CalificationProjectConfigItemId = cpi.Field<int>("CalificationProjectConfigItemId"),
+                                 ItemScore = cpi.Field<int>("ItemScore"),
+                                 ItemEnable = cpi.Field<UInt64>("ItemEnable") == 1 ? true : false,
+                                 ItemLastModify = cpi.Field<DateTime>("ItemLastModify"),
+                                 ItemCreateDate = cpi.Field<DateTime>("ItemCreateDate"),
+                             }
+                                 into cpig
+                             select new ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectItemBatchModel()
                              {
-                                 CompanyPublicId = cpg.Key.CompanyPublicId,
-                             },
-                             TotalScore = cpg.Key.TotalScore,
-                             Enable = cpg.Key.Enable,
-                             LastModify = cpg.Key.LastModify,
-                             CreateDate = cpg.Key.CreateDate,
-                             CalificationProjectItemBatchModel =
-                                (from cpi in response.DataTableResult.AsEnumerable()
-                                 where !cpi.IsNull("CalificationProjectItemId") &&
-                                        cpi.Field<int>("CalificationProjectId") == cpg.Key.CalificationProjectId
-                                 group cpi by new
+                                 CalificationProjectItemId = cpig.Key.CalificationProjectItemId,
+                                 CalificationProjectConfigItem = new CalificationProject.Models.CalificationProject.ConfigItemModel()
                                  {
-                                     CalificationProjectItemId = cpi.Field<int>("CalificationProjectItemId"),
-                                     CalificationProjectId = cpi.Field<int>("CalificationProjectId"),
-                                     CalificationProjectConfigItemId = cpi.Field<int>("CalificationProjectConfigItemId"),
-                                     ItemScore = cpi.Field<int>("ItemScore"),
-                                     ItemEnable = cpi.Field<UInt64>("ItemEnable") == 1 ? true : false,
-                                     ItemLastModify = cpi.Field<DateTime>("ItemLastModify"),
-                                     ItemCreateDate = cpi.Field<DateTime>("ItemCreateDate"),
-                                 }
-                                     into cpig
-                                     select new ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectItemBatchModel()
-                                     {
-                                         CalificationProjectItemId = cpig.Key.CalificationProjectItemId,
-                                         CalificationProjectConfigItem = new CalificationProject.Models.CalificationProject.ConfigItemModel()
+                                     CalificationProjectConfigItemId = cpig.Key.CalificationProjectConfigItemId,
+                                 },
+                                 ItemScore = cpig.Key.ItemScore,
+                                 LastModify = cpig.Key.ItemLastModify,
+                                 CreateDate = cpig.Key.ItemCreateDate,
+                                 CalificatioProjectItemInfoModel =
+                                        (from cpiinf in response.DataTableResult.AsEnumerable()
+                                         where !cpiinf.IsNull("CalificationProjectItemInfoId") &&
+                                               cpiinf.Field<int>("CalificationProjectItemId") == cpig.Key.CalificationProjectItemId
+                                         group cpiinf by new
                                          {
-                                             CalificationProjectConfigItemId = cpig.Key.CalificationProjectConfigItemId,
-                                         },
-                                         ItemScore = cpig.Key.ItemScore,
-                                         LastModify = cpig.Key.ItemLastModify,
-                                         CreateDate = cpig.Key.ItemCreateDate,
-                                         CalificatioProjectItemInfoModel =
-                                            (from cpiinf in response.DataTableResult.AsEnumerable()
-                                             where !cpiinf.IsNull("CalificationProjectItemInfoId") &&
-                                                   cpiinf.Field<int>("CalificationProjectItemId") == cpig.Key.CalificationProjectItemId
-                                             group cpiinf by new
+                                             CalificationProjectItemInfoId = cpiinf.Field<int>("CalificationProjectItemInfoId"),
+                                             CalificationProjectConfigItemInfoId = cpiinf.Field<int>("CalificationProjectConfigItemInfoId"),
+                                             ItemInfoScore = cpiinf.Field<int>("ItemInfoScore"),
+                                             ItemInfoEnable = cpiinf.Field<UInt64>("ItemInfoEnable") == 1 ? true : false,
+                                             ItemInfoLastModify = cpiinf.Field<DateTime>("ItemInfoLastModify"),
+                                             ItemInfoCreateDate = cpiinf.Field<DateTime>("ItemInfoCreateDate"),
+                                         }
+                                             into cpiinfg
+                                         select new ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectItemInfoBatchModel()
+                                         {
+                                             CalificationProjectItemInfoId = cpiinfg.Key.CalificationProjectItemInfoId,
+                                             CalificationProjectConfigItemInfoModel = new CalificationProject.Models.CalificationProject.ConfigItemInfoModel()
                                              {
-                                                 CalificationProjectItemInfoId = cpiinf.Field<int>("CalificationProjectItemInfoId"),
-                                                 CalificationProjectConfigItemInfoId = cpiinf.Field<int>("CalificationProjectConfigItemInfoId"),
-                                                 ItemInfoScore = cpiinf.Field<int>("ItemInfoScore"),
-                                                 ItemInfoEnable = cpiinf.Field<UInt64>("ItemInfoEnable") == 1 ? true : false,
-                                                 ItemInfoLastModify = cpiinf.Field<DateTime>("ItemInfoLastModify"),
-                                                 ItemInfoCreateDate = cpiinf.Field<DateTime>("ItemInfoCreateDate"),
-                                             }
-                                                 into cpiinfg
-                                                 select new ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectItemInfoBatchModel()
-                                                 {
-                                                     CalificationProjectItemInfoId = cpiinfg.Key.CalificationProjectItemInfoId,
-                                                     CalificationProjectConfigItemInfoModel = new CalificationProject.Models.CalificationProject.ConfigItemInfoModel()
-                                                     {
-                                                         CalificationProjectConfigItemInfoId = cpiinfg.Key.CalificationProjectConfigItemInfoId,
-                                                     },
-                                                     ItemInfoScore = cpiinfg.Key.ItemInfoScore,
-                                                     Enable = cpiinfg.Key.ItemInfoEnable,
-                                                     LastModify = cpiinfg.Key.ItemInfoLastModify,
-                                                     CreateDate = cpiinfg.Key.ItemInfoCreateDate,
-                                                 }).ToList(),
-                                     }).ToList(),
-                         }).ToList();
+                                                 CalificationProjectConfigItemInfoId = cpiinfg.Key.CalificationProjectConfigItemInfoId,
+                                             },
+                                             ItemInfoScore = cpiinfg.Key.ItemInfoScore,
+                                             Enable = cpiinfg.Key.ItemInfoEnable,
+                                             LastModify = cpiinfg.Key.ItemInfoLastModify,
+                                             CreateDate = cpiinfg.Key.ItemInfoCreateDate,
+                                         }).ToList(),
+                             }).ToList(),
+                     }).ToList();
             }
 
             return oReturn;
@@ -439,120 +440,120 @@ namespace ProveedoresOnLine.CalificationBatch.DAL.MySqlDAO
                          CalificationProjectConfigCreateDate = cpc.Field<DateTime>("CalificationProjectConfigCreateDate"),
                      }
                          into cpcg
-                         select new ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel()
+                     select new ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel()
+                     {
+                         CalificationProjectConfigId = cpcg.Key.CalificationProjectConfigId,
+                         Company = new Company.Models.Company.CompanyModel()
                          {
-                             CalificationProjectConfigId = cpcg.Key.CalificationProjectConfigId,
-                             Company = new Company.Models.Company.CompanyModel()
+                             CompanyPublicId = cpcg.Key.CompanyPublicId,
+                         },
+                         CalificationProjectConfigName = cpcg.Key.CalificationProjectConfigName,
+                         Enable = cpcg.Key.CalificationProjectConfigEnable,
+                         LastModify = cpcg.Key.CalificationProjectConfigLastModify,
+                         CreateDate = cpcg.Key.CalificationProjectConfigCreateDate,
+                         ConfigItemModel =
+                            (from cpcit in response.DataTableResult.AsEnumerable()
+                             where !cpcit.IsNull("CalificationProjectConfigItemId") &&
+                                   cpcit.Field<int>("CalificationProjectConfigId") == cpcg.Key.CalificationProjectConfigId
+                             group cpcit by new
                              {
-                                 CompanyPublicId = cpcg.Key.CompanyPublicId,
-                             },
-                             CalificationProjectConfigName = cpcg.Key.CalificationProjectConfigName,
-                             Enable = cpcg.Key.CalificationProjectConfigEnable,
-                             LastModify = cpcg.Key.CalificationProjectConfigLastModify,
-                             CreateDate = cpcg.Key.CalificationProjectConfigCreateDate,
-                             ConfigItemModel =
-                                (from cpcit in response.DataTableResult.AsEnumerable()
-                                 where !cpcit.IsNull("CalificationProjectConfigItemId") &&
-                                       cpcit.Field<int>("CalificationProjectConfigId") == cpcg.Key.CalificationProjectConfigId
-                                 group cpcit by new
+                                 CalificationProjectConfigItemId = cpcit.Field<int>("CalificationProjectConfigItemId"),
+                                 CalificationProjectConfigItemName = cpcit.Field<string>("CalificationProjectConfigItemName"),
+                                 CalificationProjectConfigItemTypeId = cpcit.Field<int>("CalificationProjectConfigItemTypeId"),
+                                 CalificationProjectConfigItemTypeName = cpcit.Field<string>("CalificationProjectConfigItemTypeName"),
+                                 CalificationProjectConfigItemEnable = cpcit.Field<UInt64>("CalificationProjectConfigItemEnable") == 1 ? true : false,
+                                 CalificationProjectConfigItemLastModify = cpcit.Field<DateTime>("CalificationProjectConfigItemLastModify"),
+                                 CalificationProjectConfigItemCreateDate = cpcit.Field<DateTime>("CalificationProjectConfigItemCreateDate"),
+                             }
+                                 into cpcitg
+                             select new ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigItemModel()
+                             {
+                                 CalificationProjectConfigItemId = cpcitg.Key.CalificationProjectConfigItemId,
+                                 CalificationProjectConfigItemName = cpcitg.Key.CalificationProjectConfigItemName,
+                                 CalificationProjectConfigItemType = new Company.Models.Util.CatalogModel()
                                  {
-                                     CalificationProjectConfigItemId = cpcit.Field<int>("CalificationProjectConfigItemId"),
-                                     CalificationProjectConfigItemName = cpcit.Field<string>("CalificationProjectConfigItemName"),
-                                     CalificationProjectConfigItemTypeId = cpcit.Field<int>("CalificationProjectConfigItemTypeId"),
-                                     CalificationProjectConfigItemTypeName = cpcit.Field<string>("CalificationProjectConfigItemTypeName"),
-                                     CalificationProjectConfigItemEnable = cpcit.Field<UInt64>("CalificationProjectConfigItemEnable") == 1 ? true : false,
-                                     CalificationProjectConfigItemLastModify = cpcit.Field<DateTime>("CalificationProjectConfigItemLastModify"),
-                                     CalificationProjectConfigItemCreateDate = cpcit.Field<DateTime>("CalificationProjectConfigItemCreateDate"),
-                                 }
-                                     into cpcitg
-                                     select new ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigItemModel()
-                                     {
-                                         CalificationProjectConfigItemId = cpcitg.Key.CalificationProjectConfigItemId,
-                                         CalificationProjectConfigItemName = cpcitg.Key.CalificationProjectConfigItemName,
-                                         CalificationProjectConfigItemType = new Company.Models.Util.CatalogModel()
+                                     ItemId = cpcitg.Key.CalificationProjectConfigItemTypeId,
+                                     ItemName = cpcitg.Key.CalificationProjectConfigItemTypeName,
+                                 },
+                                 Enable = cpcitg.Key.CalificationProjectConfigItemEnable,
+                                 LastModify = cpcitg.Key.CalificationProjectConfigItemLastModify,
+                                 CreateDate = cpcitg.Key.CalificationProjectConfigItemCreateDate,
+                                 CalificationProjectConfigItemInfoModel =
+                                        (from cpcinf in response.DataTableResult.AsEnumerable()
+                                         where !cpcinf.IsNull("CalificationProjectConfigItemInfoId") &&
+                                               cpcinf.Field<int>("CalificationProjectConfigItemId") == cpcitg.Key.CalificationProjectConfigItemId
+                                         group cpcinf by new
                                          {
-                                             ItemId = cpcitg.Key.CalificationProjectConfigItemTypeId,
-                                             ItemName = cpcitg.Key.CalificationProjectConfigItemTypeName,
-                                         },
-                                         Enable = cpcitg.Key.CalificationProjectConfigItemEnable,
-                                         LastModify = cpcitg.Key.CalificationProjectConfigItemLastModify,
-                                         CreateDate = cpcitg.Key.CalificationProjectConfigItemCreateDate,
-                                         CalificationProjectConfigItemInfoModel =
-                                            (from cpcinf in response.DataTableResult.AsEnumerable()
-                                             where !cpcinf.IsNull("CalificationProjectConfigItemInfoId") &&
-                                                   cpcinf.Field<int>("CalificationProjectConfigItemId") == cpcitg.Key.CalificationProjectConfigItemId
-                                             group cpcinf by new
+                                             CalificationProjectConfigItemInfoId = cpcinf.Field<int>("CalificationProjectConfigItemInfoId"),
+                                             QuestionId = cpcinf.Field<int>("QuestionId"),
+                                             QuestionName = cpcinf.Field<string>("QuestionName"),
+                                             RuleId = cpcinf.Field<int>("RuleId"),
+                                             RuleName = cpcinf.Field<string>("RuleName"),
+                                             ValueTypeId = cpcinf.Field<int>("ValueTypeId"),
+                                             ValueTypeName = cpcinf.Field<string>("ValueTypeName"),
+                                             Value = cpcinf.Field<string>("Value"),
+                                             Score = cpcinf.Field<string>("Score"),
+                                             CalificationProjectConfigItemInfoEnable = cpcinf.Field<UInt64>("CalificationProjectConfigItemInfoEnable") == 1 ? true : false,
+                                             CalificationProjectConfigItemInfoLastModify = cpcinf.Field<DateTime>("CalificationProjectConfigItemInfoLastModify"),
+                                             CalificationProjectConfigItemInfoCreateDate = cpcinf.Field<DateTime>("CalificationProjectConfigItemInfoCreateDate"),
+                                         }
+                                             into cpcinfg
+                                         select new ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigItemInfoModel()
+                                         {
+                                             CalificationProjectConfigItemInfoId = cpcinfg.Key.CalificationProjectConfigItemInfoId,
+                                             Question = new Company.Models.Util.CatalogModel()
                                              {
-                                                 CalificationProjectConfigItemInfoId = cpcinf.Field<int>("CalificationProjectConfigItemInfoId"),
-                                                 QuestionId = cpcinf.Field<int>("QuestionId"),
-                                                 QuestionName = cpcinf.Field<string>("QuestionName"),
-                                                 RuleId = cpcinf.Field<int>("RuleId"),
-                                                 RuleName = cpcinf.Field<string>("RuleName"),
-                                                 ValueTypeId = cpcinf.Field<int>("ValueTypeId"),
-                                                 ValueTypeName = cpcinf.Field<string>("ValueTypeName"),
-                                                 Value = cpcinf.Field<string>("Value"),
-                                                 Score = cpcinf.Field<string>("Score"),
-                                                 CalificationProjectConfigItemInfoEnable = cpcinf.Field<UInt64>("CalificationProjectConfigItemInfoEnable") == 1 ? true : false,
-                                                 CalificationProjectConfigItemInfoLastModify = cpcinf.Field<DateTime>("CalificationProjectConfigItemInfoLastModify"),
-                                                 CalificationProjectConfigItemInfoCreateDate = cpcinf.Field<DateTime>("CalificationProjectConfigItemInfoCreateDate"),
-                                             }
-                                                 into cpcinfg
-                                                 select new ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigItemInfoModel()
-                                                 {
-                                                     CalificationProjectConfigItemInfoId = cpcinfg.Key.CalificationProjectConfigItemInfoId,
-                                                     Question = new Company.Models.Util.CatalogModel()
-                                                     {
-                                                         ItemId = cpcinfg.Key.QuestionId,
-                                                         ItemName = cpcinfg.Key.QuestionName,
-                                                     },
-                                                     Rule = new Company.Models.Util.CatalogModel()
-                                                     {
-                                                         ItemId = cpcinfg.Key.RuleId,
-                                                         ItemName = cpcinfg.Key.RuleName,
-                                                     },
-                                                     ValueType = new Company.Models.Util.CatalogModel()
-                                                     {
-                                                         ItemId = cpcinfg.Key.ValueTypeId,
-                                                         ItemName = cpcinfg.Key.ValueTypeName,
-                                                     },
-                                                     Value = cpcinfg.Key.Value,
-                                                     Score = cpcinfg.Key.Score,
-                                                     Enable = cpcinfg.Key.CalificationProjectConfigItemInfoEnable,
-                                                     LastModify = cpcinfg.Key.CalificationProjectConfigItemInfoLastModify,
-                                                     CreateDate = cpcinfg.Key.CalificationProjectConfigItemInfoCreateDate,
-                                                 }).ToList(),
-                                     }).ToList(),
-                             ConfigValidateModel =
-                                 (from cpcv in response.DataTableResult.AsEnumerable()
-                                  where !cpcv.IsNull("CalificationProjectConfigValidateId") &&
-                                        cpcv.Field<int>("CalificationProjectConfigId") == cpcg.Key.CalificationProjectConfigId
-                                  group cpcv by new
+                                                 ItemId = cpcinfg.Key.QuestionId,
+                                                 ItemName = cpcinfg.Key.QuestionName,
+                                             },
+                                             Rule = new Company.Models.Util.CatalogModel()
+                                             {
+                                                 ItemId = cpcinfg.Key.RuleId,
+                                                 ItemName = cpcinfg.Key.RuleName,
+                                             },
+                                             ValueType = new Company.Models.Util.CatalogModel()
+                                             {
+                                                 ItemId = cpcinfg.Key.ValueTypeId,
+                                                 ItemName = cpcinfg.Key.ValueTypeName,
+                                             },
+                                             Value = cpcinfg.Key.Value,
+                                             Score = cpcinfg.Key.Score,
+                                             Enable = cpcinfg.Key.CalificationProjectConfigItemInfoEnable,
+                                             LastModify = cpcinfg.Key.CalificationProjectConfigItemInfoLastModify,
+                                             CreateDate = cpcinfg.Key.CalificationProjectConfigItemInfoCreateDate,
+                                         }).ToList(),
+                             }).ToList(),
+                         ConfigValidateModel =
+                             (from cpcv in response.DataTableResult.AsEnumerable()
+                              where !cpcv.IsNull("CalificationProjectConfigValidateId") &&
+                                    cpcv.Field<int>("CalificationProjectConfigId") == cpcg.Key.CalificationProjectConfigId
+                              group cpcv by new
+                              {
+                                  CalificationProjectConfigValidateId = cpcv.Field<int>("CalificationProjectConfigValidateId"),
+                                  OperatorId = cpcv.Field<int>("OperatorId"),
+                                  OperatorName = cpcv.Field<string>("OperatorName"),
+                                  CalificationProjectConfigValidateValue = cpcv.Field<string>("CalificationProjectConfigValidateValue"),
+                                  CalificationProjectConfigValidateResult = cpcv.Field<string>("CalificationProjectConfigValidateResult"),
+                                  CalificationProjectConfigValidateEnable = cpcv.Field<UInt64>("CalificationProjectConfigValidateEnable") == 1 ? true : false,
+                                  CalificationProjectConfigValidateLastModify = cpcv.Field<DateTime>("CalificationProjectConfigValidateLastModify"),
+                                  CalificationProjectConfigValidateCreateDate = cpcv.Field<DateTime>("CalificationProjectConfigValidateCreateDate"),
+                              }
+                                  into cpcvg
+                              select new ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigValidateModel()
+                              {
+                                  CalificationProjectConfigId = cpcvg.Key.CalificationProjectConfigValidateId,
+                                  Operator = new Company.Models.Util.CatalogModel()
                                   {
-                                      CalificationProjectConfigValidateId = cpcv.Field<int>("CalificationProjectConfigValidateId"),
-                                      OperatorId = cpcv.Field<int>("OperatorId"),
-                                      OperatorName = cpcv.Field<string>("OperatorName"),
-                                      CalificationProjectConfigValidateValue = cpcv.Field<string>("CalificationProjectConfigValidateValue"),
-                                      CalificationProjectConfigValidateResult = cpcv.Field<string>("CalificationProjectConfigValidateResult"),
-                                      CalificationProjectConfigValidateEnable = cpcv.Field<UInt64>("CalificationProjectConfigValidateEnable") == 1 ? true : false,
-                                      CalificationProjectConfigValidateLastModify = cpcv.Field<DateTime>("CalificationProjectConfigValidateLastModify"),
-                                      CalificationProjectConfigValidateCreateDate = cpcv.Field<DateTime>("CalificationProjectConfigValidateCreateDate"),
-                                  }
-                                      into cpcvg
-                                      select new ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigValidateModel()
-                                      {
-                                          CalificationProjectConfigId = cpcvg.Key.CalificationProjectConfigValidateId,
-                                          Operator = new Company.Models.Util.CatalogModel()
-                                          {
-                                              ItemId = cpcvg.Key.OperatorId,
-                                              ItemName = cpcvg.Key.OperatorName,
-                                          },
-                                          Value = cpcvg.Key.CalificationProjectConfigValidateValue,
-                                          Result = cpcvg.Key.CalificationProjectConfigValidateResult,
-                                          Enable = cpcvg.Key.CalificationProjectConfigValidateEnable,
-                                          LastModify = cpcvg.Key.CalificationProjectConfigValidateLastModify,
-                                          CreateDate = cpcvg.Key.CalificationProjectConfigValidateCreateDate,
-                                      }).ToList(),
-                         }).ToList();
+                                      ItemId = cpcvg.Key.OperatorId,
+                                      ItemName = cpcvg.Key.OperatorName,
+                                  },
+                                  Value = cpcvg.Key.CalificationProjectConfigValidateValue,
+                                  Result = cpcvg.Key.CalificationProjectConfigValidateResult,
+                                  Enable = cpcvg.Key.CalificationProjectConfigValidateEnable,
+                                  LastModify = cpcvg.Key.CalificationProjectConfigValidateLastModify,
+                                  CreateDate = cpcvg.Key.CalificationProjectConfigValidateCreateDate,
+                              }).ToList(),
+                     }).ToList();
             }
 
             return oReturn;
@@ -597,48 +598,48 @@ namespace ProveedoresOnLine.CalificationBatch.DAL.MySqlDAO
                          LegalCreateDate = l.Field<DateTime>("LegalCreateDate"),
                      }
                          into lg
-                         select new ProveedoresOnLine.Company.Models.Util.GenericItemModel()
+                     select new ProveedoresOnLine.Company.Models.Util.GenericItemModel()
+                     {
+                         ItemId = lg.Key.LegalId,
+                         ItemType = new Company.Models.Util.CatalogModel()
                          {
-                             ItemId = lg.Key.LegalId,
-                             ItemType = new Company.Models.Util.CatalogModel()
+                             ItemId = lg.Key.LegalTypeId,
+                             ItemName = lg.Key.LegalTypeName,
+                         },
+                         Enable = lg.Key.LegalEnable,
+                         LastModify = lg.Key.LegalLastModify,
+                         CreateDate = lg.Key.LegalCreateDate,
+                         ItemInfo =
+                            (from linf in response.DataTableResult.AsEnumerable()
+                             where !linf.IsNull("LegalInfoId") &&
+                                 linf.Field<int>("LegalId") == lg.Key.LegalId
+                             group linf by new
                              {
-                                 ItemId = lg.Key.LegalTypeId,
-                                 ItemName = lg.Key.LegalTypeName,
-                             },
-                             Enable = lg.Key.LegalEnable,
-                             LastModify = lg.Key.LegalLastModify,
-                             CreateDate = lg.Key.LegalCreateDate,
-                             ItemInfo =
-                                (from linf in response.DataTableResult.AsEnumerable()
-                                 where !linf.IsNull("LegalInfoId") &&
-                                     linf.Field<int>("LegalId") == lg.Key.LegalId
-                                 group linf by new
+                                 LegalInfoId = linf.Field<int>("LegalInfoId"),
+                                 LegalInfoTypeId = linf.Field<int>("LegalItemInfoTypeId"),
+                                 LegalInfoTypeName = linf.Field<string>("LegalItemInfoTypeName"),
+                                 LegalInfoValue = linf.Field<string>("LegalInfoValue"),
+                                 LegalInfoLargeValue = linf.Field<string>("LegalInfoLargeValue"),
+                                 LegalInfoEnable = linf.Field<UInt64>("LegalInfoEnable") == 1 ? true : false,
+                                 LegalInfoLastModify = linf.Field<DateTime>("LegalInfoLastModify"),
+                                 LegalInfoCreateDate = linf.Field<DateTime>("LegalInfoCreateDate"),
+                             }
+                                 into linfg
+                             select new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
+                             {
+                                 ItemInfoId = linfg.Key.LegalInfoId,
+                                 ItemInfoType = new Company.Models.Util.CatalogModel()
                                  {
-                                     LegalInfoId = linf.Field<int>("LegalInfoId"),
-                                     LegalInfoTypeId = linf.Field<int>("LegalItemInfoTypeId"),
-                                     LegalInfoTypeName = linf.Field<string>("LegalItemInfoTypeName"),
-                                     LegalInfoValue = linf.Field<string>("LegalInfoValue"),
-                                     LegalInfoLargeValue = linf.Field<string>("LegalInfoLargeValue"),
-                                     LegalInfoEnable = linf.Field<UInt64>("LegalInfoEnable") == 1 ? true : false,
-                                     LegalInfoLastModify = linf.Field<DateTime>("LegalInfoLastModify"),
-                                     LegalInfoCreateDate = linf.Field<DateTime>("LegalInfoCreateDate"),
-                                 }
-                                     into linfg
-                                     select new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                                     {
-                                         ItemInfoId = linfg.Key.LegalInfoId,
-                                         ItemInfoType = new Company.Models.Util.CatalogModel()
-                                         {
-                                             ItemId = linfg.Key.LegalInfoTypeId,
-                                             ItemName = linfg.Key.LegalInfoTypeName,
-                                         },
-                                         Value = linfg.Key.LegalInfoValue,
-                                         LargeValue = linfg.Key.LegalInfoLargeValue,
-                                         Enable = linfg.Key.LegalInfoEnable,
-                                         LastModify = linfg.Key.LegalInfoLastModify,
-                                         CreateDate = linfg.Key.LegalInfoCreateDate,
-                                     }).ToList(),
-                         }).ToList();
+                                     ItemId = linfg.Key.LegalInfoTypeId,
+                                     ItemName = linfg.Key.LegalInfoTypeName,
+                                 },
+                                 Value = linfg.Key.LegalInfoValue,
+                                 LargeValue = linfg.Key.LegalInfoLargeValue,
+                                 Enable = linfg.Key.LegalInfoEnable,
+                                 LastModify = linfg.Key.LegalInfoLastModify,
+                                 CreateDate = linfg.Key.LegalInfoCreateDate,
+                             }).ToList(),
+                     }).ToList();
             }
 
             return oReturn;
@@ -682,49 +683,49 @@ namespace ProveedoresOnLine.CalificationBatch.DAL.MySqlDAO
                          FinancialCreateDate = f.Field<DateTime>("FinancialCreateDate"),
                      }
                          into fg
-                         select new ProveedoresOnLine.Company.Models.Util.GenericItemModel()
+                     select new ProveedoresOnLine.Company.Models.Util.GenericItemModel()
+                     {
+                         ItemId = fg.Key.FinancialId,
+                         ItemName = fg.Key.FinancialName,
+                         ItemType = new Company.Models.Util.CatalogModel()
                          {
-                             ItemId = fg.Key.FinancialId,
-                             ItemName = fg.Key.FinancialName,
-                             ItemType = new Company.Models.Util.CatalogModel()
+                             ItemId = fg.Key.FinancialTypeId,
+                             ItemName = fg.Key.FinancialTypeName,
+                         },
+                         Enable = fg.Key.FinancialEnable,
+                         LastModify = fg.Key.FinancialLastModify,
+                         CreateDate = fg.Key.FinancialCreateDate,
+                         ItemInfo =
+                            (from finf in response.DataTableResult.AsEnumerable()
+                             where !finf.IsNull("FinancialInfoId") &&
+                                    finf.Field<int>("FinancialId") == fg.Key.FinancialId
+                             group finf by new
                              {
-                                 ItemId = fg.Key.FinancialTypeId,
-                                 ItemName = fg.Key.FinancialTypeName,
-                             },
-                             Enable = fg.Key.FinancialEnable,
-                             LastModify = fg.Key.FinancialLastModify,
-                             CreateDate = fg.Key.FinancialCreateDate,
-                             ItemInfo =
-                                (from finf in response.DataTableResult.AsEnumerable()
-                                 where !finf.IsNull("FinancialInfoId") &&
-                                        finf.Field<int>("FinancialId") == fg.Key.FinancialId
-                                 group finf by new
+                                 FinancialInfoId = finf.Field<int>("FinancialInfoId"),
+                                 FinancialInfoTypeId = finf.Field<int>("FinancialInfoTypeId"),
+                                 FinancialInfoTypeName = finf.Field<string>("FinancialInfoTypeName"),
+                                 FinancialInfoValue = finf.Field<string>("FinancialInfoValue"),
+                                 FinancialInfoLargeValue = finf.Field<string>("FinancialInfoLargeValue"),
+                                 FinancialInfoEnable = finf.Field<UInt64>("FinancialInfoEnable") == 1 ? true : false,
+                                 FinancialInfoLastModify = finf.Field<DateTime>("FinancialInfoLastModify"),
+                                 FinancialInfoCreateDate = finf.Field<DateTime>("FinancialInfoCreateDate"),
+                             }
+                                 into finfg
+                             select new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
+                             {
+                                 ItemInfoId = finfg.Key.FinancialInfoId,
+                                 ItemInfoType = new Company.Models.Util.CatalogModel()
                                  {
-                                     FinancialInfoId = finf.Field<int>("FinancialInfoId"),
-                                     FinancialInfoTypeId = finf.Field<int>("FinancialInfoTypeId"),
-                                     FinancialInfoTypeName = finf.Field<string>("FinancialInfoTypeName"),
-                                     FinancialInfoValue = finf.Field<string>("FinancialInfoValue"),
-                                     FinancialInfoLargeValue = finf.Field<string>("FinancialInfoLargeValue"),
-                                     FinancialInfoEnable = finf.Field<UInt64>("FinancialInfoEnable") == 1 ? true : false,
-                                     FinancialInfoLastModify = finf.Field<DateTime>("FinancialInfoLastModify"),
-                                     FinancialInfoCreateDate = finf.Field<DateTime>("FinancialInfoCreateDate"),
-                                 }
-                                     into finfg
-                                     select new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                                     {
-                                         ItemInfoId = finfg.Key.FinancialInfoId,
-                                         ItemInfoType = new Company.Models.Util.CatalogModel()
-                                         {
-                                             ItemId = finfg.Key.FinancialInfoTypeId,
-                                             ItemName = finfg.Key.FinancialInfoTypeName,
-                                         },
-                                         Value = finfg.Key.FinancialInfoValue,
-                                         LargeValue = finfg.Key.FinancialInfoLargeValue,
-                                         Enable = finfg.Key.FinancialInfoEnable,
-                                         LastModify = finfg.Key.FinancialInfoLastModify,
-                                         CreateDate = finfg.Key.FinancialInfoCreateDate,
-                                     }).ToList(),
-                         }).ToList();
+                                     ItemId = finfg.Key.FinancialInfoTypeId,
+                                     ItemName = finfg.Key.FinancialInfoTypeName,
+                                 },
+                                 Value = finfg.Key.FinancialInfoValue,
+                                 LargeValue = finfg.Key.FinancialInfoLargeValue,
+                                 Enable = finfg.Key.FinancialInfoEnable,
+                                 LastModify = finfg.Key.FinancialInfoLastModify,
+                                 CreateDate = finfg.Key.FinancialInfoCreateDate,
+                             }).ToList(),
+                     }).ToList();
             }
 
             return oReturn;
@@ -768,48 +769,48 @@ namespace ProveedoresOnLine.CalificationBatch.DAL.MySqlDAO
                             CommercialCreateDate = cial.Field<DateTime>("CommercialCreateDate"),
                         }
                             into cialg
-                            select new ProveedoresOnLine.Company.Models.Util.GenericItemModel()
+                        select new ProveedoresOnLine.Company.Models.Util.GenericItemModel()
+                        {
+                            ItemId = cialg.Key.CommercialId,
+                            ItemType = new Company.Models.Util.CatalogModel()
                             {
-                                ItemId = cialg.Key.CommercialId,
-                                ItemType = new Company.Models.Util.CatalogModel()
+                                ItemId = cialg.Key.CommercialTypeId,
+                                ItemName = cialg.Key.CommercialTypeName,
+                            },
+                            Enable = cialg.Key.CommercialEnable,
+                            LastModify = cialg.Key.CommercialLastModify,
+                            CreateDate = cialg.Key.CommercialCreateDate,
+                            ItemInfo =
+                               (from cialinf in response.DataTableResult.AsEnumerable()
+                                where !cialinf.IsNull("CommercialInfoId") &&
+                                    cialinf.Field<int>("CommercialId") == cialg.Key.CommercialId
+                                group cialinf by new
                                 {
-                                    ItemId = cialg.Key.CommercialTypeId,
-                                    ItemName = cialg.Key.CommercialTypeName,
-                                },
-                                Enable = cialg.Key.CommercialEnable,
-                                LastModify = cialg.Key.CommercialLastModify,
-                                CreateDate = cialg.Key.CommercialCreateDate,
-                                ItemInfo =
-                                   (from cialinf in response.DataTableResult.AsEnumerable()
-                                    where !cialinf.IsNull("CommercialInfoId") &&
-                                        cialinf.Field<int>("CommercialId") == cialg.Key.CommercialId
-                                    group cialinf by new
+                                    CommercialInfoId = cialinf.Field<int>("CommercialInfoId"),
+                                    CommercialInfoTypeId = cialinf.Field<int>("CommercialItemInfoTypeId"),
+                                    CommerciallInfoTypeName = cialinf.Field<string>("CommercialItemInfoTypeName"),
+                                    CommercialInfoLargeValue = cialinf.Field<string>("CommercialInfoLargeValue"),
+                                    CommercialInfoValue = cialinf.Field<string>("CommercialInfoValue"),
+                                    CommercialInfoEnable = cialinf.Field<UInt64>("CommercialInfoEnable") == 1 ? true : false,
+                                    CommercialInfoLastModify = cialinf.Field<DateTime>("CommercialInfoLastModify"),
+                                    CommercialInfoCreateDate = cialinf.Field<DateTime>("CommercialInfoCreateDate"),
+                                }
+                                    into cialinfg
+                                select new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
+                                {
+                                    ItemInfoId = cialinfg.Key.CommercialInfoId,
+                                    ItemInfoType = new Company.Models.Util.CatalogModel()
                                     {
-                                        CommercialInfoId = cialinf.Field<int>("CommercialInfoId"),
-                                        CommercialInfoTypeId = cialinf.Field<int>("CommercialItemInfoTypeId"),
-                                        CommerciallInfoTypeName = cialinf.Field<string>("CommercialItemInfoTypeName"),
-                                        CommercialInfoLargeValue = cialinf.Field<string>("CommercialInfoLargeValue"),
-                                        CommercialInfoValue = cialinf.Field<string>("CommercialInfoValue"),
-                                        CommercialInfoEnable = cialinf.Field<UInt64>("CommercialInfoEnable") == 1 ? true : false,
-                                        CommercialInfoLastModify = cialinf.Field<DateTime>("CommercialInfoLastModify"),
-                                        CommercialInfoCreateDate = cialinf.Field<DateTime>("CommercialInfoCreateDate"),
-                                    }
-                                        into cialinfg
-                                        select new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                                        {
-                                            ItemInfoId = cialinfg.Key.CommercialInfoId,
-                                            ItemInfoType = new Company.Models.Util.CatalogModel()
-                                            {
-                                                ItemId = cialinfg.Key.CommercialInfoTypeId,
-                                                ItemName = cialinfg.Key.CommerciallInfoTypeName,
-                                            },
-                                            Value = cialinfg.Key.CommercialInfoValue,
-                                            LargeValue = cialinfg.Key.CommercialInfoLargeValue,
-                                            Enable = cialinfg.Key.CommercialInfoEnable,
-                                            LastModify = cialinfg.Key.CommercialInfoLastModify,
-                                            CreateDate = cialinfg.Key.CommercialInfoCreateDate,
-                                        }).ToList(),
-                            }).ToList();
+                                        ItemId = cialinfg.Key.CommercialInfoTypeId,
+                                        ItemName = cialinfg.Key.CommerciallInfoTypeName,
+                                    },
+                                    Value = cialinfg.Key.CommercialInfoValue,
+                                    LargeValue = cialinfg.Key.CommercialInfoLargeValue,
+                                    Enable = cialinfg.Key.CommercialInfoEnable,
+                                    LastModify = cialinfg.Key.CommercialInfoLastModify,
+                                    CreateDate = cialinfg.Key.CommercialInfoCreateDate,
+                                }).ToList(),
+                        }).ToList();
             }
             return oReturn;
         }
@@ -852,48 +853,48 @@ namespace ProveedoresOnLine.CalificationBatch.DAL.MySqlDAO
                             CertificationCreateDate = cert.Field<DateTime>("CertificationCreateDate"),
                         }
                             into certg
-                            select new ProveedoresOnLine.Company.Models.Util.GenericItemModel()
+                        select new ProveedoresOnLine.Company.Models.Util.GenericItemModel()
+                        {
+                            ItemId = certg.Key.CertificationId,
+                            ItemType = new Company.Models.Util.CatalogModel()
                             {
-                                ItemId = certg.Key.CertificationId,
-                                ItemType = new Company.Models.Util.CatalogModel()
+                                ItemId = certg.Key.CertificationTypeId,
+                                ItemName = certg.Key.CertificationTypeName,
+                            },
+                            Enable = certg.Key.CertificationEnable,
+                            LastModify = certg.Key.CertificationLastModify,
+                            CreateDate = certg.Key.CertificationCreateDate,
+                            ItemInfo =
+                               (from certinf in response.DataTableResult.AsEnumerable()
+                                where !certinf.IsNull("CertificationInfoId") &&
+                                    certinf.Field<int>("CertificationId") == certg.Key.CertificationId
+                                group certinf by new
                                 {
-                                    ItemId = certg.Key.CertificationTypeId,
-                                    ItemName = certg.Key.CertificationTypeName,
-                                },
-                                Enable = certg.Key.CertificationEnable,
-                                LastModify = certg.Key.CertificationLastModify,
-                                CreateDate = certg.Key.CertificationCreateDate,
-                                ItemInfo =
-                                   (from certinf in response.DataTableResult.AsEnumerable()
-                                    where !certinf.IsNull("CertificationInfoId") &&
-                                        certinf.Field<int>("CertificationId") == certg.Key.CertificationId
-                                    group certinf by new
+                                    CertificationInfoId = certinf.Field<int>("CertificationInfoId"),
+                                    CertificationItemInfoTypeId = certinf.Field<int>("CertificationItemInfoTypeId"),
+                                    CertificationItemInfoTypeName = certinf.Field<string>("CertificationItemInfoTypeName"),
+                                    CertificationInfoLargeValue = certinf.Field<string>("CertificationInfoLargeValue"),
+                                    CertificationInfoValue = certinf.Field<string>("CertificationInfoValue"),
+                                    CertificationInfoEnable = certinf.Field<UInt64>("CertificationInfoEnable") == 1 ? true : false,
+                                    CertificationInfoLastModify = certinf.Field<DateTime>("CertificationInfoLastModify"),
+                                    CertificationInfoCreateDate = certinf.Field<DateTime>("CertificationInfoCreateDate"),
+                                }
+                                    into certingg
+                                select new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
+                                {
+                                    ItemInfoId = certingg.Key.CertificationInfoId,
+                                    ItemInfoType = new Company.Models.Util.CatalogModel()
                                     {
-                                        CertificationInfoId = certinf.Field<int>("CertificationInfoId"),
-                                        CertificationItemInfoTypeId = certinf.Field<int>("CertificationItemInfoTypeId"),
-                                        CertificationItemInfoTypeName = certinf.Field<string>("CertificationItemInfoTypeName"),
-                                        CertificationInfoLargeValue = certinf.Field<string>("CertificationInfoLargeValue"),
-                                        CertificationInfoValue = certinf.Field<string>("CertificationInfoValue"),
-                                        CertificationInfoEnable = certinf.Field<UInt64>("CertificationInfoEnable") == 1 ? true : false,
-                                        CertificationInfoLastModify = certinf.Field<DateTime>("CertificationInfoLastModify"),
-                                        CertificationInfoCreateDate = certinf.Field<DateTime>("CertificationInfoCreateDate"),
-                                    }
-                                        into certingg
-                                        select new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                                        {
-                                            ItemInfoId = certingg.Key.CertificationInfoId,
-                                            ItemInfoType = new Company.Models.Util.CatalogModel()
-                                            {
-                                                ItemId = certingg.Key.CertificationItemInfoTypeId,
-                                                ItemName = certingg.Key.CertificationItemInfoTypeName,
-                                            },
-                                            Value = certingg.Key.CertificationInfoValue,
-                                            LargeValue = certingg.Key.CertificationInfoLargeValue,
-                                            Enable = certingg.Key.CertificationInfoEnable,
-                                            LastModify = certingg.Key.CertificationInfoLastModify,
-                                            CreateDate = certingg.Key.CertificationInfoCreateDate,
-                                        }).ToList(),
-                            }).ToList();
+                                        ItemId = certingg.Key.CertificationItemInfoTypeId,
+                                        ItemName = certingg.Key.CertificationItemInfoTypeName,
+                                    },
+                                    Value = certingg.Key.CertificationInfoValue,
+                                    LargeValue = certingg.Key.CertificationInfoLargeValue,
+                                    Enable = certingg.Key.CertificationInfoEnable,
+                                    LastModify = certingg.Key.CertificationInfoLastModify,
+                                    CreateDate = certingg.Key.CertificationInfoCreateDate,
+                                }).ToList(),
+                        }).ToList();
             }
             return oReturn;
         }
@@ -935,48 +936,144 @@ namespace ProveedoresOnLine.CalificationBatch.DAL.MySqlDAO
                          FinancialCreateDate = f.Field<DateTime>("FinancialCreateDate"),
                      }
                          into fg
-                         select new ProveedoresOnLine.CompanyProvider.Models.Provider.BalanceSheetModel()
+                     select new ProveedoresOnLine.CompanyProvider.Models.Provider.BalanceSheetModel()
+                     {
+                         ItemId = fg.Key.FinancialId,
+                         ItemType = new Company.Models.Util.CatalogModel()
                          {
-                             ItemId = fg.Key.FinancialId,
-                             ItemType = new Company.Models.Util.CatalogModel()
+                             ItemId = fg.Key.FinancialTypeId,
+                             ItemName = fg.Key.FinancialTypeName,
+                         },
+                         Enable = fg.Key.FinancialEnable,
+                         LastModify = fg.Key.FinancialLastModify,
+                         CreateDate = fg.Key.FinancialCreateDate,
+                         BalanceSheetInfo =
+                            (from bs in response.DataTableResult.AsEnumerable()
+                             where !bs.IsNull("BalanceSheetId") &&
+                                    bs.Field<int>("FinancialId") == fg.Key.FinancialId
+                             group bs by new
                              {
-                                 ItemId = fg.Key.FinancialTypeId,
-                                 ItemName = fg.Key.FinancialTypeName,
-                             },
-                             Enable = fg.Key.FinancialEnable,
-                             LastModify = fg.Key.FinancialLastModify,
-                             CreateDate = fg.Key.FinancialCreateDate,
-                             BalanceSheetInfo =
-                                (from bs in response.DataTableResult.AsEnumerable()
-                                 where !bs.IsNull("BalanceSheetId") &&
-                                        bs.Field<int>("FinancialId") == fg.Key.FinancialId
-                                 group bs by new
+                                 BalanceSheetId = bs.Field<int>("BalanceSheetId"),
+                                 AccountId = bs.Field<int>("AccountId"),
+                                 AccountName = bs.Field<string>("AccountName"),
+                                 BalanceValue = bs.Field<decimal>("BalanceValue"),
+                                 BalanceEnable = bs.Field<UInt64>("BalanceEnable") == 1 ? true : false,
+                                 BalanceLastModify = bs.Field<DateTime>("BalanceLastModify"),
+                                 BalanceCreateDate = bs.Field<DateTime>("BalanceCreateDate"),
+                             }
+                                 into bsg
+                             select new ProveedoresOnLine.CompanyProvider.Models.Provider.BalanceSheetDetailModel()
+                             {
+                                 BalanceSheetId = bsg.Key.BalanceSheetId,
+                                 RelatedAccount = new Company.Models.Util.GenericItemModel()
                                  {
-                                     BalanceSheetId = bs.Field<int>("BalanceSheetId"),
-                                     AccountId = bs.Field<int>("AccountId"),
-                                     AccountName = bs.Field<string>("AccountName"),
-                                     BalanceValue = bs.Field<decimal>("BalanceValue"),
-                                     BalanceEnable = bs.Field<UInt64>("BalanceEnable") == 1 ? true : false,
-                                     BalanceLastModify = bs.Field<DateTime>("BalanceLastModify"),
-                                     BalanceCreateDate = bs.Field<DateTime>("BalanceCreateDate"),
-                                 }
-                                     into bsg
-                                     select new ProveedoresOnLine.CompanyProvider.Models.Provider.BalanceSheetDetailModel()
-                                     {
-                                         BalanceSheetId = bsg.Key.BalanceSheetId,
-                                         RelatedAccount = new Company.Models.Util.GenericItemModel()
-                                         {
-                                             ItemId = bsg.Key.AccountId,
-                                             ItemName = bsg.Key.AccountName,
-                                         },
-                                         Value = bsg.Key.BalanceValue,
-                                         Enable = bsg.Key.BalanceEnable,
-                                         LastModify = bsg.Key.BalanceLastModify,
-                                         CreateDate = bsg.Key.BalanceCreateDate,
-                                     }).ToList(),
-                         }).ToList();
+                                     ItemId = bsg.Key.AccountId,
+                                     ItemName = bsg.Key.AccountName,
+                                 },
+                                 Value = bsg.Key.BalanceValue,
+                                 Enable = bsg.Key.BalanceEnable,
+                                 LastModify = bsg.Key.BalanceLastModify,
+                                 CreateDate = bsg.Key.BalanceCreateDate,
+                             }).ToList(),
+                     }).ToList();
             }
 
+            return oReturn;
+        }
+
+        #endregion
+
+        #region Aditional Document Module
+
+        public string GetAditionalDocumentName(int AditionalDocumentId)
+        {
+            List<IDbDataParameter> lstparams = new List<IDbDataParameter>();
+
+            lstparams.Add(DataInstance.CreateTypedParameter("vAditionalDocumentId", AditionalDocumentId));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "U_Catalog_GetAditionalDocumentName",
+                CommandType = CommandType.StoredProcedure,
+                Parameters = lstparams,
+            });
+
+            string oReturn = (from ad in response.DataTableResult.AsEnumerable()
+                              where !ad.IsNull("AditionalDocumentId")
+                              select ad.Field<string>("AditionalDocumentName")).FirstOrDefault();
+
+            return oReturn;
+        }
+
+        public List<GenericItemModel> AditionalDocumentModuleInfo(string CompanyPublicId, string AditionalDocumentName)
+        {
+            List<IDbDataParameter> lstparams = new List<IDbDataParameter>();
+
+            lstparams.Add(DataInstance.CreateTypedParameter("vCompanyPublicId", CompanyPublicId));
+            lstparams.Add(DataInstance.CreateTypedParameter("vAditionalDocumentName", AditionalDocumentName));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "MP_CPB_GetAditionalDocumentByCompany",
+                CommandType = CommandType.StoredProcedure,
+                Parameters = lstparams,
+            });
+
+            var oReturn = ( 
+                            from fn in response.DataTableResult.AsEnumerable()
+                            where !fn.IsNull("AditionalDocumentId")
+                             group fn by new
+                             {
+                                 AditionalDocumentId = fn.Field<int>("AditionalDocumentId"),
+                                 AditionalDocumentTypeId = fn.Field<int>("AditionalDocumentTypeId"),
+                                 AditionalDocumentTypeName = fn.Field<string>("AditionalDocumentTypeName"),
+                                 Name = fn.Field<string>("Name"),                                 
+                                 AditionalDocumentInfoId = fn.Field<int>("AditionalDocumentInfoId"),
+                                 AditionalDocumentInfoTypeId = fn.Field<int>("AditionalDocumentInfoTypeId"),
+                                 AditionalDocumentTypeInfoName = fn.Field<string>("AditionalDocumentInfoTypeName"),
+                                 ItemId = fn.Field<int>("AditionalDocumentInfoTypeId"),
+                                 Value = fn.Field<string>("Value"),
+                                 Enable = fn.Field<UInt64>("AditionalDocumentInfoEnable") == 1 ? true : false,
+                                 LastModify = fn.Field<DateTime>("AditionalDocumentInfoLastModify"),
+                                 CreateDate = fn.Field<DateTime>("AditionalDocumentInfoCreateDate")
+                             }
+                   into fng
+                             select new GenericItemModel()
+                             {
+                                 ItemId = fng.Key.AditionalDocumentId,
+                                 ItemName = fng.Key.Name,
+                                 ItemInfo = (from fni in response.DataTableResult.AsEnumerable()
+                                            where !fni.IsNull("AditionalDocumentId") && fni.Field<int>("AditionalDocumentId") == fng.Key.AditionalDocumentId
+                                            group fni by new
+                                            {
+                                                AditionalDocumentId = fni.Field<int>("AditionalDocumentId"),
+                                                AditionalDocumentInfoId = fni.Field<int>("AditionalDocumentInfoId"),
+                                                AditionalDocumentInfoTypeId = fni.Field<int>("AditionalDocumentInfoTypeId"),
+                                                AditionalDocumentTypeInfoName = fni.Field<string>("AditionalDocumentInfoTypeName"),
+                                                ItemId = fni.Field<int>("AditionalDocumentInfoTypeId"),
+                                                Value = fni.Field<string>("Value"),
+                                                Enable = fni.Field<UInt64>("AditionalDocumentInfoEnable") == 1 ? true : false,
+                                                LastModify = fni.Field<DateTime>("AditionalDocumentInfoLastModify"),
+                                                CreateDate = fni.Field<DateTime>("AditionalDocumentInfoCreateDate")
+                                            }
+                                            into fnig
+                                            select new GenericItemInfoModel()
+                                            {
+                                                ItemInfoId = fnig.Key.AditionalDocumentInfoId,
+                                                ItemInfoType = new CatalogModel()
+                                                {
+                                                    ItemId = fnig.Key.ItemId,
+                                                    ItemName = fnig.Key.AditionalDocumentTypeInfoName,
+                                                },
+                                                Value = fnig.Key.Value,
+                                                CreateDate = fnig.Key.CreateDate,
+                                                LastModify = fnig.Key.LastModify,
+                                                Enable = fnig.Key.Enable,
+                                            }).ToList(),
+
+                             }).ToList();
             return oReturn;
         }
 

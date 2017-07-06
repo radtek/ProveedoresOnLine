@@ -86,7 +86,7 @@
             oCalificationProjectOptionList = (new System.Web.Script.Serialization.JavaScriptSerializer()).
                 Serialize(oOptionList.Select(x => new { Key = x.Key, Value = x.Value }));
         }
-        
+
         //get CalificationProjectConfigOptions
         string oCalificationProjectConfigOptionList = "[]";
         if (Model.CalificationProjectOptions != null &&
@@ -105,7 +105,7 @@
             oCalificationProjectConfigOptionList = (new System.Web.Script.Serialization.JavaScriptSerializer()).
                 Serialize(oOptionList.Select(x => new { Key = x.Key, Value = x.Value }));
         }
-        
+
         //Get calificationprojectconfigcategoryoptions
         string oCalificationProjectConfigCagtegoryOptionList = "[]";
 
@@ -125,12 +125,32 @@
             oCalificationProjectConfigCagtegoryOptionList = (new System.Web.Script.Serialization.JavaScriptSerializer()).
                 Serialize(oOptionList.Select(x => new { Key = x.Key, Value = x.Value }));
         }
+
+        string oCalificationProjectConfigAditionalDocumentsOptions = "[]";
+
+        if (Model.CalificationProjectConfigAditionalDocumentsOptions != null &&
+            Model.CalificationProjectConfigAditionalDocumentsOptions.Count > 0)
+        {
+            Dictionary<int, List<ProveedoresOnLine.Company.Models.Util.CatalogModel>> oOptionList =
+                Model.CalificationProjectConfigAditionalDocumentsOptions.
+                GroupBy(x => x.CatalogId).
+                Select(x =>
+                new
+                {
+                    okey = x.Key,
+                    ovalue = Model.CalificationProjectConfigAditionalDocumentsOptions.Where(y => y.CatalogId == x.Key).OrderBy(y => y.ItemName).ToList(),
+                }).ToDictionary(k => k.okey, v => v.ovalue);
+
+            oCalificationProjectConfigAditionalDocumentsOptions = (new System.Web.Script.Serialization.JavaScriptSerializer()).
+                    Serialize(oOptionList.Select(x => new { Key = x.Key, Value = x.Value }));
+        }
     }
 
     <script type="text/javascript">
     var vCustomerInfoOptionList = @(Html.Raw(oCalificationProjectOptionList));
     var vCalificationProjectConfigOptionList = @(Html.Raw(oCalificationProjectConfigOptionList));
     var vCalificationProjectConfigCagtegoryOptionList = @(Html.Raw(oCalificationProjectConfigCagtegoryOptionList));
+    var vCalificationProjectConfigAditionalDocumentsOptions = @(Html.Raw(oCalificationProjectConfigAditionalDocumentsOptions));
 
         $(document).ready(function () {
             Customer_CalificationProjectItemObject.Init({
@@ -139,7 +159,8 @@
             CalificationProjectConfigId: @Model.RelatedCalificationProjectConfig.CalificationProjectConfigId,
             CustomerOptions: vCustomerInfoOptionList,
             CalificationProjectConfigOptions: vCalificationProjectConfigOptionList,
-            CalificationProjectConfigCategoryOptions: vCalificationProjectConfigCagtegoryOptionList
+            CalificationProjectConfigCategoryOptions: vCalificationProjectConfigCagtegoryOptionList,
+            CalificationProjectConfigAditionalDocumentsOptions: vCalificationProjectConfigAditionalDocumentsOptions
             });
 
         Customer_CalificationProjectItemObject.RenderAsync({

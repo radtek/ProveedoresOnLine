@@ -1,9 +1,8 @@
 ﻿using ProveedoresOnLine.CalificationProject.Models.CalificationProject;
+using ProveedoresOnLine.Company.Models.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProveedoresOnLine.CalificationProject.Controller
 {
@@ -307,6 +306,11 @@ namespace ProveedoresOnLine.CalificationProject.Controller
         public static List<Models.CalificationProject.CalificationProjectCategoryModel> CalificationProjectConfigCategoryOptions()
         {
             return DAL.Controller.CalificationProjectDataController.Instance.CalificationProjectConfigCategoryOptions();
+        }
+
+        public static List<CatalogModel> CalificationProjectConfigAditionalDocumentsOptions(string CustomerPublicId)
+        {
+            return DAL.Controller.CalificationProjectDataController.Instance.CalificationProjectConfigAditionalDocumentsOptions(CustomerPublicId);
         }
 
         #endregion

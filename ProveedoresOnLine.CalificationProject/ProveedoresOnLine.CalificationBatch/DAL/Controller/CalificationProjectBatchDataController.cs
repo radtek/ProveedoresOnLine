@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProveedoresOnLine.Company.Models.Util;
 
 namespace ProveedoresOnLine.CalificationBatch.DAL.Controller
 {
@@ -117,6 +118,20 @@ namespace ProveedoresOnLine.CalificationBatch.DAL.Controller
         public List<ProveedoresOnLine.CompanyProvider.Models.Provider.BalanceSheetModel> BalanceModuleInfo(string CompanyPublicId, int BalanceAccount)
         {
             return DataFactory.BalanceModuleInfo(CompanyPublicId, BalanceAccount);
+        }
+
+        #endregion
+
+        #region Aditional Document Module
+
+        public string GetAditionalDocumentName(int AditionalDocumentId)
+        {
+            return DataFactory.GetAditionalDocumentName(AditionalDocumentId);
+        }
+
+        public List<GenericItemModel> AditionalDocumentModuleInfo(string CompanyPublicId, string AditionalDocumentName)
+        {
+            return DataFactory.AditionalDocumentModuleInfo(CompanyPublicId, AditionalDocumentName);
         }
 
         #endregion

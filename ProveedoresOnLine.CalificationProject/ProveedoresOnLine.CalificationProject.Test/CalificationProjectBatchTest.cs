@@ -252,6 +252,25 @@ namespace ProveedoresOnLine.CalificationProject.Test
 
         #endregion
 
+        #region Aditonal Document Module
+
+        [TestMethod]
+        public void GetAditionalDocumentName()
+        {
+            var oReturn = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.GetAditionalDocumentName(11476);
+
+            Assert.AreEqual(true, !string.IsNullOrEmpty(oReturn));
+        }
+        [TestMethod]
+        public void GetAditionalDocumentModuleInfo()
+        {
+            var oReturn = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.AditionalDocumentModuleInfo("A319A2B7", "Tarjeta Profesional del Contador");
+
+            Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
+        }
+
+        #endregion
+
         #endregion
     }
 }

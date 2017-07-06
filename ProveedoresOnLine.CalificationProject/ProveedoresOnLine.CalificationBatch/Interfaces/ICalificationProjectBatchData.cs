@@ -61,6 +61,14 @@ namespace ProveedoresOnLine.CalificationBatch.Interfaces
 
         #endregion
 
+        #region Aditional Documetn Module Info
+
+        string GetAditionalDocumentName(int AditionalDocumentId);
+
+        List<GenericItemModel> AditionalDocumentModuleInfo(string CompanyPublicId, string AditionalDocumentName);
+
+        #endregion
+
         #endregion
 
     }

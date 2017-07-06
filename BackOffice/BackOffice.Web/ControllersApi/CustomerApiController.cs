@@ -160,7 +160,7 @@ namespace BackOffice.Web.ControllersApi
 
             if (CPCalificationProjectConfigSearch == "true")
             {
-                List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel> oModel = new List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel>();
+                var oModel = new List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel>();
                 oModel = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigGetByCompanyId(CustomerPublicId, vEnable == "true" ? true : false);
 
                 if (oModel.Count > 0)
