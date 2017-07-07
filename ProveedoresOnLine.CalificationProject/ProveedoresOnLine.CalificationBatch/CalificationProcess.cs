@@ -50,9 +50,8 @@ namespace ProveedoresOnLine.CalificationBatch
                                 LogFile("Provider in Process::" + prv.CompanyPublicId + ":::" + DateTime.Now);
                                 
                                 //Get calification process by provider
-                                List<Models.CalificationProjectBatch.CalificationProjectBatchModel> oRelatedCalificationProject =
-                                   ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProject_GetProviderByCustomer(cnf.Company.CompanyPublicId, prv.CompanyPublicId);
-
+                                var oRelatedCalificationProject = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProject_GetProviderByCustomer(cnf.Company.CompanyPublicId, prv.CompanyPublicId, cnf.CalificationProjectConfigId);
+                                
                                 //validate calification project list
                                 if (oRelatedCalificationProject != null &&
                                     oRelatedCalificationProject.Count > 0)
@@ -65,7 +64,7 @@ namespace ProveedoresOnLine.CalificationBatch
                                     oRelatedCalificationProject.All(cp =>
                                     {
                                         //get related calification project config
-                                        cp.ProjectConfigModel = oCalificationProjectConfigModel.Where(config => config.CalificationProjectConfigId == cp.ProjectConfigModel.CalificationProjectConfigId).Select(config => config).FirstOrDefault();
+                                         cp.ProjectConfigModel = oCalificationProjectConfigModel.Where(config => config.CalificationProjectConfigId == cp.ProjectConfigModel.CalificationProjectConfigId).Select(config => config).FirstOrDefault();
 
                                         //validate calification project config is enable
                                         if (cp.ProjectConfigModel.Enable)
@@ -212,6 +211,18 @@ namespace ProveedoresOnLine.CalificationBatch
 
                                                             break;
 
+                                                        #endregion
+
+                                                        #region AditonalDocumentModule
+
+                                                        case (int)ProveedoresOnLine.CalificationBatch.Models.Enumerations.enumModuleType.CP_AditionalDocumentModule:
+
+                                                            cpib = ProveedoresOnLine.CalificationBatch.CalificationProjectModule.AditionalDocumentModule.AditionalDocumentationRule(prv.CompanyPublicId, cpib.CalificationProjectConfigItem, cpib);
+
+                                                            oModelToUpsert.CalificationProjectItemBatchModel.Add(cpib);
+
+                                                            break;
+
                                                             #endregion
                                                     }
 
@@ -313,6 +324,19 @@ namespace ProveedoresOnLine.CalificationBatch
                                                             ProveedoresOnLine.CalificationBatch.CalificationProjectModule.BalanceModule.BalanceRule(prv.CompanyPublicId, ci, null);
 
                                                         oModelToUpsert.CalificationProjectItemBatchModel.Add(oBalanceModule);
+
+                                                        break;
+
+                                                    #endregion
+
+                                                    #region AditonalDocumentModule
+
+                                                    case (int)ProveedoresOnLine.CalificationBatch.Models.Enumerations.enumModuleType.CP_AditionalDocumentModule:
+
+                                                        ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectItemBatchModel oAditionalDocumentModule =
+                                                            ProveedoresOnLine.CalificationBatch.CalificationProjectModule.AditionalDocumentModule.AditionalDocumentationRule(prv.CompanyPublicId, ci, null);
+
+                                                        oModelToUpsert.CalificationProjectItemBatchModel.Add(oAditionalDocumentModule);
 
                                                         break;
 
@@ -445,6 +469,19 @@ namespace ProveedoresOnLine.CalificationBatch
                                                     ProveedoresOnLine.CalificationBatch.CalificationProjectModule.BalanceModule.BalanceRule(prv.CompanyPublicId, md, null);
 
                                                 oCalificationProjectUpsert.CalificationProjectItemBatchModel.Add(oBalanceModule);
+
+                                                break;
+
+                                            #endregion
+
+                                            #region AditonalDocumentModule
+
+                                            case (int)ProveedoresOnLine.CalificationBatch.Models.Enumerations.enumModuleType.CP_AditionalDocumentModule:
+
+                                                ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectItemBatchModel oAditionalDocumentModule =
+                                                    ProveedoresOnLine.CalificationBatch.CalificationProjectModule.AditionalDocumentModule.AditionalDocumentationRule(prv.CompanyPublicId, md, null);
+
+                                                oCalificationProjectUpsert.CalificationProjectItemBatchModel.Add(oAditionalDocumentModule);
 
                                                 break;
 

@@ -215,7 +215,7 @@ namespace MarketPlace.Web.Controllers
             string RelatedUser = null;
             var ParentRole = SessionModel.CurrentCompanyLoginUser.RelatedCompany.FirstOrDefault().RelatedUser.FirstOrDefault().RelatedCompanyRole.ParentRoleCompany;
 
-            if ( ParentRole!= null && ParentRole!=0)
+            if ( ParentRole!= null)
             {
                 RelatedUser = SessionModel.CurrentCompanyLoginUser.RelatedUser.Email;
             }

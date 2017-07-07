@@ -41,23 +41,26 @@ namespace IntegrationPlatform.REDEBANProcess
                         ws.Cells[1, 2].Value = "No Identificación";
                         ws.Cells[1, 3].Value = "Estado";
                         ws.Cells[1, 4].Value = "Representante";
-                        ws.Cells[1, 5].Value = "Teléfono";
-                        ws.Cells[1, 6].Value = "Ciudad";
-                        ws.Cells[1, 7].Value = "Cámara de Comercio";
-                        ws.Cells[1, 8].Value = "RUT";
-                        ws.Cells[1, 9].Value = "Estados Financieros";
-                        ws.Cells[1, 10].Value = "Certificación Bancaria";
-                        ws.Cells[1, 11].Value = "Certificación de Experiencia";
-                        ws.Cells[1, 12].Value = "Certificación de Calidad";
-                        ws.Cells[1, 13].Value = "Salud, Medio Ambiente y Seguridad";
-                        ws.Cells[1, 14].Value = "Sistema de Riesgos Laborales";
-                        ws.Cells[1, 15].Value = "Certificado de Accidentalidad";
+                        ws.Cells[1, 5].Value = "Documento Cedula";
+                        ws.Cells[1, 6].Value = "Teléfono";
+                        ws.Cells[1, 7].Value = "Ciudad";
+                        ws.Cells[1, 8].Value = "Cámara de Comercio";
+                        ws.Cells[1, 9].Value = "RUT";
+                        ws.Cells[1, 10].Value = "Estados Financieros";
+                        ws.Cells[1, 11].Value = "Certificación Bancaria";
+                        ws.Cells[1, 12].Value = "Certificación de Experiencia";
+                        ws.Cells[1, 13].Value = "Certificación de Calidad";
+                        ws.Cells[1, 14].Value = "Salud, Medio Ambiente y Seguridad";
+                        ws.Cells[1, 15].Value = "Sistema de Riesgos Laborales";
+                        ws.Cells[1, 16].Value = "Certificado de Accidentalidad";
+                        ws.Cells[1, 17].Value = "Conocimiento de proveedores";
+                        ws.Cells[1, 18].Value = "Declaración de renta";
 
                         //Freeze HeadLine
                         ws.View.FreezePanes(2, 1);
 
                         //Some Style for the header line
-                        for (int i = 1; i < 16; i++)
+                        for (int i = 1; i < 19; i++)
                         {
                             var HeaderLine = ws.Cells[1, i];
                             HeaderLine.Style.Font.Bold = true;
@@ -68,6 +71,7 @@ namespace IntegrationPlatform.REDEBANProcess
                         #endregion
 
                         LogFile("Provider to generate: " + providers.Count);
+
                         providers.All(x =>
                         {
                             ColIndex = 1;
@@ -95,8 +99,9 @@ namespace IntegrationPlatform.REDEBANProcess
                                     ws.Cells[rowIndex, 2].Value = prvInfo.ProviderFullInfo.IdentificationNumber;
                                     ws.Cells[rowIndex, 3].Value = prvInfo.ProviderFullInfo.Status;
                                     ws.Cells[rowIndex, 4].Value = prvInfo.ProviderFullInfo.Representant;
-                                    ws.Cells[rowIndex, 5].Value = prvInfo.ProviderFullInfo.Telephone;
-                                    ws.Cells[rowIndex, 6].Value = prvInfo.ProviderFullInfo.City;
+                                    ws.Cells[rowIndex, 5].Formula = "HYPERLINK(\"" + prvInfo.ProviderFullInfo.IdFile + "\",\"" + "Ver Archivo" + "\")"; 
+                                    ws.Cells[rowIndex, 6].Value = prvInfo.ProviderFullInfo.Telephone;
+                                    ws.Cells[rowIndex, 7].Value = prvInfo.ProviderFullInfo.City;
                                 }
                                 else
                                 {
@@ -109,11 +114,13 @@ namespace IntegrationPlatform.REDEBANProcess
                                         [IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_ExcelFile_NoAnswer].Value;
                                     ws.Cells[rowIndex, 6].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
                                         [IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_ExcelFile_NoAnswer].Value;
+                                    ws.Cells[rowIndex, 7].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                        [IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_ExcelFile_NoAnswer].Value;
                                 }
 
 
                                 //Fill Backgorund Color Main Line
-                                for (int i = 1; i < 16; i++)
+                                for (int i = 1; i < 19; i++)
                                 {
                                     var MainCell = ws.Cells[rowIndex, i];
                                     MainCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
@@ -127,7 +134,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                     var legalRowIndex = rowIndex;
                                     prvInfo.LegalInfo_ChaimberOfCommerce.All(y =>
                                     {
-                                        var Cell = ws.Cells[legalRowIndex, 7];
+                                        var Cell = ws.Cells[legalRowIndex, 8];
                                         Cell.Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumLegalInfoType.ChaimberOfCommerceFile).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
 
                                         legalRowIndex++;
@@ -136,7 +143,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                 }
                                 else
                                 {
-                                    ws.Cells[rowIndex, 7].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                    ws.Cells[rowIndex, 8].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
                                         [IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_ExcelFile_NoAnswer].Value;
                                 }
                                 #endregion
@@ -148,7 +155,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                     prvInfo.LegalInfo_RUT.All(y =>
                                     {
 
-                                        ws.Cells[legalRowIndex, 8].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumLegalInfoType.RUTFile).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
+                                        ws.Cells[legalRowIndex, 9].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumLegalInfoType.RUTFile).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
 
                                         legalRowIndex++;
                                         return true;
@@ -157,7 +164,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                 }
                                 else
                                 {
-                                    ws.Cells[rowIndex, 8].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                    ws.Cells[rowIndex, 9].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
                                         [IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_ExcelFile_NoAnswer].Value;
                                 }
 
@@ -171,7 +178,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                     prvInfo.FinancialInfo_FinStats.All(y =>
                                     {
 
-                                        ws.Cells[FinRowIndex, 9].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumFinancialInfoType.FinancialStatsFile).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
+                                        ws.Cells[FinRowIndex, 10].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumFinancialInfoType.FinancialStatsFile).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
 
                                         FinRowIndex++;
                                         return true;
@@ -180,7 +187,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                 }
                                 else
                                 {
-                                    ws.Cells[rowIndex, 9].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                    ws.Cells[rowIndex, 10].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
                                         [IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_ExcelFile_NoAnswer].Value;
                                 }
                                 #endregion
@@ -192,14 +199,14 @@ namespace IntegrationPlatform.REDEBANProcess
                                     var FinRowIndex = rowIndex;
                                     prvInfo.FinancialInfo_BankCert.All(y =>
                                     {
-                                        ws.Cells[FinRowIndex, 10].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumFinancialInfoType.BankCertificationFile).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
+                                        ws.Cells[FinRowIndex, 11].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumFinancialInfoType.BankCertificationFile).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
                                         FinRowIndex++;
                                         return true;
                                     });
                                 }
                                 else
                                 {
-                                    ws.Cells[rowIndex, 10].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                    ws.Cells[rowIndex, 11].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
                                         [IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_ExcelFile_NoAnswer].Value;
                                 }
 
@@ -211,14 +218,14 @@ namespace IntegrationPlatform.REDEBANProcess
                                     var CommRowIndex = rowIndex;
                                     prvInfo.Commercial_CertExp.All(y =>
                                     {
-                                        ws.Cells[CommRowIndex, 11].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCommercialInfoType.ExpereienceCertificationFile).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
+                                        ws.Cells[CommRowIndex, 12].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCommercialInfoType.ExpereienceCertificationFile).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
                                         CommRowIndex++;
                                         return true;
                                     });
                                 }
                                 else
                                 {
-                                    ws.Cells[rowIndex, 11].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                    ws.Cells[rowIndex, 12].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
                                         [IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_ExcelFile_NoAnswer].Value;
                                 }
 
@@ -231,14 +238,14 @@ namespace IntegrationPlatform.REDEBANProcess
                                     var CertRowIndex = rowIndex;
                                     prvInfo.HSEQ_Cert.All(y =>
                                     {
-                                        ws.Cells[CertRowIndex, 12].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.C_CertificationFile).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
+                                        ws.Cells[CertRowIndex, 13].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.C_CertificationFile).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
                                         CertRowIndex++;
                                         return true;
                                     });
                                 }
                                 else
                                 {
-                                    ws.Cells[rowIndex, 12].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                    ws.Cells[rowIndex, 13].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
                                         [IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_ExcelFile_NoAnswer].Value;
                                 }
 
@@ -250,7 +257,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                     var CertRowIndex = rowIndex;
                                     prvInfo.HSEQ_Health.All(y =>
                                     {
-                                        ws.Cells[CertRowIndex, 13].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId ==
+                                        ws.Cells[CertRowIndex, 14].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId ==
                                         (int)Models.Enumerations.enumCertificationInfoType.CH_PoliticsSecurity ||
                                         z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.CH_PoliticsNoAlcohol ||
                                         z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.CH_ProgramOccupationalHealth ||
@@ -269,7 +276,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                 }
                                 else
                                 {
-                                    ws.Cells[rowIndex, 13].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                    ws.Cells[rowIndex, 14].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
                                         [IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_ExcelFile_NoAnswer].Value;
                                 }
 
@@ -282,7 +289,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                     var CertRowIndex = rowIndex;
                                     prvInfo.HSEQ_Riskes.All(y =>
                                     {
-                                        ws.Cells[CertRowIndex, 14].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.CR_CertificateAffiliateARL).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
+                                        ws.Cells[CertRowIndex, 15].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.CR_CertificateAffiliateARL).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
 
                                         CertRowIndex++;
                                         return true;
@@ -290,7 +297,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                 }
                                 else
                                 {
-                                    ws.Cells[rowIndex, 14].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                    ws.Cells[rowIndex, 15].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
                                         [IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_ExcelFile_NoAnswer].Value;
                                 }
                                 #endregion
@@ -301,16 +308,55 @@ namespace IntegrationPlatform.REDEBANProcess
                                     var CertRowIndex = rowIndex;
                                     prvInfo.HSEQ_Acc.All(y =>
                                     {
-                                        ws.Cells[CertRowIndex, 15].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.CA_CertificateAccidentARL).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
+                                        ws.Cells[CertRowIndex, 16].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumCertificationInfoType.CA_CertificateAccidentARL).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
                                         CertRowIndex++;
                                         return true;
                                     });
                                 }
                                 else
                                 {
-                                    ws.Cells[rowIndex, 15].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                    ws.Cells[rowIndex, 16].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
                                         [IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_ExcelFile_NoAnswer].Value;
                                 }
+                                #endregion
+
+                                #region Aditional Info
+                                if (prvInfo.AditionalDocuments.Count > 0 && prvInfo.AditionalDocuments != null)
+                                {
+                                    var AddRowIndex = rowIndex;
+                                    prvInfo.AditionalDocuments.All(y =>
+                                    {
+                                        ws.Cells[AddRowIndex, 17].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumAditionalDocumentInfoType.AD_File).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
+                                        AddRowIndex++;
+                                        return true;
+                                    });
+                                }
+                                else
+                                {
+                                    ws.Cells[rowIndex, 17].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                        [IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_ExcelFile_NoAnswer].Value;
+                                }
+
+                                #endregion
+
+                                #region Finnacial Info - IncomeStatement
+
+                                if (prvInfo.FinancialInfo_IncomeStatement.Count > 0 && prvInfo.FinancialInfo_IncomeStatement != null)
+                                {
+                                    var FinnRowIndex = rowIndex;
+                                    prvInfo.FinancialInfo_IncomeStatement.All(y =>
+                                    {
+                                        ws.Cells[FinnRowIndex, 18].Formula = "HYPERLINK(\"" + y.ItemInfo.Where(z => z.ItemInfoType.ItemId == (int)Models.Enumerations.enumFinancialInfoType.IS_FileIncomeStatement).Select(z => z.Value).FirstOrDefault() + "\",\"" + "Ver Archivo" + "\")";
+                                        FinnRowIndex++;
+                                        return true;
+                                    });
+                                }
+                                else
+                                {
+                                    ws.Cells[rowIndex, 18].Value = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                        [IntegrationPlatform.REDEBANProcess.Models.Constants.C_Settings_ExcelFile_NoAnswer].Value;
+                                }
+
                                 #endregion
 
                                 proCount++;
@@ -329,6 +375,15 @@ namespace IntegrationPlatform.REDEBANProcess
                                     string file = "REDEBAN_ProviderInfo_" + DateTime.Now.ToString("yyyy_MM_dd_hhmmss") + ".xlsx";
                                     File.WriteAllBytes(strFolder + file, bin);
 
+                                    #region File Test
+
+                                    //These lines will open it in Excel, for test purposes
+                                    //ProcessStartInfo pi = new ProcessStartInfo(strFolder + file);
+                                    //Process.Start(pi);
+
+                                    #endregion
+
+
                                     #region UploadFileToS3
 
                                     //Send to S3
@@ -343,7 +398,6 @@ namespace IntegrationPlatform.REDEBANProcess
                                     LogFile("REDEBAN Integration Process File Upload");
                                     #endregion
                                     
-
                                     #region Message
 
                                     //Send Message
@@ -370,11 +424,8 @@ namespace IntegrationPlatform.REDEBANProcess
 
                                     #endregion
 
+                                    
 
-
-                                    //These lines will open it in Excel, for test purposes
-                                    //ProcessStartInfo pi = new ProcessStartInfo(file);
-                                    //Process.Start(pi);
                                     var oRedebanLogModel = new RedebanLogModel()
                                     {
                                         RedebanProcessLogId = 0,

@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CalificationProcess.cs" />
+    <Compile Include="CalificationProjectModule\AditionalDocumentModule.cs" />
     <Compile Include="CalificationProjectModule\BalanceModule.cs" />
     <Compile Include="CalificationProjectModule\CommercialModule.cs" />
     <Compile Include="CalificationProjectModule\FinancialModule.cs" />

@@ -20,6 +20,8 @@ namespace IntegrationPlatform.REDEBANProcess.Models
 
         public List<GenericItemModel> FinancialInfo_BankCert { get; set; }
 
+        public List<GenericItemModel> FinancialInfo_IncomeStatement { get; set; }
+
         public List<GenericItemModel> Commercial_CertExp { get; set; }
 
         public List<GenericItemModel> HSEQ_Cert { get; set; }
