@@ -631,8 +631,7 @@ var Customer_CalificationProjectObject = {
         this.CalificationProjectValidateUrl = vInitObject.CalificationProjectValidateUrl;
         this.CalificationProjectConfigType = vInitObject.CalificationProjectConfigType;
         this.PageSize = vInitObject.PageSize;
-        if (vInitObject.CustomerOptions != null) {
-            debugger;
+        if (vInitObject.CustomerOptions != null) {            
             $.each(vInitObject.CustomerOptions, function (item, value) {
                 Customer_CalificationProjectObject.CustomerOptions[value.Key] = value.Value;
             });
@@ -955,8 +954,7 @@ var Customer_CalificationProjectObject = {
                 field: 'Operator',
                 title: 'Operador',
                 width: '200px',
-                template: function (dataItem) {
-                    debugger;
+                template: function (dataItem) {                    
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.Operator != null) {
 
@@ -968,8 +966,7 @@ var Customer_CalificationProjectObject = {
                     }
                     return oReturn;
                 },
-                editor: function (container, options) {
-                    debugger;
+                editor: function (container, options) {                    
                     $('<input required data-bind="value:' + options.field + '"/>')
                         .appendTo(container)
                         .kendoDropDownList({
@@ -1214,8 +1211,7 @@ var Customer_CalificationProjectItemObject = {
                 field: 'CalificationProjectModule',
                 title: 'Módulo',
                 width: '190px',
-                template: function (dataItem) {
-                    debugger;
+                template: function (dataItem) {                    
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.CalificationProjectModule != null) {
                         $.each(Customer_CalificationProjectItemObject.CustomerOptions[2003], function (item, value) {

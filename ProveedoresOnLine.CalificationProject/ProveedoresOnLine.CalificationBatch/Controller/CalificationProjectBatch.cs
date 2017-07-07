@@ -15,9 +15,9 @@ namespace ProveedoresOnLine.CalificationBatch.Controller
             return DAL.Controller.CalificationProjectBatchDataController.Instance.CalificationProject_GetByCustomer(vCustomerPublicid,vProviderPublicId,Enable);
         }
 
-        public static List<ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel> CalificationProject_GetProviderByCustomer(string CustomerPublicId, string ProviderPublicId)
+        public static List<ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel> CalificationProject_GetProviderByCustomer(string CustomerPublicId, string ProviderPublicId, int CalificationProjectConfigId)
         {
-            return DAL.Controller.CalificationProjectBatchDataController.Instance.CalificationProject_GetProviderByCustomer(CustomerPublicId, ProviderPublicId);
+            return DAL.Controller.CalificationProjectBatchDataController.Instance.CalificationProject_GetProviderByCustomer(CustomerPublicId, ProviderPublicId, CalificationProjectConfigId);
         }
 
         public static CalificationProjectBatchModel CalificationProjectUpsert(CalificationProjectBatchModel oCalProject) 

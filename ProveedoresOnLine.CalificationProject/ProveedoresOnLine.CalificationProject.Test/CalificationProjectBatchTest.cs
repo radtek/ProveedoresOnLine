@@ -33,7 +33,7 @@ namespace ProveedoresOnLine.CalificationProject.Test
         public void CalificationProject_GetProviderByCustomer()
         {
             List<ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel> oReturn =
-                ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProject_GetProviderByCustomer("18C25804", "1BD9AD1B");
+                ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProject_GetProviderByCustomer("DA5C572E", "A319A2B7", 1);
 
             Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
         }
@@ -251,6 +251,7 @@ namespace ProveedoresOnLine.CalificationProject.Test
         }
 
         #endregion
+
 
         #region Aditonal Document Module
 
