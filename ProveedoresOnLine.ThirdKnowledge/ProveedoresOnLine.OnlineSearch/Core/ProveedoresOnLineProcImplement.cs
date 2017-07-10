@@ -25,8 +25,15 @@ namespace ProveedoresOnLine.OnlineSearch.Core
                 string Answer = "";
                 string oDivResult = ProveedoresOnLine.OnlineSearch.Models.InternalSettings.Instance[ProveedoresOnLine.OnlineSearch.Models.Constants.Proc_Url].Value + "::ErrorPage:: 503";
                 List<Tuple<string, List<string>, List<string>>> oDetailinfo = new List<Tuple<string, List<string>, List<string>>>();
-                using (var client = new HttpClient())
+
+                HttpClientHandler handler = new HttpClientHandler();
+                handler.UseCookies = true;
+                handler.Proxy = new WebProxy(Models.InternalSettings.Instance[Models.Constants.JudicialP_Proxy].Value, true);
+                handler.UseProxy = true;
+
+                using (var client = new HttpClient(handler as HttpMessageHandler))
                 {
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11;
                     string Url = ProveedoresOnLine.OnlineSearch.Models.InternalSettings.Instance[ProveedoresOnLine.OnlineSearch.Models.Constants.Proc_Url].Value;
                     HttpWebRequest request = HttpWebRequest.CreateHttp(Url);
                     request.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
