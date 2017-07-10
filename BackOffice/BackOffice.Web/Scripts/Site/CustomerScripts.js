@@ -631,7 +631,7 @@ var Customer_CalificationProjectObject = {
         this.CalificationProjectValidateUrl = vInitObject.CalificationProjectValidateUrl;
         this.CalificationProjectConfigType = vInitObject.CalificationProjectConfigType;
         this.PageSize = vInitObject.PageSize;
-        if (vInitObject.CustomerOptions != null) {            
+        if (vInitObject.CustomerOptions != null) {
             $.each(vInitObject.CustomerOptions, function (item, value) {
                 Customer_CalificationProjectObject.CustomerOptions[value.Key] = value.Value;
             });
@@ -954,7 +954,7 @@ var Customer_CalificationProjectObject = {
                 field: 'Operator',
                 title: 'Operador',
                 width: '200px',
-                template: function (dataItem) {                    
+                template: function (dataItem) {
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.Operator != null) {
 
@@ -966,7 +966,7 @@ var Customer_CalificationProjectObject = {
                     }
                     return oReturn;
                 },
-                editor: function (container, options) {                    
+                editor: function (container, options) {
                     $('<input required data-bind="value:' + options.field + '"/>')
                         .appendTo(container)
                         .kendoDropDownList({
@@ -1211,7 +1211,7 @@ var Customer_CalificationProjectItemObject = {
                 field: 'CalificationProjectModule',
                 title: 'Módulo',
                 width: '190px',
-                template: function (dataItem) {                    
+                template: function (dataItem) {
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.CalificationProjectModule != null) {
                         $.each(Customer_CalificationProjectItemObject.CustomerOptions[2003], function (item, value) {
@@ -1405,6 +1405,7 @@ var Customer_CalificationProjectItemObject = {
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.Question != null) {
                         var oModule = 0;
+
                         if (vRenderObject.Module == 2003005) /*Balance*/ {
                             debugger;
                             $.each(Customer_CalificationProjectItemObject.CalificationProjectConfigCategoryOptions[10], function (item, value) {
@@ -1412,14 +1413,12 @@ var Customer_CalificationProjectItemObject = {
                                     oReturn = value.CategoryName;
                                 }
                             });
-                        }
-                            if (vRenderObject.Module == 2003006)/*Aditional Documents*/ {
-                                $.each(Customer_CalificationProjectItemObject.CalificationProjectConfigAditionalDocumentsOptions[1], function (item, value) {
-                                    if (dataItem.Question == value.ItemId) {
-                                        oReturn = value.ItemName;
-                                    }
-                                });
-                            }
+                        } else if (vRenderObject.Module == 2003006)/*Aditional Documents*/ {
+                            $.each(Customer_CalificationProjectItemObject.CalificationProjectConfigAditionalDocumentsOptions[1], function (item, value) {
+                                if (dataItem.Question == value.ItemId) {
+                                    oReturn = value.ItemName;
+                                }
+                            });
                         }
                         else {
                             if (vRenderObject.Module == 2003001) /*Legal info*/ {
@@ -1439,13 +1438,14 @@ var Customer_CalificationProjectItemObject = {
                                     oReturn = value.ItemName;
                                 }
                             });
-                        }                    
+                        }
+                    }
                     return oReturn;
                 },
                 editor: function (container, options) {
 
                     var oModule = 0;
-                    
+
                     if (vRenderObject.Module == 2003005) /*Balance*/ {
                         // create an input element
                         var input = $('<input/>');
