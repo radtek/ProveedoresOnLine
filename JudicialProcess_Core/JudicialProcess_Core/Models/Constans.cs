@@ -12,6 +12,8 @@ namespace JudicialProcess_Core.Models
 
         public const string C_POL_ThirdKnowledgeConnectionName = "POL_ThirdKnowledgeConnection";
 
+        public const string C_POL_IntegrationPlatformConnectionName = "POL_IntegrationPlatformConnection";
+
         public const string JudicialProcess_Url = "JudicialP_Url";
 
         public const string JudicialProcessResult_Url = "JudicialPResult_Url";

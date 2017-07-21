@@ -8,10 +8,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using JudicialProcess_Core.Models;
 using HtmlAgilityPack;
+using System.Web;
+using JudicialProcess_Core.DAL;
 
 namespace JudicialProcess_Core.Controller
 {
-    public  class JudicialProcess_Core
+    public class JudicialProcess_Core
     {
         public static async Task<string> Search(int IdentificationType, string Name, string IdentificationNumber, string Token)
         {
@@ -19,7 +21,7 @@ namespace JudicialProcess_Core.Controller
             {
                 List<Tuple<string, List<string>, List<string>>> oDetailinfo = new List<Tuple<string, List<string>, List<string>>>();
 
-                string Url = Models.InternalSettings.Instance[Constans.JudicialProcess_Url].Value;
+                string Url = InternalSettings.Instance[Constans.JudicialProcess_Url].Value;
                 string urlResult = Models.InternalSettings.Instance[Constans.JudicialProcessResult_Url].Value;
                 HttpClientHandler handler = new HttpClientHandler();
                 handler.UseCookies = true;
@@ -40,7 +42,7 @@ namespace JudicialProcess_Core.Controller
                     string resultContent = result.Content.ReadAsStringAsync().Result;
                     HtmlDocument HtmlDocResponse = new HtmlDocument();
                     HtmlDocResponse.LoadHtml(resultContent);
-                    
+
                     string link = string.Empty;
                     if (HtmlDocResponse.DocumentNode.SelectNodes("//tr[contains(@class, 'e_tablas')]//tr//td") != null)
                     {
@@ -55,18 +57,41 @@ namespace JudicialProcess_Core.Controller
 
                 Thread.Sleep(1000);
 
-                //Todo
-                return innerResultContent;
+                System.Text.Encoding utf_8 = System.Text.Encoding.UTF8;
+                string s_unicode = innerResultContent;
+                byte[] utf8Bytes = System.Text.Encoding.UTF8.GetBytes(s_unicode);
+                string s_unicode2 = System.Text.Encoding.UTF8.GetString(utf8Bytes);
+
+                //Save Transaction
+                TransactionModel oTransaction = new TransactionModel()
+                {
+                    Token = Token,
+                    Message = s_unicode2,
+                    Query = IdentificationNumber,
+                    ServiceType = Models.Enumerations.enumServiceType.JudicialProcessService,
+                    IsSuccess = true,
+                };
+                DAL.JudicialProcessDataController.Instance.SaveTransaction(oTransaction.Token, oTransaction.Message, oTransaction.Query, (int)oTransaction.ServiceType, oTransaction.IsSuccess);
+                return s_unicode2;
             }
             catch (Exception ex)
             {
-                //List<Tuple<string, List<string>, List<string>>> oCatchReturn = new List<Tuple<string, List<string>, List<string>>>();
-                //List<string> oDetailError = new List<string>();
-                //oDetailError.Add("RAMA JUDICIAL NO DISPONIBLE");
-                //oDetailError.Add(ex.InnerException.ToString());
-                //oCatchReturn.Add(new Tuple<string, List<string>, List<string>>(null, null, oDetailError));
-                return "";
+                TransactionModel oTransaction = new TransactionModel()
+                {
+                    Token = Token,
+                    Message = ex.Message + " - " + ex.InnerException,
+                    Query = IdentificationNumber,
+                    ServiceType = Models.Enumerations.enumServiceType.JudicialProcessService,
+                    IsSuccess = false,
+                };
+                DAL.JudicialProcessDataController.Instance.SaveTransaction(oTransaction.Token, oTransaction.Message, oTransaction.Query, (int)oTransaction.ServiceType, oTransaction.IsSuccess);
+                return "Service temporally out of service";
             }
+        }
+
+        public static bool IsAuthorized(string Token)
+        {
+            return JudicialProcessDataController.Instance.IsAuthorized(Token);
         }
     }
 }

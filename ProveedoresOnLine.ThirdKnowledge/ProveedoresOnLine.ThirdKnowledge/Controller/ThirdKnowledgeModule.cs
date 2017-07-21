@@ -31,7 +31,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
                 //Proc Request
                 if (!string.IsNullOrEmpty(IdentificationNumber) && IdType != 0)
-                    procResult = await OnLnieSearch(IdType, IdentificationNumber);
+                    //procResult = await OnLnieSearch(IdType, IdentificationNumber);
 
                 //PanamaPapers Search
                 if (!string.IsNullOrEmpty(Name))
