@@ -545,7 +545,7 @@
         ExpirationDate = 1204013,
         CurrentArea = 1204014,
         Reminder = 1204015,
-
+        Eval_Reeval= 1204016,
         //SurveyRepor
 
         //Report By Date
@@ -569,6 +569,12 @@
         EvaluatorRol = 1205005,
         EvaluatorName = 1205006,
         AreaDescription = 1205007,
+    }
+
+    public enum enumSurveyEvalReeval
+    {
+        Evaluate = 1209001,
+        Reevaluate = 1209002
     }
 
     public enum enumSurveyConfigInfoType
@@ -603,8 +609,7 @@
     public enum enumSurveyQuestionType
     {
         Question =118001,
-        File = 118002
-        
+        File = 118002        
     }
 
 
