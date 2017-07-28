@@ -223,7 +223,7 @@ namespace MarketPlace.Web.Controllers
                         .Terms("status", aggv => aggv
                             .Field(fi => fi.StatusId)))
                     .Query(q => q.
-                        Filtered(f => f                            
+                        Filtered(f => f
                             .Query(q1 => q.Term(m => m.CustomerPublicId, lstSearchFilter.Where(x => int.Parse(x.Item3) == (int)enumFilterType.OtherProviders).Select(x => x).ToList().Count > 0
                                                                                                 ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.CC_CompanyPublicId_Publicar].Value.ToLower() : SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
                             .Filter(f2 =>
@@ -233,117 +233,117 @@ namespace MarketPlace.Web.Controllers
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
                                 {
                                     qb &= q.Term(m => m.StatusId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault());
-                                }                                
-                                    var settings3 = new ConnectionSettings(node);
-                                    settings3.DisableDirectStreaming(true);
-                                    settings3.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanyIndex].Value);
+                                }
+                                var settings3 = new ConnectionSettings(node);
+                                settings3.DisableDirectStreaming(true);
+                                settings3.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanyIndex].Value);
 
-                                    ElasticClient Providers = new ElasticClient(settings3);
-                                    Nest.ISearchResponse<CompanyIndexModel> resultPrv = Providers.Search<CompanyIndexModel>((t => t
-                                        .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
-                                        .TrackScores(true)
-                                        .Size(9000000)
-                                        .Query(qw => qw.
-                                            Filtered(fw => fw
-                                                .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
-                                                .Filter(f3 =>
-                                                {
-                                                    QueryContainer qb2 = null;
+                                ElasticClient Providers = new ElasticClient(settings3);
+                                Nest.ISearchResponse<CompanyIndexModel> resultPrv = Providers.Search<CompanyIndexModel>((t => t
+                                    .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
+                                    .TrackScores(true)
+                                    .Size(9000000)
+                                    .Query(qw => qw.
+                                        Filtered(fw => fw
+                                            .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
+                                            .Filter(f3 =>
+                                            {
+                                                QueryContainer qb2 = null;
                                                     #region Basic Providers Filters
                                                     if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
-                                                    {
-                                                        qb2 &= qw.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
-                                                    }
-                                                    if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
-                                                    {
-                                                        qb2 &= qw.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
-                                                    }
-                                                    if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y).FirstOrDefault() != null)
-                                                    {
-                                                        qb2 &= qw.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
-                                                    }
-                                                    if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y).FirstOrDefault() != null)
-                                                    {
-                                                        qb2 &= qw.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
-                                                    }
+                                                {
+                                                    qb2 &= qw.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
+                                                }
+                                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
+                                                {
+                                                    qb2 &= qw.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
+                                                }
+                                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y).FirstOrDefault() != null)
+                                                {
+                                                    qb2 &= qw.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
+                                                }
+                                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y).FirstOrDefault() != null)
+                                                {
+                                                    qb2 &= qw.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
+                                                }
                                                     #endregion
 
                                                     #region My Providers Filter
                                                     if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.MyProviders).Select(y => y).FirstOrDefault() != null)
-                                                    {
-                                                        qb2 &= qw.Nested(n => n
-                                                        .Path(p => p.oCustomerProviderIndexModel)
-                                                        .Query(fq => fq
-                                                            .Match(match => match
-                                                            .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                                                            .Query(SessionModel.CurrentCompany.CompanyPublicId)
-                                                            )
-                                                       ));
-                                                    }
+                                                {
+                                                    qb2 &= qw.Nested(n => n
+                                                    .Path(p => p.oCustomerProviderIndexModel)
+                                                    .Query(fq => fq
+                                                        .Match(match => match
+                                                        .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                                        .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                                        )
+                                                   ));
+                                                }
                                                     #endregion
 
                                                     #region Other Providers Filter
                                                     if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.OtherProviders).Select(y => y).FirstOrDefault() != null)
-                                                    {
-                                                        qb2 &= qw.Nested(n => n
-                                                        .Path(p => p.oCustomerProviderIndexModel)
-                                                        .Query(fq => fq
-                                                            .Match(match => match
-                                                            .Field(field => field.oCustomerProviderIndexModel.Where(y => y.CustomerPublicId != SessionModel.CurrentCompany.CompanyPublicId).Select(y => y).First().CustomerPublicId)
-                                                            )
-                                                       ));
-                                                    }
+                                                {
+                                                    qb2 &= qw.Nested(n => n
+                                                    .Path(p => p.oCustomerProviderIndexModel)
+                                                    .Query(fq => fq
+                                                        .Match(match => match
+                                                        .Field(field => field.oCustomerProviderIndexModel.Where(y => y.CustomerPublicId != SessionModel.CurrentCompany.CompanyPublicId).Select(y => y).First().CustomerPublicId)
+                                                        )
+                                                   ));
+                                                }
                                                     #endregion
 
                                                     #region Provider Status
                                                     if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
-                                                    {
-                                                        qb2 &= qw.Nested(n => n
-                                                         .Path(p => p.oCustomerProviderIndexModel)
-                                                        .Query(fq => fq
-                                                            .Match(match => match
-                                                            .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
-                                                            .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault())
-                                                            )
-                                                          )
-                                                       );
-                                                    }
+                                                {
+                                                    qb2 &= qw.Nested(n => n
+                                                     .Path(p => p.oCustomerProviderIndexModel)
+                                                    .Query(fq => fq
+                                                        .Match(match => match
+                                                        .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
+                                                        .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault())
+                                                        )
+                                                      )
+                                                   );
+                                                }
 
                                                     #endregion
 
                                                     #region Can see other Providers?
                                                     if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1"
-                                                        && SessionModel.CurrentCompany.CompanyPublicId != Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value)
-                                                    {
-                                                        qb2 &= qw.Nested(n => n
-                                                        .Path(p => p.oCustomerProviderIndexModel)
-                                                            .Query(fq => fq
-                                                                .Match(match => match
-                                                                .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId))
-                                                              ));
-                                                    }
-                                                    else
-                                                    {
-                                                        qb2 &= qw.Nested(n => n
-                                                        .Path(p => p.oCustomerProviderIndexModel)
-                                                            .Query(fq => fq
-                                                                .Match(match => match
-                                                                .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                                                                .Query(SessionModel.CurrentCompany.CompanyPublicId))
-                                                            ));
-                                                    }
+                                                    && SessionModel.CurrentCompany.CompanyPublicId != Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value)
+                                                {
+                                                    qb2 &= qw.Nested(n => n
+                                                    .Path(p => p.oCustomerProviderIndexModel)
+                                                        .Query(fq => fq
+                                                            .Match(match => match
+                                                            .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId))
+                                                          ));
+                                                }
+                                                else
+                                                {
+                                                    qb2 &= qw.Nested(n => n
+                                                    .Path(p => p.oCustomerProviderIndexModel)
+                                                        .Query(fq => fq
+                                                            .Match(match => match
+                                                            .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                                            .Query(SessionModel.CurrentCompany.CompanyPublicId))
+                                                        ));
+                                                }
                                                     #endregion
                                                     return qb2;
-                                                })
-                                            )))
-                                        );
-
-
-
-                                    qb &= q.Terms(tms => tms
-                                     .Field(fi => fi.ProviderPublicId)
-                                     .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
+                                            })
+                                        )))
                                     );
+
+
+
+                                qb &= q.Terms(tms => tms
+                                 .Field(fi => fi.ProviderPublicId)
+                                 .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
+                                );
                                 //}
 
                                 return qb;
@@ -493,10 +493,10 @@ namespace MarketPlace.Web.Controllers
                     else
                     {
                         oModel.OtherProvidersFilter.Add(new ElasticSearchFilter
-                       {
-                           FilterCount = (int)oModel.ElasticCompanyModel.Total,
-                           FilterType = enumFilterType.OtherProviders.ToString(),
-                       });
+                        {
+                            FilterCount = (int)oModel.ElasticCompanyModel.Total,
+                            FilterType = enumFilterType.OtherProviders.ToString(),
+                        });
                     }
 
                 }
@@ -1255,7 +1255,7 @@ namespace MarketPlace.Web.Controllers
 
                 oOrderGroup.Add(oGroupListName.Where(x => x.Contains("Criticidad Alta")).Select(x => x).FirstOrDefault());
                 oOrderGroup.Add(oGroupListName.Where(x => x.Contains("Criticidad Media")).Select(x => x).FirstOrDefault());
-                oOrderGroup.Add(oGroupListName.Where(x => x.Contains("Criticidad Baja")).Select(x => x).FirstOrDefault());                
+                oOrderGroup.Add(oGroupListName.Where(x => x.Contains("Criticidad Baja")).Select(x => x).FirstOrDefault());
                 oOrderGroup.Add(oGroupListName.Where(x => x.Contains("SIN COINCIDENCIAS")).Select(x => x).FirstOrDefault());
 
                 string searchName = "";
@@ -3171,80 +3171,161 @@ namespace MarketPlace.Web.Controllers
 
             if (Request["UpsertRequest"] == "true")
             {
+                var CompanyPublicId = SessionModel.CurrentCompany.CompanyPublicId;
                 List<ReportParameter> parameters = new List<ReportParameter>();
-                ProviderModel oToInsert = new ProviderModel()
+                Tuple<byte[], string, string> report;
+                ProviderModel oToInsert = new ProviderModel();
+                switch (CompanyPublicId)
                 {
-                    RelatedCompany = new ProveedoresOnLine.Company.Models.Company.CompanyModel()
-                    {
-                        CompanyPublicId = ProviderPublicId,
-                    },
-                    RelatedReports = new List<GenericItemModel>(),
-                };
-                oToInsert.RelatedReports.Add(this.GetSurveyReportFilterRequest());
-                ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPReportUpsert(oToInsert);
+                    //ToDO: Settings
+                    case "FB9C6D3E":
+                        oToInsert = new ProviderModel()
+                        {
+                            RelatedCompany = new ProveedoresOnLine.Company.Models.Company.CompanyModel()
+                            {
+                                CompanyPublicId = ProviderPublicId,
+                            },
+                            RelatedReports = new List<GenericItemModel>(),
+                        };
+                        oToInsert.RelatedReports.Add(this.GetSurveyReportFilterRequest());
+                        ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPReportUpsert(oToInsert);
+                        DataTable data = new DataTable();
+                        data.Columns.Add("ProviderName");
+                        data.Columns.Add("StartDate");
+                        data.Columns.Add("EndDate");
+                        data.Columns.Add("EvaluationType");
+                        data.Columns.Add("SurveyScore");
 
-                parameters.Add(new ReportParameter("currentCompanyName", SessionModel.CurrentCompany.CompanyName));
-                parameters.Add(new ReportParameter("currentCompanyTipoDni", SessionModel.CurrentCompany.IdentificationType.ItemName));
-                parameters.Add(new ReportParameter("currentCompanyDni", SessionModel.CurrentCompany.IdentificationNumber));
-                parameters.Add(new ReportParameter("currentCompanyLogo", SessionModel.CurrentCompany_CompanyLogo));
-                parameters.Add(new ReportParameter("providerName", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName.ToString()));
-                parameters.Add(new ReportParameter("providerTipoDni", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationType.ItemName.ToString()));
-                parameters.Add(new ReportParameter("providerDni", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationNumber.ToString()));
-                //order items reports
-                if (oToInsert.RelatedReports != null)
-                {
-                    oToInsert.RelatedReports.All(x =>
-                    {
-                        parameters.Add(new ReportParameter("remarks",
-                            x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                            (int)enumSurveyInfoType.RP_Observation).Select(y => y.Value).
-                            DefaultIfEmpty("-").
-                            FirstOrDefault() + "."));
+                        DataRow row;
 
-                        parameters.Add(new ReportParameter("actionPlan",
-                            x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                            (int)enumSurveyInfoType.RP_ImprovementPlan).Select(y => y.Value).
-                            DefaultIfEmpty("-").
-                            FirstOrDefault() + "."));
+                        //order items reports
+                        if (oToInsert.RelatedReports != null)
+                        {
+                            oToInsert.RelatedReports.All(x =>
+                            {
+                                row = data.NewRow();
 
-                        parameters.Add(new ReportParameter("dateStart", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                                    (int)enumSurveyInfoType.RP_InitDateReport).Select(y => y.Value).
+                                parameters.Add(new ReportParameter("ProviderName", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName.ToString()));
+                                row["ProviderName"] = oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName.ToString();
+
+                                parameters.Add(new ReportParameter("StartDate", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                                    (int)enumSurveyInfoType.RP_InitDateReport).Select(y => y.Value).
+                                                    DefaultIfEmpty("-").
+                                                    FirstOrDefault()).ToString("dd/MM/yyyy")));
+                                row["StartDate"] = Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                                    (int)enumSurveyInfoType.RP_InitDateReport).Select(y => y.Value).
+                                                    DefaultIfEmpty("-").
+                                                    FirstOrDefault()).ToString("dd/MM/yyyy");
+
+                                parameters.Add(new ReportParameter("EndDate", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                            (int)enumSurveyInfoType.RP_EndDateReport).Select(y => y.Value).
+                                            DefaultIfEmpty("-").
+                                            FirstOrDefault()).ToString("dd/MM/yyyy")));
+                                row["EndDate"] = Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                             (int)enumSurveyInfoType.RP_EndDateReport).Select(y => y.Value).
+                                            DefaultIfEmpty("-").
+                                            FirstOrDefault()).ToString("dd/MM/yyyy");
+
+                                parameters.Add(new ReportParameter("EvaluationType", "Evaluación"));
+                                row["EndDate"] = "Evaluación";
+
+                                parameters.Add(new ReportParameter("SurveyScore", x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                            (int)enumSurveyInfoType.RP_ReportAverage).Select(y => y.Value).
+                                            DefaultIfEmpty("-").
+                                            FirstOrDefault()));
+
+                                row["SurveyScore"] = x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                            (int)enumSurveyInfoType.RP_ReportAverage).Select(y => y.Value).
+                                            DefaultIfEmpty("-").
+                                            FirstOrDefault();
+                                data.Rows.Add(row);
+                                return true;
+                            });
+                        }
+                        report = Report_SurveyProcable(parameters, data);
+
+                        break;
+
+                    default:
+
+                        oToInsert = new ProviderModel()
+                        {
+                            RelatedCompany = new ProveedoresOnLine.Company.Models.Company.CompanyModel()
+                            {
+                                CompanyPublicId = ProviderPublicId,
+                            },
+                            RelatedReports = new List<GenericItemModel>(),
+                        };
+                        oToInsert.RelatedReports.Add(this.GetSurveyReportFilterRequest());
+                        ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPReportUpsert(oToInsert);
+
+                        parameters.Add(new ReportParameter("currentCompanyName", SessionModel.CurrentCompany.CompanyName));
+                        parameters.Add(new ReportParameter("currentCompanyTipoDni", SessionModel.CurrentCompany.IdentificationType.ItemName));
+                        parameters.Add(new ReportParameter("currentCompanyDni", SessionModel.CurrentCompany.IdentificationNumber));
+                        parameters.Add(new ReportParameter("currentCompanyLogo", SessionModel.CurrentCompany_CompanyLogo));
+                        parameters.Add(new ReportParameter("providerName", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName.ToString()));
+                        parameters.Add(new ReportParameter("providerTipoDni", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationType.ItemName.ToString()));
+                        parameters.Add(new ReportParameter("providerDni", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationNumber.ToString()));
+                        //order items reports
+                        if (oToInsert.RelatedReports != null)
+                        {
+                            oToInsert.RelatedReports.All(x =>
+                            {
+                                parameters.Add(new ReportParameter("remarks",
+                                    x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                    (int)enumSurveyInfoType.RP_Observation).Select(y => y.Value).
+                                    DefaultIfEmpty("-").
+                                    FirstOrDefault() + "."));
+
+                                parameters.Add(new ReportParameter("actionPlan",
+                                    x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                    (int)enumSurveyInfoType.RP_ImprovementPlan).Select(y => y.Value).
+                                    DefaultIfEmpty("-").
+                                    FirstOrDefault() + "."));
+
+                                parameters.Add(new ReportParameter("dateStart", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                            (int)enumSurveyInfoType.RP_InitDateReport).Select(y => y.Value).
+                                            DefaultIfEmpty("-").
+                                            FirstOrDefault()).ToString("dd/MM/yyyy")));
+
+                                parameters.Add(new ReportParameter("dateEnd", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                    (int)enumSurveyInfoType.RP_EndDateReport).Select(y => y.Value).
                                     DefaultIfEmpty("-").
                                     FirstOrDefault()).ToString("dd/MM/yyyy")));
 
-                        parameters.Add(new ReportParameter("dateEnd", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                            (int)enumSurveyInfoType.RP_EndDateReport).Select(y => y.Value).
-                            DefaultIfEmpty("-").
-                            FirstOrDefault()).ToString("dd/MM/yyyy")));
+                                parameters.Add(new ReportParameter("average",
+                                    x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                    (int)enumSurveyInfoType.RP_ReportAverage).Select(y => y.Value).
+                                    DefaultIfEmpty("-").
+                                    FirstOrDefault()));
 
-                        parameters.Add(new ReportParameter("average",
-                            x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                            (int)enumSurveyInfoType.RP_ReportAverage).Select(y => y.Value).
-                            DefaultIfEmpty("-").
-                            FirstOrDefault()));
+                                parameters.Add(new ReportParameter("reportDate",
+                                    x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                    (int)enumSurveyInfoType.RP_ReportDate).Select(y => y.Value).
+                                    DefaultIfEmpty("-").
+                                    FirstOrDefault()));
 
-                        parameters.Add(new ReportParameter("reportDate",
-                            x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                            (int)enumSurveyInfoType.RP_ReportDate).Select(y => y.Value).
-                            DefaultIfEmpty("-").
-                            FirstOrDefault()));
+                                parameters.Add(new ReportParameter("responsible",
+                                    x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                    (int)enumSurveyInfoType.RP_ReportResponsable).Select(y => y.Value).
+                                    DefaultIfEmpty("-").
+                                    FirstOrDefault()));
+                                return true;
+                            });
+                        }
 
-                        parameters.Add(new ReportParameter("responsible",
-                            x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                            (int)enumSurveyInfoType.RP_ReportResponsable).Select(y => y.Value).
-                            DefaultIfEmpty("-").
-                            FirstOrDefault()));
-                        return true;
-                    });
+                        parameters.Add(new ReportParameter("author", SessionModel.CurrentCompanyLoginUser.RelatedUser.Name.ToString() + " " + SessionModel.CurrentCompanyLoginUser.RelatedUser.LastName.ToString()));
+
+                        report = ProveedoresOnLine.Reports.Controller.ReportModule.CP_SurveyReportDetail(
+                                                            (int)enumReportType.RP_SurveyReport,
+                                                            enumCategoryInfoType.PDF.ToString(),
+                                                            parameters,
+                                                            Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim() + "SV_Report_SurveyDetail.rdlc");
+                        parameters = null;
+                        break;
+
+
                 }
-                parameters.Add(new ReportParameter("author", SessionModel.CurrentCompanyLoginUser.RelatedUser.Name.ToString() + " " + SessionModel.CurrentCompanyLoginUser.RelatedUser.LastName.ToString()));
-
-                Tuple<byte[], string, string> report = ProveedoresOnLine.Reports.Controller.ReportModule.CP_SurveyReportDetail(
-                                                    (int)enumReportType.RP_SurveyReport,
-                                                    enumCategoryInfoType.PDF.ToString(),
-                                                    parameters,
-                                                    Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim() + "SV_Report_SurveyDetail.rdlc");
-                parameters = null;
                 return File(report.Item1, report.Item2, report.Item3);
             }
 
@@ -3740,15 +3821,15 @@ namespace MarketPlace.Web.Controllers
                     if (CalificationProjectBatch.CalificationProjectItemBatchModel.Any(y => y.CalificationProjectConfigItem.CalificationProjectConfigItemId == CalificationProjectConfigItem.CalificationProjectConfigItemId))
                     {
                         var CalificaitonProjectItemBatch = CalificationProjectBatch.CalificationProjectItemBatchModel.Where(y => y.CalificationProjectConfigItem.CalificationProjectConfigItemId == CalificationProjectConfigItem.CalificationProjectConfigItemId).Select(x => x).FirstOrDefault();
-                        var Score=0;
+                        var Score = 0;
                         row4 = data4.NewRow();
                         row4["ItemModuleName"] = CalificationProjectConfigItem.CalificationProjectConfigItemName != "" ? CalificationProjectConfigItem.CalificationProjectConfigItemName : CalificationProjectConfigItem.CalificationProjectConfigItemType.ItemName;
                         row4["ItemScore"] = CalificaitonProjectItemBatch.ItemScore;
-                        CalificationProjectConfigItem.CalificationProjectConfigItemInfoModel.All(z=> 
+                        CalificationProjectConfigItem.CalificationProjectConfigItemInfoModel.All(z =>
                         {
                             Score += int.Parse(z.Score);
                             row4["ModuleScore"] = Score;
-                            return true; 
+                            return true;
                         });
                         data4.Rows.Add(row4);
                     }
@@ -3767,7 +3848,7 @@ namespace MarketPlace.Web.Controllers
                         data4.Rows.Add(row4);
                     }
                 }
-            }            
+            }
 
             parameters.Add(new ReportParameter("CalificationProjectName", oModel.ProviderCalification.ProRelatedCalificationProject != null && oModel.ProviderCalification.ProRelatedCalificationProject.Count > 0 ? oModel.ProviderCalification.ProRelatedCalificationProject.FirstOrDefault().ProjectConfigModel.CalificationProjectConfigName : " "));
             parameters.Add(new ReportParameter("CalificationProjectTotalScore", oModel.ProviderCalification.ProRelatedCalificationProject != null && oModel.ProviderCalification.ProRelatedCalificationProject.Count > 0 ? oModel.ProviderCalification.ProRelatedCalificationProject.FirstOrDefault().TotalScore.ToString() : " "));
@@ -3857,7 +3938,7 @@ namespace MarketPlace.Web.Controllers
                 .TrackScores(true)
                 .Size(2000000)
                 .Aggregations
-                    (agg => agg                        
+                    (agg => agg
                     .Terms("ica", aggv => aggv
                         .Field(fi => fi.ICAId))
                     .Terms("city", aggv => aggv
@@ -6143,7 +6224,19 @@ namespace MarketPlace.Web.Controllers
                 });
             return oObjToReturn.Distinct().ToList();
         }
-       
+
+        private Tuple<byte[], string, string> Report_SurveyProcable(List<ReportParameter> ReportData, DataTable data)
+        {
+
+            Tuple<byte[], string, string> Report = ProveedoresOnLine.Reports.Controller.ReportModule.MP_SV_ProcablesReport((int)enumReportType.RP_SurveyReport,
+                                                            data,
+                                                            enumCategoryInfoType.PDF.ToString(),
+                                                            ReportData,
+                                                            Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim() + "SV_Report_Procables.rdlc");
+
+            return Report;
+        }
+
         #endregion Pivate Functions
 
         #region Menu
