@@ -21,8 +21,8 @@
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>0.16667in</Top>
         <Left>0.205in</Left>
-        <Height>0.24395in</Height>
-        <Width>0.72222in</Width>
+        <Height>0.25in</Height>
+        <Width>0.84375in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -46,22 +46,19 @@
                 </Style>
               </TextRun>
             </TextRuns>
-            <Style>
-              <TextAlign>Left</TextAlign>
-            </Style>
+            <Style />
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
         <Top>0.16667in</Top>
-        <Left>0.92722in</Left>
-        <Height>0.24395in</Height>
-        <Width>2.30973in</Width>
+        <Left>1.04875in</Left>
+        <Height>0.25in</Height>
+        <Width>2.84249in</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
-          <VerticalAlign>Top</VerticalAlign>
           <PaddingLeft>2pt</PaddingLeft>
           <PaddingRight>2pt</PaddingRight>
           <PaddingTop>2pt</PaddingTop>
@@ -85,7 +82,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
-        <Top>0.48006in</Top>
+        <Top>0.60506in</Top>
         <Left>0.205in</Left>
         <Height>0.25in</Height>
         <Width>0.84375in</Width>
@@ -117,10 +114,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>0.73006in</Top>
+        <Top>0.85506in</Top>
         <Left>0.205in</Left>
         <Height>0.25in</Height>
-        <Width>3.03195in</Width>
+        <Width>2.05973in</Width>
         <ZIndex>3</ZIndex>
         <Style>
           <Border>
@@ -139,7 +136,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Asunto: EVALUACIÓN DE PROVEEDORES PERIODO DESDE EL </Value>
+                <Value>Asunto: EVALUACIÓN DE PROVEEDORES PERIODO DESDE EL  </Value>
                 <Style>
                   <FontStyle>Normal</FontStyle>
                   <FontFamily>Calibri</FontFamily>
@@ -159,7 +156,7 @@
                 </Style>
               </TextRun>
               <TextRun>
-                <Value> HASTA EL </Value>
+                <Value>     HASTA EL   </Value>
                 <Style>
                   <FontStyle>Normal</FontStyle>
                   <FontFamily>Calibri</FontFamily>
@@ -183,10 +180,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.01739in</Top>
+        <Top>1.26739in</Top>
         <Left>0.205in</Left>
         <Height>0.25in</Height>
-        <Width>7.18585in</Width>
+        <Width>6.3421in</Width>
         <ZIndex>4</ZIndex>
         <Style>
           <Border>
@@ -217,7 +214,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
         <Top>0.16667in</Top>
-        <Left>6.88998in</Left>
+        <Left>6.04623in</Left>
         <Height>0.25in</Height>
         <Width>0.50087in</Width>
         <ZIndex>5</ZIndex>
@@ -304,6 +301,23 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
+                <Value />
+                <Style>
+                  <FontStyle>Normal</FontStyle>
+                  <FontFamily>Calibri</FontFamily>
+                  <FontWeight>Normal</FontWeight>
+                  <TextDecoration>None</TextDecoration>
+                  <Color>#000000</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
                 <Value>Así mismo les informamos el resultado de la evaluación; les solicitamos se realice las acciones con estricto cumplimiento de acuerdo al puntaje obtenido:</Value>
                 <Style>
                   <FontStyle>Normal</FontStyle>
@@ -320,10 +334,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.34533in</Top>
+        <Top>1.72033in</Top>
         <Left>0.205in</Left>
-        <Height>1.34258in</Height>
-        <Width>7.18585in</Width>
+        <Height>1.728in</Height>
+        <Width>6.3421in</Width>
         <ZIndex>6</ZIndex>
         <Style>
           <Border>
@@ -339,21 +353,21 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.86079in</Width>
+              <Width>0.645in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.90908in</Width>
+              <Width>0.89121in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.30036in</Width>
+              <Width>3.55332in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.11562in</Width>
+              <Width>1.23316in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.35616in</Height>
+              <Height>0.51589in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -400,7 +414,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.49007in</Height>
+              <Height>0.6498in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -557,7 +571,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.58339in</Height>
+              <Height>0.74312in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -586,6 +600,7 @@
                       <rd:DefaultName>Textbox10</rd:DefaultName>
                       <Style>
                         <Border>
+                          <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
                         <VerticalAlign>Middle</VerticalAlign>
@@ -620,6 +635,7 @@
                       <rd:DefaultName>Textbox12</rd:DefaultName>
                       <Style>
                         <Border>
+                          <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
                         <VerticalAlign>Middle</VerticalAlign>
@@ -656,6 +672,7 @@
                       <rd:DefaultName>Textbox14</rd:DefaultName>
                       <Style>
                         <Border>
+                          <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -675,7 +692,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(Parameters!SurveyScore.Value &gt;= 70 and Parameters!SurveyScore.Value &lt;= 100,Parameters!SurveyScore.Value, "")</Value>
+                              <Value>=Parameters!SurveyScore.Value</Value>
                               <Style>
                                 <FontFamily>calibri</FontFamily>
                               </Style>
@@ -689,9 +706,9 @@
                       <rd:DefaultName>SurveyScore</rd:DefaultName>
                       <Style>
                         <Border>
+                          <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
-                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -703,7 +720,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.85727in</Height>
+              <Height>1.017in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -732,6 +749,7 @@
                       <rd:DefaultName>Textbox21</rd:DefaultName>
                       <Style>
                         <Border>
+                          <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
                         <VerticalAlign>Middle</VerticalAlign>
@@ -770,6 +788,7 @@
                       <rd:DefaultName>Textbox22</rd:DefaultName>
                       <Style>
                         <Border>
+                          <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
                         <VerticalAlign>Middle</VerticalAlign>
@@ -806,6 +825,7 @@
                       <rd:DefaultName>Textbox23</rd:DefaultName>
                       <Style>
                         <Border>
+                          <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -825,7 +845,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(Parameters!SurveyScore.Value &gt;= 50 and Parameters!SurveyScore.Value &lt;= 69,Parameters!SurveyScore.Value, "")</Value>
+                              <Value>=Parameters!SurveyScore.Value</Value>
                               <Style>
                                 <FontFamily>calibri</FontFamily>
                               </Style>
@@ -839,9 +859,9 @@
                       <rd:DefaultName>SurveyScore1</rd:DefaultName>
                       <Style>
                         <Border>
+                          <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
-                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -853,7 +873,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.38894in</Height>
+              <Height>0.54867in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -882,6 +902,7 @@
                       <rd:DefaultName>Textbox25</rd:DefaultName>
                       <Style>
                         <Border>
+                          <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
                         <VerticalAlign>Middle</VerticalAlign>
@@ -920,6 +941,7 @@
                       <rd:DefaultName>Textbox26</rd:DefaultName>
                       <Style>
                         <Border>
+                          <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
                         <VerticalAlign>Middle</VerticalAlign>
@@ -956,6 +978,7 @@
                       <rd:DefaultName>Textbox27</rd:DefaultName>
                       <Style>
                         <Border>
+                          <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -975,7 +998,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIF(Parameters!SurveyScore.Value &gt; 0 and Parameters!SurveyScore.Value &lt;= 49,Parameters!SurveyScore.Value, "")</Value>
+                              <Value>=Parameters!SurveyScore.Value</Value>
                               <Style>
                                 <FontFamily>calibri</FontFamily>
                               </Style>
@@ -989,9 +1012,9 @@
                       <rd:DefaultName>SurveyScore2</rd:DefaultName>
                       <Style>
                         <Border>
+                          <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
-                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1031,10 +1054,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>DS_Survey_ProcablesReport</DataSetName>
-        <Top>2.69833in</Top>
-        <Left>0.205in</Left>
-        <Height>2.67585in</Height>
-        <Width>7.18585in</Width>
+        <Top>3.44833in</Top>
+        <Left>0.22442in</Left>
+        <Height>3.47446in</Height>
+        <Width>6.32269in</Width>
         <ZIndex>7</ZIndex>
         <Style>
           <Border>
@@ -1119,14 +1142,14 @@
                 <Style>
                   <FontStyle>Normal</FontStyle>
                   <FontFamily>Calibri</FontFamily>
-                  <FontWeight>Normal</FontWeight>
+                  <FontWeight>Bold</FontWeight>
                   <TextDecoration>None</TextDecoration>
                   <Color>#000000</Color>
                 </Style>
               </TextRun>
             </TextRuns>
             <Style>
-              <TextAlign>Left</TextAlign>
+              <TextAlign>Center</TextAlign>
             </Style>
           </Paragraph>
           <Paragraph>
@@ -1136,31 +1159,14 @@
                 <Style>
                   <FontStyle>Normal</FontStyle>
                   <FontFamily>Calibri</FontFamily>
-                  <FontWeight>Normal</FontWeight>
+                  <FontWeight>Bold</FontWeight>
                   <TextDecoration>None</TextDecoration>
                   <Color>#000000</Color>
                 </Style>
               </TextRun>
             </TextRuns>
             <Style>
-              <TextAlign>Left</TextAlign>
-            </Style>
-          </Paragraph>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value />
-                <Style>
-                  <FontStyle>Normal</FontStyle>
-                  <FontFamily>Calibri</FontFamily>
-                  <FontWeight>Normal</FontWeight>
-                  <TextDecoration>None</TextDecoration>
-                  <Color>#000000</Color>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style>
-              <TextAlign>Left</TextAlign>
+              <TextAlign>Center</TextAlign>
             </Style>
           </Paragraph>
           <Paragraph>
@@ -1216,10 +1222,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>5.42279in</Top>
+        <Top>6.92279in</Top>
         <Left>0.22442in</Left>
-        <Height>1.95507in</Height>
-        <Width>7.16644in</Width>
+        <Height>2.60865in</Height>
+        <Width>6.32269in</Width>
         <ZIndex>8</ZIndex>
         <Style>
           <Border>
@@ -1244,16 +1250,14 @@
                 </Style>
               </TextRun>
             </TextRuns>
-            <Style>
-              <TextAlign>Right</TextAlign>
-            </Style>
+            <Style />
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>0.73006in</Top>
-        <Left>5.94571in</Left>
+        <Top>0.85506in</Top>
+        <Left>4.48737in</Left>
         <Height>0.25in</Height>
-        <Width>1.44515in</Width>
+        <Width>2.05973in</Width>
         <ZIndex>9</ZIndex>
         <Style>
           <Border>
@@ -1266,24 +1270,26 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>7.423in</Height>
+    <Height>9.53145in</Height>
     <Style>
       <Border>
-        <Style>None</Style>
+        <Style>Solid</Style>
       </Border>
     </Style>
   </Body>
-  <Width>7.6in</Width>
+  <Width>6.76585in</Width>
   <Page>
     <PageHeader>
-      <Height>1.00917in</Height>
+      <Height>1.18625in</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
+      <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
         <Image Name="Image4">
           <Source>Embedded</Source>
           <Value>logoprocables1</Value>
           <Sizing>FitProportional</Sizing>
-          <Left>0.22442in</Left>
+          <Top>0.14458in</Top>
+          <Left>0.205in</Left>
           <Height>0.98958in</Height>
           <Width>2.92708in</Width>
           <Style>
@@ -1300,7 +1306,7 @@
       </Style>
     </PageHeader>
     <PageFooter>
-      <Height>0.95063in</Height>
+      <Height>1.78669in</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -1308,10 +1314,10 @@
           <Source>Embedded</Source>
           <Value>footprocables</Value>
           <Sizing>FitProportional</Sizing>
-          <Top>0.03397in</Top>
-          <Left>0.23721in</Left>
-          <Height>0.84375in</Height>
-          <Width>7.15365in</Width>
+          <Top>0.14086in</Top>
+          <Left>0.205in</Left>
+          <Height>1.46875in</Height>
+          <Width>6.3421in</Width>
           <Style>
             <Border>
               <Style>None</Style>
@@ -1325,12 +1331,12 @@
         </Border>
       </Style>
     </PageFooter>
-    <InteractiveHeight>11in</InteractiveHeight>
-    <InteractiveWidth>8.5in</InteractiveWidth>
-    <LeftMargin>0.3in</LeftMargin>
-    <RightMargin>0.3in</RightMargin>
-    <TopMargin>0.3in</TopMargin>
-    <BottomMargin>0.3in</BottomMargin>
+    <PageHeight>8.27in</PageHeight>
+    <PageWidth>11.69in</PageWidth>
+    <LeftMargin>0.7874in</LeftMargin>
+    <RightMargin>0.7874in</RightMargin>
+    <TopMargin>0.7874in</TopMargin>
+    <BottomMargin>0.7874in</BottomMargin>
     <ColumnSpacing>0.05118in</ColumnSpacing>
     <Style />
   </Page>
