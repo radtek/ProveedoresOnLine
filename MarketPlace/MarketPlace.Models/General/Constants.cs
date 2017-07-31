@@ -154,6 +154,9 @@
 
         public const string MP_TK_TextImage = "TK_TextImage";
 
+        public const string MP_SV_SurveyGeneralReport = "File_SurveyReportS3FilePath";
+       
+
         #endregion
 
         #region ThirdKnowledge

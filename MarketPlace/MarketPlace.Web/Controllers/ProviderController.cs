@@ -15,6 +15,7 @@ using System.Web.Mvc;
 using ProveedoresOnLine.CalificationProject.Models.CalificationProject;
 using Nest;
 using ProveedoresOnLine.Company.Models.Company;
+using System.IO.MemoryMappedFiles;
 
 namespace MarketPlace.Web.Controllers
 {
@@ -249,8 +250,8 @@ namespace MarketPlace.Web.Controllers
                                             .Filter(f3 =>
                                             {
                                                 QueryContainer qb2 = null;
-                                                    #region Basic Providers Filters
-                                                    if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
+                                                #region Basic Providers Filters
+                                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
                                                 {
                                                     qb2 &= qw.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
                                                 }
@@ -266,10 +267,10 @@ namespace MarketPlace.Web.Controllers
                                                 {
                                                     qb2 &= qw.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
                                                 }
-                                                    #endregion
+                                                #endregion
 
-                                                    #region My Providers Filter
-                                                    if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.MyProviders).Select(y => y).FirstOrDefault() != null)
+                                                #region My Providers Filter
+                                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.MyProviders).Select(y => y).FirstOrDefault() != null)
                                                 {
                                                     qb2 &= qw.Nested(n => n
                                                     .Path(p => p.oCustomerProviderIndexModel)
@@ -280,10 +281,10 @@ namespace MarketPlace.Web.Controllers
                                                         )
                                                    ));
                                                 }
-                                                    #endregion
+                                                #endregion
 
-                                                    #region Other Providers Filter
-                                                    if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.OtherProviders).Select(y => y).FirstOrDefault() != null)
+                                                #region Other Providers Filter
+                                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.OtherProviders).Select(y => y).FirstOrDefault() != null)
                                                 {
                                                     qb2 &= qw.Nested(n => n
                                                     .Path(p => p.oCustomerProviderIndexModel)
@@ -293,10 +294,10 @@ namespace MarketPlace.Web.Controllers
                                                         )
                                                    ));
                                                 }
-                                                    #endregion
+                                                #endregion
 
-                                                    #region Provider Status
-                                                    if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
+                                                #region Provider Status
+                                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
                                                 {
                                                     qb2 &= qw.Nested(n => n
                                                      .Path(p => p.oCustomerProviderIndexModel)
@@ -309,11 +310,11 @@ namespace MarketPlace.Web.Controllers
                                                    );
                                                 }
 
-                                                    #endregion
+                                                #endregion
 
-                                                    #region Can see other Providers?
-                                                    if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1"
-                                                    && SessionModel.CurrentCompany.CompanyPublicId != Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value)
+                                                #region Can see other Providers?
+                                                if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1"
+                                                && SessionModel.CurrentCompany.CompanyPublicId != Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value)
                                                 {
                                                     qb2 &= qw.Nested(n => n
                                                     .Path(p => p.oCustomerProviderIndexModel)
@@ -332,8 +333,8 @@ namespace MarketPlace.Web.Controllers
                                                             .Query(SessionModel.CurrentCompany.CompanyPublicId))
                                                         ));
                                                 }
-                                                    #endregion
-                                                    return qb2;
+                                                #endregion
+                                                return qb2;
                                             })
                                         )))
                                     );
@@ -3323,9 +3324,30 @@ namespace MarketPlace.Web.Controllers
                                                             Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim() + "SV_Report_SurveyDetail.rdlc");
                         parameters = null;
                         break;
-
-
                 }
+                //Save s3 File
+                //get folder
+                string strFolder = System.Web.HttpContext.Current.Server.MapPath
+                    (Models.General.InternalSettings.Instance
+                    [Models.General.Constants.C_Settings_File_TempDirectory].Value);
+
+                if (!System.IO.Directory.Exists(strFolder))
+                    System.IO.Directory.CreateDirectory(strFolder);
+
+                //get File
+                var UploadFile = File(report.Item1, report.Item2, report.Item3);
+
+                string strFilePath = System.IO.Path.Combine(strFolder, report.Item3 + "_" + DateTime.Now.ToString("yyyy_MM_dd_hhmmss"));
+                System.IO.File.WriteAllBytes(strFilePath, report.Item1);                
+                
+                string strRemoteFile = ProveedoresOnLine.FileManager.FileController.LoadFile
+                            (strFilePath,
+                            Models.General.InternalSettings.Instance[Models.General.Constants.MP_SV_SurveyGeneralReport].Value);
+
+                //remove temporal file
+                if (System.IO.File.Exists(strFilePath))
+                    System.IO.File.Delete(strFilePath);
+
                 return File(report.Item1, report.Item2, report.Item3);
             }
 

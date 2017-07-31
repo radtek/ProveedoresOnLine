@@ -9,11 +9,11 @@ using ProveedoresOnLine.CompanyProvider.Controller;
 using ProveedoresOnLine.CompanyProvider.Models.Provider;
 using ProveedoresOnLine.IndexSearch.Models;
 using ProveedoresOnLine.SurveyModule.Models;
-using ProveedoresOnLine.SurveyModule.Models.Index;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace MarketPlace.Web.Controllers
@@ -980,6 +980,8 @@ namespace MarketPlace.Web.Controllers
             //Clean the season url saved
             if (SessionModel.CurrentURL != null)
                 SessionModel.CurrentURL = null;
+
+            //Request.Url.OriginalString
 
             //get basic provider info
             List<ProviderModel> olstProvider = new List<ProviderModel>();
