@@ -38,6 +38,9 @@
     <key name="Report_PdfReportIcon">https://s3.amazonaws.com/stgproveedoresonline/MarketPlace/SiteImages/pdfdownload.png</key>
 
     <key name="CompanyPublicId_Publicar">DA5C572E</key>
+    
+    <key name="C_Settings_ProcablesPublicId">FB9C6D3E</key>
+    
     <key name="CompanyPublicId_ClientePolipropileno">10A0C1D5</key>
 
     <key name="ElasticSearchUrl">http://192.168.0.94:9200/</key>
@@ -80,7 +83,7 @@
     <key name="Company_Error_Gear3">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/gear3.png</key>
 
     <!--Report Path-->
-    <key name="MP_CP_ReportPath">D:\ProveedoresOnLine\Source\ProveedoresOnLine\ProveedoresOnLine\ProveedoresOnLine.Reports\ProveedoresOnLine.Reports\Reports\</key>
+    <key name="MP_CP_ReportPath">F:\Source\ProveedoresOnline\ProveedoresOnLine.Reports\ProveedoresOnLine.Reports\Reports\</key>
 
     <!--ThirdKnowledgeReportText-->
     <key name="TK_TextImage"><![CDATA[https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/ThirdKnowledgeText.PNG]]></key>
@@ -99,6 +102,8 @@
     <key name="N_ThirdKnowledgeUploadMassiveMessage"><![CDATA[Cargue de consultas masivas en proceso]]></key>
     <key name="N_ThirdKnowledgeEndMassiveMessage"><![CDATA[Cargue de consultas masiva finalizada]]></key>
     <key name="N_ThirdKnowledgeSingleMessage"><![CDATA[Se realizó la consulta]]></key>
+    <key name="N_Survey_Procables_Mail">POL_Procables_Mail</key>
+    
 
     <!--Url redirect-->
     <key name="N_UrlThirdKnowledgeQuery"><![CDATA[https://localhost:44309/ThirdKnowledge/TKThirdKnowledgeDetail?QueryPublicId={{QueryPublicId}}]]></key>
@@ -109,6 +114,8 @@
     
     <!--S3 Path File-->
     <key name="File_S3FilePath">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/ThirdKnowledge/</key>
+
+    <key name="File_SurveyReportS3FilePath">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/MP_Survey/GENERAL_REPORTS/</key>
 
   </MarketPlace>
 </Settings>

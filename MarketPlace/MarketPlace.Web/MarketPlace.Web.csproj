@@ -1299,7 +1299,6 @@
     <None Include="Properties\PublishProfiles\Alex-JP MP.pubxml" />
     <None Include="Properties\PublishProfiles\David MP.pubxml" />
     <None Include="Properties\PublishProfiles\DiegoF.pubxml" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\P1.pubxml" />
     <None Include="Properties\PublishProfiles\Sebastian Home MP.pubxml" />
     <None Include="Properties\PublishProfiles\Sebastian MP.pubxml" />

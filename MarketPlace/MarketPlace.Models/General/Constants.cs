@@ -45,6 +45,8 @@
 
         public const string C_Settings_Analytics = "{AreaName}_Analytics";
 
+        public const string C_Settings_ProcablesPublicId = "C_Settings_ProcablesPublicId";
+
         #endregion
 
         #region File
@@ -186,6 +188,8 @@
         public const string N_ThirdKnowledgeEndMassiveMessage = "N_ThirdKnowledgeEndMassiveMessage";
 
         public const string N_ThirdKnowledgeSingleMessage = "N_ThirdKnowledgeSingleMessage";
+
+        public const string N_Survey_Procables_Mail = "N_Survey_Procables_Mail";
 
         #endregion
 
