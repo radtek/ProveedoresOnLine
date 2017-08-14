@@ -13,6 +13,12 @@
     string oCookieName = SettingsManager.SettingsController.SettingsInstance.ModulesParams
             [Auth.Interfaces.Constants.C_SettingsModuleName]
             [Auth.Interfaces.Constants.C_IL_Cookie.Replace("{AppName}", ViewBag.AppName)].Value;
+    string oEmail = "";
+    if (ViewBag.Email != null)
+    {
+        oEmail = ViewBag.Email;
+    }
+
 }
 
 <div class="POMPInternalLoginGreatWrapper">
@@ -35,7 +41,7 @@
         </div>
     </div>
 </div>
-
+<input type="hidden" name="Email" value="@ViewBag.Email" />
 @section inlinescripts {
     <script type="text/javascript" src="//www.gstatic.com/authtoolkit/js/gitkit.js"></script>
     <link type="text/css" rel="stylesheet" href="//www.gstatic.com/authtoolkit/css/gitkit.css" />
@@ -44,6 +50,7 @@
     </style>
 
     <script type="text/javascript">
+
         var config = {
             apiKey: '@oApiKey',
             siteName: '@oApiName',
@@ -56,10 +63,12 @@
 
             ajaxSender: function (url, data, completed) {
 
-                var oUrlSender = '@Url.Action(MVC.InternalLogin.ActionNames.ResetPassword, MVC.InternalLogin.Name, new { Success = "{success}", Email = "{email}" })'
+                var oUrlSender = '@Url.Action(MVC.InternalLogin.ActionNames.ResetPassword, MVC.InternalLogin.Name, new { Success = "{success}", Email = oEmail })'
+                oUrlSender = oUrlSender.replace(/{success}/gi, '');
+                
 
                 $.ajax({
-                    url: url,
+                    url: url.replace("Email", @oEmail),
                     type: 'POST',
                     data: data,
                     cache: false,
@@ -70,7 +79,7 @@
                         //window.location = oUrlSender.replace(/{success}/gi, result.success).replace(/{email}/gi, result.email);
                     },
                     error: function (event, jqXHR, ajaxSettings, thrownError) {
-                        window.location = oUrlSender.replace(/{success}/gi, '').replace(/{email}/gi, '');
+                        window.location = oUrlSender;
                     },
                 });
             },

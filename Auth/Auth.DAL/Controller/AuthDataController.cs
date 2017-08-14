@@ -81,6 +81,10 @@ namespace Auth.DAL.Controller
         {
             return DataFactory.UserGetById(UserPublicId);
         }
+        public SessionManager.Models.Auth.User UserGetByEmail(string Email)
+        {
+            return DataFactory.UserGetByEmail(Email);
+        }
 
         #endregion
 

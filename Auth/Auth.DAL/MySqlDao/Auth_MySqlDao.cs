@@ -281,6 +281,91 @@ namespace Auth.DAL.MySqlDao
             return oRetorno;
         }
 
+        public SessionManager.Models.Auth.User UserGetByEmail(string Email)
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
+
+            lstParams.Add(DataInstance.CreateTypedParameter("vEmail", Email));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "UI_User_GetByEmail",
+                CommandType = System.Data.CommandType.StoredProcedure,
+                Parameters = lstParams
+            });
+
+            SessionManager.Models.Auth.User oRetorno = null;
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oRetorno = new SessionManager.Models.Auth.User()
+                {
+                    UserPublicId = response.DataTableResult.Rows[0].Field<string>("UserPublicId"),
+                    Name = response.DataTableResult.Rows[0].Field<string>("Name"),
+                    LastName = response.DataTableResult.Rows[0].Field<string>("LastName"),
+                    Email = response.DataTableResult.Rows[0].Field<string>("Email"),
+
+                    RelatedUserInfo =
+                        (from ui in response.DataTableResult.AsEnumerable()
+                         where !ui.IsNull("UserInfoId")
+                         group ui by
+                         new
+                         {
+                             UserInfoId = ui.Field<int>("UserInfoId"),
+                             UserInfoType = (SessionManager.Models.Auth.enumUserInfoType)ui.Field<int>("UserInfoType"),
+                             Value = ui.Field<string>("Value"),
+                             LargeValue = ui.Field<string>("LargeValue"),
+                         } into uig
+                         select new SessionManager.Models.Auth.UserInfo()
+                         {
+                             UserInfoId = uig.Key.UserInfoId,
+                             UserInfoType = uig.Key.UserInfoType,
+                             Value = uig.Key.Value,
+                             LargeValue = uig.Key.LargeValue,
+                         }).ToList(),
+
+                    RelatedUserProvider =
+                        (from up in response.DataTableResult.AsEnumerable()
+                         where !up.IsNull("ProviderId")
+                         group up by
+                         new
+                         {
+                             ProviderId = up.Field<string>("ProviderId"),
+                             Provider = (SessionManager.Models.Auth.enumProvider)up.Field<int>("Provider"),
+                             ProviderUrl = up.Field<string>("ProviderUrl"),
+                         } into upg
+                         select new SessionManager.Models.Auth.UserProvider()
+                         {
+                             ProviderId = upg.Key.ProviderId,
+                             Provider = upg.Key.Provider,
+                             ProviderUrl = upg.Key.ProviderUrl,
+                         }).ToList(),
+
+                    RelatedApplicationRole =
+                        (from ar in response.DataTableResult.AsEnumerable()
+                         where !ar.IsNull("ApplicationRoleId")
+                         group ar by
+                         new
+                         {
+                             ApplicationRoleId = ar.Field<int>("ApplicationRoleId"),
+                             Application = (SessionManager.Models.Auth.enumApplication)ar.Field<int>("ApplicationId"),
+                             Role = (SessionManager.Models.Auth.enumRole)ar.Field<int>("RoleId"),
+                             UserEmail = ar.Field<string>("Email"),
+                         } into arg
+                         select new SessionManager.Models.Auth.ApplicationRole()
+                         {
+                             ApplicationRoleId = arg.Key.ApplicationRoleId,
+                             Application = arg.Key.Application,
+                             Role = arg.Key.Role,
+                         }).ToList(),
+                };
+
+            }
+            return oRetorno;
+        }
+
         #endregion
 
     }
