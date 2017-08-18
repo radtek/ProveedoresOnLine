@@ -5838,7 +5838,7 @@ namespace MarketPlace.Web.Controllers
                     row2["QuestionWeight"] = subrep.Item3.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumSurveyConfigItemInfoType.Weight).Select(x => x.Value).FirstOrDefault();
                     row2["QuestionRating"] = subrep.Item4.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumSurveyItemInfoType.Ratting).Select(x => x.Value).FirstOrDefault();
                     row2["TotalAreaRating"] = Convert.ToDouble(row2["QuestionWeight"].ToString()) * Convert.ToDouble(row2["QuestionRating"].ToString()) / 100;
-                    row2["QuestionDescription"] = subrep.Item4.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumSurveyInfoType.Comments).Select(x => x.Value).FirstOrDefault();
+                    row2["QuestionDescription"] = subrep.Item4.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumSurveyItemInfoType.DescriptionText).Select(x => x.Value).FirstOrDefault();
                     if (string.IsNullOrEmpty(row2["QuestionDescription"].ToString()))
                         row2["QuestionDescription"] = "Sin Comentarios";
 
