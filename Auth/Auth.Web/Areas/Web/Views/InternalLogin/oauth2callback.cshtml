@@ -61,14 +61,12 @@
             language: 'es',
             cookieName: '@oCookieName',
 
-            ajaxSender: function (url, data, completed) {
+           ajaxSender: function (url, data, completed) {
 
-                var oUrlSender = '@Url.Action(MVC.InternalLogin.ActionNames.ResetPassword, MVC.InternalLogin.Name, new { Success = "{success}", Email = oEmail })'
-                oUrlSender = oUrlSender.replace(/{success}/gi, '');
-                
+                var oUrlSender = '@Url.Action(MVC.InternalLogin.ActionNames.ResetPassword, MVC.InternalLogin.Name, new { Success = "{success}", Email = "{email}" })'
 
                 $.ajax({
-                    url: url.replace("Email", @oEmail),
+                    url: url,
                     type: 'POST',
                     data: data,
                     cache: false,
@@ -79,7 +77,7 @@
                         //window.location = oUrlSender.replace(/{success}/gi, result.success).replace(/{email}/gi, result.email);
                     },
                     error: function (event, jqXHR, ajaxSettings, thrownError) {
-                        window.location = oUrlSender;
+                        window.location = oUrlSender.replace(/{success}/gi, '').replace(/{email}/gi, '');
                     },
                 });
             },

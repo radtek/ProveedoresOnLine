@@ -160,21 +160,25 @@ namespace MarketPlace.Web.Controllers
                                 )
                            ));
                         }
-                        #endregion
+                    #endregion
 
-                        #region Provider Status
-                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
-                        {
-                            qb &= q.Nested(n => n
-                             .Path(p => p.oCustomerProviderIndexModel)
-                            .Query(fq => fq
-                                .Match(match => match
-                                .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
-                                .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault())
-                                )
-                              )
-                           );
-                        }
+                    #region Provider Status
+                    if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
+                    {
+                        qb &= q.Nested(n => n
+                         .Path(p => p.oCustomerProviderIndexModel)
+                        .Query(fq => fq
+                            .Match(match => match
+                            .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
+                            .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault())
+                            )  &&  
+                            q.Match(m => m
+                                    .Field(Field => Field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                    .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                )                            
+                          )
+                       );
+                    }
 
                         #endregion
 
@@ -306,6 +310,11 @@ namespace MarketPlace.Web.Controllers
                                                         .Match(match => match
                                                         .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
                                                         .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault())
+                                                        )
+                                                        &&
+                                                        fq.Match(m => m
+                                                            .Field(Field => Field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                                            .Query(SessionModel.CurrentCompany.CompanyPublicId)
                                                         )
                                                       )
                                                    );

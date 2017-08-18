@@ -18,19 +18,22 @@
 
                 @{
                     List<Tuple<string, string>> oEmailToDraw = new List<Tuple<string, string>>();
-                    Model.ContactCompanyInfo.All(x =>
+                    if (Model.ContactCompanyInfo != null)
                     {
-                        if (x.ItemInfo.Where(inf => inf.Value == "210001").Select(inf => inf).ToList() != null &&
-                            x.ItemInfo.Where(inf => inf.Value == "210001").Select(inf => inf).ToList().Count > 0
-                         || x.ItemInfo.Where(inf => inf.Value == "210006").Select(inf => inf).ToList() != null &&
-                            x.ItemInfo.Where(inf => inf.Value == "210006").Select(inf => inf).ToList().Count > 0
-                         || x.ItemInfo.Where(inf => inf.Value == "210009").Select(inf => inf).ToList() != null &&
-                            x.ItemInfo.Where(inf => inf.Value == "210009").Select(inf => inf).ToList().Count > 0)
+                        Model.ContactCompanyInfo.All(x =>
                         {
-                            oEmailToDraw.Add(new Tuple<string, string>(x.ItemInfo.Where(inf => inf.ItemInfoType.ItemId == 206007).Select(inf => inf.Value).FirstOrDefault(), x.ItemInfo.Where(s => s.ItemInfoType.ItemId == 206001).Select(s => s.Value).FirstOrDefault()));
-                        }
-                        return true;
-                    });
+                            if (x.ItemInfo.Where(inf => inf.Value == "210001").Select(inf => inf).ToList() != null &&
+                                x.ItemInfo.Where(inf => inf.Value == "210001").Select(inf => inf).ToList().Count > 0
+                             || x.ItemInfo.Where(inf => inf.Value == "210006").Select(inf => inf).ToList() != null &&
+                                x.ItemInfo.Where(inf => inf.Value == "210006").Select(inf => inf).ToList().Count > 0
+                             || x.ItemInfo.Where(inf => inf.Value == "210009").Select(inf => inf).ToList() != null &&
+                                x.ItemInfo.Where(inf => inf.Value == "210009").Select(inf => inf).ToList().Count > 0)
+                            {
+                                oEmailToDraw.Add(new Tuple<string, string>(x.ItemInfo.Where(inf => inf.ItemInfoType.ItemId == 206007).Select(inf => inf.Value).FirstOrDefault(), x.ItemInfo.Where(s => s.ItemInfoType.ItemId == 206001).Select(s => s.Value).FirstOrDefault()));
+                            }
+                            return true;
+                        });
+                    }
 
                     if (oEmailToDraw.Count > 0)
                     {
