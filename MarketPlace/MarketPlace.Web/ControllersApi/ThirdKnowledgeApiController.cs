@@ -624,38 +624,47 @@ namespace MarketPlace.Web.ControllersApi
         [HttpGet]
         public Tuple<bool, string> FileVerify(string FilePath, string FileName, string PeriodPublicId)
         {
-            var Excel = new FileInfo(FilePath);
-
-            Tuple<bool, string> oReturn = new Tuple<bool, string>(false, "");
-            List<PlanModel> oCurrentPeriodList = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetCurrenPeriod(SessionModel.CurrentCompany.CompanyPublicId, true);
-            using (var package = new ExcelPackage(Excel))
+            try
             {
-                // Get the work book in the file
-                ExcelWorkbook workBook = package.Workbook;
+                var Excel = new FileInfo(FilePath);
 
-                if (workBook != null)
+                Tuple<bool, string> oReturn = new Tuple<bool, string>(false, "");
+                List<PlanModel> oCurrentPeriodList = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetCurrenPeriod(SessionModel.CurrentCompany.CompanyPublicId, true);
+                using (var package = new ExcelPackage(Excel))
                 {
-                    object[,] values = (object[,])workBook.Worksheets.First().Cells["A1:C1"].Value;
+                    // Get the work book in the file
+                    ExcelWorkbook workBook = package.Workbook;
 
-                    string UncodifiedObj = new JavaScriptSerializer().Serialize(values);
-                    if (UncodifiedObj.Contains(Models.General.InternalSettings.Instance
-                                    [Models.General.Constants.MP_CP_ColIdNumber].Value)
-                        && UncodifiedObj.Contains(Models.General.InternalSettings.Instance
-                                    [Models.General.Constants.MP_CP_ColIdName].Value))
+                    if (workBook != null)
                     {
-                        //Get The Active Plan By Customer                            
-                        oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries += (workBook.Worksheets[1].Dimension.End.Row - 1);
-                        ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.PeriodoUpsert(oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault());
+                        object[,] values = (object[,])workBook.Worksheets.First().Cells["A1:C1"].Value;
 
-                        oReturn = new Tuple<bool, string>(true, oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries.ToString());                        
-                    }
-                    else
-                    {
-                        oReturn = new Tuple<bool, string>(false, oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries.ToString());
+                        string UncodifiedObj = new JavaScriptSerializer().Serialize(values);
+                        if (UncodifiedObj.Contains(Models.General.InternalSettings.Instance
+                                        [Models.General.Constants.MP_CP_ColIdNumber].Value)
+                            && UncodifiedObj.Contains(Models.General.InternalSettings.Instance
+                                        [Models.General.Constants.MP_CP_ColIdName].Value))
+                        {
+                            //Get The Active Plan By Customer                            
+                            oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries += (workBook.Worksheets[1].Dimension.End.Row - 1);
+                            ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.PeriodoUpsert(oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault());
+
+                            oReturn = new Tuple<bool, string>(true, oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries.ToString());
+                        }
+                        else
+                        {
+                            oReturn = new Tuple<bool, string>(false, oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries.ToString());
+                        }
                     }
                 }
+                return oReturn;
             }
-            return oReturn;            
+            catch (Exception ex)
+            {
+
+                throw ex.InnerException;
+            }
+                     
         }
 
         #endregion Private Functions

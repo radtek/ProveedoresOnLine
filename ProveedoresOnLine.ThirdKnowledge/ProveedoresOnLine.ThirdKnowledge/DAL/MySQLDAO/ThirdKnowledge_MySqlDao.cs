@@ -614,7 +614,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
                                  QueryInfoPublicId = qinfg.Key.QueryInfoPublicId,
                                  QueryPublicId = qinfg.Key.QueryPublicId,
                                  NameResult = qinfg.Key.NameResult,
-                                 IdentificationResult = qinfg.Key.NameResult,
+                                 IdentificationResult = qinfg.Key.IdentificationResult,
                                  Priority = qinfg.Key.Priority,
                                  Peps = qinfg.Key.Peps,
                                  Status = qinfg.Key.Status,

@@ -19,7 +19,7 @@ using System.Data;
 using Nest;
 using ProveedoresOnLine.IndexSearch.Models;
 using System.Threading;
-
+using Autofac;
 
 namespace ProveedoresOnLine.ThirdKnowledgeBatch
 {
@@ -76,7 +76,7 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                                 {
                                     ItemId = (int)ProveedoresOnLine.ThirdKnowledgeBatch.Models.Enumerations.enumThirdKnowledgeQueryStatus.Finalized,
                                 };
-                                oResult.Item2.QueryPublicId  = Task.Run(async () => await ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryCreate(oResult.Item2)).Result;
+                                oResult.Item2.QueryPublicId = Task.Run(async () => await ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryCreate(oResult.Item2)).Result;
                                 ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryUpsert(oResult.Item2);
                                 CreateQueryInfo(oQuery, oResult.Item1);
                                 CreateReadyResultNotification(oQuery);
@@ -279,7 +279,7 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                             oQuery.RelatedQueryInfoModel = new List<TDQueryInfoModel>();
 
                             TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
-                            oInfoCreate.QueryPublicId = oQuery.QueryPublicId;                              
+                            oInfoCreate.QueryPublicId = oQuery.QueryPublicId;
                             oInfoCreate.QueryIdentification = !string.IsNullOrEmpty(x.NUMEIDEN) ? x.NUMEIDEN : string.Empty;
                             oInfoCreate.QueryName = !string.IsNullOrEmpty(x.NOMBRES) ? x.NOMBRES : string.Empty;
                             oInfoCreate.GroupName = "SIN COINCIDENCIAS";
@@ -362,9 +362,24 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
 
             for (int i = 0; i < ExcelDs.Rows.Count; i++)
             {
-                string Name = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeNameCollumn].Value].ToString();
-                string IdentificationNumber = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeIdNumberCollumn].Value].ToString();
+                string PersonType = "";
+                string Name = "";
+                string IdentificationNumber = "";
+                if (ExcelDs.Rows[i].ItemArray.Count() > 2)
+                {
+                    PersonType = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgePersonTypeCollumn].Value].ToString() != null ? "N/A" : ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgePersonTypeCollumn].Value].ToString();
+                    Name = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeNameCollumn].Value].ToString();
+                    IdentificationNumber = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeIdNumberCollumn].Value].ToString();
+                }
+                else
+                {
+                    Name = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeNameCollumn].Value].ToString();
+                    IdentificationNumber = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeIdNumberCollumn].Value].ToString();
+                }
+                if (IdentificationNumber.Contains("-"))               
+                    PersonType = "juridica";
 
+                //Index ThirdKnowledge Search
                 Nest.ISearchResponse<ThirdknowledgeIndexSearchModel> result = ThirdKnowledgeClient.Search<ThirdknowledgeIndexSearchModel>(s => s
                .From(0)
                    .TrackScores(true)
@@ -373,6 +388,19 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                     .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Name)) ||
                             q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
                  ).MinScore(2));
+                //Search Proc 
+                //JudiciaProcess
+                List<Tuple<string, List<string>, List<string>>> procResult = new List<Tuple<string, List<string>, List<string>>>();
+                List<Tuple<string, List<string>, List<string>>> ppResult = new List<Tuple<string, List<string>, List<string>>>();
+                List<Tuple<string, List<string>, List<string>>> judProcResult = new List<Tuple<string, List<string>, List<string>>>();
+
+                PersonType = PersonType.ToLower().Trim();
+                if (!string.IsNullOrEmpty(IdentificationNumber))
+                    judProcResult = JudicialProcessSearch(3, Name, IdentificationNumber);
+
+                //Proc Request
+                if (!string.IsNullOrEmpty(IdentificationNumber) && PersonType != "")
+                    procResult = OnLnieSearch(PersonType == "natural" ? 1 : PersonType == "juridica" ? 2 : PersonType == "extranjera" ? 3 : 1, IdentificationNumber);
 
                 if (result.Documents.Count() > 0)
                 {
@@ -404,11 +432,11 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                             oInfoCreate.Enable = true;
                             oInfoCreate.QueryPublicId = Query.QueryPublicId;
                             oInfoCreate.QueryIdentification = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty;
-                            oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(x.TypeId) ? x.TypeId : string.Empty; 
+                            oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(x.TypeId) ? x.TypeId : string.Empty;
                             oInfoCreate.QueryName = !string.IsNullOrEmpty(Name) ? Name : string.Empty;
                             oInfoCreate.IdList = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;
                             oInfoCreate.UpdateDate = !string.IsNullOrEmpty(x.LastModify) ? x.LastModify : string.Empty;
-                            oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(x.TypeId) ? x.TypeId : string.Empty;
+                            oInfoCreate.DocumentType = !string.IsNullOrEmpty(PersonType) ? PersonType : string.Empty;
                             oInfoCreate.Status = !string.IsNullOrEmpty(x.Status) ? x.Status : string.Empty;
                             #region Group
                             oInfoCreate.GroupName = !string.IsNullOrEmpty(x.ListType) &&
@@ -457,7 +485,7 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                                                             || x.ListType == "PANAMA PAPERS"
                                                             || x.ListType == "PARTIDOS Y MOVIMIENTOS POLITICOS"
                                                             || x.ListType == "PEPS INTERNACIONALES" ?
-                                                            x.ListType + " - Criticidad Baja" : "NA"; 
+                                                            x.ListType + " - Criticidad Baja" : "NA";
                             #endregion
                             oInfoCreate.GroupId = !string.IsNullOrEmpty(x.Code) ? x.Code : string.Empty;
                             oInfoCreate.IdList = !string.IsNullOrEmpty(x.TableCodeID) ? x.TableCodeID : string.Empty;
@@ -466,7 +494,7 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                             oInfoCreate.ListName = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;
                             oInfoCreate.MoreInfo = x.RelatedWiht + " " + x.ORoldescription1 + " " + x.ORoldescription2;
                             oInfoCreate.Zone = !string.IsNullOrEmpty(x.NationalitySourceCountry) ? x.NationalitySourceCountry : string.Empty;
-                            
+
                             //Create Info Conincidences                                        
                             oCoincidences.Add(new Tuple<string, string>(IdentificationNumber, Name));
 
@@ -474,10 +502,96 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                             return true;
                         });
                 }
+                if (procResult != null && procResult.Count > 0)
+                {
+                    string detailMoreInfo = "";
+                    procResult.All(x =>
+                    {
+                        x.Item3.All(p =>
+                        {
+                            detailMoreInfo += p + ", ";
+                            return true;
+                        });
+                        detailMoreInfo += " - ";
+
+                        return true;
+                    });
+
+                    TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
+                    {
+                        AKA = string.Empty,
+                        DocumentType = PersonType,
+                        Offense = "Presenta Antecedentes Procuraduría Nacional",
+                        NameResult = Name,
+                        MoreInfo = detailMoreInfo,
+                        Priority = "1",
+                        Status = "Vigente",
+                        Enable = true,
+                        QueryPublicId = Query.QueryPublicId,
+                        QueryIdentification = IdentificationNumber,
+                        IdentificationResult = IdentificationNumber,
+                        QueryName = Name,
+                        IdList = "Procuraduría General de la Nación",
+                        IdentificationNumber = IdentificationNumber,
+                        GroupName = "Procuraduría General de la Nación - Criticidad Media",
+                        Link = "https://www.procuraduria.gov.co/CertWEB/Certificado.aspx?tpo=1",
+                        ListName = "Procuraduría General de la Nación",
+                        ChargeOffense = "Presenta antecedentes en la Prcuraduría General de la Nación.",
+                        Zone = "Colombia",
+                        ElasticId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumElasticGroupId.ProcElasticId,
+                    };
+
+                    Query.RelatedQueryInfoModel.Add(oInfoCreate);
+                }
+
+                if (judProcResult != null && judProcResult.Count > 0)
+                {
+                    TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
+                    {
+                        AKA = string.Empty,
+                        DocumentType = PersonType,
+                        Offense = "El tercero " + judProcResult.FirstOrDefault().Item2[1] + "Con Identificación No. " + judProcResult.FirstOrDefault().Item2[0] + "Presenta Antecedentes Judiciales",
+                        NameResult = judProcResult.FirstOrDefault().Item2[1],
+                        MoreInfo = "El tercero " + judProcResult.FirstOrDefault().Item2[1] + "Con Identificación No. " + judProcResult.FirstOrDefault().Item2[0] + "Presenta Antecedentes Judiciales vigentes de acuerdo a la Fuente oficial de la RAMA JUDICIAL DEL PODER PUBLICO, CONSEJO SUPERIOR DE LA JUDICATURA y/o JUZGADOS DE EJECUCION DE PENAS Y MEDIDAS DE SEGURIDAD",
+                        Priority = "2",
+                        Status = "Vigente",
+                        Enable = true,
+                        QueryPublicId = Query.QueryPublicId,
+                        QueryIdentification = IdentificationNumber,
+                        IdentificationResult = IdentificationNumber,
+                        FullName = judProcResult.FirstOrDefault().Item2[1],
+                        QueryName = Name,
+                        IdList = "RAMA JUDICIAL DEL PODER PUBLICO",
+                        IdentificationNumber = IdentificationNumber,
+                        GroupName = "RAMA JUDICIAL DEL PODER PUBLICO - Criticidad Media",
+                        Link = judProcResult.FirstOrDefault().Item1,
+                        ListName = "RAMA JUDICIAL DEL PODER PUBLICO, CONSEJO SUPERIOR DE LA JUDICATURA y/o JUZGADOS DE EJECUCION DE PENAS Y MEDIDAS DE SEGURIDAD",
+                        Zone = "N/A",
+                        ChargeOffense = "El tercero " + judProcResult.FirstOrDefault().Item2[1] + "Con Identificación No. " + judProcResult.FirstOrDefault().Item2[0] + "Presenta Antecedentes Judiciales",
+                        ElasticId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumElasticGroupId.JudicialProces,
+                    };
+                    Query.RelatedQueryInfoModel.Add(oInfoCreate);
+                }
             }
             oReturn = new Tuple<List<Tuple<string, string>>, TDQueryModel>(oCoincidences, Query);
             return oReturn;
         }
         #endregion
+
+        public static List<Tuple<string, List<string>, List<string>>> JudicialProcessSearch(int IdType, string Name, string IndentificationNumber)
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterType<OnlineSearch.Core.ProveedoresOnLineJudicialProcess>().As<OnlineSearch.Interfaces.IOnLineSearch>();
+            var container = builder.Build();
+            return container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber).Result;
+        }
+        public static List<Tuple<string, List<string>, List<string>>> OnLnieSearch(int IdType, string IndentificationNumber)
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterType<OnlineSearch.Core.ProveedoresOnLineProcImplement>().As<OnlineSearch.Interfaces.IOnLineSearch>();
+
+            var container = builder.Build();
+            return container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, "", IndentificationNumber).Result;
+        }
     }
 }

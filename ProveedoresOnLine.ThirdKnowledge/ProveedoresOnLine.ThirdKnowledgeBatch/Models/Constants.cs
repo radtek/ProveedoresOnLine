@@ -34,6 +34,8 @@
 
         public const string C_Settings_ThirdKnowledgeIndex = "ThirdknowledgeIndex";
 
+        public const string C_Settings_ThirdKnowledgePersonTypeCollumn = "ThirdKnowledgePersonType";
+
         public const string C_Settings_ThirdKnowledgeNameCollumn = "ThirdKnowledgeName";
 
         public const string C_Settings_ThirdKnowledgeIdNumberCollumn = "ThirdKnowledgeIdentificationNumber";
