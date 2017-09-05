@@ -376,18 +376,34 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                     Name = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeNameCollumn].Value].ToString();
                     IdentificationNumber = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeIdNumberCollumn].Value].ToString();
                 }
-                if (IdentificationNumber.Contains("-"))               
+                if (IdentificationNumber.Contains("-"))
                     PersonType = "juridica";
 
                 //Index ThirdKnowledge Search
-                Nest.ISearchResponse<ThirdknowledgeIndexSearchModel> result = ThirdKnowledgeClient.Search<ThirdknowledgeIndexSearchModel>(s => s
-               .From(0)
-                   .TrackScores(true)
-                   .From(page)
-                   .Size(10)
-                    .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Name)) ||
-                            q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
-                 ).MinScore(2));
+                Nest.ISearchResponse<ThirdknowledgeIndexSearchModel> result = null;
+                if (!string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(IdentificationNumber))
+                {
+                    result = ThirdKnowledgeClient.Search<ThirdknowledgeIndexSearchModel>(s => s
+                      .From(0)
+                          .TrackScores(true)
+                          .From(page)
+                          .Size(10)
+                           .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Name)) &&
+                                   q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
+                        ).MinScore(2));
+                }
+                else
+                {
+                    result = ThirdKnowledgeClient.Search<ThirdknowledgeIndexSearchModel>(s => s
+                        .From(0)
+                            .TrackScores(true)
+                            .From(page)
+                            .Size(10)
+                         .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Name)) ||
+                                 q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
+                      ).MinScore(2));
+                }
+
                 //Search Proc 
                 //JudiciaProcess
                 List<Tuple<string, List<string>, List<string>>> procResult = new List<Tuple<string, List<string>, List<string>>>();
