@@ -69,6 +69,9 @@ namespace ProveedoresOnLine.Company.Models.Company
         [Nested]
         public List<CustomerProviderIndexModel> oCustomerProviderIndexModel { get; set; }
 
+        [Nested]
+        public List<CalificationIndexModel> oCalificationIndexModel { get; set; }
+
         public CompanyIndexModel()
         {
 

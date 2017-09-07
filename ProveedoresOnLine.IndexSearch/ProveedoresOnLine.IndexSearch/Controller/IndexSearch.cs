@@ -156,6 +156,9 @@ namespace ProveedoresOnLine.IndexSearch.Controller
             return true;
         }
 
+        //TODO: function to get all the Calification projects for client
+
+
         #endregion
 
         #region Survey Index

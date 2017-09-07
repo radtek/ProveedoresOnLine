@@ -951,6 +951,8 @@
         ForeignNoContact = 902010,
         NationalInactive = 902011,
         ForeignInactive = 902012,
+        SpecialNational = 902013,
+        SpecialInternational = 902014,
     }
 
     #endregion
