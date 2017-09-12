@@ -82,7 +82,6 @@
     <Compile Include="DAL\MySQLDAO\Company_MySqlDao.cs" />
     <Compile Include="Interfaces\ICompanyData.cs" />
     <Compile Include="Models\Company\CalificationIndexModel.cs" />
-    <Compile Include="Models\Company\CalificationValidateModel.cs" />
     <Compile Include="Models\Company\CompanyIndexModel.cs" />
     <Compile Include="Models\Company\CompanyModel.cs" />
     <Compile Include="Models\Company\CustomerProviderIndexModel.cs" />
