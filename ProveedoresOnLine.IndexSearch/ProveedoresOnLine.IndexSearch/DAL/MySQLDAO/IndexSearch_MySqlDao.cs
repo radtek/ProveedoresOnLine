@@ -46,7 +46,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                 response.DataSetResult.Tables[2].Rows.Count > 0)
             {
                 oReturn =
-                    (from ci in response.DataSetResult.Tables[1].AsEnumerable()
+                    (from ci in response.DataSetResult.Tables[2].AsEnumerable()
                      where !ci.IsNull("CompanyPublicId")
                      group ci by new
                      {
@@ -111,7 +111,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                              }).ToList(),
 
                         oCalificationIndexModel =
-                            (from cp in response.DataSetResult.Tables[2].AsEnumerable()
+                            (from cp in response.DataSetResult.Tables[1].AsEnumerable()
                              where !cp.IsNull("CustomerPublicId") &&
                                    cp.Field<string>("ProviderPublicId") == cig.Key.CompanyPublicId
                              group cp by new
@@ -131,7 +131,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                                  CustomerPublicId = cpg.Key.CustomerPublicId,
                                  ProviderPublicId = cpg.Key.ProviderPublicId,
                                  TotalScore = cpg.Key.TotalScore,
-                                 
+                                 TotalResult = cpg.Key.Result
                              }).ToList()
                      }).ToList();
             }
