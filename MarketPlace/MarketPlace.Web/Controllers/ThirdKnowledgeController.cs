@@ -638,7 +638,7 @@ namespace MarketPlace.Web.Controllers
                 oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("Criticidad Alta")));
                 oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("Criticidad Media")));
                 oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("Criticidad Baja")));
-                oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("SIN COINCIDENCIAS")));
+                oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("SIN COINCIDENCIAS")));         
                 oModel.Group = oGroupOrder;
             }
 

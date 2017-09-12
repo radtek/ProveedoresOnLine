@@ -76,7 +76,7 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                                 {
                                     ItemId = (int)ProveedoresOnLine.ThirdKnowledgeBatch.Models.Enumerations.enumThirdKnowledgeQueryStatus.Finalized,
                                 };
-                                oResult.Item2.QueryPublicId = Task.Run(async () => await ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryCreate(oResult.Item2)).Result;
+                                oResult.Item2.QueryPublicId = ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryCreate(oResult.Item2).Result;
                                 ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryUpsert(oResult.Item2);
                                 CreateQueryInfo(oQuery, oResult.Item1);
                                 CreateReadyResultNotification(oQuery);
@@ -114,7 +114,7 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
 
                                 #endregion
 
-                                LogFile("Success:: QueryPublicId '" + oQuery.QueryPublicId + "' :: Validation is success");
+                                LogFile("Success:: QueryPublicId '" + oQuery.QueryPublicId +  "' :: Validation is success");
                             }
                             else
                             {
@@ -275,20 +275,24 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                     {
                         oExcelToProcessInfo.All(x =>
                         {
-                            //Create QueryInfo
-                            oQuery.RelatedQueryInfoModel = new List<TDQueryInfoModel>();
-
-                            TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
-                            oInfoCreate.QueryPublicId = oQuery.QueryPublicId;
-                            oInfoCreate.QueryIdentification = !string.IsNullOrEmpty(x.NUMEIDEN) ? x.NUMEIDEN : string.Empty;
-                            oInfoCreate.QueryName = !string.IsNullOrEmpty(x.NOMBRES) ? x.NOMBRES : string.Empty;
-                            oInfoCreate.GroupName = "SIN COINCIDENCIAS";
-                            oQuery.RelatedQueryInfoModel.Add(oInfoCreate);
-                            Monitor.Enter(oQuery);
-                            lock (oQuery)
+                            if (!string.IsNullOrEmpty(x.NOMBRES) && !string.IsNullOrEmpty(x.NUMEIDEN))
                             {
-                                ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryUpsert(oQuery);
+                                //Create QueryInfo
+                                oQuery.RelatedQueryInfoModel = new List<TDQueryInfoModel>();
+
+                                TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
+                                oInfoCreate.QueryPublicId = oQuery.QueryPublicId;
+                                oInfoCreate.QueryIdentification = !string.IsNullOrEmpty(x.NUMEIDEN) ? x.NUMEIDEN : string.Empty;
+                                oInfoCreate.QueryName = !string.IsNullOrEmpty(x.NOMBRES) ? x.NOMBRES : string.Empty;
+                                oInfoCreate.GroupName = "SIN COINCIDENCIAS";
+                                oQuery.RelatedQueryInfoModel.Add(oInfoCreate);
+                                Monitor.Enter(oQuery);
+                                lock (oQuery)
+                                {
+                                    ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryUpsert(oQuery);
+                                }
                             }
+                           
                             return true;
                         });
                     }
@@ -340,6 +344,7 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                         }
                     }
                 }
+                
                 return DT_Excel;
             }
         }
@@ -378,11 +383,12 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                 }
                 if (IdentificationNumber.Contains("-"))
                     PersonType = "juridica";
-
+                bool validate = false;
                 //Index ThirdKnowledge Search
                 Nest.ISearchResponse<ThirdknowledgeIndexSearchModel> result = null;
                 if (!string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(IdentificationNumber))
                 {
+                    validate = true;
                     result = ThirdKnowledgeClient.Search<ThirdknowledgeIndexSearchModel>(s => s
                       .From(0)
                           .TrackScores(true)
@@ -392,15 +398,28 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                                    q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
                         ).MinScore(2));
                 }
-                else
+                else if (string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(IdentificationNumber))                
                 {
+                    validate = true;
                     result = ThirdKnowledgeClient.Search<ThirdknowledgeIndexSearchModel>(s => s
                         .From(0)
                             .TrackScores(true)
                             .From(page)
                             .Size(10)
-                         .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Name)) ||
+                         .Query(q => 
                                  q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
+                      ).MinScore(2));
+                }
+                else if (!string.IsNullOrEmpty(Name) && string.IsNullOrEmpty(IdentificationNumber))
+                {
+                    validate = true;
+                    result = ThirdKnowledgeClient.Search<ThirdknowledgeIndexSearchModel>(s => s
+                        .From(0)
+                            .TrackScores(true)
+                            .From(page)
+                            .Size(10)
+                         .Query(q =>
+                                 q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Name))
                       ).MinScore(2));
                 }
 
@@ -409,16 +428,18 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                 List<Tuple<string, List<string>, List<string>>> procResult = new List<Tuple<string, List<string>, List<string>>>();
                 List<Tuple<string, List<string>, List<string>>> ppResult = new List<Tuple<string, List<string>, List<string>>>();
                 List<Tuple<string, List<string>, List<string>>> judProcResult = new List<Tuple<string, List<string>, List<string>>>();
+                if (validate)
+                {
+                    PersonType = PersonType.ToLower().Trim();
+                    if (!string.IsNullOrEmpty(IdentificationNumber))
+                        judProcResult = JudicialProcessSearch(3, Name, IdentificationNumber);
 
-                PersonType = PersonType.ToLower().Trim();
-                if (!string.IsNullOrEmpty(IdentificationNumber))
-                    judProcResult = JudicialProcessSearch(3, Name, IdentificationNumber);
+                    //Proc Request
+                    if (!string.IsNullOrEmpty(IdentificationNumber) && PersonType != "")
+                        procResult = OnLnieSearch(PersonType == "natural" ? 1 : PersonType == "juridica" ? 2 : PersonType == "extranjera" ? 3 : 1, IdentificationNumber);
+                }                
 
-                //Proc Request
-                if (!string.IsNullOrEmpty(IdentificationNumber) && PersonType != "")
-                    procResult = OnLnieSearch(PersonType == "natural" ? 1 : PersonType == "juridica" ? 2 : PersonType == "extranjera" ? 3 : 1, IdentificationNumber);
-
-                if (result.Documents.Count() > 0)
+                if (result != null && result.Documents.Count() > 0)
                 {
                     result.Documents.All(x =>
                         {
