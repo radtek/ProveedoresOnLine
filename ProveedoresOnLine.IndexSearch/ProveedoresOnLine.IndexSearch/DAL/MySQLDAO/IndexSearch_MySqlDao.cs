@@ -41,7 +41,9 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                 response.DataSetResult.Tables[0] != null &&
                 response.DataSetResult.Tables[0].Rows.Count > 0 &&
                 response.DataSetResult.Tables[1] != null &&
-                response.DataSetResult.Tables[1].Rows.Count > 0)
+                response.DataSetResult.Tables[1].Rows.Count > 0 &&
+                response.DataSetResult.Tables[2] != null &&
+                response.DataSetResult.Tables[2].Rows.Count > 0)
             {
                 oReturn =
                     (from ci in response.DataSetResult.Tables[1].AsEnumerable()
@@ -106,6 +108,30 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                                  StatusId = cpg.Key.StatusId,
                                  Status = cpg.Key.Status,
                                  CustomerProviderEnable = cpg.Key.CustomerProviderEnable,
+                             }).ToList(),
+
+                        oCalificationIndexModel =
+                            (from cp in response.DataSetResult.Tables[2].AsEnumerable()
+                             where !cp.IsNull("CustomerPublicId") &&
+                                   cp.Field<string>("ProviderPublicId") == cig.Key.CompanyPublicId
+                             group cp by new
+                             {
+                                 CalificationProjectConfigId = !cp.IsNull("CalificationProjectConfigId") ? cp.Field<int>("CalificationProjectConfigId") : 0,
+                                 CalificationProjectName  = !cp.IsNull("CalificationProjectConfigName") ? cp.Field<string>("CalificationProjectConfigName") : "",
+                                 CustomerPublicId = !cp.IsNull("CustomerPublicId") ? cp.Field<string>("CustomerPublicId") : "",
+                                 ProviderPublicId = !cp.IsNull("ProviderPublicId") ? cp.Field<string>("ProviderPublicId") : "",
+                                 TotalScore = !cp.IsNull("TotalScore") ? cp.Field<int>("TotalScore") : 0,
+                                 Result = !cp.IsNull("Result") ? cp.Field<string>("Result") : "",
+                             }
+                                 into cpg
+                             select new CalificationIndexModel()
+                             {
+                                 CalificationaProjectId = cpg.Key.CalificationProjectConfigId,
+                                 CalificationProjectName = cpg.Key.CalificationProjectName,
+                                 CustomerPublicId = cpg.Key.CustomerPublicId,
+                                 ProviderPublicId = cpg.Key.ProviderPublicId,
+                                 TotalScore = cpg.Key.TotalScore,
+                                 
                              }).ToList()
                      }).ToList();
             }
