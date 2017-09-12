@@ -27,7 +27,6 @@ namespace ProveedoresOnLine.Company.Models.Company
 
         [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
         public string TotalResult { get; set; }
-
-        public List<CalificationValidateModel> oConfigValidationResult { get; set; }
+        
     }
 }
