@@ -6312,43 +6312,46 @@ namespace MarketPlace.Web.Controllers
 
         private static void SendProcablesMessage(NotificationModel oDataMessage)
         {
-
-            #region Email
-
-            //Create message object
-            MessageModule.Client.Models.ClientMessageModel oMessageToSend = new MessageModule.Client.Models.ClientMessageModel()
+            if (!string.IsNullOrEmpty(oDataMessage.User))
             {
-                Agent = Models.General.InternalSettings.Instance[Models.General.Constants.N_Survey_Procables_Mail].Value,
-                User = oDataMessage.User,
-                ProgramTime = DateTime.Now,
-                MessageQueueInfo = new List<Tuple<string, string>>(),
-            };
+                #region Email
 
-            oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("To", "diego,jaramillo@proveedoresonline.co"));
-            oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("InfoFileUrl", oDataMessage.Url));
+                //Create message object
+                MessageModule.Client.Models.ClientMessageModel oMessageToSend = new MessageModule.Client.Models.ClientMessageModel()
+                {
+                    Agent = Models.General.InternalSettings.Instance[Models.General.Constants.N_Survey_Procables_Mail].Value,
+                    User = oDataMessage.User,
+                    ProgramTime = DateTime.Now,
+                    MessageQueueInfo = new List<Tuple<string, string>>(),
+                };
 
-            //get customer info
-            oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                ("CustomerLogo", oDataMessage.CompanyLogo));
+                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("To", "diego,jaramillo@proveedoresonline.co"));
+                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("InfoFileUrl", oDataMessage.Url));
 
-            oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                ("CustomerName", oDataMessage.CompanyName));
+                //get customer info
+                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
+                    ("CustomerLogo", oDataMessage.CompanyLogo));
 
-            oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                ("CustomerIdentificationTypeName", oDataMessage.IdentificationType));
+                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
+                    ("CustomerName", oDataMessage.CompanyName));
 
-            oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                ("CustomerIdentificationNumber", oDataMessage.IdentificationNumber));
+                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
+                    ("CustomerIdentificationTypeName", oDataMessage.IdentificationType));
 
-            MessageModule.Client.Controller.ClientController.CreateMessage(oMessageToSend);
+                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
+                    ("CustomerIdentificationNumber", oDataMessage.IdentificationNumber));
 
-            #endregion
+                MessageModule.Client.Controller.ClientController.CreateMessage(oMessageToSend);
 
-            #region Notification
+                #endregion
 
-            oDataMessage.NotificationId = MessageModule.Client.Controller.ClientController.NotificationUpsert(oDataMessage);
+                #region Notification
 
-            #endregion
+                oDataMessage.NotificationId = MessageModule.Client.Controller.ClientController.NotificationUpsert(oDataMessage);
+
+                #endregion
+            }
+
 
         }
         #endregion Pivate Functions
