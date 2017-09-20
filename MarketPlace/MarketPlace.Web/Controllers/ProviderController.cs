@@ -73,6 +73,8 @@ namespace MarketPlace.Web.Controllers
                     BlackListFilter = new List<ElasticSearchFilter>(),
                     MyProvidersFilter = new List<ElasticSearchFilter>(),
                     OtherProvidersFilter = new List<ElasticSearchFilter>(),
+                    CalificationResultFilter = new List<ElasticSearchFilter>(),
+                    CalificationTypeProcessFilter = new List<ElasticSearchFilter>(),
                 };
 
                 #region ElasticSearch
@@ -101,6 +103,18 @@ namespace MarketPlace.Web.Controllers
                                 )
                             )
                         )
+                        .Nested("calification_avg", x => x.
+                            Path(p => p.oCalificationIndexModel).
+                                Aggregations(aggs => aggs.Terms("calification", term => term.Field(fi => fi.oCalificationIndexModel.First().CalificationProjectName)
+                                )
+                            )
+                        ).Nested("calification_result_avg", x => x.
+                            Path(p => p.oCalificationIndexModel).
+                                Aggregations(aggs => aggs.Terms("calification_result", term => term.Field(fi => fi.oCalificationIndexModel.First().TotalResult)
+                                )
+                            )
+                        )
+
                     .Terms("ica", aggv => aggv
                         .Field(fi => fi.ICAId))
                     .Terms("city", aggv => aggv
@@ -520,6 +534,22 @@ namespace MarketPlace.Web.Controllers
                     });
                 }
 
+
+                #endregion
+
+                #region Calification Type
+
+                oModel.ElasticCompanyModel.Aggs.Nested("calification_avg").Terms("calification").Buckets.
+                      Where(x => x.Key == SessionModel.CurrentCompany.CompanyPublicId.ToLower()).Select(x => x).ToList().All(x =>
+                      {
+                          oModel.CalificationTypeProcessFilter.Add(new ElasticSearchFilter
+                          {
+                              FilterCount = (int)x.DocCount,
+                              FilterType = x.Key,
+                          });
+                          ProvidersForClientcount = (int)x.DocCount;
+                          return true;
+                      });
 
                 #endregion
 
