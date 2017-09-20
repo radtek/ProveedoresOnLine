@@ -1,4 +1,5 @@
-﻿using ProveedoresOnLine.Company.Models.Role;
+﻿using ProveedoresOnLine.Company.Models.Company;
+using ProveedoresOnLine.Company.Models.Role;
 using ProveedoresOnLine.Company.Models.Util;
 using System;
 using System.Collections.Generic;
@@ -389,6 +390,11 @@ namespace ProveedoresOnLine.Company.DAL.Controller
         public void CompanyActivityInfoIndex()
         {
             DataFactory.CompanyActivityInfoIndex();
+        }
+
+        public List<CalificationIndexModel> CalificationGetAll()
+        {
+           return DataFactory.CalificationGetAll();
         }
 
         #endregion

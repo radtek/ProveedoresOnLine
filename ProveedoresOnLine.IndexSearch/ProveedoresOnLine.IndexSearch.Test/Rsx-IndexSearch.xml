@@ -2,7 +2,7 @@
 <Settings>
   <IndexSearch>
     <key name="ElasticSearch_Url">http://192.168.0.94:9200/</key>
-    <key name="CompanyIndex">prod_companyindex</key>
+    <key name="CompanyIndex">dev_companyindex</key>
     <key name="CompanyCustomerIndex">prod_companycustomerindex</key>
     <key name="CompanySurveyIndex">prod_companysurveyindex</key>
     <key name="SurveyIndex">prod_surveyindex</key>

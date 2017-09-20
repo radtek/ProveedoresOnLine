@@ -422,6 +422,8 @@
         SurveyType = 111012,
         SurveyRank = 111013,
         SurveyEvaluator = 111014,
+        CalificationType  = 111019,
+        CalificationResult = 111020,
 
         ProviderStatus = 112001,
         ProviderRate = 112002,

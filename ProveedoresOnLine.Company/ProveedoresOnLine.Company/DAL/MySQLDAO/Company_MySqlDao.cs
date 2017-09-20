@@ -1624,7 +1624,7 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
             }
             return oReturn;
         }
-        
+
         #endregion
 
         #region Util MP
@@ -2443,13 +2443,13 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
                                          RoleCompanyId = rc.Field<int>("RoleCompanyId"),
                                          RoleCompanyName = rc.Field<string>("RoleCompanyName"),
                                          ParentRoleCompany = rc.Field<int?>("ParentRoleCompany"),
-                                     }into rcg
+                                     } into rcg
                                      select new RoleCompanyModel()
                                      {
                                          RoleCompanyId = rcg.Key.RoleCompanyId,
                                          RoleCompanyName = rcg.Key.RoleCompanyName,
                                          ParentRoleCompany = rcg.Key.ParentRoleCompany,
-                                         RoleModule = 
+                                         RoleModule =
                                             (from rm in response.DataTableResult.AsEnumerable()
                                              where !rm.IsNull("RoleModuleId") &&
                                                     rm.Field<int>("RoleCompanyId") == rcg.Key.RoleCompanyId
@@ -2459,7 +2459,7 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
                                                  RoleModuleTypeId = rm.Field<int>("RoleModuleTypeId"),
                                                  RoleModuleTypeName = rm.Field<string>("RoleModuleTypeName"),
                                                  RoleModuleName = rm.Field<string>("RoleModuleName"),
-                                             }into rmg
+                                             } into rmg
                                              select new RoleModuleModel()
                                              {
                                                  RoleModuleId = rmg.Key.RoleModuleId,
@@ -2479,7 +2479,7 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
                                                          ModuleOptionTypeId = mo.Field<int>("ModuleOptionTypeId"),
                                                          ModuleOptionTypeName = mo.Field<string>("ModuleOptionTypeName"),
                                                          ModuleOptionName = mo.Field<string>("ModuleOptionName"),
-                                                     }into mog
+                                                     } into mog
                                                      select new GenericItemModel()
                                                      {
                                                          ItemId = mog.Key.ModuleOptionId,
@@ -2500,13 +2500,13 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
                                                                  ModuleOptionIngoTypeName = moi.Field<string>("ModuleOptionIngoTypeName"),
                                                                  ModuleOptionInfoValue = moi.Field<string>("ModuleOptionInfoValue"),
                                                                  ModuleOptionInfoLargeValue = moi.Field<string>("ModuleOptionInfoLargeValue"),
-                                                             }into moig
+                                                             } into moig
                                                              select new GenericItemInfoModel()
                                                              {
                                                                  ItemInfoId = moig.Key.ModuleOptionInfoId,
                                                                  ItemInfoType = new CatalogModel()
                                                                  {
-                                                                     ItemId =  moig.Key.ModuleOptionInfoTypeId,
+                                                                     ItemId = moig.Key.ModuleOptionInfoTypeId,
                                                                      ItemName = moig.Key.ModuleOptionIngoTypeName,
                                                                  },
                                                                  Value = moig.Key.ModuleOptionInfoValue,
@@ -2524,7 +2524,7 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
                                                  ReportRoleTypeId = rr.Field<int>("ReportRoleTypeId"),
                                                  ReportRoleTypeName = rr.Field<string>("ReportRoleTypeName"),
                                                  ReportRoleName = rr.Field<string>("ReportRoleName"),
-                                             }into rrg
+                                             } into rrg
                                              select new GenericItemModel()
                                              {
                                                  ItemId = rrg.Key.ReportRoleId,
@@ -2640,7 +2640,7 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
 
             return Convert.ToInt32(response.ScalarResult);
         }
-        
+
         public int ReportRoleUpsert(int RoleCompanyId, int? ReportRoleId, int ReportRoleType, string ReportRole, bool Enable)
         {
             List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
@@ -2650,7 +2650,7 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
             lstParams.Add(DataInstance.CreateTypedParameter("vReportRoleType", ReportRoleType));
             lstParams.Add(DataInstance.CreateTypedParameter("vReportRole", ReportRole));
             lstParams.Add(DataInstance.CreateTypedParameter("vEnable", Enable == true ? 1 : 0));
-           
+
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
                 CommandExecutionType = ADO.Models.enumCommandExecutionType.NonQuery,
@@ -3063,6 +3063,49 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
             });
         }
 
+
+        public List<CalificationIndexModel> CalificationGetAll()
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
+                        
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "C_IndexCalificationProject",
+                CommandType = System.Data.CommandType.StoredProcedure,
+                Parameters = lstParams
+            });
+
+            List<CalificationIndexModel> oReturn = null;
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn =
+                          (from cp in response.DataTableResult.AsEnumerable()
+                           where !cp.IsNull("CustomerPublicId")
+                           group cp by new
+                           {
+                               CalificationProjectConfigId = !cp.IsNull("CalificationProjectConfigId") ? cp.Field<int>("CalificationProjectConfigId") : 0,
+                               CalificationProjectName = !cp.IsNull("CalificationProjectConfigName") ? cp.Field<string>("CalificationProjectConfigName") : "",
+                               CustomerPublicId = !cp.IsNull("CustomerPublicId") ? cp.Field<string>("CustomerPublicId") : "",
+                               ProviderPublicId = !cp.IsNull("ProviderPublicId") ? cp.Field<string>("ProviderPublicId") : "",
+                               TotalScore = !cp.IsNull("TotalScore") ? cp.Field<int>("TotalScore") : 0,
+                               Result = !cp.IsNull("Result") ? cp.Field<string>("Result") : "",
+                           }
+                               into cpg
+                           select new CalificationIndexModel()
+                           {
+                               CalificationaProjectId = cpg.Key.CalificationProjectConfigId,
+                               CalificationProjectName = cpg.Key.CalificationProjectName,
+                               CustomerPublicId = cpg.Key.CustomerPublicId,
+                               ProviderPublicId = cpg.Key.ProviderPublicId,
+                               TotalScore = cpg.Key.TotalScore,
+                               TotalResult = cpg.Key.Result
+                           }).ToList();
+            }
+            return oReturn;
+        }
         #endregion
     }
 }

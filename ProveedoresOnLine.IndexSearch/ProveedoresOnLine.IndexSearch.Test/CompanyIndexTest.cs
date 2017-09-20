@@ -29,5 +29,11 @@ namespace ProveedoresOnLine.IndexSearch.Test
             ProveedoresOnLine.CompanyIndexSearch.CompanyIndexSearchProcess.CustomerProviderIdexationFunction();
         }
 
+        [TestMethod]
+        public void CalificationIdexationFunction()
+        {
+            ProveedoresOnLine.CompanyIndexSearch.CompanyIndexSearchProcess.CalificationIdexationFunction();
+        }
+
     }
 }

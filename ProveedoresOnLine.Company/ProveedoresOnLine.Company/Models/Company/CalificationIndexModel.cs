@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace ProveedoresOnLine.Company.Models.Company
 {
-    [ElasticsearchType(Name = "calification_index")]
+    [ElasticsearchType(Name = "Calification_Info")]
     public class CalificationIndexModel
     {
+        
         public CalificationIndexModel()
         {
 
@@ -17,7 +18,7 @@ namespace ProveedoresOnLine.Company.Models.Company
         [Number]
         public int CalificationaProjectId { get; set; }
 
-        [String(Index = FieldIndexOption.Analyzed)]
+        [String]
         public string CalificationProjectName { get; set; }
 
         [String]
@@ -29,7 +30,7 @@ namespace ProveedoresOnLine.Company.Models.Company
         [Number]
         public double TotalScore { get; set; }
 
-        [String(Index = FieldIndexOption.Analyzed)]
+        [String]
         public string TotalResult { get; set; }
         
     }
