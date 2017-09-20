@@ -76,7 +76,7 @@ namespace ProveedoresOnLine.IndexSearch.Test
             Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
             var settings = new ConnectionSettings(node);
             settings.DisableDirectStreaming(true);
-            settings.DefaultIndex("prod_companyindex");
+            settings.DefaultIndex("dev_companyindex");
             #region Original Search
             ElasticClient CustomerProviderClient = new ElasticClient(settings);
 
@@ -86,18 +86,29 @@ namespace ProveedoresOnLine.IndexSearch.Test
                 .Size(20)
                 .Aggregations
                     (agg => agg
-                        .Nested("status_avg", x => x.
-                            Path(p => p.oCustomerProviderIndexModel.Where(xx => xx.CustomerPublicId == "26D388E3").Select(xx => xx).ToArray()).
-                                Aggregations(aggs => aggs.Terms("status", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().StatusId)
-                                )
-                            )
-                        )
+                        //.Nested("status_avg", x => x.
+                        //    Path(p => p.oCustomerProviderIndexModel.Where(xx => xx.CustomerPublicId == "26D388E3").Select(xx => xx).ToArray()).
+                        //        Aggregations(aggs => aggs.Terms("status", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().StatusId)
+                        //        )
+                        //    )
+                        //)
                     .Nested("myproviders_avg", x => x.
                         Path(p => p.oCustomerProviderIndexModel).
                             Aggregations(aggs => aggs.Terms("myproviders", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().CustomerPublicId)
                             )
                         )
                     )
+                      .Nested("calification_avg", x => x.
+                            Path(p => p.oCalificationIndexModel).
+                                Aggregations(aggs => aggs.Terms("calification", term => term.Field(fi => fi.oCalificationIndexModel.First().CalificationProjectName)
+                                )
+                            )
+                        ).Nested("calification_result_avg", x => x.
+                            Path(p => p.oCalificationIndexModel).
+                                Aggregations(aggs => aggs.Terms("calification_result", term => term.Field(fi => fi.oCalificationIndexModel.First().TotalResult)
+                                )
+                            )
+                        )
                     .Terms("ica", aggv => aggv
                         .Field(fi => fi.ICAId))
                     .Terms("city", aggv => aggv
@@ -198,12 +209,13 @@ namespace ProveedoresOnLine.IndexSearch.Test
                         #endregion
 
                         qb &= q.Nested(n => n
-                           .Path(p => p.oCustomerProviderIndexModel)
+                           .Path(p => p.oCalificationIndexModel)
                                .Query(fq => fq
                                    .Match(match => match
-                                   .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                                   .Query("26D388E3"))
+                                   .Field(field => field.oCalificationIndexModel.First().CalificationProjectName)
+                                   .Query("proceso_de_calificacion_de_proveedores_online"))
                                ));
+                        
                         return qb;
                     })
                     )))
@@ -546,9 +558,164 @@ namespace ProveedoresOnLine.IndexSearch.Test
             var Index = client.IndexMany(SurveyndexModelList, "prod_surveyindex");
         }
 
+        [TestMethod]
+        public void CalificationSearch()
+        {
+            Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+            var settings = new ConnectionSettings(node);
+            settings.DisableDirectStreaming(true);
+            settings.DefaultIndex("dev_calificationindex");
+
+            ElasticClient CalificationClient = new ElasticClient(settings);
+            Nest.ISearchResponse<CalificationIndexModel> resultCalification = CalificationClient.Search<CalificationIndexModel>((s => s
+                .From(string.IsNullOrEmpty("1") ? 0 : Convert.ToInt32("1") * 20)
+                .TrackScores(true)
+                .Size(20)
+                .Aggregations
+                    (agg => agg
+                    .Terms("calification_avg", aggv => aggv
+                    .Field(fi => fi.CalificationProjectName))
+                    .Terms("calification_result_avg", aggv => aggv
+                        .Field(fi => fi.TotalResult)))
+                     .Query(q => q.
+                      Filtered(f => f
+                        //.Query(q1 => q.Term(m => m.CustomerPublicId, lstSearchFilter.Where(x => int.Parse(x.Item3) == (int)enumFilterType.OtherProviders).Select(x => x).ToList().Count > 0
+                        //                                                                    ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.CC_CompanyPublicId_Publicar].Value.ToLower() : SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
+                        .Filter(f2 =>
+                        {
+                            QueryContainer qb = null;
+
+                                #region TODO Dvalid if we can drop it
+                                //if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
+                                //{
+                                //    qb &= q.Term(m => m.StatusId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault());
+                                //}
+                                //var settings3 = new ConnectionSettings(node);
+                                //settings3.DisableDirectStreaming(true);
+                                //settings3.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanyIndex].Value);
+
+                                //ElasticClient Providers = new ElasticClient(settings3);
+                                //Nest.ISearchResponse<CompanyIndexModel> resultPrv = Providers.Search<CompanyIndexModel>((t => t
+                                //    .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
+                                //    .TrackScores(true)
+                                //    .Size(9000000)
+                                //    .Query(qw => qw.
+                                //        Filtered(fw => fw
+                                //            .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
+                                //            .Filter(f3 =>
+                                //            {
+                                //                QueryContainer qb2 = null;
+                                //                #region Basic Providers Filters
+                                //                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
+                                //                {
+                                //                    qb2 &= qw.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
+                                //                }
+                                //                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
+                                //                {
+                                //                    qb2 &= qw.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
+                                //                }
+                                //                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y).FirstOrDefault() != null)
+                                //                {
+                                //                    qb2 &= qw.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
+                                //                }
+                                //                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y).FirstOrDefault() != null)
+                                //                {
+                                //                    qb2 &= qw.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
+                                //                }
+                                //                #endregion
+
+                                //                #region My Providers Filter
+                                //                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.MyProviders).Select(y => y).FirstOrDefault() != null)
+                                //                {
+                                //                    qb2 &= qw.Nested(n => n
+                                //                    .Path(p => p.oCustomerProviderIndexModel)
+                                //                    .Query(fq => fq
+                                //                        .Match(match => match
+                                //                        .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                //                        .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                //                        )
+                                //                   ));
+                                //                }
+                                //                #endregion
+
+                                //                #region Other Providers Filter
+                                //                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.OtherProviders).Select(y => y).FirstOrDefault() != null)
+                                //                {
+                                //                    qb2 &= qw.Nested(n => n
+                                //                    .Path(p => p.oCustomerProviderIndexModel)
+                                //                    .Query(fq => fq
+                                //                        .Match(match => match
+                                //                        .Field(field => field.oCustomerProviderIndexModel.Where(y => y.CustomerPublicId != SessionModel.CurrentCompany.CompanyPublicId).Select(y => y).First().CustomerPublicId)
+                                //                        )
+                                //                   ));
+                                //                }
+                                //                #endregion
+
+                                //                #region Provider Status
+                                //                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
+                                //                {
+                                //                    qb2 &= qw.Nested(n => n
+                                //                     .Path(p => p.oCustomerProviderIndexModel)
+                                //                    .Query(fq => fq
+                                //                        .Match(match => match
+                                //                        .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
+                                //                        .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault())
+                                //                        )
+                                //                        &&
+                                //                        fq.Match(m => m
+                                //                            .Field(Field => Field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                //                            .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                //                        )
+                                //                      )
+                                //                   );
+                                //                }
+
+                                //                #endregion
+
+                                //                #region Can see other Providers?
+                                //                if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1"
+                                //                && SessionModel.CurrentCompany.CompanyPublicId != Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value)
+                                //                {
+                                //                    qb2 &= qw.Nested(n => n
+                                //                    .Path(p => p.oCustomerProviderIndexModel)
+                                //                        .Query(fq => fq
+                                //                            .Match(match => match
+                                //                            .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId))
+                                //                          ));
+                                //                }
+                                //                else
+                                //                {
+                                //                    qb2 &= qw.Nested(n => n
+                                //                    .Path(p => p.oCustomerProviderIndexModel)
+                                //                        .Query(fq => fq
+                                //                            .Match(match => match
+                                //                            .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                //                            .Query(SessionModel.CurrentCompany.CompanyPublicId))
+                                //                        ));
+                                //                }
+                                //                #endregion
+                                //                return qb2;
+                                //            })
+                                //        )))
+                                //    ); 
+                                #endregion
+
+                                qb &= q.Terms(tms => tms
+                             .Field(fi => fi.CustomerPublicId)
+                             .Terms<string>(""));
+
+
+                                //qb &= q.Terms(tms => tms
+                                // .Field(fi => fi.ProviderPublicId)
+                                // .Terms<string>(oModel.ElasticCompanyModel.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
+                                //);
+                                return qb;
+                        })))));
+        }
+
 
         #endregion
-       
+
     }
 }
 

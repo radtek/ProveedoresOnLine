@@ -66,7 +66,7 @@ namespace ProveedoresOnLine.Company.Models.Company
         [String(Index = FieldIndexOption.Analyzed)]
         public string ICA { get; set; }
 
-        [Nested]
+        [Nested]        
         public List<CustomerProviderIndexModel> oCustomerProviderIndexModel { get; set; }
 
         [Nested]

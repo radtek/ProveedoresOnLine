@@ -244,6 +244,65 @@
                 </li>
 
             }
+
+            //Calification Filter
+            if (Model.CalificationTypeProcessFilter != null && Model.CalificationTypeProcessFilter.Count > 0)
+            {
+                <li>
+                    <span>Proceso de Calificación</span>
+                    <ul>
+                        @foreach (var oFilterItem in Model.CalificationTypeProcessFilter)
+                        {
+                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
+                            {
+                                <li>
+                                    <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CalificationType)'}});" />
+                                    <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                </li>
+                            }
+                            else
+                            {
+                                if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
+                                {
+                                    <li>
+                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CalificationType)'}});" />
+                                        <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                    </li>
+                                }
+                            }
+                        }
+                    </ul>
+                </li>
+            }
+            //Calification Result Filter
+            if (Model.CalificationResultFilter != null && Model.CalificationResultFilter.Count > 0)
+            {
+                <li>
+                    <span>Calificación</span>
+                    <ul>
+                        @foreach (var oFilterItem in Model.CalificationResultFilter)
+                        {
+                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
+                            {
+                                <li>
+                                    <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CalificationResult)'}});" />
+                                    <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                </li>
+                            }
+                            else
+                            {
+                                if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
+                                {
+                                    <li>
+                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CalificationResult)'}});" />
+                                        <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                    </li>
+                                }
+                            }
+                        }
+                    </ul>
+                </li>
+            }
         }
         @if (oCurrentModule.Any(x => x == (int)MarketPlace.Models.General.enumModule.Survey) &&
             Model.ElasticSurveyModel != null)
@@ -252,7 +311,7 @@
             if (Model.SurveyType != null && Model.SurveyType.Count > 0)
             {
                 <li>
-                    <span>Tipo de evaluación</span>
+                    <span>Calificación</span>
                     <ul>
                         @foreach (var oFilterItem in Model.SurveyType)
                         {

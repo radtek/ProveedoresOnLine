@@ -172,6 +172,8 @@ namespace ProveedoresOnLine.Company.Interfaces
 
         void CompanyActivityInfoIndex();
 
+        List<CalificationIndexModel> CalificationGetAll();
+
         #endregion
     }
 }

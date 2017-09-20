@@ -1177,6 +1177,10 @@ namespace ProveedoresOnLine.Company.Controller
             DAL.Controller.CompanyDataController.Instance.CompanyActivityInfoIndex();
         }
 
+        public static List<CalificationIndexModel> CalificationGetAll()
+        {
+            return DAL.Controller.CompanyDataController.Instance.CalificationGetAll();
+        }
         #endregion
     }
 }

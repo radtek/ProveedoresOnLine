@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.IO;
 using ProveedoresOnLine.Company.Models.Role;
+using ProveedoresOnLine.Company.Models.Company;
 
 namespace ProveedoresOnLine.Company.Test
 {
@@ -438,6 +439,14 @@ namespace ProveedoresOnLine.Company.Test
             ProveedoresOnLine.Company.Controller.Company.ModuleOptionInfoUpsert(oModel);
 
             Assert.AreEqual(true, oModel.ItemInfo != null && oModel.ItemInfo.Count > 0);
+        }
+
+        [TestMethod]
+        public void CalificationGetAll()
+        {
+            int oTotalRows = 0;
+            List<CalificationIndexModel> oReturn = ProveedoresOnLine.Company.Controller.Company.CalificationGetAll();
+            Assert.AreEqual(true, oReturn.Count > 0);
         }
 
     }
