@@ -26,5 +26,10 @@ namespace ProveedoresOnLine.CompanyIndexSearch
             ProveedoresOnLine.IndexSearch.Controller.IndexSearch.CalificationIdexationFunction();
         }
 
+        public static void CustomFiltersIdexationFunction()
+        {
+            ProveedoresOnLine.IndexSearch.Controller.IndexSearch.CustomFiltersIdexationFunction();
+        }
+
     }
 }

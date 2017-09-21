@@ -197,14 +197,58 @@ namespace ProveedoresOnLine.IndexSearch.Controller
 
             LogFile("Index Process Successfull for: " + Counter + " Customers-Providers");
             return true;
-        }       
+        }
+
+        public static bool CustomFiltersIdexationFunction()
+        {
+            int CustomerProviderId = 0;
+            var Counter = 0;
+            try
+            {
+                List<ProveedoresOnLine.Company.Models.Company.> oCalificationToIndex = Company.Controller.Company.CalificationGetAll();
+                LogFile("About to index: " + oCalificationToIndex.Count + " CalificationIndex");
+
+                Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+                var settings = new ConnectionSettings(node);
+                settings.DefaultIndex("dev_calificationindex");
+                ElasticClient client = new ElasticClient(settings);
+
+                ICreateIndexResponse oElasticResponse = client.
+                        CreateIndex("dev_calificationindex", c => c
+                        .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                        .Analysis(a => a.
+                            Analyzers(an => an.
+                                Custom("customWhiteSpace", anc => anc.
+                                    Filters("asciifolding", "lowercase").
+                                    Tokenizer("whitespace")
+                                        )
+                                    ).TokenFilters(tf => tf
+                                    .EdgeNGram("customEdgeNGram", engrf => engrf
+                                    .MinGram(1)
+                                    .MaxGram(10))
+                                )
+                            ).NumberOfShards(1)
+                        )
+                    );
+                client.Map<CalificationIndexModel>(m => m.AutoMap());
+                var Index = client.IndexMany(oCalificationToIndex, "dev_calificationindex");
+            }
+            catch (Exception err)
+            {
+                LogFile("Index Process Failed for CustomerProvider: " + CustomerProviderId + err.Message + "Inner Exception::" + err.InnerException);
+            }
+
+            LogFile("Index Process Successfull for: " + Counter + " Customers-Providers");
+            return true;
+
+        }
 
 
-        #endregion
+            #endregion
 
-        #region Survey Index
+            #region Survey Index
 
-        public static bool SurveyIndexationFunction()
+            public static bool SurveyIndexationFunction()
         {
             List<CompanySurveyIndexModel> oCompanySurveyIndexSearch = GetCompanySurveyIndex();
 

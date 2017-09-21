@@ -35,5 +35,11 @@ namespace ProveedoresOnLine.IndexSearch.Test
             ProveedoresOnLine.CompanyIndexSearch.CompanyIndexSearchProcess.CalificationIdexationFunction();
         }
 
+        [TestMethod]
+        public void CustomFiltersIdexationFunction()
+        {
+            ProveedoresOnLine.CompanyIndexSearch.CompanyIndexSearchProcess.CustomFiltersIdexationFunction();
+        }
+
     }
 }
