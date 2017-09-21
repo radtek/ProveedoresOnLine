@@ -205,16 +205,16 @@ namespace ProveedoresOnLine.IndexSearch.Controller
             var Counter = 0;
             try
             {
-                List<CustomFiltersIndexModel> oCalificationToIndex = Company.Controller.Company.CustomFiltersGetAll();
-                LogFile("About to index: " + oCalificationToIndex.Count + " CustomFiltersIndex");
+                List<CustomFiltersIndexModel> oCustomFiltersToIndex = Company.Controller.Company.CustomFiltersGetAll();
+                LogFile("About to index: " + oCustomFiltersToIndex.Count + " CustomFiltersIndex");
 
                 Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
                 var settings = new ConnectionSettings(node);
-                settings.DefaultIndex("dev_customFiltersIndex");
+                settings.DefaultIndex("dev_customfiltersindex");
                 ElasticClient client = new ElasticClient(settings);
 
                 ICreateIndexResponse oElasticResponse = client.
-                        CreateIndex("dev_customFiltersIndex", c => c
+                        CreateIndex("dev_customfiltersindex", c => c
                         .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
                         .Analysis(a => a.
                             Analyzers(an => an.
@@ -230,8 +230,8 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                             ).NumberOfShards(1)
                         )
                     );
-                client.Map<CalificationIndexModel>(m => m.AutoMap());
-                var Index = client.IndexMany(oCalificationToIndex, "dev_customFiltersIndex");
+                client.Map<CustomFiltersIndexModel>(m => m.AutoMap());
+                var Index = client.IndexMany(oCustomFiltersToIndex, "dev_customfiltersindex");
             }
             catch (Exception err)
             {
