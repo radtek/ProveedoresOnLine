@@ -205,7 +205,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
             var Counter = 0;
             try
             {
-                List<ProveedoresOnLine.Company.Models.Company.> oCalificationToIndex = Company.Controller.Company.CalificationGetAll();
+                List<CustomFiltersIndexModel> oCalificationToIndex = new List<CustomFiltersIndexModel>(); ;
                 LogFile("About to index: " + oCalificationToIndex.Count + " CalificationIndex");
 
                 Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);

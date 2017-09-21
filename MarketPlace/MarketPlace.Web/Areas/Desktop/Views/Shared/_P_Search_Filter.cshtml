@@ -257,7 +257,7 @@
                             {
                                 <li>
                                     <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CalificationType)'}});" />
-                                    <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                    <span>@oFilterItem.FilterName.Replace("_", " ") (@oFilterItem.FilterCount) </span>
                                 </li>
                             }
                             else
@@ -266,7 +266,7 @@
                                 {
                                     <li>
                                         <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CalificationType)'}});" />
-                                        <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                        <span>@oFilterItem.FilterName.Replace("_"," ") (@oFilterItem.FilterCount) </span>
                                     </li>
                                 }
                             }
@@ -286,7 +286,7 @@
                             {
                                 <li>
                                     <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CalificationResult)'}});" />
-                                    <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                    <span>@oFilterItem.FilterName.Replace("_", " ") (@oFilterItem.FilterCount) </span>
                                 </li>
                             }
                             else
@@ -295,7 +295,7 @@
                                 {
                                     <li>
                                         <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CalificationResult)'}});" />
-                                        <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                        <span>@oFilterItem.FilterName.Replace("_"," ") (@oFilterItem.FilterCount) </span>
                                     </li>
                                 }
                             }
