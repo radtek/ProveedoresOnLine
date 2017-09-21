@@ -174,6 +174,8 @@ namespace ProveedoresOnLine.Company.Interfaces
 
         List<CalificationIndexModel> CalificationGetAll();
 
+        List<CustomFiltersIndexModel> CustomFiltersGetAll();
+
         #endregion
     }
 }

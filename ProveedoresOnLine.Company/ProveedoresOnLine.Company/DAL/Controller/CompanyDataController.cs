@@ -397,6 +397,11 @@ namespace ProveedoresOnLine.Company.DAL.Controller
            return DataFactory.CalificationGetAll();
         }
 
+        public List<CustomFiltersIndexModel> CustomFiltersGetAll()
+        {
+            return DataFactory.CustomFiltersGetAll();
+        }
+
         #endregion
     }
 }

@@ -205,16 +205,16 @@ namespace ProveedoresOnLine.IndexSearch.Controller
             var Counter = 0;
             try
             {
-                List<CustomFiltersIndexModel> oCalificationToIndex = new List<CustomFiltersIndexModel>(); ;
-                LogFile("About to index: " + oCalificationToIndex.Count + " CalificationIndex");
+                List<CustomFiltersIndexModel> oCalificationToIndex = Company.Controller.Company.CustomFiltersGetAll();
+                LogFile("About to index: " + oCalificationToIndex.Count + " CustomFiltersIndex");
 
                 Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
                 var settings = new ConnectionSettings(node);
-                settings.DefaultIndex("dev_calificationindex");
+                settings.DefaultIndex("dev_customFiltersIndex");
                 ElasticClient client = new ElasticClient(settings);
 
                 ICreateIndexResponse oElasticResponse = client.
-                        CreateIndex("dev_calificationindex", c => c
+                        CreateIndex("dev_customFiltersIndex", c => c
                         .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
                         .Analysis(a => a.
                             Analyzers(an => an.
@@ -231,14 +231,14 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                         )
                     );
                 client.Map<CalificationIndexModel>(m => m.AutoMap());
-                var Index = client.IndexMany(oCalificationToIndex, "dev_calificationindex");
+                var Index = client.IndexMany(oCalificationToIndex, "dev_customFiltersIndex");
             }
             catch (Exception err)
             {
-                LogFile("Index Process Failed for CustomerProvider: " + CustomerProviderId + err.Message + "Inner Exception::" + err.InnerException);
+                LogFile("Index Process Failed for CustomFilters: " + CustomerProviderId + err.Message + "Inner Exception::" + err.InnerException);
             }
 
-            LogFile("Index Process Successfull for: " + Counter + " Customers-Providers");
+            LogFile("Index Process Successfull for: " + Counter + " Custom-Filters");
             return true;
 
         }

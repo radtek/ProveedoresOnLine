@@ -3106,6 +3106,45 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
             }
             return oReturn;
         }
+
+        public List<CustomFiltersIndexModel> CustomFiltersGetAll()
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "C_IndexCustomFilters",
+                CommandType = System.Data.CommandType.StoredProcedure,
+                Parameters = lstParams
+            });
+
+            List<CustomFiltersIndexModel> oReturn = null;
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn =
+                          (from cp in response.DataTableResult.AsEnumerable()
+                           where !cp.IsNull("CustomerPublicId")
+                           group cp by new
+                           {
+                               CustomerPublicId = !cp.IsNull("CustomerPublicId") ? cp.Field<string>("CustomerPublicId") : "",
+                               ProviderPublicId = !cp.IsNull("ProviderPublicId") ? cp.Field<string>("ProviderPublicId") : "",
+                               FieldType = !cp.IsNull("FieldType") ? cp.Field<int>("FieldType") : 0,
+                               value = !cp.IsNull("value") ? cp.Field<string>("value") : "",
+                           }
+                               into cpg
+                           select new CustomFiltersIndexModel()
+                           {
+                               CustomerPublicId = cpg.Key.CustomerPublicId,
+                               ProviderPublicId = cpg.Key.ProviderPublicId,
+                               FieldType = cpg.Key.FieldType,
+                               value = cpg.Key.value
+                           }).ToList();
+            }
+            return oReturn;
+        }
         #endregion
     }
 }
