@@ -43,7 +43,9 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                 response.DataSetResult.Tables[1] != null &&
                 response.DataSetResult.Tables[1].Rows.Count > 0 &&
                 response.DataSetResult.Tables[2] != null &&
-                response.DataSetResult.Tables[2].Rows.Count > 0)
+                response.DataSetResult.Tables[2].Rows.Count > 0 &&
+                response.DataSetResult.Tables[3] != null &&
+                response.DataSetResult.Tables[3].Rows.Count > 0)
             {
                 oReturn =
                     (from ci in response.DataSetResult.Tables[1].AsEnumerable()
@@ -132,6 +134,26 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                                  ProviderPublicId = cpg.Key.ProviderPublicId,
                                  TotalScore = cpg.Key.TotalScore,
                                  TotalResult = cpg.Key.Result
+                             }).ToList(),
+
+                        oCustomFiltersIndexModel =
+                            (from cp in response.DataSetResult.Tables[3].AsEnumerable()
+                             where !cp.IsNull("CustomerPublicId") &&
+                                   cp.Field<string>("ProviderPublicId") == cig.Key.CompanyPublicId
+                             group cp by new
+                             {
+                                 CustomerPublicId = !cp.IsNull("CustomerPublicId") ? cp.Field<string>("CustomerPublicId") : "",
+                                 ProviderPublicId = !cp.IsNull("ProviderPublicId") ? cp.Field<string>("ProviderPublicId") : "",
+                                 FieldType = !cp.IsNull("FieldType") ? cp.Field<int>("FieldType") : 0,
+                                 value = !cp.IsNull("value") ? cp.Field<string>("value") : "",
+                             }
+                                 into cpg
+                             select new CustomFiltersIndexModel()
+                             {
+                                 CustomerPublicId = cpg.Key.CustomerPublicId,
+                                 ProviderPublicId = cpg.Key.ProviderPublicId,
+                                 FieldType = cpg.Key.FieldType,
+                                 value = cpg.Key.value
                              }).ToList()
                      }).ToList();
             }
