@@ -13,5 +13,7 @@ namespace ProveedoresOnLine.Company.Models.Util
         public string FilterName { get; set; }
 
         public string FilterType { get; set; }
+
+        public string FilterValue { get; set; }
     }
 }

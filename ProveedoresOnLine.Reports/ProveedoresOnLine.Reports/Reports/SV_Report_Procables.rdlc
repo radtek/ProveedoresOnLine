@@ -183,7 +183,7 @@
         <Top>1.26739in</Top>
         <Left>0.205in</Left>
         <Height>0.25in</Height>
-        <Width>6.3421in</Width>
+        <Width>7.14418in</Width>
         <ZIndex>4</ZIndex>
         <Style>
           <Border>
@@ -214,7 +214,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
         <Top>0.16667in</Top>
-        <Left>6.04623in</Left>
+        <Left>6.84831in</Left>
         <Height>0.25in</Height>
         <Width>0.50087in</Width>
         <ZIndex>5</ZIndex>
@@ -337,7 +337,7 @@
         <Top>1.72033in</Top>
         <Left>0.205in</Left>
         <Height>1.728in</Height>
-        <Width>6.3421in</Width>
+        <Width>7.14418in</Width>
         <ZIndex>6</ZIndex>
         <Style>
           <Border>
@@ -359,10 +359,10 @@
               <Width>0.89121in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.55332in</Width>
+              <Width>4.20332in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.23316in</Width>
+              <Width>1.38523in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1056,8 +1056,8 @@
         <DataSetName>DS_Survey_ProcablesReport</DataSetName>
         <Top>3.44833in</Top>
         <Left>0.22442in</Left>
-        <Height>3.47446in</Height>
-        <Width>6.32269in</Width>
+        <Height>3.47448in</Height>
+        <Width>7.12476in</Width>
         <ZIndex>7</ZIndex>
         <Style>
           <Border>
@@ -1125,20 +1125,20 @@
                 <Style>
                   <FontStyle>Normal</FontStyle>
                   <FontFamily>Calibri</FontFamily>
-                  <FontWeight>Normal</FontWeight>
+                  <FontWeight>Bold</FontWeight>
                   <TextDecoration>None</TextDecoration>
                   <Color>#000000</Color>
                 </Style>
               </TextRun>
             </TextRuns>
             <Style>
-              <TextAlign>Left</TextAlign>
+              <TextAlign>Center</TextAlign>
             </Style>
           </Paragraph>
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value />
+                <Value>CARLOS CORREA</Value>
                 <Style>
                   <FontStyle>Normal</FontStyle>
                   <FontFamily>Calibri</FontFamily>
@@ -1155,58 +1155,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value />
-                <Style>
-                  <FontStyle>Normal</FontStyle>
-                  <FontFamily>Calibri</FontFamily>
-                  <FontWeight>Bold</FontWeight>
-                  <TextDecoration>None</TextDecoration>
-                  <Color>#000000</Color>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style>
-              <TextAlign>Center</TextAlign>
-            </Style>
-          </Paragraph>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value />
-                <Style>
-                  <FontStyle>Normal</FontStyle>
-                  <FontFamily>Calibri</FontFamily>
-                  <FontWeight>Bold</FontWeight>
-                  <TextDecoration>None</TextDecoration>
-                  <Color>#000000</Color>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style>
-              <TextAlign>Center</TextAlign>
-            </Style>
-          </Paragraph>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>ADRIANA PEREZ AVILA</Value>
-                <Style>
-                  <FontStyle>Normal</FontStyle>
-                  <FontFamily>Calibri</FontFamily>
-                  <FontWeight>Bold</FontWeight>
-                  <TextDecoration>None</TextDecoration>
-                  <Color>#000000</Color>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style>
-              <TextAlign>Center</TextAlign>
-            </Style>
-          </Paragraph>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>Jefe de Compra</Value>
+                <Value>Director de Supply Chain</Value>
                 <Style>
                   <FontStyle>Normal</FontStyle>
                   <FontFamily>Calibri</FontFamily>
@@ -1222,10 +1171,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>6.92279in</Top>
+        <Top>7.04779in</Top>
         <Left>0.22442in</Left>
-        <Height>2.60865in</Height>
-        <Width>6.32269in</Width>
+        <Height>1.89198in</Height>
+        <Width>7.12476in</Width>
         <ZIndex>8</ZIndex>
         <Style>
           <Border>
@@ -1257,7 +1206,7 @@
         <Top>0.85506in</Top>
         <Left>4.48737in</Left>
         <Height>0.25in</Height>
-        <Width>2.05973in</Width>
+        <Width>2.86181in</Width>
         <ZIndex>9</ZIndex>
         <Style>
           <Border>
@@ -1270,14 +1219,14 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>9.53145in</Height>
+    <Height>9.53144in</Height>
     <Style>
       <Border>
         <Style>Solid</Style>
       </Border>
     </Style>
   </Body>
-  <Width>6.76585in</Width>
+  <Width>7.84918in</Width>
   <Page>
     <PageHeader>
       <Height>1.18625in</Height>
@@ -1317,7 +1266,7 @@
           <Top>0.14086in</Top>
           <Left>0.205in</Left>
           <Height>1.46875in</Height>
-          <Width>6.3421in</Width>
+          <Width>7.14418in</Width>
           <Style>
             <Border>
               <Style>None</Style>

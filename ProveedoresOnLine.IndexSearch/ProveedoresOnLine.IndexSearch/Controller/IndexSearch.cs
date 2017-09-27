@@ -244,11 +244,11 @@ namespace ProveedoresOnLine.IndexSearch.Controller
         }
 
 
-            #endregion
+        #endregion
 
-            #region Survey Index
+        #region Survey Index
 
-            public static bool SurveyIndexationFunction()
+        public static bool SurveyIndexationFunction()
         {
             List<CompanySurveyIndexModel> oCompanySurveyIndexSearch = GetCompanySurveyIndex();
 
@@ -320,7 +320,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
         #region ThirdKnowledge Index
 
         public static bool GetThirdknowledgeIndex(int RowFrom, int RowTo)
-        {                                   
+        {
             try
             {
                 LogFile("Start Process: " + "ThirdKnowledgeToIndex:::");
@@ -351,27 +351,27 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                         )
                     );
 
-                client.Map<ThirdknowledgeIndexSearchModel>(m => m.AutoMap());                
+                client.Map<ThirdknowledgeIndexSearchModel>(m => m.AutoMap());
                 RowFrom = 0;
                 for (int i = -1; i < (oToIndex.FirstOrDefault().TotalRows / 10000); i++)
-			    {
+                {
                     List<ThirdknowledgeIndexSearchModel> oToIterIndex = new List<ThirdknowledgeIndexSearchModel>();
-                    LogFile("Index Process Count::: " + RowFrom + "__:::__" + RowTo);                   
-                   
+                    LogFile("Index Process Count::: " + RowFrom + "__:::__" + RowTo);
+
                     oToIterIndex = DAL.Controller.IndexSearchDataController.Instance.GetThirdknowledgeIndex(RowFrom, 10000);
                     RowFrom = RowFrom + 10000;
-                    
+
                     client.Map<ThirdknowledgeIndexSearchModel>(m => m.AutoMap());
                     var IndexIter = client.IndexMany(oToIterIndex, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ThirdKnowledgeIndex].Value);
                     LogFile("Index Process Status::: " + IndexIter.IsValid + "::" + IndexIter.DebugInformation);
-			    }             
-                
+                }
+
                 LogFile("Index Process Successfull for: " + oToIndex.Count());
             }
             catch (Exception err)
             {
                 LogFile("Index Process Failed for Thirdknowledge: " + err.Message + "Inner Exception::" + err.InnerException);
-            }            
+            }
             return true;
         }
 
@@ -405,7 +405,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                         )
                     );
                 client.Map<TK_QueryIndexModel>(m => m.AutoMap());
-                var Index = client.IndexMany(oToIndex,Models.Util.InternalSettings.Instance[Models.Constants.C_Settings_TD_QueryIndex].Value);
+                var Index = client.IndexMany(oToIndex, Models.Util.InternalSettings.Instance[Models.Constants.C_Settings_TD_QueryIndex].Value);
             }
             catch (Exception err)
             {
@@ -416,7 +416,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
         }
 
         public static void QueryModelIndexByItem(TK_QueryIndexModel oModelToIndex)
-        {            
+        {
             try
             {
                 if (oModelToIndex != null)
@@ -447,7 +447,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                         );
                     client.Map<TK_QueryIndexModel>(m => m.AutoMap());
                     var Index = client.Index(oModelToIndex);
-                }                
+                }
             }
             catch (Exception err)
             {
@@ -465,33 +465,33 @@ namespace ProveedoresOnLine.IndexSearch.Controller
             settings.DisableDirectStreaming(true);
             ElasticClient client = new ElasticClient(settings);
 
-            var result  = client.Search<TK_QueryIndexModel>(s => s 
-            .From(string.IsNullOrEmpty("0") ? 0 : Convert.ToInt32(0) * 20)
-            .TrackScores(true)
-            .Size(20)
-            .Aggregations
-                (agg => agg
-                .Terms("status", aggv => aggv
-                    .Field(fi => fi.QueryStatus))
-                .Terms("date", aggv => aggv
-                    .Field(fi => fi.LastModify))
-                .Terms("searchtype", c => c
-                    .Field(fi => fi.SearchType))
-                .Terms("domain", c => c
-                    .Field(fi => fi.Domain))
-                .Terms("useremail", bl => bl
-                    .Field(fi => fi.User)))               
-                .Query(q => q.Filtered(f => f.
-                    Filter(f2 =>
-                    {                        
-                        QueryContainer qb = null;
+            var result = client.Search<TK_QueryIndexModel>(s => s
+           .From(string.IsNullOrEmpty("0") ? 0 : Convert.ToInt32(0) * 20)
+           .TrackScores(true)
+           .Size(20)
+           .Aggregations
+               (agg => agg
+               .Terms("status", aggv => aggv
+                   .Field(fi => fi.QueryStatus))
+               .Terms("date", aggv => aggv
+                   .Field(fi => fi.LastModify))
+               .Terms("searchtype", c => c
+                   .Field(fi => fi.SearchType))
+               .Terms("domain", c => c
+                   .Field(fi => fi.Domain))
+               .Terms("useremail", bl => bl
+                   .Field(fi => fi.User)))
+               .Query(q => q.Filtered(f => f.
+                   Filter(f2 =>
+                   {
+                       QueryContainer qb = null;
                         //qb &= q.Term(m => m.CustomerPublicId, "26D388E3");
                         //qb &= q.Term(m => m.CustomerPublicId, "DA5C572E");
 
                         qb &= f2.Terms(tms => tms
-                            .Field(fi => fi.CustomerPublicId.ToLower())
-                             .Terms<string>("da5c572e")
-                            );
+                           .Field(fi => fi.CustomerPublicId.ToLower())
+                            .Terms<string>("da5c572e")
+                           );
                         //if (!string.IsNullOrEmpty("")
                         // || !string.IsNullOrEmpty("")
                         // || !string.IsNullOrEmpty("")
@@ -510,10 +510,10 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                         //}
 
                         return qb;
-                    }
-                    )
-                )
-                )
+                   }
+                   )
+               )
+               )
             );
 
             if (result.Documents != null)

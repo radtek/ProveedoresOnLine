@@ -5,6 +5,9 @@
 
     string strCustomEconomicActivity = string.Empty;
 
+    string CurrentCustomer = MarketPlace.Models.General.SessionModel.CurrentCompany.CompanyPublicId;
+    string PublicarCustomerPublicId = MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.CC_CompanyPublicId_Publicar].Value;
+
     if (MarketPlace.Models.General.SessionModel.CurrentCompany != null &&
         MarketPlace.Models.General.SessionModel.CurrentCompany.CompanyInfo != null)
     {
@@ -217,7 +220,7 @@
                         }
                     </ul>
                     <ul>
-                        @if (showOtherProviders)
+                        @if (showOtherProviders && CurrentCustomer != PublicarCustomerPublicId)
                         {
                             foreach (var oFilterItem in Model.OtherProvidersFilter)
                             {
@@ -253,10 +256,10 @@
                     <ul>
                         @foreach (var oFilterItem in Model.CalificationTypeProcessFilter)
                         {
-                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
+                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterName.ToString()))
                             {
                                 <li>
-                                    <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CalificationType)'}});" />
+                                    <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterName + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CalificationType)'}});" />
                                     <span>@oFilterItem.FilterName.Replace("_", " ") (@oFilterItem.FilterCount) </span>
                                 </li>
                             }
@@ -265,7 +268,7 @@
                                 if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
                                 {
                                     <li>
-                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CalificationType)'}});" />
+                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterName + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CalificationType)'}});" />
                                         <span>@oFilterItem.FilterName.Replace("_"," ") (@oFilterItem.FilterCount) </span>
                                     </li>
                                 }
@@ -282,10 +285,10 @@
                     <ul>
                         @foreach (var oFilterItem in Model.CalificationResultFilter)
                         {
-                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
+                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterName.ToString()))
                             {
                                 <li>
-                                    <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CalificationResult)'}});" />
+                                    <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterName + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CalificationResult)'}});" />
                                     <span>@oFilterItem.FilterName.Replace("_", " ") (@oFilterItem.FilterCount) </span>
                                 </li>
                             }
@@ -294,7 +297,7 @@
                                 if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
                                 {
                                     <li>
-                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CalificationResult)'}});" />
+                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterName + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CalificationResult)'}});" />
                                         <span>@oFilterItem.FilterName.Replace("_"," ") (@oFilterItem.FilterCount) </span>
                                     </li>
                                 }
