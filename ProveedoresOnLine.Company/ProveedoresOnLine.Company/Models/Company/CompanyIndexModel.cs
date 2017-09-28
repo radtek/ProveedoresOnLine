@@ -72,6 +72,9 @@ namespace ProveedoresOnLine.Company.Models.Company
         [Nested]
         public List<CalificationIndexModel> oCalificationIndexModel { get; set; }
 
+        [Nested]
+        public List<CustomFiltersIndexModel> oCustomFiltersIndexModel { get; set; }
+
         public CompanyIndexModel()
         {
 

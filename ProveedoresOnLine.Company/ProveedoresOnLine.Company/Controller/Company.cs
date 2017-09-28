@@ -1181,6 +1181,11 @@ namespace ProveedoresOnLine.Company.Controller
         {
             return DAL.Controller.CompanyDataController.Instance.CalificationGetAll();
         }
+
+        public static List<CustomFiltersIndexModel> CustomFiltersGetAll()
+        {
+            return DAL.Controller.CompanyDataController.Instance.CustomFiltersGetAll();
+        }
         #endregion
     }
 }
