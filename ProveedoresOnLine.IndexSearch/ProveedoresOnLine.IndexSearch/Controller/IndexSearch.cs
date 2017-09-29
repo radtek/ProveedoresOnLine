@@ -167,11 +167,11 @@ namespace ProveedoresOnLine.IndexSearch.Controller
 
                 Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
                 var settings = new ConnectionSettings(node);
-                settings.DefaultIndex("dev_calificationindex");
+                settings.DefaultIndex("prod_calificationindex");
                 ElasticClient client = new ElasticClient(settings);
 
                 ICreateIndexResponse oElasticResponse = client.
-                        CreateIndex("dev_calificationindex", c => c
+                        CreateIndex("prod_calificationindex", c => c
                         .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
                         .Analysis(a => a.
                             Analyzers(an => an.
@@ -188,7 +188,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                         )
                     );
                 client.Map<CalificationIndexModel>(m => m.AutoMap());
-                var Index = client.IndexMany(oCalificationToIndex, "dev_calificationindex");
+                var Index = client.IndexMany(oCalificationToIndex, "prod_calificationindex");
             }
             catch (Exception err)
             {
@@ -210,11 +210,11 @@ namespace ProveedoresOnLine.IndexSearch.Controller
 
                 Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
                 var settings = new ConnectionSettings(node);
-                settings.DefaultIndex("dev_customfiltersindex");
+                settings.DefaultIndex("prod_customfiltersindex");
                 ElasticClient client = new ElasticClient(settings);
 
                 ICreateIndexResponse oElasticResponse = client.
-                        CreateIndex("dev_customfiltersindex", c => c
+                        CreateIndex("prod_customfiltersindex", c => c
                         .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
                         .Analysis(a => a.
                             Analyzers(an => an.
@@ -231,7 +231,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                         )
                     );
                 client.Map<CustomFiltersIndexModel>(m => m.AutoMap());
-                var Index = client.IndexMany(oCustomFiltersToIndex, "dev_customfiltersindex");
+                var Index = client.IndexMany(oCustomFiltersToIndex, "prod_customfiltersindex");
             }
             catch (Exception err)
             {
