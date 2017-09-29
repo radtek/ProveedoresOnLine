@@ -75,6 +75,7 @@ namespace MarketPlace.Web.Controllers
                     OtherProvidersFilter = new List<ElasticSearchFilter>(),
                     CalificationResultFilter = new List<ElasticSearchFilter>(),
                     CalificationTypeProcessFilter = new List<ElasticSearchFilter>(),
+                    CustomTypeFilter = new List<ElasticSearchFilter>(),
                 };
 
                 #region ElasticSearch
@@ -111,6 +112,11 @@ namespace MarketPlace.Web.Controllers
                         ).Nested("calification_result_avg", x => x.
                             Path(p => p.oCalificationIndexModel).
                                 Aggregations(aggs => aggs.Terms("calification_result", term => term.Field(fi => fi.oCalificationIndexModel.First().TotalResult)
+                                )
+                            )
+                        ).Nested("customfiltertype_avg", x => x.
+                            Path(p => p.oCustomFiltersIndexModel).
+                                Aggregations(aggs => aggs.Terms("customfiltertype", term => term.Field(fi => fi.oCustomFiltersIndexModel.First().Label)
                                 )
                             )
                         )
@@ -258,7 +264,25 @@ namespace MarketPlace.Web.Controllers
 
                         #endregion
 
+                        #region Custom Filters
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilter).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= q.Nested(n => n
+                             .Path(p => p.oCustomFiltersIndexModel)
+                            .Query(fq => fq
+                                .Match(match => match
+                                .Field(field => field.oCustomFiltersIndexModel.First().Label)
+                                .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilter).Select(y => y.Item1).FirstOrDefault())
+                                )
+                                 && q.Match(m => m
+                                        .Field(Field => Field.oCustomFiltersIndexModel.First().CustomerPublicId)
+                                        .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                    )
+                              )
+                           );
+                        }
 
+                        #endregion
                         qb &= q.Term(m => m.CompanyEnable, true);
                         return qb;
                     })
@@ -447,6 +471,9 @@ namespace MarketPlace.Web.Controllers
                             })
                         )))
                     );
+              
+                oModel.TotalRows = (int)oModel.ElasticCompanyModel.Total;
+                #endregion
 
                 #region Calification Search
                 var calificationSettings = new ConnectionSettings(node);
@@ -470,7 +497,7 @@ namespace MarketPlace.Web.Controllers
                             .Filter(f2 =>
                             {
                                 QueryContainer qb = null;
-                                
+
                                 #region Calification
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y).FirstOrDefault() != null)
                                 {
@@ -494,7 +521,52 @@ namespace MarketPlace.Web.Controllers
                             })))));
 
                 #endregion
-                oModel.TotalRows = (int)oModel.ElasticCompanyModel.Total;
+
+                #region Custom Filter Search
+                var calificationSettings = new ConnectionSettings(node);
+                calificationSettings.DisableDirectStreaming(true);
+                calificationSettings.DefaultIndex("dev_calificationindex");
+
+                ElasticClient CalificationClient = new ElasticClient(calificationSettings);
+                Nest.ISearchResponse<CalificationIndexModel> resultCalification = CalificationClient.Search<CalificationIndexModel>((s => s
+                    .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
+                    .TrackScores(true)
+                    .Size(9000000)
+                    .Aggregations
+                        (agg => agg
+                        .Terms("calification_avg", aggv => aggv
+                        .Field(fi => fi.CalificationProjectName))
+                        .Terms("calification_result_avg", aggv => aggv
+                            .Field(fi => fi.TotalResult)))
+                         .Query(q => q.
+                          Filtered(f => f
+                            .Query(q1 => q.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
+                            .Filter(f2 =>
+                            {
+                                QueryContainer qb = null;
+
+                                #region Calification
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb &= q.Term(m => m.CalificationProjectName, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y.Item1).FirstOrDefault());
+
+                                }
+
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb &= q.Term(m => m.TotalResult, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y.Item1).FirstOrDefault());
+                                }
+
+                                #endregion
+
+                                qb &= q.Terms(tms => tms
+                                 .Field(fi => fi.ProviderPublicId)
+                                 .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
+                                );
+                                return qb;
+
+                            })))));
+
                 #endregion
 
                 //parse view model

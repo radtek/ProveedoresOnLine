@@ -32,6 +32,10 @@ namespace ProveedoresOnLine.IndexSearch.Models
 
         public const string C_Settings_TD_QueryIndex = "QueryIndex";
 
+        public const string C_Settings_CalificationIndex = "CalificationIndex";
+
+        public const string C_Settings_CustomFiltesIndex = "CustomFiltersIndex";
+
         #endregion
 
         #region AppSettings
