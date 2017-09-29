@@ -478,7 +478,7 @@ namespace MarketPlace.Web.Controllers
                 #region Calification Search
                 var calificationSettings = new ConnectionSettings(node);
                 calificationSettings.DisableDirectStreaming(true);
-                calificationSettings.DefaultIndex("dev_calificationindex");
+                calificationSettings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CalificarionIndex].Value);
 
                 ElasticClient CalificationClient = new ElasticClient(calificationSettings);
                 Nest.ISearchResponse<CalificationIndexModel> resultCalification = CalificationClient.Search<CalificationIndexModel>((s => s
