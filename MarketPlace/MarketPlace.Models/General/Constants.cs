@@ -118,6 +118,8 @@
 
         public const string C_Settings_QueryModelIndex = "QueryIndex";
 
+        public const string C_Settings_CalificarionIndex = "CalificationIndex";
+
         #endregion
 
         #endregion
