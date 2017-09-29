@@ -523,12 +523,12 @@ namespace MarketPlace.Web.Controllers
                 #endregion
 
                 #region Custom Filter Search
-                var calificationSettings = new ConnectionSettings(node);
-                calificationSettings.DisableDirectStreaming(true);
-                calificationSettings.DefaultIndex("dev_calificationindex");
+                var customSettings = new ConnectionSettings(node);
+                customSettings.DisableDirectStreaming(true);
+                customSettings.DefaultIndex("dev_calificationindex");
 
-                ElasticClient CalificationClient = new ElasticClient(calificationSettings);
-                Nest.ISearchResponse<CalificationIndexModel> resultCalification = CalificationClient.Search<CalificationIndexModel>((s => s
+                ElasticClient CustomClient = new ElasticClient(customSettings);
+                Nest.ISearchResponse<CalificationIndexModel> resultCustom = CalificationClient.Search<CalificationIndexModel>((s => s
                     .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
                     .TrackScores(true)
                     .Size(9000000)
