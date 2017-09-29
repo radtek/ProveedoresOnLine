@@ -449,5 +449,13 @@ namespace ProveedoresOnLine.Company.Test
             Assert.AreEqual(true, oReturn.Count > 0);
         }
 
+        [TestMethod]
+        public void CustomFiltersGetAll()
+        {
+            int oTotalRows = 0;
+            List<CustomFiltersIndexModel> oReturn = ProveedoresOnLine.Company.Controller.Company.CustomFiltersGetAll();
+            Assert.AreEqual(true, oReturn.Count > 0);
+        }
+
     }
 }

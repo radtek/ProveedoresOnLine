@@ -16,8 +16,8 @@ namespace ProveedoresOnLine.Company.Models.Company
         [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
         public string ProviderPublicId { get; set; }
 
-        [Number]
-        public int FieldType { get; set; }
+        [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
+        public string Label { get; set; }
 
         [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
         public string value { get; set; }

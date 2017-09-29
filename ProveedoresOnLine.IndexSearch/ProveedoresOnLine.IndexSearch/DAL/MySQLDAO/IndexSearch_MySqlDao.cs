@@ -144,7 +144,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                              {
                                  CustomerPublicId = !cp.IsNull("CustomerPublicId") ? cp.Field<string>("CustomerPublicId") : "",
                                  ProviderPublicId = !cp.IsNull("ProviderPublicId") ? cp.Field<string>("ProviderPublicId") : "",
-                                 FieldType = !cp.IsNull("FieldType") ? cp.Field<int>("FieldType") : 0,
+                                 Label = !cp.IsNull("Label") ? cp.Field<string>("Label") : "",
                                  value = !cp.IsNull("value") ? cp.Field<string>("value") : "",
                              }
                                  into cpg
@@ -152,7 +152,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                              {
                                  CustomerPublicId = cpg.Key.CustomerPublicId,
                                  ProviderPublicId = cpg.Key.ProviderPublicId,
-                                 FieldType = cpg.Key.FieldType,
+                                 Label = cpg.Key.Label,
                                  value = cpg.Key.value
                              }).ToList()
                      }).ToList();
