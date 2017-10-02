@@ -179,7 +179,13 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             oInfoCreate.DocumentType = x.TypeId;
                             oInfoCreate.Offense = x.RelatedWiht;
                             oInfoCreate.NameResult = x.CompleteName;
-                            if (x.ListType == "FIGURAS PUBLICAS" || x.ListType == "PEPS INTERNACIONALES")
+                            if (x.ListType == "FIGURAS PUBLICAS" || x.ListType == "PEPS INTERNACIONALES" 
+                                                                 || x.ListType == "CONSEJO NACIONAL ELECTORAL" 
+                                                                 || x.ListType == "FUERZAS MILITARES"
+                                                                 || x.ListType == "GOBIERNO DEPARTAMENTAL"
+                                                                 || x.ListType == "GOBIERNO MUNICIPAL"
+                                                                 || x.ListType == "GOBIERNO NACIONAL" 
+                                                                 || x.ListType == "ESTRUCTURA DE GOBIERNO")
                                 oInfoCreate.Peps = x.ListType;
                             else
                                 oInfoCreate.Peps = "N/A";
