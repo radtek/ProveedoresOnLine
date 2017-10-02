@@ -306,6 +306,45 @@
                     </ul>
                 </li>
             }
+
+            //Calification Result Filter
+            if (Model.CustomTypeFilter != null && Model.CustomTypeFilter.Count > 0)
+            {
+                foreach (var item in Model.CustomerFilterObject.Item2.Distinct())
+                {
+                    <li>
+                        <span>@item.Replace('_',' ')</span>
+                        <ul>
+                            @foreach (var oFilterItem in Model.CustomerFilterObject.Item1)
+                            {
+                                if (item.Replace(' ', '_') == oFilterItem.FilterName.Split('/').ToList()[0])
+                                {
+                                    if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterName.ToString()))
+                                    {
+                                        <li>
+                                            <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterName + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CustomFilterItem)'}});" />
+                                            <span>@oFilterItem.FilterName.Split('/').ToList()[1].Replace("_", " ")  (@oFilterItem.FilterCount) </span>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
+                                        {
+                                            <li>
+                                                <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterName + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CustomFilterItem)'}});" />
+                                                <span>@oFilterItem.FilterName.Split('/').ToList()[1].Replace("_", " ") (@oFilterItem.FilterCount) </span>
+                                            </li>
+                                        }
+                                    }
+                                }
+
+                            }
+                        </ul>
+                    </li>
+                }
+
+            }
+
         }
         @if (oCurrentModule.Any(x => x == (int)MarketPlace.Models.General.enumModule.Survey) &&
             Model.ElasticSurveyModel != null)

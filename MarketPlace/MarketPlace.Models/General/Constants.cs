@@ -120,6 +120,8 @@
 
         public const string C_Settings_CalificarionIndex = "CalificationIndex";
 
+        public const string C_Settings_CustomFiltersIndex = "CustomFiltersIndex";
+
         #endregion
 
         #endregion

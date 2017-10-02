@@ -424,7 +424,8 @@
         SurveyEvaluator = 111014,
         CalificationType  = 111019,
         CalificationResult = 111020,
-        CustomFilter = 111021,
+        CustomFilterType = 111021,
+        CustomFilterItem = 111022,
 
         ProviderStatus = 112001,
         ProviderRate = 112002,

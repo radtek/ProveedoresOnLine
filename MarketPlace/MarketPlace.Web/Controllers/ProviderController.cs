@@ -76,6 +76,7 @@ namespace MarketPlace.Web.Controllers
                     CalificationResultFilter = new List<ElasticSearchFilter>(),
                     CalificationTypeProcessFilter = new List<ElasticSearchFilter>(),
                     CustomTypeFilter = new List<ElasticSearchFilter>(),
+                    CustomerFilterObject = new Tuple<List<ElasticSearchFilter>, List<string>>(new List<ElasticSearchFilter>(),new List<string>()),
                 };
 
                 #region ElasticSearch
@@ -265,14 +266,14 @@ namespace MarketPlace.Web.Controllers
                         #endregion
 
                         #region Custom Filters
-                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilter).Select(y => y).FirstOrDefault() != null)
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y).FirstOrDefault() != null)
                         {
                             qb &= q.Nested(n => n
                              .Path(p => p.oCustomFiltersIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
-                                .Field(field => field.oCustomFiltersIndexModel.First().Label)
-                                .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilter).Select(y => y.Item1).FirstOrDefault())
+                                .Field(field => field.oCustomFiltersIndexModel.First().value)
+                                .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y.Item1).FirstOrDefault())
                                 )
                                  && q.Match(m => m
                                         .Field(Field => Field.oCustomFiltersIndexModel.First().CustomerPublicId)
@@ -406,6 +407,27 @@ namespace MarketPlace.Web.Controllers
 
                                 #endregion
 
+
+                                #region Custom Filters
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= qw.Nested(n => n
+                                     .Path(p => p.oCustomFiltersIndexModel)
+                                    .Query(fq => fq
+                                        .Match(match => match
+                                        .Field(field => field.oCustomFiltersIndexModel.First().value)
+                                        .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y.Item1).FirstOrDefault())
+                                        )
+                                         && fq.Match(m => m
+                                                .Field(Field => Field.oCustomFiltersIndexModel.First().CustomerPublicId)
+                                                .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                            )
+                                      )
+                                   );
+                                }
+
+                                #endregion
+
                                 #region Can see other Providers?
                                 if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1"
                                      && SessionModel.CurrentCompany.CompanyPublicId != Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value)
@@ -427,6 +449,7 @@ namespace MarketPlace.Web.Controllers
                                             .Query(SessionModel.CurrentCompany.CompanyPublicId))
                                         ));
                                 }
+
                                 #endregion
                                 return qb2;
                             })
@@ -525,39 +548,30 @@ namespace MarketPlace.Web.Controllers
                 #region Custom Filter Search
                 var customSettings = new ConnectionSettings(node);
                 customSettings.DisableDirectStreaming(true);
-                customSettings.DefaultIndex("dev_calificationindex");
+                customSettings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CustomFiltersIndex].Value);
 
                 ElasticClient CustomClient = new ElasticClient(customSettings);
-                Nest.ISearchResponse<CalificationIndexModel> resultCustom = CalificationClient.Search<CalificationIndexModel>((s => s
+                Nest.ISearchResponse<CustomFiltersIndexModel> resultCustom = CustomClient.Search<CustomFiltersIndexModel>((s => s
                     .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
                     .TrackScores(true)
                     .Size(9000000)
                     .Aggregations
                         (agg => agg
-                        .Terms("calification_avg", aggv => aggv
-                        .Field(fi => fi.CalificationProjectName))
-                        .Terms("calification_result_avg", aggv => aggv
-                            .Field(fi => fi.TotalResult)))
+                        .Terms("customfiltertype_avg", aggv => aggv
+                        .Field(fi => fi.Label))
+                        .Terms("customfilter_item_avg", aggv => aggv
+                            .Field(fi => fi.value)))
                          .Query(q => q.
                           Filtered(f => f
                             .Query(q1 => q.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
                             .Filter(f2 =>
                             {
                                 QueryContainer qb = null;
-
-                                #region Calification
-                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y).FirstOrDefault() != null)
+                                
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb &= q.Term(m => m.CalificationProjectName, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y.Item1).FirstOrDefault());
-
-                                }
-
-                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y).FirstOrDefault() != null)
-                                {
-                                    qb &= q.Term(m => m.TotalResult, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y.Item1).FirstOrDefault());
-                                }
-
-                                #endregion
+                                    qb &= q.Term(m => m.value, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y.Item1).FirstOrDefault());
+                                }                                
 
                                 qb &= q.Terms(tms => tms
                                  .Field(fi => fi.ProviderPublicId)
@@ -742,7 +756,6 @@ namespace MarketPlace.Web.Controllers
 
                 #endregion
 
-
                 #region Calification Score
 
                 resultCalification.Aggs.Terms("calification_result_avg").Buckets.All(x =>
@@ -759,6 +772,27 @@ namespace MarketPlace.Web.Controllers
 
                 #endregion
 
+                #region Custom Filters Type
+
+                List<string> oFilterName = new List<string>();
+                resultCustom.Aggs.Terms("customfilter_item_avg").Buckets.All(x =>
+                {
+                    
+                    oModel.CustomTypeFilter.Add(new ElasticSearchFilter
+                    {
+                        FilterCount = (int)x.DocCount,
+                        FilterName = x.Key,
+                        FilterType = enumFilterType.CustomFilterType.ToString(),
+                    });
+                    ProvidersForClientcount = (int)x.DocCount;
+                    
+                    oFilterName.Add(x.Key.Split('/').ToList()[0]);
+                    oModel.CustomerFilterObject = new Tuple<List<ElasticSearchFilter>, List<string>>(oModel.CustomTypeFilter, oFilterName);
+                    return true;
+                });
+                
+                #endregion
+                
                 #endregion
 
                 #endregion ElasticSearch
@@ -853,6 +887,8 @@ namespace MarketPlace.Web.Controllers
                             if (int.Parse(x.Item3) == (int)enumFilterType.CalificationResult && oModel.OtherProvidersFilter.Count > 0)
                                 newFilterUrl += "," + x.Item1 + ";" + oModel.CalificationResultFilter.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
 
+                            if (int.Parse(x.Item3) == (int)enumFilterType.CustomFilterItem && oModel.CustomerFilterObject.Item1.Count > 0)
+                                newFilterUrl += "," + x.Item1 + ";" + oModel.CustomerFilterObject.Item1.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
                             return true;
                         });
                     oModel.SearchFilter = newFilterUrl;
