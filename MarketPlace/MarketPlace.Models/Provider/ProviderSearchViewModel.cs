@@ -35,7 +35,9 @@ namespace MarketPlace.Models.Provider
 
         public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> SurveyStatus { get; set; }
 
-        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> CustomTypeFilter { get; set; }        
+        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> CustomTypeFilter { get; set; }
+
+        public Tuple<List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter>, List<string>> CustomerFilterObject { get; set; }
 
         public string SearchParam { get; set; }
 
