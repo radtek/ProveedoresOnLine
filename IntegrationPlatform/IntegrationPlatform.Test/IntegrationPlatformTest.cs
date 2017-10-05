@@ -120,11 +120,11 @@ namespace IntegrationPlatform.Test
         }
 
         [TestMethod]
-        public void CatalogGetSanofiOptions()
+        public void CatalogGetCustomerOptions()
         {
             List<ProveedoresOnLine.Company.Models.Util.CatalogModel> oReturn = new List<ProveedoresOnLine.Company.Models.Util.CatalogModel>();
 
-            oReturn = IntegrationPlatform.Controller.IntegrationPlatform.CatalogGetSanofiOptions();
+            oReturn = IntegrationPlatform.Controller.IntegrationPlatform.CatalogGetCustomerOptions("55DF9756");
 
             Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
         }

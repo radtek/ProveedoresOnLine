@@ -1797,7 +1797,7 @@ namespace BackOffice.Web.Controllers
                 //Get provider menu
                 oModel.ProviderMenu = GetProviderMenu(oModel);
 
-                oModel.ProviderOptions = IntegrationPlatform.Controller.IntegrationPlatform.CatalogGetSanofiOptions();
+                oModel.ProviderOptions = IntegrationPlatform.Controller.IntegrationPlatform.CatalogGetCustomerOptions(oRelatedCustomer[0].CompanyPublicId);
             }
 
             return View(oModel);

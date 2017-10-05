@@ -256,13 +256,19 @@ namespace IntegrationPlatform.DAL.MySQLDAO
             return Convert.ToInt32(response.ScalarResult);
         }
 
-        public List<ProveedoresOnLine.Company.Models.Util.CatalogModel> CatalogGetSanofiOptions()
+        public List<ProveedoresOnLine.Company.Models.Util.CatalogModel> CatalogGetCustomerOptions(string CustomerPublicId)
         {
+            List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
+
+            lstParams.Add(DataInstance.CreateTypedParameter("vCustomerPublicId", CustomerPublicId));
+
+
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
                 CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
-                CommandText = "Sanofi_Catalog_GetProviderOptions",
+                CommandText = "IP_Catalog_GetOptions",
                 CommandType = CommandType.StoredProcedure,
+                Parameters = lstParams
             });
 
             List<ProveedoresOnLine.Company.Models.Util.CatalogModel> oReturn = new List<ProveedoresOnLine.Company.Models.Util.CatalogModel>();
