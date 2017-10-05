@@ -62,9 +62,9 @@ namespace IntegrationPlatform.DAL.Controller
             return DataFactory.Sanofi_AditionalDataInfo_Upsert(AditionalDataInfoId, AditionalDataId, AditionalDataInfoType, Value, LargeValue, Enable);
         }
 
-        public List<ProveedoresOnLine.Company.Models.Util.CatalogModel> CatalogGetSanofiOptions()
+        public List<ProveedoresOnLine.Company.Models.Util.CatalogModel> CatalogGetCustomerOptions(string CustomerPublicId)
         {
-            return DataFactory.CatalogGetSanofiOptions();
+            return DataFactory.CatalogGetCustomerOptions(CustomerPublicId);
         }
 
         #endregion
