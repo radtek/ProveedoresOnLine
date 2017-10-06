@@ -10,6 +10,8 @@
 
         public const string C_POL_CustomerPublicId_Publicar = "DA5C572E";
 
+        public const string C_POL_CustomerPublicId_Falabella = "55DF9756";
+
         #endregion
     }
 }

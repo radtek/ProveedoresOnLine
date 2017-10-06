@@ -6005,7 +6005,7 @@ namespace MarketPlace.Web.Controllers
                 //get provider view model
                 oModel.RelatedLiteProvider = new ProviderLiteViewModel(oProvider);
                 oModel.ProviderMenu = GetProviderMenu(oModel);
-                oModel.ProviderOptions = oModel.ProviderOptions = IntegrationPlatform.Controller.IntegrationPlatform.CatalogGetSanofiOptions();
+                oModel.ProviderOptions = oModel.ProviderOptions = IntegrationPlatform.Controller.IntegrationPlatform.CatalogGetCustomerOptions(SessionModel.CurrentCompany.CompanyPublicId);
             }
 
             return View(oModel);
