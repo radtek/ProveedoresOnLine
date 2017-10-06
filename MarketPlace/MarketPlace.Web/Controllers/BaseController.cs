@@ -166,7 +166,7 @@ namespace MarketPlace.Web.Controllers
                 //Conocimiento de terceros
                 oReturn.Add(new GenericMenu()
                 {
-                    Name = "Conocimiento de Terceros",
+                    Name = "Listas Restrictivas",
                     Position = oPosition,
                     Url = Url.RouteUrl(
                         MarketPlace.Models.General.Constants.C_Routes_Default,
