@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IntegrationPlatform.Controller
 {
-    public class IntegrationPlatform
+    public class IntegrationPlatformController
     {
         #region Integration
 
@@ -38,11 +38,9 @@ namespace IntegrationPlatform.Controller
         {
             string RelatedCustomer = CustomData.RelatedCompany.CompanyPublicId;
 
-            switch (RelatedCustomer)
+            if (RelatedCustomer == IntegrationPlatform.Models.Util.InternalSettings.Instance[IntegrationPlatform.Models.Constants.C_SettingsPublicIdSanofi].Value)//SANOFI
             {
-                case Models.Constants.C_POL_CustomerPublicId_Sanofi: //SANOFI
-
-                    #region Custom Data
+                #region Custom Data
 
                     if (CustomData.CustomData != null &&
                         CustomData.CustomData.Count > 0)
@@ -88,12 +86,10 @@ namespace IntegrationPlatform.Controller
                     }
 
                     #endregion
-
-                    break;
-                
-                case Models.Constants.C_POL_CustomerPublicId_Publicar: //Publicar publicidad multimedia s.a.s.
-
-                    #region Custom Data
+            }
+            else if(RelatedCustomer == IntegrationPlatform.Models.Util.InternalSettings.Instance[IntegrationPlatform.Models.Constants.C_SettingsPublicIdPublicar].Value)//Publicar publicidad multimedia s.a.s.
+            { 
+                #region Custom Data
 
                     if (CustomData.CustomData != null &&
                         CustomData.CustomData.Count > 0)
@@ -138,13 +134,11 @@ namespace IntegrationPlatform.Controller
                         });
                     }
 
-                    #endregion
-
-                    break;
-
-                case Models.Constants.C_POL_CustomerPublicId_Falabella: //Banco Falabella SA
-
-                    #region Custom Data
+                #endregion
+            }
+            else if(RelatedCustomer == IntegrationPlatform.Models.Util.InternalSettings.Instance[IntegrationPlatform.Models.Constants.C_SettingsPublicIdFalabella].Value) //Banco Falabella SA
+            { 
+                #region Custom Data
 
                     if (CustomData.CustomData != null &&
                         CustomData.CustomData.Count > 0)
@@ -190,8 +184,6 @@ namespace IntegrationPlatform.Controller
                     }
 
                     #endregion
-
-                    break;
             }
 
             return CustomData;

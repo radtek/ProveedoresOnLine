@@ -31,7 +31,7 @@ namespace IntegrationPlatform.Test
                 },
             };
 
-            List<IntegrationPlatform.Models.Integration.CustomDataModel> oReturn = IntegrationPlatform.Controller.IntegrationPlatform.CustomerProvider_GetCustomData(oRelatedCustomer, ProviderPublicId);
+            List<IntegrationPlatform.Models.Integration.CustomDataModel> oReturn = IntegrationPlatform.Controller.IntegrationPlatformController.CustomerProvider_GetCustomData(oRelatedCustomer, ProviderPublicId);
 
             Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
         }
@@ -70,7 +70,7 @@ namespace IntegrationPlatform.Test
                 },
             };
 
-            oCustomDataModel = IntegrationPlatform.Controller.IntegrationPlatform.CustomerProvider_CustomData_Upsert(oCustomDataModel, "F5112365");
+            oCustomDataModel = IntegrationPlatform.Controller.IntegrationPlatformController.CustomerProvider_CustomData_Upsert(oCustomDataModel, "F5112365");
 
             Assert.AreEqual(true, oCustomDataModel.CustomData != null && oCustomDataModel.CustomData.Count > 0);
         }
@@ -92,7 +92,7 @@ namespace IntegrationPlatform.Test
                 },
             };
 
-            oReturn = IntegrationPlatform.Controller.IntegrationPlatform.CustomerProvider_Sanofi_CustomDataInfo_Upsert(oReturn);
+            oReturn = IntegrationPlatform.Controller.IntegrationPlatformController.CustomerProvider_Sanofi_CustomDataInfo_Upsert(oReturn);
 
             Assert.AreEqual(true, oReturn != null);
         }
@@ -114,7 +114,7 @@ namespace IntegrationPlatform.Test
                 },
             };
 
-            oReturn = IntegrationPlatform.Controller.IntegrationPlatform.CustomerProvider_Publicar_CustomDataInfo_Upsert(oReturn);
+            oReturn = IntegrationPlatform.Controller.IntegrationPlatformController.CustomerProvider_Publicar_CustomDataInfo_Upsert(oReturn);
 
             Assert.AreEqual(true, oReturn != null);
         }
@@ -124,7 +124,7 @@ namespace IntegrationPlatform.Test
         {
             List<ProveedoresOnLine.Company.Models.Util.CatalogModel> oReturn = new List<ProveedoresOnLine.Company.Models.Util.CatalogModel>();
 
-            oReturn = IntegrationPlatform.Controller.IntegrationPlatform.CatalogGetCustomerOptions("55DF9756");
+            oReturn = IntegrationPlatform.Controller.IntegrationPlatformController.CatalogGetCustomerOptions("55DF9756");
 
             Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
         }
@@ -138,7 +138,7 @@ namespace IntegrationPlatform.Test
                 },
             };
 
-            List<Models.Integration.CustomDataModel> oReturn = IntegrationPlatform.Controller.IntegrationPlatform.CustomerProvider_GetCustomData(RelatedCustomer, "A24EB150");
+            List<Models.Integration.CustomDataModel> oReturn = IntegrationPlatform.Controller.IntegrationPlatformController.CustomerProvider_GetCustomData(RelatedCustomer, "A24EB150");
 
             Assert.AreEqual(true, oReturn.Count > 0 && oReturn != null);
         }
@@ -147,7 +147,7 @@ namespace IntegrationPlatform.Test
         public void MP_CustomerProvider_GetCustomData()
         {            
 
-            var oReturn = IntegrationPlatform.Controller.IntegrationPlatform.MP_CustomerProvider_GetCustomData("7BC27832", "A24EB150");
+            var oReturn = IntegrationPlatform.Controller.IntegrationPlatformController.MP_CustomerProvider_GetCustomData("7BC27832", "A24EB150");
 
             Assert.AreEqual(true, oReturn != null);
         }
