@@ -185,7 +185,8 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                                                                  || x.ListType == "GOBIERNO DEPARTAMENTAL"
                                                                  || x.ListType == "GOBIERNO MUNICIPAL"
                                                                  || x.ListType == "GOBIERNO NACIONAL" 
-                                                                 || x.ListType == "ESTRUCTURA DE GOBIERNO")
+                                                                 || x.ListType == "ESTRUCTURA DE GOBIERNO"
+                                                                 || x.ListType == "PARTIDOS Y MOVIMIENTOS POLITICOS")
                                 oInfoCreate.Peps = x.ListType;
                             else
                                 oInfoCreate.Peps = "N/A";
