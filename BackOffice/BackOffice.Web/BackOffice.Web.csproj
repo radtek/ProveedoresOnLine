@@ -1167,6 +1167,8 @@
     <Content Include="Views\Administrator\AdminSurvey.cshtml" />
     <Content Include="Views\Administrator\AdminThirdknowledge.cshtml" />
     <Content Include="Views\Provider\CPCProviderCalificationProjectUpsert.cshtml" />
+    <Content Include="Views\Customer\NCNotificationsConfigUpsert.cshtml" />
+    <Content Include="Views\Customer\NCNotificationsConfigItemUpsert.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

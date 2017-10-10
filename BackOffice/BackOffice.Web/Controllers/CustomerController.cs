@@ -876,6 +876,58 @@ namespace BackOffice.Web.Controllers
 
         #endregion
 
+        #region NotificationsConfig
+        public virtual ActionResult NCNotificationsConfigUpsert(string CustomerPublicId)
+        {
+            //generic model info
+            BackOffice.Models.Customer.CustomerViewModel oModel = new Models.Customer.CustomerViewModel()
+            {
+                CustomerOptions = ProveedoresOnLine.CompanyCustomer.Controller.CompanyCustomer.CatalogGetCustomerOptions(),
+                RelatedCustomer = new ProveedoresOnLine.CompanyCustomer.Models.Customer.CustomerModel()
+                {
+                    RelatedCompany = ProveedoresOnLine.Company.Controller.Company.CompanyGetBasicInfo(CustomerPublicId),
+                },
+            };
+
+            //get provider menu
+            oModel.CustomerMenu = GetCustomerMenu(oModel);
+
+            return View(oModel);
+        }
+
+        public virtual ActionResult NCNotificationsConfigItemUpsert(string CustomerPublicId, string NotificationConfigId)
+        {
+            //generic model info
+            BackOffice.Models.Customer.CustomerViewModel oModel = new Models.Customer.CustomerViewModel()
+            {
+                CustomerOptions = ProveedoresOnLine.CompanyCustomer.Controller.CompanyCustomer.CatalogGetCustomerOptions(),
+                RelatedCustomer = new ProveedoresOnLine.CompanyCustomer.Models.Customer.CustomerModel()
+                {
+                    RelatedCompany = ProveedoresOnLine.Company.Controller.Company.CompanyGetBasicInfo(CustomerPublicId),
+                },
+                //RelatedSurveyConfig = new Models.Customer.SurveyConfigViewModel(ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyConfigGetById(Convert.ToInt32(SurveyConfigId.Trim()))),
+                RelatedRoleCompanyList = new List<Models.Customer.CustomerRoleViewModel>(),
+            };
+
+            //get role company list
+            ProveedoresOnLine.Company.Models.Company.CompanyModel oRules = ProveedoresOnLine.Company.Controller.Company.RoleCompany_GetByPublicId(CustomerPublicId);
+
+            if (oRules != null && oRules.RelatedRole != null && oRules.RelatedRole.Count > 0)
+            {
+                oRules.RelatedRole.All(y =>
+                {
+                    oModel.RelatedRoleCompanyList.Add(new Models.Customer.CustomerRoleViewModel(y));
+                    return true;
+                });
+            }
+
+            //get provider menu
+            oModel.CustomerMenu = GetCustomerMenu(oModel);
+
+            return View(oModel);
+        }
+        #endregion
+
         #region Reports
 
         public virtual ActionResult DownloadReport(string CustomerPublicId)
@@ -954,7 +1006,7 @@ namespace BackOffice.Web.Controllers
                     Position = 0,
                     ChildMenu = new List<Models.General.GenericMenu>(),
                 };
-
+                
                 //Basic info
                 oMenuAux.ChildMenu.Add(new Models.General.GenericMenu()
                 {
@@ -1095,6 +1147,39 @@ namespace BackOffice.Web.Controllers
                     Position = 0,
                     IsSelected =
                         (oCurrentAction == MVC.Customer.ActionNames.CPCCalificationProjectConfigUpsert &&
+                        oCurrentController == MVC.Customer.Name),
+                });
+
+                //get is selected menu
+                oMenuAux.IsSelected = oMenuAux.ChildMenu.Any(x => x.IsSelected);
+
+                //add menu
+                oReturn.Add(oMenuAux);
+
+                #endregion
+
+                #region Notifications config
+
+                //header
+                oMenuAux = new Models.General.GenericMenu()
+                {
+                    Name = "Notificaciones",
+                    Position = 5,
+                    ChildMenu = new List<Models.General.GenericMenu>(),
+                };
+
+                //Company User
+                oMenuAux.ChildMenu.Add(new Models.General.GenericMenu()
+                {
+                    Name = "Configuración",
+                    Url = Url.Action
+                        (MVC.Customer.ActionNames.NCNotificationsConfigUpsert,
+                        MVC.Customer.Name,
+                        new { CustomerPublicId = vCustomerInfo.RelatedCustomer.RelatedCompany.CompanyPublicId }),
+                    Position = 0,
+                    IsSelected =
+                        ((oCurrentAction == MVC.Customer.ActionNames.PCProjectConfigUpsert ||
+                        oCurrentAction == MVC.Customer.ActionNames.PCEvaluationItemUpsert) &&
                         oCurrentController == MVC.Customer.Name),
                 });
 
