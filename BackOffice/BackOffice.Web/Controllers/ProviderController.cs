@@ -1655,7 +1655,7 @@ namespace BackOffice.Web.Controllers
 
                                 #endregion
 
-                                oCustomDataToUpsert = IntegrationPlatform.Controller.IntegrationPlatform.CustomerProvider_CustomData_Upsert(oCustomDataToUpsert, ProviderPublicId);
+                                oCustomDataToUpsert = IntegrationPlatform.Controller.IntegrationPlatformController.CustomerProvider_CustomData_Upsert(oCustomDataToUpsert, ProviderPublicId);
 
                                 break;
 
@@ -1693,7 +1693,7 @@ namespace BackOffice.Web.Controllers
 
                                 #endregion
 
-                                oCustomDataToUpsert = IntegrationPlatform.Controller.IntegrationPlatform.CustomerProvider_CustomData_Upsert(oCustomDataToUpsert, ProviderPublicId);
+                                oCustomDataToUpsert = IntegrationPlatform.Controller.IntegrationPlatformController.CustomerProvider_CustomData_Upsert(oCustomDataToUpsert, ProviderPublicId);
 
                                 break;
 
@@ -1731,7 +1731,7 @@ namespace BackOffice.Web.Controllers
 
                                 #endregion
 
-                                oCustomDataToUpsert = IntegrationPlatform.Controller.IntegrationPlatform.CustomerProvider_CustomData_Upsert(oCustomDataToUpsert, ProviderPublicId);
+                                oCustomDataToUpsert = IntegrationPlatform.Controller.IntegrationPlatformController.CustomerProvider_CustomData_Upsert(oCustomDataToUpsert, ProviderPublicId);
 
                                 break;
 
@@ -1769,7 +1769,7 @@ namespace BackOffice.Web.Controllers
 
                                 #endregion
 
-                                oCustomDataToUpsert = IntegrationPlatform.Controller.IntegrationPlatform.CustomerProvider_CustomData_Upsert(oCustomDataToUpsert, ProviderPublicId);
+                                oCustomDataToUpsert = IntegrationPlatform.Controller.IntegrationPlatformController.CustomerProvider_CustomData_Upsert(oCustomDataToUpsert, ProviderPublicId);
 
                                 break;
                         }
@@ -1783,7 +1783,7 @@ namespace BackOffice.Web.Controllers
 
             List<ProveedoresOnLine.Company.Models.Company.CompanyModel> oRelatedCustomer = ProveedoresOnLine.CompanyCustomer.Controller.CompanyCustomer.GetCustomerProviderByCustomData(ProviderPublicId);
 
-            oModel.RelatedProvider.CustomData = IntegrationPlatform.Controller.IntegrationPlatform.CustomerProvider_GetCustomData(oRelatedCustomer, ProviderPublicId);
+            oModel.RelatedProvider.CustomData = IntegrationPlatform.Controller.IntegrationPlatformController.CustomerProvider_GetCustomData(oRelatedCustomer, ProviderPublicId);
 
             #endregion
 
@@ -1797,7 +1797,7 @@ namespace BackOffice.Web.Controllers
                 //Get provider menu
                 oModel.ProviderMenu = GetProviderMenu(oModel);
 
-                oModel.ProviderOptions = IntegrationPlatform.Controller.IntegrationPlatform.CatalogGetCustomerOptions(oRelatedCustomer[0].CompanyPublicId);
+                oModel.ProviderOptions = IntegrationPlatform.Controller.IntegrationPlatformController.CatalogGetCustomerOptions(oRelatedCustomer[0].CompanyPublicId);
             }
 
             return View(oModel);

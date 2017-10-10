@@ -23,7 +23,7 @@ namespace IntegrationPlatform.Models.Util
         {
             get { return SettingsManager.SettingsController.SettingsInstance.ModulesParams[IntegrationPlatform.Models.Constants.C_SettingsModuleName][SettingName]; }
         }
-        public int Count
+        public new int Count
         {
             get
             {
