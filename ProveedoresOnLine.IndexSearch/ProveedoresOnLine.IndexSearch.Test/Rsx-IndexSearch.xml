@@ -2,16 +2,16 @@
 <Settings>
   <IndexSearch>
     <key name="ElasticSearch_Url">http://192.168.0.94:9200/</key>
-    <key name="CompanyIndex">dev_companyindex</key>
-    <key name="CompanyCustomerIndex">dev_companycustomerindex</key>
-    <key name="CompanySurveyIndex">dev_companysurveyindex</key>
-    <key name="SurveyIndex">dev_surveyindex</key>
-    <key name="CustomerProviderIndex">dev_customerproviderindex</key>
-    <key name="ThirdknowledgeIndex">dev_thirdknowledgeindex</key>
-    <key name="CalificationIndex">dev_calificationindex</key>
-    <key name="CustomFiltersIndex">dev_customfiltersindex</key>
+    <key name="CompanyIndex">prod_companyindex</key>
+    <key name="CompanyCustomerIndex">prod_companycustomerindex</key>
+    <key name="CompanySurveyIndex">prod_companysurveyindex</key>
+    <key name="SurveyIndex">prod_surveyindex</key>
+    <key name="CustomerProviderIndex">prod_customerproviderindex</key>
+    <key name="ThirdknowledgeIndex">prod_thirdknowledgeindex</key>
+    <key name="CalificationIndex">prod_calificationindex</key>
+    <key name="CustomFiltersIndex">prod_customfiltersindex</key>
     
-    <key name="QueryIndex">dev_queryindex</key>
+    <key name="QueryIndex">prod_queryindex</key>
   </IndexSearch>
 </Settings>
 
