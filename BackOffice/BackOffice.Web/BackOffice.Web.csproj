@@ -552,6 +552,7 @@
     <None Include="Properties\PublishProfiles\Sebastian.pubxml" />
     <None Include="Properties\PublishProfiles\SebastianHome.pubxml" />
     <None Include="Properties\PublishProfiles\Sebastian_BackOffice_ASUSPC.pubxml" />
+    <None Include="Properties\PublishProfiles\Sergio Palacios.pubxml" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Rsx-BackOffice.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1166,6 +1167,8 @@
     <Content Include="Views\Administrator\AdminSurvey.cshtml" />
     <Content Include="Views\Administrator\AdminThirdknowledge.cshtml" />
     <Content Include="Views\Provider\CPCProviderCalificationProjectUpsert.cshtml" />
+    <Content Include="Views\Customer\NCNotificationsConfigUpsert.cshtml" />
+    <Content Include="Views\Customer\NCNotificationsConfigItemUpsert.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

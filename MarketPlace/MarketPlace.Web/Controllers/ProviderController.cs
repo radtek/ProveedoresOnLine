@@ -5997,7 +5997,7 @@ namespace MarketPlace.Web.Controllers
                             (x.RelatedCompany.CompanyPublicId == ProviderPublicId) :
                             x.RelatedCompany.CompanyPublicId == ProviderPublicId).FirstOrDefault();
 
-            oModel.CustomData = IntegrationPlatform.Controller.IntegrationPlatform.MP_CustomerProvider_GetCustomData(SessionModel.CurrentCompany.CompanyPublicId, ProviderPublicId);
+            oModel.CustomData = IntegrationPlatform.Controller.IntegrationPlatformController.MP_CustomerProvider_GetCustomData(SessionModel.CurrentCompany.CompanyPublicId, ProviderPublicId);
 
             //validate provider permisions
             if (oProvider != null)
@@ -6005,7 +6005,7 @@ namespace MarketPlace.Web.Controllers
                 //get provider view model
                 oModel.RelatedLiteProvider = new ProviderLiteViewModel(oProvider);
                 oModel.ProviderMenu = GetProviderMenu(oModel);
-                oModel.ProviderOptions = oModel.ProviderOptions = IntegrationPlatform.Controller.IntegrationPlatform.CatalogGetCustomerOptions(SessionModel.CurrentCompany.CompanyPublicId);
+                oModel.ProviderOptions = oModel.ProviderOptions = IntegrationPlatform.Controller.IntegrationPlatformController.CatalogGetCustomerOptions(SessionModel.CurrentCompany.CompanyPublicId);
             }
 
             return View(oModel);

@@ -76,10 +76,19 @@ else if (Model.Item2.AditionalFieldTypeInfo.ItemId == 101009)
         }
     }
 }
-
 else if (Model.Item2.AditionalFieldTypeInfo.ItemId == 301001)
 {
     foreach (var item in Model.Item1.ProviderOptions.Where(x => x.CatalogId == 301))
+    {
+        if (!string.IsNullOrEmpty(oCustomList) && Convert.ToInt32(oCustomList) == item.ItemId)
+        {
+            <span>@item.ItemName</span>
+        }
+    }
+}
+else if (Model.Item2.AditionalFieldTypeInfo.ItemId == 401001)
+{
+    foreach (var item in Model.Item1.ProviderOptions.Where(x => x.CatalogId == 401))
     {
         if (!string.IsNullOrEmpty(oCustomList) && Convert.ToInt32(oCustomList) == item.ItemId)
         {
