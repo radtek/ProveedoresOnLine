@@ -325,7 +325,7 @@ var Customer_RulesObject = {
                 field: 'UserCompanyId',
                 title: 'Id',
                 width: '100px',
-            },],
+            }, ],
         });
     },
 };
@@ -3057,7 +3057,7 @@ var Customer_ProjectModule = {
                         }
                     },
                 }],
-            },],
+            }, ],
         });
     },
 };
@@ -3320,7 +3320,7 @@ var ThirdKnowledgeObject = {
                             ThirdKnowledgeObject.RenderAsync(vRenderObject);
                         }
                     }
-                },],
+                }, ],
             }
             ]
         })
@@ -3529,7 +3529,7 @@ var ThirdKnowledgeObject = {
                                 ThirdKnowledgeObject.RenderAsync(vRenderObject);
                             }
                         }
-                    },],
+                    }, ],
             }
             ]
         })
@@ -3787,7 +3787,147 @@ var Customer_AditionalDocumentsObject = {
                 field: 'AditionalDataId',
                 title: 'Id',
                 width: '100px',
-            },],
+            }, ],
         });
     },
 };
+
+var Customer_NotificationsObject = {
+    ObjectId: '',
+    CustomerPublicId: '',
+
+    Init: function (vInitObject) {
+        this.ObjectId = vInitObject.ObjectId;
+        this.CustomerPublicId = vInitObject.CustomerPublicId;
+    },
+
+    RenderAsync: function () {
+        Customer_NotificationsObject.Render_NotificationsConfig();
+        Customer_NotificationsObject.ConfigEvents();
+    },
+
+    Render_NotificationsConfig: function () {
+        $('#' + Customer_NotificationsObject.ObjectId).kendoGrid({
+            editable: true,
+            navigatable: true,
+            pageable: false,
+            scrollable: true,
+            toolbar: [
+                { name: 'create', text: 'Nuevo' },
+                { name: 'save', text: 'Guardar datos del listado' },
+                { name: 'cancel', text: 'Descartar' },
+                { name: 'ViewEnable', template: $('#' + Customer_AditionalDocumentsObject.ObjectId + '_ViewEnablesTemplate').html() },
+                { name: 'ShortcutToolTip', template: $('#' + Customer_AditionalDocumentsObject.ObjectId + '_ShortcutToolTipTemplate').html() },
+            ],
+            dataSource: {
+                schema: {
+                    model: {
+                        id: "AditionalDataId",
+                        fields: {
+                            AditionalDataId: { editable: false, nullable: true },
+
+                            Title: { editable: true, validation: { required: true } },
+
+                            AditionalDataTypeId: { editable: false },
+                            AditionalDataType: { editable: true, validation: { required: true } },
+
+                            ModuleId: { editable: false },
+                            Module: { editable: true, validation: { required: true } },
+
+                            Enable: { editable: true, type: 'boolean', defaultValue: true },
+                        },
+                    }
+                },
+                transport: {
+                    read: function (options) {
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/CustomerApi?GetAditionalDocument=true&CustomerPublicId=' + Customer_AditionalDocumentsObject.CustomerPublicId + '&ViewEnable=' + Customer_AditionalDocumentsObject.GetViewEnableInfo(),
+                            dataType: 'json',
+                            success: function (result) {
+                                options.success(result);
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', result);
+                            },
+                        });
+                    },
+                    create: function (options) {
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/CustomerApi?ADAditionalDocumemntsUpsert=true&CustomerPublicId=' + Customer_AditionalDocumentsObject.CustomerPublicId,
+                            dataType: 'json',
+                            type: 'post',
+                            data: {
+                                DataToUpsert: kendo.stringify(options.data)
+                            },
+                            success: function (result) {
+                                options.success(result);
+                                Message('success', 'Se creó el registro.');
+
+                                $('#' + Customer_AditionalDocumentsObject.ObjectId).data('kendoGrid').dataSource.read();
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', result);
+                            },
+                        });
+                    },
+                    update: function (options) {
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/CustomerApi?ADAditionalDocumemntsUpsert=true&CustomerPublicId=' + Customer_AditionalDocumentsObject.CustomerPublicId,
+                            dataType: 'json',
+                            type: 'post',
+                            data: {
+                                DataToUpsert: kendo.stringify(options.data)
+                            },
+                            success: function (result) {
+                                options.success(result);
+                                Message('success', 'Se editó el registro.');
+
+                                $('#' + Customer_AditionalDocumentsObject.ObjectId).data('kendoGrid').dataSource.read();
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', 'Error al actualizar el registro.');
+                            },
+                        });
+                    },
+                },
+                requestStart: function () {
+                    kendo.ui.progress($("#loading"), true);
+                },
+                requestEnd: function () {
+                    kendo.ui.progress($("#loading"), false);
+                }
+            },
+            columns: [{
+                field: 'Enable',
+                title: 'Habilitado',
+                width: '100px',
+            }, {
+                field: 'Title',
+                title: 'Titulo',
+                width: '100px',
+            }, {
+                field: 'AditionalDataType',
+                title: 'Tipo de archivo',
+                width: '150px',
+            }, {
+                field: 'Module',
+                title: 'Modulo',
+                width: '200px',
+            }, {
+                field: 'AditionalDataId',
+                title: 'Id',
+                width: '100px',
+            }, ],
+        });
+    },
+
+    ConfigEvents: function () {
+        //config grid infro visible enable event
+        $('#' + Customer_NotificationsObject.ObjectId + '_ViewEnable').change(function () {
+            $('#' + Customer_NotificationsObject.ObjectId).data('kendoGrid').dataSource.read();
+        });
+    },
+}
