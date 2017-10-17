@@ -3816,15 +3816,15 @@ var Customer_NotificationsObject = {
                 { name: 'create', text: 'Nuevo' },
                 { name: 'save', text: 'Guardar datos del listado' },
                 { name: 'cancel', text: 'Descartar' },
-                { name: 'ViewEnable', template: $('#' + Customer_AditionalDocumentsObject.ObjectId + '_ViewEnablesTemplate').html() },
-                { name: 'ShortcutToolTip', template: $('#' + Customer_AditionalDocumentsObject.ObjectId + '_ShortcutToolTipTemplate').html() },
+                { name: 'ViewEnable', template: $('#' + Customer_NotificationsObject.ObjectId + '_ViewEnablesTemplate').html() },
+                { name: 'ShortcutToolTip', template: $('#' + Customer_NotificationsObject.ObjectId + '_ShortcutToolTipTemplate').html() },
             ],
             dataSource: {
                 schema: {
                     model: {
-                        id: "AditionalDataId",
+                        id: "NotificationConfigId",
                         fields: {
-                            AditionalDataId: { editable: false, nullable: true },
+                            NotificationConfigId: { editable: false, nullable: true },
 
                             Title: { editable: true, validation: { required: true } },
 

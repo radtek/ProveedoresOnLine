@@ -7,6 +7,7 @@
 
     string CurrentCustomer = MarketPlace.Models.General.SessionModel.CurrentCompany.CompanyPublicId;
     string PublicarCustomerPublicId = MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.CC_CompanyPublicId_Publicar].Value;
+    string FalabellaCustomerPublicId = MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.CC_CompanyPublicId_FalabellaCustomer].Value;
 
     if (MarketPlace.Models.General.SessionModel.CurrentCompany != null &&
         MarketPlace.Models.General.SessionModel.CurrentCompany.CompanyInfo != null)
@@ -31,151 +32,6 @@
         @*new funtion*@
         @if (oCurrentMenu.Any(x => x == (int)MarketPlace.Models.General.enumProviderMenu.GeneralInfo))
         {
-            //Pais Filter
-            if (Model.CountryFilter != null && Model.CountryFilter.Count > 0)
-            {
-                <li>
-                    <span>Pais</span>
-                    <ul>
-                        @foreach (var oFilterItem in Model.CountryFilter)
-                        {
-                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
-                            {
-                                <li>
-                                    <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
-                                    <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
-                                </li>
-                            }
-                            else
-                            {
-                                if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
-                                {
-                                    <li>
-                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
-                                        <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
-                                    </li>
-                                }
-                            }
-                        }
-                    </ul>
-                </li>
-            }
-            //City Filter
-            if (Model.CityFilter != null && Model.CityFilter.Count > 0)
-            {
-                <li>
-                    <span>Ciudad</span>
-                    <ul>
-                        @foreach (var oFilterItem in Model.CityFilter)
-                        {
-                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
-                            {
-                                <li>
-                                    <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.City)'}});" />
-                                    <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
-                                </li>
-                            }
-                            else
-                            {
-                                if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
-                                {
-                                    <li>
-                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.City)'}});" />
-                                        <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
-                                    </li>
-                                }
-                            }
-                        }
-                    </ul>
-                </li>
-            }
-            //Ica Filter
-            if (Model.IcaFilter != null && Model.IcaFilter.Count > 0)
-            {
-                <li>
-                    <span>ICA</span>
-                    <ul>
-                        @foreach (var oFilterItem in Model.IcaFilter)
-                        {
-                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
-                            {
-                                <li>
-                                    <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.EconomicActivity)'}});" />
-                                    <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
-                                </li>
-                            }
-                            else
-                            {
-                                if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
-                                {
-                                    <li>
-                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.EconomicActivity)'}});" />
-                                        <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
-                                    </li>
-                                }
-                            }
-                        }
-                    </ul>
-                </li>
-            }
-            //BlackList Filter
-            if (Model.BlackListFilter != null && Model.BlackListFilter.Count > 0)
-            {
-                <li>
-                    <span>Proveedores en Listas Restrictivas</span>
-                    <ul>
-                        @foreach (var oFilterItem in Model.BlackListFilter)
-                        {
-                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
-                            {
-                                <li>
-                                    <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.RestrictiveListProvider)'}});" />
-                                    <span>Proveedores En Listas Restrictivas (@oFilterItem.FilterCount) </span>
-                                </li>
-                            }
-                            else
-                            {
-                                if (oFilterItem.FilterCount != 0 && oFilterItem.FilterType != "F")
-                                {
-                                    <li>
-                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.RestrictiveListProvider)'}});" />
-                                        <span>Proveedores En Listas Restrictivas (@oFilterItem.FilterCount) </span>
-                                    </li>
-                                }
-                            }
-                        }
-                    </ul>
-                </li>
-            }
-            //Status Filter
-            if (Model.StatusFilter != null && Model.StatusFilter.Count > 0)
-            {
-                <li>
-                    <span>Estado</span>
-                    <ul>
-                        @foreach (var oFilterItem in Model.StatusFilter)
-                        {
-                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
-                            {
-                                <li>
-                                    <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.ProviderStatus)'}});" />
-                                    <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
-                                </li>
-                            }
-                            else
-                            {
-                                if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
-                                {
-                                    <li>
-                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.ProviderStatus)'}});" />
-                                        <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
-                                    </li>
-                                }
-                            }
-                        }
-                    </ul>
-                </li>
-            }
             //My Providers Filter
             if (Model.MyProvidersFilter != null && Model.MyProvidersFilter.Count > 0)
             {
@@ -247,6 +103,193 @@
                 </li>
 
             }
+            //Custom  Filter
+            if (Model.CustomTypeFilter != null && Model.CustomTypeFilter.Count > 0)
+            {
+                foreach (var item in Model.CustomerFilterObject.Item2.Distinct())
+                {
+                    string TittleName = item.Replace('_', ' ').First().ToString().ToUpper() + item.Replace('_', ' ').Substring(1);
+                    <li>
+                        <span>@TittleName</span>
+                        <ul>
+                            @foreach (var oFilterItem in Model.CustomerFilterObject.Item1)
+                            {
+                                if (item.Replace(' ', '_') == oFilterItem.FilterName.Split('/').ToList()[0])
+                                {
+                                    if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterName.ToString()))
+                                    {
+                                        <li>
+                                            <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterName + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CustomFilterItem)'}});" />
+                                            <span>@oFilterItem.FilterName.Split('/').ToList()[1].Replace("_", " ")  (@oFilterItem.FilterCount) </span>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
+                                        {
+                                            <li>
+                                                <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterName + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CustomFilterItem)'}});" />
+                                                <span>@oFilterItem.FilterName.Split('/').ToList()[1].Replace("_", " ") (@oFilterItem.FilterCount) </span>
+                                            </li>
+                                        }
+                                    }
+                                }
+
+                            }
+                        </ul>
+                    </li>
+                }
+
+            }
+            //Pais Filter
+            if (Model.CountryFilter != null && Model.CountryFilter.Count > 0)
+            {
+                <li>
+                    <span>Pais</span>
+                    <ul>
+                        @foreach (var oFilterItem in Model.CountryFilter)
+                        {
+                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
+                            {
+                                <li>
+                                    <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
+                                    <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                </li>
+                            }
+                            else
+                            {
+                                if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
+                                {
+                                    <li>
+                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.Country)'}});" />
+                                        <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                    </li>
+                                }
+                            }
+                        }
+                    </ul>
+                </li>
+            }
+            //City Filter
+            if (Model.CityFilter != null && Model.CityFilter.Count > 0)
+            {
+                <li>
+                    <span>Ciudad</span>
+                    <ul>
+                        @foreach (var oFilterItem in Model.CityFilter)
+                        {
+                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
+                            {
+                                <li>
+                                    <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.City)'}});" />
+                                    <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                </li>
+                            }
+                            else
+                            {
+                                if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
+                                {
+                                    <li>
+                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.City)'}});" />
+                                        <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                    </li>
+                                }
+                            }
+                        }
+                    </ul>
+                </li>
+            }
+            if (CurrentCustomer != FalabellaCustomerPublicId)
+            {
+                //Ica Filter
+                if (Model.IcaFilter != null && Model.IcaFilter.Count > 0)
+                {
+                    <li>
+                        <span>ICA</span>
+                        <ul>
+                            @foreach (var oFilterItem in Model.IcaFilter)
+                            {
+                                if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
+                                {
+                                    <li>
+                                        <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.EconomicActivity)'}});" />
+                                        <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                    </li>
+                                }
+                                else
+                                {
+                                    if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
+                                    {
+                                        <li>
+                                            <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.EconomicActivity)'}});" />
+                                            <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                        </li>
+                                    }
+                                }
+                            }
+                        </ul>
+                    </li>
+                }
+            }
+
+            //BlackList Filter
+            if (Model.BlackListFilter != null && Model.BlackListFilter.Count > 0)
+            {
+                <li>
+                    <span>Proveedores en Listas Restrictivas</span>
+                    <ul>
+                        @foreach (var oFilterItem in Model.BlackListFilter)
+                        {
+                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
+                            {
+                                <li>
+                                    <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.RestrictiveListProvider)'}});" />
+                                    <span>Proveedores En Listas Restrictivas (@oFilterItem.FilterCount) </span>
+                                </li>
+                            }
+                            else
+                            {
+                                if (oFilterItem.FilterCount != 0 && oFilterItem.FilterType != "F")
+                                {
+                                    <li>
+                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.RestrictiveListProvider)'}});" />
+                                        <span>Proveedores En Listas Restrictivas (@oFilterItem.FilterCount) </span>
+                                    </li>
+                                }
+                            }
+                        }
+                    </ul>
+                </li>
+            }
+            //Status Filter
+            if (Model.StatusFilter != null && Model.StatusFilter.Count > 0)
+            {
+                <li>
+                    <span>Estado</span>
+                    <ul>
+                        @foreach (var oFilterItem in Model.StatusFilter)
+                        {
+                            if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
+                            {
+                                <li>
+                                    <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.ProviderStatus)'}});" />
+                                    <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                </li>
+                            }
+                            else
+                            {
+                                if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
+                                {
+                                    <li>
+                                        <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.ProviderStatus)'}});" />
+                                        <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                    </li>
+                                }
+                            }
+                        }
+                    </ul>
+                </li>
+            }            
 
             //Calification Filter
             if (Model.CalificationTypeProcessFilter != null && Model.CalificationTypeProcessFilter.Count > 0)
@@ -305,45 +348,7 @@
                         }
                     </ul>
                 </li>
-            }
-
-            //Calification Result Filter
-            if (Model.CustomTypeFilter != null && Model.CustomTypeFilter.Count > 0)
-            {
-                foreach (var item in Model.CustomerFilterObject.Item2.Distinct())
-                {
-                    <li>
-                        <span>@item.Replace('_',' ')</span>
-                        <ul>
-                            @foreach (var oFilterItem in Model.CustomerFilterObject.Item1)
-                            {
-                                if (item.Replace(' ', '_') == oFilterItem.FilterName.Split('/').ToList()[0])
-                                {
-                                    if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterName.ToString()))
-                                    {
-                                        <li>
-                                            <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterName + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CustomFilterItem)'}});" />
-                                            <span>@oFilterItem.FilterName.Split('/').ToList()[1].Replace("_", " ")  (@oFilterItem.FilterCount) </span>
-                                        </li>
-                                    }
-                                    else
-                                    {
-                                        if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
-                                        {
-                                            <li>
-                                                <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterName + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CustomFilterItem)'}});" />
-                                                <span>@oFilterItem.FilterName.Split('/').ToList()[1].Replace("_", " ") (@oFilterItem.FilterCount) </span>
-                                            </li>
-                                        }
-                                    }
-                                }
-
-                            }
-                        </ul>
-                    </li>
-                }
-
-            }
+            }           
 
         }
         @if (oCurrentModule.Any(x => x == (int)MarketPlace.Models.General.enumModule.Survey) &&

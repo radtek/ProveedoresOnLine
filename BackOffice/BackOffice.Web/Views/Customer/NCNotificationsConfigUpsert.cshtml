@@ -77,11 +77,10 @@
         $(document).ready(function () {
             Customer_NotificationsObject.Init({
                 ObjectId: 'divGridNotificationConfig',
-                CustomerPublicId: '@Model.RelatedCustomer.RelatedCompany.CompanyPublicId',
-                               
+                CustomerPublicId: '@Model.RelatedCustomer.RelatedCompany.CompanyPublicId',                               
             });
 
-            Customer_SurveyObject.RenderAsync();
+            Customer_NotificationsObject.RenderAsync();
         });
     </script>
 }

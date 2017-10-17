@@ -102,6 +102,8 @@
 
         public const string CC_CompanyPublicId_ClientePolipropileno = "CompanyPublicId_ClientePolipropileno";
 
+        public const string CC_CompanyPublicId_FalabellaCustomer = "CompanyPublicId_FalabellaCustomer";
+
         #endregion
 
         #region Index
