@@ -6980,13 +6980,14 @@ var Provider_CustomerInfoObject = {
                 $('#' + Provider_CustomerInfoObject.ObjectId + '_Customer_List_Dialog').html('');
                 for (var i = 0; i < result.length; i++) {
                     if (result[i].CP_Enable == 'True') {
-                        $('#' + Provider_CustomerInfoObject.ObjectId + '_Customer_List_Dialog').append('<li class="CompanyCheck"><input id="' + result[i].CP_CustomerPublicId + '" type="checkbox" checked /></li>')
+                        //$('#' + Provider_CustomerInfoObject.ObjectId + '_Customer_List_Dialog').append('<li class="CompanyCheck"><input id="' + result[i].CP_CustomerPublicId + '" type="checkbox" checked /></li>')
                     }
                     else {
                         $('#' + Provider_CustomerInfoObject.ObjectId + '_Customer_List_Dialog').append('<li class="CompanyCheck"><input id="' + result[i].CP_CustomerPublicId + '" type="checkbox" /></li>')
+                        $('#' + Provider_CustomerInfoObject.ObjectId + '_Customer_List_Dialog').append('<li class="Company">' + result[i].CP_Customer + '</li>')
+                        $('#' + Provider_CustomerInfoObject.ObjectId + '_Customer_List_Dialog').append('<li><input id="PublicId" type="hidden" value="' + result[i].CP_CustomerPublicId + '" /></li>')
                     }
-                    $('#' + Provider_CustomerInfoObject.ObjectId + '_Customer_List_Dialog').append('<li class="Company">' + result[i].CP_Customer + '</li>')
-                    $('#' + Provider_CustomerInfoObject.ObjectId + '_Customer_List_Dialog').append('<li><input id="PublicId" type="hidden" value="' + result[i].CP_CustomerPublicId + '" /></li>')
+                    
                 }
             },
             error: function (result) {
