@@ -42,6 +42,8 @@
     <key name="C_Settings_ProcablesPublicId">FB9C6D3E</key>
     
     <key name="CompanyPublicId_ClientePolipropileno">10A0C1D5</key>
+    
+    <key name="CompanyPublicId_FalabellaCustomer">163B3310</key>
 
     <key name="ElasticSearchUrl">http://192.168.0.94:9200/</key>
         
@@ -59,7 +61,8 @@
     
     <key name="CalificationIndex">dev_calificationindex</key>
     
-    <key name="CustomFiltersIndex">dev_customfiltersindex</key>
+    <key name="CustomFiltersIndex">dev_customfiltersindex</key>  
+    
       
     
     <key name="Desktop_Analytics">

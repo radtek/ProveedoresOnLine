@@ -222,6 +222,8 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                                                              || x.ListType == "NACIONES UNIDAS"
                                                              || x.ListType == "NON-SDN IRANIAN SANCTIONS ACT LIST (NS-ISA)_EEUU"
                                                              || x.ListType == "OFAC"
+                                                             || x.ListType == "SECTORAL SANCTIONS IDENTIFICATIONS_LIST_EEUU"
+                                                             || x.ListType == "SPECIALLY DESIGNATED NATIONALS LIST_EEUU"
                                                              || x.ListType == "PALESTINIAN LEGISLATIVE COUNCIL LIST_EEUU"
                                                              || x.ListType == "VINCULADOS" ?
                                                              "LISTAS RESTRICTIVAS" + " - Criticidad Alta" :
@@ -246,9 +248,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                                                              || x.ListType == "ONU_RESOLUCION_1988"
                                                              || x.ListType == "ONU_RESOLUCION_1988"
                                                              || x.ListType == "ONU_RESOLUCION_1988"
-                                                             || x.ListType == "ONU_RESOLUCION_2023"
-                                                             || x.ListType == "SECTORAL SANCTIONS IDENTIFICATIONS_LIST_EEUU"
-                                                             || x.ListType == "SPECIALLY DESIGNATED NATIONALS LIST_EEUU"
+                                                             || x.ListType == "ONU_RESOLUCION_2023"                                                             
                                                              || x.ListType == "SUPER SOCIEDADES"
                                                              || x.ListType == "UNVERIFIED_LIST_EEUU" ?
                                                              x.ListType + " - Criticidad Media" :

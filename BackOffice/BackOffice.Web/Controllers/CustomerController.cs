@@ -895,37 +895,6 @@ namespace BackOffice.Web.Controllers
             return View(oModel);
         }
 
-        public virtual ActionResult NCNotificationsConfigItemUpsert(string CustomerPublicId, string NotificationConfigId)
-        {
-            //generic model info
-            BackOffice.Models.Customer.CustomerViewModel oModel = new Models.Customer.CustomerViewModel()
-            {
-                CustomerOptions = ProveedoresOnLine.CompanyCustomer.Controller.CompanyCustomer.CatalogGetCustomerOptions(),
-                RelatedCustomer = new ProveedoresOnLine.CompanyCustomer.Models.Customer.CustomerModel()
-                {
-                    RelatedCompany = ProveedoresOnLine.Company.Controller.Company.CompanyGetBasicInfo(CustomerPublicId),
-                },
-                //RelatedSurveyConfig = new Models.Customer.SurveyConfigViewModel(ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyConfigGetById(Convert.ToInt32(SurveyConfigId.Trim()))),
-                RelatedRoleCompanyList = new List<Models.Customer.CustomerRoleViewModel>(),
-            };
-
-            //get role company list
-            ProveedoresOnLine.Company.Models.Company.CompanyModel oRules = ProveedoresOnLine.Company.Controller.Company.RoleCompany_GetByPublicId(CustomerPublicId);
-
-            if (oRules != null && oRules.RelatedRole != null && oRules.RelatedRole.Count > 0)
-            {
-                oRules.RelatedRole.All(y =>
-                {
-                    oModel.RelatedRoleCompanyList.Add(new Models.Customer.CustomerRoleViewModel(y));
-                    return true;
-                });
-            }
-
-            //get provider menu
-            oModel.CustomerMenu = GetCustomerMenu(oModel);
-
-            return View(oModel);
-        }
         #endregion
 
         #region Reports

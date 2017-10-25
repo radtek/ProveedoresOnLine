@@ -21,7 +21,7 @@
                 Html.RenderPartial(MVC.Shared.Views._C_CustomerActions, Model);
             }
             <div id="loading"></div>
-            <div id="divGridSurveyConfig"></div>
+            <div id="divGridNotificationConfig"></div>
             <br />
             @{
                 Model.IsForm = false;
@@ -34,19 +34,19 @@
 <!--templates-->
 <div style="display:none;">
 
-    <div id="divGridSurveyConfig_ShortcutToolTipTemplate">
+    <div id="divGridNotificationConfig_ShortcutToolTipTemplate">
         <img class="divGrid_kbtooltip" src="@Url.Content(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_InfoTooltip].Value)" title=" Nuevo (alt+shift+n) -  Guardar (alt+shift+g) - Descartar (alt+shift+d) " />
     </div>
 
-    <div id="divGridSurveyConfig_ViewEnablesTemplate">
+    <div id="divGridNotificationConfig_ViewEnablesTemplate">
         <label class="POBOProviderGridVerSoloTrue">Ver solo los habilitados</label>
         <input class="POBOProviderGridEnableContact" id="divGridSurveyConfig_ViewEnable" type="checkbox" checked="checked" />
     </div>
 
-    <div id="divGridSurveyConfig_SearchTemplate">
+    @*<div id="divGridNotificationConfig_SearchTemplate">
         <input class="POBOSurveySearchInput" id="divGridSurveyConfig_txtSearch" type="text" value="@Request["SearchParam"]" placeholder="Buscar evaluación por nombre o por grupo" />
         <a class="POBOSearchEvaluations" href="javascript:Customer_SurveyObject.Search();">Buscar</a>
-    </div>
+    </div>*@
 </div>
 
 @{
@@ -75,15 +75,12 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            Customer_SurveyObject.Init({
-                ObjectId: 'divGridSurveyConfig',
-                CustomerPublicId: '@Model.RelatedCustomer.RelatedCompany.CompanyPublicId',
-                PageSize: '@BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_Grid_RowCountDefault].Value',
-                SurveyGroup: '@oSurveyGroup',
-                SurveyConfigItemUpsertUrl: '@Html.Raw(oSCSurveyConfigItemUpsertUrl)',
+            Customer_NotificationsObject.Init({
+                ObjectId: 'divGridNotificationConfig',
+                CustomerPublicId: '@Model.RelatedCustomer.RelatedCompany.CompanyPublicId',                               
             });
 
-            Customer_SurveyObject.RenderAsync();
+            Customer_NotificationsObject.RenderAsync();
         });
     </script>
 }

@@ -117,7 +117,7 @@ namespace MarketPlace.Web.Controllers
                             )
                         ).Nested("customfiltertype_avg", x => x.
                             Path(p => p.oCustomFiltersIndexModel).
-                                Aggregations(aggs => aggs.Terms("customfiltertype", term => term.Field(fi => fi.oCustomFiltersIndexModel.First().Label)
+                                Aggregations(aggs => aggs.Terms("customfiltertype", term => term.Field(fi => fi.oCustomFiltersIndexModel.First().Label).Size(50)
                                 )
                             )
                         )
@@ -558,9 +558,9 @@ namespace MarketPlace.Web.Controllers
                     .Aggregations
                         (agg => agg
                         .Terms("customfiltertype_avg", aggv => aggv
-                        .Field(fi => fi.Label))
+                        .Field(fi => fi.Label).Size(50))
                         .Terms("customfilter_item_avg", aggv => aggv
-                            .Field(fi => fi.value)))
+                            .Field(fi => fi.value).Size(50)))
                          .Query(q => q.
                           Filtered(f => f
                             .Query(q1 => q.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
