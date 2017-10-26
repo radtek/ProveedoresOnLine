@@ -84,6 +84,8 @@
     <Compile Include="Models\Company\CalificationIndexModel.cs" />
     <Compile Include="Models\Company\CompanyIndexModel.cs" />
     <Compile Include="Models\Company\CompanyModel.cs" />
+    <Compile Include="Models\Company\CompanyNotificationInfoModel.cs" />
+    <Compile Include="Models\Company\CompanyNotificationModel.cs" />
     <Compile Include="Models\Company\CustomerProviderIndexModel.cs" />
     <Compile Include="Models\Company\CustomFiltersIndexModel.cs" />
     <Compile Include="Models\Role\RoleCompanyModel.cs" />

@@ -1187,5 +1187,104 @@ namespace ProveedoresOnLine.Company.Controller
             return DAL.Controller.CompanyDataController.Instance.CustomFiltersGetAll();
         }
         #endregion
+
+        #region Notifications Config
+        public static List<CompanyNotificationModel> NotificationConfigGetByCompany(string CompanyPublicId)
+        {
+            return DAL.Controller.CompanyDataController.Instance.NotificationConfigGetByCompany(CompanyPublicId);
+        }
+
+        public static CompanyNotificationModel NotificationConfigUpsert(CompanyNotificationModel oNotificationModel)
+        {
+            if (!string.IsNullOrEmpty(oNotificationModel.CompanyPublicId) && oNotificationModel.CompanyNotificationInfo != null && oNotificationModel.CompanyNotificationInfo.Count > 0)
+            {
+                LogManager.Models.LogModel oLog = GetGenericLogModel();
+                try
+                {
+                    oNotificationModel.NotificationConfigId = DAL.Controller.CompanyDataController.Instance.NotificationConfigUpsert
+                        (oNotificationModel.CompanyPublicId,
+                        oNotificationModel.NotificationConfigId,
+                        oNotificationModel.NotificationName,
+                        oNotificationModel.Enable);
+
+                    NotificationConfigInfoUpsert(oNotificationModel);
+
+                    oLog.IsSuccess = true;
+
+                }
+                catch (Exception err)
+                {
+                    oLog.IsSuccess = false;
+                    oLog.Message = err.Message + " - " + err.StackTrace;
+
+                    throw err;
+                }
+                finally
+                {
+                    oLog.LogObject = oNotificationModel;
+
+                    oLog.RelatedLogInfo.Add(new LogManager.Models.LogInfoModel()
+                    {
+                        LogInfoType = "NotificationConfig",
+                        Value = oNotificationModel.CompanyPublicId,
+                    });
+
+                    LogManager.ClientLog.AddLog(oLog);
+                }
+            }
+
+            return oNotificationModel;
+        }
+
+        public static CompanyNotificationModel NotificationConfigInfoUpsert(CompanyNotificationModel oInfoToUpsert)
+        {
+            if (oInfoToUpsert.NotificationConfigId > 0 &&
+                oInfoToUpsert.CompanyNotificationInfo != null &&
+                oInfoToUpsert.CompanyNotificationInfo.Count > 0)
+            {
+                oInfoToUpsert.CompanyNotificationInfo.All(ctinf =>
+                {
+                    LogManager.Models.LogModel oLog = GetGenericLogModel();
+                    try
+                    {
+                        ctinf.CompanyNotificationInfoId = DAL.Controller.CompanyDataController.Instance.NotificationConfigInfoUpsert
+                            (oInfoToUpsert.NotificationConfigId,
+                            ctinf.CompanyNotificationInfoId > 0 ? (int?)ctinf.CompanyNotificationInfoId : null,
+                            ctinf.ConfigItemType.ItemId,
+                            ctinf.Value,
+                            ctinf.LargeValue,
+                            ctinf.Enable);
+
+                        oLog.IsSuccess = true;
+
+                    }
+                    catch (Exception err)
+                    {
+                        oLog.IsSuccess = false;
+                        oLog.Message = err.Message + " - " + err.StackTrace;
+
+                        throw err;
+                    }
+                    finally
+                    {
+                        oLog.LogObject = ctinf;
+
+                        oLog.RelatedLogInfo.Add(new LogManager.Models.LogInfoModel()
+                        {
+                            LogInfoType = "NotificationConfigInfo Upsert",
+                            Value = oInfoToUpsert.NotificationConfigId.ToString(),
+                        });
+
+                        LogManager.ClientLog.AddLog(oLog);
+                    }
+
+                    return true;
+                });
+            }
+
+            return oInfoToUpsert;
+        }
+
+        #endregion
     }
 }

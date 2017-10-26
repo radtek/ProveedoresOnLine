@@ -23,7 +23,7 @@ namespace ProveedoresOnLine.Company.Test
         public void TreeGetFullByType()
         {
             List<ProveedoresOnLine.Company.Models.Util.TreeModel> oReturn =
-                ProveedoresOnLine.Company.Controller.Company.TreeGetFullByType(114014);
+                ProveedoresOnLine.Company.Controller.Company.TreeGetFullByType(114003);
 
             Assert.AreEqual(true, oReturn.Count > 0);
         }
@@ -34,7 +34,7 @@ namespace ProveedoresOnLine.Company.Test
             int oTotalCount;
             List<ProveedoresOnLine.Company.Models.Util.GeographyModel> oReturn =
                 ProveedoresOnLine.Company.Controller.Company.CategorySearchByGeography
-                ("cu", null, 0, 20, out oTotalCount);
+                ("iso", null, 0, 20, out oTotalCount);
 
             Assert.AreEqual(true, oReturn.Count >= 10);
         }
@@ -211,7 +211,7 @@ namespace ProveedoresOnLine.Company.Test
             int oTotalRows;
             List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> oReturn =
                 ProveedoresOnLine.Company.Controller.Company.CategorySearchByResolutionAdmin
-                ("", 0, 5, out oTotalRows);
+                ("iso", 0, 5, out oTotalRows);
 
             Assert.AreEqual(true, oReturn.Count >= 1);
 
@@ -453,9 +453,20 @@ namespace ProveedoresOnLine.Company.Test
         public void CustomFiltersGetAll()
         {
             int oTotalRows = 0;
-            List<CustomFiltersIndexModel> oReturn = ProveedoresOnLine.Company.Controller.Company.CustomFiltersGetAll();
+            List<CustomFiltersIndexModel> oReturn = Controller.Company.CustomFiltersGetAll();
             Assert.AreEqual(true, oReturn.Count > 0);
         }
 
+
+        #region Notificatio Company Config
+
+        [TestMethod]
+        public void NotificationConfigGetByCompany()
+        {
+            List<CompanyNotificationModel> oReturn = Controller.Company.NotificationConfigGetByCompany("DA5C572E");
+            Assert.AreEqual(true, oReturn.Count > 0);
+        }
+
+        #endregion
     }
 }

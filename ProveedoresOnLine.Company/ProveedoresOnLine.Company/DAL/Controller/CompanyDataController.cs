@@ -403,5 +403,24 @@ namespace ProveedoresOnLine.Company.DAL.Controller
         }
 
         #endregion
+
+        #region Notifications Config
+
+        public List<CompanyNotificationModel> NotificationConfigGetByCompany(string CompanyPublicId)
+        {
+            return DataFactory.NotificationConfigGetByCompany(CompanyPublicId);
+        }
+
+        public int NotificationConfigUpsert(string CompanyPublicId, int? NotificationConfigId, string NotificationName, bool Enable)
+        {
+            return DataFactory.NotificationConfigUpsert(CompanyPublicId, NotificationConfigId, NotificationName, Enable);
+        }
+
+        public int NotificationConfigInfoUpsert(int NotificationConfigId, int? NotificationConfigInfoId, int ConfigItemType, string Value, string LargeValue, bool Enable)
+        {
+            return DataFactory.NotificationConfigInfoUpsert(NotificationConfigId, NotificationConfigInfoId, ConfigItemType, Value, LargeValue, Enable);
+        }
+
+        #endregion
     }
 }

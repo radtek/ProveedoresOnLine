@@ -177,5 +177,14 @@ namespace ProveedoresOnLine.Company.Interfaces
         List<CustomFiltersIndexModel> CustomFiltersGetAll();
 
         #endregion
+
+        #region Notifications
+
+        List<CompanyNotificationModel> NotificationConfigGetByCompany(string CompanyPublicId);
+
+        int NotificationConfigUpsert(string CompanyPublicId, int? NotificationConfigId, string NotificationName, bool Enable);
+
+        int NotificationConfigInfoUpsert(int NotificationConfigId, int? NotificationConfigInfoId, int ConfigItemType, string Value, string LargeValue, bool Enable);
+        #endregion
     }
 }
