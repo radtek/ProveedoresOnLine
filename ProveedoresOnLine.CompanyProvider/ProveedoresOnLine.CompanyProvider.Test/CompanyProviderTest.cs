@@ -2057,6 +2057,15 @@ namespace ProveedoresOnLine.CompanyProvider.Test
         {
             var oReturn = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPGetBasicInfo("9677120A");
         }
+
+        [TestMethod]
+        public void MPAditionalDocumentGetInfoByCustomer()
+        {
+            var oReturn = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPAditionalDocumentGetInfoByCustomer("DA5C572E", 1701001);
+            Assert.AreEqual(true, oReturn.Count >= 1);
+        }
+
+
         #endregion
 
         #region Charts

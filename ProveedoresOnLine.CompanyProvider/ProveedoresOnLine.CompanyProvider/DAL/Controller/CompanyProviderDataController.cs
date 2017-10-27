@@ -1,4 +1,5 @@
 ﻿using ProveedoresOnLine.Company.Models.Company;
+using ProveedoresOnLine.Company.Models.Util;
 using ProveedoresOnLine.CompanyProvider.Models.Provider;
 using System.Collections.Generic;
 
@@ -140,6 +141,11 @@ namespace ProveedoresOnLine.CompanyProvider.DAL.Controller
         public List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> AditionalDocumentGetByType(string CompanyPublicId, int? AditionalDocumentType, bool Enable)
         {
             return DataFactory.AditionalDocumentGetByType(CompanyPublicId, AditionalDocumentType, Enable);
+        }
+
+        public List<GenericItemModel> MPAditionalDocumentGetInfoByCustomer(string CustomerPublicId, int? AditionalDocumentType)
+        {
+            return DataFactory.MPAditionalDocumentGetInfoByCustomer(CustomerPublicId, AditionalDocumentType);
         }
 
         #endregion Aditional Documents

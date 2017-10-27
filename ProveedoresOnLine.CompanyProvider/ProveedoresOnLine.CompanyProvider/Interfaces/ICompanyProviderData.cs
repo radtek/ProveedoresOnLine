@@ -74,6 +74,8 @@ namespace ProveedoresOnLine.CompanyProvider.Interfaces
 
         List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> AditionalDocumentGetByType(string CompanyPublicId, int? AditionalDocumentType, bool Enable);
 
+        List<GenericItemModel> MPAditionalDocumentGetInfoByCustomer(string CustomerPublicId, int? AditionalDocumentType);
+
         #endregion Aditional Documents
 
         #region Util

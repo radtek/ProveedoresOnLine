@@ -95,6 +95,7 @@
     <Compile Include="Customer\CalificationProjectItemConfigViewModel.cs" />
     <Compile Include="Customer\CalificationProjectItemInfoConfigViewModel.cs" />
     <Compile Include="Customer\CustomerRoleViewModel.cs" />
+    <Compile Include="Customer\NotificationsConfigViewModel.cs" />
     <Compile Include="Customer\ThirdKnowledgeViewModel.cs" />
     <Compile Include="Customer\CustomerViewModel.cs" />
     <Compile Include="Customer\CustomerSearchViewModel.cs" />
