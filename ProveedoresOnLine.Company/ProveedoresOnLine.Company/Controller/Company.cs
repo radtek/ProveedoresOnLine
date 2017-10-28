@@ -391,6 +391,11 @@ namespace ProveedoresOnLine.Company.Controller
             return DAL.Controller.CompanyDataController.Instance.MPCategorySearchByActivity(TreeId, SearchParam, RowCount);
         }
 
+        public static List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> MPCategorySearchByIdCategory(int idCatalog, int RowCount)
+        {
+            return DAL.Controller.CompanyDataController.Instance.MPCategorySearchByIdCategory(idCatalog, RowCount);
+        }
+
         #endregion
 
         #region Company CRUD

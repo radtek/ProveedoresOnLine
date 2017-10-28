@@ -1663,6 +1663,39 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
             return oReturn;
         }
 
+        public List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> MPCategorySearchByIdCategory(int idCatalog, int RowCount)
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
+
+            lstParams.Add(DataInstance.CreateTypedParameter("vIdCatalog", idCatalog));
+            //lstParams.Add(DataInstance.CreateTypedParameter("vSearchParam", SearchParam));
+            lstParams.Add(DataInstance.CreateTypedParameter("vRowCount", RowCount));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "MP_U_Category_SearchByidCategory",
+                CommandType = CommandType.StoredProcedure,
+                Parameters = lstParams,
+            });
+
+            List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> oReturn = null;
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn =
+                    (from cat in response.DataTableResult.AsEnumerable()
+                     //where !cat.IsNull("CategoryId")
+                     select new ProveedoresOnLine.Company.Models.Util.GenericItemModel()
+                     {
+                         ItemId = cat.Field<int>("ItemId"),
+                         ItemName = cat.Field<string>("Name"),
+                     }).ToList();
+            }
+
+            return oReturn;
+        }
         #endregion
 
         #region Company CRUD
