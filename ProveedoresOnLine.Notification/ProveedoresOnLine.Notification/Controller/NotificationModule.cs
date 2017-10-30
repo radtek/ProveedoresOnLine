@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProveedoresOnLine.Notification.Interfaces
+namespace ProveedoresOnLine.Notification.Controller
 {
-    internal interface INotificationData
+    public class NotificationModule
     {
     }
 }

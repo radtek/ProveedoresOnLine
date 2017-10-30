@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SettingsConfig> 
+  <Module name="Notification">
+    <key name="location">D:\Repositories\ProveedoresOnLine\ProveedoresOnLine.Notification\ProveedoresOnLine.Notification.Test\Rsx-Notification.xml</key>
+  </Module>
+</SettingsConfig>
