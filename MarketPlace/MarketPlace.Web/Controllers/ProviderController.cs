@@ -4515,7 +4515,10 @@ namespace MarketPlace.Web.Controllers
                 {
                     oModel.ElasticCompanyModel.Documents.All(x =>
                     {
-                        ProviderList.AddRange(ProveedoresOnLine.Reports.Controller.ReportModule.R_ProviderGeneralReport(SessionModel.CurrentCompany.CompanyPublicId, x.CompanyPublicId));
+                        if (x.oCustomerProviderIndexModel.SingleOrDefault(y=> y.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId) != null)
+                        {
+                            ProviderList.AddRange(ProveedoresOnLine.Reports.Controller.ReportModule.R_ProviderGeneralReport(SessionModel.CurrentCompany.CompanyPublicId, x.CompanyPublicId));
+                        }
                         return true;
                     });
                 }

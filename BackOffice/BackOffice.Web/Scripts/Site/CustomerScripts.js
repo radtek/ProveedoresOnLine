@@ -4004,7 +4004,7 @@ var Customer_NotificationsObject = {
                 editor: function (container, options) {
                     var oReturn = '';
                     debugger;
-                    if (options.model.DocumentType == "2009003") {
+                    if (options.model.DocumentType == "2009003") {//HSEQ
                         // create an input element
                         var input = $('<input/>');
                         // set its name to the field to which the column is bound ('name' in this case)
@@ -4044,7 +4044,7 @@ var Customer_NotificationsObject = {
                             }
                         });
                     }
-                    if (options.model.DocumentType == "2009002") {
+                    if (options.model.DocumentType == "2009002") {// Información Adicional
                         // create an input element
                         var input = $('<input/>');
                         // set its name to the field to which the column is bound ('name' in this case)
@@ -4083,7 +4083,47 @@ var Customer_NotificationsObject = {
                                 }
                             }
                         });
-                    }                    
+                    }     
+                    if (options.model.DocumentType == "2009001") {//Información General
+                        // create an input element
+                        var input = $('<input/>');
+                        // set its name to the field to which the column is bound ('name' in this case)
+                        input.attr('value', options.model[options.field]);
+                        // append it to the container
+                        input.appendTo(container);
+                        // initialize a Kendo UI AutoComplete
+                        input.kendoAutoComplete({
+                            dataTextField: 'ItemName',
+                            select: function (e) {
+                                var selectedItem = this.dataItem(e.item.index());
+                                //set server fiel name
+                                options.model[options.field] = selectedItem.ItemName;
+                                //options.model['Document'] = selectedItem.ItemId;
+                                options.model['Document'] = selectedItem.ItemName;
+                                //enable made changes
+                                options.model.dirty = true;
+                            },
+                            dataSource: {
+                                type: 'json',
+                                serverFiltering: true,
+                                transport: {
+                                    read: function (options) {
+                                        $.ajax({
+                                            url: BaseUrl.ApiUrl + '/UtilApi?GeneralInfoByCustomer=true',
+                                            dataType: 'json',
+                                            success: function (result) {
+                                                debugger;
+                                                options.success(result);
+                                            },
+                                            error: function (result) {
+                                                options.error(result);
+                                            }
+                                        });
+                                    },
+                                }
+                            }
+                        });
+                    }     
                     return oReturn;
                 },
             }, {

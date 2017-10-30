@@ -214,6 +214,11 @@ namespace ProveedoresOnLine.Company.DAL.Controller
             return DataFactory.MPCategorySearchByActivity(TreeId, SearchParam, RowCount);
         }
 
+        public List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> MPCategorySearchByIdCategory(int idCatalog, int RowCount)
+        {
+            return DataFactory.MPCategorySearchByIdCategory(idCatalog, RowCount);
+        }
+
         #endregion
 
         #region Company CRUD
