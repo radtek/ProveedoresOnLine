@@ -175,15 +175,15 @@ namespace BackOffice.Models.Provider
                 Select(x => x.Value).
                 DefaultIfEmpty(string.Empty).
                 FirstOrDefault();
-            
-        #endregion
 
-        #region Aditional Data
+            #endregion
 
-        ADT_DataTypeId = RelatedAditionalDocument.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumAditionalDataInfoType.ADT_DataType).
-                Select(x => x.ItemInfoId.ToString()).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
+            #region Aditional Data
+
+            ADT_DataTypeId = RelatedAditionalDocument.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumAditionalDataInfoType.ADT_DataType).
+                    Select(x => x.ItemInfoId.ToString()).
+                    DefaultIfEmpty(string.Empty).
+                    FirstOrDefault();
 
             ADT_DataType = RelatedAditionalDocument.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumAditionalDataInfoType.ADT_DataType).
                 Select(x => x.Value).

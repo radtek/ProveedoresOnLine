@@ -2395,7 +2395,7 @@ var Provider_CompanyHSEQObject = {
             }, {
                 field: 'C_Scope',
                 title: 'Alcance',
-                width: '550px',
+                width: '950px',
             }, {
                 field: 'C_StartDateCertification',
                 title: 'Fecha Certificación',
@@ -6644,7 +6644,7 @@ var Provider_LegalInfoObject = {
             }, {
                 field: 'RS_Description',
                 title: 'Alcance',
-                width: '500px',
+                width: '900px',
             }, {
                 field: 'RS_ResolutionFile',
                 title: 'Archivo Anexo',
