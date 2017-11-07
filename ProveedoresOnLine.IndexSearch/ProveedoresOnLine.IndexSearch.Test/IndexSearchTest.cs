@@ -527,6 +527,9 @@ namespace ProveedoresOnLine.IndexSearch.Test
             clientToIndex.DeleteIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value);
         }
 
+        /// <summary>
+        /// Run To update suvery's index
+        /// </summary>
         [TestMethod]
         public void SurveyIndexation()
         {
