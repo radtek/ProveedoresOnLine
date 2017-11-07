@@ -7,8 +7,9 @@ namespace ProveedoresOnLine.Notification.Test
     public class NotificationTest
     {
         [TestMethod]
-        public void TestMethod1()
+        public void ManageNotification()
         {
+            Controller.NotificationModule.StartProcess();
         }
     }
 }

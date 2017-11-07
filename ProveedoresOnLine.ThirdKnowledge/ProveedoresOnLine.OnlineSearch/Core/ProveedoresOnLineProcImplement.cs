@@ -120,7 +120,7 @@ namespace ProveedoresOnLine.OnlineSearch.Core
 
                     #endregion
 
-                    string Url_TMP = "http://consulta:8080/api/proc/?IdentificationType="+ IdentificationType +"&IdNumber="+ IdentificationNumber + "&Token=1M72112Z";
+                    string Url_TMP = "http://54.208.133.7/api/simplecompany/search?TD="+ IdentificationType + "&NumeroIdentificacion=" + IdentificationNumber;
                     
                     client.BaseAddress = new Uri(Url_TMP);
                     client.DefaultRequestHeaders.Add("Authorization", "1M72112Z");

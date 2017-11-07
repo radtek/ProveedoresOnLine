@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ProveedoresOnLine.Notification</RootNamespace>
     <AssemblyName>ProveedoresOnLine.Notification</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,14 +34,36 @@
     <Reference Include="ADO">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ADO\developer\ADO.dll</HintPath>
     </Reference>
+    <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MessageModule.Client">
+      <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\MessageModule.Client\developer\MessageModule.Client.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ADO\developer\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Web">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ADO\developer\MySql.Web.dll</HintPath>
     </Reference>
+    <Reference Include="ProveedoresOnLine.Company">
+      <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.Company\developer\ProveedoresOnLine.Company.dll</HintPath>
+    </Reference>
+    <Reference Include="ProveedoresOnLine.CompanyProvider">
+      <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.CompanyProvider\developer\ProveedoresOnLine.CompanyProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="SettingsManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\SettingsManager\developer\SettingsManager.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,9 +76,16 @@
     <Compile Include="DAL\Controller\NotificationDataController.cs" />
     <Compile Include="DAL\Controller\NotificationDataFactory.cs" />
     <Compile Include="DAL\MySQLDAO\Notification_MySqlDao.cs" />
+    <Compile Include="Interfaces\INotificationCore.cs" />
     <Compile Include="Interfaces\INotificationData.cs" />
     <Compile Include="Models\Constants.cs" />
+    <Compile Include="Models\Enumerations.cs" />
+    <Compile Include="Models\InternalSettings.cs" />
+    <Compile Include="Notification.Core\NotificationProvider_Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

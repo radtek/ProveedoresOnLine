@@ -411,6 +411,7 @@ namespace ProveedoresOnLine.Company.DAL.Controller
 
         #region Notifications Config
 
+        
         public List<CompanyNotificationModel> NotificationConfigGetByCompany(string CompanyPublicId)
         {
             return DataFactory.NotificationConfigGetByCompany(CompanyPublicId);
@@ -424,6 +425,11 @@ namespace ProveedoresOnLine.Company.DAL.Controller
         public int NotificationConfigInfoUpsert(int NotificationConfigId, int? NotificationConfigInfoId, int ConfigItemType, string Value, string LargeValue, bool Enable)
         {
             return DataFactory.NotificationConfigInfoUpsert(NotificationConfigId, NotificationConfigInfoId, ConfigItemType, Value, LargeValue, Enable);
+        }
+
+        public List<CompanyNotificationModel> NotificationConfigGetAll()
+        {
+            return DataFactory.NotificationConfigGetAll();
         }
 
         #endregion

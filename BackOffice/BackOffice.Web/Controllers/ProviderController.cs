@@ -1564,7 +1564,6 @@ namespace BackOffice.Web.Controllers
                 oModel.RelatedProvider = new ProveedoresOnLine.CompanyProvider.Models.Provider.ProviderModel()
                 {
                     RelatedCompany = ProveedoresOnLine.Company.Controller.Company.CompanyGetBasicInfo(ProviderPublicId),
-                    //RelatedAditionalDocuments = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.AditionalDocumentGetByType(ProviderPublicId, null,true),
                 };
 
                 //Get provider Menu

@@ -1194,6 +1194,11 @@ namespace ProveedoresOnLine.Company.Controller
         #endregion
 
         #region Notifications Config
+
+        public static List<CompanyNotificationModel> NotificationConfigGetAll()
+        {
+            return DAL.Controller.CompanyDataController.Instance.NotificationConfigGetAll();
+        }
         public static List<CompanyNotificationModel> NotificationConfigGetByCompany(string CompanyPublicId)
         {
             return DAL.Controller.CompanyDataController.Instance.NotificationConfigGetByCompany(CompanyPublicId);

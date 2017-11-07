@@ -1303,7 +1303,7 @@ namespace BackOffice.Web.ControllersApi
                     CompanyPublicId = CustomerPublicId,
                     NotificationName = oDataToUpsert.NotificationTitle,
                     Enable = oDataToUpsert.Enable,
-                    NotificationConfigId = int.Parse(oDataToUpsert.NotificationConfigId),
+                    NotificationConfigId = !string.IsNullOrEmpty(oDataToUpsert.NotificationConfigId) ? Convert.ToInt32(oDataToUpsert.NotificationConfigId) : 0,
                     CompanyNotificationInfo = new List<CompanyNotificationInfoModel>()
                     {
                         new CompanyNotificationInfoModel()
