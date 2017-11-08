@@ -3834,15 +3834,24 @@ var Customer_NotificationsObject = {
                         fields: {
                             NotificationConfigId: { editable: false, nullable: true, defaultValue: '0' },
                             NotificationTitle: { editable: true, validation: { required: true } },
+                            MessageTypeId: { editable: false},
                             MessageType: { editable: true, validation: { required: true } },
                             NotificationType: { editable: true, validation: { required: true } },
+                            NotificationTypeId: { editable: false },
                             DocumentType: { editable: true, validation: { required: false } },
+                            DocumentTypeId: { editable: false },
                             Document: { editable: true, validation: { required: false } },
+                            DocumentId: { editable: false},
                             NotificationCritery: { editable: true, validation: { required: true } },
+                            NotificationCriteryId: { editable: false },
                             RuleType: { editable: true, validation: { required: true } },
+                            RuleTypeId: { editable: false },
                             NotificationValue: { editable: true, validation: { required: true } },
+                            NotificationValueId: { editable: false },
                             MessageBody: { editable: true, validation: { required: true } },
+                            MessageBodyId: { editable: false },
                             Responsable: { editable: true, validation: { required: true } },
+                            ResponsableId: { editable: false },
                             Enable: { editable: true, type: 'boolean', defaultValue: true },
                         },
                     }
@@ -4018,7 +4027,7 @@ var Customer_NotificationsObject = {
                                 var selectedItem = this.dataItem(e.item.index());
                                 //set server fiel name
                                 options.model[options.field] = selectedItem.ItemName;
-                                //options.model['Document'] = selectedItem.ItemId;
+                                options.model['DocumentId'] = selectedItem.ItemId;
                                 options.model['Document'] = selectedItem.ItemName;
                                 //enable made changes
                                 options.model.dirty = true;
@@ -4058,7 +4067,7 @@ var Customer_NotificationsObject = {
                                 var selectedItem = this.dataItem(e.item.index());
                                 //set server fiel name
                                 options.model[options.field] = selectedItem.ItemName;
-                                //options.model['Document'] = selectedItem.ItemId;
+                                options.model['DocumentId'] = selectedItem.ItemId;
                                 options.model['Document'] = selectedItem.ItemName;
                                 //enable made changes
                                 options.model.dirty = true;

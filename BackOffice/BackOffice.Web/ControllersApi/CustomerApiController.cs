@@ -1308,7 +1308,7 @@ namespace BackOffice.Web.ControllersApi
                     {
                         new CompanyNotificationInfoModel()
                         {
-                            CompanyNotificationId = !string.IsNullOrEmpty(oDataToUpsert.NotificationConfigId) ? Convert.ToInt32(oDataToUpsert.NotificationConfigId) : 0,
+                            CompanyNotificationInfoId = !string.IsNullOrEmpty(oDataToUpsert.NotificationCriteryId) ? Convert.ToInt32(oDataToUpsert.NotificationCriteryId) : 0,
                             ConfigItemType = new CatalogModel()
                             {
                                 ItemId = (int)Models.General.enumNotificationInfoType.NotificationCritery,
@@ -1320,7 +1320,7 @@ namespace BackOffice.Web.ControllersApi
                         },
                         new CompanyNotificationInfoModel()
                         {
-                            CompanyNotificationId = !string.IsNullOrEmpty(oDataToUpsert.NotificationConfigId) ? Convert.ToInt32(oDataToUpsert.NotificationConfigId) : 0,
+                            CompanyNotificationInfoId  = !string.IsNullOrEmpty(oDataToUpsert.DocumentId) ? Convert.ToInt32(oDataToUpsert.DocumentId) : 0,
                             ConfigItemType = new CatalogModel()
                             {
                                 ItemId = (int)Models.General.enumNotificationInfoType.Document,
@@ -1329,7 +1329,7 @@ namespace BackOffice.Web.ControllersApi
                             Enable = oDataToUpsert.Enable,
                         },new CompanyNotificationInfoModel()
                         {
-                            CompanyNotificationId = !string.IsNullOrEmpty(oDataToUpsert.NotificationConfigId) ? Convert.ToInt32(oDataToUpsert.NotificationConfigId) : 0,
+                            CompanyNotificationInfoId  = !string.IsNullOrEmpty(oDataToUpsert.DocumentTypeId) ? Convert.ToInt32(oDataToUpsert.DocumentTypeId) : 0,
                             ConfigItemType = new CatalogModel()
                             {
                                 ItemId = (int)Models.General.enumNotificationInfoType.DocumentType,
@@ -1338,7 +1338,7 @@ namespace BackOffice.Web.ControllersApi
                             Enable = oDataToUpsert.Enable,
                         },new CompanyNotificationInfoModel()
                         {
-                            CompanyNotificationId = !string.IsNullOrEmpty(oDataToUpsert.NotificationConfigId) ? Convert.ToInt32(oDataToUpsert.NotificationConfigId) : 0,
+                            CompanyNotificationInfoId  = !string.IsNullOrEmpty(oDataToUpsert.MessageTypeId) ? Convert.ToInt32(oDataToUpsert.MessageTypeId) : 0,
                             ConfigItemType = new CatalogModel()
                             {
                                 ItemId = (int)Models.General.enumNotificationInfoType.MessageType,
@@ -1348,7 +1348,7 @@ namespace BackOffice.Web.ControllersApi
                         },
                           new CompanyNotificationInfoModel()
                         {
-                            CompanyNotificationId = !string.IsNullOrEmpty(oDataToUpsert.NotificationConfigId) ? Convert.ToInt32(oDataToUpsert.NotificationConfigId) : 0,
+                            CompanyNotificationInfoId  = !string.IsNullOrEmpty(oDataToUpsert.MessageBodyId) ? Convert.ToInt32(oDataToUpsert.MessageBodyId) : 0,
                             ConfigItemType = new CatalogModel()
                             {
                                 ItemId = (int)Models.General.enumNotificationInfoType.BodyMessage,
@@ -1358,7 +1358,7 @@ namespace BackOffice.Web.ControllersApi
                         },
                           new CompanyNotificationInfoModel()
                         {
-                            CompanyNotificationId = !string.IsNullOrEmpty(oDataToUpsert.NotificationConfigId) ? Convert.ToInt32(oDataToUpsert.NotificationConfigId) : 0,
+                            CompanyNotificationInfoId  = !string.IsNullOrEmpty(oDataToUpsert.NotificationTypeId) ? Convert.ToInt32(oDataToUpsert.NotificationTypeId) : 0,
                             ConfigItemType = new CatalogModel()
                             {
                                 ItemId = (int)Models.General.enumNotificationInfoType.NotificationType,
@@ -1368,7 +1368,7 @@ namespace BackOffice.Web.ControllersApi
                         },
                         new CompanyNotificationInfoModel()
                         {
-                            CompanyNotificationId = !string.IsNullOrEmpty(oDataToUpsert.NotificationConfigId) ? Convert.ToInt32(oDataToUpsert.NotificationConfigId) : 0,
+                            CompanyNotificationInfoId  = !string.IsNullOrEmpty(oDataToUpsert.ResponsableId) ? Convert.ToInt32(oDataToUpsert.ResponsableId) : 0,
                             ConfigItemType = new CatalogModel()
                             {
                                 ItemId = (int)Models.General.enumNotificationInfoType.Responsable,
@@ -1378,7 +1378,7 @@ namespace BackOffice.Web.ControllersApi
                         }
                         ,new CompanyNotificationInfoModel()
                         {
-                            CompanyNotificationId = !string.IsNullOrEmpty(oDataToUpsert.NotificationConfigId) ? Convert.ToInt32(oDataToUpsert.NotificationConfigId) : 0,
+                            CompanyNotificationInfoId  = !string.IsNullOrEmpty(oDataToUpsert.RuleTypeId) ? Convert.ToInt32(oDataToUpsert.RuleTypeId) : 0,
                             ConfigItemType = new CatalogModel()
                             {
                                 ItemId = (int)Models.General.enumNotificationInfoType.RuleType,
@@ -1388,7 +1388,7 @@ namespace BackOffice.Web.ControllersApi
                         }
                         ,new CompanyNotificationInfoModel()
                         {
-                            CompanyNotificationId = !string.IsNullOrEmpty(oDataToUpsert.NotificationConfigId) ? Convert.ToInt32(oDataToUpsert.NotificationConfigId) : 0,
+                            CompanyNotificationInfoId  = !string.IsNullOrEmpty(oDataToUpsert.NotificationValueId) ? Convert.ToInt32(oDataToUpsert.NotificationValueId) : 0,
                             ConfigItemType = new CatalogModel()
                             {
                                 ItemId = (int)Models.General.enumNotificationInfoType.NotificationValue,
@@ -1399,7 +1399,7 @@ namespace BackOffice.Web.ControllersApi
                     }
                 };
 
-                oNotificationConfig = ProveedoresOnLine.Company.Controller.Company.NotificationConfigUpsert(oNotificationConfig);
+                    oNotificationConfig = ProveedoresOnLine.Company.Controller.Company.NotificationConfigUpsert(oNotificationConfig);
                 oReturn.Add(new NotificationsConfigViewModel(oNotificationConfig));
             }
 

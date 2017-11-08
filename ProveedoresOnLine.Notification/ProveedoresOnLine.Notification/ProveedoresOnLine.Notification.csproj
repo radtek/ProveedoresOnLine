@@ -34,8 +34,8 @@
     <Reference Include="ADO">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ADO\developer\ADO.dll</HintPath>
     </Reference>
-    <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=4.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.3.0\lib\net45\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MessageModule.Client">
@@ -87,7 +87,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>XCOPY "$(ProjectDir)$(OutDir)*.dll" "\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.Notification\developer\" /y</PostBuildEvent>

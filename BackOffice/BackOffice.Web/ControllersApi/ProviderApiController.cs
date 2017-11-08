@@ -3737,7 +3737,9 @@ namespace BackOffice.Web.ControllersApi
                                 ));
                             return true;
                         });
-                    oReturn = oReturn.Where(x => x.CP_Customer.ToLower().Contains(SearchParam)).Select(x => x).ToList();
+                    if (!string.IsNullOrEmpty(SearchParam))                    
+                        oReturn = oReturn.Where(x => x.CP_Customer.ToLower().Contains(SearchParam)).Select(x => x).ToList();
+                                       
                     oReturn.Add(new ProviderCustomerViewModel
                     {
                         CP_Customer = "A Quien Interese",

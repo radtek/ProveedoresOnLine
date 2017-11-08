@@ -56,11 +56,15 @@ namespace ProveedoresOnLine.Notification.Controller
                         return true;
                     });
                 }
+                else
+                {
+                    LogFile("No Notifications to Send :::::: " + DateTime.Now);
+                }
 
             }
             catch (Exception ex )
             {
-                LogFile("Process Notifications Error!!! :::::: " + ex.InnerException);
+                LogFile("Process Notifications Error!!! :::::: " + ex.Message);
                 throw;
             }
         }
