@@ -358,7 +358,7 @@ var Provider_CompanyContactObject = {
                 title: 'Tipo de contacto',
                 width: '190px',
                 template: function (dataItem) {
-                    debugger;
+                    
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.CC_CompanyContactType != null) {
                         $.each(Provider_CompanyContactObject.ProviderOptions[209], function (item, value) {
