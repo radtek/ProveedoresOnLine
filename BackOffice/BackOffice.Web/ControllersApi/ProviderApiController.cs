@@ -2663,7 +2663,86 @@ namespace BackOffice.Web.ControllersApi
                             Value = oDataToUpsert.AD_File,
                             Enable = true,
                         });
-
+                    //New Data for the grid
+                    oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.Add(
+                        new GenericItemInfoModel()
+                        {
+                            ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.AD_ValueId) ? 0 : Convert.ToInt32(oDataToUpsert.AD_ValueId.Trim()),
+                            ItemInfoType = new CatalogModel()
+                            {
+                                ItemId = (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_Value,
+                            },
+                            Value = oDataToUpsert.AD_Value,
+                            Enable = true,
+                        });
+                    oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.Add(
+                        new GenericItemInfoModel()
+                        {
+                            ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.AD_InitialDateId) ? 0 : Convert.ToInt32(oDataToUpsert.AD_InitialDateId.Trim()),
+                            ItemInfoType = new CatalogModel()
+                            {
+                                ItemId = (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_InitialDate,
+                            },
+                            Value = string.IsNullOrEmpty(oDataToUpsert.AD_InitialDate) ?
+                            string.Empty :
+                            oDataToUpsert.AD_InitialDate.Replace(" ", "").Length == BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_Server].Value.Replace(" ", "").Length ?
+                            oDataToUpsert.AD_InitialDate :
+                            DateTime.ParseExact(
+                                oDataToUpsert.AD_InitialDate,
+                                BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_KendoToServer].Value,
+                                System.Globalization.CultureInfo.InvariantCulture).
+                            ToString(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_Server].Value),
+                            Enable = true,
+                        });
+                    oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.Add(
+                       new GenericItemInfoModel()
+                       {
+                           ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.AD_EndDateId) ? 0 : Convert.ToInt32(oDataToUpsert.AD_EndDateId.Trim()),
+                           ItemInfoType = new CatalogModel()
+                           {
+                               ItemId = (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_EndDate,
+                           },
+                           Value = string.IsNullOrEmpty(oDataToUpsert.AD_EndDate) ?
+                            string.Empty :
+                            oDataToUpsert.AD_EndDate.Replace(" ", "").Length == BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_Server].Value.Replace(" ", "").Length ?
+                            oDataToUpsert.AD_EndDate :
+                            DateTime.ParseExact(
+                                oDataToUpsert.AD_EndDate,
+                                BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_KendoToServer].Value,
+                                System.Globalization.CultureInfo.InvariantCulture).
+                            ToString(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_Server].Value),
+                           Enable = true,
+                       });
+                    oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.Add(
+                       new GenericItemInfoModel()
+                       {
+                           ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.AD_VigencyId) ? 0 : Convert.ToInt32(oDataToUpsert.AD_VigencyId.Trim()),
+                           ItemInfoType = new CatalogModel()
+                           {
+                               ItemId = (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_Vigency,
+                           },
+                           Value = string.IsNullOrEmpty(oDataToUpsert.AD_Vigency) ?
+                            string.Empty :
+                            oDataToUpsert.AD_Vigency.Replace(" ", "").Length == BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_Server].Value.Replace(" ", "").Length ?
+                            oDataToUpsert.AD_Vigency :
+                            DateTime.ParseExact(
+                                oDataToUpsert.AD_Vigency,
+                                BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_KendoToServer].Value,
+                                System.Globalization.CultureInfo.InvariantCulture).
+                            ToString(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_Server].Value),
+                           Enable = true,
+                       });
+                    oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.Add(
+                       new GenericItemInfoModel()
+                       {
+                           ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.AD_DescriptionId) ? 0 : Convert.ToInt32(oDataToUpsert.AD_DescriptionId.Trim()),
+                           ItemInfoType = new CatalogModel()
+                           {
+                               ItemId = (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_Description,
+                           },
+                           LargeValue = oDataToUpsert.AD_Description,
+                           Enable = true,
+                       });
                     lstUsedFiles.Add(oDataToUpsert.AD_File);
                 }
                 else if (oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemType.ItemId == (int)BackOffice.Models.General.enumAditionalDocumentType.AditionalData)
@@ -3648,19 +3727,19 @@ namespace BackOffice.Web.ControllersApi
         [HttpGet]
         public List<BackOffice.Models.Provider.ProviderCustomerViewModel> GetAllCustomers
         (string GetAllCustomers,
-            string ProviderPublicId)
+            string ProviderPublicId, string SearchParam)
         {
             List<BackOffice.Models.Provider.ProviderCustomerViewModel> oReturn = new List<Models.Provider.ProviderCustomerViewModel>();
 
             if (GetAllCustomers == "true")
             {
                 ProveedoresOnLine.CompanyCustomer.Models.Customer.CustomerModel oCustomerByProvider =
-                    ProveedoresOnLine.CompanyCustomer.Controller.CompanyCustomer.GetCustomerByProvider(ProviderPublicId, null);
-
+                    ProveedoresOnLine.CompanyCustomer.Controller.CompanyCustomer.GetCustomerByProvider(ProviderPublicId, null);                
                 List<CustomerProviderModel> oCustomerProvider = new List<CustomerProviderModel>();
 
                 if (oCustomerByProvider != null && oCustomerByProvider.RelatedProvider != null && oCustomerByProvider.RelatedProvider.Count > 0)
                 {
+                    
                     oCustomerByProvider.RelatedProvider.All(x =>
                         {
                             oReturn.Add(new ProviderCustomerViewModel(
@@ -3670,7 +3749,7 @@ namespace BackOffice.Web.ControllersApi
                                 ));
                             return true;
                         });
-
+                    oReturn = oReturn.Where(x => x.CP_Customer.ToLower().Contains(SearchParam)).Select(x => x).ToList();
                     oReturn.Add(new ProviderCustomerViewModel
                     {
                         CP_Customer = "A Quien Interese",

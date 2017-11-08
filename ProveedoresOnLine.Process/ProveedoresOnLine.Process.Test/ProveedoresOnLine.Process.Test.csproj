@@ -142,6 +142,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.IndexSearch\developer\ProveedoresOnLine.IndexSearch.dll</HintPath>
     </Reference>
+    <Reference Include="ProveedoresOnLine.Notification">
+      <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.Notification\developer\ProveedoresOnLine.Notification.dll</HintPath>
+    </Reference>
     <Reference Include="ProveedoresOnLine.RestrictiveListProcessBatch">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.RestrictiveListProcessBatch\developer\ProveedoresOnLine.RestrictiveListProcessBatch.dll</HintPath>
     </Reference>
@@ -188,6 +191,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CalificationProjectProcessJobTest.cs" />
+    <Compile Include="NotificationsProcessJobTest.cs" />
     <Compile Include="REDEBANProcessJobTest.cs" />
     <Compile Include="CompanyIndexProcessJobTest.cs" />
     <Compile Include="CompanySurveyIndexProcessJobTest.cs" />
@@ -209,7 +213,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -217,7 +223,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="quartz_jobs.xml" />
-    <Content Include="Rsx-SettingsConfig.xml" />
+    <Content Include="Rsx-SettingsConfig.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

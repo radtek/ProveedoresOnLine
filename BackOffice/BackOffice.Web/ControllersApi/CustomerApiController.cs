@@ -1303,7 +1303,7 @@ namespace BackOffice.Web.ControllersApi
                     CompanyPublicId = CustomerPublicId,
                     NotificationName = oDataToUpsert.NotificationTitle,
                     Enable = oDataToUpsert.Enable,
-                    NotificationConfigId = int.Parse(oDataToUpsert.NotificationConfigId),
+                    NotificationConfigId = !string.IsNullOrEmpty(oDataToUpsert.NotificationConfigId) ? Convert.ToInt32(oDataToUpsert.NotificationConfigId) : 0,
                     CompanyNotificationInfo = new List<CompanyNotificationInfoModel>()
                     {
                         new CompanyNotificationInfoModel()
@@ -1327,8 +1327,7 @@ namespace BackOffice.Web.ControllersApi
                             },
                             Value = oDataToUpsert.Document,
                             Enable = oDataToUpsert.Enable,
-                        },
-                         new CompanyNotificationInfoModel()
+                        },new CompanyNotificationInfoModel()
                         {
                             CompanyNotificationId = !string.IsNullOrEmpty(oDataToUpsert.NotificationConfigId) ? Convert.ToInt32(oDataToUpsert.NotificationConfigId) : 0,
                             ConfigItemType = new CatalogModel()
@@ -1337,18 +1336,7 @@ namespace BackOffice.Web.ControllersApi
                             },
                             Value = oDataToUpsert.DocumentType,
                             Enable = oDataToUpsert.Enable,
-                        },
-                         new CompanyNotificationInfoModel()
-                        {
-                            CompanyNotificationId = !string.IsNullOrEmpty(oDataToUpsert.NotificationConfigId) ? Convert.ToInt32(oDataToUpsert.NotificationConfigId) : 0,
-                            ConfigItemType = new CatalogModel()
-                            {
-                                ItemId = (int)Models.General.enumNotificationInfoType.DocumentType,
-                            },
-                            Value = oDataToUpsert.DocumentType,
-                            Enable = oDataToUpsert.Enable,
-                        },
-                          new CompanyNotificationInfoModel()
+                        },new CompanyNotificationInfoModel()
                         {
                             CompanyNotificationId = !string.IsNullOrEmpty(oDataToUpsert.NotificationConfigId) ? Convert.ToInt32(oDataToUpsert.NotificationConfigId) : 0,
                             ConfigItemType = new CatalogModel()

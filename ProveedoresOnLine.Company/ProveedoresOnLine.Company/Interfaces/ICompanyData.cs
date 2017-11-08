@@ -181,7 +181,7 @@ namespace ProveedoresOnLine.Company.Interfaces
         #endregion
 
         #region Notifications
-
+        List<CompanyNotificationModel> NotificationConfigGetAll();
         List<CompanyNotificationModel> NotificationConfigGetByCompany(string CompanyPublicId);
 
         int NotificationConfigUpsert(string CompanyPublicId, int? NotificationConfigId, string NotificationName, bool Enable);

@@ -2395,7 +2395,7 @@ var Provider_CompanyHSEQObject = {
             }, {
                 field: 'C_Scope',
                 title: 'Alcance',
-                width: '550px',
+                width: '950px',
             }, {
                 field: 'C_StartDateCertification',
                 title: 'Fecha Certificación',
@@ -4617,9 +4617,9 @@ var Provider_CompanyFinancialObject = {
                             type: 'json',
                             serverFiltering: true,
                             transport: {
-                                read: function (options) {
+                                read: function (options) {                                    
                                     $.ajax({
-                                        url: BaseUrl.ApiUrl + '/ProviderApi?GetAllCustomers=true&ProviderPublicId=' + Provider_CompanyFinancialObject.ProviderPublicId,
+                                        url: BaseUrl.ApiUrl + '/ProviderApi?GetAllCustomers=true&ProviderPublicId=' + Provider_CompanyFinancialObject.ProviderPublicId + '&SearchParam=' + options.data.filter.filters[0].value,
                                         dataType: 'json',
                                         success: function (result) {
                                             options.success(result);
@@ -4703,11 +4703,13 @@ var Provider_AditionalDocumentObject = {
     ProviderPublicId: '',
     AditionalType: '',
     ProviderOptions: new Array(),
+    DateFormat: '',
 
     Init: function (vInitObject) {
         this.ObjectId = vInitObject.ObjectId;
         this.ProviderPublicId = vInitObject.ProviderPublicId;
         this.AditionalType = vInitObject.AditionalType;
+        this.DateFormat = vInitObject.DateFormat;
         if (vInitObject.ProviderOptions != null) {
             $.each(vInitObject.ProviderOptions, function (item, value) {
                 Provider_AditionalDocumentObject.ProviderOptions[value.Key] = value.Value;
@@ -4799,6 +4801,21 @@ var Provider_AditionalDocumentObject = {
                             AD_RelatedUserId: { editable: false },
 
                             AD_CreateDate: { editable: false },
+
+                            AD_ValueId: { editable: false },
+                            AD_Value: { editable: true, validation: { required: false } },
+
+                            AD_InitialDateId: { editable: false },
+                            AD_InitialDate: { editable: true, validation: { required: false } },
+
+                            AD_EndDateId: { editable: false },
+                            AD_EndDate: { editable: true, validation: { required: false } },
+
+                            AD_VigencyId: { editable: false},
+                            AD_Vigency: { editable: true, validation: { required: false } },
+
+                            AD_DescriptionId: { editable: false},
+                            AD_Description: { editable: true, validation: { required: false } },
                         },
                     }
                 },
@@ -4966,6 +4983,7 @@ var Provider_AditionalDocumentObject = {
                     input.kendoAutoComplete({
                         dataTextField: 'CP_Customer',
                         select: function (e) {
+                            debugger;
                             isSelected = true;
                             var selectedItem = this.dataItem(e.item.index());
                             //set server fiel name
@@ -4981,7 +4999,7 @@ var Provider_AditionalDocumentObject = {
                             transport: {
                                 read: function (options) {
                                     $.ajax({
-                                        url: BaseUrl.ApiUrl + '/ProviderApi?GetAllCustomers=true&ProviderPublicId=' + Provider_AditionalDocumentObject.ProviderPublicId,
+                                        url: BaseUrl.ApiUrl + '/ProviderApi?GetAllCustomers=true&ProviderPublicId=' + Provider_AditionalDocumentObject.ProviderPublicId + '&SearchParam=' + options.data.filter.filters[0].value,
                                         dataType: 'json',
                                         success: function (result) {
                                             options.success(result);
@@ -5005,6 +5023,57 @@ var Provider_AditionalDocumentObject = {
                 title: 'Fecha de cargue',
                 width: '190px',
             }, {
+                field: 'AD_Value',
+                title: 'Valor',
+                width: '190px',
+            },
+            {
+                field: 'AD_InitialDate',
+                title: 'Fecha Incial',
+                width: '190px',
+                format: Provider_AditionalDocumentObject.DateFormat,
+                editor: function timeEditor(container, options) {
+                    var input = $('<input type="date" name="'
+                        + options.field
+                        + '" value="'
+                        + options.model.get(options.field)
+                        + '" />');
+                    input.appendTo(container);
+                },
+            }, {
+                field: 'AD_EndDate',
+                title: 'Fecha Final',
+                width: '190px',
+                format: Provider_AditionalDocumentObject.DateFormat,
+                editor: function timeEditor(container, options) {
+                    var input = $('<input type="date" name="'
+                        + options.field
+                        + '" value="'
+                        + options.model.get(options.field)
+                        + '" />');
+                    input.appendTo(container);
+                },
+            }, {
+                field: 'AD_Vigency',
+                title: 'Fecha Vigencia',
+                width: '190px',
+                format: Provider_AditionalDocumentObject.DateFormat,
+                editor: function timeEditor(container, options) {
+                    var input = $('<input type="date" name="'
+                        + options.field
+                        + '" value="'
+                        + options.model.get(options.field)
+                        + '" />');
+                    input.appendTo(container);
+                },
+            },
+            {
+                field: 'AD_Description',
+                title: 'Description',
+                width: '390px',
+            },
+
+            {
                 field: 'AditionalDocumentId',
                 title: 'Id Interno',
                 width: '78px',
@@ -5207,7 +5276,7 @@ var Provider_AditionalDocumentObject = {
                             transport: {
                                 read: function (options) {
                                     $.ajax({
-                                        url: BaseUrl.ApiUrl + '/ProviderApi?GetAllCustomers=true&ProviderPublicId=' + Provider_AditionalDocumentObject.ProviderPublicId,
+                                        url: BaseUrl.ApiUrl + '/ProviderApi?GetAllCustomers=true&ProviderPublicId=' + Provider_AditionalDocumentObject.ProviderPublicId + '&SearchParam=' + options.data.filter.filters[0].value,
                                         dataType: 'json',
                                         success: function (result) {
                                             options.success(result);
@@ -6575,7 +6644,7 @@ var Provider_LegalInfoObject = {
             }, {
                 field: 'RS_Description',
                 title: 'Alcance',
-                width: '500px',
+                width: '900px',
             }, {
                 field: 'RS_ResolutionFile',
                 title: 'Archivo Anexo',

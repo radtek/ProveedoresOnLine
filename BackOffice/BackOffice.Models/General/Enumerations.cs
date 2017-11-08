@@ -441,6 +441,12 @@
         AD_File = 1702001,
         AD_RelatedCustomer = 1702002,
         AD_RelatedUser = 1702003,
+        AD_Value = 1702004,
+        AD_InitialDate = 1702005,
+        AD_EndDate = 1702008,
+        AD_Vigency = 1702006,
+        AD_Description = 1702007,
+
     }
 
     public enum enumAditionalDataInfoType
@@ -694,7 +700,6 @@
         BodyMessage = 2008007,
         Responsable = 2008008,
         DocumentType = 2008009,
-
     }
 
     #endregion

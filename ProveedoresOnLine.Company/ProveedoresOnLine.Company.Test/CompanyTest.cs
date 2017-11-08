@@ -10,6 +10,7 @@ namespace ProveedoresOnLine.Company.Test
     [TestClass]
     public class CompanyTest
     {
+        #region Tree
         [TestMethod]
         public void TreeGetByType()
         {
@@ -27,7 +28,9 @@ namespace ProveedoresOnLine.Company.Test
 
             Assert.AreEqual(true, oReturn.Count > 0);
         }
+        #endregion
 
+        #region Category Group Functions
         [TestMethod]
         public void CategorySearchByGeography()
         {
@@ -109,30 +112,6 @@ namespace ProveedoresOnLine.Company.Test
         }
 
         [TestMethod]
-        public void CompanySearchFilter()
-        {
-            List<ProveedoresOnLine.Company.Models.Util.GenericFilterModel> oReturn =
-                ProveedoresOnLine.Company.Controller.Company.CompanySearchFilter
-                ("202001,202003", null, null);
-
-            Assert.AreEqual(true, oReturn.Count >= 1);
-        }
-
-        [TestMethod]
-        public void CompanySearch()
-        {
-            int oTotalRows;
-
-            List<ProveedoresOnLine.Company.Models.Company.CompanyModel> oReturn =
-                ProveedoresOnLine.Company.Controller.Company.CompanySearch
-                (null, null, null, 1, 5, out oTotalRows);
-
-            Assert.AreEqual(true, oReturn.Count >= 1);
-
-            Assert.AreEqual(true, oTotalRows > 0);
-        }
-
-        [TestMethod]
         public void CategorySearchByGeographyAdmin()
         {
             int oTotalRows;
@@ -186,26 +165,6 @@ namespace ProveedoresOnLine.Company.Test
         }
 
         [TestMethod]
-        public void RoleCompanyGetByPublicId()
-        {
-            ProveedoresOnLine.Company.Models.Company.CompanyModel oReturn =
-                ProveedoresOnLine.Company.Controller.Company.RoleCompany_GetByPublicId
-                ("DA5C572E");
-
-            Assert.AreEqual(true, oReturn.RelatedRole.Count >= 1);
-        }
-
-        [TestMethod]
-        public void RoleCompanyGetUsersByPublicId()
-        {
-            List<ProveedoresOnLine.Company.Models.Company.UserCompany> oReturn =
-                ProveedoresOnLine.Company.Controller.Company.RoleCompany_GetUsersByPublicId
-                ("DA5C572E", true);
-
-            Assert.AreEqual(true, oReturn.Count >= 1);
-        }
-
-        [TestMethod]
         public void CategorySearcgByResolutionAdmin()
         {
             int oTotalRows;
@@ -245,26 +204,6 @@ namespace ProveedoresOnLine.Company.Test
         }
 
         [TestMethod]
-        public void MP_RoleCompanyGetByUser()
-        {
-            List<ProveedoresOnLine.Company.Models.Company.CompanyModel> oReturn =
-                ProveedoresOnLine.Company.Controller.Company.MP_RoleCompanyGetByUser
-                ("noexiste1@correo.com");
-
-            Assert.AreEqual(true, oReturn.Count >= 1);
-        }
-
-        [TestMethod]
-        public void MP_RoleCompanyGetByUserNew()
-        {
-            List<ProveedoresOnLine.Company.Models.Company.CompanyModel> oReturn =
-                ProveedoresOnLine.Company.Controller.Company.MP_RoleCompanyGetByUserNew
-                ("david.moncayo@publicar.com");
-
-            Assert.AreEqual(true, oReturn.Count >= 1);
-        }
-
-        [TestMethod]
         public void CategorySearchByTreeAdmin()
         {
             List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> oReturn =
@@ -284,16 +223,6 @@ namespace ProveedoresOnLine.Company.Test
                     ("", 0, 20, out oTotalRows);
 
             Assert.AreEqual(true, oReturn.Count >= 1);
-        }
-
-        [TestMethod]
-        public void BlackListGetByCompanyPublicId()
-        {
-            List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> oReturn =
-                ProveedoresOnLine.Company.Controller.Company.BlackListGetByCompanyPublicId
-                ("1D9B9580");
-
-            Assert.AreEqual(true, oReturn.Count >= 10);
         }
 
         [TestMethod]
@@ -337,14 +266,6 @@ namespace ProveedoresOnLine.Company.Test
         }
 
         [TestMethod]
-        public void MinimumWageSearchByYear()
-        {   
-            ProveedoresOnLine.Company.Models.Util.MinimumWageModel oReturn = ProveedoresOnLine.Company.Controller.Company.MinimumWageSearchByYear(2015,988);
-
-            Assert.AreEqual(true, oReturn != null);
-        }
-        
-        [TestMethod]
         public void CatalogGetAllModuleOptions()
         {
             List<ProveedoresOnLine.Company.Models.Util.CatalogModel> oReturn =
@@ -352,14 +273,54 @@ namespace ProveedoresOnLine.Company.Test
 
             Assert.AreEqual(true, oReturn != null);
         }
+        #endregion
+
+        #region General Company Functions
+        [TestMethod]
+        public void CompanySearchFilter()
+        {
+            List<ProveedoresOnLine.Company.Models.Util.GenericFilterModel> oReturn =
+                ProveedoresOnLine.Company.Controller.Company.CompanySearchFilter
+                ("202001,202003", null, null);
+
+            Assert.AreEqual(true, oReturn.Count >= 1);
+        }
 
         [TestMethod]
-        public void GetRoleCompanySearch()
+        public void CompanySearch()
         {
-            int oTotalRows = 0;
-            List<RoleCompanyModel> oReturn = ProveedoresOnLine.Company.Controller.Company.GetRoleCompanySearch("", true, out oTotalRows);
+            int oTotalRows;
 
-            Assert.AreEqual(true, oReturn.Count > 0);
+            List<ProveedoresOnLine.Company.Models.Company.CompanyModel> oReturn =
+                ProveedoresOnLine.Company.Controller.Company.CompanySearch
+                (null, null, null, 1, 5, out oTotalRows);
+
+            Assert.AreEqual(true, oReturn.Count >= 1);
+
+            Assert.AreEqual(true, oTotalRows > 0);
+        }
+
+        #endregion
+
+        #region Role Functions
+        [TestMethod]
+        public void RoleCompanyGetByPublicId()
+        {
+            ProveedoresOnLine.Company.Models.Company.CompanyModel oReturn =
+                ProveedoresOnLine.Company.Controller.Company.RoleCompany_GetByPublicId
+                ("DA5C572E");
+
+            Assert.AreEqual(true, oReturn.RelatedRole.Count >= 1);
+        }
+
+        [TestMethod]
+        public void RoleCompanyGetUsersByPublicId()
+        {
+            List<ProveedoresOnLine.Company.Models.Company.UserCompany> oReturn =
+                ProveedoresOnLine.Company.Controller.Company.RoleCompany_GetUsersByPublicId
+                ("DA5C572E", true);
+
+            Assert.AreEqual(true, oReturn.Count >= 1);
         }
 
         [TestMethod]
@@ -388,7 +349,61 @@ namespace ProveedoresOnLine.Company.Test
 
             Assert.AreEqual(true, oCompanyToUpsert.RelatedCompanyRole.RoleModule.Count > 0);
         }
+        
+        [TestMethod]
+        public void GetRoleCompanySearch()
+        {
+            int oTotalRows = 0;
+            List<RoleCompanyModel> oReturn = ProveedoresOnLine.Company.Controller.Company.GetRoleCompanySearch("", true, out oTotalRows);
 
+            Assert.AreEqual(true, oReturn.Count > 0);
+        }
+        #endregion
+
+        #region MarketPlace Functions
+        [TestMethod]
+        public void MP_RoleCompanyGetByUser()
+        {
+            List<ProveedoresOnLine.Company.Models.Company.CompanyModel> oReturn =
+                ProveedoresOnLine.Company.Controller.Company.MP_RoleCompanyGetByUser
+                ("noexiste1@correo.com");
+
+            Assert.AreEqual(true, oReturn.Count >= 1);
+        }
+
+        [TestMethod]
+        public void MP_RoleCompanyGetByUserNew()
+        {
+            List<ProveedoresOnLine.Company.Models.Company.CompanyModel> oReturn =
+                ProveedoresOnLine.Company.Controller.Company.MP_RoleCompanyGetByUserNew
+                ("david.moncayo@publicar.com");
+
+            Assert.AreEqual(true, oReturn.Count >= 1);
+        }
+
+        #endregion
+
+        #region Admin 
+        [TestMethod]
+        public void BlackListGetByCompanyPublicId()
+        {
+            List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> oReturn =
+                ProveedoresOnLine.Company.Controller.Company.BlackListGetByCompanyPublicId
+                ("1D9B9580");
+
+            Assert.AreEqual(true, oReturn.Count >= 10);
+        }
+
+        [TestMethod]
+        public void MinimumWageSearchByYear()
+        {
+            ProveedoresOnLine.Company.Models.Util.MinimumWageModel oReturn = ProveedoresOnLine.Company.Controller.Company.MinimumWageSearchByYear(2015, 988);
+
+            Assert.AreEqual(true, oReturn != null);
+        } 
+        #endregion
+
+        #region Module Functions
         [TestMethod]
         public void ModuleOption()
         {
@@ -441,6 +456,10 @@ namespace ProveedoresOnLine.Company.Test
             Assert.AreEqual(true, oModel.ItemInfo != null && oModel.ItemInfo.Count > 0);
         }
 
+        #endregion
+        
+        #region Calification
+
         [TestMethod]
         public void CalificationGetAll()
         {
@@ -448,15 +467,17 @@ namespace ProveedoresOnLine.Company.Test
             List<CalificationIndexModel> oReturn = ProveedoresOnLine.Company.Controller.Company.CalificationGetAll();
             Assert.AreEqual(true, oReturn.Count > 0);
         }
+        #endregion
 
+        #region Custom Filters
         [TestMethod]
         public void CustomFiltersGetAll()
         {
             int oTotalRows = 0;
             List<CustomFiltersIndexModel> oReturn = Controller.Company.CustomFiltersGetAll();
             Assert.AreEqual(true, oReturn.Count > 0);
-        }
-
+        } 
+        #endregion
 
         #region Notificatio Company Config
 
@@ -464,6 +485,13 @@ namespace ProveedoresOnLine.Company.Test
         public void NotificationConfigGetByCompany()
         {
             List<CompanyNotificationModel> oReturn = Controller.Company.NotificationConfigGetByCompany("DA5C572E");
+            Assert.AreEqual(true, oReturn.Count > 0);
+        }
+
+        [TestMethod]
+        public void NotificationConfigGetAll()
+        {
+            List<CompanyNotificationModel> oReturn = Controller.Company.NotificationConfigGetAll();
             Assert.AreEqual(true, oReturn.Count > 0);
         }
 
