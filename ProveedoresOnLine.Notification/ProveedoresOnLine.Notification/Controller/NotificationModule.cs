@@ -80,7 +80,7 @@ namespace ProveedoresOnLine.Notification.Controller
 
         #region Log File
 
-        private static void LogFile(string LogMessage)
+        public static void LogFile(string LogMessage)
         {
             try
             {

@@ -4027,7 +4027,7 @@ var Customer_NotificationsObject = {
                                 var selectedItem = this.dataItem(e.item.index());
                                 //set server fiel name
                                 options.model[options.field] = selectedItem.ItemName;
-                                options.model['DocumentId'] = selectedItem.ItemId;
+                                //options.model['DocumentId'] = selectedItem.ItemId;
                                 options.model['Document'] = selectedItem.ItemName;
                                 //enable made changes
                                 options.model.dirty = true;
@@ -4067,7 +4067,7 @@ var Customer_NotificationsObject = {
                                 var selectedItem = this.dataItem(e.item.index());
                                 //set server fiel name
                                 options.model[options.field] = selectedItem.ItemName;
-                                options.model['DocumentId'] = selectedItem.ItemId;
+                                //options.model['DocumentId'] = selectedItem.ItemId;
                                 options.model['Document'] = selectedItem.ItemName;
                                 //enable made changes
                                 options.model.dirty = true;
@@ -4282,7 +4282,7 @@ var Customer_NotificationsObject = {
             {
                 field: 'Responsable',
                 title: 'Responsable',
-                width: '150px',
+                width: '450px',
             },
             {
                 field: 'NotificationConfigId',

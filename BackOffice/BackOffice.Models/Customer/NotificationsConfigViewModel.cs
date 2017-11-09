@@ -85,7 +85,12 @@ namespace BackOffice.Models.Customer
                DefaultIfEmpty(string.Empty).
                FirstOrDefault();
             Enable = oCompanyNotification.Enable;
-
+            ResponsableId = oCompanyNotification.CompanyNotificationInfo.
+               Where(y => y.ConfigItemType.ItemId == (int)BackOffice.Models.General.enumNotificationInfoType.Responsable).
+               Select(y => y.CompanyNotificationInfoId.ToString()).
+               DefaultIfEmpty(string.Empty).
+               FirstOrDefault();
+            Enable = oCompanyNotification.Enable;
             RuleType = oCompanyNotification.CompanyNotificationInfo.
                Where(y => y.ConfigItemType.ItemId == (int)BackOffice.Models.General.enumNotificationInfoType.RuleType).
                Select(y => y.Value).

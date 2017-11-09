@@ -8,6 +8,7 @@ using ProveedoresOnLine.Notification.Models;
 using static ProveedoresOnLine.Notification.Models.Enumerations;
 using ProveedoresOnLine.Company.Models.Company;
 using ProveedoresOnLine.Company.Models.Util;
+using ProveedoresOnLine.Notification.Controller;
 
 namespace ProveedoresOnLine.Notification.Notification.Core
 {
@@ -43,6 +44,7 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                         {
                             oProviders.All(p =>
                             {
+                                BuildMsgObject = false;
                                 //Get LegalInfo
                                 List<Company.Models.Util.GenericItemModel> oLegalInfo = CompanyProvider.Controller.CompanyProvider.LegalGetBasicInfo(p.CompanyPublicId, (int)enumGeneralInfoType.ChaimberOfComerceInfo, true);
 
@@ -59,13 +61,13 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                                         if (RuleValue == (int)enumVigencyType.ThirtyDays)
                                         {
                                             ChaimberOfComerceDateToValidate = ChaimberOfComerceDateToValidate.AddMonths(-1);
-                                            if (ChaimberOfComerceDateToValidate.Date == DateTime.Now.Date)                                            
+                                            if (ChaimberOfComerceDateToValidate.Date == DateTime.Now.Date)
                                                 BuildMsgObject = true;
                                         }
                                         if (RuleValue == (int)enumVigencyType.SixtyDays)
                                         {
                                             ChaimberOfComerceDateToValidate = ChaimberOfComerceDateToValidate.AddMonths(-2);
-                                            if (ChaimberOfComerceDateToValidate.Date == DateTime.Now.Date)                                            
+                                            if (ChaimberOfComerceDateToValidate.Date == DateTime.Now.Date)
                                                 BuildMsgObject = true;
                                         }
                                         if (RuleValue == (int)enumVigencyType.NinetyDays)
@@ -111,12 +113,12 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                                         }
 
                                         //Send notification
-                                        if (BuildMsgObject)                                        
+                                        if (BuildMsgObject)
                                             this.SendNotification(NotificationConfigInfoModel, p);
-                                                                                
+
                                         break;
                                         #endregion
-                                       
+
                                 }
                                 #endregion
 
@@ -130,6 +132,7 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                     {
                         oProviders.All(p =>
                         {
+                            BuildMsgObject = false;
                             //Get LegalInfo
                             List<Company.Models.Util.GenericItemModel> oHSEQInfo = CompanyProvider.Controller.CompanyProvider.CertficationGetBasicInfo(p.CompanyPublicId, (int)enumGeneralInfoType.HSEQCertifications, true);
 
@@ -213,6 +216,7 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                     {
                         oProviders.All(p =>
                         {
+                            BuildMsgObject = false;
                             //Get LegalInfo
                             List<Company.Models.Util.GenericItemModel> oDocumentInfo = CompanyProvider.Controller.CompanyProvider.AditionalDocumentGetByType(p.CompanyPublicId, (int)enumGeneralInfoType.AdditionalDocument, true);
 
@@ -309,21 +313,19 @@ namespace ProveedoresOnLine.Notification.Notification.Core
 
         private void SendNotification(List<ProveedoresOnLine.Company.Models.Company.CompanyNotificationInfoModel> NotificationConfigInfoModel, CompanyModel oCompany)
         {
-            try
+            List<string> oResponsables = new List<string>();
+            oResponsables.AddRange(NotificationConfigInfoModel.Where(x => x.ConfigItemType.ItemId == 2008008).Select(x => x.LargeValue).FirstOrDefault().Split(';'));
+            if (oResponsables.Count > 0)
             {
-                List<string> oResponsables = new List<string>();
-                oResponsables.AddRange(NotificationConfigInfoModel.Where(x => x.ConfigItemType.ItemId == 2008008).Select(x => x.LargeValue).FirstOrDefault().Split(';'));
-                if (oResponsables.Count > 0)
+                CompanyModel oProviderInfo = Company.Controller.Company.CompanyGetBasicInfo(oCompany.CompanyPublicId);
+                oResponsables.All(x =>
                 {
-                    CompanyModel oProviderInfo = Company.Controller.Company.CompanyGetBasicInfo(oCompany.CompanyPublicId);
-                    oResponsables.All(x =>
+                    MessageModule.Client.Models.ClientMessageModel oMessage = new MessageModule.Client.Models.ClientMessageModel()
                     {
-                        MessageModule.Client.Models.ClientMessageModel oMessage = new MessageModule.Client.Models.ClientMessageModel()
-                        {
-                            Agent = "POL_NotificationMessage_Mail",
-                            User = "Proveedores OnLine Notifications",
-                            ProgramTime = DateTime.Now,
-                            MessageQueueInfo = new System.Collections.Generic.List<Tuple<string, string>>()
+                        Agent = "POL_NotificationMessage_Mail",
+                        User = "Proveedores OnLine Notifications",
+                        ProgramTime = DateTime.Now,
+                        MessageQueueInfo = new System.Collections.Generic.List<Tuple<string, string>>()
                         {
                             new Tuple<string,string>("To",x),
                             new Tuple<string,string>("ProviderName",oCompany.CompanyName),
@@ -332,17 +334,11 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                             new Tuple<string,string>("MessageBody",NotificationConfigInfoModel.Where(m => m.ConfigItemType.ItemId == 2008007).Select(m => m.LargeValue).FirstOrDefault()),
                             new Tuple<string,string>("Subject","Notificación Proveedor " + oCompany.CompanyName),
                         },
-
-                        };
-                        MessageModule.Client.Controller.ClientController.CreateMessage(oMessage);
-                        return true;
-                    });
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
+                    };
+                    int idMessage = MessageModule.Client.Controller.ClientController.CreateMessage(oMessage);
+                    NotificationModule.LogFile("Message Sent to !!! :::::: " + x + ":::IdMessageQueue::" + idMessage + "::::::" + DateTime.Now);
+                    return true;
+                });
             }
         }
     }
