@@ -260,12 +260,12 @@ namespace ProveedoresOnLine.IndexSearch.Controller
 
                 var settings = new ConnectionSettings(node);
 
-                settings.DefaultIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_SurveyIndex].Value);
+                settings.DefaultIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value);
 
                 ElasticClient client = new ElasticClient(settings);
 
                 ICreateIndexResponse oElasticResponse = client.
-                        CreateIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_SurveyIndex].Value, c => c
+                        CreateIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value, c => c
                         .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
                         .Analysis(a => a.
                             Analyzers(an => an.

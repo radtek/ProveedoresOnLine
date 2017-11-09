@@ -54,6 +54,11 @@ namespace BackOffice.Models.Customer
                 Select(y => y.Value).
                 DefaultIfEmpty(string.Empty).
                 FirstOrDefault();
+            DocumentId = oCompanyNotification.CompanyNotificationInfo.
+              Where(y => y.ConfigItemType.ItemId == (int)BackOffice.Models.General.enumNotificationInfoType.Document).
+              Select(y => y.CompanyNotificationInfoId.ToString()).
+              DefaultIfEmpty(string.Empty).
+              FirstOrDefault();
             NotificationCritery = oCompanyNotification.CompanyNotificationInfo.
                 Where(y => y.ConfigItemType.ItemId == (int)BackOffice.Models.General.enumNotificationInfoType.NotificationCritery).
                 Select(y => y.Value).
@@ -69,6 +74,11 @@ namespace BackOffice.Models.Customer
                Select(y => y.LargeValue).
                DefaultIfEmpty(string.Empty).
                FirstOrDefault();
+            MessageBodyId = oCompanyNotification.CompanyNotificationInfo.
+               Where(y => y.ConfigItemType.ItemId == (int)BackOffice.Models.General.enumNotificationInfoType.BodyMessage).
+               Select(y => y.CompanyNotificationInfoId.ToString()).
+               DefaultIfEmpty(string.Empty).
+               FirstOrDefault();
             Responsable = oCompanyNotification.CompanyNotificationInfo.
                Where(y => y.ConfigItemType.ItemId == (int)BackOffice.Models.General.enumNotificationInfoType.Responsable).
                Select(y => y.LargeValue).
@@ -81,10 +91,20 @@ namespace BackOffice.Models.Customer
                Select(y => y.Value).
                DefaultIfEmpty(string.Empty).
                FirstOrDefault();
+            RuleTypeId = oCompanyNotification.CompanyNotificationInfo.
+              Where(y => y.ConfigItemType.ItemId == (int)BackOffice.Models.General.enumNotificationInfoType.RuleType).
+              Select(y => y.CompanyNotificationInfoId.ToString()).
+              DefaultIfEmpty(string.Empty).
+              FirstOrDefault();
 
             NotificationValue = oCompanyNotification.CompanyNotificationInfo.
                Where(y => y.ConfigItemType.ItemId == (int)BackOffice.Models.General.enumNotificationInfoType.NotificationValue).
                Select(y => y.Value).
+               DefaultIfEmpty(string.Empty).
+               FirstOrDefault();
+            NotificationValueId = oCompanyNotification.CompanyNotificationInfo.
+               Where(y => y.ConfigItemType.ItemId == (int)BackOffice.Models.General.enumNotificationInfoType.NotificationValue).
+               Select(y => y.CompanyNotificationInfoId.ToString()).
                DefaultIfEmpty(string.Empty).
                FirstOrDefault();
         }
@@ -98,15 +118,19 @@ namespace BackOffice.Models.Customer
         public string DocumentType { get; set; }
         public string DocumentTypeId { get; set; }
         public string Document { get; set; }
+        public string DocumentId { get; set; }
         public string NotificationCritery { get; set; }
         public string NotificationCriteryId { get; set; }
         public string MessageBody { get; set; }
+        public string MessageBodyId { get; set; }
         public string Responsable { get; set; }
+        public string ResponsableId { get; set; }
 
         public bool Enable { get; set; }
 
         public string RuleType { get; set; }
-
+        public string RuleTypeId { get; set; }
         public string NotificationValue { get; set; }
+        public string NotificationValueId { get; set; }
     }
 }

@@ -39,7 +39,7 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                     if (DocumentType == (int)enumDocumentType.GeneralInfo)
                     {
                         // In Chaimber Of Commerce case
-                        if (DocumentName == "Cámara de Comercio")
+                        if (DocumentName.ToLower() == "cámara de comercio")
                         {
                             oProviders.All(p =>
                             {
@@ -327,8 +327,8 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                         {
                             new Tuple<string,string>("To",x),
                             new Tuple<string,string>("ProviderName",oCompany.CompanyName),
-                            new Tuple<string,string>("Nit",oCompany.IdentificationNumber),
-                            new Tuple<string,string>("Logo",oProviderInfo.CompanyInfo.Where(y => y.ItemInfoType.ItemId == 203005).Select(y => y.Value).FirstOrDefault()),
+                            new Tuple<string,string>("Nit",!string.IsNullOrEmpty(oProviderInfo.IdentificationNumber) ? oProviderInfo.IdentificationNumber : "N/D"),
+                            new Tuple<string,string>("Logo",!string.IsNullOrEmpty(oProviderInfo.CompanyInfo.Where(y => y.ItemInfoType.ItemId == 203005).Select(y => y.Value).FirstOrDefault()) ? oProviderInfo.CompanyInfo.Where(y => y.ItemInfoType.ItemId == 203005).Select(y => y.Value).FirstOrDefault() : ""),
                             new Tuple<string,string>("MessageBody",NotificationConfigInfoModel.Where(m => m.ConfigItemType.ItemId == 2008007).Select(m => m.LargeValue).FirstOrDefault()),
                             new Tuple<string,string>("Subject","Notificación Proveedor " + oCompany.CompanyName),
                         },
