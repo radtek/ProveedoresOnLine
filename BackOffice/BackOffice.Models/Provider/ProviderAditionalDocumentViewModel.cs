@@ -172,7 +172,7 @@ namespace BackOffice.Models.Provider
                 DefaultIfEmpty(string.Empty).
                 FirstOrDefault();
             AD_Description = RelatedAditionalDocument.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_Description).
-                Select(x => x.Value).
+                Select(x => x.LargeValue).
                 DefaultIfEmpty(string.Empty).
                 FirstOrDefault();
 

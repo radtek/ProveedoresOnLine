@@ -3236,7 +3236,7 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
                               } into cig
                               select new CompanyNotificationInfoModel()
                               {
-                                  CompanyNotificationId = cig.Key.CompanyNotificationInfoId,
+                                  CompanyNotificationInfoId = cig.Key.CompanyNotificationInfoId,                                  
                                   ConfigItemType = new CatalogModel()
                                   {
                                       ItemId = cig.Key.ConfigItemTypeId,
@@ -3304,7 +3304,7 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
                               } into cig
                               select new CompanyNotificationInfoModel()
                               {
-                                  CompanyNotificationId = cig.Key.CompanyNotificationInfoId,
+                                  CompanyNotificationInfoId = cig.Key.CompanyNotificationInfoId,
                                   ConfigItemType = new CatalogModel()
                                   {
                                       ItemId = cig.Key.ConfigItemTypeId,
