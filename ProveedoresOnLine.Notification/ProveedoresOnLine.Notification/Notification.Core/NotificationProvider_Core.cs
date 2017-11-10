@@ -9,6 +9,7 @@ using static ProveedoresOnLine.Notification.Models.Enumerations;
 using ProveedoresOnLine.Company.Models.Company;
 using ProveedoresOnLine.Company.Models.Util;
 using ProveedoresOnLine.Notification.Controller;
+using System.Globalization;
 
 namespace ProveedoresOnLine.Notification.Notification.Core
 {
@@ -19,7 +20,7 @@ namespace ProveedoresOnLine.Notification.Notification.Core
 
             //Get All Providers by this Customer (CompanyPublicId)
             List<CompanyModel> oProviders = CompanyProvider.Controller.CompanyProvider.GetAllProvidersByCustomerPublicId(CompanyPublicId);
-
+            CultureInfo culture = CultureInfo.CreateSpecificCulture("es-ES");
             if (NotificationConfigInfoModel != null)
             {
                 if (NotificationConfigInfoModel.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.NotificationType).Select(x => x.Value).FirstOrDefault() == ((int)enumNotificationType.Document).ToString())
@@ -50,7 +51,7 @@ namespace ProveedoresOnLine.Notification.Notification.Core
 
                                 DateTime ChaimberOfComerceDateToValidate = new DateTime();
                                 if (oLegalInfo != null)
-                                    ChaimberOfComerceDateToValidate = oLegalInfo.FirstOrDefault().ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumGeneralInfoType.ChaimberOfComerceDateToValidate).Select(x => Convert.ToDateTime(x.Value)).FirstOrDefault();
+                                    ChaimberOfComerceDateToValidate = oLegalInfo.FirstOrDefault().ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumGeneralInfoType.ChaimberOfComerceDateToValidate).Select(x => DateTime.Parse(x.Value, culture)).FirstOrDefault();
 
                                 #region Validate the vigency just for the Documents of Provider
                                 //Valid the Rules
@@ -138,10 +139,10 @@ namespace ProveedoresOnLine.Notification.Notification.Core
 
                             DateTime HSQQDateToValidate = new DateTime();
                             if (oHSEQInfo != null)
-                                HSQQDateToValidate = oHSEQInfo.FirstOrDefault().ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumGeneralInfoType.HSEQVigency).Select(x => Convert.ToDateTime(x.Value)).FirstOrDefault();
+                                HSQQDateToValidate = oHSEQInfo.FirstOrDefault().ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumGeneralInfoType.HSEQVigency).Select(x => DateTime.Parse(x.Value, culture)).FirstOrDefault();
 
                             #region Validate the vigency just for the Documents of Provider
-                            //Valid the Rules
+                                //Valid the Rules
                             switch (RuleType)
                             {
                                 #region Evalue Rules
@@ -227,7 +228,7 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                                  oDocumentInfo.Where(y => y.ItemName.Trim() == DocumentName.Trim()).Select(y => y).FirstOrDefault();
                                 if (oDocumentToValid != null)
                                 {
-                                    oDateToValid = oDocumentToValid.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumGeneralInfoType.AdditionalVigencyDate).Select(x => DateTime.Parse(x.Value)).FirstOrDefault();
+                                    oDateToValid = oDocumentToValid.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumGeneralInfoType.AdditionalVigencyDate).Select(x => Convert.ToDateTime(x.Value)).FirstOrDefault();
                                     //oDocumentInfo = oDocumentInfo.FirstOrDefault().ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumGeneralInfoType.HSEQVigency).Select(x => Convert.ToDateTime(x.Value)).FirstOrDefault();
                                     if (oDateToValid != new DateTime())
                                     {
