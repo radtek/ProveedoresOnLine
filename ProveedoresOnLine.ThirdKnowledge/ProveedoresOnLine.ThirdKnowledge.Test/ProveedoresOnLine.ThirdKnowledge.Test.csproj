@@ -145,10 +145,12 @@
     <Compile Include="ThirdKnowledgeBatchTest.cs" />
     <Compile Include="ThirdKnowledgeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ThisdKnowledgeOnLineSearchTest.cs" />
+    <Compile Include="ThirdKnowledgeOnLineSearchTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Rsx-SettingsConfig.xml" />
+    <Content Include="Rsx-SettingsConfig.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Rsx-ThirdKnowledge.xml">
       <SubType>Designer</SubType>
     </Content>

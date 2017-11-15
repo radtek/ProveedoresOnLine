@@ -42,5 +42,12 @@ namespace ProveedoresOnLine.OnlineSearch.Models
         public const string JudicialP_Proxy = "JudicialP_Proxy";
 
         #endregion
+
+        #region Register Page Service
+
+        public const string RegisterServiceURL = "RegisterService_URL";
+
+        public const string RegisterServiceToken = "RegisterService_Token";
+        #endregion
     }
 }

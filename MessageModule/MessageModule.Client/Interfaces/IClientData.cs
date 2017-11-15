@@ -15,12 +15,11 @@ namespace MessageModule.Client.Interfaces
 
         #region Notifications
 
-        int NotificationUpsert(int? NotificationId, string CompanyPublicId, string Label, string User, string Url, int NotificationType, bool Enable);
+        int NotificationUpsert(int? NotificationId, string Image, string Label, string Url, string User, int State, bool Enable);
 
-        void NotificationDeleteById(int NotificationId);
+        int NotificationInfoUpsert(int? NotificationInfoId, int NotificationId, int NotificationInfoType, string Value, string LargeValue, bool Enable);
 
-
-        List<NotificationModel> NotificationGetByUser(string CompanyPublicId, string User, bool Enable);
+        List<NotificationModel> NotificationGetByUser(string User, bool Enable);
 
         #endregion
     }

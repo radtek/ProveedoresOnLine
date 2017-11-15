@@ -126,7 +126,7 @@ namespace MarketPlace.Web.ControllersApi
             {
                 List<MessageModule.Client.Models.NotificationModel> oNotifications =
                     MessageModule.Client.Controller.ClientController.NotificationGetByUser
-                    (CompanyPublicId, User, Enable == "true" ? true : false);
+                    ( User, Enable == "true" ? true : false);
 
                 if (oNotifications != null &&
                     oNotifications.Count > 0)
