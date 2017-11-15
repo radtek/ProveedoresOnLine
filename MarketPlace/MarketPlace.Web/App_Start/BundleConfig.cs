@@ -111,6 +111,15 @@ namespace MarketPlace.Web
 
                     #endregion
 
+                    #region Font Awesome Icon
+
+                    bundles.Add(new StyleBundle("~/site/FontAwesomeIcon").IncludeDirectory(
+                              "~/Areas/" + MarketPlace.Models.General.AreaModel.CurrentAreaName + "/Content/FontAwesomeIcon/",
+                              "*.css",
+                              true));
+
+                    #endregion
+
                     #endregion
 
                     break;

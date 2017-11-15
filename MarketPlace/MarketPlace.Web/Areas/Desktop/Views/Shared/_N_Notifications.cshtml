@@ -1,14 +1,57 @@
-﻿<div id="Notification">
-    @if (MarketPlace.Models.General.SessionModel.NewNotifications)
-    {
-        <img id="NewNotification" src="@(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.N_NewNotification].Value.Trim())" />
+﻿@{ 
+    var cant = MarketPlace.Models.General.SessionModel.NewNotifications == false ? "0" : MarketPlace.Models.General.SessionModel.ListNotifications.Count.ToString();
+}
 
-        <img id="OldNotification" style="display:none;" src="@(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.N_OldNotification].Value.Trim())" />
-    }
-    else
-    {
-        <img id="OldNotification" src="@(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.N_OldNotification].Value.Trim())" />
+<div id="Notification">   
+    <ul class="nav navbar-top-links navbar-right">
 
-        <img id="NewNotification" style="display:none;" src="@(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.N_NewNotification].Value.Trim())" />
-    }
+        <li class="dropdown">
+            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" aria-expanded="true">
+                <i class="fa fa-bell"></i>  <span class="label label-warning">@cant</span>
+            </a>
+
+            <ul class="dropdown-menu dropdown-alerts pre-scrollable">
+                @if (MarketPlace.Models.General.SessionModel.NewNotifications)
+                {
+                    if (MarketPlace.Models.General.SessionModel.ListNotifications != null)
+                    {
+                        foreach (var Notification in MarketPlace.Models.General.SessionModel.ListNotifications)
+                        {
+                            <li>
+                                <a href="@Notification.Url">
+                                    <div>
+                                        <i class="@Notification.Image fa-fw"></i> @Notification.Label
+                                        <span class="pull-right text-muted smal">@Notification.CreateDate.ToShortDateString() @Notification.CreateDate.ToLongTimeString()</span>
+                                    </div>
+                                </a>
+                            </li>
+                            
+                            <li class="divider"></li>
+                        }
+                    }
+
+                    <li>
+                        <div class="text-center link-block">
+                            <a href="notifications.html">
+                                <strong>Ver Todas</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a>
+                            <div>
+                                NO TIENE NINGUNA NOTIFICACIÓN
+                            </div>
+                        </a>
+                    </li>
+                }
+                
+            </ul>
+        </li>
+    </ul>
 </div>
+

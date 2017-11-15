@@ -36,6 +36,7 @@ namespace MessageModule.Client.DAL.Controller
 
         #endregion
 
+        #region Message Queue
         public int MessageQueueCreate(string Agent, DateTime ProgramTime, string User)
         {
             return DataFactory.MessageQueueCreate(Agent, ProgramTime, User);
@@ -44,23 +45,24 @@ namespace MessageModule.Client.DAL.Controller
         public void MessageQueueInfoCreate(int MessageQueueId, string Parameter, string Value)
         {
             DataFactory.MessageQueueInfoCreate(MessageQueueId, Parameter, Value);
-        }
+        } 
+        #endregion
 
         #region Notifications
 
-        public int NotificationUpsert(int? NotificationId, string CompanyPublicId, string Label, string User, string Url, int NotificationType, bool Enable)
+        public int NotificationUpsert(int? NotificationId, string Image, string Label, string Url, string User, int State, bool Enable)
         {
-            return DataFactory.NotificationUpsert(NotificationId, CompanyPublicId, Label, User, Url, NotificationType, Enable);
+            return DataFactory.NotificationUpsert(NotificationId, Image, Label, Url, User, State, Enable);
         }
 
-        public void NotificationDeleteById(int NotificationId)
+        public int NotificationInfoUpsert(int? NotificationInfoId, int NotificationId, int NotificationInfoType, string Value, string LargeValue, bool Enable)
         {
-            DataFactory.NotificationDeleteById(NotificationId);
+            return DataFactory.NotificationInfoUpsert(NotificationInfoId, NotificationId, NotificationInfoType, Value, LargeValue, Enable);
         }
 
-        public List<NotificationModel> NotificationGetByUser(string CompanyPublicId, string User, bool Enable)
+        public List<NotificationModel> NotificationGetByUser(string User, bool Enable)
         {
-            return DataFactory.NotificationGetByUser(CompanyPublicId, User, Enable);
+            return DataFactory.NotificationGetByUser(User, Enable);
         }
 
         #endregion

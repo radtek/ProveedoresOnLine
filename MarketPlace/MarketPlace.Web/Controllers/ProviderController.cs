@@ -3533,13 +3533,15 @@ namespace MarketPlace.Web.Controllers
                             });
                         }
                         report = Report_SurveyProcable(parameters, data);
+
+                        //TODO: Make this fine
                         MessageModule.Client.Models.NotificationModel oDataMessage = new NotificationModel()
                         {
-                            CompanyName = SessionModel.CurrentCompany.CompanyName,
-                            CompanyLogo = SessionModel.CurrentCompany_CompanyLogo,
-                            IdentificationType = SessionModel.CurrentCompany.IdentificationType.ItemName,
-                            IdentificationNumber = SessionModel.CurrentCompany.IdentificationNumber,
-                            NotificationType = (int)enumReportType.RP_SurveyReport,
+                            //CompanyName = SessionModel.CurrentCompany.CompanyName,
+                            //CompanyLogo = SessionModel.CurrentCompany_CompanyLogo,
+                            //IdentificationType = SessionModel.CurrentCompany.IdentificationType.ItemName,
+                            //IdentificationNumber = SessionModel.CurrentCompany.IdentificationNumber,
+                            //NotificationType = (int)enumReportType.RP_SurveyReport,
                             Url = report.Item3,
                         };
 
@@ -6560,7 +6562,8 @@ namespace MarketPlace.Web.Controllers
 
             return Report;
         }
-
+        
+        //TODO: Do This correctly
         private static void SendProcablesMessage(NotificationModel oDataMessage)
         {
             if (!string.IsNullOrEmpty(oDataMessage.User))
@@ -6568,37 +6571,37 @@ namespace MarketPlace.Web.Controllers
                 #region Email
 
                 //Create message object
-                MessageModule.Client.Models.ClientMessageModel oMessageToSend = new MessageModule.Client.Models.ClientMessageModel()
-                {
-                    Agent = Models.General.InternalSettings.Instance[Models.General.Constants.N_Survey_Procables_Mail].Value,
-                    User = oDataMessage.User,
-                    ProgramTime = DateTime.Now,
-                    MessageQueueInfo = new List<Tuple<string, string>>(),
-                };
+                //MessageModule.Client.Models.ClientMessageModel oMessageToSend = new MessageModule.Client.Models.ClientMessageModel()
+                //{
+                //    Agent = Models.General.InternalSettings.Instance[Models.General.Constants.N_Survey_Procables_Mail].Value,
+                //    User = oDataMessage.User,
+                //    ProgramTime = DateTime.Now,
+                //    MessageQueueInfo = new List<Tuple<string, string>>(),
+                //};
 
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("To", "diego,jaramillo@proveedoresonline.co"));
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("InfoFileUrl", oDataMessage.Url));
+                //oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("To", "diego,jaramillo@proveedoresonline.co"));
+                //oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("InfoFileUrl", oDataMessage.Url));
 
-                //get customer info
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                    ("CustomerLogo", oDataMessage.CompanyLogo));
+                ////get customer info
+                //oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
+                //    ("CustomerLogo", oDataMessage.CompanyLogo));
 
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                    ("CustomerName", oDataMessage.CompanyName));
+                //oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
+                //    ("CustomerName", oDataMessage.CompanyName));
 
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                    ("CustomerIdentificationTypeName", oDataMessage.IdentificationType));
+                //oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
+                //    ("CustomerIdentificationTypeName", oDataMessage.IdentificationType));
 
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                    ("CustomerIdentificationNumber", oDataMessage.IdentificationNumber));
+                //oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
+                //    ("CustomerIdentificationNumber", oDataMessage.IdentificationNumber));
 
-                MessageModule.Client.Controller.ClientController.CreateMessage(oMessageToSend);
+                //MessageModule.Client.Controller.ClientController.CreateMessage(oMessageToSend);
 
                 #endregion
 
                 #region Notification
 
-                oDataMessage.NotificationId = MessageModule.Client.Controller.ClientController.NotificationUpsert(oDataMessage);
+                //oDataMessage.NotificationId = MessageModule.Client.Controller.ClientController.NotificationUpsert(oDataMessage);
 
                 #endregion
             }

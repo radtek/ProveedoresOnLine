@@ -8,6 +8,7 @@ namespace MarketPlace.Models.General
 {
     public static class SessionModel
     {
+        public static List<MessageModule.Client.Models.NotificationModel> ListNotifications { get; set; }
         public static SessionManager.Models.Auth.User CurrentLoginUser { get { return SessionManager.SessionController.Auth_UserLogin; } }
 
         public static bool UserIsLoggedIn { get { return (CurrentLoginUser != null); } }
@@ -381,11 +382,11 @@ namespace MarketPlace.Models.General
         {
             get
             {
-                List<MessageModule.Client.Models.NotificationModel> oReturn = MessageModule.Client.Controller.ClientController.NotificationGetByUser(CurrentCompany.CompanyPublicId, CurrentLoginUser.Email, true);
+                ListNotifications = MessageModule.Client.Controller.ClientController.NotificationGetByUser(CurrentLoginUser.Email, true);
 
                 bool oNewNotifications = false;
 
-                oNewNotifications = oReturn != null ? true : false;
+                oNewNotifications = ListNotifications != null ? true : false;
 
                 return oNewNotifications;
             }

@@ -557,7 +557,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
         #region Messenger
 
-        public static void CreateUploadNotification(MessageModule.Client.Models.NotificationModel DataMessage)
+        public static void CreateUploadNotification(MessageModule.Client.Models.ClientMessageModel DataMessage)
         {
             try
             {
@@ -570,30 +570,15 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     User = DataMessage.User,
                     ProgramTime = DateTime.Now,
                     MessageQueueInfo = new List<Tuple<string, string>>(),
-                };
-
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("To", DataMessage.User));
-
-                //get customer info
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                    ("CustomerLogo", DataMessage.CompanyLogo));
-
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                    ("CustomerName", DataMessage.CompanyName));
-
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                    ("CustomerIdentificationTypeName", DataMessage.IdentificationType));
-
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                    ("CustomerIdentificationNumber", DataMessage.IdentificationNumber));
+                };               
 
                 MessageModule.Client.Controller.ClientController.CreateMessage(oMessageToSend);
 
                 #endregion
 
                 #region Notification
-
-                DataMessage.NotificationId = MessageModule.Client.Controller.ClientController.NotificationUpsert(DataMessage);
+                //TODO Manage Notification
+                //DataMessage.NotificationId = MessageModule.Client.Controller.ClientController.NotificationUpsert(DataMessage);
 
                 #endregion
             }

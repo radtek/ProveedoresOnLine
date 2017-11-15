@@ -34,7 +34,7 @@ namespace ProveedoresOnLine.Notification.Controller
                         if (n.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.NotificationType).Select(x => x.Value).FirstOrDefault() == ((int)enumNotificationType.Document).ToString())
                         {
                             //Call DocumentPRovider Function
-                            ProviderCore(n.CompanyPublicId, n.CompanyNotificationInfo);
+                            ProviderCore(n.CompanyPublicId, n);
                         }
                         else if (n.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.NotificationType).Select(x => x.Value).FirstOrDefault() == ((int)enumNotificationType.RestrictiveList_POL).ToString())
                         {
@@ -69,13 +69,13 @@ namespace ProveedoresOnLine.Notification.Controller
             }
         }
 
-        public static bool ProviderCore(string CompanyPublicId, List<ProveedoresOnLine.Company.Models.Company.CompanyNotificationInfoModel> NotificationConfigInfoModel)
+        public static bool ProviderCore(string CompanyPublicId, ProveedoresOnLine.Company.Models.Company.CompanyNotificationModel NotificationConfigModel)
         {
             var builder = new ContainerBuilder();
             builder.RegisterType< Notification.Core.NotificationProvider_Core>().As<Interfaces.INotificationCore>();
 
             var container = builder.Build();
-            return container.Resolve<Interfaces.INotificationCore>().ManageNotification(CompanyPublicId, NotificationConfigInfoModel);
+            return container.Resolve<Interfaces.INotificationCore>().ManageNotification(CompanyPublicId, NotificationConfigModel);
         }
 
         #region Log File

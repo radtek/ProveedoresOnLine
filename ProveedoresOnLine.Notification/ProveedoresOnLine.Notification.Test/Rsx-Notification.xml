@@ -1,6 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Settings>
   <Notification>
-   
+    <key name="UrlNotificationAdditionalInfo_MK">https://www.proveedoresonline.co/Marketplace/Provider/LIChaimberOfCommerceInfo?ProviderPublicId=</key>
+    <key name="UrlNotificationAdditionalInfo_BO">https://www.proveedoresonline.co/BackOffice/Provider/LIChaimberOfCommerceInfo?ProviderPublicId=</key>
+    <key name="UrlNotificationHSEQ_MK"></key>
+    <key name="UrlNotificationHSEQ_BO"></key>
+    <key name="UrlNotificationGeneralInfo_Mk"></key>
+    <key name="UrlNotificationGeneralInfo_BO"></key>
   </Notification>
 </Settings>

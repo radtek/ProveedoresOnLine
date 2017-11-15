@@ -90,25 +90,38 @@ namespace MessageModule.Client.Controller
             {
                 oReturn = DAL.Controller.ClientDataController.Instance.NotificationUpsert(
                 NotificationUpsert.NotificationId,
-                NotificationUpsert.CompanyPublicId,
+                NotificationUpsert.Image,
                 NotificationUpsert.Label,
-                NotificationUpsert.User,
                 NotificationUpsert.Url,
-                NotificationUpsert.NotificationType,
+                NotificationUpsert.User,
+                NotificationUpsert.State,
                 NotificationUpsert.Enable);
             }
 
             return oReturn;
         }
 
-        public static void NotificationDeleteById(int NotificationId)
+        public static int NotificationInfoUpsert(NotificationInfoModel NotificationInfoUpsert)
         {
-            DAL.Controller.ClientDataController.Instance.NotificationDeleteById(NotificationId);
+            int oReturn = 0;
+
+            if (NotificationInfoUpsert != null)
+            {
+                oReturn = DAL.Controller.ClientDataController.Instance.NotificationInfoUpsert(
+                NotificationInfoUpsert.NotificationInfoId,
+                NotificationInfoUpsert.NotificationId,
+                NotificationInfoUpsert.NotificationInfoType,
+                NotificationInfoUpsert.Value,
+                NotificationInfoUpsert.LargeValue,                
+                NotificationInfoUpsert.Enable);
+            }
+
+            return oReturn;
         }
 
-        public static List<NotificationModel> NotificationGetByUser(string CompanyPublicId, string User, bool Enable)
+        public static List<NotificationModel> NotificationGetByUser(string User, bool Enable)
         {
-            return DAL.Controller.ClientDataController.Instance.NotificationGetByUser(CompanyPublicId, User, Enable);
+            return DAL.Controller.ClientDataController.Instance.NotificationGetByUser(User, Enable);
         }
 
         #endregion

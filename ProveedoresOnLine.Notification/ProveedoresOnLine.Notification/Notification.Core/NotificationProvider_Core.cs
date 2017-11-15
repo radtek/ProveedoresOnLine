@@ -15,25 +15,25 @@ namespace ProveedoresOnLine.Notification.Notification.Core
 {
     internal class NotificationProvider_Core : INotificationCore
     {
-        public bool ManageNotification(string CompanyPublicId, List<ProveedoresOnLine.Company.Models.Company.CompanyNotificationInfoModel> NotificationConfigInfoModel)
+        public bool ManageNotification(string CompanyPublicId, ProveedoresOnLine.Company.Models.Company.CompanyNotificationModel NotificationConfigModel)
         {
 
             //Get All Providers by this Customer (CompanyPublicId)
             List<CompanyModel> oProviders = CompanyProvider.Controller.CompanyProvider.GetAllProvidersByCustomerPublicId(CompanyPublicId);
             CultureInfo culture = CultureInfo.CreateSpecificCulture("es-ES");
-            if (NotificationConfigInfoModel != null)
+            if (NotificationConfigModel.CompanyNotificationInfo != null)
             {
-                if (NotificationConfigInfoModel.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.NotificationType).Select(x => x.Value).FirstOrDefault() == ((int)enumNotificationType.Document).ToString())
+                if (NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.NotificationType).Select(x => x.Value).FirstOrDefault() == ((int)enumNotificationType.Document).ToString())
                 {
                     //Wich Document To Valid
-                    int DocumentType = NotificationConfigInfoModel.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.DocumentType).Select(x => int.Parse(x.Value)).FirstOrDefault();
-                    string DocumentName = NotificationConfigInfoModel.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.Document).Select(x => x.Value).FirstOrDefault();
+                    int DocumentType = NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.DocumentType).Select(x => int.Parse(x.Value)).FirstOrDefault();
+                    string DocumentName = NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.Document).Select(x => x.Value).FirstOrDefault();
                     //Vigency, Priority, Status
-                    int Critery = NotificationConfigInfoModel.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.NotificationCritery).Select(x => int.Parse(x.Value)).FirstOrDefault();
+                    int Critery = NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.NotificationCritery).Select(x => int.Parse(x.Value)).FirstOrDefault();
                     //<=, <,> ....
-                    int RuleType = NotificationConfigInfoModel.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.RuleType).Select(x => int.Parse(x.Value)).FirstOrDefault();
+                    int RuleType = NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.RuleType).Select(x => int.Parse(x.Value)).FirstOrDefault();
                     //Days, Less 30, ...
-                    int RuleValue = NotificationConfigInfoModel.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.NotificationValue).Select(x => int.Parse(x.Value)).FirstOrDefault();
+                    int RuleValue = NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.NotificationValue).Select(x => int.Parse(x.Value)).FirstOrDefault();
                     // Indicatator if is necessary to build a Message Object
                     bool BuildMsgObject = false;
 
@@ -85,7 +85,7 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                                         }
                                         //Send notification
                                         if (BuildMsgObject)
-                                            this.SendNotification(NotificationConfigInfoModel, p);
+                                            this.SendNotification(NotificationConfigModel, p, DocumentType);
                                         break;
                                     case ((int)enumRuleType.LessOrEqualThan):
                                         if (RuleValue == (int)enumVigencyType.ThirtyDays)
@@ -115,7 +115,7 @@ namespace ProveedoresOnLine.Notification.Notification.Core
 
                                         //Send notification
                                         if (BuildMsgObject)
-                                            this.SendNotification(NotificationConfigInfoModel, p);
+                                            this.SendNotification(NotificationConfigModel, p, DocumentType);
 
                                         break;
                                         #endregion
@@ -173,7 +173,7 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                                     }
                                     //Send notification
                                     if (BuildMsgObject)
-                                        this.SendNotification(NotificationConfigInfoModel, p);
+                                        this.SendNotification(NotificationConfigModel, p, DocumentType);
                                     break;
                                 case ((int)enumRuleType.LessOrEqualThan):
                                     if (RuleValue == (int)enumVigencyType.ThirtyDays)
@@ -202,7 +202,7 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                                     }
                                     //Send notification
                                     if (BuildMsgObject)
-                                        this.SendNotification(NotificationConfigInfoModel, p);
+                                        this.SendNotification(NotificationConfigModel, p, DocumentType);
                                     break;
                                     #endregion
                             }
@@ -264,7 +264,7 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                                                 }
                                                 //Send notification
                                                 if (BuildMsgObject)
-                                                    this.SendNotification(NotificationConfigInfoModel, p);
+                                                    this.SendNotification(NotificationConfigModel, p, DocumentType);
                                                 break;
                                             case ((int)enumRuleType.LessOrEqualThan):
                                                 if (RuleValue == (int)enumVigencyType.ThirtyDays)
@@ -293,7 +293,7 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                                                 }
                                                 //Send notification
                                                 if (BuildMsgObject)
-                                                    this.SendNotification(NotificationConfigInfoModel, p);
+                                                    this.SendNotification(NotificationConfigModel, p, DocumentType);
                                                 break;
                                                 #endregion
                                         }
@@ -312,10 +312,11 @@ namespace ProveedoresOnLine.Notification.Notification.Core
             return true;
         }
 
-        private void SendNotification(List<ProveedoresOnLine.Company.Models.Company.CompanyNotificationInfoModel> NotificationConfigInfoModel, CompanyModel oCompany)
+        private void SendNotification(ProveedoresOnLine.Company.Models.Company.CompanyNotificationModel NotificationConfigModel, CompanyModel oCompany, int DocumentType)
         {
+
             List<string> oResponsables = new List<string>();
-            oResponsables.AddRange(NotificationConfigInfoModel.Where(x => x.ConfigItemType.ItemId == 2008008).Select(x => x.LargeValue).FirstOrDefault().Split(';'));
+            oResponsables.AddRange(NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == 2008008).Select(x => x.LargeValue).FirstOrDefault().Split(';'));
             if (oResponsables.Count > 0)
             {
                 CompanyModel oProviderInfo = Company.Controller.Company.CompanyGetBasicInfo(oCompany.CompanyPublicId);
@@ -332,10 +333,29 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                             new Tuple<string,string>("ProviderName",oCompany.CompanyName),
                             new Tuple<string,string>("Nit",!string.IsNullOrEmpty(oProviderInfo.IdentificationNumber) ? oProviderInfo.IdentificationNumber : "N/D"),
                             new Tuple<string,string>("Logo",!string.IsNullOrEmpty(oProviderInfo.CompanyInfo.Where(y => y.ItemInfoType.ItemId == 203005).Select(y => y.Value).FirstOrDefault()) ? oProviderInfo.CompanyInfo.Where(y => y.ItemInfoType.ItemId == 203005).Select(y => y.Value).FirstOrDefault() : ""),
-                            new Tuple<string,string>("MessageBody",NotificationConfigInfoModel.Where(m => m.ConfigItemType.ItemId == 2008007).Select(m => m.LargeValue).FirstOrDefault()),
+                            new Tuple<string,string>("MessageBody",NotificationConfigModel.CompanyNotificationInfo.Where(m => m.ConfigItemType.ItemId == 2008007).Select(m => m.LargeValue).FirstOrDefault()),
                             new Tuple<string,string>("Subject","Notificación Proveedor " + oCompany.CompanyName),
                         },
                     };
+                    //ToDo
+                    //Create the Notification model to send
+                    MessageModule.Client.Models.NotificationModel mNotificacion = new MessageModule.Client.Models.NotificationModel()
+                    {
+                        Image = "",
+                        Label = NotificationConfigModel.NotificationName,
+                        Url = DocumentType == (int)enumDocumentType.AdditionalInfo ?
+                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationAdditionalInfo_MK].Value.Trim() + oCompany.CompanyPublicId :
+                                DocumentType == (int)enumDocumentType.HSEQ ?
+                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationHSEQ_MK].Value.Trim() + oCompany.CompanyPublicId
+                                : DocumentType == (int)enumDocumentType.GeneralInfo ?
+                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationGeneralInfo_Mk].Value.Trim() + oCompany.CompanyPublicId 
+                                : "N/A",
+                        User = x,
+                        State = 2013002,
+                        Enable = true,
+                    };
+
+                    MessageModule.Client.Controller.ClientController.NotificationUpsert(mNotificacion);
                     int idMessage = MessageModule.Client.Controller.ClientController.CreateMessage(oMessage);
                     NotificationModule.LogFile("Message Sent to !!! :::::: " + x + ":::IdMessageQueue::" + idMessage + "::::::" + DateTime.Now);
                     return true;

@@ -8,6 +8,7 @@ namespace MessageModule.Test
     [TestClass]
     public class ClientTest
     {
+        #region MessageQueue
         [TestMethod]
         public void CreateMessage()
         {
@@ -18,7 +19,7 @@ namespace MessageModule.Test
                     User = "usario@sistema.com",
                     ProgramTime = DateTime.Now,
 
-                    MessageQueueInfo = new System.Collections.Generic.List<Tuple<string,string>>()
+                    MessageQueueInfo = new System.Collections.Generic.List<Tuple<string, string>>()
                     {
                         new Tuple<string,string>("To","diego.jaramillo@proveedoresonline.co"),
                         new Tuple<string,string>("RememberUrl","https://www.proveedoresonline.co/marketplace/home/TermsAndConditios"),
@@ -26,18 +27,21 @@ namespace MessageModule.Test
                 });
 
             Assert.AreEqual(true, oMessageId > 0);
-        }
+        } 
+        #endregion
 
+        #region Notification
         [TestMethod]
         public void NotificationUpsert()
         {
             NotificationModel oReturn = new NotificationModel()
             {
-                CompanyPublicId = "DA5C572E",
-                Label = "pruebas",
-                User = "david.moncayo@publicar.com",
+                //NotificationId = 1, // PARA ACTUALIZAR
+                Image = "fa fa_user",
+                Label = "test",
                 Url = "www.google.com.co",
-                NotificationType = 1801001,
+                User = "sergio.palacios@proveedoresonline.co",
+                State = 2013002,
                 Enable = true,
             };
 
@@ -47,22 +51,34 @@ namespace MessageModule.Test
         }
 
         [TestMethod]
-        public void NotificationGetByUser()
+        public void NotificationInfoUpsert()
         {
-            List<NotificationModel> oReturn = MessageModule.Client.Controller.ClientController.NotificationGetByUser(
-                "DA5C572E",
-                "david.moncayo@publicar.com",
-                true);
+            NotificationInfoModel oReturn = new NotificationInfoModel()
+            {
+                NotificationInfoId = 1, // PARA ACTUALIZAR
+                NotificationId = 1,
+                NotificationInfoType = 2008002,// Tipo de Notificación
+                Value = "2005003", // MK 
+                LargeValue = null,
+                Enable = true,
+            };
 
-            Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
+            oReturn.NotificationId = MessageModule.Client.Controller.ClientController.NotificationInfoUpsert(oReturn);
+
+            Assert.AreEqual(true, oReturn != null && oReturn.NotificationId > 0);
         }
 
         [TestMethod]
-        public void NotificationDeleteById()
+        public void NotificationGetByUser()//FALTA PROBAR
         {
-            MessageModule.Client.Controller.ClientController.NotificationDeleteById(26);
+            List<NotificationModel> oReturn = MessageModule.Client.Controller.ClientController.NotificationGetByUser(
+                //"DA5C572E",
+                "sergio.palacios@proveedoresonline.co",
+                true);
 
-            Assert.AreEqual(true, true);
-        }
+            Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
+        } 
+        #endregion
+
     }
 }
