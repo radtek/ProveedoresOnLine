@@ -336,8 +336,8 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                             new Tuple<string,string>("Subject","Notificación Proveedor " + oCompany.CompanyName),
                         },
                     };
-                    int idMessage = MessageModule.Client.Controller.ClientController.CreateMessage(oMessage);
-                    NotificationModule.LogFile("Message Sent to !!! :::::: " + x + ":::IdMessageQueue::" + idMessage + "::::::" + DateTime.Now);
+                    int idMessage = MessageModule.Client.Controller.ClientController.CreateMessage(oMessage);                    
+                    NotificationModule.LogFile("Message Sent to !!! :::::: " + x + ":::IdMessageQueue   ::" + idMessage + "::::::" + DateTime.Now);
                     return true;
                 });
             }

@@ -149,7 +149,7 @@ namespace MarketPlace.Web.ControllersApi
         {
             if (NDeleteNotifications == "true")
             {
-                MessageModule.Client.Controller.ClientController.NotificationDeleteById(Convert.ToInt32(NotificationId));
+                //MessageModule.Client.Controller.ClientController.NotificationDeleteById(Convert.ToInt32(NotificationId));
             }
         }
 
