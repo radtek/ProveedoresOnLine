@@ -55,16 +55,16 @@ namespace MessageModule.Client.DAL.MySQLDAO
 
         #region Notifications
 
-        public int NotificationUpsert(int? NotificationId, string CompanyPublicId, string Label, string User, string Url, int NotificationType, bool Enable)
+        public int NotificationUpsert(int? NotificationId, string Image, string Label, string Url, string User, int State, bool Enable)
         {
             List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
 
             lstParams.Add(DataInstance.CreateTypedParameter("vNotificationId", NotificationId));
-            lstParams.Add(DataInstance.CreateTypedParameter("vCompanyPublicId", CompanyPublicId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vImage", Image));
             lstParams.Add(DataInstance.CreateTypedParameter("vLabel", Label));
             lstParams.Add(DataInstance.CreateTypedParameter("vUrl", Url));
             lstParams.Add(DataInstance.CreateTypedParameter("vUser", User));
-            lstParams.Add(DataInstance.CreateTypedParameter("vNotificationType", NotificationType));
+            lstParams.Add(DataInstance.CreateTypedParameter("vState", State));
             lstParams.Add(DataInstance.CreateTypedParameter("vEnable", Enable == true ? 1 : 0));
 
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
@@ -78,32 +78,38 @@ namespace MessageModule.Client.DAL.MySQLDAO
             return Convert.ToInt32(response.ScalarResult);
         }
 
-        public void NotificationDeleteById(int NotificationId)
+        public int NotificationInfoUpsert(int? NotificationInfoId, int NotificationId, int NotificationInfoType, string Value, string LargeValue, bool Enable)
         {
             List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
 
+            lstParams.Add(DataInstance.CreateTypedParameter("vNotificationInfoId", NotificationInfoId));
             lstParams.Add(DataInstance.CreateTypedParameter("vNotificationId", NotificationId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vNotificationInfoType", NotificationInfoType));
+            lstParams.Add(DataInstance.CreateTypedParameter("vValue", Value));
+            lstParams.Add(DataInstance.CreateTypedParameter("vLargeValue", LargeValue));
+            lstParams.Add(DataInstance.CreateTypedParameter("vEnable", Enable == true ? 1 : 0));
 
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
-                CommandExecutionType = ADO.Models.enumCommandExecutionType.NonQuery,
-                CommandText = "N_Notification_DeleteById",
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.Scalar,
+                CommandText = "N_NotificationInfo_Upsert",
                 CommandType = CommandType.StoredProcedure,
                 Parameters = lstParams,
             });
+
+            return Convert.ToInt32(response.ScalarResult);
         }
 
-        public List<NotificationModel> NotificationGetByUser(string CompanyPublicId, string User, bool Enable)
+        public List<NotificationModel> NotificationGetByUser(string User, bool Enable)
         {
             List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
 
-            lstParams.Add(DataInstance.CreateTypedParameter("vCompanyPublicId", CompanyPublicId));
             lstParams.Add(DataInstance.CreateTypedParameter("vUser", User));
             lstParams.Add(DataInstance.CreateTypedParameter("vEnable", Enable == true ? 1 : 0));
 
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
-                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataSet,
                 CommandText = "N_Notification_GetByUser",
                 CommandType = CommandType.StoredProcedure,
                 Parameters = lstParams,
@@ -111,37 +117,42 @@ namespace MessageModule.Client.DAL.MySQLDAO
 
             List<NotificationModel> oReturn = null;
 
-            if (response.DataTableResult != null &&
-                response.DataTableResult.Rows.Count > 0)
+            if (response.DataSetResult != null &&
+                response.DataSetResult.Tables.Count > 1)
             {
-                oReturn =
-                    (from n in response.DataTableResult.AsEnumerable()
+
+                if (response.DataSetResult.Tables[0] != null && response.DataSetResult.Tables[0].Rows.Count > 0)
+                {
+                    oReturn =
+                    (from n in response.DataSetResult.Tables[0].AsEnumerable()
                      where !n.IsNull("NotificationId")
-                     group n by new
+                     select new NotificationModel()
                      {
                          NotificationId = n.Field<int>("NotificationId"),
-                         CompanyPublicId = n.Field<string>("CompanyPublicId"),
+                         Image = n.Field<string>("Image"),
                          Label = n.Field<string>("Label"),
                          Url = n.Field<string>("Url"),
                          User = n.Field<string>("User"),
-                         NotificationType = n.Field<int>("NotificationType"),
-                         NotificationEnable = n.Field<UInt64>("NotificationEnable"),
+                         Enable = n.Field<UInt64>("Enable") == 1 ? true : false,
                          LastModify = n.Field<DateTime>("LastModify"),
                          CreateDate = n.Field<DateTime>("CreateDate"),
-                     }
-                     into ng
-                     select new NotificationModel()
-                     {
-                         NotificationId = ng.Key.NotificationId,
-                         CompanyPublicId = ng.Key.CompanyPublicId,
-                         Label = ng.Key.Label,
-                         Url = ng.Key.Url,
-                         User = ng.Key.User,
-                         NotificationType = ng.Key.NotificationType,
-                         Enable = ng.Key.NotificationEnable == 1 ? true : false,
-                         LastModify = ng.Key.LastModify,
-                         CreateDate = ng.Key.CreateDate,
+
+                         ListNotificationInfo = (from ni in response.DataSetResult.Tables[1].AsEnumerable()
+                                                 where !ni.IsNull("NotificationInfoId") &&
+                                                        ni.Field<int>("NotificationId") == n.Field<int>("NotificationId")
+                                                 select new NotificationInfoModel()
+                                                 {
+                                                     NotificationInfoId = ni.Field<int>("NotificationInfoId"),
+                                                     NotificationId = ni.Field<int>("NotificationId"),
+                                                     NotificationInfoType = ni.Field<int>("NotificationInfoType"),
+                                                     Value = ni.Field<string>("Value"),
+                                                     LargeValue = ni.Field<string>("LargeValue"),
+                                                     Enable = ni.Field<UInt64>("Enable") == 1 ? true : false,
+                                                     LastModify = ni.Field<DateTime>("LastModify"),
+                                                     CreateDate = ni.Field<DateTime>("CreateDate"),
+                                                 }).ToList(),
                      }).ToList();
+                }
             }
 
             return oReturn;
