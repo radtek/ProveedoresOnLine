@@ -29,10 +29,10 @@ namespace MarketPlace.Models.General
         {
             get
             {
-                if (string.IsNullOrEmpty(oCompanyPublicId))
-                {
-                    oCompanyPublicId = oNotificationModel.CompanyPublicId;
-                }
+                //if (string.IsNullOrEmpty(oCompanyPublicId))
+                //{
+                //    oCompanyPublicId = oNotificationModel.CompanyPublicId;
+                //}
 
                 return oCompanyPublicId;
             }
@@ -57,10 +57,10 @@ namespace MarketPlace.Models.General
         {
             get
             {
-                if (string.IsNullOrEmpty(oNotificationType))
-                {
-                    oNotificationType = oNotificationModel.NotificationType.ToString();
-                }
+                //if (string.IsNullOrEmpty(oNotificationType))
+                //{
+                //    oNotificationType = oNotificationModel.NotificationType.ToString();
+                //}
 
                 return oNotificationType;
             }
