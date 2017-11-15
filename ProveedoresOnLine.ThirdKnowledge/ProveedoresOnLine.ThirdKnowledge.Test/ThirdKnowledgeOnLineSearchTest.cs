@@ -6,7 +6,7 @@ using Autofac;
 namespace ProveedoresOnLine.ThirdKnowledge.Test
 {
     [TestClass]
-    public class ThisdKnowledgeOnLineSearchTest
+    public class ThirdKnowledgeOnLineSearchTest
     {
         [TestMethod]
         public async Task ProcSearch()
@@ -14,7 +14,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
             await Controller.ThirdKnowledgeModule.OnLnieSearch(1, "71984381");
             //return "";
         }
-
+        
         [TestMethod]
         public async Task PanamaPSearch()
         {
@@ -34,5 +34,13 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
         {
            OnlineSearch.Controller.SearchController.GetAnswerByTreeidAndQuestion(0,"");
         }
+
+        [TestMethod]
+        public async Task RegSearch()
+        {
+            await Controller.ThirdKnowledgeModule.RegisterSearch(1,"", "71984381");
+            //return "";
+        }
+
     }
 }

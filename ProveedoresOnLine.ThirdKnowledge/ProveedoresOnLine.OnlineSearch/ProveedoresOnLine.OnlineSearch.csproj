@@ -66,6 +66,7 @@
     <Compile Include="Core\ProveedoresOnLineJudicialProcess.cs" />
     <Compile Include="Core\ProveedoresOnLinePPImplement.cs" />
     <Compile Include="Core\ProveedoresOnLineProcImplement.cs" />
+    <Compile Include="Core\ProveedoresOnLineRegImplement.cs" />
     <Compile Include="DAL\Controller\OnLineSearchDataController.cs" />
     <Compile Include="DAL\Controller\OnLineSearchDataFactory.cs" />
     <Compile Include="DAL\MySQLDAO\OnLinSearch_MySqlDao.cs" />

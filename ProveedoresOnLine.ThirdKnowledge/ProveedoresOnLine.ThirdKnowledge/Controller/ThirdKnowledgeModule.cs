@@ -25,6 +25,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                 List<Tuple<string, List<string>, List<string>>> procResult = new List<Tuple<string, List<string>, List<string>>>();
                 List<Tuple<string, List<string>, List<string>>> ppResult = new List<Tuple<string, List<string>, List<string>>>();
                 List<Tuple<string, List<string>, List<string>>> judProcResult = new List<Tuple<string, List<string>, List<string>>>();
+                List<Tuple<string, List<string>, List<string>>> RegResult = new List<Tuple<string, List<string>, List<string>>>();
 
                 if (!string.IsNullOrEmpty(IdentificationNumber))
                     judProcResult = await JudicialProcessSearch(3, Name, IdentificationNumber);
@@ -36,6 +37,20 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                 //PanamaPapers Search
                 if (!string.IsNullOrEmpty(Name))
                     ppResult = await PPSearch(IdType == 2 ? 0 : 1, Name, IdentificationNumber);
+
+                //Register Search
+                if (!string.IsNullOrEmpty(IdentificationNumber))                                   
+                    ppResult = await RegisterSearch(IdType, Name, IdentificationNumber);
+
+                /*
+                  
+                 
+                if (ppResult == null)
+                {
+                    ppResult = await RegisterSearch(0,null,null);
+                }
+                */
+                  
 
                 if (!string.IsNullOrEmpty(Name))
                 {
@@ -614,6 +629,14 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<OnlineSearch.Core.ProveedoresOnLineJudicialProcess>().As<OnlineSearch.Interfaces.IOnLineSearch>();
+            var container = builder.Build();
+            return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber);
+        }
+
+        public static async Task<List<Tuple<string, List<string>, List<string>>>> RegisterSearch(int IdType, string Name, string IndentificationNumber)
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterType<OnlineSearch.Core.ProveedoresOnLineRegImplement>().As<OnlineSearch.Interfaces.IOnLineSearch>();
             var container = builder.Build();
             return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber);
         }
