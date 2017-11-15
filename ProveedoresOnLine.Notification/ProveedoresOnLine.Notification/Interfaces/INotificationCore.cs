@@ -10,6 +10,6 @@ namespace ProveedoresOnLine.Notification.Interfaces
     internal interface INotificationCore
     {
 
-        bool ManageNotification(string CompanyPublicId, List<ProveedoresOnLine.Company.Models.Company.CompanyNotificationInfoModel> NotificationConfigInfoModel);
+        bool ManageNotification(string CompanyPublicId, ProveedoresOnLine.Company.Models.Company.CompanyNotificationModel NotificationConfigModel);
     }
 }

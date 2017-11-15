@@ -181,7 +181,7 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
             MessageModule.Client.Models.ClientMessageModel oMessageToSend = new MessageModule.Client.Models.ClientMessageModel()
             {
                 Agent = ThirdKnowledge.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledge.Models.Constants.C_Settings_TK_ReadyResultAgent].Value,
-                User = oQuery.User,
+                User = "Proveedore OnLine ThirdKnowledge",
                 ProgramTime = DateTime.Now,
                 MessageQueueInfo = new List<Tuple<string, string>>(),
             };
@@ -197,19 +197,20 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
 
             #region Notification
 
-            MessageModule.Client.Models.NotificationModel oNotification = new MessageModule.Client.Models.NotificationModel()
-            {
-                CompanyPublicId = oQuery.CompayPublicId,
-                NotificationType = (int)ThirdKnowledge.Models.Enumerations.enumNotificationType.ThirdKnowledgeNotification,
-                Url = ThirdKnowledge.Models.InternalSettings.Instance
-                                [ThirdKnowledge.Models.Constants.N_UrlThirdKnowledgeQuery].Value.Replace("{QueryPublicId}", oQuery.QueryPublicId),
-                User = oQuery.User,
-                Label = ThirdKnowledge.Models.InternalSettings.Instance
-                                [ThirdKnowledge.Models.Constants.N_ThirdKnowledgeEndMassiveMessage].Value,
-                Enable = true,
-            };
+            //TODO: Manage Notification
+            //MessageModule.Client.Models.NotificationModel oNotification = new MessageModule.Client.Models.NotificationModel()
+            //{
+            //    CompanyPublicId = oQuery.CompayPublicId,
+            //    NotificationType = (int)ThirdKnowledge.Models.Enumerations.enumNotificationType.ThirdKnowledgeNotification,
+            //    Url = ThirdKnowledge.Models.InternalSettings.Instance
+            //                    [ThirdKnowledge.Models.Constants.N_UrlThirdKnowledgeQuery].Value.Replace("{QueryPublicId}", oQuery.QueryPublicId),
+            //    User = oQuery.User,
+            //    Label = ThirdKnowledge.Models.InternalSettings.Instance
+            //                    [ThirdKnowledge.Models.Constants.N_ThirdKnowledgeEndMassiveMessage].Value,
+            //    Enable = true,
+            //};
 
-            MessageModule.Client.Controller.ClientController.NotificationUpsert(oNotification);
+            //MessageModule.Client.Controller.ClientController.NotificationUpsert(oNotification);
 
             #endregion
         }
