@@ -22,35 +22,30 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         {
             try
             {
+                bool RegisterName = false;
                 List<Tuple<string, List<string>, List<string>>> procResult = new List<Tuple<string, List<string>, List<string>>>();
                 List<Tuple<string, List<string>, List<string>>> ppResult = new List<Tuple<string, List<string>, List<string>>>();
                 List<Tuple<string, List<string>, List<string>>> judProcResult = new List<Tuple<string, List<string>, List<string>>>();
                 List<Tuple<string, List<string>, List<string>>> RegResult = new List<Tuple<string, List<string>, List<string>>>();
 
+                //Judicial proces Search
                 if (!string.IsNullOrEmpty(IdentificationNumber))
                     judProcResult = await JudicialProcessSearch(3, Name, IdentificationNumber);
 
                 //Proc Request
                 if (!string.IsNullOrEmpty(IdentificationNumber) && IdType != 0)
-                    procResult = await OnLnieSearch(IdType, IdentificationNumber);
-
-                //PanamaPapers Search
-                if (!string.IsNullOrEmpty(Name))
-                    ppResult = await PPSearch(IdType == 2 ? 0 : 1, Name, IdentificationNumber);
+                    procResult = await OnLnieSearch(IdType, IdentificationNumber);               
 
                 //Register Search
-                if (!string.IsNullOrEmpty(IdentificationNumber))                                   
-                    ppResult = await RegisterSearch(IdType, Name, IdentificationNumber);
+                if (!string.IsNullOrEmpty(IdentificationNumber) && IdType > 0)
+                    RegResult = await RegisterSearch(IdType, Name, IdentificationNumber);
 
-                /*
-                  
-                 
-                if (ppResult == null)
-                {
-                    ppResult = await RegisterSearch(0,null,null);
-                }
-                */
-                  
+                if (!string.IsNullOrEmpty(RegResult.FirstOrDefault().Item1))                
+                    RegisterName = true;
+
+                //PanamaPapers Search
+                if (RegisterName)
+                    ppResult = await PPSearch(IdType == 2 ? 0 : 1, RegResult.FirstOrDefault().Item1, IdentificationNumber);
 
                 if (!string.IsNullOrEmpty(Name))
                 {
@@ -80,7 +75,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                 .TrackScores(true)
                 .From(0)
                 .Size(10)
-                 .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Name)) ||
+                 .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(RegisterName == true ? RegResult.FirstOrDefault().Item1 : Name)) ||
                             q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
                  ).MinScore(2));
 
@@ -154,6 +149,26 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                 }
 
+                if (RegisterName)
+                {
+                    TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
+                    {
+                        AKA = string.Empty,
+                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Nit" : IdType == 3 ? "C. Extranjería" : "",                        
+                        NameResult = !string.IsNullOrEmpty(RegResult.FirstOrDefault().Item1) ? RegResult.FirstOrDefault().Item1 : "",                        
+                        Enable = true,
+                        QueryPublicId = oQueryToCreate.QueryPublicId,
+                        QueryIdentification = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty,
+                        QueryName = Name,
+                        IdList = "Registraduria/Dian",
+                        IdentificationNumber = IdentificationNumber,
+                        GroupName = "Registraduria/Dian",                        
+                        ListName = "Registraduria/Dian",
+                        ElasticId = (int)enumElasticGroupId.RegistersList,
+                    };
+                    oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
+                }
+
                 if (judProcResult != null && judProcResult.Count > 0)
                 {
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
@@ -194,12 +209,12 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             oInfoCreate.DocumentType = x.TypeId;
                             oInfoCreate.Offense = x.RelatedWiht;
                             oInfoCreate.NameResult = x.CompleteName;
-                            if (x.ListType == "FIGURAS PUBLICAS" || x.ListType == "PEPS INTERNACIONALES" 
-                                                                 || x.ListType == "CONSEJO NACIONAL ELECTORAL" 
+                            if (x.ListType == "FIGURAS PUBLICAS" || x.ListType == "PEPS INTERNACIONALES"
+                                                                 || x.ListType == "CONSEJO NACIONAL ELECTORAL"
                                                                  || x.ListType == "FUERZAS MILITARES"
                                                                  || x.ListType == "GOBIERNO DEPARTAMENTAL"
                                                                  || x.ListType == "GOBIERNO MUNICIPAL"
-                                                                 || x.ListType == "GOBIERNO NACIONAL" 
+                                                                 || x.ListType == "GOBIERNO NACIONAL"
                                                                  || x.ListType == "ESTRUCTURA DE GOBIERNO"
                                                                  || x.ListType == "PARTIDOS Y MOVIMIENTOS POLITICOS")
                                 oInfoCreate.Peps = x.ListType;
@@ -263,7 +278,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                                                              || x.ListType == "ONU_RESOLUCION_1988"
                                                              || x.ListType == "ONU_RESOLUCION_1988"
                                                              || x.ListType == "ONU_RESOLUCION_1988"
-                                                             || x.ListType == "ONU_RESOLUCION_2023"                                                             
+                                                             || x.ListType == "ONU_RESOLUCION_2023"
                                                              || x.ListType == "SUPER SOCIEDADES"
                                                              || x.ListType == "UNVERIFIED_LIST_EEUU" ?
                                                              x.ListType + " - Criticidad Media" :
@@ -460,9 +475,9 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                        oPeriodModel.PlanPublicId, oPeriodModel.AssignedQueries, oPeriodModel.IsLimited, oPeriodModel.TotalQueries, oPeriodModel.InitDate, oPeriodModel.EndDate, oPeriodModel.Enable);
         }
 
-        public static List<Models.TDQueryModel> ThirdKnowledgeSearch(string CustomerPublicId, string RelatedUser,string Domain, string StartDate, string EndtDate, int PageNumber, int RowCount, string SearchType, string Status, out int TotalRows)
+        public static List<Models.TDQueryModel> ThirdKnowledgeSearch(string CustomerPublicId, string RelatedUser, string Domain, string StartDate, string EndtDate, int PageNumber, int RowCount, string SearchType, string Status, out int TotalRows)
         {
-            return ThirdKnowledgeDataController.Instance.ThirdKnowledgeSearch(CustomerPublicId, RelatedUser,Domain, StartDate, EndtDate, PageNumber, RowCount, SearchType, Status, out TotalRows);
+            return ThirdKnowledgeDataController.Instance.ThirdKnowledgeSearch(CustomerPublicId, RelatedUser, Domain, StartDate, EndtDate, PageNumber, RowCount, SearchType, Status, out TotalRows);
         }
 
         public static List<Models.TDQueryModel> ThirdKnowledgeSearchByPublicId(string QueryPublicId, int PageNumber, int RowCount, out int TotalRows)
@@ -570,7 +585,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     User = DataMessage.User,
                     ProgramTime = DateTime.Now,
                     MessageQueueInfo = new List<Tuple<string, string>>(),
-                };               
+                };
 
                 MessageModule.Client.Controller.ClientController.CreateMessage(oMessageToSend);
 
