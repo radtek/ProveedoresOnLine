@@ -397,35 +397,39 @@ namespace IntegrationPlatform.REDEBANProcess
 
                                     LogFile("REDEBAN Integration Process File Upload");
                                     #endregion
-                                    
+
                                     #region Message
 
-                                    //Send Message
-                                    MessageModule.Client.Models.NotificationModel oDataMessage = new MessageModule.Client.Models.NotificationModel();
-                                    oDataMessage.CompanyPublicId = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
-                                        [IntegrationPlatform.REDEBANProcess.Models.Constants.C_REDEBAN_ProviderPublicId].Value;
-                                    oDataMessage.User = "REDEBAN Process";
-                                    oDataMessage.CompanyLogo = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
-                                        [IntegrationPlatform.REDEBANProcess.Models.Constants.N_RedebanCompanyLogo].Value;
-                                    oDataMessage.CompanyName = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
-                                        [IntegrationPlatform.REDEBANProcess.Models.Constants.N_RedebanCompanyName].Value;
-                                    oDataMessage.IdentificationType = "NIT";
-                                    oDataMessage.IdentificationNumber = "830070527";
+                                    //Create message object
+                                    MessageModule.Client.Models.ClientMessageModel oMessageToSend = new MessageModule.Client.Models.ClientMessageModel()
+                                    {
+                                        Agent = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance[Constants.C_Settings_REDEBAN_Mail].Value,
+                                        User = "REDEBAN Process",
+                                        ProgramTime = DateTime.Now,
+                                        MessageQueueInfo = new List<Tuple<string, string>>(),
+                                    };
 
-                                    #endregion
+                                    oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("To", IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance[Constants.N_Redeban_Mail_To].Value));
+                                    oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("InfoFileUrl", strRemoteFile));
 
-                                    #region Notification
+                                    //get customer info|
+                                    oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
+                                        ("CustomerLogo", IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance
+                                        [IntegrationPlatform.REDEBANProcess.Models.Constants.N_RedebanCompanyLogo].Value));
 
-                                    oDataMessage.Label = Models.InternalSettings.Instance
-                                            [Models.Constants.N_RedebanReportMessage].Value;
-                                    oDataMessage.Url = strRemoteFile;
-                                    oDataMessage.NotificationType = (int)IntegrationPlatform.REDEBANProcess.Models.Enumerations.enumNotificationType.RedebanNotification;
-                                    oDataMessage.Enable = true;
+                                    oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
+                                        ("CustomerName", IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance[IntegrationPlatform.REDEBANProcess.Models.Constants.N_RedebanCompanyName].Value));
 
-                                    #endregion
+                                    oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
+                                        ("CustomerIdentificationTypeName", "NIT"));
 
+                                    oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
+                                        ("CustomerIdentificationNumber", "830070527"));
+
+                                   
+
+                                    #endregion                                  
                                     
-
                                     var oRedebanLogModel = new RedebanLogModel()
                                     {
                                         RedebanProcessLogId = 0,
@@ -438,7 +442,7 @@ namespace IntegrationPlatform.REDEBANProcess
                                     };
                                     RedebanProcessLogUpsert(oRedebanLogModel);
 
-                                    IntegrationPlatform.REDEBANProcess.IntegrationPlatformREDEBANProcess.SendMessage(oDataMessage);
+                                    IntegrationPlatform.REDEBANProcess.IntegrationPlatformREDEBANProcess.SendMessage(oMessageToSend);
 
                                     LogFile("REDEBAN Integration Process File Queue Message");
                                     
@@ -500,46 +504,16 @@ namespace IntegrationPlatform.REDEBANProcess
             return i.Max();
         }
 
-        private static void SendMessage(NotificationModel oDataMessage)
+        private static void SendMessage(ClientMessageModel oDataMessage)
         {
             try
             {
-                #region Email
+                #region Email               
 
-                //Create message object
-                MessageModule.Client.Models.ClientMessageModel oMessageToSend = new MessageModule.Client.Models.ClientMessageModel()
-                {
-                    Agent = IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance[Constants.C_Settings_REDEBAN_Mail].Value,
-                    User = oDataMessage.User,
-                    ProgramTime = DateTime.Now,
-                    MessageQueueInfo = new List<Tuple<string, string>>(),
-                };
-
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("To", IntegrationPlatform.REDEBANProcess.Models.InternalSettings.Instance[Constants.N_Redeban_Mail_To].Value));
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("InfoFileUrl", oDataMessage.Url));
-
-                //get customer info
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                    ("CustomerLogo", oDataMessage.CompanyLogo));
-
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                    ("CustomerName", oDataMessage.CompanyName));
-
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                    ("CustomerIdentificationTypeName", oDataMessage.IdentificationType));
-
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                    ("CustomerIdentificationNumber", oDataMessage.IdentificationNumber));
-
-                MessageModule.Client.Controller.ClientController.CreateMessage(oMessageToSend);
+                MessageModule.Client.Controller.ClientController.CreateMessage(oDataMessage);
 
                 #endregion
-
-                #region Notification
-
-                oDataMessage.NotificationId = MessageModule.Client.Controller.ClientController.NotificationUpsert(oDataMessage);
-
-                #endregion
+               
                 RedebanLogModel oLogModel = IntegrationPlatformREDEBANProcess.GetLogBySendStatus(false);
 
                 oLogModel.SendStatus = true;
