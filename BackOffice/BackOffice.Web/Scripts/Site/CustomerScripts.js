@@ -3797,7 +3797,6 @@ var Customer_NotificationsObject = {
     CustomerPublicId: '',
     NotificationsOptions: new Array(),
     Init: function (vInitObject) {
-        debugger;
         this.ObjectId = vInitObject.ObjectId;
         this.CustomerPublicId = vInitObject.CustomerPublicId;
 
@@ -3935,7 +3934,6 @@ var Customer_NotificationsObject = {
                 template: function (dataItem) {
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.MessageType != null) {
-                        debugger;
                         $.each(Customer_NotificationsObject.NotificationsOptions[2005], function (item, value) {
                             if (dataItem.MessageType == value.ItemId) {
                                 oReturn = value.ItemName;
@@ -3961,7 +3959,6 @@ var Customer_NotificationsObject = {
                 template: function (dataItem) {
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.NotificationType != null) {
-                        debugger;
                         $.each(Customer_NotificationsObject.NotificationsOptions[2006], function (item, value) {
                             if (dataItem.NotificationType == value.ItemId) {
                                 oReturn = value.ItemName;
@@ -3987,7 +3984,6 @@ var Customer_NotificationsObject = {
                 template: function (dataItem) {
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.DocumentType != null) {
-                        debugger;
                         $.each(Customer_NotificationsObject.NotificationsOptions[2009], function (item, value) {
                             if (dataItem.DocumentType == value.ItemId) {
                                 oReturn = value.ItemName;
@@ -4217,7 +4213,6 @@ var Customer_NotificationsObject = {
                 },                
                 editor: function (container, options) {
                     var oReturn = '';
-                    debugger;
                     if (options.model.NotificationCritery == "2007001") {
                         $('<input required data-bind="value:' + options.field + '"/>')
                        .appendTo(container)
@@ -4230,7 +4225,6 @@ var Customer_NotificationsObject = {
                         oReturn = 'Seleccione una opción.';
                         if (options.model.NotificationCritery == "2007001") {
                             $.each(Customer_NotificationsObject.NotificationsOptions[2010], function (item, value) {
-                                debugger;
                                 oReturn = value.ItemName;
                             });
                         }
