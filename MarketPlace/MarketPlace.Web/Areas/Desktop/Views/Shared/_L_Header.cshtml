@@ -1,5 +1,5 @@
 ﻿@if (MarketPlace.Models.General.SessionModel.UserIsLoggedIn &&
-                                                                                                    MarketPlace.Models.General.SessionModel.IsUserAuthorized())
+                                                                                                                MarketPlace.Models.General.SessionModel.IsUserAuthorized())
 {
     //get company logo
     string strCompanyLogo = MarketPlace.Models.General.SessionModel.CurrentCompany_CompanyLogo;
@@ -16,6 +16,8 @@
     //get header menu
     List<MarketPlace.Models.General.GenericMenu> oHeaderMenu = (ViewContext.Controller as MarketPlace.Web.Controllers.BaseController).GetHeaderMenu();
 
+    
+
     <nav class="navbar navbar-inverse navbar-static-top">
 
         <div class="navbar-header">
@@ -29,12 +31,11 @@
                 <img src="@strCompanyLogo">
             </a>
         </div>
-        
-        
         <div id="navbar3" class="navbar-collapse collapse">
+
             <ul class="navbar navbar-right POMPNavbar">
                 <li class="dropdown">
-                    
+
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><img class="POMPUserLogo" src="@strUserLogo" /><span>  Bienvenido: </span>@MarketPlace.Models.General.SessionModel.CurrentLoginUser.Name<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li>
@@ -45,15 +46,14 @@
                                         action = MVC.Home.ActionNames.LogOutUser
                                     }))">Salir</a>
                         </li>
-
                     </ul>
             </ul>
-            <ul class="navbar navbar-right POMPNavbar">
-                <li>
-                    @Html.Partial(MVC.Desktop.Shared.Views.ViewNames._N_Notifications)
-                </li>
-            </ul>
-            <hr class="POMPHr"/>
+
+            
+                        @Html.Partial(MVC.Desktop.Shared.Views.ViewNames._N_Notifications)
+                  
+
+            <hr class="POMPHr" />
             <ul class="nav navbar-nav navbar-right POMPMainMenu">
                 @foreach (MarketPlace.Models.General.GenericMenu oMenuItem in oHeaderMenu.OrderBy(x => x.Position))
                 {
@@ -65,8 +65,10 @@
                     <li class="@strSelectedClass"><a href="@oMenuItem.Url">@oMenuItem.Name</a></li>
                 }
             </ul>
+
         </div>
-        <!--/.nav-collapse -->
-    </nav>
+
+            <!--/.nav-collapse -->
+</nav>
 
 }

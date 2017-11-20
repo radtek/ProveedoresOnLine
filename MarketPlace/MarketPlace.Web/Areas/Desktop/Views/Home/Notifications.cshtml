@@ -1,0 +1,43 @@
+﻿@{
+    Layout = MVC.Desktop.Shared.Views._Layout;
+}
+
+<h2>Mis Notificaciones</h2>
+
+@*ESTE ES EL ENVUELTO COMPLETO DE MENU LATERAL Y CONTENIDO*@
+<div class="POMPProviderGreatWrapper">
+    @*ESTE ES QUE TRAE EL PARCIAL QUE PINTA EL MENU LATERAL*@
+
+    <div class="POMPProviderDataWrapper">
+        <div class="container">
+
+
+            @if (MarketPlace.Models.General.SessionModel.NewNotifications)
+            {
+                if (MarketPlace.Models.General.SessionModel.ListNotifications != null)
+                {
+                    <table class="table table-hover">
+                        <thead>
+                        </thead>
+                        <tbody>
+                            @foreach (var Notification in MarketPlace.Models.General.SessionModel.ListNotifications)
+                            {
+                                var classLeido = Notification.State == 2013002 ? "style = \"background : #e0e0e84a;\"" : "" ;
+                                <tr>
+                                    <td @classLeido style="background : #e0e0e84a;" >
+                                        <a href="@Notification.Url">
+                                            <img src="@Notification.Image" alt="" />
+                                            @Notification.Label
+                                            <span class="pull-right text-muted smal"> @Notification.CreateDate.ToShortDateString()  @Notification.CreateDate.ToLongTimeString()</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                }
+            }
+        </div>
+    </div>
+</div>

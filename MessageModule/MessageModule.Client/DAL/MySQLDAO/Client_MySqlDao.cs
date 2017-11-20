@@ -133,6 +133,7 @@ namespace MessageModule.Client.DAL.MySQLDAO
                          Label = n.Field<string>("Label"),
                          Url = n.Field<string>("Url"),
                          User = n.Field<string>("User"),
+                         State = n.Field<int>("State"),
                          Enable = n.Field<UInt64>("Enable") == 1 ? true : false,
                          LastModify = n.Field<DateTime>("LastModify"),
                          CreateDate = n.Field<DateTime>("CreateDate"),

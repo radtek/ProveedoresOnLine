@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace MarketPlace.Web.Controllers
@@ -106,6 +107,19 @@ namespace MarketPlace.Web.Controllers
         public virtual ActionResult TermsAndConditions()
         {
             return View();
+        }
+
+        public virtual ActionResult Notifications()
+        {
+            return View();
+        }
+
+        public virtual PartialViewResult ChangeStatusNotification(int idNotification)
+        {
+            MessageModule.Client.Models.NotificationModel mNotification = MarketPlace.Models.General.SessionModel.ListNotifications.SingleOrDefault(x => x.NotificationId == idNotification);
+            
+            MarketPlace.Models.General.SessionModel.ChangeStatusNotification(mNotification);
+            return PartialView("_N_Notifications");
         }
     }
 }

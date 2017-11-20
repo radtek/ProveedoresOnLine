@@ -174,6 +174,15 @@ namespace MarketPlace.Models.General
             SetCurrentSessionCompany(null);
         }
 
+
+        public static void ChangeStatusNotification(MessageModule.Client.Models.NotificationModel mNotification)
+        {
+            mNotification.State = 2013001; // Leido
+            MessageModule.Client.Controller.ClientController.NotificationUpsert(mNotification);
+
+            ListNotifications = MessageModule.Client.Controller.ClientController.NotificationGetByUser(CurrentLoginUser.Email, true);
+        }
+
         public static void SetCurrentSessionCompany(string CompanyPublicIdToChange)
         {
             if (CurrentCompanyLoginUser.RelatedCompany != null && CurrentCompanyLoginUser.RelatedCompany.Count > 0)

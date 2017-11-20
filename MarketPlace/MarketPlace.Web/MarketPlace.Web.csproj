@@ -413,6 +413,9 @@
     <Compile Include="ReportController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
     </Compile>
+    <Compile Include="SharedController.generated.cs">
+      <DependentUpon>T4MVC.tt</DependentUpon>
+    </Compile>
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="StatsController.generated.cs">
       <DependentUpon>T4MVC.tt</DependentUpon>
@@ -706,6 +709,7 @@
     <Content Include="Areas\Desktop\Views\ThirdKnowledge\TK_App\TK_Service.js" />
     <Content Include="Areas\Desktop\Content\FontAwesomeIcon\font-awesome.css" />
     <Content Include="Areas\Desktop\Content\FontAwesomeIcon\font-awesome.min.css" />
+    <Content Include="Content\Site.css" />
     <Content Include="Content\ui-bootstrap-csp.css" />
     <Content Include="favicon.ico" />
     <Content Include="Areas\Desktop\fonts\glyphicons-halflings-regular.svg" />
@@ -2099,6 +2103,8 @@
     <Content Include="Areas\Desktop\Scripts\Angular\ui-bootstrap-tpls.min.js" />
     <Content Include="Areas\Desktop\Scripts\Angular\ui-bootstrap.js" />
     <Content Include="Areas\Desktop\Scripts\Angular\ui-bootstrap.min.js" />
+    <Content Include="Areas\Desktop\Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Areas\Desktop\Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -2189,10 +2195,13 @@
     <Content Include="Areas\Desktop\Views\Survey\SVSurveyEvaluatorDetail.cshtml" />
     <Content Include="Areas\Desktop\Views\Survey\SVSurveyReport.cshtml" />
     <Content Include="Areas\Desktop\Views\Survey\SVSurveyProgram.cshtml" />
+    <Content Include="Areas\Desktop\Views\Home\Notifications.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Desktop\Content\Images\" />
     <Folder Include="Scripts\" />
+    <Folder Include="Views\Home\" />
+    <Folder Include="Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

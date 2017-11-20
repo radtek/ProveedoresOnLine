@@ -1,15 +1,14 @@
-﻿@{ 
+﻿@{
     var cant = MarketPlace.Models.General.SessionModel.NewNotifications == false ? "0" : MarketPlace.Models.General.SessionModel.ListNotifications.Count.ToString();
 }
 
-<div id="Notification">   
-    <ul class="nav navbar-top-links navbar-right">
+<div id="Notification">
+    <ul class="navbar navbar-right POMPNavbar">
 
         <li class="dropdown">
             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" aria-expanded="true">
                 <i class="fa fa-bell"></i>  <span class="label label-warning">@cant</span>
             </a>
-
             <ul class="dropdown-menu dropdown-alerts pre-scrollable">
                 @if (MarketPlace.Models.General.SessionModel.NewNotifications)
                 {
@@ -17,23 +16,36 @@
                     {
                         foreach (var Notification in MarketPlace.Models.General.SessionModel.ListNotifications)
                         {
-                            <li>
-                                <a href="@Notification.Url" target="_blank" >
-                                    <div>
-                                        <img src="@Notification.Image" />
-                                        @Notification.Label
-                                        <span class="pull-right text-muted smal">@Notification.CreateDate.ToShortDateString() @Notification.CreateDate.ToLongTimeString()</span>
-                                    </div>
-                                </a>
+                            var classLeido = Notification.State == 2013002 ? "style = \"background : #e0e0e84a;\"" : "";
+                            <li @classLeido style="background : #e0e0e84a;" >
+                                @Html.Raw(
+                                Ajax.ActionLink(
+                                            "[replacetext]",
+                                            "ChangeStatusNotification",
+                                            "Home",
+                                            new
+                                            {
+                                                idNotification = Notification.NotificationId
+                                            },
+                                            new AjaxOptions
+                                            {
+                                                UpdateTargetId = "Notification",
+                                                InsertionMode = InsertionMode.Replace,
+                                                HttpMethod = "POST",
+                                                OnBegin = "window.open('" + Notification.Url + "', '_blank')"
+                                            },
+                                            null)
+                                .ToHtmlString()
+                                .Replace("[replacetext]", "<img style=\" width: 40px; margin-right: 10px;\" src=\"" + Notification.Image + "\" />" + Notification.Label + "<span class=\"pull-right text-muted smal\">" + Notification.CreateDate.ToShortDateString() + Notification.CreateDate.ToLongTimeString() + "</span>"))
                             </li>
-                            
+
                             <li class="divider"></li>
                         }
                     }
 
                     <li>
                         <div class="text-center link-block">
-                            <a href="notifications.html">
+                            <a href="@Url.Action("Notifications","Home")">
                                 <strong>Ver Todas</strong>
                                 <i class="fa fa-angle-right"></i>
                             </a>
@@ -50,9 +62,9 @@
                         </a>
                     </li>
                 }
-                
+
             </ul>
         </li>
     </ul>
 </div>
-
+@Scripts.Render("~/Areas/Desktop/Scripts/jquery.unobtrusive-ajax.min.js")

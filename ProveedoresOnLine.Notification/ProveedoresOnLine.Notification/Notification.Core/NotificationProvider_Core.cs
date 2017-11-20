@@ -342,11 +342,11 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                     MessageModule.Client.Models.NotificationModel oNotification = new MessageModule.Client.Models.NotificationModel()
                     {
                         Image = DocumentType == (int)enumDocumentType.AdditionalInfo ?
-                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationIconAdditionalInfo].Value.Trim() + oCompany.CompanyPublicId :
+                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationIconAdditionalInfo].Value.Trim() :
                                 DocumentType == (int)enumDocumentType.HSEQ ?
-                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationIconHSEQ].Value.Trim() + oCompany.CompanyPublicId
+                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationIconHSEQ].Value.Trim()
                                 : DocumentType == (int)enumDocumentType.GeneralInfo ?
-                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationIconGeneralInfo].Value.Trim() + oCompany.CompanyPublicId
+                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationIconGeneralInfo].Value.Trim()
                                 : "N/A",
                         Label = NotificationConfigModel.NotificationName,
                         Url = DocumentType == (int)enumDocumentType.AdditionalInfo ?

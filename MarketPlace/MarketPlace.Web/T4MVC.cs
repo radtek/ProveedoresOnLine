@@ -40,6 +40,7 @@ public static partial class MVC
     public static MarketPlace.Web.Controllers.StatsController Stats = new MarketPlace.Web.Controllers.T4MVC_StatsController();
     public static MarketPlace.Web.Controllers.SurveyController Survey = new MarketPlace.Web.Controllers.T4MVC_SurveyController();
     public static MarketPlace.Web.Controllers.ThirdKnowledgeController ThirdKnowledge = new MarketPlace.Web.Controllers.T4MVC_ThirdKnowledgeController();
+    public static T4MVC.SharedController Shared = new T4MVC.SharedController();
 }
 
 namespace T4MVC
@@ -102,6 +103,19 @@ internal partial class T4MVC_System_Web_Mvc_ActionResult : System.Web.Mvc.Action
     public string Protocol { get; set; }
     public RouteValueDictionary RouteValueDictionary { get; set; }
 }
+[GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+internal partial class T4MVC_System_Web_Mvc_PartialViewResult : System.Web.Mvc.PartialViewResult, IT4MVCActionResult
+{
+    public T4MVC_System_Web_Mvc_PartialViewResult(string area, string controller, string action, string protocol = null): base()
+    {
+        this.InitMVCT4Result(area, controller, action, protocol);
+    }
+    
+    public string Controller { get; set; }
+    public string Action { get; set; }
+    public string Protocol { get; set; }
+    public RouteValueDictionary RouteValueDictionary { get; set; }
+}
 
 
 
@@ -119,6 +133,8 @@ namespace Links
         private const string URLPATH = "~/Content";
         public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
         public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+        public static readonly string Site_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/Site.min.css") ? Url("Site.min.css") : Url("Site.css");
+             
         public static readonly string ui_bootstrap_csp_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/ui-bootstrap-csp.min.css") ? Url("ui-bootstrap-csp.min.css") : Url("ui-bootstrap-csp.css");
              
     }
@@ -938,6 +954,8 @@ namespace Links
                 public static readonly string jquery_2_1_3_min_map = Url("jquery-2.1.3.min.map");
                 public static readonly string jquery_ui_1_11_2_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jquery-ui-1.11.2.min.js") ? Url("jquery-ui-1.11.2.min.js") : Url("jquery-ui-1.11.2.js");
                 public static readonly string jquery_ui_1_11_2_min_js = Url("jquery-ui-1.11.2.min.js");
+                public static readonly string jquery_unobtrusive_ajax_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jquery.unobtrusive-ajax.min.js") ? Url("jquery.unobtrusive-ajax.min.js") : Url("jquery.unobtrusive-ajax.js");
+                public static readonly string jquery_unobtrusive_ajax_min_js = Url("jquery.unobtrusive-ajax.min.js");
                 public static readonly string jquery_validate_vsdoc_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jquery.validate-vsdoc.min.js") ? Url("jquery.validate-vsdoc.min.js") : Url("jquery.validate-vsdoc.js");
                 public static readonly string jquery_validate_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/jquery.validate.min.js") ? Url("jquery.validate.min.js") : Url("jquery.validate.js");
                 public static readonly string jquery_validate_min_js = Url("jquery.validate.min.js");
@@ -1504,6 +1522,29 @@ namespace Links
                 public static readonly string bootstrap_css_map = Url("bootstrap.css.map");
                 public static readonly string bootstrap_min_css = Url("bootstrap.min.css");
                 [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+                public static class FontAwesomeIcon {
+                    private const string URLPATH = "~/Areas/Desktop/Content/FontAwesomeIcon";
+                    public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+                    public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+                    public static readonly string font_awesome_css = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/font-awesome.min.css") ? Url("font-awesome.min.css") : Url("font-awesome.css");
+                         
+                    public static readonly string font_awesome_min_css = Url("font-awesome.min.css");
+                }
+            
+                [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+                public static class fonts {
+                    private const string URLPATH = "~/Areas/Desktop/Content/fonts";
+                    public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
+                    public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+                    public static readonly string fontawesome_webfont_eot = Url("fontawesome-webfont.eot");
+                    public static readonly string fontawesome_webfont_svg = Url("fontawesome-webfont.svg");
+                    public static readonly string fontawesome_webfont_ttf = Url("fontawesome-webfont.ttf");
+                    public static readonly string fontawesome_webfont_woff = Url("fontawesome-webfont.woff");
+                    public static readonly string fontawesome_webfont_woff2 = Url("fontawesome-webfont.woff2");
+                    public static readonly string FontAwesome_otf = Url("FontAwesome.otf");
+                }
+            
+                [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
                 public static class Images {
                     private const string URLPATH = "~/Areas/Desktop/Content/Images";
                     public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
@@ -1963,6 +2004,7 @@ namespace Links
         {
             public static class Assets
             {
+                public const string Site_css = "~/Content/Site.css";
                 public const string ui_bootstrap_csp_css = "~/Content/ui-bootstrap-csp.css";
             }
         }
