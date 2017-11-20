@@ -55,17 +55,17 @@ namespace MessageModule.Client.DAL.MySQLDAO
 
         #region Notifications
 
-        public int NotificationUpsert(int? NotificationId, string Image, string Label, string Url, string User, int State, bool Enable)
+        public int NotificationUpsert(NotificationModel NotificationUpsert)
         {
             List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
 
-            lstParams.Add(DataInstance.CreateTypedParameter("vNotificationId", NotificationId));
-            lstParams.Add(DataInstance.CreateTypedParameter("vImage", Image));
-            lstParams.Add(DataInstance.CreateTypedParameter("vLabel", Label));
-            lstParams.Add(DataInstance.CreateTypedParameter("vUrl", Url));
-            lstParams.Add(DataInstance.CreateTypedParameter("vUser", User));
-            lstParams.Add(DataInstance.CreateTypedParameter("vState", State));
-            lstParams.Add(DataInstance.CreateTypedParameter("vEnable", Enable == true ? 1 : 0));
+            lstParams.Add(DataInstance.CreateTypedParameter("vNotificationId", NotificationUpsert.NotificationId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vImage", NotificationUpsert.Image));
+            lstParams.Add(DataInstance.CreateTypedParameter("vLabel", NotificationUpsert.Label));
+            lstParams.Add(DataInstance.CreateTypedParameter("vUrl", NotificationUpsert.Url));
+            lstParams.Add(DataInstance.CreateTypedParameter("vUser", NotificationUpsert.User));
+            lstParams.Add(DataInstance.CreateTypedParameter("vState", NotificationUpsert.State));
+            lstParams.Add(DataInstance.CreateTypedParameter("vEnable", NotificationUpsert.Enable == true ? 1 : 0));
 
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
@@ -78,16 +78,16 @@ namespace MessageModule.Client.DAL.MySQLDAO
             return Convert.ToInt32(response.ScalarResult);
         }
 
-        public int NotificationInfoUpsert(int? NotificationInfoId, int NotificationId, int NotificationInfoType, string Value, string LargeValue, bool Enable)
+        public int NotificationInfoUpsert(NotificationInfoModel NotificationInfoUpsert)
         {
             List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
 
-            lstParams.Add(DataInstance.CreateTypedParameter("vNotificationInfoId", NotificationInfoId));
-            lstParams.Add(DataInstance.CreateTypedParameter("vNotificationId", NotificationId));
-            lstParams.Add(DataInstance.CreateTypedParameter("vNotificationInfoType", NotificationInfoType));
-            lstParams.Add(DataInstance.CreateTypedParameter("vValue", Value));
-            lstParams.Add(DataInstance.CreateTypedParameter("vLargeValue", LargeValue));
-            lstParams.Add(DataInstance.CreateTypedParameter("vEnable", Enable == true ? 1 : 0));
+            lstParams.Add(DataInstance.CreateTypedParameter("vNotificationInfoId", NotificationInfoUpsert.NotificationInfoId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vNotificationId", NotificationInfoUpsert.NotificationId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vNotificationInfoType", NotificationInfoUpsert.NotificationInfoType));
+            lstParams.Add(DataInstance.CreateTypedParameter("vValue", NotificationInfoUpsert.Value));
+            lstParams.Add(DataInstance.CreateTypedParameter("vLargeValue", NotificationInfoUpsert.LargeValue));
+            lstParams.Add(DataInstance.CreateTypedParameter("vEnable", NotificationInfoUpsert.Enable == true ? 1 : 0));
 
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {

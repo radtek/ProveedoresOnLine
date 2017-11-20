@@ -3,9 +3,13 @@
   <Notification>
     <key name="UrlNotificationAdditionalInfo_MK">https://www.proveedoresonline.co/Marketplace/Provider/LIChaimberOfCommerceInfo?ProviderPublicId=</key>
     <key name="UrlNotificationAdditionalInfo_BO">https://www.proveedoresonline.co/BackOffice/Provider/LIChaimberOfCommerceInfo?ProviderPublicId=</key>
-    <key name="UrlNotificationHSEQ_MK"></key>
-    <key name="UrlNotificationHSEQ_BO"></key>
-    <key name="UrlNotificationGeneralInfo_Mk"></key>
-    <key name="UrlNotificationGeneralInfo_BO"></key>
+    <key name="UrlNotificationHSEQ_MK">https://www.proveedoresonline.co/Marketplace/Provider/LIChaimberOfCommerceInfo?ProviderPublicId=</key>
+    <key name="UrlNotificationHSEQ_BO">https://www.proveedoresonline.co/Marketplace/Provider/LIChaimberOfCommerceInfo?ProviderPublicId=</key>
+    <key name="UrlNotificationGeneralInfo_Mk">https://www.proveedoresonline.co/Marketplace/Provider/LIChaimberOfCommerceInfo?ProviderPublicId=</key>
+    <key name="UrlNotificationGeneralInfo_BO">https://www.proveedoresonline.co/Marketplace/Provider/LIChaimberOfCommerceInfo?ProviderPublicId=</key>
+
+    <key name="UrlNotificationIconAdditionalInfo">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/doc1.png</key>
+    <key name="UrlNotificationIconHSEQ">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/doc2.png</key>
+    <key name="UrlNotificationIconGeneralInfo">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/doc3.png</key>
   </Notification>
 </Settings>

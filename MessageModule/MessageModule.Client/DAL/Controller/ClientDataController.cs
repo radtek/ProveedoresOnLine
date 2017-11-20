@@ -50,14 +50,14 @@ namespace MessageModule.Client.DAL.Controller
 
         #region Notifications
 
-        public int NotificationUpsert(int? NotificationId, string Image, string Label, string Url, string User, int State, bool Enable)
+        public int NotificationUpsert(NotificationModel NotificationUpsert)
         {
-            return DataFactory.NotificationUpsert(NotificationId, Image, Label, Url, User, State, Enable);
+            return DataFactory.NotificationUpsert(NotificationUpsert);
         }
 
-        public int NotificationInfoUpsert(int? NotificationInfoId, int NotificationId, int NotificationInfoType, string Value, string LargeValue, bool Enable)
+        public int NotificationInfoUpsert(NotificationInfoModel NotificationInfoUpsert)
         {
-            return DataFactory.NotificationInfoUpsert(NotificationInfoId, NotificationId, NotificationInfoType, Value, LargeValue, Enable);
+            return DataFactory.NotificationInfoUpsert(NotificationInfoUpsert);
         }
 
         public List<NotificationModel> NotificationGetByUser(string User, bool Enable)

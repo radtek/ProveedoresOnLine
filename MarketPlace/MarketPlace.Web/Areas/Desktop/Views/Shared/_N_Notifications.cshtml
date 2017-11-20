@@ -18,9 +18,10 @@
                         foreach (var Notification in MarketPlace.Models.General.SessionModel.ListNotifications)
                         {
                             <li>
-                                <a href="@Notification.Url">
+                                <a href="@Notification.Url" target="_blank" >
                                     <div>
-                                        <i class="@Notification.Image fa-fw"></i> @Notification.Label
+                                        <img src="@Notification.Image" />
+                                        @Notification.Label
                                         <span class="pull-right text-muted smal">@Notification.CreateDate.ToShortDateString() @Notification.CreateDate.ToLongTimeString()</span>
                                     </div>
                                 </a>

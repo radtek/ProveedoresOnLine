@@ -84,39 +84,12 @@ namespace MessageModule.Client.Controller
 
         public static int NotificationUpsert(NotificationModel NotificationUpsert)
         {
-            int oReturn = 0;
-
-            if (NotificationUpsert != null)
-            {
-                oReturn = DAL.Controller.ClientDataController.Instance.NotificationUpsert(
-                NotificationUpsert.NotificationId,
-                NotificationUpsert.Image,
-                NotificationUpsert.Label,
-                NotificationUpsert.Url,
-                NotificationUpsert.User,
-                NotificationUpsert.State,
-                NotificationUpsert.Enable);
-            }
-
-            return oReturn;
+            return DAL.Controller.ClientDataController.Instance.NotificationUpsert(NotificationUpsert);
         }
 
         public static int NotificationInfoUpsert(NotificationInfoModel NotificationInfoUpsert)
         {
-            int oReturn = 0;
-
-            if (NotificationInfoUpsert != null)
-            {
-                oReturn = DAL.Controller.ClientDataController.Instance.NotificationInfoUpsert(
-                NotificationInfoUpsert.NotificationInfoId,
-                NotificationInfoUpsert.NotificationId,
-                NotificationInfoUpsert.NotificationInfoType,
-                NotificationInfoUpsert.Value,
-                NotificationInfoUpsert.LargeValue,                
-                NotificationInfoUpsert.Enable);
-            }
-
-            return oReturn;
+            return DAL.Controller.ClientDataController.Instance.NotificationInfoUpsert(NotificationInfoUpsert);
         }
 
         public static List<NotificationModel> NotificationGetByUser(string User, bool Enable)

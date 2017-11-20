@@ -339,9 +339,15 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                     };
                     //ToDo
                     //Create the Notification model to send
-                    MessageModule.Client.Models.NotificationModel mNotificacion = new MessageModule.Client.Models.NotificationModel()
+                    MessageModule.Client.Models.NotificationModel oNotification = new MessageModule.Client.Models.NotificationModel()
                     {
-                        Image = "",
+                        Image = DocumentType == (int)enumDocumentType.AdditionalInfo ?
+                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationIconAdditionalInfo].Value.Trim() + oCompany.CompanyPublicId :
+                                DocumentType == (int)enumDocumentType.HSEQ ?
+                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationIconHSEQ].Value.Trim() + oCompany.CompanyPublicId
+                                : DocumentType == (int)enumDocumentType.GeneralInfo ?
+                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationIconGeneralInfo].Value.Trim() + oCompany.CompanyPublicId
+                                : "N/A",
                         Label = NotificationConfigModel.NotificationName,
                         Url = DocumentType == (int)enumDocumentType.AdditionalInfo ?
                                 ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationAdditionalInfo_MK].Value.Trim() + oCompany.CompanyPublicId :
@@ -355,7 +361,8 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                         Enable = true,
                     };
 
-                    MessageModule.Client.Controller.ClientController.NotificationUpsert(mNotificacion);
+                    int idNotification = MessageModule.Client.Controller.ClientController.NotificationUpsert(oNotification);
+                    NotificationModule.LogFile("Notification created to !!! :::::: " + x + ":::IdNotification::" + idNotification + "::::::" + DateTime.Now);
                     int idMessage = MessageModule.Client.Controller.ClientController.CreateMessage(oMessage);
                     NotificationModule.LogFile("Message Sent to !!! :::::: " + x + ":::IdMessageQueue::" + idMessage + "::::::" + DateTime.Now);
                     return true;
