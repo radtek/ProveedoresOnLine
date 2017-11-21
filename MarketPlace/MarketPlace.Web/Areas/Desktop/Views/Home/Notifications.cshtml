@@ -1,43 +1,66 @@
 ﻿@{
+    ViewBag.Title = "Proveedores OnLine - Mis Notificaciones";
     Layout = MVC.Desktop.Shared.Views._Layout;
 }
 
-<h2>Mis Notificaciones</h2>
+<div class="col-md-12 col-md-offset-2">
 
-@*ESTE ES EL ENVUELTO COMPLETO DE MENU LATERAL Y CONTENIDO*@
-<div class="POMPProviderGreatWrapper">
-    @*ESTE ES QUE TRAE EL PARCIAL QUE PINTA EL MENU LATERAL*@
+            @*ESTE ES EL ENVUELTO COMPLETO DE MENU LATERAL Y CONTENIDO*@
+            <div class="POMPProviderGreatWrapper">
+                @*ESTE ES QUE TRAE EL PARCIAL QUE PINTA EL MENU LATERAL*@
 
-    <div class="POMPProviderDataWrapper">
-        <div class="container">
+                <div class="POMPProviderDataWrapper">
+                    <label class="POMPSectionTitles">Mis Notificaciones</label>
 
 
-            @if (MarketPlace.Models.General.SessionModel.NewNotifications)
-            {
-                if (MarketPlace.Models.General.SessionModel.ListNotifications != null)
-                {
-                    <table class="table table-hover">
-                        <thead>
-                        </thead>
-                        <tbody>
-                            @foreach (var Notification in MarketPlace.Models.General.SessionModel.ListNotifications)
-                            {
-                                var classLeido = Notification.State == 2013002 ? "style = \"background : #e0e0e84a;\"" : "" ;
-                                <tr>
-                                    <td @classLeido style="background : #e0e0e84a;" >
-                                        <a href="@Notification.Url">
-                                            <img src="@Notification.Image" alt="" />
-                                            @Notification.Label
-                                            <span class="pull-right text-muted smal"> @Notification.CreateDate.ToShortDateString()  @Notification.CreateDate.ToLongTimeString()</span>
-                                        </a>
-                                    </td>
-                                </tr>
+                    @if (MarketPlace.Models.General.SessionModel.NewNotifications)
+                    {
+                        if (MarketPlace.Models.General.SessionModel.ListNotifications != null)
+                        {
+                                    <table class="table table-hover">
+                                        <thead>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var Notification in MarketPlace.Models.General.SessionModel.ListNotifications)
+                                            {
+                                                var classLeido = Notification.State == 2013002 ? "background : #EFF5F5" : "";
+                                                <tr>
+                                                    <td  style="@classLeido">
+                                                        @Html.Raw(
+                                                            Ajax.ActionLink(
+                                                                        "[replacetext]",
+                                                                        "ChangeStatusNotification",
+                                                                        "Home",
+                                                                        new
+                                                                        {
+                                                                            idNotification = Notification.NotificationId
+                                                                        },
+                                                                        new AjaxOptions
+                                                                        {
+                                                                            UpdateTargetId = "Notification",
+                                                                            InsertionMode = InsertionMode.Replace,
+                                                                            HttpMethod = "POST",
+                                                                            OnBegin = "actualizaEstado('" + Notification.Url + "', this)"
+                                                                        },
+                                                                        null)
+                                                            .ToHtmlString()
+                                                            .Replace("[replacetext]", "<img class=\"img img-circle\" style=\" width: 35px; height: 35px; margin-right: 10px;\" src=\"" + Notification.Image + "\" />" + Notification.Label + "<span class=\"pull-right text-muted small\">" + Notification.CreateDate.ToShortDateString() + Notification.CreateDate.ToLongTimeString() + "</span>"))
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+
+                                    </table>
+                                }
                             }
-                        </tbody>
+                </div>
 
-                    </table>
-                }
-            }
+            </div>
         </div>
-    </div>
-</div>
+<script>
+    function actualizaEstado(url, e) {        
+        $(e).closest('tr').css("background", "#EFF5F5");
+        window.open(url, '_blank');
+    }
+
+</script>

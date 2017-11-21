@@ -1,5 +1,5 @@
 ﻿@{
-    var cant = MarketPlace.Models.General.SessionModel.NewNotifications == false ? "0" : MarketPlace.Models.General.SessionModel.ListNotifications.Count.ToString();
+    var cant = MarketPlace.Models.General.SessionModel.NewNotifications == false ? 0 : MarketPlace.Models.General.SessionModel.ListNotifications.Where(x => x.State == 2013002).ToList().Count;
 }
 
 <div id="Notification">
@@ -7,7 +7,11 @@
 
         <li class="dropdown">
             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" aria-expanded="true">
-                <i class="fa fa-bell"></i>  <span class="label label-warning">@cant</span>
+                <i class="fa fa-bell"></i>  
+                @if (cant > 0)
+                {
+                    <span class="label label-warning">@cant</span>
+                }
             </a>
             <ul class="dropdown-menu dropdown-alerts pre-scrollable">
                 @if (MarketPlace.Models.General.SessionModel.NewNotifications)
@@ -16,30 +20,29 @@
                     {
                         foreach (var Notification in MarketPlace.Models.General.SessionModel.ListNotifications)
                         {
-                            var classLeido = Notification.State == 2013002 ? "style = \"background : #e0e0e84a;\"" : "";
-                            <li @classLeido style="background : #e0e0e84a;" >
+                            var classLeido = Notification.State == 2013002 ? "background : #EFF5F5;" : "";
+                            <li style=" @classLeido border-bottom: solid 1px #dddddd; padding-bottom: 14px; padding-top: 4px;" >
                                 @Html.Raw(
-                                Ajax.ActionLink(
-                                            "[replacetext]",
-                                            "ChangeStatusNotification",
-                                            "Home",
-                                            new
-                                            {
-                                                idNotification = Notification.NotificationId
-                                            },
-                                            new AjaxOptions
-                                            {
-                                                UpdateTargetId = "Notification",
-                                                InsertionMode = InsertionMode.Replace,
-                                                HttpMethod = "POST",
-                                                OnBegin = "window.open('" + Notification.Url + "', '_blank')"
-                                            },
-                                            null)
-                                .ToHtmlString()
-                                .Replace("[replacetext]", "<img style=\" width: 40px; margin-right: 10px;\" src=\"" + Notification.Image + "\" />" + Notification.Label + "<span class=\"pull-right text-muted smal\">" + Notification.CreateDate.ToShortDateString() + Notification.CreateDate.ToLongTimeString() + "</span>"))
+                                    Ajax.ActionLink(
+                                                "[replacetext]",
+                                                "ChangeStatusNotification",
+                                                "Home",
+                                                new
+                                                {
+                                                    idNotification = Notification.NotificationId
+                                                },
+                                                new AjaxOptions
+                                                {
+                                                    UpdateTargetId = "Notification",
+                                                    InsertionMode = InsertionMode.Replace,
+                                                    HttpMethod = "POST",
+                                                    OnBegin = "window.open('" + Notification.Url + "', '_blank')"
+                                                },
+                                                null)
+                                    .ToHtmlString()
+                                    .Replace("[replacetext]", "<img class=\"img img-circle\" style=\" width: 35px; height: 35px; margin-right: 10px;\" src=\"" + Notification.Image + "\" />" + Notification.Label + "<span class=\"pull-right text-muted small\">" + Notification.CreateDate.ToShortDateString() + Notification.CreateDate.ToLongTimeString() + "</span>"))
                             </li>
-
-                            <li class="divider"></li>
+                            
                         }
                     }
 

@@ -341,13 +341,9 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                     //Create the Notification model to send
                     MessageModule.Client.Models.NotificationModel oNotification = new MessageModule.Client.Models.NotificationModel()
                     {
-                        Image = DocumentType == (int)enumDocumentType.AdditionalInfo ?
-                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationIconAdditionalInfo].Value.Trim() :
-                                DocumentType == (int)enumDocumentType.HSEQ ?
-                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationIconHSEQ].Value.Trim()
-                                : DocumentType == (int)enumDocumentType.GeneralInfo ?
-                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationIconGeneralInfo].Value.Trim()
-                                : "N/A",
+                        Image = !string.IsNullOrEmpty(oCompany.CompanyInfo.Where(z => z.ItemInfoType.ItemId == 203005).Select(z => z.Value).FirstOrDefault()) ?
+                                oCompany.CompanyInfo.Where(z => z.ItemInfoType.ItemId == 203005).Select(z => z.Value).FirstOrDefault() :
+                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationIconAdditionalInfo].Value.Trim(),
                         Label = NotificationConfigModel.NotificationName,
                         Url = DocumentType == (int)enumDocumentType.AdditionalInfo ?
                                 ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationAdditionalInfo_MK].Value.Trim() + oCompany.CompanyPublicId :
