@@ -60,9 +60,9 @@ namespace MessageModule.Client.DAL.MySQLDAO
             List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
 
             lstParams.Add(DataInstance.CreateTypedParameter("vNotificationId", NotificationUpsert.NotificationId));
-            lstParams.Add(DataInstance.CreateTypedParameter("vImage", NotificationUpsert.Image));
+            lstParams.Add(DataInstance.CreateTypedParameter("vNotificationType", NotificationUpsert.NotificationType));
             lstParams.Add(DataInstance.CreateTypedParameter("vLabel", NotificationUpsert.Label));
-            lstParams.Add(DataInstance.CreateTypedParameter("vUrl", NotificationUpsert.Url));
+            lstParams.Add(DataInstance.CreateTypedParameter("vCompanyPublicId", NotificationUpsert.CompanyPublicId));
             lstParams.Add(DataInstance.CreateTypedParameter("vUser", NotificationUpsert.User));
             lstParams.Add(DataInstance.CreateTypedParameter("vState", NotificationUpsert.State));
             lstParams.Add(DataInstance.CreateTypedParameter("vEnable", NotificationUpsert.Enable == true ? 1 : 0));
@@ -129,9 +129,9 @@ namespace MessageModule.Client.DAL.MySQLDAO
                      select new NotificationModel()
                      {
                          NotificationId = n.Field<int>("NotificationId"),
-                         Image = n.Field<string>("Image"),
+                         NotificationType = n.Field<int>("NotificationType"),
                          Label = n.Field<string>("Label"),
-                         Url = n.Field<string>("Url"),
+                         CompanyPublicId = n.Field<string>("CompanyPublicId"),
                          User = n.Field<string>("User"),
                          State = n.Field<int>("State"),
                          Enable = n.Field<UInt64>("Enable") == 1 ? true : false,

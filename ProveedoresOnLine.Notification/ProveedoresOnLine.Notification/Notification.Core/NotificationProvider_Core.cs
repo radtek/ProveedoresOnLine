@@ -348,28 +348,37 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                             new Tuple<string,string>("Subject","Notificación Proveedor " + oCompany.CompanyName),
                         },
                     };
-                    
-                    //Notification model to send
+                    //Create the Notification model to send
                     MessageModule.Client.Models.NotificationModel oNotification = new MessageModule.Client.Models.NotificationModel()
                     {
-                        Image = !string.IsNullOrEmpty(oProviderInfo.CompanyInfo.Where(y => y.ItemInfoType.ItemId == 203005).Select(y => y.Value).FirstOrDefault()) ?
-                                oProviderInfo.CompanyInfo.Where(y => y.ItemInfoType.ItemId == 203005).Select(y => y.Value).FirstOrDefault() :
-                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationIconAdditionalInfo].Value.Trim(),
+                        NotificationType = DocumentType,
+                        CompanyPublicId = oCompany.CompanyPublicId,
                         Label = NotificationConfigModel.NotificationName,
-                        Url = DocumentType == (int)enumDocumentType.AdditionalInfo ?
-                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationAdditionalInfo_MK].Value.Trim() + oCompany.CompanyPublicId :
-                                DocumentType == (int)enumDocumentType.HSEQ ?
-                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationHSEQ_MK].Value.Trim() + oCompany.CompanyPublicId
-                                : DocumentType == (int)enumDocumentType.GeneralInfo ?
-                                ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationGeneralInfo_Mk].Value.Trim() + oCompany.CompanyPublicId 
-                                : "N/A",
                         User = x,
-                        State = 2013002,
+                        State = 2013002, // Sin leer
                         Enable = true,
                     };
 
                     int idNotification = MessageModule.Client.Controller.ClientController.NotificationUpsert(oNotification);
                     NotificationModule.LogFile("Notification created to !!! :::::: " + x + ":::IdNotification::" + idNotification + "::::::" + DateTime.Now);
+
+                    if (idNotification != 0)
+                    {
+                        //Create the NotificationInfo model to send
+                        MessageModule.Client.Models.NotificationInfoModel oNotificationInfo = new MessageModule.Client.Models.NotificationInfoModel()
+                        {
+                            NotificationId = idNotification,
+                            NotificationInfoType = 2008007, // Item body
+                            Value = null,
+                            LargeValue = NotificationConfigModel.CompanyNotificationInfo.Where(m => m.ConfigItemType.ItemId == 2008007).Select(m => m.LargeValue).FirstOrDefault(),
+                            Enable = true,
+                        };
+
+                        int idNotificationInfo = MessageModule.Client.Controller.ClientController.NotificationInfoUpsert(oNotificationInfo);
+                        NotificationModule.LogFile("NotificationInfo created to !!! :::::: " + x + ":::IdNotificationInfo::" + idNotificationInfo + "::::::" + DateTime.Now);
+                    }
+                    
+
                     int idMessage = MessageModule.Client.Controller.ClientController.CreateMessage(oMessage);
                     NotificationModule.LogFile("Message Sent to !!! :::::: " + x + ":::IdMessageQueue::" + idMessage + "::::::" + DateTime.Now);
                     return true;
