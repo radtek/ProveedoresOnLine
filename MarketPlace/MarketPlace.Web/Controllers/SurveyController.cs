@@ -213,6 +213,9 @@ namespace MarketPlace.Web.Controllers
                         }
                         #endregion
 
+                        qb &= f2.Term(x => x.User.ToLower(), SessionModel.CurrentLoginUser.Email.ToLower());
+                        
+                        //QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User.ToLower())).Query(SessionModel.CurrentLoginUser.Email.ToLower()));
                         return qb;
                     })
                     ))

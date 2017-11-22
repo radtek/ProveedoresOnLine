@@ -204,6 +204,17 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                                     if (BuildMsgObject)
                                         this.SendNotification(NotificationConfigModel, p, DocumentType);
                                     break;
+                                case ((int)enumRuleType.EqualThan):
+                                    if (RuleValue == (int)enumVigencyType.ThirtyDays)
+                                    {
+                                        
+                                        if (HSQQDateToValidate.Date == DateTime.Now.Date)
+                                            BuildMsgObject = true;
+                                    }
+                                    //Send notification
+                                    if (BuildMsgObject)
+                                        this.SendNotification(NotificationConfigModel, p, DocumentType);
+                                    break;
                                     #endregion
                             }
                             #endregion
@@ -337,12 +348,12 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                             new Tuple<string,string>("Subject","Notificación Proveedor " + oCompany.CompanyName),
                         },
                     };
-                    //ToDo
-                    //Create the Notification model to send
+                    
+                    //Notification model to send
                     MessageModule.Client.Models.NotificationModel oNotification = new MessageModule.Client.Models.NotificationModel()
                     {
-                        Image = !string.IsNullOrEmpty(oCompany.CompanyInfo.Where(z => z.ItemInfoType.ItemId == 203005).Select(z => z.Value).FirstOrDefault()) ?
-                                oCompany.CompanyInfo.Where(z => z.ItemInfoType.ItemId == 203005).Select(z => z.Value).FirstOrDefault() :
+                        Image = !string.IsNullOrEmpty(oProviderInfo.CompanyInfo.Where(y => y.ItemInfoType.ItemId == 203005).Select(y => y.Value).FirstOrDefault()) ?
+                                oProviderInfo.CompanyInfo.Where(y => y.ItemInfoType.ItemId == 203005).Select(y => y.Value).FirstOrDefault() :
                                 ProveedoresOnLine.Notification.Models.InternalSettings.Instance[Models.Constants.C_Settings_NotificationIconAdditionalInfo].Value.Trim(),
                         Label = NotificationConfigModel.NotificationName,
                         Url = DocumentType == (int)enumDocumentType.AdditionalInfo ?
