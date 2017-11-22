@@ -37,9 +37,9 @@ namespace MessageModule.Test
             NotificationModel oReturn = new NotificationModel()
             {
                 //NotificationId = 1, // PARA ACTUALIZAR
-                Image = "fa fa_user",
+                NotificationType = 2009001, //GeneralInfo = 2009001, AdditionalInfo = 2009002, HSEQ = 2009003,
                 Label = "test",
-                Url = "www.google.com.co",
+                CompanyPublicId = "DA5C572E",
                 User = "sergio.palacios@proveedoresonline.co",
                 State = 2013002,
                 Enable = true,

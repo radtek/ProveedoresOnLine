@@ -10,11 +10,11 @@ namespace MessageModule.Client.Models
     {
         public int NotificationId { get; set; }
 
-        public string Image { get; set; }
+        public int NotificationType { get; set; }
 
         public string Label { get; set; }
 
-        public string Url { get; set; }       
+        public string CompanyPublicId { get; set; }       
         
         public string User { get; set; }
 
