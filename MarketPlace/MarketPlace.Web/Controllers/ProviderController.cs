@@ -120,6 +120,11 @@ namespace MarketPlace.Web.Controllers
                                 Aggregations(aggs => aggs.Terms("customfiltertype", term => term.Field(fi => fi.oCustomFiltersIndexModel.First().Label).Size(50)
                                 )
                             )
+                        ).Nested("customerprovidertype_avg", x => x.
+                            Path(p => p.oCustomerProviderIndexModel).
+                                Aggregations(aggs => aggs.Terms("customerprovidertypetype", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().Status).Size(50).ExecutionHint(TermsAggregationExecutionHint.GlobalOrdinals)
+                                )
+                            )
                         )
 
                     .Terms("ica", aggv => aggv
@@ -221,7 +226,12 @@ namespace MarketPlace.Web.Controllers
                                 .Query(fq => fq
                                     .Match(match => match
                                     .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                                    .Query(SessionModel.CurrentCompany.CompanyPublicId))
+                                     .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault())
+                                    ) &&
+                                    q.Match(m => m
+                                        .Field(Field => Field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                        .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                    )
                                 ));
                         }
                         #endregion
@@ -461,7 +471,7 @@ namespace MarketPlace.Web.Controllers
                 #region Customer Provider Search
 
                 ElasticClient CustomerProviderClient = new ElasticClient(settings2);
-                Nest.ISearchResponse<CustomerProviderIndexModel> result = CustomerProviderClient.Search<CustomerProviderIndexModel>((s => s
+                    Nest.ISearchResponse<CustomerProviderIndexModel> result = CustomerProviderClient.Search<CustomerProviderIndexModel>((s => s
                     .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
                     .TrackScores(true)
                     .Size(20)
@@ -481,14 +491,19 @@ namespace MarketPlace.Web.Controllers
 
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb &= q.Term(m => m.StatusId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault());
+                                    qb &= q.Term(m => m.StatusId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).
+                                        Select(y => y.Item1).FirstOrDefault());
+                                        //&& q.Match(m => m
+                                        //        .Field(Field => Field.CustomerPublicId)
+                                        //        .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                        //    );
                                 }
 
                                 qb &= q.Terms(tms => tms
                                  .Field(fi => fi.ProviderPublicId)
                                  .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
                                 );
-                                //}
+                            
 
                                 return qb;
                             })
@@ -682,7 +697,7 @@ namespace MarketPlace.Web.Controllers
                       {
                           oModel.MyProvidersFilter.Add(new ElasticSearchFilter
                           {
-                              FilterCount = ProvidersStatusCount,
+                              FilterCount = (int)x.DocCount,
                               FilterType = x.Key,
                           });
                           ProvidersForClientcount = (int)x.DocCount;
@@ -720,21 +735,28 @@ namespace MarketPlace.Web.Controllers
                     }
                     else
                     {
+                        if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1")
+                        {
+                            oModel.OtherProvidersFilter.Add(new ElasticSearchFilter
+                            {
+                                FilterCount = (int)oModel.ElasticCompanyModel.Total - ProvidersStatusCount,
+                                FilterType = enumFilterType.OtherProviders.ToString(),
+                            });
+                        }                     
+                    }
+
+                }
+                else
+                {
+
+                    if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1")
+                    {
                         oModel.OtherProvidersFilter.Add(new ElasticSearchFilter
                         {
                             FilterCount = (int)oModel.ElasticCompanyModel.Total,
                             FilterType = enumFilterType.OtherProviders.ToString(),
                         });
                     }
-
-                }
-                else
-                {
-                    oModel.OtherProvidersFilter.Add(new ElasticSearchFilter
-                    {
-                        FilterCount = (int)oModel.ElasticCompanyModel.Total - ProvidersStatusCount,
-                        FilterType = enumFilterType.OtherProviders.ToString(),
-                    });
                 }
 
 

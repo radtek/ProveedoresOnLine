@@ -34,18 +34,20 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
                 //Proc Request
                 if (!string.IsNullOrEmpty(IdentificationNumber) && IdType != 0)
-                    procResult = await OnLnieSearch(IdType, IdentificationNumber);               
+                    procResult = await OnLnieSearch(IdType, IdentificationNumber);
 
                 //Register Search
-                if (!string.IsNullOrEmpty(IdentificationNumber) && IdType > 0)
-                    RegResult = await RegisterSearch(IdType, Name, IdentificationNumber);
+                //if (!string.IsNullOrEmpty(IdentificationNumber) && IdType > 0)
+                //    RegResult = await RegisterSearch(IdType, Name, IdentificationNumber);
 
-                if (!string.IsNullOrEmpty(RegResult.FirstOrDefault().Item1))                
-                    RegisterName = true;
+                //if (!string.IsNullOrEmpty(RegResult.FirstOrDefault().Item1))                
+                //    RegisterName = true;
 
                 //PanamaPapers Search
                 if (RegisterName)
                     ppResult = await PPSearch(IdType == 2 ? 0 : 1, RegResult.FirstOrDefault().Item1, IdentificationNumber);
+                else                
+                    ppResult = await PPSearch(IdType == 2 ? 0 : 1, Name, IdentificationNumber);               
 
                 if (!string.IsNullOrEmpty(Name))
                 {

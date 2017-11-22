@@ -387,7 +387,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                          SurveyStatusId = sv.Field<int?>("SurveyStatusId").ToString(),
                          SurveyStatus = sv.Field<string>("SurveyStatus"),
                          //SurveyUserId = sv.Field<int?>("UserId").ToString(),
-                         //SurveyUser = sv.Field<string>("User"),
+                         SurveyUser = sv.Field<string>("User"),
                      }
                          into svg
                      select new SurveyIndexSearchModel()
@@ -400,7 +400,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                          SurveyStatusId = svg.Key.SurveyStatusId,
                          SurveyStatus = svg.Key.SurveyStatus,
                          //UserId = svg.Key.SurveyUserId,
-                         //User = svg.Key.SurveyUser,
+                         User = svg.Key.SurveyUser,
                      }).ToList();
             }
 

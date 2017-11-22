@@ -204,6 +204,17 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                                     if (BuildMsgObject)
                                         this.SendNotification(NotificationConfigModel, p, DocumentType);
                                     break;
+                                case ((int)enumRuleType.EqualThan):
+                                    if (RuleValue == (int)enumVigencyType.ThirtyDays)
+                                    {
+                                        
+                                        if (HSQQDateToValidate.Date == DateTime.Now.Date)
+                                            BuildMsgObject = true;
+                                    }
+                                    //Send notification
+                                    if (BuildMsgObject)
+                                        this.SendNotification(NotificationConfigModel, p, DocumentType);
+                                    break;
                                     #endregion
                             }
                             #endregion
