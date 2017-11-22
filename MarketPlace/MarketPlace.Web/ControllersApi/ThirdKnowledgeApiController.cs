@@ -433,8 +433,7 @@ namespace MarketPlace.Web.ControllersApi
 
                         oNotificationmodel.Label = Models.General.InternalSettings.Instance
                                 [Models.General.Constants.N_ThirdKnowledgeUploadMassiveMessage].Value;
-                        oNotificationmodel.Url = Models.General.InternalSettings.Instance
-                                [Models.General.Constants.N_UrlThirdKnowledgeQuery].Value.Replace("{{QueryPublicId}}", oQueryToCreate.QueryPublicId);
+                        oNotificationmodel.CompanyPublicId = oQueryToCreate.QueryPublicId;
                         //oNotificationmodel.NotificationType = (int)MarketPlace.Models.General.enumNotificationType.ThirdKnowledgeNotification;
                         oNotificationmodel.Enable = true;
 
@@ -574,8 +573,7 @@ namespace MarketPlace.Web.ControllersApi
 
                     oNotificationmodel.Label = Models.General.InternalSettings.Instance
                             [Models.General.Constants.N_ThirdKnowledgeUploadMassiveMessage].Value;
-                    oNotificationmodel.Url = Models.General.InternalSettings.Instance
-                            [Models.General.Constants.N_UrlThirdKnowledgeQuery].Value.Replace("{{QueryPublicId}}", oQueryToCreate.QueryPublicId);
+                    oNotificationmodel.CompanyPublicId = oQueryToCreate.QueryPublicId;
                     //oNotificationmodel.NotificationType = (int)MarketPlace.Models.General.enumNotificationType.ThirdKnowledgeNotification;
                     oNotificationmodel.Enable = true;
 

@@ -3542,7 +3542,7 @@ namespace MarketPlace.Web.Controllers
                             //IdentificationType = SessionModel.CurrentCompany.IdentificationType.ItemName,
                             //IdentificationNumber = SessionModel.CurrentCompany.IdentificationNumber,
                             //NotificationType = (int)enumReportType.RP_SurveyReport,
-                            Url = report.Item3,
+                            //Url = report.Item3,
                         };
 
                         //SendProcablesMessage(oDataMessage);

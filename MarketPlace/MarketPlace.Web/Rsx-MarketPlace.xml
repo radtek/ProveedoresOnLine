@@ -125,6 +125,14 @@
 
     <key name="File_SurveyReportS3FilePath">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/MP_Survey/GENERAL_REPORTS/</key>
 
+    <key name="UrlNotificationAdditionalInfo_MK">https://localhost:44309/Provider/LIChaimberOfCommerceInfo?ProviderPublicId=</key>
+    <key name="UrlNotificationHSEQ_MK">https://localhost:44309/Provider/LIChaimberOfCommerceInfo?ProviderPublicId=</key>
+    <key name="UrlNotificationGeneralInfo_Mk">https://localhost:44309/Provider/LIChaimberOfCommerceInfo?ProviderPublicId=</key>
+
+    <key name="UrlNotificationIconAdditionalInfo">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/doc1.png</key>
+    <key name="UrlNotificationIconHSEQ">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/doc2.png</key>
+    <key name="UrlNotificationIconGeneralInfo">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/doc3.png</key>
+
   </MarketPlace>
 </Settings>
 

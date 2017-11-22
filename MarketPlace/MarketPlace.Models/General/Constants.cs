@@ -213,6 +213,16 @@
 
         #endregion
 
+        #region Notification URL Redirection
+        public const string C_Settings_NotificationAdditionalInfo_MK = "UrlNotificationAdditionalInfo_MK";
+        public const string C_Settings_NotificationHSEQ_MK = "UrlNotificationHSEQ_MK";
+        public const string C_Settings_NotificationGeneralInfo_Mk = "UrlNotificationGeneralInfo_Mk";
+
+        public const string C_Settings_NotificationIconAdditionalInfo = "UrlNotificationIconAdditionalInfo";
+        public const string C_Settings_NotificationIconHSEQ = "UrlNotificationIconHSEQ";
+        public const string C_Settings_NotificationIconGeneralInfo = "UrlNotificationIconGeneralInfo"; 
+        #endregion
+
         #endregion
 
     }

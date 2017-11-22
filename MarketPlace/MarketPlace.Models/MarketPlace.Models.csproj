@@ -99,7 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ElasticSearchModels\ElasticSearchModel.cs" />
-    <Compile Include="General\NotificationViewModel.cs" />
     <Compile Include="Provider\ProviderAditionalDocumentViewModel.cs" />
     <Compile Include="Provider\ProviderCalificationViewModel.cs" />
     <Compile Include="Survey\SurveySearchViewModel.cs" />
@@ -145,6 +144,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MarketPlace\Models\Company\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
