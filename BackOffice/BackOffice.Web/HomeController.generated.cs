@@ -61,6 +61,12 @@ namespace BackOffice.Web.Controllers
 
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.PartialViewResult ChangeStatusNotification()
+        {
+            return new T4MVC_System_Web_Mvc_PartialViewResult(Area, Name, ActionNames.ChangeStatusNotification);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public virtual System.Web.Mvc.FileResult GetPdfFileBytes()
         {
             return new T4MVC_System_Web_Mvc_FileResult(Area, Name, ActionNames.GetPdfFileBytes);
@@ -83,6 +89,8 @@ namespace BackOffice.Web.Controllers
         {
             public readonly string Index = "Index";
             public readonly string LogOutUser = "LogOutUser";
+            public readonly string Notifications = "Notifications";
+            public readonly string ChangeStatusNotification = "ChangeStatusNotification";
             public readonly string GetPdfFileBytes = "GetPdfFileBytes";
         }
 
@@ -91,10 +99,20 @@ namespace BackOffice.Web.Controllers
         {
             public const string Index = "Index";
             public const string LogOutUser = "LogOutUser";
+            public const string Notifications = "Notifications";
+            public const string ChangeStatusNotification = "ChangeStatusNotification";
             public const string GetPdfFileBytes = "GetPdfFileBytes";
         }
 
 
+        static readonly ActionParamsClass_ChangeStatusNotification s_params_ChangeStatusNotification = new ActionParamsClass_ChangeStatusNotification();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_ChangeStatusNotification ChangeStatusNotificationParams { get { return s_params_ChangeStatusNotification; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_ChangeStatusNotification
+        {
+            public readonly string idNotification = "idNotification";
+        }
         static readonly ActionParamsClass_GetPdfFileBytes s_params_GetPdfFileBytes = new ActionParamsClass_GetPdfFileBytes();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ActionParamsClass_GetPdfFileBytes GetPdfFileBytesParams { get { return s_params_GetPdfFileBytes; } }
@@ -114,8 +132,10 @@ namespace BackOffice.Web.Controllers
             public class _ViewNamesClass
             {
                 public readonly string Index = "Index";
+                public readonly string Notifications = "Notifications";
             }
             public readonly string Index = "~/Views/Home/Index.cshtml";
+            public readonly string Notifications = "~/Views/Home/Notifications.cshtml";
         }
     }
 
@@ -143,6 +163,29 @@ namespace BackOffice.Web.Controllers
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.LogOutUser);
             LogOutUserOverride(callInfo);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void NotificationsOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult Notifications()
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Notifications);
+            NotificationsOverride(callInfo);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void ChangeStatusNotificationOverride(T4MVC_System_Web_Mvc_PartialViewResult callInfo, int idNotification);
+
+        [NonAction]
+        public override System.Web.Mvc.PartialViewResult ChangeStatusNotification(int idNotification)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_PartialViewResult(Area, Name, ActionNames.ChangeStatusNotification);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "idNotification", idNotification);
+            ChangeStatusNotificationOverride(callInfo, idNotification);
             return callInfo;
         }
 

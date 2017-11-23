@@ -205,15 +205,7 @@
 
         #endregion
 
-        #region NotificationIcon
-
-        public const string N_NewNotification = "N_NewNotification";
-
-        public const string N_OldNotification = "N_OldNotification";
-
-        #endregion
-
-        #region Notification URL Redirection
+        #region Notification URL Redirection and Icons
         public const string C_Settings_NotificationAdditionalInfo_MK = "UrlNotificationAdditionalInfo_MK";
         public const string C_Settings_NotificationHSEQ_MK = "UrlNotificationHSEQ_MK";
         public const string C_Settings_NotificationGeneralInfo_Mk = "UrlNotificationGeneralInfo_Mk";

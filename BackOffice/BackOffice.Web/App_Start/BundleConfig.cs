@@ -87,6 +87,15 @@ namespace BackOffice.Web
 
             #endregion
 
+            #region Font Awesome Icon
+
+            bundles.Add(new StyleBundle("~/site/FontAwesomeIcon").IncludeDirectory(
+                      "~/Content/FontAwesomeIcon/",
+                      "*.css",
+                      true));
+
+            #endregion
+
             #endregion
 
             //allow bundles in debug mode

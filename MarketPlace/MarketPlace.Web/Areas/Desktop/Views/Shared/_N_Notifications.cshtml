@@ -13,7 +13,7 @@
                     <span class="label label-warning">@cant</span>
                 }
             </a>
-            <ul class="dropdown-menu dropdown-alerts pre-scrollable">
+            <ul class="dropdown-menu dropdown-alerts pre-scrollable" style="max-width: 350px;">
                 @if (MarketPlace.Models.General.SessionModel.NewNotifications)
                 {
                     if (MarketPlace.Models.General.SessionModel.ListNotifications != null)
@@ -54,7 +54,7 @@
 
                             var classLeido = Notification.State == 2013002 ? "background : #EFF5F5;" : "";
 
-                            <li style=" @classLeido border-bottom: solid 1px #dddddd; padding-bottom: 14px; padding-top: 4px; min-width: 280px;" >
+                            <li style=" @classLeido border-bottom: solid 1px #dddddd; padding-bottom: 14px; padding-top: 4px;" >
                                 @Html.Raw(
                                     Ajax.ActionLink(
                                                 "[replacetext]",
