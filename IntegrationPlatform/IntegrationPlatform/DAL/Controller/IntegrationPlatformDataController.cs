@@ -50,6 +50,11 @@ namespace IntegrationPlatform.DAL.Controller
             return DataFactory.MP_CustomerProvider_GetCustomData(CustomerPublicId, ProviderPublicId);
         }
 
+        public List<ProveedoresOnLine.Company.Models.Util.CatalogModel> CatalogGetCustomerOptions(string CustomerPublicId)
+        {
+            return DataFactory.CatalogGetCustomerOptions(CustomerPublicId);
+        }
+
         #region Integration Sanofi
 
         public int Sanofi_AditionalData_Upsert(int AditionalDataId, string ProviderPublicId, int AditionalFieldId, string AditionalDataName, bool Enable)
@@ -62,6 +67,10 @@ namespace IntegrationPlatform.DAL.Controller
             return DataFactory.Sanofi_AditionalDataInfo_Upsert(AditionalDataInfoId, AditionalDataId, AditionalDataInfoType, Value, LargeValue, Enable);
         }
 
+        #endregion
+
+        #region Falabella
+
         public int Falabella_AditionalData_Upsert(int AditionalDataId, string ProviderPublicId, int AditionalFieldId, string AditionalDataName, bool Enable)
         {
             return DataFactory.Falabella_AditionalData_Upsert(AditionalDataId, ProviderPublicId, AditionalFieldId, AditionalDataName, Enable);
@@ -72,9 +81,18 @@ namespace IntegrationPlatform.DAL.Controller
             return DataFactory.Falabella_AditionalDataInfo_Upsert(AditionalDataInfoId, AditionalDataId, AditionalDataInfoType, Value, LargeValue, Enable);
         }
 
-        public List<ProveedoresOnLine.Company.Models.Util.CatalogModel> CatalogGetCustomerOptions(string CustomerPublicId)
+        #endregion
+
+        #region Alpina
+
+        public int Alpina_AditionalData_Upsert(int AditionalDataId, string ProviderPublicId, int AditionalFieldId, string AditionalDataName, bool Enable)
         {
-            return DataFactory.CatalogGetCustomerOptions(CustomerPublicId);
+            return DataFactory.Alpina_AditionalData_Upsert(AditionalDataId, ProviderPublicId, AditionalFieldId, AditionalDataName, Enable);
+        }
+
+        public int Alpina_AditionalDataInfo_Upsert(int AditionalDataInfoId, int AditionalDataId, int? AditionalDataInfoType, string Value, string LargeValue, bool Enable)
+        {
+            return DataFactory.Alpina_AditionalDataInfo_Upsert(AditionalDataInfoId, AditionalDataId, AditionalDataInfoType, Value, LargeValue, Enable);
         }
 
         #endregion

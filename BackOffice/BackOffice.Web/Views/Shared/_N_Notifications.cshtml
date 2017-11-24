@@ -13,7 +13,7 @@
                     <span class="label label-warning">@cant</span>
                 }
             </a>
-            <ul class="dropdown-menu dropdown-alerts pre-scrollable" style="max-width: 350px;">
+            <ul class="dropdown-menu dropdown-alerts pre-scrollable" style="max-width: 350px; min-width : 280px;">
                 @if (BackOffice.Models.General.SessionModel.NewNotifications)
                 {
                     if (BackOffice.Models.General.SessionModel.ListNotifications != null)
@@ -72,7 +72,7 @@
                                                 },
                                                 null)
                                     .ToHtmlString()
-                                    .Replace("[replacetext]", "<img class=\"img img-circle\" style=\" width: 35px; height: 35px; margin-right: 10px;\" src=\"" + @logo + "\" />" + Notification.Label + "<br><em class=\"small\" style=\"padding-left: 30px; \">" + @NotificatioBody + "</em><span class=\"pull-right text-muted small\">" + Notification.CreateDate.ToShortDateString() + Notification.CreateDate.ToLongTimeString() + "</span>"))
+                                    .Replace("[replacetext]", "<img class=\"img img-circle\" style=\" border:none; width: 35px; height: 35px; margin-right: 10px;\" src=\"" + @logo + "\" />" + Notification.Label + "<br><em class=\"small\" style=\"padding-left: 30px; \">" + @NotificatioBody + "</em><span class=\"pull-right text-muted small\">" + Notification.CreateDate.ToShortDateString() + Notification.CreateDate.ToLongTimeString() + "</span>"))
                             </li>
                             
                         }
