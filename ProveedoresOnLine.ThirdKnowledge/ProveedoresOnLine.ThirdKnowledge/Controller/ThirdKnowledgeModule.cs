@@ -586,18 +586,13 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     Agent = ThirdKnowledge.Models.InternalSettings.Instance[Constants.C_Settings_TK_UploadSuccessFileAgent].Value,
                     User = DataMessage.User,
                     ProgramTime = DateTime.Now,
-                    MessageQueueInfo = new List<Tuple<string, string>>(),
-                };
+                    MessageQueueInfo = DataMessage.MessageQueueInfo,
+                };                
 
                 MessageModule.Client.Controller.ClientController.CreateMessage(oMessageToSend);
 
                 #endregion
-
-                #region Notification
-                //TODO Manage Notification
-                //DataMessage.NotificationId = MessageModule.Client.Controller.ClientController.NotificationUpsert(DataMessage);
-
-                #endregion
+                
             }
             catch (Exception)
             {

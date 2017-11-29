@@ -427,21 +427,10 @@ namespace MarketPlace.Web.ControllersApi
                         ("CustomerIdentificationTypeName", SessionModel.CurrentCompany.IdentificationType.ItemName));
                         oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
                         ("CustomerIdentificationNumber", SessionModel.CurrentCompany.IdentificationNumber));
-
-                        #region Notification
-                        MessageModule.Client.Models.NotificationModel oNotificationmodel = new MessageModule.Client.Models.NotificationModel();
-
-                        oNotificationmodel.Label = Models.General.InternalSettings.Instance
-                                [Models.General.Constants.N_ThirdKnowledgeUploadMassiveMessage].Value;
-                        oNotificationmodel.CompanyPublicId = oQueryToCreate.QueryPublicId;
-                        //oNotificationmodel.NotificationType = (int)MarketPlace.Models.General.enumNotificationType.ThirdKnowledgeNotification;
-                        oNotificationmodel.Enable = true;
-
-                        #endregion
-
-                        ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.CreateUploadNotification(oDataMessage);
-                        //TODO: Function to send notification
-                        //ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.CreateUploadNotification(oDataMessage);
+                        oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                        ("To", SessionModel.CurrentLoginUser.Email));
+                        
+                        ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.CreateUploadNotification(oDataMessage);                        
                     }
 
                     //remove temporal file
@@ -567,22 +556,11 @@ namespace MarketPlace.Web.ControllersApi
                     ("CustomerIdentificationTypeName", SessionModel.CurrentCompany.IdentificationType.ItemName));
                     oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
                     ("CustomerIdentificationNumber", SessionModel.CurrentCompany.IdentificationNumber));
-
-                    #region Notification
-                    MessageModule.Client.Models.NotificationModel oNotificationmodel = new MessageModule.Client.Models.NotificationModel();
-
-                    oNotificationmodel.Label = Models.General.InternalSettings.Instance
-                            [Models.General.Constants.N_ThirdKnowledgeUploadMassiveMessage].Value;
-                    oNotificationmodel.CompanyPublicId = oQueryToCreate.QueryPublicId;
-                    //oNotificationmodel.NotificationType = (int)MarketPlace.Models.General.enumNotificationType.ThirdKnowledgeNotification;
-                    oNotificationmodel.Enable = true;
-
-                    #endregion
+                    oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                    ("To", SessionModel.CurrentLoginUser.Email));
 
                     ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.CreateUploadNotification(oDataMessage);
-                    //TODO: Function to send notification
-                    //ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.CreateUploadNotification(oDataMessage);
-
+                    
                     //remove temporal file
                     if (System.IO.File.Exists(strFilePath))
                         System.IO.File.Delete(strFilePath);
