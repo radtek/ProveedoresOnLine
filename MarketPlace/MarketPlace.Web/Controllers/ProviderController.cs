@@ -3486,181 +3486,206 @@ namespace MarketPlace.Web.Controllers
                 List<ReportParameter> parameters = new List<ReportParameter>();
                 Tuple<byte[], string, string> report;
                 ProviderModel oToInsert = new ProviderModel();
-                switch (CompanyPublicId)
+                if (Models.General.InternalSettings.Instance[Models.General.Constants.C_Settings_ProcablesPublicId].Value == CompanyPublicId)
                 {
-                    //ToDO: Settings
-                    //case Models.General.InternalSettings.Instance[Models.General.Constants.C_Settings_ProcablesPublicId].Value:
-                    case "FB9C6D3E":
-                        oToInsert = new ProviderModel()
+                    oToInsert = new ProviderModel()
+                    {
+                        RelatedCompany = new ProveedoresOnLine.Company.Models.Company.CompanyModel()
                         {
-                            RelatedCompany = new ProveedoresOnLine.Company.Models.Company.CompanyModel()
-                            {
-                                CompanyPublicId = ProviderPublicId,
-                            },
-                            RelatedReports = new List<GenericItemModel>(),
-                        };
-                        oToInsert.RelatedReports.Add(this.GetSurveyReportFilterRequest());
-                        ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPReportUpsert(oToInsert);
-                        DataTable data = new DataTable();
-                        data.Columns.Add("ProviderName");
-                        data.Columns.Add("StartDate");
-                        data.Columns.Add("EndDate");
-                        data.Columns.Add("EvaluationType");
-                        data.Columns.Add("SurveyScore");
+                            CompanyPublicId = ProviderPublicId,
+                        },
+                        RelatedReports = new List<GenericItemModel>(),
+                    };
+                    oToInsert.RelatedReports.Add(this.GetSurveyReportFilterRequest());
+                    ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPReportUpsert(oToInsert);
+                    DataTable data = new DataTable();
+                    data.Columns.Add("ProviderName");
+                    data.Columns.Add("StartDate");
+                    data.Columns.Add("EndDate");
+                    data.Columns.Add("EvaluationType");
+                    data.Columns.Add("SurveyScore");
 
-                        DataRow row;
+                    DataRow row;
 
-                        //order items reports
-                        if (oToInsert.RelatedReports != null)
+                    //order items reports
+                    if (oToInsert.RelatedReports != null)
+                    {
+                        oToInsert.RelatedReports.All(x =>
                         {
-                            oToInsert.RelatedReports.All(x =>
-                            {
-                                row = data.NewRow();
+                            row = data.NewRow();
 
-                                parameters.Add(new ReportParameter("ProviderName", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName.ToString()));
-                                row["ProviderName"] = oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName.ToString();
+                            parameters.Add(new ReportParameter("ProviderName", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName.ToString()));
+                            row["ProviderName"] = oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName.ToString();
 
-                                parameters.Add(new ReportParameter("StartDate", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                                                    (int)enumSurveyInfoType.RP_InitDateReport).Select(y => y.Value).
-                                                    DefaultIfEmpty("-").
-                                                    FirstOrDefault()).ToString("dd/MM/yyyy")));
-                                row["StartDate"] = Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                                                    (int)enumSurveyInfoType.RP_InitDateReport).Select(y => y.Value).
-                                                    DefaultIfEmpty("-").
-                                                    FirstOrDefault()).ToString("dd/MM/yyyy");
+                            parameters.Add(new ReportParameter("StartDate", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                                (int)enumSurveyInfoType.RP_InitDateReport).Select(y => y.Value).
+                                                DefaultIfEmpty("-").
+                                                FirstOrDefault()).ToString("dd/MM/yyyy")));
+                            row["StartDate"] = Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                                (int)enumSurveyInfoType.RP_InitDateReport).Select(y => y.Value).
+                                                DefaultIfEmpty("-").
+                                                FirstOrDefault()).ToString("dd/MM/yyyy");
 
-                                parameters.Add(new ReportParameter("EndDate", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                                            (int)enumSurveyInfoType.RP_EndDateReport).Select(y => y.Value).
-                                            DefaultIfEmpty("-").
-                                            FirstOrDefault()).ToString("dd/MM/yyyy")));
-                                row["EndDate"] = Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                                             (int)enumSurveyInfoType.RP_EndDateReport).Select(y => y.Value).
-                                            DefaultIfEmpty("-").
-                                            FirstOrDefault()).ToString("dd/MM/yyyy");
+                            parameters.Add(new ReportParameter("EndDate", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                        (int)enumSurveyInfoType.RP_EndDateReport).Select(y => y.Value).
+                                        DefaultIfEmpty("-").
+                                        FirstOrDefault()).ToString("dd/MM/yyyy")));
+                            row["EndDate"] = Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                         (int)enumSurveyInfoType.RP_EndDateReport).Select(y => y.Value).
+                                        DefaultIfEmpty("-").
+                                        FirstOrDefault()).ToString("dd/MM/yyyy");
 
-                                parameters.Add(new ReportParameter("EvaluationType", "Evaluación"));
-                                row["EndDate"] = "Evaluación";
+                            parameters.Add(new ReportParameter("EvaluationType", "Evaluación"));
+                            row["EndDate"] = "Evaluación";
 
-                                parameters.Add(new ReportParameter("SurveyScore", x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                                            (int)enumSurveyInfoType.RP_ReportAverage).Select(y => y.Value).
-                                            DefaultIfEmpty("-").
-                                            FirstOrDefault()));
+                            parameters.Add(new ReportParameter("SurveyScore", x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                        (int)enumSurveyInfoType.RP_ReportAverage).Select(y => y.Value).
+                                        DefaultIfEmpty("-").
+                                        FirstOrDefault()));
 
-                                row["SurveyScore"] = x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                                            (int)enumSurveyInfoType.RP_ReportAverage).Select(y => y.Value).
-                                            DefaultIfEmpty("-").
-                                            FirstOrDefault();
-                                data.Rows.Add(row);
-                                return true;
-                            });
-                        }
-                        report = Report_SurveyProcable(parameters, data);
-
-                        //TODO: Make this fine
-                        MessageModule.Client.Models.NotificationModel oDataMessage = new NotificationModel()
-                        {
-                            //CompanyName = SessionModel.CurrentCompany.CompanyName,
-                            //CompanyLogo = SessionModel.CurrentCompany_CompanyLogo,
-                            //IdentificationType = SessionModel.CurrentCompany.IdentificationType.ItemName,
-                            //IdentificationNumber = SessionModel.CurrentCompany.IdentificationNumber,
-                            //NotificationType = (int)enumReportType.RP_SurveyReport,
-                            //Url = report.Item3,
-                        };
-
-                        //SendProcablesMessage(oDataMessage);
-                        break;
-
-                    default:
-
-                        oToInsert = new ProviderModel()
-                        {
-                            RelatedCompany = new ProveedoresOnLine.Company.Models.Company.CompanyModel()
-                            {
-                                CompanyPublicId = ProviderPublicId,
-                            },
-                            RelatedReports = new List<GenericItemModel>(),
-                        };
-                        oToInsert.RelatedReports.Add(this.GetSurveyReportFilterRequest());
-                        ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPReportUpsert(oToInsert);
-
-                        parameters.Add(new ReportParameter("currentCompanyName", SessionModel.CurrentCompany.CompanyName));
-                        parameters.Add(new ReportParameter("currentCompanyTipoDni", SessionModel.CurrentCompany.IdentificationType.ItemName));
-                        parameters.Add(new ReportParameter("currentCompanyDni", SessionModel.CurrentCompany.IdentificationNumber));
-                        parameters.Add(new ReportParameter("currentCompanyLogo", SessionModel.CurrentCompany_CompanyLogo));
-                        parameters.Add(new ReportParameter("providerName", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName.ToString()));
-                        parameters.Add(new ReportParameter("providerTipoDni", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationType.ItemName.ToString()));
-                        parameters.Add(new ReportParameter("providerDni", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationNumber.ToString()));
-                        //order items reports
-                        if (oToInsert.RelatedReports != null)
-                        {
-                            oToInsert.RelatedReports.All(x =>
-                            {
-                                parameters.Add(new ReportParameter("remarks",
-                                    x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                                    (int)enumSurveyInfoType.RP_Observation).Select(y => y.Value).
-                                    DefaultIfEmpty("-").
-                                    FirstOrDefault() + "."));
-
-                                parameters.Add(new ReportParameter("actionPlan",
-                                    x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                                    (int)enumSurveyInfoType.RP_ImprovementPlan).Select(y => y.Value).
-                                    DefaultIfEmpty("-").
-                                    FirstOrDefault() + "."));
-
-                                parameters.Add(new ReportParameter("dateStart", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                                            (int)enumSurveyInfoType.RP_InitDateReport).Select(y => y.Value).
-                                            DefaultIfEmpty("-").
-                                            FirstOrDefault()).ToString("dd/MM/yyyy")));
-
-                                parameters.Add(new ReportParameter("dateEnd", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                                    (int)enumSurveyInfoType.RP_EndDateReport).Select(y => y.Value).
-                                    DefaultIfEmpty("-").
-                                    FirstOrDefault()).ToString("dd/MM/yyyy")));
-
-                                parameters.Add(new ReportParameter("average",
-                                    x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                                    (int)enumSurveyInfoType.RP_ReportAverage).Select(y => y.Value).
-                                    DefaultIfEmpty("-").
-                                    FirstOrDefault()));
-
-                                parameters.Add(new ReportParameter("reportDate",
-                                    x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                                    (int)enumSurveyInfoType.RP_ReportDate).Select(y => y.Value).
-                                    DefaultIfEmpty("-").
-                                    FirstOrDefault()));
-
-                                parameters.Add(new ReportParameter("responsible",
-                                    x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                                    (int)enumSurveyInfoType.RP_ReportResponsable).Select(y => y.Value).
-                                    DefaultIfEmpty("-").
-                                    FirstOrDefault()));
-                                return true;
-                            });
-                        }
-
-                        parameters.Add(new ReportParameter("author", SessionModel.CurrentCompanyLoginUser.RelatedUser.Name.ToString() + " " + SessionModel.CurrentCompanyLoginUser.RelatedUser.LastName.ToString()));
-
-                        report = ProveedoresOnLine.Reports.Controller.ReportModule.CP_SurveyReportDetail(
-                                                            (int)enumReportType.RP_SurveyReport,
-                                                            enumCategoryInfoType.PDF.ToString(),
-                                                            parameters,
-                                                            Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim() + "SV_Report_SurveyDetail.rdlc");
-                        parameters = null;
-                        break;
+                            row["SurveyScore"] = x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                        (int)enumSurveyInfoType.RP_ReportAverage).Select(y => y.Value).
+                                        DefaultIfEmpty("-").
+                                        FirstOrDefault();
+                            data.Rows.Add(row);
+                            return true;
+                        });
+                    }
+                    report = Report_SurveyProcable(parameters, data);
+                    
                 }
+                else
+                {
+                    oToInsert = new ProviderModel()
+                    {
+                        RelatedCompany = new ProveedoresOnLine.Company.Models.Company.CompanyModel()
+                        {
+                            CompanyPublicId = ProviderPublicId,
+                        },
+                        RelatedReports = new List<GenericItemModel>(),
+                    };
+                    oToInsert.RelatedReports.Add(this.GetSurveyReportFilterRequest());
+                    ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPReportUpsert(oToInsert);
+
+                    parameters.Add(new ReportParameter("currentCompanyName", SessionModel.CurrentCompany.CompanyName));
+                    parameters.Add(new ReportParameter("currentCompanyTipoDni", SessionModel.CurrentCompany.IdentificationType.ItemName));
+                    parameters.Add(new ReportParameter("currentCompanyDni", SessionModel.CurrentCompany.IdentificationNumber));
+                    parameters.Add(new ReportParameter("currentCompanyLogo", SessionModel.CurrentCompany_CompanyLogo));
+                    parameters.Add(new ReportParameter("providerName", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName.ToString()));
+                    parameters.Add(new ReportParameter("providerTipoDni", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationType.ItemName.ToString()));
+                    parameters.Add(new ReportParameter("providerDni", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationNumber.ToString()));
+                    //order items reports
+                    if (oToInsert.RelatedReports != null)
+                    {
+                        oToInsert.RelatedReports.All(x =>
+                        {
+                            parameters.Add(new ReportParameter("remarks",
+                                x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                (int)enumSurveyInfoType.RP_Observation).Select(y => y.Value).
+                                DefaultIfEmpty("-").
+                                FirstOrDefault() + "."));
+
+                            parameters.Add(new ReportParameter("actionPlan",
+                                x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                (int)enumSurveyInfoType.RP_ImprovementPlan).Select(y => y.Value).
+                                DefaultIfEmpty("-").
+                                FirstOrDefault() + "."));
+
+                            parameters.Add(new ReportParameter("dateStart", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                        (int)enumSurveyInfoType.RP_InitDateReport).Select(y => y.Value).
+                                        DefaultIfEmpty("-").
+                                        FirstOrDefault()).ToString("dd/MM/yyyy")));
+
+                            parameters.Add(new ReportParameter("dateEnd", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                (int)enumSurveyInfoType.RP_EndDateReport).Select(y => y.Value).
+                                DefaultIfEmpty("-").
+                                FirstOrDefault()).ToString("dd/MM/yyyy")));
+
+                            parameters.Add(new ReportParameter("average",
+                                x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                (int)enumSurveyInfoType.RP_ReportAverage).Select(y => y.Value).
+                                DefaultIfEmpty("-").
+                                FirstOrDefault()));
+
+                            parameters.Add(new ReportParameter("reportDate",
+                                x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                (int)enumSurveyInfoType.RP_ReportDate).Select(y => y.Value).
+                                DefaultIfEmpty("-").
+                                FirstOrDefault()));
+
+                            parameters.Add(new ReportParameter("responsible",
+                                x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                (int)enumSurveyInfoType.RP_ReportResponsable).Select(y => y.Value).
+                                DefaultIfEmpty("-").
+                                FirstOrDefault()));
+                            return true;
+                        });
+                    }
+
+                    parameters.Add(new ReportParameter("author", SessionModel.CurrentCompanyLoginUser.RelatedUser.Name.ToString() + " " + SessionModel.CurrentCompanyLoginUser.RelatedUser.LastName.ToString()));
+
+                    report = ProveedoresOnLine.Reports.Controller.ReportModule.CP_SurveyReportDetail(
+                                                        (int)enumReportType.RP_SurveyReport,
+                                                        enumCategoryInfoType.PDF.ToString(),
+                                                        parameters,
+                                                        Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim() + "SV_Report_SurveyDetail.rdlc");
+                    parameters = null;
+                }
+
+
+                //Send Emails
+
+                //Get Emails
+                List<string> Responsables = Request.Form.AllKeys.Where(x => x.Contains("Emails_")).ToList();
+
+                //Get Other Emails
+                if (!string.IsNullOrEmpty(Request.Form["OtherEmails"]))
+                {
+                    Responsables.AddRange(Request.Form["OtherEmails"].Split(';').ToArray());
+                }
+                
+                //Send Emails
+                if (Responsables.Count > 0)
+                {
+                    Responsables.Where(x => !string.IsNullOrEmpty(x)).All(x =>
+                    {
+                        MessageModule.Client.Models.ClientMessageModel oMessage = new MessageModule.Client.Models.ClientMessageModel()
+                        {
+                            Agent = Models.General.InternalSettings.Instance[Models.General.Constants.N_Survey_Procables_Mail].Value,
+                            User = SessionModel.CurrentLoginUser.Email.ToString(),
+                            ProgramTime = DateTime.Now,
+                            MessageQueueInfo = new System.Collections.Generic.List<Tuple<string, string>>()
+                                {
+                                    new Tuple<string,string>("To",x.Replace("Emails_","")),
+                                    new Tuple<string,string>("InfoFileUrl",report.Item3),
+                                    new Tuple<string,string>("CustomerLogo",SessionModel.CurrentCompany_CompanyLogo),
+                                    new Tuple<string,string>("CustomerName",SessionModel.CurrentCompany.CompanyName),
+                                    new Tuple<string,string>("CustomerIdentificationTypeName",SessionModel.CurrentCompany.IdentificationType.ItemName),
+                                    new Tuple<string,string>("CustomerIdentificationNumber",SessionModel.CurrentCompany.IdentificationNumber),
+                                },
+                        };
+
+                        MessageModule.Client.Controller.ClientController.CreateMessage(oMessage);
+
+                        return true;
+                    });
+                }
+
                 //Save s3 File
-                //get folder
+                //get folder Temporary
                 string strFolder = System.Web.HttpContext.Current.Server.MapPath
                     (Models.General.InternalSettings.Instance
                     [Models.General.Constants.C_Settings_File_TempDirectory].Value);
 
+                //create folder
                 if (!System.IO.Directory.Exists(strFolder))
                     System.IO.Directory.CreateDirectory(strFolder);
 
-                //get File
+                //get
+
                 var UploadFile = File(report.Item1, report.Item2, report.Item3);
 
-                string strFilePath = System.IO.Path.Combine(strFolder, report.Item3 + "_" + DateTime.Now.ToString("yyyy_MM_dd_hhmmss"));
+                string strFilePath = System.IO.Path.Combine(strFolder, report.Item3);
                 System.IO.File.WriteAllBytes(strFilePath, report.Item1);
 
                 string strRemoteFile = ProveedoresOnLine.FileManager.FileController.LoadFile
@@ -6823,51 +6848,7 @@ namespace MarketPlace.Web.Controllers
             return Report;
         }
         
-        //TODO: Do This correctly
-        private static void SendProcablesMessage(NotificationModel oDataMessage)
-        {
-            if (!string.IsNullOrEmpty(oDataMessage.User))
-            {
-                #region Email
-
-                //Create message object
-                //MessageModule.Client.Models.ClientMessageModel oMessageToSend = new MessageModule.Client.Models.ClientMessageModel()
-                //{
-                //    Agent = Models.General.InternalSettings.Instance[Models.General.Constants.N_Survey_Procables_Mail].Value,
-                //    User = oDataMessage.User,
-                //    ProgramTime = DateTime.Now,
-                //    MessageQueueInfo = new List<Tuple<string, string>>(),
-                //};
-
-                //oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("To", "diego,jaramillo@proveedoresonline.co"));
-                //oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("InfoFileUrl", oDataMessage.Url));
-
-                ////get customer info
-                //oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                //    ("CustomerLogo", oDataMessage.CompanyLogo));
-
-                //oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                //    ("CustomerName", oDataMessage.CompanyName));
-
-                //oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                //    ("CustomerIdentificationTypeName", oDataMessage.IdentificationType));
-
-                //oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                //    ("CustomerIdentificationNumber", oDataMessage.IdentificationNumber));
-
-                //MessageModule.Client.Controller.ClientController.CreateMessage(oMessageToSend);
-
-                #endregion
-
-                #region Notification
-
-                //oDataMessage.NotificationId = MessageModule.Client.Controller.ClientController.NotificationUpsert(oDataMessage);
-
-                #endregion
-            }
-
-
-        }
+        
         #endregion Pivate Functions
 
         #region Menu
