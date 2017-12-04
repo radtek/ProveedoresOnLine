@@ -28,7 +28,7 @@
     
     <key name="CompanyCustomerIndex">dev_companycustomerindex</key>
 
-    <key name="CompanySurveyIndex">dev_companysurveyindex</key>
+    <key name="CompanySurveyIndex">dev_surveyindex</key>
     
     <key name="CustomerProviderIndex">dev_customerproviderindex</key>
       
