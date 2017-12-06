@@ -3657,7 +3657,7 @@ namespace MarketPlace.Web.Controllers
                             MessageQueueInfo = new System.Collections.Generic.List<Tuple<string, string>>()
                                 {
                                     new Tuple<string,string>("To",x.Replace("Emails_","")),
-                                    new Tuple<string,string>("InfoFileUrl",report.Item3),
+                                    new Tuple<string,string>("InfoFileUrl", Models.General.InternalSettings.Instance[Models.General.Constants.MP_SV_SurveyGeneralReport].Value + report.Item3),
                                     new Tuple<string,string>("CustomerLogo",SessionModel.CurrentCompany_CompanyLogo),
                                     new Tuple<string,string>("CustomerName",SessionModel.CurrentCompany.CompanyName),
                                     new Tuple<string,string>("CustomerIdentificationTypeName",SessionModel.CurrentCompany.IdentificationType.ItemName),
