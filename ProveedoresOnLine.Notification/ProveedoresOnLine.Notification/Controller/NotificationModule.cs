@@ -18,12 +18,14 @@ namespace ProveedoresOnLine.Notification.Controller
         /// <param name="CompanyPublicId">Customer Public Id </param>
         public static void StartProcess()
         {
+            string CurrentProviderPublicId = "";
             try
             {
                 LogFile("Process Start :::::: " + DateTime.Now);
                 List<ProveedoresOnLine.Company.Models.Company.CompanyNotificationModel> oNotificatiosToManage = new List<Company.Models.Company.CompanyNotificationModel>();
                 oNotificatiosToManage = ProveedoresOnLine.Company.Controller.Company.NotificationConfigGetAll();
 
+                
                 //Divide by rules Type
                 if (oNotificatiosToManage != null && oNotificatiosToManage.Count > 0)
                 {
@@ -31,6 +33,7 @@ namespace ProveedoresOnLine.Notification.Controller
                     //Get Notification Types
                     oNotificatiosToManage.All(n =>
                     {
+                        CurrentProviderPublicId = n.CompanyPublicId;
                         if (n.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.NotificationType).Select(x => x.Value).FirstOrDefault() == ((int)enumNotificationType.Document).ToString())
                         {
                             //Call DocumentPRovider Function
@@ -64,7 +67,7 @@ namespace ProveedoresOnLine.Notification.Controller
             }
             catch (Exception ex )
             {
-                LogFile("Process Notifications Error!!! :::::: " + ex.Message);
+                LogFile("Process Notifications Error!!! :::::: " + ex.Message + ":::CompanyPublicId:::" + CurrentProviderPublicId);
                 throw;
             }
         }

@@ -45,6 +45,31 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
             
         }
 
+        /// <summary>
+        /// Vote Register Info
+        /// </summary>
+        /// <returns></returns>
+        [TestMethod]
+        public async Task RegisterEntitySearch()
+        {
+            List<Tuple<string, List<string>, List<string>>> resultado = null;
+            resultado = await Controller.ThirdKnowledgeModule.RegisterEntitySearch(1, "", "71984381");
+        }
+
+        [TestMethod]
+        public async Task ParadisePapersSearch()
+        {
+            List<Tuple<string, List<string>, List<string>>> resultado = null;
+            resultado = await Controller.ThirdKnowledgeModule.ParadisePapersSearch(1, "Juan Manuel Santos", null);
+        }
+
+        [TestMethod]
+        public async Task RUESSearch()
+        {
+            List<Tuple<string, List<string>, List<string>>> resultado = null;
+            resultado = await Controller.ThirdKnowledgeModule.RUESSearch(2, null, "800251569");
+        }
+
         [TestMethod]
         public async Task validateProcess()
         {

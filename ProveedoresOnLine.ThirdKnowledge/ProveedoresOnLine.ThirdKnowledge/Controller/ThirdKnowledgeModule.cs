@@ -26,28 +26,9 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                 List<Tuple<string, List<string>, List<string>>> procResult = new List<Tuple<string, List<string>, List<string>>>();
                 List<Tuple<string, List<string>, List<string>>> ppResult = new List<Tuple<string, List<string>, List<string>>>();
                 List<Tuple<string, List<string>, List<string>>> judProcResult = new List<Tuple<string, List<string>, List<string>>>();
-                List<Tuple<string, List<string>, List<string>>> RegResult = new List<Tuple<string, List<string>, List<string>>>();
-
-                //Judicial proces Search
-                if (!string.IsNullOrEmpty(IdentificationNumber))
-                    judProcResult = await JudicialProcessSearch(3, Name, IdentificationNumber);
-
-                //Proc Request
-                if (!string.IsNullOrEmpty(IdentificationNumber) && IdType != 0)
-                    procResult = await OnLnieSearch(IdType, IdentificationNumber);
-
-                //Register Search
-                //if (!string.IsNullOrEmpty(IdentificationNumber) && IdType > 0)
-                //    RegResult = await RegisterSearch(IdType, Name, IdentificationNumber);
-
-                //if (!string.IsNullOrEmpty(RegResult.FirstOrDefault().Item1))                
-                //    RegisterName = true;
-
-                //PanamaPapers Search
-                if (RegisterName)
-                    ppResult = await PPSearch(IdType == 2 ? 0 : 1, RegResult.FirstOrDefault().Item1, IdentificationNumber);
-                else                
-                    ppResult = await PPSearch(IdType == 2 ? 0 : 1, Name, IdentificationNumber);               
+                List<Tuple<string, List<string>, List<string>>> RegDianResult = new List<Tuple<string, List<string>, List<string>>>();
+                List<Tuple<string, List<string>, List<string>>> RegEntityResult = new List<Tuple<string, List<string>, List<string>>>();
+                List<Tuple<string, List<string>, List<string>>> RUESResult = new List<Tuple<string, List<string>, List<string>>>();
 
                 if (!string.IsNullOrEmpty(Name))
                 {
@@ -62,24 +43,52 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     else if (Name.ToLower().Contains("l.t.d.a"))
                         Name = Name.ToLower().Replace("l.t.d.a", "");
                 }
+
+                //Identify personType and Call the respective function
+                if (IdType == 1 || IdType == 3)
+                {
+                    if (!string.IsNullOrEmpty(IdentificationNumber))
+                    {
+                        //Judicial proces Search
+                        judProcResult = await JudicialProcessSearch(3, Name, IdentificationNumber);
+
+                        //Proc Request                    
+                        procResult = await OnLnieSearch(IdType, IdentificationNumber);
+
+                        //Register Search                    
+                        RegDianResult = await RegisterSearch(IdType, Name, IdentificationNumber);
+
+                        //Register Search Vote information                    
+                        RegEntityResult = await RegisterEntitySearch(IdType, Name, IdentificationNumber);
+
+                        if (!string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1))
+                            ppResult = await PPSearch(1, RegDianResult.FirstOrDefault().Item1, IdentificationNumber);
+                    }
+                }
+                else if (IdType == 2)
+                {
+                    if (!string.IsNullOrEmpty(IdentificationNumber))
+                    {
+                        //Proc Request                    
+                        procResult = await OnLnieSearch(IdType, IdentificationNumber);
+
+                        //Register Search                    
+                        RegDianResult = await RegisterSearch(IdType, Name, IdentificationNumber);
+
+                        //Panama Papers
+                        if (!string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1))
+                            ppResult = await PPSearch(1, RegDianResult.FirstOrDefault().Item1, IdentificationNumber);
+
+                        //RUES Implement
+                        RUESResult = await RUESSearch(3, RegDianResult.FirstOrDefault().Item1, IdentificationNumber);
+                    }
+                }
+
                 List<PlanModel> oPlanModel = new List<PlanModel>();
                 PeriodModel oCurrentPeriod = new PeriodModel();
 
-                //Search Elastic
-                Uri node = new Uri(InternalSettings.Instance[Constants.C_Settings_ElasticSearchUrl].Value);
-
-                var settings = new ConnectionSettings(node);
-                settings.DefaultIndex(InternalSettings.Instance[Constants.C_Settings_ThirdKnowledgeIndex].Value);
-                settings.DisableDirectStreaming(true);
-                ElasticClient client = new ElasticClient(settings);
-
-                var oSearchResult = client.Search<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel>(s => s
-                .TrackScores(true)
-                .From(0)
-                .Size(10)
-                 .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(RegisterName == true ? RegResult.FirstOrDefault().Item1 : Name)) ||
-                            q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
-                 ).MinScore(2));
+                //Call ElasticSearch Function
+                ISearchResponse<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel> oSearchResult = ElasticSearch(Name, IdentificationNumber);
 
                 oQueryToCreate.RelatedQueryInfoModel = new List<TDQueryInfoModel>();
                 if (procResult != null && procResult.Count > 0)
@@ -156,15 +165,15 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
                     {
                         AKA = string.Empty,
-                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Nit" : IdType == 3 ? "C. Extranjería" : "",                        
-                        NameResult = !string.IsNullOrEmpty(RegResult.FirstOrDefault().Item1) ? RegResult.FirstOrDefault().Item1 : "",                        
+                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Nit" : IdType == 3 ? "C. Extranjería" : "",
+                        NameResult = !string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1) ? RegDianResult.FirstOrDefault().Item1 : "",
                         Enable = true,
                         QueryPublicId = oQueryToCreate.QueryPublicId,
                         QueryIdentification = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty,
                         QueryName = Name,
                         IdList = "Registraduria/Dian",
                         IdentificationNumber = IdentificationNumber,
-                        GroupName = "Registraduria/Dian",                        
+                        GroupName = "Registraduria/Dian",
                         ListName = "Registraduria/Dian",
                         ElasticId = (int)enumElasticGroupId.RegistersList,
                     };
@@ -642,6 +651,70 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
             var container = builder.Build();
             return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber);
         }
+
+        public static async Task<List<Tuple<string, List<string>, List<string>>>> RegisterEntitySearch(int IdType, string Name, string IndentificationNumber)
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterType<OnlineSearch.Core.ProveedoresOnLineRegistreImplement>().As<OnlineSearch.Interfaces.IOnLineSearch>();
+            var container = builder.Build();
+            return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber);
+        }
+
+        public static async Task<List<Tuple<string, List<string>, List<string>>>> ParadisePapersSearch(int IdType, string Name, string IndentificationNumber)
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterType<OnlineSearch.Core.ProveedoresOnLineParadiseImplement>().As<OnlineSearch.Interfaces.IOnLineSearch>();
+            var container = builder.Build();
+            return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber);
+        }
+        public static async Task<List<Tuple<string, List<string>, List<string>>>> RUESSearch(int IdType, string Name, string IndentificationNumber)
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterType<OnlineSearch.Core.ProveedoresOnLineRUESImplement>().As<OnlineSearch.Interfaces.IOnLineSearch>();
+            var container = builder.Build();
+            return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber);
+        }
+
+        #endregion
+
+        #region Private Function
+
+        public static ISearchResponse<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel> ElasticSearch(string Name, string IdentificationNumber)
+        {
+            Uri node = new Uri(InternalSettings.Instance[Constants.C_Settings_ElasticSearchUrl].Value);
+
+            var settings = new ConnectionSettings(node);
+            settings.DefaultIndex(InternalSettings.Instance[Constants.C_Settings_ThirdKnowledgeIndex].Value);
+            settings.DisableDirectStreaming(true);
+            ElasticClient client = new ElasticClient(settings);
+
+            ISearchResponse<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel> oSearchResult = null;
+            if (!string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(IdentificationNumber))
+            {
+                oSearchResult = client.Search<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel>(s => s
+                .TrackScores(true)
+                .From(0)
+                .Size(5)
+                 .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Name)) &&
+                            q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
+                 )
+                );
+            }
+            else
+            {
+                oSearchResult = client.Search<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel>(s => s
+                .TrackScores(true)
+                .From(0)
+                .Size(5)
+                 .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Name)) ||
+                            q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
+                 ).MinScore(1)
+                );
+            }
+
+            return oSearchResult;
+        }
+
         #endregion
     }
 }

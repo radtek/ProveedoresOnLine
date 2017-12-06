@@ -559,7 +559,7 @@ namespace ProveedoresOnLine.IndexSearch.Test
                 );
             client.Map<SurveyIndexSearchModel>(m => m.AutoMap());
             var Index = client.IndexMany(SurveyndexModelList, "prod_surveyindex");
-        }
+            }
 
         [TestMethod]
         public void CalificationSearch()

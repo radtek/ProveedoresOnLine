@@ -193,12 +193,12 @@ namespace MarketPlace.Web.Controllers
                         .Field(fi => fi.SurveyTypeId)))
                 .Query(q => q.
                     Filtered(f => f
-                    .Query(qi => qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId)))
+                    .Query(qi => qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId))
+                    && qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User)).Query(SessionModel.CurrentLoginUser.Email)))
                     .Filter(f2 =>
                     {
                         QueryContainer qb = null;
-
-                        //qb &= f2.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId));
+                        
                         #region Status Srv Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y).FirstOrDefault() != null)
                         {
@@ -212,10 +212,7 @@ namespace MarketPlace.Web.Controllers
                             qb &= q.Term(m => m.SurveyTypeId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y.Item1).FirstOrDefault());
                         }
                         #endregion
-
-                        qb &= f2.Term(x => x.User.ToLower(), SessionModel.CurrentLoginUser.Email.ToLower());
                         
-                        //QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User.ToLower())).Query(SessionModel.CurrentLoginUser.Email.ToLower()));
                         return qb;
                     })
                     ))
