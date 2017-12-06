@@ -454,10 +454,10 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
         {
             List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
 
-            lstParams.Add(DataInstanceTopbls.CreateTypedParameter("vRowFrom", vRowFrom));
-            lstParams.Add(DataInstanceTopbls.CreateTypedParameter("vRowTo", vRowTo));
+            lstParams.Add(DataInstanceThirdKnowledge.CreateTypedParameter("vRowFrom", vRowFrom));
+            lstParams.Add(DataInstanceThirdKnowledge.CreateTypedParameter("vRowTo", vRowTo));
 
-            ADO.Models.ADOModelResponse response = DataInstanceTopbls.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            ADO.Models.ADOModelResponse response = DataInstanceThirdKnowledge.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
                 CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
                 CommandText = "MP_TK_GetAllTOPBLSDATA",

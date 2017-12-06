@@ -69,6 +69,18 @@
     <key name="JudicialPResult_Url"><![CDATA[http://procesos.ramajudicial.gov.co/jepms/bogotajepms/adju.asp?cp4={link}&fecha_r={datetime}_02:38:26%20p.m.]]></key>
     <key name="JudicialP_Proxy">http://127.0.0.1:9666</key>  
 
+  <!--Registraduría Nacional Estrucutre Page-->
+    <key name="Registraduria_Url"><![CDATA[https://wsp.registraduria.gov.co/censo/_censoResultado.php?nCedula=CC&nCedulaH=&x=37&y=13]]></key>
+
+    <!--Paradise Papers-->
+    <key name="ParadisePapers_Url"><![CDATA[https://offshoreleaks.icij.org/stories/]]></key>
+    
+    <key name="RUES_Url"><![CDATA[http://www.rues.org.co/RM/ConsultaNIT_json]]></key>
+    <key name="txtNIT">txtNIT</key>
+
+    <key name="RegisterService_URL"><![CDATA[http://54.209.208.188:9810/api/register?IdType={TID}&IdentificationNumber={NID}&Token=DA5C572E]]></key>
+
+    <key name="RegisterService_Token">DA5C572E</key>
   </ThirdKnowledge>
 </Settings>
 

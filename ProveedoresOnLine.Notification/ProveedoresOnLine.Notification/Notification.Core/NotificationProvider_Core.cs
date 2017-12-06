@@ -21,256 +21,74 @@ namespace ProveedoresOnLine.Notification.Notification.Core
             //Get All Providers by this Customer (CompanyPublicId)
             List<CompanyModel> oProviders = CompanyProvider.Controller.CompanyProvider.GetAllProvidersByCustomerPublicId(CompanyPublicId);
             CultureInfo culture = CultureInfo.CreateSpecificCulture("es-ES");
+            string ProviderPublicId = "";
             if (NotificationConfigModel.CompanyNotificationInfo != null)
             {
-                if (NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.NotificationType).Select(x => x.Value).FirstOrDefault() == ((int)enumNotificationType.Document).ToString())
+                try
                 {
-                    //Wich Document To Valid
-                    int DocumentType = NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.DocumentType).Select(x => int.Parse(x.Value)).FirstOrDefault();
-                    string DocumentName = NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.Document).Select(x => x.Value).FirstOrDefault();
-                    //Vigency, Priority, Status
-                    int Critery = NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.NotificationCritery).Select(x => int.Parse(x.Value)).FirstOrDefault();
-                    //<=, <,> ....
-                    int RuleType = NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.RuleType).Select(x => int.Parse(x.Value)).FirstOrDefault();
-                    //Days, Less 30, ...
-                    int RuleValue = NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.NotificationValue).Select(x => int.Parse(x.Value)).FirstOrDefault();
-                    // Indicatator if is necessary to build a Message Object
-                    bool BuildMsgObject = false;
-
-                    #region General Info
-                    if (DocumentType == (int)enumDocumentType.GeneralInfo)
+                    if (NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.NotificationType).Select(x => x.Value).FirstOrDefault() == ((int)enumNotificationType.Document).ToString())
                     {
-                        // In Chaimber Of Commerce case
-                        if (DocumentName.ToLower() == "cámara de comercio")
+                        //Wich Document To Valid
+                        int DocumentType = NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.DocumentType).Select(x => int.Parse(x.Value)).FirstOrDefault();
+                        string DocumentName = NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.Document).Select(x => x.Value).FirstOrDefault();
+                        //Vigency, Priority, Status
+                        int Critery = NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.NotificationCritery).Select(x => int.Parse(x.Value)).FirstOrDefault();
+                        //<=, <,> ....
+                        int RuleType = NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.RuleType).Select(x => int.Parse(x.Value)).FirstOrDefault();
+                        //Days, Less 30, ...
+                        int RuleValue = NotificationConfigModel.CompanyNotificationInfo.Where(x => x.ConfigItemType.ItemId == (int)enumNotificationInfoType.NotificationValue).Select(x => int.Parse(x.Value)).FirstOrDefault();
+                        // Indicatator if is necessary to build a Message Object
+                        bool BuildMsgObject = false;
+
+                        #region General Info
+                        if (DocumentType == (int)enumDocumentType.GeneralInfo)
                         {
-                            oProviders.All(p =>
-                            {
-                                BuildMsgObject = false;
-                                //Get LegalInfo
-                                List<Company.Models.Util.GenericItemModel> oLegalInfo = CompanyProvider.Controller.CompanyProvider.LegalGetBasicInfo(p.CompanyPublicId, (int)enumGeneralInfoType.ChaimberOfComerceInfo, true);
-
-                                DateTime ChaimberOfComerceDateToValidate = new DateTime();
-                                if (oLegalInfo != null)
-                                    ChaimberOfComerceDateToValidate = oLegalInfo.FirstOrDefault().ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumGeneralInfoType.ChaimberOfComerceDateToValidate).Select(x => DateTime.Parse(x.Value, culture)).FirstOrDefault();
-
-                                #region Validate the vigency just for the Documents of Provider
-                                //Valid the Rules
-                                switch (RuleType)
+                            // In Chaimber Of Commerce case
+                            if (DocumentName.ToLower() == "cámara de comercio")
+                            {                                
+                                oProviders.All(p =>
                                 {
-                                    #region Evalue Rules
-                                    case ((int)enumRuleType.LessThan):
-                                        if (RuleValue == (int)enumVigencyType.ThirtyDays)
-                                        {
-                                            ChaimberOfComerceDateToValidate = ChaimberOfComerceDateToValidate.AddMonths(-1);
-                                            if (ChaimberOfComerceDateToValidate.Date == DateTime.Now.Date)
-                                                BuildMsgObject = true;
-                                        }
-                                        if (RuleValue == (int)enumVigencyType.SixtyDays)
-                                        {
-                                            ChaimberOfComerceDateToValidate = ChaimberOfComerceDateToValidate.AddMonths(-2);
-                                            if (ChaimberOfComerceDateToValidate.Date == DateTime.Now.Date)
-                                                BuildMsgObject = true;
-                                        }
-                                        if (RuleValue == (int)enumVigencyType.NinetyDays)
-                                        {
-                                            ChaimberOfComerceDateToValidate = ChaimberOfComerceDateToValidate.AddMonths(-3);
-                                            if (ChaimberOfComerceDateToValidate.Date == DateTime.Now.Date)
-                                                BuildMsgObject = true;
-                                        }
-                                        if (RuleValue == (int)enumVigencyType.OneYear)
-                                        {
-                                            ChaimberOfComerceDateToValidate = ChaimberOfComerceDateToValidate.AddYears(-1);
-                                            if (ChaimberOfComerceDateToValidate.Date == DateTime.Now.Date)
-                                                BuildMsgObject = true;
-                                        }
-                                        //Send notification
-                                        if (BuildMsgObject)
-                                            this.SendNotification(NotificationConfigModel, p, DocumentType);
-                                        break;
-                                    case ((int)enumRuleType.LessOrEqualThan):
-                                        if (RuleValue == (int)enumVigencyType.ThirtyDays)
-                                        {
-                                            ChaimberOfComerceDateToValidate = ChaimberOfComerceDateToValidate.AddDays(-31);
-                                            if (ChaimberOfComerceDateToValidate.Date == DateTime.Now.Date)
-                                                BuildMsgObject = true;
-                                        }
-                                        if (RuleValue == (int)enumVigencyType.SixtyDays)
-                                        {
-                                            ChaimberOfComerceDateToValidate = ChaimberOfComerceDateToValidate.AddDays(-61);
-                                            if (ChaimberOfComerceDateToValidate.Date == DateTime.Now.Date)
-                                                BuildMsgObject = true;
-                                        }
-                                        if (RuleValue == (int)enumVigencyType.NinetyDays)
-                                        {
-                                            ChaimberOfComerceDateToValidate = ChaimberOfComerceDateToValidate.AddDays(-91);
-                                            if (ChaimberOfComerceDateToValidate.Date == DateTime.Now.Date)
-                                                BuildMsgObject = true;
-                                        }
-                                        if (RuleValue == (int)enumVigencyType.OneYear)
-                                        {
-                                            ChaimberOfComerceDateToValidate = ChaimberOfComerceDateToValidate.AddYears(-1);
-                                            if (ChaimberOfComerceDateToValidate.Date == DateTime.Now.Date)
-                                                BuildMsgObject = true;
-                                        }
+                                    ProviderPublicId = p.CompanyPublicId;
+                                    NotificationModule.LogFile("Process Notifications:::Rule Section:: Cámara de Comercio" + ":::CompanyPublicId:::" + p.CompanyPublicId);
+                                    BuildMsgObject = false;
+                                    //Get LegalInfo
+                                    List<Company.Models.Util.GenericItemModel> oLegalInfo = CompanyProvider.Controller.CompanyProvider.LegalGetBasicInfo(p.CompanyPublicId, (int)enumGeneralInfoType.ChaimberOfComerceInfo, true);
 
-                                        //Send notification
-                                        if (BuildMsgObject)
-                                            this.SendNotification(NotificationConfigModel, p, DocumentType);
+                                    var ChaimberOfComerceDateToValidate = "";
+                                    if (oLegalInfo != null)
+                                        ChaimberOfComerceDateToValidate = oLegalInfo.FirstOrDefault().ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumGeneralInfoType.ChaimberOfComerceDateToValidate).Select(x => x.Value).FirstOrDefault();
 
-                                        break;
-                                        #endregion
-
-                                }
-                                #endregion
-
-                                return true;
-                            });
-                        }
-                    }
-                    #endregion
-                    #region HSEQ Info
-                    if (DocumentType == (int)enumDocumentType.HSEQ)
-                    {
-                        oProviders.All(p =>
-                        {
-                            BuildMsgObject = false;
-                            //Get LegalInfo
-                            List<Company.Models.Util.GenericItemModel> oHSEQInfo = CompanyProvider.Controller.CompanyProvider.CertficationGetBasicInfo(p.CompanyPublicId, (int)enumGeneralInfoType.HSEQCertifications, true);
-
-                            DateTime HSQQDateToValidate = new DateTime();
-                            if (oHSEQInfo != null)
-                                HSQQDateToValidate = oHSEQInfo.FirstOrDefault().ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumGeneralInfoType.HSEQVigency).Select(x => DateTime.Parse(x.Value, culture)).FirstOrDefault();
-
-                            #region Validate the vigency just for the Documents of Provider
-                                //Valid the Rules
-                            switch (RuleType)
-                            {
-                                #region Evalue Rules
-                                case ((int)enumRuleType.LessThan):
-                                    if (RuleValue == (int)enumVigencyType.ThirtyDays)
+                                    #region Validate the vigency just for the Documents of Provider
+                                    //Valid the Rules
+                                    if (!string.IsNullOrEmpty(ChaimberOfComerceDateToValidate))
                                     {
-                                        HSQQDateToValidate = HSQQDateToValidate.AddDays(-30);
-                                        if (HSQQDateToValidate.Date == DateTime.Now.Date)
-                                            BuildMsgObject = true;
-                                    }
-                                    if (RuleValue == (int)enumVigencyType.SixtyDays)
-                                    {
-                                        HSQQDateToValidate = HSQQDateToValidate.AddDays(-60);
-                                        if (HSQQDateToValidate.Date == DateTime.Now.Date)
-                                            BuildMsgObject = true;
-                                    }
-                                    if (RuleValue == (int)enumVigencyType.NinetyDays)
-                                    {
-                                        HSQQDateToValidate = HSQQDateToValidate.AddDays(-90);
-                                        if (HSQQDateToValidate.Date == DateTime.Now.Date)
-                                            BuildMsgObject = true;
-                                    }
-                                    if (RuleValue == (int)enumVigencyType.OneYear)
-                                    {
-                                        HSQQDateToValidate = HSQQDateToValidate.AddYears(-1);
-                                        if (HSQQDateToValidate.Date == DateTime.Now.Date)
-                                            BuildMsgObject = true;
-                                    }
-                                    //Send notification
-                                    if (BuildMsgObject)
-                                        this.SendNotification(NotificationConfigModel, p, DocumentType);
-                                    break;
-                                case ((int)enumRuleType.LessOrEqualThan):
-                                    if (RuleValue == (int)enumVigencyType.ThirtyDays)
-                                    {
-                                        HSQQDateToValidate = HSQQDateToValidate.AddDays(-31);
-                                        if (HSQQDateToValidate.Date == DateTime.Now.Date)
-                                            BuildMsgObject = true;
-                                    }
-                                    if (RuleValue == (int)enumVigencyType.SixtyDays)
-                                    {
-                                        HSQQDateToValidate = HSQQDateToValidate.AddDays(-61);
-                                        if (HSQQDateToValidate.Date == DateTime.Now.Date)
-                                            BuildMsgObject = true;
-                                    }
-                                    if (RuleValue == (int)enumVigencyType.NinetyDays)
-                                    {
-                                        HSQQDateToValidate = HSQQDateToValidate.AddDays(-91);
-                                        if (HSQQDateToValidate.Date == DateTime.Now.Date)
-                                            BuildMsgObject = true;
-                                    }
-                                    if (RuleValue == (int)enumVigencyType.OneYear)
-                                    {
-                                        HSQQDateToValidate = HSQQDateToValidate.AddYears(-1);
-                                        if (HSQQDateToValidate.Date == DateTime.Now.Date)
-                                            BuildMsgObject = true;
-                                    }
-                                    //Send notification
-                                    if (BuildMsgObject)
-                                        this.SendNotification(NotificationConfigModel, p, DocumentType);
-                                    break;
-                                case ((int)enumRuleType.EqualThan):
-                                    if (RuleValue == (int)enumVigencyType.ThirtyDays)
-                                    {
-                                        
-                                        if (HSQQDateToValidate.Date == DateTime.Now.Date)
-                                            BuildMsgObject = true;
-                                    }
-                                    //Send notification
-                                    if (BuildMsgObject)
-                                        this.SendNotification(NotificationConfigModel, p, DocumentType);
-                                    break;
-                                    #endregion
-                            }
-                            #endregion
-
-                            return true;
-                        });
-                    }
-                    #endregion
-                    #region Additional Info
-                    if (DocumentType == (int)enumDocumentType.AdditionalInfo)
-                    {
-                        oProviders.All(p =>
-                        {
-                            BuildMsgObject = false;
-                            //Get LegalInfo
-                            List<Company.Models.Util.GenericItemModel> oDocumentInfo = CompanyProvider.Controller.CompanyProvider.AditionalDocumentGetByType(p.CompanyPublicId, (int)enumGeneralInfoType.AdditionalDocument, true);
-
-                            DateTime oDateToValid = new DateTime();
-                            if (oDocumentInfo != null)
-                            {
-                                Company.Models.Util.GenericItemModel oDocumentToValid =
-                                 oDocumentInfo.Where(y => y.ItemName.Trim() == DocumentName.Trim()).Select(y => y).FirstOrDefault();
-                                if (oDocumentToValid != null)
-                                {
-                                    oDateToValid = oDocumentToValid.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumGeneralInfoType.AdditionalVigencyDate).Select(x => Convert.ToDateTime(x.Value)).FirstOrDefault();
-                                    //oDocumentInfo = oDocumentInfo.FirstOrDefault().ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumGeneralInfoType.HSEQVigency).Select(x => Convert.ToDateTime(x.Value)).FirstOrDefault();
-                                    if (oDateToValid != new DateTime())
-                                    {
-                                        #region Validate the vigency just for the Documents of Provider
-                                        //Valid the Rules
+                                        DateTime dateToValidate = DateTime.Parse(ChaimberOfComerceDateToValidate, culture);
                                         switch (RuleType)
                                         {
                                             #region Evalue Rules
                                             case ((int)enumRuleType.LessThan):
                                                 if (RuleValue == (int)enumVigencyType.ThirtyDays)
                                                 {
-                                                    oDateToValid = oDateToValid.AddDays(-30);
-                                                    if (oDateToValid.Date == DateTime.Now.Date)
+                                                    dateToValidate = dateToValidate.AddMonths(-1);
+                                                    if (dateToValidate.Date == DateTime.Now.Date)
                                                         BuildMsgObject = true;
                                                 }
                                                 if (RuleValue == (int)enumVigencyType.SixtyDays)
                                                 {
-                                                    oDateToValid = oDateToValid.AddDays(-60);
-                                                    if (oDateToValid.Date == DateTime.Now.Date)
+                                                    dateToValidate = dateToValidate.AddMonths(-2);
+                                                    if (dateToValidate.Date == DateTime.Now.Date)
                                                         BuildMsgObject = true;
                                                 }
                                                 if (RuleValue == (int)enumVigencyType.NinetyDays)
                                                 {
-                                                    oDateToValid = oDateToValid.AddDays(-90);
-                                                    if (oDateToValid.Date == DateTime.Now)
+                                                    dateToValidate = dateToValidate.AddMonths(-3);
+                                                    if (dateToValidate.Date == DateTime.Now.Date)
                                                         BuildMsgObject = true;
                                                 }
                                                 if (RuleValue == (int)enumVigencyType.OneYear)
                                                 {
-                                                    oDateToValid = oDateToValid.AddYears(-1);
-                                                    if (oDateToValid.Date == DateTime.Now.Date)
+                                                    dateToValidate = dateToValidate.AddYears(-1);
+                                                    if (dateToValidate.Date == DateTime.Now.Date)
                                                         BuildMsgObject = true;
                                                 }
                                                 //Send notification
@@ -280,44 +98,250 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                                             case ((int)enumRuleType.LessOrEqualThan):
                                                 if (RuleValue == (int)enumVigencyType.ThirtyDays)
                                                 {
-                                                    oDateToValid = oDateToValid.AddDays(-31);
-                                                    if (oDateToValid.Date == DateTime.Now.Date)
+                                                    dateToValidate = dateToValidate.AddMonths(-1);
+                                                    if (dateToValidate.Date == DateTime.Now.Date)
                                                         BuildMsgObject = true;
                                                 }
                                                 if (RuleValue == (int)enumVigencyType.SixtyDays)
                                                 {
-                                                    oDateToValid = oDateToValid.AddDays(-61);
-                                                    if (oDateToValid.Date == DateTime.Now.Date)
+                                                    dateToValidate = dateToValidate.AddMonths(-2);
+                                                    if (dateToValidate.Date == DateTime.Now.Date)
                                                         BuildMsgObject = true;
                                                 }
                                                 if (RuleValue == (int)enumVigencyType.NinetyDays)
                                                 {
-                                                    oDateToValid = oDateToValid.AddDays(-91);
-                                                    if (oDateToValid.Date == DateTime.Now.Date)
+                                                    dateToValidate = dateToValidate.AddMonths(-3);
+                                                    if (dateToValidate.Date == DateTime.Now.Date)
                                                         BuildMsgObject = true;
                                                 }
                                                 if (RuleValue == (int)enumVigencyType.OneYear)
                                                 {
-                                                    oDateToValid = oDateToValid.AddYears(-1);
-                                                    if (oDateToValid.Date == DateTime.Now.Date)
+                                                    dateToValidate = dateToValidate.AddYears(-1);
+                                                    if (dateToValidate.Date == DateTime.Now.Date)
                                                         BuildMsgObject = true;
                                                 }
+
                                                 //Send notification
                                                 if (BuildMsgObject)
                                                     this.SendNotification(NotificationConfigModel, p, DocumentType);
+
                                                 break;
                                                 #endregion
                                         }
-                                        #endregion
                                     }
+                                    
+                                    #endregion
 
-                                }
+                                    return true;
+                                });
                             }
-                            return true;
-                        });
+                        }
+                        #endregion
+                        #region HSEQ Info
+                        if (DocumentType == (int)enumDocumentType.HSEQ)
+                        {                            
+                            oProviders.All(p =>
+                            {
+                                ProviderPublicId = p.CompanyPublicId;
+                                NotificationModule.LogFile("Process Notifications:::Rule Section:: HSEQ" + ":::CompanyPublicId:::" + p.CompanyPublicId);
+                                BuildMsgObject = false;
+                                //Get LegalInfo
+                                List<Company.Models.Util.GenericItemModel> oHSEQInfo = CompanyProvider.Controller.CompanyProvider.CertficationGetBasicInfo(p.CompanyPublicId, (int)enumGeneralInfoType.HSEQCertifications, true);
+
+                                var HSQQDateToValidate = "";
+                                if (oHSEQInfo != null)
+                                    HSQQDateToValidate = oHSEQInfo.FirstOrDefault().ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumGeneralInfoType.HSEQVigency).Select(x => x.Value).FirstOrDefault();
+
+                                #region Validate the vigency just for the Documents of Provider
+                                //Valid the Rules
+                                if (!string.IsNullOrEmpty(HSQQDateToValidate))
+                                {
+                                    DateTime dateToValidate = DateTime.Parse(HSQQDateToValidate, culture);
+                                    switch (RuleType)
+                                    {
+                                        #region Evalue Rules
+                                        case ((int)enumRuleType.LessThan):
+                                            if (RuleValue == (int)enumVigencyType.ThirtyDays)
+                                            {
+                                                dateToValidate = dateToValidate.AddMonths(-1);
+                                                if (dateToValidate.Date == DateTime.Now.Date)
+                                                    BuildMsgObject = true;
+                                            }
+                                            if (RuleValue == (int)enumVigencyType.SixtyDays)
+                                            {
+                                                dateToValidate = dateToValidate.AddMonths(-2);
+                                                if (dateToValidate.Date == DateTime.Now.Date)
+                                                    BuildMsgObject = true;
+                                            }
+                                            if (RuleValue == (int)enumVigencyType.NinetyDays)
+                                            {
+                                                dateToValidate = dateToValidate.AddMonths(-3);
+                                                if (dateToValidate.Date == DateTime.Now.Date)
+                                                    BuildMsgObject = true;
+                                            }
+                                            if (RuleValue == (int)enumVigencyType.OneYear)
+                                            {
+                                                dateToValidate = dateToValidate.AddYears(-1);
+                                                if (dateToValidate.Date == DateTime.Now.Date)
+                                                    BuildMsgObject = true;
+                                            }
+                                            //Send notification
+                                            if (BuildMsgObject)
+                                                this.SendNotification(NotificationConfigModel, p, DocumentType);
+                                            break;
+                                        case ((int)enumRuleType.LessOrEqualThan):
+                                            if (RuleValue == (int)enumVigencyType.ThirtyDays)
+                                            {
+                                                dateToValidate = dateToValidate.AddMonths(-1);
+                                                if (dateToValidate.Date == DateTime.Now.Date)
+                                                    BuildMsgObject = true;
+                                            }
+                                            if (RuleValue == (int)enumVigencyType.SixtyDays)
+                                            {
+                                                dateToValidate = dateToValidate.AddMonths(-2);
+                                                if (dateToValidate.Date == DateTime.Now.Date)
+                                                    BuildMsgObject = true;
+                                            }
+                                            if (RuleValue == (int)enumVigencyType.NinetyDays)
+                                            {
+                                                dateToValidate = dateToValidate.AddMonths(-3);
+                                                if (dateToValidate.Date == DateTime.Now.Date)
+                                                    BuildMsgObject = true;
+                                            }
+                                            if (RuleValue == (int)enumVigencyType.OneYear)
+                                            {
+                                                dateToValidate = dateToValidate.AddYears(-1);
+                                                if (dateToValidate.Date == DateTime.Now.Date)
+                                                    BuildMsgObject = true;
+                                            }
+                                            //Send notification
+                                            if (BuildMsgObject)
+                                                this.SendNotification(NotificationConfigModel, p, DocumentType);
+                                            break;
+                                        case ((int)enumRuleType.EqualThan):
+                                            if (RuleValue == (int)enumVigencyType.ThirtyDays)
+                                            {
+
+                                                if (dateToValidate.Date == DateTime.Now.Date)
+                                                    BuildMsgObject = true;
+                                            }
+                                            //Send notification
+                                            if (BuildMsgObject)
+                                                this.SendNotification(NotificationConfigModel, p, DocumentType);
+                                            break;
+                                            #endregion
+                                    }
+                                }
+                               
+                                #endregion
+
+                                return true;
+                            });
+                        }
+                        #endregion
+                        #region Additional Info
+                        if (DocumentType == (int)enumDocumentType.AdditionalInfo)
+                        {                            
+                            oProviders.All(p =>
+                            {
+                                ProviderPublicId = p.CompanyPublicId;
+                                NotificationModule.LogFile("Process Notifications:::Rule Section:: AdditionalInfo" + ":::CompanyPublicId:::" + p.CompanyPublicId);
+                                BuildMsgObject = false;
+                                //Get LegalInfo
+                                List<Company.Models.Util.GenericItemModel> oDocumentInfo = CompanyProvider.Controller.CompanyProvider.AditionalDocumentGetByType(p.CompanyPublicId, (int)enumGeneralInfoType.AdditionalDocument, true);
+
+                                var personalizedDocument = "";
+                                if (oDocumentInfo != null)
+                                {
+                                    Company.Models.Util.GenericItemModel oDocumentToValid =
+                                     oDocumentInfo.Where(y => y.ItemName.Trim() == DocumentName.Trim()).Select(y => y).FirstOrDefault();
+                                    if (oDocumentToValid != null)
+                                    {
+                                        personalizedDocument = oDocumentToValid.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumGeneralInfoType.AdditionalVigencyDate).Select(x => x.Value).FirstOrDefault();
+
+                                        if (!string.IsNullOrEmpty(personalizedDocument))
+                                        {
+                                            DateTime oDateToValid = DateTime.Parse(personalizedDocument, culture);
+                                            #region Validate the vigency just for the Documents of Provider
+                                            //Valid the Rules
+                                            switch (RuleType)
+                                            {
+                                                #region Evalue Rules
+                                                case ((int)enumRuleType.LessThan):
+                                                    if (RuleValue == (int)enumVigencyType.ThirtyDays)
+                                                    {
+                                                        oDateToValid = oDateToValid.AddMonths(-1);
+                                                        if (oDateToValid.Date == DateTime.Now.Date)
+                                                            BuildMsgObject = true;
+                                                    }
+                                                    if (RuleValue == (int)enumVigencyType.SixtyDays)
+                                                    {
+                                                        oDateToValid = oDateToValid.AddMonths(-2);
+                                                        if (oDateToValid.Date == DateTime.Now.Date)
+                                                            BuildMsgObject = true;
+                                                    }
+                                                    if (RuleValue == (int)enumVigencyType.NinetyDays)
+                                                    {
+                                                        oDateToValid = oDateToValid.AddMonths(-3);
+                                                        if (oDateToValid.Date == DateTime.Now)
+                                                            BuildMsgObject = true;
+                                                    }
+                                                    if (RuleValue == (int)enumVigencyType.OneYear)
+                                                    {
+                                                        oDateToValid = oDateToValid.AddYears(-1);
+                                                        if (oDateToValid.Date == DateTime.Now.Date)
+                                                            BuildMsgObject = true;
+                                                    }
+                                                    //Send notification
+                                                    if (BuildMsgObject)
+                                                        this.SendNotification(NotificationConfigModel, p, DocumentType);
+                                                    break;
+                                                case ((int)enumRuleType.LessOrEqualThan):
+                                                    if (RuleValue == (int)enumVigencyType.ThirtyDays)
+                                                    {
+                                                        oDateToValid = oDateToValid.AddMonths(-1);
+                                                        if (oDateToValid.Date == DateTime.Now.Date)
+                                                            BuildMsgObject = true;
+                                                    }
+                                                    if (RuleValue == (int)enumVigencyType.SixtyDays)
+                                                    {
+                                                        oDateToValid = oDateToValid.AddMonths(-2);
+                                                        if (oDateToValid.Date == DateTime.Now.Date)
+                                                            BuildMsgObject = true;
+                                                    }
+                                                    if (RuleValue == (int)enumVigencyType.NinetyDays)
+                                                    {
+                                                        oDateToValid = oDateToValid.AddMonths(-3);
+                                                        if (oDateToValid.Date == DateTime.Now.Date)
+                                                            BuildMsgObject = true;
+                                                    }
+                                                    if (RuleValue == (int)enumVigencyType.OneYear)
+                                                    {
+                                                        oDateToValid = oDateToValid.AddYears(-1);
+                                                        if (oDateToValid.Date == DateTime.Now.Date)
+                                                            BuildMsgObject = true;
+                                                    }
+                                                    //Send notification
+                                                    if (BuildMsgObject)
+                                                        this.SendNotification(NotificationConfigModel, p, DocumentType);
+                                                    break;
+                                                    #endregion
+                                            }
+                                            #endregion
+                                        }
+                                    }
+                                }
+                                NotificationModule.LogFile("Process Notifification done ::: send Notification?" + "::" + BuildMsgObject + "Date:::" + DateTime.Now );
+                                return true;
+                            });
+                        }
+                        #endregion
                     }
-                    #endregion
                 }
+                catch (Exception ex)
+                {
+                    NotificationModule.LogFile("Process Notifications Error!!! :::::: " + ex.Message + ":::CompanyPublicId:::" + ProviderPublicId);                    
+                }                
 
             }
             return true;
