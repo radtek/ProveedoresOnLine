@@ -1,5 +1,6 @@
 ﻿using ADO.Models;
 using HtmlAgilityPack;
+using Newtonsoft.Json;
 using ProveedoresOnLine.OnlineSearch.Interfaces;
 using ProveedoresOnLine.OnlineSearch.Models;
 using System;
@@ -32,8 +33,29 @@ namespace ProveedoresOnLine.OnlineSearch.Core
                     string resultContent = await result.Content.ReadAsStringAsync();
                     HtmlDocument HtmlDocResponse = new HtmlDocument();
                     HtmlDocResponse.LoadHtml(resultContent);
-                    List<string> stringResult = new List<string>();
-                    stringResult.Add(HtmlDocResponse.DocumentNode.InnerText);
+                    List<string> stringJsonResult = new List<string>();
+                    stringJsonResult.Add(HtmlDocResponse.DocumentNode.InnerText);
+
+                    List<string> stringResult = new List<string>();                   
+
+                    RuesModel deserializedProduct = JsonConvert.DeserializeObject<RuesModel>(stringJsonResult.FirstOrDefault());
+                    if (deserializedProduct.codigo_error == "0000")
+                    {
+                        HtmlDocResponse.LoadHtml(deserializedProduct.rows.FirstOrDefault().enlaceVer);
+                        var link = HtmlDocResponse.DocumentNode
+                                      .Descendants("a")
+                                      .First(x => x.Attributes["class"] != null
+                                               && x.Attributes["class"].Value == "c-blue");
+
+                        string linkPath = InternalSettings.Instance[Models.Constants.RUES_Domine].Value + link.Attributes["href"].Value;
+
+                        stringResult.Add(deserializedProduct.rows.FirstOrDefault().identificacion);
+                        stringResult.Add(deserializedProduct.rows.FirstOrDefault().razon_social);
+                        stringResult.Add(deserializedProduct.rows.FirstOrDefault().matricula);
+                        stringResult.Add(deserializedProduct.rows.FirstOrDefault().estado);
+                        stringResult.Add(linkPath);
+                    }                                    
+
                     oDetailinfo.Add(new Tuple<string, List<string>, List<string>>(null, stringResult, null));
                 }
                 Thread.Sleep(1000);
@@ -44,6 +66,6 @@ namespace ProveedoresOnLine.OnlineSearch.Core
             {
                 throw ex.InnerException;
             };
-        }
+        }       
     }
 }

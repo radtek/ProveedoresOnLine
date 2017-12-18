@@ -183,6 +183,12 @@
 
         public const string TK_File_S3FilePath = "File_S3FilePath";
 
+        public const string TK_ListToValidateSancioned = "TK_ListToValidateSancioned";
+
+        public const string TK_ListToValidatePEP = "TK_ListToValidatePEP";
+
+        public const string TK_ListToValidateGeneralInfo = "TK_ListToValidateGeneralInfo";
+        
         #endregion
 
         #region Notifications

@@ -77,6 +77,7 @@
     
     <key name="RUES_Url"><![CDATA[http://www.rues.org.co/RM/ConsultaNIT_json]]></key>
     <key name="txtNIT">txtNIT</key>
+    <key name="RUES_Domine">http://www.rues.org.co</key>
 
     <key name="RegisterService_URL"><![CDATA[http://54.209.208.188:9810/api/register?IdType={TID}&IdentificationNumber={NID}&Token=DA5C572E]]></key>
 

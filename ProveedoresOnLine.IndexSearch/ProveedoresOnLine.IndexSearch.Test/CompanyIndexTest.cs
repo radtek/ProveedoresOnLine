@@ -40,6 +40,5 @@ namespace ProveedoresOnLine.IndexSearch.Test
         {
             ProveedoresOnLine.CompanyIndexSearch.CompanyIndexSearchProcess.CustomFiltersIdexationFunction();
         }
-
     }
 }

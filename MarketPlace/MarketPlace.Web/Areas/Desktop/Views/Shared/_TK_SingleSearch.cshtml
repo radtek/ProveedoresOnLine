@@ -31,9 +31,8 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-4">
+                    <label>Criterio de Búsqueda</label>
                     <select name="ThirdKnowledgeIdType" class="form-control ThirdKnowledgeIdType">
-
-                        <option value="">Tipo de Persona</option>
                         @{
                             var selected = new ProveedoresOnLine.Company.Models.Util.CatalogModel();
                             if (!string.IsNullOrEmpty(Model.RelatedThirdKnowledge.IdType))
@@ -42,7 +41,7 @@
                             }
                         }
                         @foreach (var item in Model.ProviderOptions.Where(x => x.CatalogId == (int)MarketPlace.Models.General.enumCatalog.PersonType).Select(x => x))
-                        {
+                        {  
                             if (item.ItemId == selected.ItemId)
                             {
                                 <option selected="selected" value="@item.ItemId">@item.ItemName</option>
@@ -53,25 +52,15 @@
                             }
                         }                        
                     </select>
-                </div>
-                <div class="col-sm-4">
-                    @if (!string.IsNullOrEmpty(Model.RelatedThirdKnowledge.SearchNameParam))
-                    {
-                        <input class="ThirdKnowledgeSeachBox" type="text" name="Name" value="@Model.RelatedThirdKnowledge.SearchNameParam" placeholder="Buscar por Nombre y Apellidos" />
-                    }
-                    else
-                    {
-                        <input class="ThirdKnowledgeSeachBox" type="text" name="Name" value="" placeholder="Buscar por Nombre y Apellidos" />
-                    }
-                </div>
+                </div>              
                 <div class="col-sm-4">
                     @if (!string.IsNullOrEmpty(Model.RelatedThirdKnowledge.SearchIdNumberParam))
-                    {
-                        <input class="ThirdKnowledgeSeachBox" type="text" name="IdentificationNumber" value="@Model.RelatedThirdKnowledge.SearchIdNumberParam" placeholder="Buscar por Número de identificación" />
+                    {                       
+                        <input class="ThirdKnowledgeSeachBox" type="text" name="IdentificationNumber" value="@Model.RelatedThirdKnowledge.SearchIdNumberParam" placeholder="Nombre o Número de Identificación" />
                     }
                     else
                     {
-                        <input class="ThirdKnowledgeSeachBox" type="text" name="IdentificationNumber" value="" placeholder="Buscar por Número de identificación" />
+                        <input class="ThirdKnowledgeSeachBox" type="text" name="IdentificationNumber" value="" placeholder="Nombre o Número de Identificación"   />
                     }
                 </div>
             </div>
@@ -82,8 +71,7 @@
                     <div class="col-sm-2 pull-right">
                         <a class="ThirdKnowledgeButtom" href="javascript:Third_KnowledgeSimpleSearchObject.SimpleSearch();">Consultar</a>
                     </div>
-
-
+                                        
                     List<int> oCurrentReport = MarketPlace.Models.General.SessionModel.CurrentReport();
                     <div class="row">
                         <div class="col-sm-2 pull-right" style="display:none" id="ThirdKnowledge_showreport" name="ThirdKnowledge_showreport">
@@ -145,6 +133,7 @@
             ReSearch: '@Model.RelatedThirdKnowledge.ReSearch',
             QueryDetailsRoleOption: '@OptionRole',
         });
+        
     });
 </script>
 

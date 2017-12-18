@@ -362,8 +362,8 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                     RowFrom = RowFrom + 10000;
 
                     client.Map<ThirdknowledgeIndexSearchModel>(m => m.AutoMap());
-                    var IndexIter = client.IndexMany(oToIterIndex, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ThirdKnowledgeIndex].Value);
-                    LogFile("Index Process Status::: " + IndexIter.IsValid + "::" + IndexIter.DebugInformation);
+                    var IndexIter = client.IndexManyAsync(oToIterIndex, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ThirdKnowledgeIndex].Value);
+                    LogFile("Index Process Status::: " + IndexIter.AsyncState + "::" + IndexIter.Result);
                 }
 
                 LogFile("Index Process Successfull for: " + oToIndex.Count());

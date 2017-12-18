@@ -17,8 +17,8 @@
     {
         Juridica = 213001,
         Natural = 213002,
-        PersonaExtranjera = 213003
-
+        CCExtranjera = 213003,
+        DenominatioName = 213004
     }
 
     #endregion

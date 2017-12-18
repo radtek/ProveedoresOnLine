@@ -35,16 +35,19 @@ var Third_KnowledgeSimpleSearchObject = {
                     $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_DivResult').html('')
                     var tittlestDiv = '';
                     var resultDiv = '';
-                    if (result.RelatedSingleSearch != null && result.RelatedSingleSearch.length > 0) {                             
-                        $.each(result.RelatedSingleSearch, function (item, value) {                                   
-                            if (value.m_Item1 == "SIN COINCIDENCIAS") {                                
+                    debugger;
+                    if (result.TKGroupByListViewModel != null && result.TKGroupByListViewModel.length > 0) {
+
+                        $.each(result.TKGroupByListViewModel, function (item, value) {
+                            debugger;
+                            if (value.m_Item1 == "INFORMACIÓN BÁSICA") {
                                 resultDiv = '';
                                 resultDiv += '<div class="row">' +
-                                '<div class="col-sm-12 col-lg-12 POMPTKDetailTitle"><strong>SIN COINCIDENCIAS</strong></div>' +
+                                '<div class="col-sm-12 col-lg-12 POMPTKDetailTitle"><strong>INFORMACIÓN BÁSICA ' + value.m_Item2 + '</strong></div>' +
                                 '</div>' +
                                 '<br />' +
                                 '<div class="row">' +
-                                '<div class="col-sm-4 POMPProviderBoxInfo text-left"><strong>Nombre Consultado</strong></div>' +
+                                '<div class="col-sm-4 POMPProviderBoxInfo text-left"><strong>Nombre Encontrado</strong></div>' +
                                 '<div class="col-sm-4 POMPProviderBoxInfo text-left"><strong>Identificación Consultada</strong></div>' +
                                 '</div><br />';
                                 resultDiv += '<div class="row POMPBorderbottom">';

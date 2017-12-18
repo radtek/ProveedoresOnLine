@@ -44,6 +44,8 @@
             PanamaPElasticId = 002,
             JudicialProces = 003,
             RegistersList = 004,
+            RUES = 005,
+            RegisterDian = 006,
         }
     }
 }

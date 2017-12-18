@@ -66,6 +66,8 @@ namespace ProveedoresOnLine.OnlineSearch.Models
 
         public const string RUES_txtParam = "txtNIT";
 
+        public const string RUES_Domine = "RUES_Domine";
+
         #endregion
     }
 }
