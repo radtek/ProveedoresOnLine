@@ -120,6 +120,7 @@
     
     <!--S3 Path File-->
     <key name="File_S3FilePath">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/ThirdKnowledge/</key>
+    <key name="File_S3FileSurveyReportsPath">https://s3.amazonaws.com/proveedoresonline/MarketPlace/MP_Survey/GENERAL_REPORTS/</key>
 
     <key name="File_SurveyReportS3FilePath">\MarketPlace\MP_Survey\GENERAL_REPORTS\</key>
 

@@ -182,6 +182,7 @@
         public const string TK_Research_Image = "TK_Research_Image";
 
         public const string TK_File_S3FilePath = "File_S3FilePath";
+        public const string File_S3FileSurveyReportsPath = "File_S3FileSurveyReportsPath";
 
         public const string TK_ListToValidateSancioned = "TK_ListToValidateSancioned";
 
