@@ -159,3 +159,4 @@ $RECYCLE.BIN/
 /BackOffice/.vs/config/applicationhost.config
 /ProveedoresOnLine.RestrictiveListProcess/ProveedoresOnLine.RestrictiveListProcess.Test/TempDirectory/BlackList_902005_2016_09_01_012325.xlsx
 /ProveedoresOnLine.ThirdKnowledge/.vs/ProveedoresOnLine.ThirdKnowledge/v15/sqlite3/storage.ide
+*.lock

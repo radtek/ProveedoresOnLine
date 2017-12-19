@@ -1,7 +1,7 @@
 ﻿@model MarketPlace.Models.Provider.ProviderViewModel
 
 <label class="POMPSectionTitles">Consulta Individual de Terceros</label>
-<script src="~/Scripts/JSLINQ.js"></script>
+<script src="~/Scripts/linq.js"></script>
 <div class="container-fluid POMPTKContainerDetail">
     @if (Model.RelatedThirdKnowledge.HasPlan)
     {
@@ -24,7 +24,7 @@
                     <label>De @Model.RelatedThirdKnowledge.CurrentPlanModel.RelatedPeriodModel.FirstOrDefault().AssignedQueries</label>
                 }
             </div>
-        </div>        
+        </div>
     }
 
     <form id="ThirdKnowledge_Form" action="@Url.Content("~/api/ThirdKnowledgeApi?TKSingleSearch=true")" method="post">
@@ -37,11 +37,11 @@
                             var selected = new ProveedoresOnLine.Company.Models.Util.CatalogModel();
                             if (!string.IsNullOrEmpty(Model.RelatedThirdKnowledge.IdType))
                             {
-                                selected = Model.ProviderOptions.Where(x => x.CatalogId == (int)MarketPlace.Models.General.enumCatalog.PersonType).Select(x => x).Where(x => x.ItemId == int.Parse(Model.RelatedThirdKnowledge.IdType)).Select(x => x).FirstOrDefault();                                
+                                selected = Model.ProviderOptions.Where(x => x.CatalogId == (int)MarketPlace.Models.General.enumCatalog.PersonType).Select(x => x).Where(x => x.ItemId == int.Parse(Model.RelatedThirdKnowledge.IdType)).Select(x => x).FirstOrDefault();
                             }
                         }
                         @foreach (var item in Model.ProviderOptions.Where(x => x.CatalogId == (int)MarketPlace.Models.General.enumCatalog.PersonType).Select(x => x))
-                        {  
+                        {
                             if (item.ItemId == selected.ItemId)
                             {
                                 <option selected="selected" value="@item.ItemId">@item.ItemName</option>
@@ -50,9 +50,9 @@
                             {
                                 <option value="@item.ItemId">@item.ItemName</option>
                             }
-                        }                        
+                        }
                     </select>
-                </div>              
+                </div>
                 <div class="col-md-6">
                     <label>Valor a Buscar</label>
                     @if (!string.IsNullOrEmpty(Model.RelatedThirdKnowledge.SearchIdNumberParam))
@@ -61,7 +61,7 @@
                     }
                     else
                     {
-                       <input class="ThirdKnowledgeSeachBox" type="text" name="IdentificationNumber" id="IdentificationNumber" value="" placeholder="Nombre o Número de Identificación" />
+                        <input class="ThirdKnowledgeSeachBox" type="text" name="IdentificationNumber" id="IdentificationNumber" value="" placeholder="Nombre o Número de Identificación" />
                     }
                 </div>
             </div>
@@ -72,7 +72,7 @@
                     <div class="col-sm-2 pull-right">
                         <a class="ThirdKnowledgeButtom" href="javascript:Third_KnowledgeSimpleSearchObject.SimpleSearch();">Consultar</a>
                     </div>
-                                        
+
                     List<int> oCurrentReport = MarketPlace.Models.General.SessionModel.CurrentReport();
                     <div class="row">
                         <div class="col-sm-2 pull-right" style="display:none" id="ThirdKnowledge_showreport" name="ThirdKnowledge_showreport">
@@ -127,14 +127,14 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        
+
         Third_KnowledgeSimpleSearchObject.Init({
             ObjectId: 'ThirdKnowledge',
             Url: '@UrlReturn',
             ReSearch: '@Model.RelatedThirdKnowledge.ReSearch',
             QueryDetailsRoleOption: '@OptionRole',
         });
-        
+
     });
 </script>
 
