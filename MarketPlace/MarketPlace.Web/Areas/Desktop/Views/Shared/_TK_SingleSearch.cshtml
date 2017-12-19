@@ -1,7 +1,7 @@
 ﻿@model MarketPlace.Models.Provider.ProviderViewModel
 
 <label class="POMPSectionTitles">Consulta Individual de Terceros</label>
-
+<script src="~/Scripts/JSLINQ.js"></script>
 <div class="container-fluid POMPTKContainerDetail">
     @if (Model.RelatedThirdKnowledge.HasPlan)
     {
@@ -30,7 +30,7 @@
     <form id="ThirdKnowledge_Form" action="@Url.Content("~/api/ThirdKnowledgeApi?TKSingleSearch=true")" method="post">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-md-6">
                     <label>Criterio de Búsqueda</label>
                     <select name="ThirdKnowledgeIdType" class="form-control ThirdKnowledgeIdType">
                         @{
@@ -53,14 +53,15 @@
                         }                        
                     </select>
                 </div>              
-                <div class="col-sm-4">
+                <div class="col-md-6">
+                    <label>Valor a Buscar</label>
                     @if (!string.IsNullOrEmpty(Model.RelatedThirdKnowledge.SearchIdNumberParam))
-                    {                       
-                        <input class="ThirdKnowledgeSeachBox" type="text" name="IdentificationNumber" value="@Model.RelatedThirdKnowledge.SearchIdNumberParam" placeholder="Nombre o Número de Identificación" />
+                    {
+                        <input class="ThirdKnowledgeSeachBox" type="text" name="IdentificationNumber" id="IdentificationNumber" value="@Model.RelatedThirdKnowledge.SearchIdNumberParam" placeholder="Nombre o Número de Identificación" />
                     }
                     else
                     {
-                        <input class="ThirdKnowledgeSeachBox" type="text" name="IdentificationNumber" value="" placeholder="Nombre o Número de Identificación"   />
+                       <input class="ThirdKnowledgeSeachBox" type="text" name="IdentificationNumber" id="IdentificationNumber" value="" placeholder="Nombre o Número de Identificación" />
                     }
                 </div>
             </div>
@@ -126,7 +127,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        debugger;
+        
         Third_KnowledgeSimpleSearchObject.Init({
             ObjectId: 'ThirdKnowledge',
             Url: '@UrlReturn',

@@ -2105,6 +2105,8 @@
     <Content Include="Areas\Desktop\Scripts\Angular\ui-bootstrap.min.js" />
     <Content Include="Areas\Desktop\Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Areas\Desktop\Scripts\jquery.unobtrusive-ajax.min.js" />
+    <None Include="Scripts\JSLINQ-vsdoc.js" />
+    <Content Include="Scripts\JSLINQ.js" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -2199,12 +2201,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Desktop\Content\Images\" />
-    <Folder Include="Scripts\" />
     <Folder Include="Views\Home\" />
     <Folder Include="Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MarketPlace.Models\MarketPlace.Models.csproj">
