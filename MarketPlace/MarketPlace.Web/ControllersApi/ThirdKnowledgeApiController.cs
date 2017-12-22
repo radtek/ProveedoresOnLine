@@ -88,7 +88,7 @@ namespace MarketPlace.Web.ControllersApi
                             Uri node = new Uri(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
                             var settings = new ConnectionSettings(node);
                             settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_QueryModelIndex].Value);
-                            ElasticClient client = new ElasticClient(settings);
+                            /*ElasticClient client = new ElasticClient(settings);
 
                             ICreateIndexResponse oElasticResponse = client.
                                     CreateIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_QueryModelIndex].Value, c => c
@@ -108,7 +108,7 @@ namespace MarketPlace.Web.ControllersApi
                                     )
                                 );
                             client.Map<TK_QueryIndexModel>(m => m.AutoMap());
-                            var Index = client.Index(oModelToIndex);
+                            var Index = client.Index(oModelToIndex);*/
 
                             #endregion
 
