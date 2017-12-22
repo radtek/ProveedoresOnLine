@@ -183,10 +183,10 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     {
                         IdList = "RUES",
                         GroupName = "RUES",
-                        NameResult = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[2]) ? RUESResult.FirstOrDefault().Item2[2] : "No aparece registro en RUES",
-                        IdentificationResult = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[1]) ? RUESResult.FirstOrDefault().Item2[1] : "No aparece registro en RUES",
-                        Status = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[4]) ? RUESResult.FirstOrDefault().Item2[4] : "No aparece registro en RUES",
-                        Link = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[5]) ? RUESResult.FirstOrDefault().Item2[5] : "No aparece registro en RUES",
+                        NameResult = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[1]) ? RUESResult.FirstOrDefault().Item2[1] : "No aparece registro en RUES",
+                        IdentificationResult = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[0]) ? RUESResult.FirstOrDefault().Item2[0] : "No aparece registro en RUES",
+                        Status = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[3]) ? RUESResult.FirstOrDefault().Item2[3] : "No aparece registro en RUES",
+                        Link = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[4]) ? RUESResult.FirstOrDefault().Item2[4] : "No aparece registro en RUES",
                         ListName = "RUES",
                         ElasticId = (int)enumElasticGroupId.RUES,
                     };

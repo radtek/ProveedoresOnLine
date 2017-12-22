@@ -79,12 +79,12 @@ var Third_KnowledgeSimpleSearchObject = {
                                 } else {
                                     resultDiv += '<div class="col-md-6 POMPProviderBoxInfo text-left"><strong>NOMBRE NO REGISTRA</strong></div>';
                                 }
-                                resultDiv += '<div class="col-md-6 POMPProviderBoxInfo text-left"><strong>C.C. ' + $("#IdentificationNumber").val() + '</strong></div>' +
+                                resultDiv += '<div class="col-md-6 POMPProviderBoxInfo text-left"><strong>NIT ' + $("#IdentificationNumber").val() + '</strong></div>' +
                                     '</div><br />';
 
                                 if (group.First().m_Item4 != null && group.First().m_Item4.length > 0) {
                                     resultDiv += '<div class="row">' +
-                                        '<div class="col-md-12 POMPProviderBoxInfo text-left"><strong><a href="' + group.First().m_Item3 + '" target="_blank">Ver Puesto de Votación</a></strong></div>' +
+                                        '<div class="col-md-12 POMPProviderBoxInfo text-left"><strong><a href="' + group.First().m_Item3 + '" target="_blank">Ver RUES</a></strong></div>' +
                                         '</div>';
                                 }
                             } else {
