@@ -120,18 +120,7 @@ namespace MarketPlace.Web.Controllers
                                 Aggregations(aggs => aggs.Terms("customfiltertype", term => term.Field(fi => fi.oCustomFiltersIndexModel.First().Label).Size(50)
                                 )
                             )
-                        )
-                    //.Nested("customerprovidertype_avg", x => x.
-                    //    Path(p => p.oCustomerProviderIndexModel).
-                    //        Aggregations(aggs => aggs
-                    //        .Terms("customerprovidertype", t => t.Field(fi => fi.oCustomerProviderIndexModel.Where(z => z.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId).Select(z => z).First().StatusId))
-                    //        //.Field(field => field.oCustomerProviderIndexModel.Where(y => y.CustomerPublicId != SessionModel.CurrentCompany.CompanyPublicId).Select(y => y).First().CustomerPublicId))
-                    //        .Terms("customer", t => t.Field(fi => fi.oCustomerProviderIndexModel.First().CustomerPublicId)
-                    //        //.Terms("customerprovidertype", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().StatusId))
-                    //        //.Terms("customerprovidertype", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().StatusId).Size(50)
-                    //        )
-                    //    )
-                    //)
+                        )                   
 
                     .Terms("ica", aggv => aggv
                         .Field(fi => fi.ICAId))
@@ -142,36 +131,39 @@ namespace MarketPlace.Web.Controllers
                     .Terms("blacklist", bl => bl
                         .Field(fi => fi.InBlackList)))
                 .Query(q => q.
-                    Filtered(f => f
-                    .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
-                    .Filter(f2 =>
+                    Bool(bl => bl
+                    //Filtered(f => f
+                    //.Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
+                    .Should(f2 =>
                     {
                         QueryContainer qb = null;
+                        //qb &= q.QueryString(qs => qs.Query(SearchParam));
 
+                        qb &= f2.QueryString(qs => qs.Query(SearchParam));
                         #region Filters
                         #region Basic Providers Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
                         }
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
                         }
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
                         }
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
                         }
                         #endregion
 
                         #region My Providers Filter
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.MyProviders).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                             .Path(p => p.oCustomerProviderIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
@@ -185,7 +177,7 @@ namespace MarketPlace.Web.Controllers
                         #region Other Providers Filter
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.OtherProviders).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                             .Path(p => p.oCustomerProviderIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
@@ -198,14 +190,14 @@ namespace MarketPlace.Web.Controllers
                         #region Provider Status
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                              .Path(p => p.oCustomerProviderIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
                                 .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
                                 .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault())
                                 ) &&
-                                q.Match(m => m
+                                f2.Match(m => m
                                         .Field(Field => Field.oCustomerProviderIndexModel.First().CustomerPublicId)
                                         .Query(SessionModel.CurrentCompany.CompanyPublicId.ToLower())
                                     )
@@ -219,7 +211,7 @@ namespace MarketPlace.Web.Controllers
                         if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1"
                                                         && SessionModel.CurrentCompany.CompanyPublicId != Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                             .Path(p => p.oCustomerProviderIndexModel)
                                 .Query(fq => fq
                                     .Match(match => match
@@ -228,7 +220,7 @@ namespace MarketPlace.Web.Controllers
                         }
                         else
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                            .Path(p => p.oCustomerProviderIndexModel)
                                .Query(fq => fq
                                    .Match(match => match
@@ -241,14 +233,14 @@ namespace MarketPlace.Web.Controllers
                         #region Calification
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                              .Path(p => p.oCalificationIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
                                 .Field(field => field.oCalificationIndexModel.First().CalificationProjectName)
                                 .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y.Item1).FirstOrDefault())
                                 )
-                                 && q.Match(m => m
+                                 && f2.Match(m => m
                                         .Field(Field => Field.oCalificationIndexModel.First().CustomerPublicId)
                                         .Query(SessionModel.CurrentCompany.CompanyPublicId)
                                     )
@@ -258,14 +250,14 @@ namespace MarketPlace.Web.Controllers
 
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                              .Path(p => p.oCalificationIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
                                 .Field(field => field.oCalificationIndexModel.First().TotalResult)
                                  .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y.Item1).FirstOrDefault())
                                 )
-                                && q.Match(m => m
+                                && f2.Match(m => m
                                         .Field(Field => Field.oCalificationIndexModel.First().CustomerPublicId)
                                         .Query(SessionModel.CurrentCompany.CompanyPublicId)
                                     )
@@ -279,7 +271,7 @@ namespace MarketPlace.Web.Controllers
                         #region Custom Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                              .Path(p => p.oCustomFiltersIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
@@ -296,21 +288,22 @@ namespace MarketPlace.Web.Controllers
 
                         #endregion 
                         #endregion
-                        qb &= q.Term(m => m.CompanyEnable, true);
+                        //qb &= q.Term(m => m.CompanyEnable, true);
                         return qb;
                     })
                     ))
                 );
 
                 var settings2 = new ConnectionSettings(node);
-                settings2.DisableDirectStreaming(true);
+                settings2.DisableDirectStreaming();
                 settings2.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CustomerProviderIndex].Value);
-
+                settings2.RequestTimeout(TimeSpan.FromMilliseconds(60000));
                 #region All Providers
 
                 var settings3 = new ConnectionSettings(node);
                 settings3.DisableDirectStreaming(true);
                 settings3.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanyIndex].Value);
+                
 
                 ElasticClient Providers = new ElasticClient(settings3);
                 Nest.ISearchResponse<CompanyIndexModel> resultPrv = Providers.Search<CompanyIndexModel>((t => t
@@ -318,34 +311,36 @@ namespace MarketPlace.Web.Controllers
                     .TrackScores(true)
                     .Size(9000000)
                     .Query(qw => qw.
-                        Filtered(fw => fw
-                            .Query(q1 => q1.MatchAll() && qw.QueryString(qs => qs.Query(SearchParam)))
-                            .Filter(f3 =>
+                        Bool(fw => fw
+                            //.Query(q1 => q1.MatchAll() && qw.QueryString(qs => qs.Query(SearchParam)))
+                            .Should(f3 =>
                             {
                                 QueryContainer qb2 = null;
+
+                                qb2 &= f3.MatchAll() && f3.QueryString(qs => qs.Query(SearchParam));
                                 #region Basic Providers Filters
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
+                                    qb2 &= f3.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
                                 }
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
+                                    qb2 &= f3.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
                                 }
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
+                                    qb2 &= f3.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
                                 }
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
+                                    qb2 &= f3.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
                                 }
                                 #endregion
 
                                 #region My Providers Filter
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.MyProviders).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Nested(n => n
+                                    qb2 &= f3.Nested(n => n
                                     .Path(p => p.oCustomerProviderIndexModel)
                                     .Query(fq => fq
                                         .Match(match => match
@@ -359,7 +354,7 @@ namespace MarketPlace.Web.Controllers
                                 #region Other Providers Filter
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.OtherProviders).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Nested(n => n
+                                    qb2 &= f3.Nested(n => n
                                     .Path(p => p.oCustomerProviderIndexModel)
                                     .Query(fq => fq
                                         .Match(match => match
@@ -372,7 +367,7 @@ namespace MarketPlace.Web.Controllers
                                 #region Provider Status
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Nested(n => n
+                                    qb2 &= f3.Nested(n => n
                                      .Path(p => p.oCustomerProviderIndexModel)
                                     .Query(fq => fq
                                         .Match(match => match
@@ -393,7 +388,7 @@ namespace MarketPlace.Web.Controllers
                                 #region Calification
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Nested(n => n
+                                    qb2 &= f3.Nested(n => n
                                      .Path(p => p.oCalificationIndexModel)
                                     .Query(fq => fq
                                         .Match(match => match
@@ -406,7 +401,7 @@ namespace MarketPlace.Web.Controllers
 
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Nested(n => n
+                                    qb2 &= f3.Nested(n => n
                                      .Path(p => p.oCalificationIndexModel)
                                     .Query(fq => fq
                                         .Match(match => match
@@ -419,11 +414,10 @@ namespace MarketPlace.Web.Controllers
 
                                 #endregion
 
-
                                 #region Custom Filters
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Nested(n => n
+                                    qb2 &= f3.Nested(n => n
                                      .Path(p => p.oCustomFiltersIndexModel)
                                     .Query(fq => fq
                                         .Match(match => match
@@ -444,7 +438,7 @@ namespace MarketPlace.Web.Controllers
                                 if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1"
                                      && SessionModel.CurrentCompany.CompanyPublicId != Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value)
                                 {
-                                    qb2 &= qw.Nested(n => n
+                                    qb2 &= f3.Nested(n => n
                                     .Path(p => p.oCustomerProviderIndexModel)
                                         .Query(fq => fq
                                             .Match(match => match
@@ -453,7 +447,7 @@ namespace MarketPlace.Web.Controllers
                                 }
                                 else
                                 {
-                                    qb2 &= qw.Nested(n => n
+                                    qb2 &= f3.Nested(n => n
                                     .Path(p => p.oCustomerProviderIndexModel)
                                         .Query(fq => fq
                                             .Match(match => match
@@ -471,12 +465,22 @@ namespace MarketPlace.Web.Controllers
                 #endregion
 
                 #region Customer Provider Search
+                List<string> allProviders = null;
+                if (resultPrv.Documents != null && resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList().Count > 0)
+                {
+                    allProviders = new List<string>();
 
+                    allProviders.Add("1351d3f3");
+                    allProviders.Add("4cd75091");
+                    //allProviders.Add("123456");
+                    //= resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList();
+                }
                 ElasticClient CustomerProviderClient = new ElasticClient(settings2);
                 Nest.ISearchResponse<CustomerProviderIndexModel> result = CustomerProviderClient.Search<CustomerProviderIndexModel>((s => s
                 .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
                 .TrackScores(true)
                 .Size(20)
+                 
                 .Aggregations
                     (agg => agg
                     .Terms("myproviders", aggv => aggv
@@ -484,23 +488,23 @@ namespace MarketPlace.Web.Controllers
                     .Terms("status", aggv => aggv
                         .Field(fi => fi.StatusId)))
                 .Query(q => q.
-                    Filtered(f => f
-                        .Query(q1 => q.Term(m => m.CustomerPublicId, lstSearchFilter.Where(x => int.Parse(x.Item3) == (int)enumFilterType.OtherProviders).Select(x => x).ToList().Count > 0
-                                                                                            ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.CC_CompanyPublicId_Publicar].Value.ToLower() : SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
-                        .Filter(f2 =>
+                    Bool(f => f
+                        //.Query(q1 => q.Term(m => m.CustomerPublicId, lstSearchFilter.Where(x => int.Parse(x.Item3) == (int)enumFilterType.OtherProviders).Select(x => x).ToList().Count > 0
+                        //                                                                    ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.CC_CompanyPublicId_Publicar].Value.ToLower() : SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
+                        .Should(f2 =>
                         {
                             QueryContainer qb = null;
-
+                            qb &= f2.Term(m => m.CustomerPublicId, lstSearchFilter.Where(x => int.Parse(x.Item3) == (int)enumFilterType.OtherProviders).Select(x => x).ToList().Count > 0
+                                                                                            ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.CC_CompanyPublicId_Publicar].Value.ToLower() : SessionModel.CurrentCompany.CompanyPublicId.ToLower());
                             if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
                             {
-                                qb &= q.Term(m => m.StatusId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault());
+                                qb &= f2.Term(m => m.StatusId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault());
                             }
-
-                            qb &= q.Terms(tms => tms
-                             .Field(fi => fi.ProviderPublicId)
-                             .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
+                            qb &= f2.Terms(tms => tms
+                                 .Field(fi => fi.ProviderPublicId.ToLower())
+                                 .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList().Take(1000))
                             );
-                            return qb;
+                           return qb;
                         })
                     )))
                 );
@@ -525,29 +529,29 @@ namespace MarketPlace.Web.Controllers
                         .Terms("calification_result_avg", aggv => aggv
                             .Field(fi => fi.TotalResult)))
                          .Query(q => q.
-                          Filtered(f => f
-                            .Query(q1 => q.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
-                            .Filter(f2 =>
+                          Bool(f => f
+                            //.Query(q1 => q.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
+                            .Must(f2 =>
                             {
                                 QueryContainer qb = null;
-
+                                qb &= f2.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower());
                                 #region Calification
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb &= q.Term(m => m.CalificationProjectName, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y.Item1).FirstOrDefault());
+                                    qb &= f2.Term(m => m.CalificationProjectName, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y.Item1).FirstOrDefault());
 
                                 }
 
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb &= q.Term(m => m.TotalResult, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y.Item1).FirstOrDefault());
+                                    qb &= f2.Term(m => m.TotalResult, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y.Item1).FirstOrDefault());
                                 }
 
                                 #endregion
 
-                                qb &= q.Terms(tms => tms
-                                 .Field(fi => fi.ProviderPublicId)
-                                 .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
+                                qb &= f2.Terms(tms => tms
+                                 .Field(fi => fi.ProviderPublicId.ToLower())
+                                 .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList().Take(1000))
                                 );
                                 return qb;
 
@@ -572,20 +576,20 @@ namespace MarketPlace.Web.Controllers
                         .Terms("customfilter_item_avg", aggv => aggv
                             .Field(fi => fi.value).Size(50)))
                          .Query(q => q.
-                          Filtered(f => f
-                            .Query(q1 => q.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
-                            .Filter(f2 =>
+                          Bool(f => f
+                            //.Query(q1 => q.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
+                            .Should(f2 =>
                             {
                                 QueryContainer qb = null;
-
+                                qb &= f2.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower());
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb &= q.Term(m => m.value, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y.Item1).FirstOrDefault());
+                                    qb &= f2.Term(m => m.value, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y.Item1).FirstOrDefault());
                                 }
 
-                                qb &= q.Terms(tms => tms
+                                qb &= f2.Terms(tms => tms
                                  .Field(fi => fi.ProviderPublicId)
-                                 .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
+                                 .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList().Take(1000))
                                 );
                                 return qb;
 
@@ -4336,35 +4340,36 @@ namespace MarketPlace.Web.Controllers
                     .Terms("blacklist", bl => bl
                         .Field(fi => fi.InBlackList)))
                 .Query(q => q.
-                    Filtered(f => f
-                    .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
-                    .Filter(f2 =>
+                    Bool(f => f
+                    //.Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
+                    .Should(f2 =>
                     {
                         QueryContainer qb = null;
 
+                        qb &= f2.MatchAll() && q.QueryString(qs => qs.Query(SearchParam));
                         #region Basic Providers Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
                         }
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
                         }
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
                         }
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
                         }
                         #endregion
 
                         #region My Providers Filter
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.MyProviders).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                             .Path(p => p.oCustomerProviderIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
@@ -4378,7 +4383,7 @@ namespace MarketPlace.Web.Controllers
                         #region Other Providers Filter
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.OtherProviders).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                             .Path(p => p.oCustomerProviderIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
@@ -4391,14 +4396,14 @@ namespace MarketPlace.Web.Controllers
                         #region Provider Status
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                              .Path(p => p.oCustomerProviderIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
                                 .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
                                 .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault())
                                 ) &&
-                                q.Match(m => m
+                                f2.Match(m => m
                                         .Field(Field => Field.oCustomerProviderIndexModel.First().CustomerPublicId)
                                         .Query(SessionModel.CurrentCompany.CompanyPublicId)
                                     )
@@ -4412,7 +4417,7 @@ namespace MarketPlace.Web.Controllers
                         if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1"
                                                         && SessionModel.CurrentCompany.CompanyPublicId != Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                             .Path(p => p.oCustomerProviderIndexModel)
                                 .Query(fq => fq
                                     .Match(match => match
@@ -4421,7 +4426,7 @@ namespace MarketPlace.Web.Controllers
                         }
                         else
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                             .Path(p => p.oCustomerProviderIndexModel)
                                 .Query(fq => fq
                                     .Match(match => match
@@ -4435,14 +4440,14 @@ namespace MarketPlace.Web.Controllers
                         #region Calification
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                              .Path(p => p.oCalificationIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
                                 .Field(field => field.oCalificationIndexModel.First().CalificationProjectName)
                                 .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y.Item1).FirstOrDefault())
                                 )
-                                 && q.Match(m => m
+                                 && f2.Match(m => m
                                         .Field(Field => Field.oCalificationIndexModel.First().CustomerPublicId)
                                         .Query(SessionModel.CurrentCompany.CompanyPublicId)
                                     )
@@ -4452,14 +4457,14 @@ namespace MarketPlace.Web.Controllers
 
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                              .Path(p => p.oCalificationIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
                                 .Field(field => field.oCalificationIndexModel.First().TotalResult)
                                  .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y.Item1).FirstOrDefault())
                                 )
-                                && q.Match(m => m
+                                && f2.Match(m => m
                                         .Field(Field => Field.oCalificationIndexModel.First().CustomerPublicId)
                                         .Query(SessionModel.CurrentCompany.CompanyPublicId)
                                     )
@@ -4473,14 +4478,14 @@ namespace MarketPlace.Web.Controllers
                         #region Custom Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                              .Path(p => p.oCustomFiltersIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
                                 .Field(field => field.oCustomFiltersIndexModel.First().value)
                                 .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y.Item1).FirstOrDefault())
                                 )
-                                 && q.Match(m => m
+                                 && f2.Match(m => m
                                         .Field(Field => Field.oCustomFiltersIndexModel.First().CustomerPublicId)
                                         .Query(SessionModel.CurrentCompany.CompanyPublicId)
                                     )
@@ -4489,7 +4494,7 @@ namespace MarketPlace.Web.Controllers
                         }
 
                         #endregion
-                        qb &= q.Term(m => m.CompanyEnable, true);
+                        qb &= f2.Term(m => m.CompanyEnable, true);
                         return qb;
                     })
                     ))
@@ -4511,34 +4516,36 @@ namespace MarketPlace.Web.Controllers
                     .TrackScores(true)
                     .Size(9000000)
                     .Query(qw => qw.
-                        Filtered(fw => fw
-                            .Query(q1 => q1.MatchAll() && qw.QueryString(qs => qs.Query(SearchParam)))
-                            .Filter(f3 =>
+                        Bool(fw => fw
+                            //.Query(q1 => q1.MatchAll() && qw.QueryString(qs => qs.Query(SearchParam)))
+                            .Should(f3 =>
                             {
                                 QueryContainer qb2 = null;
+
+                                qb2 &= f3.MatchAll() && f3.QueryString(qs => qs.Query(SearchParam));
                                 #region Basic Providers Filters
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
+                                    qb2 &= f3.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
                                 }
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
+                                    qb2 &= f3.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
                                 }
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
+                                    qb2 &= f3.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
                                 }
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
+                                    qb2 &= f3.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
                                 }
                                 #endregion
 
                                 #region My Providers Filter
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.MyProviders).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Nested(n => n
+                                    qb2 &= f3.Nested(n => n
                                     .Path(p => p.oCustomerProviderIndexModel)
                                     .Query(fq => fq
                                         .Match(match => match
@@ -4552,7 +4559,7 @@ namespace MarketPlace.Web.Controllers
                                 #region Other Providers Filter
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.OtherProviders).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Nested(n => n
+                                    qb2 &= f3.Nested(n => n
                                     .Path(p => p.oCustomerProviderIndexModel)
                                     .Query(fq => fq
                                         .Match(match => match
@@ -4565,7 +4572,7 @@ namespace MarketPlace.Web.Controllers
                                 #region Provider Status
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Nested(n => n
+                                    qb2 &= f3.Nested(n => n
                                      .Path(p => p.oCustomerProviderIndexModel)
                                     .Query(fq => fq
                                         .Match(match => match
@@ -4586,7 +4593,7 @@ namespace MarketPlace.Web.Controllers
                                 #region Calification
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Nested(n => n
+                                    qb2 &= f3.Nested(n => n
                                      .Path(p => p.oCalificationIndexModel)
                                     .Query(fq => fq
                                         .Match(match => match
@@ -4599,7 +4606,7 @@ namespace MarketPlace.Web.Controllers
 
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Nested(n => n
+                                    qb2 &= f3.Nested(n => n
                                      .Path(p => p.oCalificationIndexModel)
                                     .Query(fq => fq
                                         .Match(match => match
@@ -4616,7 +4623,7 @@ namespace MarketPlace.Web.Controllers
                                 #region Custom Filters
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb2 &= qw.Nested(n => n
+                                    qb2 &= f3.Nested(n => n
                                      .Path(p => p.oCustomFiltersIndexModel)
                                     .Query(fq => fq
                                         .Match(match => match
@@ -4637,7 +4644,7 @@ namespace MarketPlace.Web.Controllers
                                 if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1"
                                      && SessionModel.CurrentCompany.CompanyPublicId != Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value)
                                 {
-                                    qb2 &= qw.Nested(n => n
+                                    qb2 &= f3.Nested(n => n
                                     .Path(p => p.oCustomerProviderIndexModel)
                                         .Query(fq => fq
                                             .Match(match => match
@@ -4646,7 +4653,7 @@ namespace MarketPlace.Web.Controllers
                                 }
                                 else
                                 {
-                                    qb2 &= qw.Nested(n => n
+                                    qb2 &= f3.Nested(n => n
                                     .Path(p => p.oCustomerProviderIndexModel)
                                         .Query(fq => fq
                                             .Match(match => match
@@ -4677,19 +4684,21 @@ namespace MarketPlace.Web.Controllers
                         .Terms("status", aggv => aggv
                             .Field(fi => fi.StatusId)))
                     .Query(q => q.
-                        Filtered(f => f
-                            .Query(q1 => q.Term(m => m.CustomerPublicId, lstSearchFilter.Where(x => int.Parse(x.Item3) == (int)enumFilterType.OtherProviders).Select(x => x).ToList().Count > 0
-                                                                                                ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.CC_CompanyPublicId_Publicar].Value.ToLower() : SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
-                            .Filter(f2 =>
+                        Bool(f => f
+                            //.Query(q1 => q.Term(m => m.CustomerPublicId, lstSearchFilter.Where(x => int.Parse(x.Item3) == (int)enumFilterType.OtherProviders).Select(x => x).ToList().Count > 0
+                            //                                                                    ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.CC_CompanyPublicId_Publicar].Value.ToLower() : SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
+                            .Should(f2 =>
                             {
-                                QueryContainer qb = null;
+                            QueryContainer qb = null;
 
+                            qb &= f2.Term(m => m.CustomerPublicId, lstSearchFilter.Where(x => int.Parse(x.Item3) == (int)enumFilterType.OtherProviders).Select(x => x).ToList().Count > 0
+                                                                                            ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.CC_CompanyPublicId_Publicar].Value.ToLower() : SessionModel.CurrentCompany.CompanyPublicId.ToLower());
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb &= q.Term(m => m.StatusId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault());
+                                    qb &= f2.Term(m => m.StatusId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault());
                                 }
 
-                                qb &= q.Terms(tms => tms
+                                qb &= f2.Terms(tms => tms
                                  .Field(fi => fi.ProviderPublicId)
                                  .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
                                 );
@@ -4720,27 +4729,27 @@ namespace MarketPlace.Web.Controllers
                         .Terms("calification_result_avg", aggv => aggv
                             .Field(fi => fi.TotalResult)))
                          .Query(q => q.
-                          Filtered(f => f
-                            .Query(q1 => q.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
-                            .Filter(f2 =>
+                          Bool(f => f
+                            //.Query(q1 => q.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
+                            .Should(f2 =>
                             {
                                 QueryContainer qb = null;
-
+                                qb &= f2.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower());
                                 #region Calification
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb &= q.Term(m => m.CalificationProjectName, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y.Item1).FirstOrDefault());
+                                    qb &= f2.Term(m => m.CalificationProjectName, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y.Item1).FirstOrDefault());
 
                                 }
 
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb &= q.Term(m => m.TotalResult, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y.Item1).FirstOrDefault());
+                                    qb &= f2.Term(m => m.TotalResult, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y.Item1).FirstOrDefault());
                                 }
 
                                 #endregion
 
-                                qb &= q.Terms(tms => tms
+                                qb &= f2.Terms(tms => tms
                                  .Field(fi => fi.ProviderPublicId)
                                  .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
                                 );
@@ -4767,18 +4776,20 @@ namespace MarketPlace.Web.Controllers
                         .Terms("customfilter_item_avg", aggv => aggv
                             .Field(fi => fi.value).Size(50)))
                          .Query(q => q.
-                          Filtered(f => f
-                            .Query(q1 => q.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
-                            .Filter(f2 =>
+                          Bool(f => f
+                            //.Query(q1 => q.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
+                            .Should(f2 =>
                             {
                                 QueryContainer qb = null;
 
+                                qb &= f2.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower());
+
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb &= q.Term(m => m.value, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y.Item1).FirstOrDefault());
+                                    qb &= f2.Term(m => m.value, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y.Item1).FirstOrDefault());
                                 }
 
-                                qb &= q.Terms(tms => tms
+                                qb &= f2.Terms(tms => tms
                                  .Field(fi => fi.ProviderPublicId)
                                  .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
                                 );

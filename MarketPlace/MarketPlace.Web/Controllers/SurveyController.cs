@@ -192,15 +192,16 @@ namespace MarketPlace.Web.Controllers
                     .Terms("srv_type", c => c
                         .Field(fi => fi.SurveyTypeId)))
                 .Query(q => q.
-                    Filtered(f => f
-                    .Query(qi => qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId))
-                    && qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User)).Query(SessionModel.CurrentLoginUser.Email)))
+                    Bool(f => f
+                    //.Query(qi => qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId))
+                    //&& qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User)).Query(SessionModel.CurrentLoginUser.Email)))
                     .Filter(f2 =>
                     {
                         QueryContainer qb = null;
-                        
+                        qb &= q.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId))
+                            && q.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User)).Query(SessionModel.CurrentLoginUser.Email));
                         #region Status Srv Filters
-                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y).FirstOrDefault() != null)
+                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y).FirstOrDefault() != null)
                         {
                             qb &= q.Term(m => m.SurveyStatusId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y.Item1).FirstOrDefault());
                         }
@@ -259,12 +260,13 @@ namespace MarketPlace.Web.Controllers
                 .TrackScores(true)
                 .Size(20)
                 .Query(q => q.
-                    Filtered(f => f
-                    .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
+                    Bool(f => f
+                    //.Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
                     .Filter(f2 =>
                     {
                         QueryContainer qb = null;
 
+                        qb &= q.MatchAll() && q.QueryString(qs => qs.Query(SearchParam));
                         #region Basic Providers Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
                         {

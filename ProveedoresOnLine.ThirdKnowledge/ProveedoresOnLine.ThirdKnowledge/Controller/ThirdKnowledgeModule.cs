@@ -30,22 +30,22 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         public static async Task<TDQueryModel> SimpleRequest(string PeriodPublicId, int IdType, string SearchParam, TDQueryModel oQueryToCreate)
         {
             try
-            {
-                bool RegisterName = false;
+            {   
                 List<Tuple<string, List<string>, List<string>>> procResult = new List<Tuple<string, List<string>, List<string>>>();
                 List<Tuple<string, List<string>, List<string>>> ppResult = new List<Tuple<string, List<string>, List<string>>>();
                 List<Tuple<string, List<string>, List<string>>> judProcResult = new List<Tuple<string, List<string>, List<string>>>();
                 List<Tuple<string, List<string>, List<string>>> RegDianResult = new List<Tuple<string, List<string>, List<string>>>();
                 List<Tuple<string, List<string>, List<string>>> RegEntityResult = new List<Tuple<string, List<string>, List<string>>>();
                 List<Tuple<string, List<string>, List<string>>> RUESResult = new List<Tuple<string, List<string>, List<string>>>();
-                ISearchResponse<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel> oSearchResult = null; 
-                
+
+                var oSearchResult = ElasticSearch(IdType, SearchParam);
+
                 //Identify personType and Call the respective function
                 //Persons
                 if (IdType != 4)
                 {
                     if (!string.IsNullOrEmpty(SearchParam))
-                    {
+                    {   
                         //Judicial proces Search
                         judProcResult = await JudicialProcessSearch(3, null, SearchParam);
 
@@ -67,16 +67,8 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         //RUES Implement
                         if (IdType == 2)                        
                             RUESResult = await RUESSearch(2,"", SearchParam);
-                        
-                        //Call ElasticSearch Function
-                        oSearchResult = ElasticSearch(IdType, SearchParam);
                     }
-                }
-                else
-                {
-                    //Call ElasticSearch Function
-                    oSearchResult = ElasticSearch(IdType, SearchParam);
-                }
+                }                
 
                 oQueryToCreate.RelatedQueryInfoModel = new List<TDQueryInfoModel>();
 
@@ -230,13 +222,14 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         ElasticId = (int)enumElasticGroupId.JudicialProces,
                     };
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
-                } 
+                }
                 #endregion
-
-                if (oSearchResult.Documents.Count() > 0 || procResult.Count > 0 || ppResult != null && ppResult.Count > 0
-                    || judProcResult != null && judProcResult.Count > 0)
+                try
                 {
-                    oSearchResult.Documents.All(x =>
+                    if (oSearchResult.Documents.Count() > 0 || procResult.Count > 0 || ppResult != null && ppResult.Count > 0
+                    || judProcResult != null && judProcResult.Count > 0)
+                    {
+                        oSearchResult.Documents.All(x =>
                         {
                             TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
 
@@ -254,11 +247,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                                                                  || x.ListType == "PARTIDOS Y MOVIMIENTOS POLITICOS")
                                 oInfoCreate.Peps = x.ListType;
                             else
-                                oInfoCreate.Peps = "N/A";                        
+                                oInfoCreate.Peps = "N/A";
 
                             oInfoCreate.Enable = true;
                             oInfoCreate.QueryPublicId = oQueryToCreate.QueryPublicId;
-                            oInfoCreate.IdentificationNumber = !string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty;                            
+                            oInfoCreate.IdentificationNumber = !string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty;
                             oInfoCreate.UpdateDate = !string.IsNullOrEmpty(x.LastModify) ? x.LastModify : string.Empty;
                             oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(x.TypeId) ? x.TypeId : string.Empty;
                             oInfoCreate.Status = !string.IsNullOrEmpty(x.Status) ? x.Status : string.Empty;
@@ -325,24 +318,31 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                             return true;
                         });
-                    oQueryToCreate.IsSuccess = true;
-                }
-                else
-                {
-                    TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
-                    oInfoCreate.QueryPublicId = oQueryToCreate.QueryPublicId;
-                    if (IdType != 4)                    
-                        oInfoCreate.QueryName = SearchParam;
+                        oQueryToCreate.IsSuccess = true;
+                    }
                     else
-                        oInfoCreate.QueryIdentification = !string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty;
-                    oInfoCreate.GroupName = "SIN COINCIDENCIAS";
-                    oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
+                    {
+                        TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
+                        oInfoCreate.QueryPublicId = oQueryToCreate.QueryPublicId;
+                        if (IdType != 4)
+                            oInfoCreate.QueryName = SearchParam;
+                        else
+                            oInfoCreate.QueryIdentification = !string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty;
+                        oInfoCreate.GroupName = "SIN COINCIDENCIAS";
+                        oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
 
-                    oQueryToCreate.IsSuccess = false;
+                        oQueryToCreate.IsSuccess = false;
+                    }
+                    oQueryToCreate.QueryPublicId = await QueryCreate(oQueryToCreate);
+
+                    Task.Run(async () => await QueryUpsert(oQueryToCreate));
                 }
-                oQueryToCreate.QueryPublicId = await QueryCreate(oQueryToCreate);
+                catch (Exception)
+                {
 
-                Task.Run(async () => await QueryUpsert(oQueryToCreate));
+                    throw;
+                }
+                
                 return oQueryToCreate;
             }
             catch (Exception ex)

@@ -292,7 +292,7 @@ namespace MarketPlace.Web.Controllers
                     .Field(fi => fi.Domain))
                 .Terms("useremail", bl => bl
                     .Field(fi => fi.User)))
-                .Query(q => q.Filtered(f => f.
+                .Query(q => q.Bool(f => f.
                     Filter(f2 =>
                         {
                             QueryContainer qb = null;
@@ -457,7 +457,7 @@ namespace MarketPlace.Web.Controllers
                         .Field(fi => fi.Domain))
                     .Terms("useremail", bl => bl
                         .Field(fi => fi.User)))
-                    .Query(q => q.Filtered(f => f.
+                    .Query(q => q.Bool(f => f.
                         Filter(f2 =>
                         {
                             QueryContainer qb = null;

@@ -30,9 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Elasticsearch.Net, Version=2.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Elasticsearch.Net.2.4.1\lib\net45\Elasticsearch.Net.dll</HintPath>
+    <Reference Include="Elasticsearch.Net, Version=5.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Elasticsearch.Net.5.5.0\lib\net45\Elasticsearch.Net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="IntegrationPlatform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -41,13 +41,13 @@
     <Reference Include="MessageModule.Client">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\MessageModule.Client\developer\MessageModule.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Nest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NEST.2.4.1\lib\net45\Nest.dll</HintPath>
+    <Reference Include="Nest, Version=5.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\packages\NEST.5.5.0\lib\net45\Nest.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ProveedoresOnLine.CalificationBatch">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.CalificationBatch\developer\ProveedoresOnLine.CalificationBatch.dll</HintPath>
@@ -143,10 +143,11 @@
     <Compile Include="Survey\SurveyViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Folder Include="MarketPlace\Models\Company\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MarketPlace\Models\Company\" />
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

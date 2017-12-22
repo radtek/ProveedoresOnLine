@@ -141,7 +141,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
                                     .MinGram(1)
                                     .MaxGram(10))
                                 )
-                            ).NumberOfShards(1)
+                            ).NumberOfShards(10)
                         )
                     );
                 client.Map<CustomerProviderIndexModel>(m => m.AutoMap());
