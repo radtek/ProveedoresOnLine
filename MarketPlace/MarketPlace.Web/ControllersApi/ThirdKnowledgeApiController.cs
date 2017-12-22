@@ -134,6 +134,7 @@ namespace MarketPlace.Web.ControllersApi
                                 List<string> oDetails = new List<string>();
                                 if (IdType != 4)
                                 {
+                                    oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId);
                                     //GetName
                                     if (IdType == 2 && oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[2]).Select(x => x.NameResult).FirstOrDefault() != null)
                                         oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[2]).Select(x => x.NameResult).FirstOrDefault());
@@ -156,6 +157,7 @@ namespace MarketPlace.Web.ControllersApi
                                 SancionedList.All(x =>
                                     {
                                         oDetails = new List<string>();
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId);
                                         bool exist = false;
                                         if (oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y =>  y).FirstOrDefault()!= null)
                                         {
