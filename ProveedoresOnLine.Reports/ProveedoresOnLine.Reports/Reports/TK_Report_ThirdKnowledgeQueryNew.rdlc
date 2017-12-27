@@ -89,8 +89,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox19</rd:DefaultName>
-        <Top>1.15053cm</Top>
-        <Left>0.45717cm</Left>
+        <Top>0.37358cm</Top>
+        <Left>12.65447cm</Left>
         <Height>0.57354cm</Height>
         <Width>3.7861cm</Width>
         <ZIndex>2</ZIndex>
@@ -122,79 +122,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox19</rd:DefaultName>
-        <Top>1.15053cm</Top>
-        <Left>4.41968cm</Left>
+        <Top>0.37358cm</Top>
+        <Left>16.61698cm</Left>
         <Height>0.57354cm</Height>
         <Width>7.89964cm</Width>
         <ZIndex>3</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox Name="Textbox26">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>Tipo de consulta:</Value>
-                <Style>
-                  <FontFamily>Segoe UI Light</FontFamily>
-                  <FontSize>9pt</FontSize>
-                  <FontWeight>Bold</FontWeight>
-                  <Color>DimGray</Color>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox19</rd:DefaultName>
-        <Top>0.37358cm</Top>
-        <Left>12.65447cm</Left>
-        <Height>0.57354cm</Height>
-        <Width>4.42111cm</Width>
-        <ZIndex>4</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox Name="Textbox27">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=Parameters!QueryType.Value</Value>
-                <Style>
-                  <FontFamily>Segoe UI Light</FontFamily>
-                  <FontSize>9pt</FontSize>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox19</rd:DefaultName>
-        <Top>0.37358cm</Top>
-        <Left>17.25197cm</Left>
-        <Height>0.57354cm</Height>
-        <Width>7.79875cm</Width>
-        <ZIndex>5</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -229,7 +161,7 @@
         <Left>12.65446cm</Left>
         <Height>0.57354cm</Height>
         <Width>4.42112cm</Width>
-        <ZIndex>6</ZIndex>
+        <ZIndex>4</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -262,7 +194,7 @@
         <Left>17.25197cm</Left>
         <Height>0.57354cm</Height>
         <Width>7.79874cm</Width>
-        <ZIndex>7</ZIndex>
+        <ZIndex>5</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -280,7 +212,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Nombre consultado:</Value>
+                <Value>Valor consultado:</Value>
                 <Style>
                   <FontFamily>Segoe UI Light</FontFamily>
                   <FontSize>9pt</FontSize>
@@ -297,7 +229,7 @@
         <Left>0.45718cm</Left>
         <Height>0.57354cm</Height>
         <Width>3.7861cm</Width>
-        <ZIndex>8</ZIndex>
+        <ZIndex>6</ZIndex>
         <Visibility>
           <Hidden>= Iif (Parameters!QueryType.Value = "Masivo" , true, false)</Hidden>
         </Visibility>
@@ -318,7 +250,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=Parameters!searchName.Value</Value>
+                <Value>=Parameters!ValueQuery.Value</Value>
                 <Style>
                   <FontFamily>Segoe UI Light</FontFamily>
                   <FontSize>9pt</FontSize>
@@ -333,81 +265,7 @@
         <Left>4.41968cm</Left>
         <Height>0.57354cm</Height>
         <Width>7.89965cm</Width>
-        <ZIndex>9</ZIndex>
-        <Visibility>
-          <Hidden>= Iif (Parameters!QueryType.Value = "Masivo" , true, false)</Hidden>
-        </Visibility>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox Name="Textbox34">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>Identificación consultada:</Value>
-                <Style>
-                  <FontFamily>Segoe UI Light</FontFamily>
-                  <FontSize>9pt</FontSize>
-                  <FontWeight>Bold</FontWeight>
-                  <Color>DimGray</Color>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox19</rd:DefaultName>
-        <Top>1.90046cm</Top>
-        <Left>12.65447cm</Left>
-        <Height>0.57354cm</Height>
-        <Width>4.42111cm</Width>
-        <ZIndex>10</ZIndex>
-        <Visibility>
-          <Hidden>= Iif (Parameters!QueryType.Value = "Masivo" , true, false)</Hidden>
-        </Visibility>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox Name="Textbox37">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=Parameters!searchIdentification.Value</Value>
-                <Style>
-                  <FontFamily>Segoe UI Light</FontFamily>
-                  <FontSize>9pt</FontSize>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox19</rd:DefaultName>
-        <Top>1.90046cm</Top>
-        <Left>17.25197cm</Left>
-        <Height>0.57354cm</Height>
-        <Width>7.79874cm</Width>
-        <ZIndex>11</ZIndex>
+        <ZIndex>7</ZIndex>
         <Visibility>
           <Hidden>= Iif (Parameters!QueryType.Value = "Masivo" , true, false)</Hidden>
         </Visibility>
@@ -442,7 +300,7 @@
         <Top>3.12705cm</Top>
         <Height>0.78521cm</Height>
         <Width>25.44798cm</Width>
-        <ZIndex>12</ZIndex>
+        <ZIndex>8</ZIndex>
         <Visibility>
           <Hidden>= Iif (CountRows("DataSet_rst") &gt; 0, false, true)</Hidden>
         </Visibility>
@@ -852,13 +710,81 @@
         <Left>0.92287cm</Left>
         <Height>2.58521cm</Height>
         <Width>23.54257cm</Width>
-        <ZIndex>13</ZIndex>
+        <ZIndex>9</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Tablix>
+      <Textbox Name="Textbox26">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Criterio de Busqueda:</Value>
+                <Style>
+                  <FontFamily>Segoe UI Light</FontFamily>
+                  <FontSize>9pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                  <Color>DimGray</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox19</rd:DefaultName>
+        <Top>1.22109cm</Top>
+        <Left>0.45719cm</Left>
+        <Height>0.57354cm</Height>
+        <Width>3.78609cm</Width>
+        <ZIndex>10</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox27">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!QueryType.Value</Value>
+                <Style>
+                  <FontFamily>Segoe UI Light</FontFamily>
+                  <FontSize>9pt</FontSize>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox19</rd:DefaultName>
+        <Top>1.22109cm</Top>
+        <Left>4.41968cm</Left>
+        <Height>0.57354cm</Height>
+        <Width>7.89966cm</Width>
+        <ZIndex>11</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
     <Height>7.79742cm</Height>
     <Style />
@@ -1083,12 +1009,7 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="searchName">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="searchIdentification">
+    <ReportParameter Name="ValueQuery">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>

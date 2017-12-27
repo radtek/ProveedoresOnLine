@@ -859,10 +859,12 @@ namespace MarketPlace.Web.Controllers
             List<TDQueryModel> oQueryResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId(QueryPublicId, oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.PageNumber, oTotalRowsAux, out TotalRows);
 
             //Call Function to build object
+            List<Tuple<string, string, string, List<string>, bool>> ObjResult = TK_CreateObjectReport(oQueryResult);
+
 
             oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.TotalRows = TotalRows;
 
-            if (oQueryResult != null && oQueryResult.Count > 0)
+            /*if (oQueryResult != null && oQueryResult.Count > 0)
                 oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult = oQueryResult;
             else if (IsSuccess == "Finalizado")
                 oModel.RelatedThidKnowledgeSearch.Message = "La búsqueda no arrojó resultados.";
@@ -920,7 +922,7 @@ namespace MarketPlace.Web.Controllers
                 oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("Criticidad Baja")));
                 oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("SIN COINCIDENCIAS")));
                 oModel.Group = oGroupOrder;
-            }
+            }*/
 
 
             //Get report generator
