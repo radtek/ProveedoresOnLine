@@ -215,7 +215,7 @@ namespace MarketPlace.Web.Controllers
             string RelatedUser = null;
             var ParentRole = SessionModel.CurrentCompanyLoginUser.RelatedCompany.FirstOrDefault().RelatedUser.FirstOrDefault().RelatedCompanyRole.ParentRoleCompany;
 
-            if ( ParentRole!= null)
+            if (ParentRole != null)
             {
                 RelatedUser = SessionModel.CurrentCompanyLoginUser.RelatedUser.Email;
             }
@@ -435,7 +435,7 @@ namespace MarketPlace.Web.Controllers
 
                 Uri node2 = new Uri(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
                 var settings2 = new ConnectionSettings(node2);
-                
+
 
                 settings2.DefaultIndex(Models.General.InternalSettings.Instance[Models.General.Constants.C_Settings_QueryModelIndex].Value);
                 settings2.DisableDirectStreaming(true);
@@ -638,7 +638,7 @@ namespace MarketPlace.Web.Controllers
                 oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("Criticidad Alta")));
                 oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("Criticidad Media")));
                 oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("Criticidad Baja")));
-                oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("SIN COINCIDENCIAS")));         
+                oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("SIN COINCIDENCIAS")));
                 oModel.Group = oGroupOrder;
             }
 
@@ -857,7 +857,9 @@ namespace MarketPlace.Web.Controllers
 
             //TODO: Dejar El nuevo Objeto según  el cambio de Listas Restrictivas para poderlo enviar al reporte
             List<TDQueryModel> oQueryResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId(QueryPublicId, oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.PageNumber, oTotalRowsAux, out TotalRows);
-            
+
+            //Call Function to build object
+
             oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.TotalRows = TotalRows;
 
             if (oQueryResult != null && oQueryResult.Count > 0)
@@ -1203,6 +1205,108 @@ namespace MarketPlace.Web.Controllers
                 oReturn.Add(oMenuAux);
             }
             return oReturn;
+        }
+
+        #endregion
+
+        #region Private functions
+
+        public List<Tuple<string, string, string, List<string>, bool>> TK_CreateObjectReport(List<TDQueryModel> oQueryResult)
+        {
+            List<string> SancionedList = MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.TK_ListToValidateSancioned].Value.Split(';').ToList();
+            List<string> PepList = MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.TK_ListToValidatePEP].Value.Split(';').ToList();
+            List<string> GeneralList = MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.TK_ListToValidateGeneralInfo].Value.Split(';').ToList();
+
+            List<Tuple<string, string, string, List<string>, bool>> oReturn = new List<Tuple<string, string, string, List<string>, bool>>();
+            if (oQueryResult != null)
+            {
+                oQueryResult.All(x =>
+                {
+                    #region GeneralInfo                                
+                    List<string> oDetails = new List<string>();
+                    if (x.RelatedQueryInfoModel != null && !string.IsNullOrEmpty(x.RelatedQueryInfoModel.Where(y => y.DocumentType != null).Select(y => y.DocumentType).FirstOrDefault()))
+                    {
+                        int IdType = int.Parse(x.RelatedQueryInfoModel.Where(y => y.DocumentType != null).Select(y => y.DocumentType).FirstOrDefault());
+                        //GetName
+                        if (IdType == 2 && x.RelatedQueryInfoModel.Where(p => p.ListName == GeneralList[2]).Select(p => p.NameResult).FirstOrDefault() != null)
+                        {
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(p => p.ListName == GeneralList[2]).Select(p => p.NameResult).FirstOrDefault());
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(p => p.ListName == GeneralList[2]).Select(p => p.ElasticId.ToString()).FirstOrDefault());
+                        }
+
+                        else if (IdType == 1 && x.RelatedQueryInfoModel.Where(p => p.ListName == GeneralList[0]).Select(p => p.NameResult).FirstOrDefault() != null)
+                        {
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(p => p.ListName == GeneralList[0]).Select(p => p.NameResult).FirstOrDefault());
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(p => p.ListName == GeneralList[0]).Select(p => p.ElasticId.ToString()).FirstOrDefault());
+                        }
+
+                        oDetails.Add(x.QueryPublicId);
+                        Tuple<string, string, string, List<string>, bool> oDetail = new
+                                    Tuple<string, string, string, List<string>, bool>("INFORMACIÓN BÁSICA",
+                                        IdType == 2 ? GeneralList[2] : GeneralList[1],
+                                        IdType == 2 ? x.RelatedQueryInfoModel.Where(p => p.ListName == GeneralList[2]).Select(p => p.Link).FirstOrDefault() :
+                                        IdType == 1 ? x.RelatedQueryInfoModel.Where(p => p.ListName == GeneralList[1]).Select(p => p.Link).FirstOrDefault() : "", oDetails,
+                                                    oDetails.Count > 0 ? true : false);
+                        oReturn.Add(oDetail);
+                    }
+
+                    #endregion
+
+                    #region Sancioned Group List
+                    SancionedList.All(sl =>
+                    {
+                        oDetails = new List<string>();
+                        bool exist = false;
+                        if (x.RelatedQueryInfoModel.Where(y => y.ListName == sl).Select(y => y).FirstOrDefault() != null)
+                        {
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == sl).Select(y => y).FirstOrDefault().NameResult);
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == sl).Select(y => y).FirstOrDefault().IdentificationResult);
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == sl).Select(y => y).FirstOrDefault().QueryInfoPublicId);
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == sl).Select(y => y).FirstOrDefault().QueryPublicId);
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == sl).Select(y => y).FirstOrDefault().ElasticId.ToString());
+                            exist = true;
+                        }
+                        else
+                            exist = false;
+                        oDetails.Add(x.QueryPublicId);
+
+                        Tuple<string, string, string, List<string>, bool> oDetail = new
+                               Tuple<string, string, string, List<string>, bool>("LISTAS RESTRICTIVAS, SANCIONES NACIONALES E INTERNACIONALES",
+                                   sl, "", oDetails, exist);
+                        oReturn.Add(oDetail);
+                        return true;
+                    });
+                    #endregion
+
+                    #region Peps
+                    PepList.All(pep =>
+                    {
+                        oDetails = new List<string>();
+                        bool exist = false;
+                        if (x.RelatedQueryInfoModel.Where(y => y.ListName == pep).Select(y => y).FirstOrDefault() != null)
+                        {
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == pep).Select(y => y).FirstOrDefault().NameResult);
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == pep).Select(y => y).FirstOrDefault().IdentificationResult);
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == pep).Select(y => y).FirstOrDefault().QueryInfoPublicId);
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == pep).Select(y => y).FirstOrDefault().QueryPublicId);
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == pep).Select(y => y).FirstOrDefault().ElasticId.ToString());
+                            exist = true;
+                        }
+                        else
+                            exist = false;
+                        oDetails.Add(x.QueryPublicId);                        
+                        Tuple<string, string, string, List<string>, bool> oDetail = new
+                               Tuple<string, string, string, List<string>, bool>("PEPS -  PERSONAS POLITICAMENTE Y PUBLICAMENTE EXPUESTAS",
+                                   pep, "", oDetails, exist);
+                        oReturn.Add(oDetail);
+                        return true;
+                    });
+                    #endregion
+                    return true;
+                });
+            }
+
+            return null;
         }
 
         #endregion

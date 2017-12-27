@@ -151,6 +151,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
                     {
                         NameResult = !string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1) ? RegDianResult.FirstOrDefault().Item1 : "",
+                        QueryPublicId = oQueryToCreate.QueryPublicId,
                         IdList = "Registraduria/Dian",
                         GroupName = "Registraduria/Dian",
                         ListName = "Registraduria/Dian",
@@ -165,6 +166,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                 {
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
                     {
+                        QueryPublicId = oQueryToCreate.QueryPublicId,
                         IdList = "Registraduria",
                         GroupName = "Registraduria - Puesto de Votación",
                         Link = RegEntityResult.FirstOrDefault().Item1,
@@ -181,6 +183,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                 {
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
                     {
+                        QueryPublicId = oQueryToCreate.QueryPublicId,
                         IdList = "RUES",
                         GroupName = "RUES",
                         NameResult = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[1]) ? RUESResult.FirstOrDefault().Item2[1] : "No aparece registro en RUES",
