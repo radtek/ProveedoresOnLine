@@ -15,8 +15,10 @@
         <xs:element name="ThirdKnowlegde_rst" msprop:Generator_TableClassName="ThirdKnowlegde_rstDataTable" msprop:Generator_TableVarName="tableThirdKnowlegde_rst" msprop:Generator_TablePropName="ThirdKnowlegde_rst" msprop:Generator_RowDeletingName="ThirdKnowlegde_rstRowDeleting" msprop:Generator_RowChangingName="ThirdKnowlegde_rstRowChanging" msprop:Generator_RowEvHandlerName="ThirdKnowlegde_rstRowChangeEventHandler" msprop:Generator_RowDeletedName="ThirdKnowlegde_rstRowDeleted" msprop:Generator_UserTableName="ThirdKnowlegde_rst" msprop:Generator_RowChangedName="ThirdKnowlegde_rstRowChanged" msprop:Generator_RowEvArgName="ThirdKnowlegde_rstRowChangeEvent" msprop:Generator_RowClassName="ThirdKnowlegde_rstRow">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="NameGroupList" msprop:Generator_ColumnVarNameInTable="columnNameGroupList" msprop:Generator_ColumnPropNameInRow="NameGroupList" msprop:Generator_ColumnPropNameInTable="NameGroupListColumn" msprop:Generator_UserColumnName="NameGroupList" type="xs:string" minOccurs="0" />
-              <xs:element name="NameList" msprop:Generator_ColumnVarNameInTable="columnNameList" msprop:Generator_ColumnPropNameInRow="NameList" msprop:Generator_ColumnPropNameInTable="NameListColumn" msprop:Generator_UserColumnName="NameList" type="xs:string" minOccurs="0" />
+              <xs:element name="GroupName" msprop:Generator_ColumnVarNameInTable="columnGroupName" msprop:Generator_ColumnPropNameInRow="GroupName" msprop:Generator_ColumnPropNameInTable="GroupNameColumn" msprop:Generator_UserColumnName="GroupName" type="xs:string" minOccurs="0" />
+              <xs:element name="ListName" msprop:Generator_ColumnVarNameInTable="columnListName" msprop:Generator_ColumnPropNameInRow="ListName" msprop:Generator_ColumnPropNameInTable="ListNameColumn" msprop:Generator_UserColumnName="ListName" type="xs:string" minOccurs="0" />
+              <xs:element name="Link" msprop:Generator_ColumnVarNameInTable="columnLink" msprop:Generator_ColumnPropNameInRow="Link" msprop:Generator_ColumnPropNameInTable="LinkColumn" msprop:Generator_UserColumnName="Link" type="xs:string" minOccurs="0" />
+              <xs:element name="Status" msprop:Generator_ColumnVarNameInTable="columnStatus" msprop:Generator_ColumnPropNameInRow="Status" msprop:Generator_ColumnPropNameInTable="StatusColumn" msprop:Generator_UserColumnName="Status" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

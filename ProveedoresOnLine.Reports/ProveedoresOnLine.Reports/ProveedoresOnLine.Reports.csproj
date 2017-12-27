@@ -279,6 +279,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DS_ThirdKnowledgeReport.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Reports\DataSet\DS_ThirdKnowledgeReportNew.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DS_ThirdKnowledgeReportNew.xsd</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -567,6 +572,17 @@
     </None>
     <None Include="Reports\DataSet\DS_ThirdKnowledgeReport.xss">
       <DependentUpon>DS_ThirdKnowledgeReport.xsd</DependentUpon>
+    </None>
+    <None Include="Reports\DataSet\DS_ThirdKnowledgeReportNew.xsc">
+      <DependentUpon>DS_ThirdKnowledgeReportNew.xsd</DependentUpon>
+    </None>
+    <None Include="Reports\DataSet\DS_ThirdKnowledgeReportNew.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DS_ThirdKnowledgeReportNew.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reports\DataSet\DS_ThirdKnowledgeReportNew.xss">
+      <DependentUpon>DS_ThirdKnowledgeReportNew.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -314,9 +314,13 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class ThirdKnowlegde_rstDataTable : global::System.Data.TypedTableBase<ThirdKnowlegde_rstRow> {
             
-            private global::System.Data.DataColumn columnNameGroupList;
+            private global::System.Data.DataColumn columnGroupName;
             
-            private global::System.Data.DataColumn columnNameList;
+            private global::System.Data.DataColumn columnListName;
+            
+            private global::System.Data.DataColumn columnLink;
+            
+            private global::System.Data.DataColumn columnStatus;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -353,17 +357,33 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn NameGroupListColumn {
+            public global::System.Data.DataColumn GroupNameColumn {
                 get {
-                    return this.columnNameGroupList;
+                    return this.columnGroupName;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn NameListColumn {
+            public global::System.Data.DataColumn ListNameColumn {
                 get {
-                    return this.columnNameList;
+                    return this.columnListName;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn LinkColumn {
+                get {
+                    return this.columnLink;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn StatusColumn {
+                get {
+                    return this.columnStatus;
                 }
             }
             
@@ -404,11 +424,13 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ThirdKnowlegde_rstRow AddThirdKnowlegde_rstRow(string NameGroupList, string NameList) {
+            public ThirdKnowlegde_rstRow AddThirdKnowlegde_rstRow(string GroupName, string ListName, string Link, string Status) {
                 ThirdKnowlegde_rstRow rowThirdKnowlegde_rstRow = ((ThirdKnowlegde_rstRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
-                        NameGroupList,
-                        NameList};
+                        GroupName,
+                        ListName,
+                        Link,
+                        Status};
                 rowThirdKnowlegde_rstRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowThirdKnowlegde_rstRow);
                 return rowThirdKnowlegde_rstRow;
@@ -431,17 +453,23 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             internal void InitVars() {
-                this.columnNameGroupList = base.Columns["NameGroupList"];
-                this.columnNameList = base.Columns["NameList"];
+                this.columnGroupName = base.Columns["GroupName"];
+                this.columnListName = base.Columns["ListName"];
+                this.columnLink = base.Columns["Link"];
+                this.columnStatus = base.Columns["Status"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             private void InitClass() {
-                this.columnNameGroupList = new global::System.Data.DataColumn("NameGroupList", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNameGroupList);
-                this.columnNameList = new global::System.Data.DataColumn("NameList", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnNameList);
+                this.columnGroupName = new global::System.Data.DataColumn("GroupName", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnGroupName);
+                this.columnListName = new global::System.Data.DataColumn("ListName", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnListName);
+                this.columnLink = new global::System.Data.DataColumn("Link", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnLink);
+                this.columnStatus = new global::System.Data.DataColumn("Status", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnStatus);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -887,58 +915,114 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string NameGroupList {
+            public string GroupName {
                 get {
                     try {
-                        return ((string)(this[this.tableThirdKnowlegde_rst.NameGroupListColumn]));
+                        return ((string)(this[this.tableThirdKnowlegde_rst.GroupNameColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'NameGroupList\' in table \'ThirdKnowlegde_rst\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'GroupName\' in table \'ThirdKnowlegde_rst\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tableThirdKnowlegde_rst.NameGroupListColumn] = value;
+                    this[this.tableThirdKnowlegde_rst.GroupNameColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string NameList {
+            public string ListName {
                 get {
                     try {
-                        return ((string)(this[this.tableThirdKnowlegde_rst.NameListColumn]));
+                        return ((string)(this[this.tableThirdKnowlegde_rst.ListNameColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'NameList\' in table \'ThirdKnowlegde_rst\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'ListName\' in table \'ThirdKnowlegde_rst\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tableThirdKnowlegde_rst.NameListColumn] = value;
+                    this[this.tableThirdKnowlegde_rst.ListNameColumn] = value;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsNameGroupListNull() {
-                return this.IsNull(this.tableThirdKnowlegde_rst.NameGroupListColumn);
+            public string Link {
+                get {
+                    try {
+                        return ((string)(this[this.tableThirdKnowlegde_rst.LinkColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Link\' in table \'ThirdKnowlegde_rst\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableThirdKnowlegde_rst.LinkColumn] = value;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetNameGroupListNull() {
-                this[this.tableThirdKnowlegde_rst.NameGroupListColumn] = global::System.Convert.DBNull;
+            public string Status {
+                get {
+                    try {
+                        return ((string)(this[this.tableThirdKnowlegde_rst.StatusColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Status\' in table \'ThirdKnowlegde_rst\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableThirdKnowlegde_rst.StatusColumn] = value;
+                }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsNameListNull() {
-                return this.IsNull(this.tableThirdKnowlegde_rst.NameListColumn);
+            public bool IsGroupNameNull() {
+                return this.IsNull(this.tableThirdKnowlegde_rst.GroupNameColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetNameListNull() {
-                this[this.tableThirdKnowlegde_rst.NameListColumn] = global::System.Convert.DBNull;
+            public void SetGroupNameNull() {
+                this[this.tableThirdKnowlegde_rst.GroupNameColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsListNameNull() {
+                return this.IsNull(this.tableThirdKnowlegde_rst.ListNameColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetListNameNull() {
+                this[this.tableThirdKnowlegde_rst.ListNameColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsLinkNull() {
+                return this.IsNull(this.tableThirdKnowlegde_rst.LinkColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetLinkNull() {
+                this[this.tableThirdKnowlegde_rst.LinkColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsStatusNull() {
+                return this.IsNull(this.tableThirdKnowlegde_rst.StatusColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetStatusNull() {
+                this[this.tableThirdKnowlegde_rst.StatusColumn] = global::System.Convert.DBNull;
             }
         }
         
