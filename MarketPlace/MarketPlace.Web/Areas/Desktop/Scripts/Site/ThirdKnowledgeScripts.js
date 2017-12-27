@@ -39,7 +39,7 @@ var Third_KnowledgeSimpleSearchObject = {
                     if (result.TKGroupByListViewModel != null && result.TKGroupByListViewModel.length > 0) {
                         
                         var queryResult = Enumerable.From(result.TKGroupByListViewModel).GroupBy(function (item) { return item.m_Item1; }).ToArray();
-
+                        
                         $.each(queryResult, function (a, group) {
                             
                             resultDiv = '';
@@ -107,7 +107,8 @@ var Third_KnowledgeSimpleSearchObject = {
 
                                     if (d.m_Item5 == true) {
                                         resultDiv += '<td><span class="badge badge-danger">' + val + '</span></td>' +
-                                            '<td><strong><a href="' + d.m_Item3 + '" target="_blank">Ver Detalle</a></strong></td>';
+                                            '<td><strong><a target = "_blank" href= "' + BaseUrl.SiteUrl + 'ThirdKnowledge/TKDetailSingleSearch?QueryPublicId=' + d.m_Item4[5] + '&QueryBasicPublicId=' + d.m_Item4[5] + '&ElasticId=' + d.m_Item4[4] +
+                                       '&ReturnUrl=null">Ver Detalle</a></strong></td>';
                                     } else {
                                         resultDiv += '<td>' + val + '</td>' +
                                             '<td><strong></strong></td>';
@@ -467,3 +468,25 @@ var MyQueriesSearchObj = {
         }
     }
 }
+
+function Numeros(e) {
+    // Permite: backspace, delete, tab, escape, enter and .
+    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+        // Permite: Ctrl+A
+        (e.keyCode == 65 && e.ctrlKey === true) ||
+        // Permite: home, end, left, right
+        (e.keyCode >= 35 && e.keyCode <= 39)) {
+        // solo permitir lo que no este dentro de estas condiciones es un return false
+        return;
+    }
+    // Aseguramos que son numeros
+    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+        e.preventDefault();
+    }
+}
+
+$("#IdentificationNumber").keydown(function (e) {
+    if ($('#ThirdKnowledgeIdType').val() == "213002" || $('#ThirdKnowledgeIdType').val() == "213001") {// Juridica y Natural
+        Numeros(e);
+    }
+});

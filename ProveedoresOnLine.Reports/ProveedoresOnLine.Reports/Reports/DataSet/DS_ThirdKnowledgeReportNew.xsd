@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DS_ThirdKnowledgeReportNew" targetNamespace="http://tempuri.org/DS_ThirdKnowledgeReportNew.xsd" xmlns:mstns="http://tempuri.org/DS_ThirdKnowledgeReportNew.xsd" xmlns="http://tempuri.org/DS_ThirdKnowledgeReportNew.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DS_ThirdKnowledgeReportNew" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DS_ThirdKnowledgeReportNew" msprop:Generator_UserDSName="DS_ThirdKnowledgeReportNew">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ThirdKnowlegde_rst" msprop:Generator_TableClassName="ThirdKnowlegde_rstDataTable" msprop:Generator_TableVarName="tableThirdKnowlegde_rst" msprop:Generator_TablePropName="ThirdKnowlegde_rst" msprop:Generator_RowDeletingName="ThirdKnowlegde_rstRowDeleting" msprop:Generator_RowChangingName="ThirdKnowlegde_rstRowChanging" msprop:Generator_RowEvHandlerName="ThirdKnowlegde_rstRowChangeEventHandler" msprop:Generator_RowDeletedName="ThirdKnowlegde_rstRowDeleted" msprop:Generator_UserTableName="ThirdKnowlegde_rst" msprop:Generator_RowChangedName="ThirdKnowlegde_rstRowChanged" msprop:Generator_RowEvArgName="ThirdKnowlegde_rstRowChangeEvent" msprop:Generator_RowClassName="ThirdKnowlegde_rstRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="NameGroupList" msprop:Generator_ColumnVarNameInTable="columnNameGroupList" msprop:Generator_ColumnPropNameInRow="NameGroupList" msprop:Generator_ColumnPropNameInTable="NameGroupListColumn" msprop:Generator_UserColumnName="NameGroupList" type="xs:string" minOccurs="0" />
+              <xs:element name="NameList" msprop:Generator_ColumnVarNameInTable="columnNameList" msprop:Generator_ColumnPropNameInRow="NameList" msprop:Generator_ColumnPropNameInTable="NameListColumn" msprop:Generator_UserColumnName="NameList" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="ThirdKnowledge_obj" msprop:Generator_TableClassName="ThirdKnowledge_objDataTable" msprop:Generator_TableVarName="tableThirdKnowledge_obj" msprop:Generator_TablePropName="ThirdKnowledge_obj" msprop:Generator_RowDeletingName="ThirdKnowledge_objRowDeleting" msprop:Generator_RowChangingName="ThirdKnowledge_objRowChanging" msprop:Generator_RowEvHandlerName="ThirdKnowledge_objRowChangeEventHandler" msprop:Generator_RowDeletedName="ThirdKnowledge_objRowDeleted" msprop:Generator_UserTableName="ThirdKnowledge_obj" msprop:Generator_RowChangedName="ThirdKnowledge_objRowChanged" msprop:Generator_RowEvArgName="ThirdKnowledge_objRowChangeEvent" msprop:Generator_RowClassName="ThirdKnowledge_objRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Item1" msprop:Generator_ColumnVarNameInTable="columnItem1" msprop:Generator_ColumnPropNameInRow="Item1" msprop:Generator_ColumnPropNameInTable="Item1Column" msprop:Generator_UserColumnName="Item1" type="xs:string" minOccurs="0" />
+              <xs:element name="Item2" msprop:Generator_ColumnVarNameInTable="columnItem2" msprop:Generator_ColumnPropNameInRow="Item2" msprop:Generator_ColumnPropNameInTable="Item2Column" msprop:Generator_UserColumnName="Item2" type="xs:string" minOccurs="0" />
+              <xs:element name="Item3" msprop:Generator_ColumnVarNameInTable="columnItem3" msprop:Generator_ColumnPropNameInRow="Item3" msprop:Generator_ColumnPropNameInTable="Item3Column" msprop:Generator_UserColumnName="Item3" type="xs:string" minOccurs="0" />
+              <xs:element name="Item4" msprop:Generator_ColumnVarNameInTable="columnItem4" msprop:Generator_ColumnPropNameInRow="Item4" msprop:Generator_ColumnPropNameInTable="Item4Column" msprop:Generator_UserColumnName="Item4" type="xs:string" minOccurs="0" />
+              <xs:element name="Item5" msprop:Generator_ColumnVarNameInTable="columnItem5" msprop:Generator_ColumnPropNameInRow="Item5" msprop:Generator_ColumnPropNameInTable="Item5Column" msprop:Generator_UserColumnName="Item5" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

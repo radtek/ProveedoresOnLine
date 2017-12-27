@@ -85,6 +85,12 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.ActionResult TKThirdKnowledgeDetailNew()
+        {
+            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.TKThirdKnowledgeDetailNew);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public virtual System.Web.Mvc.FileResult GetPdfFileBytes()
         {
             return new T4MVC_System_Web_Mvc_FileResult(Area, Name, ActionNames.GetPdfFileBytes);
@@ -111,6 +117,7 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             public readonly string TKDetailSingleSearch = "TKDetailSingleSearch";
             public readonly string TKThirdKnowledgeSearch = "TKThirdKnowledgeSearch";
             public readonly string TKThirdKnowledgeDetail = "TKThirdKnowledgeDetail";
+            public readonly string TKThirdKnowledgeDetailNew = "TKThirdKnowledgeDetailNew";
             public readonly string GetPdfFileBytes = "GetPdfFileBytes";
         }
 
@@ -123,6 +130,7 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             public const string TKDetailSingleSearch = "TKDetailSingleSearch";
             public const string TKThirdKnowledgeSearch = "TKThirdKnowledgeSearch";
             public const string TKThirdKnowledgeDetail = "TKThirdKnowledgeDetail";
+            public const string TKThirdKnowledgeDetailNew = "TKThirdKnowledgeDetailNew";
             public const string GetPdfFileBytes = "GetPdfFileBytes";
         }
 
@@ -167,6 +175,19 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
         public ActionParamsClass_TKThirdKnowledgeDetail TKThirdKnowledgeDetailParams { get { return s_params_TKThirdKnowledgeDetail; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionParamsClass_TKThirdKnowledgeDetail
+        {
+            public readonly string QueryPublicId = "QueryPublicId";
+            public readonly string PageNumber = "PageNumber";
+            public readonly string InitDate = "InitDate";
+            public readonly string EndDate = "EndDate";
+            public readonly string Enable = "Enable";
+            public readonly string IsSuccess = "IsSuccess";
+        }
+        static readonly ActionParamsClass_TKThirdKnowledgeDetailNew s_params_TKThirdKnowledgeDetailNew = new ActionParamsClass_TKThirdKnowledgeDetailNew();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_TKThirdKnowledgeDetailNew TKThirdKnowledgeDetailNewParams { get { return s_params_TKThirdKnowledgeDetailNew; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_TKThirdKnowledgeDetailNew
         {
             public readonly string QueryPublicId = "QueryPublicId";
             public readonly string PageNumber = "PageNumber";
@@ -308,6 +329,23 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "Enable", Enable);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "IsSuccess", IsSuccess);
             TKThirdKnowledgeDetailOverride(callInfo, QueryPublicId, PageNumber, InitDate, EndDate, Enable, IsSuccess);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void TKThirdKnowledgeDetailNewOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult TKThirdKnowledgeDetailNew(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.TKThirdKnowledgeDetailNew);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "QueryPublicId", QueryPublicId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "PageNumber", PageNumber);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "InitDate", InitDate);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "EndDate", EndDate);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "Enable", Enable);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "IsSuccess", IsSuccess);
+            TKThirdKnowledgeDetailNewOverride(callInfo, QueryPublicId, PageNumber, InitDate, EndDate, Enable, IsSuccess);
             return callInfo;
         }
 

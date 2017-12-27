@@ -126,6 +126,9 @@ namespace Links
         private const string URLPATH = "~/Scripts";
         public static string Url() { return T4MVCHelpers.ProcessVirtualPath(URLPATH); }
         public static string Url(string fileName) { return T4MVCHelpers.ProcessVirtualPath(URLPATH + "/" + fileName); }
+        public static readonly string linq_vsdoc_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/linq-vsdoc.min.js") ? Url("linq-vsdoc.min.js") : Url("linq-vsdoc.js");
+        public static readonly string linq_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/linq.min.js") ? Url("linq.min.js") : Url("linq.js");
+        public static readonly string linq_min_js = Url("linq.min.js");
     }
 
     [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -1998,6 +2001,8 @@ namespace Links
         {
             public static class Assets
             {
+                public const string linq_js = "~/Scripts/linq.js"; 
+                public const string linq_min_js = "~/Scripts/linq.min.js"; 
             }
         }
         public static partial class Content 

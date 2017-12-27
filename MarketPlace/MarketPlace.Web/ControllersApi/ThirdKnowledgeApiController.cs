@@ -88,7 +88,7 @@ namespace MarketPlace.Web.ControllersApi
                             Uri node = new Uri(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
                             var settings = new ConnectionSettings(node);
                             settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_QueryModelIndex].Value);
-                            /*ElasticClient client = new ElasticClient(settings);
+                            ElasticClient client = new ElasticClient(settings);
 
                             ICreateIndexResponse oElasticResponse = client.
                                     CreateIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_QueryModelIndex].Value, c => c
@@ -108,7 +108,7 @@ namespace MarketPlace.Web.ControllersApi
                                     )
                                 );
                             client.Map<TK_QueryIndexModel>(m => m.AutoMap());
-                            var Index = client.Index(oModelToIndex);*/
+                            var Index = client.Index(oModelToIndex);
 
                             #endregion
 
@@ -134,19 +134,25 @@ namespace MarketPlace.Web.ControllersApi
                                 List<string> oDetails = new List<string>();
                                 if (IdType != 4)
                                 {
-                                    oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId);
                                     //GetName
                                     if (IdType == 2 && oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[2]).Select(x => x.NameResult).FirstOrDefault() != null)
+                                    {
                                         oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[2]).Select(x => x.NameResult).FirstOrDefault());
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[2]).Select(x => x.ElasticId.ToString()).FirstOrDefault());
+                                    }
 
                                     else if (IdType == 1 && oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[0]).Select(x => x.NameResult).FirstOrDefault() != null)
+                                    {
                                         oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[0]).Select(x => x.NameResult).FirstOrDefault());
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[0]).Select(x => x.ElasticId.ToString()).FirstOrDefault());
+                                    }
 
+                                    oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId);                                    
                                     Tuple<string, string, string, List<string>, bool> oDetail = new
                                                 Tuple<string, string, string, List<string>, bool>("INFORMACIÓN BÁSICA",
                                                     IdType == 2 ? GeneralList[2] : GeneralList[1],
                                                     IdType == 2 ? oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[2]).Select(x => x.Link).FirstOrDefault() :
-                                                                IdType == 1 ? oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[1]).Select(x => x.Link).FirstOrDefault() : "", oDetails,
+                                                    IdType == 1 ? oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[1]).Select(x => x.Link).FirstOrDefault() : "", oDetails,
                                                                 oDetails.Count > 0 ? true : false);
                                     oModel.TKGroupByListViewModel.Add(oDetail);
                                 }
@@ -157,7 +163,6 @@ namespace MarketPlace.Web.ControllersApi
                                 SancionedList.All(x =>
                                     {
                                         oDetails = new List<string>();
-                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId);
                                         bool exist = false;
                                         if (oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y =>  y).FirstOrDefault()!= null)
                                         {
@@ -165,10 +170,13 @@ namespace MarketPlace.Web.ControllersApi
                                             oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault().IdentificationResult);
                                             oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault().QueryInfoPublicId);
                                             oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault().QueryPublicId);
+                                            oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault().ElasticId.ToString());
                                             exist = true;
                                         }
                                         else                                        
                                             exist = false;
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId);
+                                        
                                         Tuple<string, string, string, List<string>, bool> oDetail = new
                                                Tuple<string, string, string, List<string>, bool>("LISTAS RESTRICTIVAS, SANCIONES NACIONALES E INTERNACIONALES",
                                                    x, "",oDetails, exist);
@@ -188,10 +196,13 @@ namespace MarketPlace.Web.ControllersApi
                                         oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault().IdentificationResult);
                                         oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault().QueryInfoPublicId);
                                         oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault().QueryPublicId);
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault().ElasticId.ToString());
                                         exist = true;
                                     }
                                     else
                                         exist = false;
+                                    oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId);
+                                    oDetails.Add(oModel.RelatedThidKnowledgeSearch.ElasticId.ToString());
                                     Tuple<string, string, string, List<string>, bool> oDetail = new
                                            Tuple<string, string, string, List<string>, bool>("PEPS -  PERSONAS POLITICAMENTE Y PUBLICAMENTE EXPUESTAS",
                                                x, "", oDetails, exist);

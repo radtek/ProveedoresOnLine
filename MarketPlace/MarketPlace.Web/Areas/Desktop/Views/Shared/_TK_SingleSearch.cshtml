@@ -32,7 +32,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <label>Criterio de Búsqueda</label>
-                    <select name="ThirdKnowledgeIdType" class="form-control ThirdKnowledgeIdType">
+                    <select name="ThirdKnowledgeIdType" class="form-control ThirdKnowledgeIdType" id="ThirdKnowledgeIdType" onchange="$('#IdentificationNumber').val('')">
                         @{
                             var selected = new ProveedoresOnLine.Company.Models.Util.CatalogModel();
                             if (!string.IsNullOrEmpty(Model.RelatedThirdKnowledge.IdType))
@@ -116,7 +116,7 @@
 @* Report Viewer*@
 @{
     <div id="ThirdKnowledge_Dialog">
-        <form id="ThirdKnowledge_DialogForm" action="@Url.Action(MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeDetail,MVC.ThirdKnowledge.Name,new
+        <form id="ThirdKnowledge_DialogForm" action="@Url.Action(MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeDetailNew,MVC.ThirdKnowledge.Name,new
         {
             QueryPublicId = "",
             InitDate = DateTime.Now,
@@ -135,7 +135,7 @@
             QueryDetailsRoleOption: '@OptionRole',
         });
 
-    });
+    });    
 </script>
 
 

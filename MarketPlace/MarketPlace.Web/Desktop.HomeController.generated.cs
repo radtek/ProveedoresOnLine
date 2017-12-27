@@ -134,9 +134,11 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             public class _ViewNamesClass
             {
                 public readonly string Index = "Index";
+                public readonly string Notifications = "Notifications";
                 public readonly string TermsAndConditions = "TermsAndConditions";
             }
             public readonly string Index = "~/Areas/Desktop/Views/Home/Index.cshtml";
+            public readonly string Notifications = "~/Areas/Desktop/Views/Home/Notifications.cshtml";
             public readonly string TermsAndConditions = "~/Areas/Desktop/Views/Home/TermsAndConditions.cshtml";
         }
     }

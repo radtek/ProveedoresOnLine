@@ -133,9 +133,7 @@ namespace MarketPlace.Web.Controllers
             public _ViewNamesClass ViewNames { get { return s_ViewNames; } }
             public class _ViewNamesClass
             {
-                public readonly string Notifications = "Notifications";
             }
-            public readonly string Notifications = "~/Views/Home/Notifications.cshtml";
         }
     }
 
