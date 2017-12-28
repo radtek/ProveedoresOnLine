@@ -279,6 +279,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DS_ThirdKnowledgeReport.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Reports\DataSet\DS_ThirdKnowledgeReportNew.cs">
+      <DependentUpon>DS_ThirdKnowledgeReportNew.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Reports\DataSet\DS_ThirdKnowledgeReportNew.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -602,7 +605,6 @@
     <EmbeddedResource Include="Reports\TK_Report_ThirdKnowledgeQuery.rdlc" />
     <EmbeddedResource Include="Reports\TK_Report_GIBlackListReportDetail.rdlc" />
     <EmbeddedResource Include="Reports\TK_Report_ThirdKnowledgeQueryDetail.rdlc" />
-    <EmbeddedResource Include="Reports\TK_Report_ThirdKnowledgeQueryNew2.rdlc" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

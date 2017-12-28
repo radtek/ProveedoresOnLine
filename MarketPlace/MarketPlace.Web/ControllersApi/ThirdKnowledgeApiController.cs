@@ -139,22 +139,33 @@ namespace MarketPlace.Web.ControllersApi
                                     {
                                         oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[2]).Select(x => x.NameResult).FirstOrDefault());
                                         oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[2]).Select(x => x.ElasticId.ToString()).FirstOrDefault());
+
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId);
+                                        Tuple<string, string, string, List<string>, bool> oDetail = new
+                                                    Tuple<string, string, string, List<string>, bool>("INFORMACIÓN BÁSICA",
+                                                        IdType == 2 ? GeneralList[2] : GeneralList[1],
+                                                        IdType == 2 ? oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[2]).Select(x => x.Link).FirstOrDefault() :
+                                                        IdType == 1 ? oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[1]).Select(x => x.Link).FirstOrDefault() : "", oDetails,
+                                                                    oDetails.Count > 0 ? true : false);
+                                        oModel.TKGroupByListViewModel.Add(oDetail);
                                     }
 
                                     else if (IdType == 1 && oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[0]).Select(x => x.NameResult).FirstOrDefault() != null)
                                     {
                                         oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[0]).Select(x => x.NameResult).FirstOrDefault());
                                         oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[0]).Select(x => x.ElasticId.ToString()).FirstOrDefault());
+
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId);
+                                        Tuple<string, string, string, List<string>, bool> oDetail = new
+                                                    Tuple<string, string, string, List<string>, bool>("INFORMACIÓN BÁSICA",
+                                                        IdType == 2 ? GeneralList[2] : GeneralList[1],
+                                                        IdType == 2 ? oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[2]).Select(x => x.Link).FirstOrDefault() :
+                                                        IdType == 1 ? oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[1]).Select(x => x.Link).FirstOrDefault() : "", oDetails,
+                                                                    oDetails.Count > 0 ? true : false);
+                                        oModel.TKGroupByListViewModel.Add(oDetail);
                                     }
 
-                                    oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId);                                    
-                                    Tuple<string, string, string, List<string>, bool> oDetail = new
-                                                Tuple<string, string, string, List<string>, bool>("INFORMACIÓN BÁSICA",
-                                                    IdType == 2 ? GeneralList[2] : GeneralList[1],
-                                                    IdType == 2 ? oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[2]).Select(x => x.Link).FirstOrDefault() :
-                                                    IdType == 1 ? oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[1]).Select(x => x.Link).FirstOrDefault() : "", oDetails,
-                                                                oDetails.Count > 0 ? true : false);
-                                    oModel.TKGroupByListViewModel.Add(oDetail);
+                                    
                                 }
 
                                 #endregion

@@ -10,7 +10,6 @@ using System.Web;
 using System.Threading.Tasks;
 using ProveedoresOnLine.Company.Models.Util;
 using ProveedoresOnLine.SurveyModule.Models;
-using System.Web.Mvc;
 
 namespace ProveedoresOnLine.Reports.Test
 {
@@ -183,22 +182,15 @@ namespace ProveedoresOnLine.Reports.Test
             parameters.Add(new ReportParameter("GroupNameDce", "sdfsd"));
 
             DataTable data = new DataTable();
-            DataTable data2 = new DataTable();
-            DataTable data3 = new DataTable();
-            DataTable data4 = new DataTable();
-            DataTable data5 = new DataTable();
+            DataTable data1 = new DataTable();
 
             Tuple<byte[], string, string> report =
                 ProveedoresOnLine.Reports.Controller.ReportModule.TK_QueryReportNew("PDF",
                                                                                      data,
-                                                                                     data2,
-                                                                                     data3,
-                                                                                     data4,
-                                                                                     data5,
+                                                                                     data1,
                                                                                      parameters,
                                                                                      "C:\\Users\\Yamile García Vega\\source\\repos\\ProveedoresOnLine\\ProveedoresOnLine.Reports\\ProveedoresOnLine.Reports\\Reports\\TK_Report_ThirdKnowledgeQueryNew.rdlc");
-            parameters = null;
-            File(report.Item1, report.Item2, report.Item3);
+            parameters = null;            
         }
          
         #endregion
