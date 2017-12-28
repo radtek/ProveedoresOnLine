@@ -38,6 +38,12 @@
 
         public const string MP_CP_ColSearchCritery = "MP_CP_ColSearchCritery";
 
-        public const string C_Settings_ThirdKnowledgeIdNumberCollumn = "ThirdKnowledgeIdentificationNumber";
+        #region Search Critery
+        public const string Param_Natural = "Param_Natural";
+        public const string Param_Juridica = "Param_Juridica";
+        public const string Param_Extrajera = "Param_Extrajera";       
+        public const string Param_Denominacion = "Param_Denominacion";
+        
+        #endregion
     }
 }
