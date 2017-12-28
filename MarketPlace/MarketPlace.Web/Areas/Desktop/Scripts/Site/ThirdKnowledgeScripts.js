@@ -39,7 +39,7 @@ var Third_KnowledgeSimpleSearchObject = {
                     if (result.TKGroupByListViewModel != null && result.TKGroupByListViewModel.length > 0) {
                         
                         var queryResult = Enumerable.From(result.TKGroupByListViewModel).GroupBy(function (item) { return item.m_Item1; }).ToArray();
-                        
+                        console.log(queryResult);
                         $.each(queryResult, function (a, group) {
                             
                             resultDiv = '';
@@ -95,7 +95,7 @@ var Third_KnowledgeSimpleSearchObject = {
 
                                 resultDiv += '<div class="POMPProviderBoxInfo"><div class="row">';
                                 resultDiv += '<table class="table table-striped table-hover">' +
-                                    '<thead><th class="col-md-8">Nombre de la Lista</th><th class="col-md-1">Coincide?</th><th class="col-md-2">Mas Información</th></thead>' +
+                                    '<thead><th class="col-md-7">Nombre de la Lista</th><th class="col-md-2">Presenta posible Riesgo</th><th class="col-md-2">Mas Información</th></thead>' +
                                     '<tbody>'
 
                                 $.each(group.source, function (c, d) {

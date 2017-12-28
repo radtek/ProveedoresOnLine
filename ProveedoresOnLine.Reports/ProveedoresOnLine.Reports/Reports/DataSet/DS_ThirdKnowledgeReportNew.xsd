@@ -33,6 +33,16 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="ThirdKnowledge_BasicInfo" msprop:Generator_TableClassName="ThirdKnowledge_BasicInfoDataTable" msprop:Generator_TableVarName="tableThirdKnowledge_BasicInfo" msprop:Generator_RowChangedName="ThirdKnowledge_BasicInfoRowChanged" msprop:Generator_TablePropName="ThirdKnowledge_BasicInfo" msprop:Generator_RowDeletingName="ThirdKnowledge_BasicInfoRowDeleting" msprop:Generator_RowChangingName="ThirdKnowledge_BasicInfoRowChanging" msprop:Generator_RowEvHandlerName="ThirdKnowledge_BasicInfoRowChangeEventHandler" msprop:Generator_RowDeletedName="ThirdKnowledge_BasicInfoRowDeleted" msprop:Generator_RowClassName="ThirdKnowledge_BasicInfoRow" msprop:Generator_UserTableName="ThirdKnowledge_BasicInfo" msprop:Generator_RowEvArgName="ThirdKnowledge_BasicInfoRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Name" msprop:Generator_ColumnVarNameInTable="columnName" msprop:Generator_ColumnPropNameInRow="Name" msprop:Generator_ColumnPropNameInTable="NameColumn" msprop:Generator_UserColumnName="Name" type="xs:string" minOccurs="0" />
+              <xs:element name="NameGroupList" msprop:Generator_ColumnVarNameInTable="columnNameGroupList" msprop:Generator_ColumnPropNameInRow="NameGroupList" msprop:Generator_ColumnPropNameInTable="NameGroupListColumn" msprop:Generator_UserColumnName="NameGroupList" type="xs:string" minOccurs="0" />
+              <xs:element name="IdentificationQuery" msprop:Generator_ColumnVarNameInTable="columnIdentificationQuery" msprop:Generator_ColumnPropNameInRow="IdentificationQuery" msprop:Generator_ColumnPropNameInTable="IdentificationQueryColumn" msprop:Generator_UserColumnName="IdentificationQuery" type="xs:string" minOccurs="0" />
+              <xs:element name="NameResult" msprop:Generator_ColumnVarNameInTable="columnNameResult" msprop:Generator_ColumnPropNameInRow="NameResult" msprop:Generator_ColumnPropNameInTable="NameResultColumn" msprop:Generator_UserColumnName="NameResult" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:choice>
     </xs:complexType>
   </xs:element>

@@ -520,7 +520,7 @@ namespace ProveedoresOnLine.Reports.Controller
 
         }
 
-        public static Tuple<byte[], string, string> TK_QueryReportNew(string FormatType, DataTable data_rst, DataTable data_dce, DataTable data_psp, DataTable data_snc, DataTable data_rstNew, List<ReportParameter> ReportData, string FilePath)
+        public static Tuple<byte[], string, string> TK_QueryReportNew(string FormatType, DataTable data_rst, DataTable data_basicInfo, List<ReportParameter> ReportData, string FilePath)
         {
             LocalReport localReport = new LocalReport();
 
@@ -531,30 +531,16 @@ namespace ProveedoresOnLine.Reports.Controller
             Microsoft.Reporting.WebForms.ReportDataSource src_rst = new Microsoft.Reporting.WebForms.ReportDataSource();
             src_rst.Name = "DataSet_rst";
             src_rst.Value = data_rst != null ? data_rst : new DataTable();
-            Microsoft.Reporting.WebForms.ReportDataSource src_dce = new Microsoft.Reporting.WebForms.ReportDataSource();
-            src_dce.Name = "DataSet_dce";
-            src_dce.Value = data_dce != null ? data_dce : new DataTable();
-            Microsoft.Reporting.WebForms.ReportDataSource src_fnc = new Microsoft.Reporting.WebForms.ReportDataSource();
 
-            Microsoft.Reporting.WebForms.ReportDataSource src_psp = new Microsoft.Reporting.WebForms.ReportDataSource();
-            src_psp.Name = "DataSet_psp";
-            src_psp.Value = data_psp != null ? data_psp : new DataTable();
-            Microsoft.Reporting.WebForms.ReportDataSource src_snc = new Microsoft.Reporting.WebForms.ReportDataSource();
-            src_snc.Name = "DataSet_snc";
-            src_snc.Value = data_snc != null ? data_snc : new DataTable();
-
-            /*Microsoft.Reporting.WebForms.ReportDataSource src_rstNew = new Microsoft.Reporting.WebForms.ReportDataSource();
-            src_rst.Name = "DataSet_rstNew";
-            src_rst.Value = data_rstNew != null ? data_rstNew : new DataTable();*/
+            Microsoft.Reporting.WebForms.ReportDataSource src_basicInfo = new Microsoft.Reporting.WebForms.ReportDataSource();
+            src_basicInfo.Name = "DataSet_InfoBasic";
+            src_basicInfo.Value = data_basicInfo != null ? data_basicInfo : new DataTable();
 
             ReportDataSource source = new ReportDataSource();
             source.Name = "DS_ThirdKnowledgeReport";
 
             localReport.DataSources.Add(src_rst);
-            localReport.DataSources.Add(src_dce);
-            localReport.DataSources.Add(src_psp);
-            localReport.DataSources.Add(src_snc);
-            //localReport.DataSources.Add(src_rstNew);
+            localReport.DataSources.Add(src_basicInfo);
 
             string mimeType;
             string encoding;
