@@ -368,27 +368,23 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
 
             for (int i = 0; i < ExcelDs.Rows.Count; i++)
             {
-                string PersonType = "";
-                string Name = "";
-                string IdentificationNumber = "";
+                string SearchCritery = "";
+                string SearchParam = "";
+                
                 if (ExcelDs.Rows[i].ItemArray.Count() > 2)
                 {
-                    PersonType = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgePersonTypeCollumn].Value].ToString() != null ? "N/A" : ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgePersonTypeCollumn].Value].ToString();
-                    Name = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeNameCollumn].Value].ToString();
-                    IdentificationNumber = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeIdNumberCollumn].Value].ToString();
-                }
-                else
-                {
-                    Name = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeNameCollumn].Value].ToString();
-                    IdentificationNumber = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeIdNumberCollumn].Value].ToString();
-                }
-                if (IdentificationNumber.Contains("-"))
-                    PersonType = "juridica";
+                    SearchCritery = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.MP_CP_ColSearchCritery].Value].ToString(); 
+                    SearchParam = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.MP_CP_ColSearchParam].Value].ToString();                    
+                }               
                 bool validate = false;
                 //Index ThirdKnowledge Search
                 Nest.ISearchResponse<ThirdknowledgeIndexSearchModel> result = null;
-                if (!string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(IdentificationNumber))
+                if (!string.IsNullOrEmpty(SearchCritery) && !string.IsNullOrEmpty(SearchParam))
                 {
+                    if (SearchCritery == ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.MP_CP_ColSearchCritery].Value)
+                    {
+
+                    }
                     validate = true;
                     result = ThirdKnowledgeClient.Search<ThirdknowledgeIndexSearchModel>(s => s
                       .From(0)
@@ -399,30 +395,7 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                                    q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
                         ).MinScore(2));
                 }
-                else if (string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(IdentificationNumber))                
-                {
-                    validate = true;
-                    result = ThirdKnowledgeClient.Search<ThirdknowledgeIndexSearchModel>(s => s
-                        .From(0)
-                            .TrackScores(true)
-                            .From(page)
-                            .Size(10)
-                         .Query(q => 
-                                 q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
-                      ).MinScore(2));
-                }
-                else if (!string.IsNullOrEmpty(Name) && string.IsNullOrEmpty(IdentificationNumber))
-                {
-                    validate = true;
-                    result = ThirdKnowledgeClient.Search<ThirdknowledgeIndexSearchModel>(s => s
-                        .From(0)
-                            .TrackScores(true)
-                            .From(page)
-                            .Size(10)
-                         .Query(q =>
-                                 q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Name))
-                      ).MinScore(2));
-                }
+                
 
                 //Search Proc 
                 //JudiciaProcess

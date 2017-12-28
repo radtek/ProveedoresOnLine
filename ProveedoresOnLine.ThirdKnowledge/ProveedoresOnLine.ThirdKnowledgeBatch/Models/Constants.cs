@@ -34,9 +34,9 @@
 
         public const string C_Settings_ThirdKnowledgeIndex = "ThirdknowledgeIndex";
 
-        public const string C_Settings_ThirdKnowledgePersonTypeCollumn = "ThirdKnowledgePersonType";
+        public const string MP_CP_ColSearchParam = "MP_CP_ColSearchParam";
 
-        public const string C_Settings_ThirdKnowledgeNameCollumn = "ThirdKnowledgeName";
+        public const string MP_CP_ColSearchCritery = "MP_CP_ColSearchCritery";
 
         public const string C_Settings_ThirdKnowledgeIdNumberCollumn = "ThirdKnowledgeIdentificationNumber";
     }
