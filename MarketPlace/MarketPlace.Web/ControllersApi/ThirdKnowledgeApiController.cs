@@ -677,9 +677,9 @@ namespace MarketPlace.Web.ControllersApi
 
                         string UncodifiedObj = new JavaScriptSerializer().Serialize(values);
                         if (UncodifiedObj.Contains(Models.General.InternalSettings.Instance
-                                        [Models.General.Constants.MP_CP_ColIdNumber].Value)
+                                        [Models.General.Constants.MP_CP_ColSearchCritery].Value)
                             && UncodifiedObj.Contains(Models.General.InternalSettings.Instance
-                                        [Models.General.Constants.MP_CP_ColIdName].Value))
+                                        [Models.General.Constants.MP_CP_ColSearchParam].Value))
                         {
                             //Get The Active Plan By Customer                            
                             oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries += (workBook.Worksheets[1].Dimension.End.Row - 1);
