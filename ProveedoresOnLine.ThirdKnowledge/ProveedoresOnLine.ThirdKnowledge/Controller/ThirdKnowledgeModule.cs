@@ -40,6 +40,8 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
                 var oSearchResult = ElasticSearch(IdType, SearchParam);
 
+                oQueryToCreate.RelatedQueryInfoModel = new List<TDQueryInfoModel>();
+
                 //Identify personType and Call the respective function
                 //Persons
                 if (IdType != 4)
@@ -68,9 +70,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         if (IdType == 2)                        
                             RUESResult = await RUESSearch(2,"", SearchParam);
                     }
-                }                
-
-                oQueryToCreate.RelatedQueryInfoModel = new List<TDQueryInfoModel>();
+                }
 
                 #region Procuraduria
                 if (procResult != null && procResult.Count > 0)
@@ -153,6 +153,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         NameResult = !string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1) ? RegDianResult.FirstOrDefault().Item1 : "",
                         QueryPublicId = oQueryToCreate.QueryPublicId,
                         IdList = "Registraduria/Dian",
+                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : IdType == 4 ? "Denominación o Razon Social" : "",
                         GroupName = "Registraduria/Dian",
                         ListName = "Registraduria/Dian",
                         ElasticId = (int)enumElasticGroupId.RegisterDian,
@@ -167,6 +168,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
                     {
                         QueryPublicId = oQueryToCreate.QueryPublicId,
+                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : IdType == 4 ? "Denominación o Razon Social" : "",
                         IdList = "Registraduria",
                         GroupName = "Registraduria - Puesto de Votación",
                         Link = RegEntityResult.FirstOrDefault().Item1,
@@ -185,6 +187,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     {
                         QueryPublicId = oQueryToCreate.QueryPublicId,
                         IdList = "RUES",
+                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : IdType == 4 ? "Denominación o Razon Social" : "",
                         GroupName = "RUES",
                         NameResult = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[1]) ? RUESResult.FirstOrDefault().Item2[1] : "No aparece registro en RUES",
                         IdentificationResult = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[0]) ? RUESResult.FirstOrDefault().Item2[0] : "No aparece registro en RUES",

@@ -26,8 +26,6 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
         
         private ThirdKnowlegde_rstDataTable tableThirdKnowlegde_rst;
         
-        private ThirdKnowledge_objDataTable tableThirdKnowledge_obj;
-        
         private ThirdKnowledge_BasicInfoDataTable tableThirdKnowledge_BasicInfo;
         
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
@@ -61,9 +59,6 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
                 if ((ds.Tables["ThirdKnowlegde_rst"] != null)) {
                     base.Tables.Add(new ThirdKnowlegde_rstDataTable(ds.Tables["ThirdKnowlegde_rst"]));
                 }
-                if ((ds.Tables["ThirdKnowledge_obj"] != null)) {
-                    base.Tables.Add(new ThirdKnowledge_objDataTable(ds.Tables["ThirdKnowledge_obj"]));
-                }
                 if ((ds.Tables["ThirdKnowledge_BasicInfo"] != null)) {
                     base.Tables.Add(new ThirdKnowledge_BasicInfoDataTable(ds.Tables["ThirdKnowledge_BasicInfo"]));
                 }
@@ -92,16 +87,6 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
         public ThirdKnowlegde_rstDataTable ThirdKnowlegde_rst {
             get {
                 return this.tableThirdKnowlegde_rst;
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        [global::System.ComponentModel.Browsable(false)]
-        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
-        public ThirdKnowledge_objDataTable ThirdKnowledge_obj {
-            get {
-                return this.tableThirdKnowledge_obj;
             }
         }
         
@@ -185,9 +170,6 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
                 if ((ds.Tables["ThirdKnowlegde_rst"] != null)) {
                     base.Tables.Add(new ThirdKnowlegde_rstDataTable(ds.Tables["ThirdKnowlegde_rst"]));
                 }
-                if ((ds.Tables["ThirdKnowledge_obj"] != null)) {
-                    base.Tables.Add(new ThirdKnowledge_objDataTable(ds.Tables["ThirdKnowledge_obj"]));
-                }
                 if ((ds.Tables["ThirdKnowledge_BasicInfo"] != null)) {
                     base.Tables.Add(new ThirdKnowledge_BasicInfoDataTable(ds.Tables["ThirdKnowledge_BasicInfo"]));
                 }
@@ -230,12 +212,6 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
                     this.tableThirdKnowlegde_rst.InitVars();
                 }
             }
-            this.tableThirdKnowledge_obj = ((ThirdKnowledge_objDataTable)(base.Tables["ThirdKnowledge_obj"]));
-            if ((initTable == true)) {
-                if ((this.tableThirdKnowledge_obj != null)) {
-                    this.tableThirdKnowledge_obj.InitVars();
-                }
-            }
             this.tableThirdKnowledge_BasicInfo = ((ThirdKnowledge_BasicInfoDataTable)(base.Tables["ThirdKnowledge_BasicInfo"]));
             if ((initTable == true)) {
                 if ((this.tableThirdKnowledge_BasicInfo != null)) {
@@ -254,8 +230,6 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
             this.SchemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
             this.tableThirdKnowlegde_rst = new ThirdKnowlegde_rstDataTable();
             base.Tables.Add(this.tableThirdKnowlegde_rst);
-            this.tableThirdKnowledge_obj = new ThirdKnowledge_objDataTable();
-            base.Tables.Add(this.tableThirdKnowledge_obj);
             this.tableThirdKnowledge_BasicInfo = new ThirdKnowledge_BasicInfoDataTable();
             base.Tables.Add(this.tableThirdKnowledge_BasicInfo);
         }
@@ -263,12 +237,6 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private bool ShouldSerializeThirdKnowlegde_rst() {
-            return false;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        private bool ShouldSerializeThirdKnowledge_obj() {
             return false;
         }
         
@@ -335,9 +303,6 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public delegate void ThirdKnowlegde_rstRowChangeEventHandler(object sender, ThirdKnowlegde_rstRowChangeEvent e);
-        
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public delegate void ThirdKnowledge_objRowChangeEventHandler(object sender, ThirdKnowledge_objRowChangeEvent e);
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public delegate void ThirdKnowledge_BasicInfoRowChangeEventHandler(object sender, ThirdKnowledge_BasicInfoRowChangeEvent e);
@@ -591,309 +556,6 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
                 global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
                 attribute2.Name = "tableTypeName";
                 attribute2.FixedValue = "ThirdKnowlegde_rstDataTable";
-                type.Attributes.Add(attribute2);
-                type.Particle = sequence;
-                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
-                if (xs.Contains(dsSchema.TargetNamespace)) {
-                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
-                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
-                    try {
-                        global::System.Xml.Schema.XmlSchema schema = null;
-                        dsSchema.Write(s1);
-                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
-                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
-                            s2.SetLength(0);
-                            schema.Write(s2);
-                            if ((s1.Length == s2.Length)) {
-                                s1.Position = 0;
-                                s2.Position = 0;
-                                for (; ((s1.Position != s1.Length) 
-                                            && (s1.ReadByte() == s2.ReadByte())); ) {
-                                    ;
-                                }
-                                if ((s1.Position == s1.Length)) {
-                                    return type;
-                                }
-                            }
-                        }
-                    }
-                    finally {
-                        if ((s1 != null)) {
-                            s1.Close();
-                        }
-                        if ((s2 != null)) {
-                            s2.Close();
-                        }
-                    }
-                }
-                xs.Add(dsSchema);
-                return type;
-            }
-        }
-        
-        /// <summary>
-        ///Represents the strongly named DataTable class.
-        ///</summary>
-        [global::System.Serializable()]
-        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class ThirdKnowledge_objDataTable : global::System.Data.TypedTableBase<ThirdKnowledge_objRow> {
-            
-            private global::System.Data.DataColumn columnItem1;
-            
-            private global::System.Data.DataColumn columnItem2;
-            
-            private global::System.Data.DataColumn columnItem3;
-            
-            private global::System.Data.DataColumn columnItem4;
-            
-            private global::System.Data.DataColumn columnItem5;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ThirdKnowledge_objDataTable() {
-                this.TableName = "ThirdKnowledge_obj";
-                this.BeginInit();
-                this.InitClass();
-                this.EndInit();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            internal ThirdKnowledge_objDataTable(global::System.Data.DataTable table) {
-                this.TableName = table.TableName;
-                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
-                    this.CaseSensitive = table.CaseSensitive;
-                }
-                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
-                    this.Locale = table.Locale;
-                }
-                if ((table.Namespace != table.DataSet.Namespace)) {
-                    this.Namespace = table.Namespace;
-                }
-                this.Prefix = table.Prefix;
-                this.MinimumCapacity = table.MinimumCapacity;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected ThirdKnowledge_objDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
-                    base(info, context) {
-                this.InitVars();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn Item1Column {
-                get {
-                    return this.columnItem1;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn Item2Column {
-                get {
-                    return this.columnItem2;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn Item3Column {
-                get {
-                    return this.columnItem3;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn Item4Column {
-                get {
-                    return this.columnItem4;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn Item5Column {
-                get {
-                    return this.columnItem5;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            [global::System.ComponentModel.Browsable(false)]
-            public int Count {
-                get {
-                    return this.Rows.Count;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ThirdKnowledge_objRow this[int index] {
-                get {
-                    return ((ThirdKnowledge_objRow)(this.Rows[index]));
-                }
-            }
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public event ThirdKnowledge_objRowChangeEventHandler ThirdKnowledge_objRowChanging;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public event ThirdKnowledge_objRowChangeEventHandler ThirdKnowledge_objRowChanged;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public event ThirdKnowledge_objRowChangeEventHandler ThirdKnowledge_objRowDeleting;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public event ThirdKnowledge_objRowChangeEventHandler ThirdKnowledge_objRowDeleted;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void AddThirdKnowledge_objRow(ThirdKnowledge_objRow row) {
-                this.Rows.Add(row);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ThirdKnowledge_objRow AddThirdKnowledge_objRow(string Item1, string Item2, string Item3, string Item4, string Item5) {
-                ThirdKnowledge_objRow rowThirdKnowledge_objRow = ((ThirdKnowledge_objRow)(this.NewRow()));
-                object[] columnValuesArray = new object[] {
-                        Item1,
-                        Item2,
-                        Item3,
-                        Item4,
-                        Item5};
-                rowThirdKnowledge_objRow.ItemArray = columnValuesArray;
-                this.Rows.Add(rowThirdKnowledge_objRow);
-                return rowThirdKnowledge_objRow;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public override global::System.Data.DataTable Clone() {
-                ThirdKnowledge_objDataTable cln = ((ThirdKnowledge_objDataTable)(base.Clone()));
-                cln.InitVars();
-                return cln;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override global::System.Data.DataTable CreateInstance() {
-                return new ThirdKnowledge_objDataTable();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            internal void InitVars() {
-                this.columnItem1 = base.Columns["Item1"];
-                this.columnItem2 = base.Columns["Item2"];
-                this.columnItem3 = base.Columns["Item3"];
-                this.columnItem4 = base.Columns["Item4"];
-                this.columnItem5 = base.Columns["Item5"];
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            private void InitClass() {
-                this.columnItem1 = new global::System.Data.DataColumn("Item1", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnItem1);
-                this.columnItem2 = new global::System.Data.DataColumn("Item2", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnItem2);
-                this.columnItem3 = new global::System.Data.DataColumn("Item3", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnItem3);
-                this.columnItem4 = new global::System.Data.DataColumn("Item4", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnItem4);
-                this.columnItem5 = new global::System.Data.DataColumn("Item5", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnItem5);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ThirdKnowledge_objRow NewThirdKnowledge_objRow() {
-                return ((ThirdKnowledge_objRow)(this.NewRow()));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
-                return new ThirdKnowledge_objRow(builder);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override global::System.Type GetRowType() {
-                return typeof(ThirdKnowledge_objRow);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowChanged(e);
-                if ((this.ThirdKnowledge_objRowChanged != null)) {
-                    this.ThirdKnowledge_objRowChanged(this, new ThirdKnowledge_objRowChangeEvent(((ThirdKnowledge_objRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowChanging(e);
-                if ((this.ThirdKnowledge_objRowChanging != null)) {
-                    this.ThirdKnowledge_objRowChanging(this, new ThirdKnowledge_objRowChangeEvent(((ThirdKnowledge_objRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowDeleted(e);
-                if ((this.ThirdKnowledge_objRowDeleted != null)) {
-                    this.ThirdKnowledge_objRowDeleted(this, new ThirdKnowledge_objRowChangeEvent(((ThirdKnowledge_objRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowDeleting(e);
-                if ((this.ThirdKnowledge_objRowDeleting != null)) {
-                    this.ThirdKnowledge_objRowDeleting(this, new ThirdKnowledge_objRowChangeEvent(((ThirdKnowledge_objRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void RemoveThirdKnowledge_objRow(ThirdKnowledge_objRow row) {
-                this.Rows.Remove(row);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
-                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
-                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                DS_ThirdKnowledgeReportNew ds = new DS_ThirdKnowledgeReportNew();
-                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
-                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
-                any1.MinOccurs = new decimal(0);
-                any1.MaxOccurs = decimal.MaxValue;
-                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
-                sequence.Items.Add(any1);
-                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
-                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
-                any2.MinOccurs = new decimal(1);
-                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
-                sequence.Items.Add(any2);
-                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
-                attribute1.Name = "namespace";
-                attribute1.FixedValue = ds.Namespace;
-                type.Attributes.Add(attribute1);
-                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
-                attribute2.Name = "tableTypeName";
-                attribute2.FixedValue = "ThirdKnowledge_objDataTable";
                 type.Attributes.Add(attribute2);
                 type.Particle = sequence;
                 global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
@@ -1353,161 +1015,6 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
         /// <summary>
         ///Represents strongly named DataRow class.
         ///</summary>
-        public partial class ThirdKnowledge_objRow : global::System.Data.DataRow {
-            
-            private ThirdKnowledge_objDataTable tableThirdKnowledge_obj;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            internal ThirdKnowledge_objRow(global::System.Data.DataRowBuilder rb) : 
-                    base(rb) {
-                this.tableThirdKnowledge_obj = ((ThirdKnowledge_objDataTable)(this.Table));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string Item1 {
-                get {
-                    try {
-                        return ((string)(this[this.tableThirdKnowledge_obj.Item1Column]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'Item1\' in table \'ThirdKnowledge_obj\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableThirdKnowledge_obj.Item1Column] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string Item2 {
-                get {
-                    try {
-                        return ((string)(this[this.tableThirdKnowledge_obj.Item2Column]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'Item2\' in table \'ThirdKnowledge_obj\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableThirdKnowledge_obj.Item2Column] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string Item3 {
-                get {
-                    try {
-                        return ((string)(this[this.tableThirdKnowledge_obj.Item3Column]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'Item3\' in table \'ThirdKnowledge_obj\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableThirdKnowledge_obj.Item3Column] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string Item4 {
-                get {
-                    try {
-                        return ((string)(this[this.tableThirdKnowledge_obj.Item4Column]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'Item4\' in table \'ThirdKnowledge_obj\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableThirdKnowledge_obj.Item4Column] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string Item5 {
-                get {
-                    try {
-                        return ((string)(this[this.tableThirdKnowledge_obj.Item5Column]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'Item5\' in table \'ThirdKnowledge_obj\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableThirdKnowledge_obj.Item5Column] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsItem1Null() {
-                return this.IsNull(this.tableThirdKnowledge_obj.Item1Column);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetItem1Null() {
-                this[this.tableThirdKnowledge_obj.Item1Column] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsItem2Null() {
-                return this.IsNull(this.tableThirdKnowledge_obj.Item2Column);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetItem2Null() {
-                this[this.tableThirdKnowledge_obj.Item2Column] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsItem3Null() {
-                return this.IsNull(this.tableThirdKnowledge_obj.Item3Column);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetItem3Null() {
-                this[this.tableThirdKnowledge_obj.Item3Column] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsItem4Null() {
-                return this.IsNull(this.tableThirdKnowledge_obj.Item4Column);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetItem4Null() {
-                this[this.tableThirdKnowledge_obj.Item4Column] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsItem5Null() {
-                return this.IsNull(this.tableThirdKnowledge_obj.Item5Column);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetItem5Null() {
-                this[this.tableThirdKnowledge_obj.Item5Column] = global::System.Convert.DBNull;
-            }
-        }
-        
-        /// <summary>
-        ///Represents strongly named DataRow class.
-        ///</summary>
         public partial class ThirdKnowledge_BasicInfoRow : global::System.Data.DataRow {
             
             private ThirdKnowledge_BasicInfoDataTable tableThirdKnowledge_BasicInfo;
@@ -1654,40 +1161,6 @@ namespace ProveedoresOnLine.Reports.Reports.DataSet {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public ThirdKnowlegde_rstRow Row {
-                get {
-                    return this.eventRow;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataRowAction Action {
-                get {
-                    return this.eventAction;
-                }
-            }
-        }
-        
-        /// <summary>
-        ///Row event argument class
-        ///</summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public class ThirdKnowledge_objRowChangeEvent : global::System.EventArgs {
-            
-            private ThirdKnowledge_objRow eventRow;
-            
-            private global::System.Data.DataRowAction eventAction;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ThirdKnowledge_objRowChangeEvent(ThirdKnowledge_objRow row, global::System.Data.DataRowAction action) {
-                this.eventRow = row;
-                this.eventAction = action;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ThirdKnowledge_objRow Row {
                 get {
                     return this.eventRow;
                 }

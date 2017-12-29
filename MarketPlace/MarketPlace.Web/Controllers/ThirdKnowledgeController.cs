@@ -1100,7 +1100,7 @@ namespace MarketPlace.Web.Controllers
                             oDetails.Add(x.RelatedQueryInfoModel.Where(p => p.ListName == GeneralList[0]).Select(p => p.ElasticId.ToString()).FirstOrDefault());
                             oDetails.Add(x.QueryPublicId);
                             oDetails.Add(x.RelatedQueryInfoModel.Where(p => p.IdentificationResult != null).Select(p => p.IdentificationResult).FirstOrDefault());
-                            oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.QueryIdentification != null).Select(y => y.QueryIdentification).FirstOrDefault());
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.QueryName != null).Select(y => y.QueryName).FirstOrDefault());
                         }
                         
                         Tuple<string, string, string, List<string>, bool> oDetail = new

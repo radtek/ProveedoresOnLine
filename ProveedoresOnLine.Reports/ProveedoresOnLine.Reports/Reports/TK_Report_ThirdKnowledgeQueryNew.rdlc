@@ -25,7 +25,7 @@
         <Top>0.37358cm</Top>
         <Left>0.45719cm</Left>
         <Height>0.57354cm</Height>
-        <Width>3.7861cm</Width>
+        <Width>2.93943cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -55,9 +55,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox19</rd:DefaultName>
         <Top>0.37358cm</Top>
-        <Left>4.41968cm</Left>
+        <Left>3.53869cm</Left>
         <Height>0.57354cm</Height>
-        <Width>7.89966cm</Width>
+        <Width>5.68175cm</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
@@ -90,9 +90,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox19</rd:DefaultName>
         <Top>0.37358cm</Top>
-        <Left>12.65447cm</Left>
+        <Left>9.51219cm</Left>
         <Height>0.57354cm</Height>
-        <Width>4.42111cm</Width>
+        <Width>3.07174cm</Width>
         <ZIndex>2</ZIndex>
         <Style>
           <Border>
@@ -123,9 +123,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox19</rd:DefaultName>
         <Top>0.37358cm</Top>
-        <Left>17.25197cm</Left>
+        <Left>12.76031cm</Left>
         <Height>0.57354cm</Height>
-        <Width>7.79874cm</Width>
+        <Width>3.63596cm</Width>
         <ZIndex>3</ZIndex>
         <Style>
           <Border>
@@ -146,6 +146,7 @@
               <TextRun>
                 <Value>Resultados de la Busqueda</Value>
                 <Style>
+                  <FontSize>9pt</FontSize>
                   <FontWeight>Bold</FontWeight>
                   <Color>DimGray</Color>
                 </Style>
@@ -156,8 +157,8 @@
         </Paragraphs>
         <rd:DefaultName>Textbox19</rd:DefaultName>
         <Top>2.17455cm</Top>
-        <Height>0.78521cm</Height>
-        <Width>25.44798cm</Width>
+        <Height>0.57354cm</Height>
+        <Width>16.61523cm</Width>
         <ZIndex>4</ZIndex>
         <Visibility>
           <Hidden>= Iif (CountRows("DataSet_rst") &gt; 0, false, true)</Hidden>
@@ -182,10 +183,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>18.71333cm</Width>
+              <Width>10.04294cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.89007cm</Width>
+              <Width>6.1151cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -204,7 +205,6 @@
                               <Value>=Fields!GroupName.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
-                                <FontSize>12pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>White</Color>
                               </Style>
@@ -246,7 +246,7 @@
                             <TextRun>
                               <Value>Nombre de la Lista</Value>
                               <Style>
-                                <FontSize>11pt</FontSize>
+                                <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -279,7 +279,7 @@
                             <TextRun>
                               <Value>Presenta posible Riesgo</Value>
                               <Style>
-                                <FontSize>11pt</FontSize>
+                                <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -316,7 +316,9 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Fields!ListName.Value</Value>
-                              <Style />
+                              <Style>
+                                <FontSize>9pt</FontSize>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
@@ -347,6 +349,7 @@
                             <TextRun>
                               <Value>=IIf(Fields!Status.Value.ToString().ToUpper() = "TRUE" , "SI","NO")</Value>
                               <Style>
+                                <FontSize>9pt</FontSize>
                                 <Color>=IIf(Fields!Status.Value.ToString().ToUpper() = "TRUE", "#9d4444","")</Color>
                               </Style>
                             </TextRun>
@@ -406,11 +409,12 @@
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
+        <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet_rst</DataSetName>
-        <Top>5.66773cm</Top>
-        <Left>1.08162cm</Left>
+        <Top>4.79461cm</Top>
+        <Left>0.45719cm</Left>
         <Height>2.01167cm</Height>
-        <Width>23.6034cm</Width>
+        <Width>16.15804cm</Width>
         <ZIndex>5</ZIndex>
         <Style>
           <Border>
@@ -422,10 +426,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>9.01522cm</Width>
+              <Width>7.98007cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>9.29979cm</Width>
+              <Width>6.25708cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -444,7 +448,6 @@
                               <Value>=Fields!Name.Value + " - " + Fields!NameGroupList.Value</Value>
                               <Style>
                                 <FontStyle>Italic</FontStyle>
-                                <FontSize>12pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>White</Color>
                               </Style>
@@ -467,7 +470,6 @@
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell />
@@ -486,7 +488,9 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Fields!NameResult.Value</Value>
-                              <Style />
+                              <Style>
+                                <FontSize>9pt</FontSize>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
@@ -516,7 +520,9 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Fields!IdentificationQuery.Value</Value>
-                              <Style />
+                              <Style>
+                                <FontSize>9pt</FontSize>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
@@ -571,10 +577,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>DataSet_InfoBasic</DataSetName>
-        <Top>3.70981cm</Top>
-        <Left>3.30412cm</Left>
+        <Top>3.18064cm</Top>
+        <Left>1.24037cm</Left>
         <Height>1.2cm</Height>
-        <Width>18.31501cm</Width>
+        <Width>14.23715cm</Width>
         <ZIndex>6</ZIndex>
         <Style>
           <Border>
@@ -605,7 +611,7 @@
         <Top>1.25106cm</Top>
         <Left>0.45719cm</Left>
         <Height>0.57354cm</Height>
-        <Width>3.7861cm</Width>
+        <Width>2.93943cm</Width>
         <ZIndex>7</ZIndex>
         <Style>
           <Border>
@@ -636,9 +642,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox19</rd:DefaultName>
         <Top>1.25106cm</Top>
-        <Left>4.41968cm</Left>
+        <Left>3.53869cm</Left>
         <Height>0.57354cm</Height>
-        <Width>7.89966cm</Width>
+        <Width>9.33628cm</Width>
         <ZIndex>8</ZIndex>
         <Style>
           <Border>
@@ -651,13 +657,13 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>7.83815cm</Height>
+    <Height>7.25607cm</Height>
     <Style />
   </Body>
-  <Width>26.03006cm</Width>
+  <Width>16.61523cm</Width>
   <Page>
     <PageHeader>
-      <Height>2.5841cm</Height>
+      <Height>1.71097cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -665,8 +671,8 @@
           <Source>External</Source>
           <Value>=Parameters!CustomerImage.Value</Value>
           <Sizing>FitProportional</Sizing>
-          <Top>0.18344cm</Top>
-          <Left>0.29413cm</Left>
+          <Top>0cm</Top>
+          <Left>0cm</Left>
           <Height>1.63067cm</Height>
           <Width>3.39354cm</Width>
           <Style>
@@ -687,7 +693,7 @@
                       <Value>="REPORTE CONSULTAS LISTAS RESTRICTIVAS"</Value>
                       <Style>
                         <FontFamily>Calibri</FontFamily>
-                        <FontSize>16pt</FontSize>
+                        <FontSize>14pt</FontSize>
                         <Color>White</Color>
                       </Style>
                     </TextRun>
@@ -698,9 +704,9 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>0.5106cm</Top>
-              <Height>0.86458cm</Height>
-              <Width>21.14633cm</Width>
+              <Top>0.45768cm</Top>
+              <Height>0.65291cm</Height>
+              <Width>12.85759cm</Width>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -714,9 +720,9 @@
             </Textbox>
           </ReportItems>
           <KeepTogether>true</KeepTogether>
-          <Left>4.30165cm</Left>
-          <Height>2.01167cm</Height>
-          <Width>21.14633cm</Width>
+          <Left>3.53869cm</Left>
+          <Height>1.47015cm</Height>
+          <Width>12.85759cm</Width>
           <ZIndex>1</ZIndex>
           <Style>
             <Border>
@@ -760,7 +766,7 @@
           <Top>0.28826cm</Top>
           <Left>0.29416cm</Left>
           <Height>0.88399cm</Height>
-          <Width>24.75659cm</Width>
+          <Width>16.32107cm</Width>
           <Style>
             <Border>
               <Style>None</Style>
@@ -779,8 +785,8 @@
         </Border>
       </Style>
     </PageFooter>
-    <PageHeight>21cm</PageHeight>
-    <PageWidth>29.7cm</PageWidth>
+    <PageHeight>29.7cm</PageHeight>
+    <PageWidth>21cm</PageWidth>
     <LeftMargin>2cm</LeftMargin>
     <RightMargin>2cm</RightMargin>
     <TopMargin>2cm</TopMargin>
