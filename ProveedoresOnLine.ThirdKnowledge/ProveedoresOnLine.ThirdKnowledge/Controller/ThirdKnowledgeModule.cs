@@ -151,6 +151,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
                     {
                         NameResult = !string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1) ? RegDianResult.FirstOrDefault().Item1 : "",
+                        IdentificationResult = SearchParam,
                         QueryPublicId = oQueryToCreate.QueryPublicId,
                         IdList = "Registraduria/Dian",
                         DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : IdType == 4 ? "Denominación o Razon Social" : "",
@@ -331,9 +332,13 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
                         oInfoCreate.QueryPublicId = oQueryToCreate.QueryPublicId;
                         if (IdType != 4)
-                            oInfoCreate.QueryName = SearchParam;
-                        else
+                        {
                             oInfoCreate.QueryIdentification = !string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty;
+                            oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty;                            
+                        }
+                        else                        
+                            oInfoCreate.QueryName = SearchParam;
+                        
                         oInfoCreate.GroupName = "SIN COINCIDENCIAS";
                         oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
 

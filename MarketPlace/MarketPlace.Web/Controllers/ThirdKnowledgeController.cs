@@ -293,38 +293,45 @@ namespace MarketPlace.Web.Controllers
                 .Terms("useremail", bl => bl
                     .Field(fi => fi.User)))
                 .Query(q => q.Bool(f => f.
-                    Filter(f2 =>
+                    Should(f2 =>
                         {
                             QueryContainer qb = null;
 
-                            qb &= f2.Terms(tms => tms
-                            .Field(fi => fi.CustomerPublicId.ToLower())
-                             .Terms<string>(SessionModel.CurrentCompany.CompanyPublicId.ToLower())
-                            );
+                            //q.Match(m => m
+                            //            .Field(Field => Field.oCustomFiltersIndexModel.First().CustomerPublicId)
+                            //            .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                            qb &= f2.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower());
+                            //f2.Match(m => m
+                            //            .Field(Field => Field.CustomerPublicId.ToLower())
+                            //            .Query(SessionModel.CurrentCompany.CompanyPublicId.ToLower()));
+                            //            .Query(SessionModel.CurrentCompany.CompanyPublicId) f2.Terms(tms => tms
+                            //.Field(fi => fi.CustomerPublicId.ToLower())
+                            // .Terms<string>(SessionModel.CurrentCompany.CompanyPublicId.ToLower())
+                            //);
 
                             if (!string.IsNullOrEmpty(Status))
                             {
-                                qb &= q.Term(m => m.QueryStatus, Status);
+                                qb &= f2.Term(m => m.QueryStatus, Status);
                                 oModel.RelatedThidKnowledgeSearch.FilterList.Add(Status, (int)enumTKFilter.StatusFilter);
                             }
                             if (!string.IsNullOrEmpty(SearchType))
                             {
-                                qb &= q.Term(m => m.SearchType, SearchType);
+                                qb &= f2.Term(m => m.SearchType, SearchType);
                                 oModel.RelatedThidKnowledgeSearch.FilterList.Add(SearchType, (int)enumTKFilter.QueryTypeFilter);
                             }
                             if (!string.IsNullOrEmpty(RelatedUser))
                             {
-                                qb &= q.Term(m => m.User, RelatedUser);
+                                qb &= f2.Term(m => m.User, RelatedUser);
                                 oModel.RelatedThidKnowledgeSearch.FilterList.Add(RelatedUser, (int)enumTKFilter.UserFilter);
                             }
                             if (!string.IsNullOrEmpty(Domain))
                             {
-                                qb &= q.Term(m => m.Domain, Domain);
+                                qb &= f2.Term(m => m.Domain, Domain);
                                 oModel.RelatedThidKnowledgeSearch.FilterList.Add(Domain, (int)enumTKFilter.DomainFilter);
                             }
                             if (!string.IsNullOrEmpty(InitDate) && !string.IsNullOrEmpty(EndDate))
                             {
-                                qb &= q.DateRange(dr => dr
+                                qb &= f2.DateRange(dr => dr
                                         .Field(t2 => t2.CreateDate)
                                         .GreaterThanOrEquals(InitDate).LessThan(EndDate)
                                     );
