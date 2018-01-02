@@ -1314,18 +1314,9 @@
     <Content Include="Areas\Desktop\Content\fonts\fontawesome-webfont.woff" />
     <Content Include="Areas\Desktop\Content\fonts\fontawesome-webfont.ttf" />
     <Content Include="Areas\Desktop\Content\fonts\fontawesome-webfont.eot" />
-    <None Include="Properties\PublishProfiles\Alex-JP MP.pubxml" />
-    <None Include="Properties\PublishProfiles\David MP.pubxml" />
-    <None Include="Properties\PublishProfiles\DiegoF.pubxml" />
-    <None Include="Properties\PublishProfiles\DiegoFHaus.pubxml" />
-    <None Include="Properties\PublishProfiles\P1.pubxml" />
-    <None Include="Properties\PublishProfiles\Sebastian Home MP.pubxml" />
-    <None Include="Properties\PublishProfiles\Sebastian MP.pubxml" />
     <Content Include="Areas\Desktop\Scripts\rateit\jquery.rateit.js" />
     <Content Include="Areas\Desktop\Scripts\rateit\jquery.rateit.min.js" />
     <Content Include="Areas\Desktop\Scripts\rateit\jquery.rateit.min.js.map" />
-    <None Include="Properties\PublishProfiles\SebastianMartinez_ASUS.pubxml" />
-    <None Include="Properties\PublishProfiles\Sebastian_Home_MP.pubxml" />
     <Content Include="Areas\Desktop\Scripts\Angular\angular-animate.js" />
     <Content Include="Areas\Desktop\Scripts\Angular\angular-animate.min.js" />
     <Content Include="Areas\Desktop\Scripts\Angular\angular-aria.js" />
@@ -2096,7 +2087,7 @@
     <Content Include="Areas\Desktop\Scripts\Angular\angular-cookies.min.js.map" />
     <Content Include="Areas\Desktop\Scripts\Angular\angular-aria.min.js.map" />
     <Content Include="Areas\Desktop\Scripts\Angular\angular-animate.min.js.map" />
-    <None Include="Properties\PublishProfiles\Sergio Palacios.pubxml" />
+    <None Include="Properties\PublishProfiles\Sebastian_Martinez-Marketplace.pubxml" />
     <None Include="T4MVC.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>T4MVC.cs</LastGenOutput>

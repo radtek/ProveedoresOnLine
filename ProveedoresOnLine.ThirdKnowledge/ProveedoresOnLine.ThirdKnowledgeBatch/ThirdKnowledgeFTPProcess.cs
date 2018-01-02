@@ -387,7 +387,14 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                     SearchParam = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.MP_CP_ColSearchParam].Value].ToString();                    
                 }
 
-                ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(Query.PeriodPublicId, 1, "", Query);
+                if (SearchCritery == ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.Param_Critery].Value.Split(';')[0])                
+                    ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(Query.PeriodPublicId, 1, SearchParam, Query);
+                else if (SearchCritery == ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.Param_Critery].Value.Split(';')[1])
+                    ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(Query.PeriodPublicId, 2, SearchParam, Query);
+                else if (SearchCritery == ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.Param_Critery].Value.Split(';')[2])
+                    ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(Query.PeriodPublicId, 3, SearchParam, Query);
+                else if (SearchCritery == ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.Param_Critery].Value.Split(';')[3])
+                    ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(Query.PeriodPublicId, 4, SearchParam, Query);
 
                 //bool validate = false;
                 ////Index ThirdKnowledge Search
@@ -417,7 +424,7 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                 //            ).MinScore(1));
                 //    }                   
                 //}
-                
+
 
                 ////Search Proc 
                 ////JudiciaProcess
