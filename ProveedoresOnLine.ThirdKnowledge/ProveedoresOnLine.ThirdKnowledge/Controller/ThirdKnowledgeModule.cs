@@ -174,6 +174,9 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         Link = RegEntityResult.FirstOrDefault().Item1,
                         ListName = "Registraduria - Puesto de Votación",
                         ElasticId = (int)enumElasticGroupId.RegistersList,
+                        NameResult = !string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1) ? RegDianResult.FirstOrDefault().Item1 : string.Empty,
+                        QueryIdentification = IdType == 1 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : IdType == 2 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty,
+                        QueryName = IdType == 4 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty
                     };
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                 }
@@ -195,7 +198,9 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         Link = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[4]) ? RUESResult.FirstOrDefault().Item2[4] : "No aparece registro en RUES",
                         ListName = "RUES",
                         ElasticId = (int)enumElasticGroupId.RUES,
-                    };
+                        QueryIdentification = IdType == 1 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : IdType == 2 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty,
+                        QueryName = IdType == 4 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty
+                };
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                 } 
                 #endregion
@@ -319,8 +324,8 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             oInfoCreate.ListName = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;
                             oInfoCreate.MoreInfo = x.RelatedWiht + " " + x.ORoldescription1 + " " + x.ORoldescription2;
                             oInfoCreate.Zone = x.NationalitySourceCountry;
-                            oInfoCreate.QueryIdentification = oInfoCreate.QueryName = !string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty; ;
-
+                            oInfoCreate.QueryIdentification = IdType == 1 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : IdType == 2 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty;
+                            oInfoCreate.QueryName = IdType == 4 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty;
                             oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                             return true;
                         });
@@ -330,10 +335,12 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     {
                         TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
                         oInfoCreate.QueryPublicId = oQueryToCreate.QueryPublicId;
-                        if (IdType != 4)
+                        oInfoCreate.QueryIdentification = IdType == 1 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : IdType == 2 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty;
+                        oInfoCreate.QueryName = IdType == 4 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty;
+                        /*if (IdType != 4)
                             oInfoCreate.QueryName = SearchParam;
                         else
-                            oInfoCreate.QueryIdentification = !string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty;
+                            oInfoCreate.QueryIdentification = !string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty;*/
                         oInfoCreate.GroupName = "SIN COINCIDENCIAS";
                         oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
 

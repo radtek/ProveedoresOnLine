@@ -874,11 +874,7 @@ namespace MarketPlace.Web.Controllers
 
                 var objRelatedQueryBasicInfo = oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.RelatedQueryInfoModel != null).FirstOrDefault().RelatedQueryInfoModel.FirstOrDefault();
                 string searchName = "";
-
-
-                if (!string.IsNullOrEmpty(objRelatedQueryBasicInfo.QueryName))
-                    searchName = objRelatedQueryBasicInfo.QueryName;
-
+                
                 /*Basic Info*/
                 DataTable data_BasicInfo = new DataTable();
                 data_BasicInfo.Columns.Add("Name");
@@ -896,7 +892,7 @@ namespace MarketPlace.Web.Controllers
                 DataRow row_HighCrit;
                 ObjResult.All(x =>
                 {
-                    if (x.Item2 != null )
+                    if (x.Item2 != null)
                     {
                         if (x.Item2.Contains("Registraduria"))
                         {
@@ -905,7 +901,7 @@ namespace MarketPlace.Web.Controllers
                             row_HighCrit["NameGroupList"] = x.Item2; // REGISTRADURIA
                             row_HighCrit["IdentificationQuery"] = x.Item4[3]; // NOMBRE DE LA EMPRESA O PERSONA
                             row_HighCrit["NameResult"] = x.Item4[0];// NOMBRE ENCONTRADO
-                            searchName = x.Item4[4]; //Data Query
+                            searchName = x.Item4[3]; //Data Query
                             data_BasicInfo.Rows.Add(row_HighCrit);
                         }
                         else if (x.Item2 == "RUES" || x.Item2 == "DIAN")
@@ -915,7 +911,7 @@ namespace MarketPlace.Web.Controllers
                             row_HighCrit["NameGroupList"] = x.Item2; // RUES
                             row_HighCrit["IdentificationQuery"] = x.Item4[3]; // NOMBRE DE LA EMPRESA O PERSONA
                             row_HighCrit["NameResult"] = x.Item4[0];// NOMBRE ENCONTRADO
-                            searchName = x.Item4[4]; //Data Query
+                            searchName = x.Item4[3]; //Data Query
                             data_BasicInfo.Rows.Add(row_HighCrit);
                         }
                         else
@@ -925,11 +921,12 @@ namespace MarketPlace.Web.Controllers
                             row_HighCrit["ListName"] = x.Item2;
                             row_HighCrit["Link"] = x.Item3;
                             row_HighCrit["Status"] = x.Item5;
+                            if (string.IsNullOrEmpty(searchName))
+                                searchName = x.Item4[1];
                             data_GroupList.Rows.Add(row_HighCrit);
                         }
                     }
-                    else if (x.Item1 == "SIN COINCIDENCIA")
-                    {
+                    else {
                         searchName = x.Item4[0]; //Data Query    
                     }
 
@@ -1102,6 +1099,16 @@ namespace MarketPlace.Web.Controllers
                             oDetails.Add(x.RelatedQueryInfoModel.Where(p => p.IdentificationResult != null).Select(p => p.IdentificationResult).FirstOrDefault());
                             oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.QueryName != null).Select(y => y.QueryName).FirstOrDefault());
                         }
+                        else {
+                            if (x.RelatedQueryInfoModel.Where(y => y.QueryName != null).Select(y => y.QueryName).FirstOrDefault() != null)
+                            {
+                                oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.QueryName != null).Select(y => y.QueryName).FirstOrDefault());
+                            }
+                            else
+                            {
+                                oDetails.Add(x.RelatedQueryInfoModel.Where(p => p.IdentificationResult != null).Select(p => p.IdentificationResult).FirstOrDefault());
+                            }
+                        }
                         
                         Tuple<string, string, string, List<string>, bool> oDetail = new
                                 Tuple<string, string, string, List<string>, bool>("INFORMACIÓN BÁSICA",
@@ -1111,7 +1118,14 @@ namespace MarketPlace.Web.Controllers
                     }
                     else
                     {
-                        oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.QueryName != null).Select(y => y.QueryName).FirstOrDefault());
+                        if (x.RelatedQueryInfoModel.Where(y => y.QueryName != null).Select(y => y.QueryName).FirstOrDefault() != null)
+                        {
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.QueryName != null).Select(y => y.QueryName).FirstOrDefault());
+                        }
+                        else
+                        {
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(p => p.IdentificationResult != null).Select(p => p.IdentificationResult).FirstOrDefault());
+                        }
                         Tuple<string, string, string, List<string>, bool> oDetail = new
                                 Tuple<string, string, string, List<string>, bool>("SIN COINCIDENCIA",
                                     null,
@@ -1133,6 +1147,7 @@ namespace MarketPlace.Web.Controllers
                             oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == sl).Select(y => y).FirstOrDefault().QueryInfoPublicId);
                             oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == sl).Select(y => y).FirstOrDefault().QueryPublicId);
                             oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == sl).Select(y => y).FirstOrDefault().ElasticId.ToString());
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.QueryName != null).Select(y => y).FirstOrDefault().QueryName);
                             exist = true;
                         }
                         else
@@ -1159,6 +1174,7 @@ namespace MarketPlace.Web.Controllers
                             oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == pep).Select(y => y).FirstOrDefault().QueryInfoPublicId);
                             oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == pep).Select(y => y).FirstOrDefault().QueryPublicId);
                             oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == pep).Select(y => y).FirstOrDefault().ElasticId.ToString());
+                            oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.QueryName != null).Select(y => y).FirstOrDefault().QueryName);
                             exist = true;
                         }
                         else
