@@ -100,8 +100,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         Enable = true,
                         QueryPublicId = oQueryToCreate.QueryPublicId,
                         QueryIdentification = SearchParam,
-                        IdentificationResult = SearchParam,
-                        QueryName = !string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1) ? RegDianResult.FirstOrDefault().Item1 : string.Empty,
+                        IdentificationResult = SearchParam,                        
                         IdList = "Procuraduría General de la Nación",
                         IdentificationNumber = SearchParam,
                         GroupName = "Procuraduría General de la Nación - Criticidad Media",
@@ -109,7 +108,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         ListName = "Procuraduría General de la Nación",
                         ChargeOffense = "Presenta antecedentes en la Prcuraduría General de la Nación.",
                         Zone = "Colombia",
-                        ElasticId = (int)enumElasticGroupId.ProcElasticId,
+                        ElasticId = (int)enumElasticGroupId.ProcElasticId,                        
                     };
 
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
@@ -122,7 +121,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
                     {
                         AKA = string.Empty,
-                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : "",
+                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "NIT" : IdType == 3 ? "C. Extranjería" : "",
                         Offense = "Presenta Reporte en Panama Papers",
                         NameResult = !string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1) ? RegDianResult.FirstOrDefault().Item1 : string.Empty,
                         MoreInfo = "Panama Papers no hace refierencia necesariamente a un delito o una investigación por LA/FT.",
@@ -130,15 +129,14 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         Status = "Vigente",
                         Enable = true,
                         QueryPublicId = oQueryToCreate.QueryPublicId,
-                        QueryIdentification = "N/A",
-                        QueryName = "",
+                        QueryIdentification = SearchParam,                        
                         IdList = "Panama Papers",
                         IdentificationNumber = SearchParam,
                         GroupName = "Panama Papers - Criticidad Baja",
                         Link = ppResult.FirstOrDefault().Item1,
                         ListName = "Panama Papers",
                         Zone = "N/A",
-                        ChargeOffense = "Presenta antecedentes en la Prcuraduría General de la Nación.",
+                        ChargeOffense = "Aparece registrado en la lista de Panama Papers",
                         ElasticId = (int)enumElasticGroupId.PanamaPElasticId,
                     };
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
@@ -154,10 +152,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         IdentificationResult = SearchParam,
                         QueryPublicId = oQueryToCreate.QueryPublicId,
                         IdList = "Registraduria/Dian",
-                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : IdType == 4 ? "Denominación o Razon Social" : "",
+                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "NIT" : IdType == 3 ? "C. Extranjería" : IdType == 4 ? "Denominación o Razon Social" : "",
                         GroupName = "Registraduria/Dian",
                         ListName = "Registraduria/Dian",
-                        ElasticId = (int)enumElasticGroupId.RegisterDian,
+                        ElasticId = (int)enumElasticGroupId.RegisterDian,                        
+                        QueryIdentification = SearchParam,
                     };
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                 } 
@@ -169,12 +168,13 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
                     {
                         QueryPublicId = oQueryToCreate.QueryPublicId,
-                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : IdType == 4 ? "Denominación o Razon Social" : "",
+                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "NIT" : IdType == 3 ? "C. Extranjería" : IdType == 4 ? "Denominación o Razon Social" : "",
                         IdList = "Registraduria",
                         GroupName = "Registraduria - Puesto de Votación",
                         Link = RegEntityResult.FirstOrDefault().Item1,
                         ListName = "Registraduria - Puesto de Votación",
                         ElasticId = (int)enumElasticGroupId.RegistersList,
+                        QueryIdentification = SearchParam,
                     };
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                 }
@@ -188,7 +188,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     {
                         QueryPublicId = oQueryToCreate.QueryPublicId,
                         IdList = "RUES",
-                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : IdType == 4 ? "Denominación o Razon Social" : "",
+                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "NIT" : IdType == 3 ? "C. Extranjería" : IdType == 4 ? "Denominación o Razon Social" : "",
                         GroupName = "RUES",
                         NameResult = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[1]) ? RUESResult.FirstOrDefault().Item2[1] : "No aparece registro en RUES",
                         IdentificationResult = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[0]) ? RUESResult.FirstOrDefault().Item2[0] : "No aparece registro en RUES",
@@ -196,6 +196,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         Link = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[4]) ? RUESResult.FirstOrDefault().Item2[4] : "No aparece registro en RUES",
                         ListName = "RUES",
                         ElasticId = (int)enumElasticGroupId.RUES,
+                        QueryIdentification = SearchParam,
                     };
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                 } 
@@ -207,7 +208,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
                     {
                         AKA = string.Empty,
-                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : "",
+                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "NIT" : IdType == 3 ? "C. Extranjería" : "",
                         Offense = "El tercero " + judProcResult.FirstOrDefault().Item2[1] + "Con Identificación No. " + judProcResult.FirstOrDefault().Item2[0] + "Presenta Antecedentes Judiciales",
                         NameResult = judProcResult.FirstOrDefault().Item2[1],
                         MoreInfo = "El tercero " + judProcResult.FirstOrDefault().Item2[1] + "Con Identificación No. " + judProcResult.FirstOrDefault().Item2[0] + "Presenta Antecedentes Judiciales vigentes de acuerdo a la Fuente oficial de la RAMA JUDICIAL DEL PODER PUBLICO, CONSEJO SUPERIOR DE LA JUDICATURA y/o JUZGADOS DE EJECUCION DE PENAS Y MEDIDAS DE SEGURIDAD",
@@ -217,8 +218,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         QueryPublicId = oQueryToCreate.QueryPublicId,
                         QueryIdentification = SearchParam,
                         IdentificationResult = SearchParam,
-                        FullName = judProcResult.FirstOrDefault().Item2[1],
-                        QueryName = "",
+                        FullName = judProcResult.FirstOrDefault().Item2[1],                        
                         IdList = "RAMA JUDICIAL DEL PODER PUBLICO",
                         IdentificationNumber = SearchParam,
                         GroupName = "RAMA JUDICIAL DEL PODER PUBLICO - Criticidad Media",
@@ -241,7 +241,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
 
                             oInfoCreate.AKA = x.AKA;
-                            oInfoCreate.DocumentType = x.TypeId;
+                            oInfoCreate.DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "NIT" : IdType == 3 ? "C. Extranjería" : "";
                             oInfoCreate.Offense = x.RelatedWiht;
                             oInfoCreate.NameResult = x.CompleteName;
                             if (x.ListType == "FIGURAS PUBLICAS" || x.ListType == "PEPS INTERNACIONALES"
@@ -320,7 +320,10 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             oInfoCreate.ListName = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;
                             oInfoCreate.MoreInfo = x.RelatedWiht + " " + x.ORoldescription1 + " " + x.ORoldescription2;
                             oInfoCreate.Zone = x.NationalitySourceCountry;
-                            oInfoCreate.QueryIdentification = oInfoCreate.QueryName = !string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty; ;
+                            if (IdType == 4)                            
+                                oInfoCreate.QueryName = !string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty;                            
+                            else                            
+                                oInfoCreate.QueryIdentification = SearchParam;
 
                             oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                             return true;
