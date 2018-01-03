@@ -91,6 +91,12 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.ActionResult TKMasiveDetail()
+        {
+            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.TKMasiveDetail);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public virtual System.Web.Mvc.FileResult GetPdfFileBytes()
         {
             return new T4MVC_System_Web_Mvc_FileResult(Area, Name, ActionNames.GetPdfFileBytes);
@@ -118,6 +124,7 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             public readonly string TKThirdKnowledgeSearch = "TKThirdKnowledgeSearch";
             public readonly string TKThirdKnowledgeDetail = "TKThirdKnowledgeDetail";
             public readonly string TKThirdKnowledgeDetailNew = "TKThirdKnowledgeDetailNew";
+            public readonly string TKMasiveDetail = "TKMasiveDetail";
             public readonly string GetPdfFileBytes = "GetPdfFileBytes";
         }
 
@@ -131,6 +138,7 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             public const string TKThirdKnowledgeSearch = "TKThirdKnowledgeSearch";
             public const string TKThirdKnowledgeDetail = "TKThirdKnowledgeDetail";
             public const string TKThirdKnowledgeDetailNew = "TKThirdKnowledgeDetailNew";
+            public const string TKMasiveDetail = "TKMasiveDetail";
             public const string GetPdfFileBytes = "GetPdfFileBytes";
         }
 
@@ -196,6 +204,19 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             public readonly string Enable = "Enable";
             public readonly string IsSuccess = "IsSuccess";
         }
+        static readonly ActionParamsClass_TKMasiveDetail s_params_TKMasiveDetail = new ActionParamsClass_TKMasiveDetail();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_TKMasiveDetail TKMasiveDetailParams { get { return s_params_TKMasiveDetail; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_TKMasiveDetail
+        {
+            public readonly string QueryPublicId = "QueryPublicId";
+            public readonly string PageNumber = "PageNumber";
+            public readonly string InitDate = "InitDate";
+            public readonly string EndDate = "EndDate";
+            public readonly string Enable = "Enable";
+            public readonly string IsSuccess = "IsSuccess";
+        }
         static readonly ActionParamsClass_GetPdfFileBytes s_params_GetPdfFileBytes = new ActionParamsClass_GetPdfFileBytes();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ActionParamsClass_GetPdfFileBytes GetPdfFileBytesParams { get { return s_params_GetPdfFileBytes; } }
@@ -216,6 +237,7 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             {
                 public readonly string Index = "Index";
                 public readonly string TKDetailSingleSearch = "TKDetailSingleSearch";
+                public readonly string TKMasiveDetail = "TKMasiveDetail";
                 public readonly string TKMasiveSearch = "TKMasiveSearch";
                 public readonly string TKSingleSearch = "TKSingleSearch";
                 public readonly string TKThirdKnowledgeDetail = "TKThirdKnowledgeDetail";
@@ -223,6 +245,7 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             }
             public readonly string Index = "~/Areas/Desktop/Views/ThirdKnowledge/Index.cshtml";
             public readonly string TKDetailSingleSearch = "~/Areas/Desktop/Views/ThirdKnowledge/TKDetailSingleSearch.cshtml";
+            public readonly string TKMasiveDetail = "~/Areas/Desktop/Views/ThirdKnowledge/TKMasiveDetail.cshtml";
             public readonly string TKMasiveSearch = "~/Areas/Desktop/Views/ThirdKnowledge/TKMasiveSearch.cshtml";
             public readonly string TKSingleSearch = "~/Areas/Desktop/Views/ThirdKnowledge/TKSingleSearch.cshtml";
             public readonly string TKThirdKnowledgeDetail = "~/Areas/Desktop/Views/ThirdKnowledge/TKThirdKnowledgeDetail.cshtml";
@@ -346,6 +369,23 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "Enable", Enable);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "IsSuccess", IsSuccess);
             TKThirdKnowledgeDetailNewOverride(callInfo, QueryPublicId, PageNumber, InitDate, EndDate, Enable, IsSuccess);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void TKMasiveDetailOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult TKMasiveDetail(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.TKMasiveDetail);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "QueryPublicId", QueryPublicId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "PageNumber", PageNumber);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "InitDate", InitDate);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "EndDate", EndDate);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "Enable", Enable);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "IsSuccess", IsSuccess);
+            TKMasiveDetailOverride(callInfo, QueryPublicId, PageNumber, InitDate, EndDate, Enable, IsSuccess);
             return callInfo;
         }
 

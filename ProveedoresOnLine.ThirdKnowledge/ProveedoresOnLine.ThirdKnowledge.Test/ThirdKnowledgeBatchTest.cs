@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProveedoresOnLine.ThirdKnowledge.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProveedoresOnLine.ThirdKnowledge.Test
 {
@@ -9,9 +10,9 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
     public class ThirdKnowledgeBatchTest
     {
         [TestMethod]
-        public void StartProcess()
+        public async Task  StartProcess()
         {
-            ProveedoresOnLine.ThirdKnowledgeBatch.ThirdKnowledgeFTPProcess.StartProcess();            
+            await ProveedoresOnLine.ThirdKnowledgeBatch.ThirdKnowledgeFTPProcess.StartProcess();
         }
     }
 }

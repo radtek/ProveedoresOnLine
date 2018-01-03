@@ -293,38 +293,45 @@ namespace MarketPlace.Web.Controllers
                 .Terms("useremail", bl => bl
                     .Field(fi => fi.User)))
                 .Query(q => q.Bool(f => f.
-                    Filter(f2 =>
+                    Should(f2 =>
                         {
                             QueryContainer qb = null;
 
-                            qb &= f2.Terms(tms => tms
-                            .Field(fi => fi.CustomerPublicId.ToLower())
-                             .Terms<string>(SessionModel.CurrentCompany.CompanyPublicId.ToLower())
-                            );
+                            //q.Match(m => m
+                            //            .Field(Field => Field.oCustomFiltersIndexModel.First().CustomerPublicId)
+                            //            .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                            qb &= f2.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower());
+                            //f2.Match(m => m
+                            //            .Field(Field => Field.CustomerPublicId.ToLower())
+                            //            .Query(SessionModel.CurrentCompany.CompanyPublicId.ToLower()));
+                            //            .Query(SessionModel.CurrentCompany.CompanyPublicId) f2.Terms(tms => tms
+                            //.Field(fi => fi.CustomerPublicId.ToLower())
+                            // .Terms<string>(SessionModel.CurrentCompany.CompanyPublicId.ToLower())
+                            //);
 
                             if (!string.IsNullOrEmpty(Status))
                             {
-                                qb &= q.Term(m => m.QueryStatus, Status);
+                                qb &= f2.Term(m => m.QueryStatus, Status);
                                 oModel.RelatedThidKnowledgeSearch.FilterList.Add(Status, (int)enumTKFilter.StatusFilter);
                             }
                             if (!string.IsNullOrEmpty(SearchType))
                             {
-                                qb &= q.Term(m => m.SearchType, SearchType);
+                                qb &= f2.Term(m => m.SearchType, SearchType);
                                 oModel.RelatedThidKnowledgeSearch.FilterList.Add(SearchType, (int)enumTKFilter.QueryTypeFilter);
                             }
                             if (!string.IsNullOrEmpty(RelatedUser))
                             {
-                                qb &= q.Term(m => m.User, RelatedUser);
+                                qb &= f2.Term(m => m.User, RelatedUser);
                                 oModel.RelatedThidKnowledgeSearch.FilterList.Add(RelatedUser, (int)enumTKFilter.UserFilter);
                             }
                             if (!string.IsNullOrEmpty(Domain))
                             {
-                                qb &= q.Term(m => m.Domain, Domain);
+                                qb &= f2.Term(m => m.Domain, Domain);
                                 oModel.RelatedThidKnowledgeSearch.FilterList.Add(Domain, (int)enumTKFilter.DomainFilter);
                             }
                             if (!string.IsNullOrEmpty(InitDate) && !string.IsNullOrEmpty(EndDate))
                             {
-                                qb &= q.DateRange(dr => dr
+                                qb &= f2.DateRange(dr => dr
                                         .Field(t2 => t2.CreateDate)
                                         .GreaterThanOrEquals(InitDate).LessThan(EndDate)
                                     );
@@ -580,6 +587,24 @@ namespace MarketPlace.Web.Controllers
 
             List<TDQueryModel> oQueryResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId(QueryPublicId, oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.PageNumber, oTotalRowsAux, out TotalRows);
 
+            //call new controller
+            if (oQueryResult != null && oQueryResult.FirstOrDefault().SearchType.ItemId == (int)enumThirdKnowledgeQueryType.Masive)
+            {
+                //redirect
+                return RedirectToRoute
+                    (MarketPlace.Models.General.Constants.C_Routes_Default,
+                    new
+                    {
+                        controller = MVC.ThirdKnowledge.Name,
+                        action = MVC.ThirdKnowledge.ActionNames.TKMasiveDetail,
+                        QueryPublicId = QueryPublicId,
+                        PageNumber = PageNumber,
+                        InitDate = InitDate,
+                        EndDate = EndDate,
+                        Enable = Enable,
+                        IsSuccess = IsSuccess                       
+                    });
+            }
             oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.TotalRows = TotalRows;
 
             if (oQueryResult != null && oQueryResult.Count > 0)
@@ -954,6 +979,284 @@ namespace MarketPlace.Web.Controllers
                                                                 fileFormat,
                                                                 data_GroupList,
                                                                 data_BasicInfo,
+                                                                parameters,
+                                                                Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim() + "TK_Report_ThirdKnowledgeQueryNew.rdlc");
+                parameters = null;
+                return File(ThirdKnowledgeReport.Item1, ThirdKnowledgeReport.Item2, ThirdKnowledgeReport.Item3);
+
+                #endregion
+            }
+
+            return View(oModel);
+        }
+
+
+        public virtual ActionResult TKMasiveDetail(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess)
+        {
+            if (SessionModel.CurrentURL != null)
+                SessionModel.CurrentURL = null;
+
+            int oTotalRowsAux = Convert.ToInt32(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_Grid_RowCountDefault].Value.Trim());
+
+            if (Request["DownloadReport"] == "true")
+                oTotalRowsAux = 10000;
+
+            if (!string.IsNullOrEmpty(Request["ThirdKnowledge_FormQueryPublicId"]))
+                QueryPublicId = Request["ThirdKnowledge_FormQueryPublicId"];
+
+            ProviderViewModel oModel = new ProviderViewModel();
+            oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel();
+            oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult = new List<TDQueryModel>();
+            oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager = new Models.ThirdKnowledge.ThirdKnowledgeSearchViewModel()
+            {
+                PageNumber = !string.IsNullOrEmpty(PageNumber) ? Convert.ToInt32(PageNumber) : 0,
+            };
+            int TotalRows = 0;
+
+            List<TDQueryModel> oQueryResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId(QueryPublicId, oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.PageNumber, oTotalRowsAux, out TotalRows);
+
+            oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.TotalRows = TotalRows;
+
+            if (oQueryResult != null && oQueryResult.Count > 0)
+                oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult = oQueryResult;
+            else if (IsSuccess == "Finalizado")
+                oModel.RelatedThidKnowledgeSearch.Message = "La búsqueda no arrojó resultados.";
+
+            if (!string.IsNullOrEmpty(InitDate) && !string.IsNullOrEmpty(EndDate))
+            {
+                oModel.RelatedThidKnowledgeSearch.InitDate = Convert.ToDateTime(InitDate);
+                oModel.RelatedThidKnowledgeSearch.EndDate = Convert.ToDateTime(EndDate);
+            }
+
+            oModel.ProviderMenu = GetThirdKnowledgeControllerMenu();
+
+
+            if (oModel != null)
+            {
+                List<Tuple<string, List<ThirdKnowledgeViewModel>>> oGroup = new List<Tuple<string, List<ThirdKnowledgeViewModel>>>();
+                List<string> Item1 = new List<string>();
+
+                oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.All(
+                item =>
+                {
+                    item.RelatedQueryInfoModel.All(x =>
+                    {
+                        Item1.Add(x.GroupName);
+                        return true;
+                    });
+                    Item1 = Item1.GroupBy(x => x).Select(grp => grp.First()).ToList();
+
+                    List<ThirdKnowledgeViewModel> oItem2 = new List<ThirdKnowledgeViewModel>();
+                    Tuple<string, List<ThirdKnowledgeViewModel>> oTupleItem = new Tuple<string, List<ThirdKnowledgeViewModel>>("", new List<ThirdKnowledgeViewModel>());
+
+                    Item1.All(x =>
+                    {
+                        oItem2 = new List<ThirdKnowledgeViewModel>();
+                        if (item.RelatedQueryInfoModel.Where(td => td.GroupName == x) != null)
+                        {
+                            item.RelatedQueryInfoModel.Where(td => td.GroupName == x).
+                            Select(td => td).ToList().All(d =>
+                            {
+                                oItem2.Add(new ThirdKnowledgeViewModel(d));
+                                return true;
+                            });
+                            oTupleItem = new Tuple<string, List<ThirdKnowledgeViewModel>>(x, oItem2);
+                            oGroup.Add(oTupleItem);
+                        }
+                        return true;
+                    });
+                    return true;
+                });
+
+                List<Tuple<string, List<ThirdKnowledgeViewModel>>> oGroupOrder = new List<Tuple<string, List<ThirdKnowledgeViewModel>>>();
+
+                oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("Criticidad Alta")));
+                oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("Criticidad Media")));
+                oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("Criticidad Baja")));
+                oGroupOrder.AddRange(oGroup.Where(x => x.Item1.Contains("SIN COINCIDENCIAS")));
+                oModel.Group = oGroupOrder;
+            }
+
+
+            //Get report generator
+            if (Request["DownloadReport"] == "true")
+            {
+                #region Set Parameters
+                //Get Request
+
+                var objRelatedQueryBasicInfo = oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.RelatedQueryInfoModel != null).FirstOrDefault().RelatedQueryInfoModel.FirstOrDefault();
+                string searchName = "";
+                string searchIdentification = "";
+                if (!string.IsNullOrEmpty(objRelatedQueryBasicInfo.QueryName))
+                    searchName = objRelatedQueryBasicInfo.QueryName;
+
+                if (!string.IsNullOrEmpty(objRelatedQueryBasicInfo.QueryIdentification))
+                {
+                    searchIdentification += objRelatedQueryBasicInfo.QueryIdentification;
+                }
+
+                List<ReportParameter> parameters = new List<ReportParameter>();
+
+                //Customer Info Parameters
+                parameters.Add(new ReportParameter("CustomerName", SessionModel.CurrentCompany.CompanyName));
+                parameters.Add(new ReportParameter("CustomerIdentification", SessionModel.CurrentCompany.IdentificationNumber));
+                parameters.Add(new ReportParameter("CustomerIdentificationType", SessionModel.CurrentCompany.IdentificationType.ItemName));
+                parameters.Add(new ReportParameter("CustomerImage", SessionModel.CurrentCompany_CompanyLogo));
+
+                //Query Info Parameters
+                parameters.Add(new ReportParameter("ThirdKnowledgeText", MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.MP_TK_TextImage].Value));
+                parameters.Add(new ReportParameter("User", oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.User != null).Select(x => x.User).DefaultIfEmpty("No hay campo").FirstOrDefault()));
+                parameters.Add(new ReportParameter("CreateDate", oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.CreateDate != null).Select(x => x.CreateDate.AddHours(-5).ToString().ToString()).DefaultIfEmpty("No hay campo").FirstOrDefault()));
+                parameters.Add(new ReportParameter("QueryType", oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.SearchType != null).Select(x => x.SearchType.ItemName).DefaultIfEmpty("No hay campo").FirstOrDefault()));
+                parameters.Add(new ReportParameter("Status", oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.QueryStatus != null).Select(x => x.QueryStatus.ItemName).DefaultIfEmpty("No hay campo").FirstOrDefault()));
+                parameters.Add(new ReportParameter("searchName", searchName));
+                parameters.Add(new ReportParameter("searchIdentification", searchIdentification));
+                parameters.Add(new ReportParameter("IsSuccess", oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x != null).Select(x => x.IsSuccess).FirstOrDefault().ToString()));
+
+                /*data for Matches with High Critical*/
+                DataTable data_HighCritical = new DataTable();
+                data_HighCritical.Columns.Add("IdentificationResult");
+                data_HighCritical.Columns.Add("NameResult");
+                data_HighCritical.Columns.Add("Offense");
+                data_HighCritical.Columns.Add("Peps");
+                data_HighCritical.Columns.Add("Priority");
+                data_HighCritical.Columns.Add("Status");
+                data_HighCritical.Columns.Add("ListName");
+                data_HighCritical.Columns.Add("IdentificationSearch");
+                data_HighCritical.Columns.Add("NameSearch");
+                DataRow row_HighCrit;
+                var lrs = new List<ThirdKnowledgeViewModel>();
+                oModel.Group.All(x =>
+                {
+                    if (x.Item1.Contains("Criticidad Alta"))
+                    {
+                        lrs.AddRange(x.Item2);
+                    }
+                    return true;
+                });
+
+                if (lrs != null)
+                    lrs.All(y =>
+                    {
+                        row_HighCrit = data_HighCritical.NewRow();
+                        row_HighCrit["IdentificationResult"] = y.IdentificationNumberResult;
+                        row_HighCrit["NameResult"] = y.NameResult;
+                        row_HighCrit["Offense"] = y.Offense;
+                        row_HighCrit["Peps"] = y.Peps;
+                        row_HighCrit["Priority"] = y.Priority;
+                        row_HighCrit["Status"] = y.Status.ToLower() == "true" ? "Activo" : "Inactivo";
+                        row_HighCrit["ListName"] = y.ListName;
+                        row_HighCrit["IdentificationSearch"] = y.IdNumberRequest; // SearchId Param
+                        row_HighCrit["NameSearch"] = y.RequestName; // SearchName Param
+                        data_HighCritical.Rows.Add(row_HighCrit);
+                        return true;
+                    });
+
+                /*data for Matches with Medium Critical*/
+                DataTable data_MediumCritical = new DataTable();
+                data_MediumCritical.Columns.Add("IdentificationResult");
+                data_MediumCritical.Columns.Add("NameResult");
+                data_MediumCritical.Columns.Add("Offense");
+                data_MediumCritical.Columns.Add("Peps");
+                data_MediumCritical.Columns.Add("Priority");
+                data_MediumCritical.Columns.Add("Status");
+                data_MediumCritical.Columns.Add("ListName");
+                data_MediumCritical.Columns.Add("IdentificationSearch");
+                data_MediumCritical.Columns.Add("NameSearch");
+                DataRow row_MediumCrit;
+                var dce = new List<ThirdKnowledgeViewModel>();
+                oModel.Group.All(x =>
+                {
+                    if (x.Item1.Contains("Criticidad Media"))
+                    {
+                        dce.AddRange(x.Item2);
+                    }
+                    return true;
+                });
+                if (dce != null)
+                    dce.All(y =>
+                    {
+                        row_MediumCrit = data_MediumCritical.NewRow();
+                        row_MediumCrit["IdentificationResult"] = y.IdentificationNumberResult;
+                        parameters.Add(new ReportParameter("GroupNameDce", y.GroupName));
+                        row_MediumCrit["NameResult"] = y.NameResult;
+                        row_MediumCrit["Offense"] = y.Offense;
+                        row_MediumCrit["Peps"] = y.Peps;
+                        row_MediumCrit["Priority"] = y.Priority;
+                        row_MediumCrit["Status"] = y.Status.ToLower() == "true" ? "Activo" : "Inactivo";
+                        row_MediumCrit["ListName"] = y.ListName;
+                        row_MediumCrit["IdentificationSearch"] = y.IdNumberRequest; // SearchId Param
+                        row_MediumCrit["NameSearch"] = y.RequestName; // SearchName Param
+                        data_MediumCritical.Rows.Add(row_MediumCrit);
+                        return true;
+                    });
+
+                /*data for Matches with Low Critical*/
+                DataTable data_LowCritical = new DataTable();
+                data_LowCritical.Columns.Add("IdentificationResult");
+                data_LowCritical.Columns.Add("NameResult");
+                data_LowCritical.Columns.Add("Offense");
+                data_LowCritical.Columns.Add("Peps");
+                data_LowCritical.Columns.Add("Priority");
+                data_LowCritical.Columns.Add("Status");
+                data_LowCritical.Columns.Add("ListName");
+                data_LowCritical.Columns.Add("IdentificationSearch");
+                data_LowCritical.Columns.Add("NameSearch");
+                DataRow row_LowCrit;
+                var psp = new List<ThirdKnowledgeViewModel>();
+                oModel.Group.All(x =>
+                {
+                    if (x.Item1.Contains("Criticidad Baja"))
+                    {
+                        psp.AddRange(x.Item2);
+                    }
+                    return true;
+                });
+                if (psp != null)
+                    psp.All(y =>
+                    {
+                        row_LowCrit = data_LowCritical.NewRow();
+                        row_LowCrit["IdentificationResult"] = y.IdentificationNumberResult;
+                        row_LowCrit["NameResult"] = y.NameResult;
+                        row_LowCrit["Offense"] = y.Offense;
+                        row_LowCrit["Peps"] = y.Peps;
+                        row_LowCrit["Priority"] = y.Priority;
+                        row_LowCrit["Status"] = y.Status.ToLower() == "true" ? "Activo" : "Inactivo";
+                        row_LowCrit["ListName"] = y.ListName;
+                        row_LowCrit["IdentificationSearch"] = y.IdNumberRequest; // SearchId Param
+                        row_LowCrit["NameSearch"] = y.RequestName; // SearchName Param
+                        data_LowCritical.Rows.Add(row_LowCrit);
+                        return true;
+                    });
+
+
+                /*data for No Match Results*/
+                DataTable data_NoMatch = new DataTable();
+                data_NoMatch.Columns.Add("IdentificationResult");
+                data_NoMatch.Columns.Add("NameResult");
+                data_NoMatch.Columns.Add("IdentificationSearch");
+                data_NoMatch.Columns.Add("NameSearch");
+                DataRow row_NoMatch;
+                List<ThirdKnowledgeViewModel> snc = oModel.Group.Where(x => x.Item1.Contains("SIN COINCIDENCIAS")).Select(x => x.Item2).FirstOrDefault();
+                if (snc != null)
+                    snc.All(y =>
+                    {
+                        row_NoMatch = data_NoMatch.NewRow();
+                        row_NoMatch["IdentificationSearch"] = y.IdNumberRequest; // SearchId Param
+                        row_NoMatch["NameSearch"] = y.NameResult; // SearchName Param
+                        row_NoMatch["IdentificationResult"] = y.IdNumberRequest;
+                        row_NoMatch["NameResult"] = y.RequestName;
+
+                        data_NoMatch.Rows.Add(row_NoMatch);
+                        return true;
+                    });
+                string fileFormat = Request["ThirdKnowledge_cmbFormat"] != null ? Request["ThirdKnowledge_cmbFormat"].ToString() : "pdf";
+                Tuple<byte[], string, string> ThirdKnowledgeReport = ProveedoresOnLine.Reports.Controller.ReportModule.TK_QueryReport(
+                                                                fileFormat,
+                                                                data_HighCritical,
+                                                                data_MediumCritical,
+                                                                data_LowCritical,
+                                                                data_NoMatch,
                                                                 parameters,
                                                                 Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim() + "TK_Report_ThirdKnowledgeQueryNew.rdlc");
                 parameters = null;

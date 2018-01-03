@@ -38,6 +38,8 @@
 
         public const string MP_CP_ColSearchCritery = "MP_CP_ColSearchCritery";
 
+        public const string Param_Critery = "Param_Critery";        
+
         #region Search Critery
         public const string Param_Natural = "Param_Natural";
         public const string Param_Juridica = "Param_Juridica";

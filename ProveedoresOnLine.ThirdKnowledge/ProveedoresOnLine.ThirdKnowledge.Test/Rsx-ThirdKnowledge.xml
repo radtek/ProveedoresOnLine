@@ -40,10 +40,8 @@
     <key name="MP_CP_ColSearchParam">PARÁMETRO DE BÚSQUEDA</key>
     <key name="MP_CP_ColSearchCritery">CRITERIO DE BÚSQUEDA</key>
 
-    <key name="Param_Natural">NATURAL</key>
-    <key name="Param_Juridica">JURIDICA</key>
-    <key name="Param_Extrajera">EXTRANJERA</key>
-    <key name="Param_Denominacion">DENOMINACION - RAZON SOCIAL</key>
+    <key name="Param_Critery">NATURAL;JURIDICA;EXTRANJERA;DENOMINACION - RAZON SOCIAL</key>
+   
     <!--ChatUrl-->
 
     <key name="TK_ChatUrl"></key>
