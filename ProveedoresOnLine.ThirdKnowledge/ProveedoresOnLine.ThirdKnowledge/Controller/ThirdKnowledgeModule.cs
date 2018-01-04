@@ -176,7 +176,6 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         ElasticId = (int)enumElasticGroupId.RegistersList,
                         NameResult = !string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1) ? RegDianResult.FirstOrDefault().Item1 : string.Empty,
                         QueryIdentification = IdType == 1 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : IdType == 2 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty,
-                        QueryName = IdType == 4 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty
                     };
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                 }
@@ -199,7 +198,6 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         ListName = "RUES",
                         ElasticId = (int)enumElasticGroupId.RUES,
                         QueryIdentification = IdType == 1 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : IdType == 2 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty,
-                        QueryName = IdType == 4 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty
                 };
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                 } 
@@ -323,8 +321,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             oInfoCreate.ListName = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;
                             oInfoCreate.MoreInfo = x.RelatedWiht + " " + x.ORoldescription1 + " " + x.ORoldescription2;
                             oInfoCreate.Zone = x.NationalitySourceCountry;
-                            oInfoCreate.QueryIdentification = IdType == 1 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : IdType == 2 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty;
-                            oInfoCreate.QueryName = IdType == 4 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty;
+                            if (IdType == 4)                            
+                                oInfoCreate.QueryName = SearchParam;                            
+                            else                            
+                                oInfoCreate.QueryIdentification = SearchParam;                           
+                            
                             oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                             return true;
                         });

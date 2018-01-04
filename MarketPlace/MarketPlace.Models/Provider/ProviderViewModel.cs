@@ -86,6 +86,8 @@ namespace MarketPlace.Models.Provider
 
         public List<Tuple<string, string, string, List<string>, bool>>  TKGroupByListViewModel { get; set; }
 
+        public List<Tuple<string, string, string, TDQueryInfoModel>> TKMasiveDetailModel { get; set; }
+
         public IntegrationPlatform.Models.Integration.CustomDataModel CustomData { get; set; }
 
         public List<ProveedoresOnLine.Company.Models.Util.CatalogModel> ProviderOptions { get; set; }

@@ -1,0 +1,177 @@
+﻿@model MarketPlace.Models.Provider.ProviderViewModel
+@{
+    ViewBag.Title = "Proveedores OnLine - Consulta Individual";
+    Model.RenderScripts = false;
+}
+<div class="POMPSearchResultsPager">
+    <!--Pager-->
+    @Html.Partial(MVC.Desktop.Shared.Views._TK_ThirdKnowledgeSearch_Result_Pager, Model.RelatedThidKnowledgeSearch)&nbsp;|&nbsp;
+    <span class="POMPTKTotalPagesText">Total Páginas: @(Model.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.TotalPages)</span>
+</div>
+<div class="container-fluid POMPTKDetailContainer" id="TKDetailContainer">
+    @if (Model.Group != null && Model.Group.Count >= 0)
+    {
+        var options = MarketPlace.Models.General.SessionModel.CurrentThirdknowledgeOption();
+        foreach (var col in Model.Group)
+        {
+            if (col.Item1 == "SIN COINCIDENCIAS")
+            {
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12 POMPTKDetailTitle"><strong>@col.Item1</strong></div>
+                </div>
+                <br />
+                <div class="row">
+
+                    <div class="col-sm-4 POMPProviderBoxInfo text-left"><strong>Nombre Consultado</strong></div>
+                    <div class="col-sm-4 POMPProviderBoxInfo text-left"><strong>Identificación Consultada</strong></div>
+
+                </div>
+
+
+                <br />
+                foreach (var subItem in col.Item2)
+                {
+                    <div class="row POMPBorderbottom">
+                        <div class="col-sm-4 POMPProviderBoxInfo text-left"><p>@subItem.RequestName</p></div>
+                        <div class="col-sm-4 POMPProviderBoxInfo text-left"><p>@subItem.IdNumberRequest</p></div>
+                        <div class="col-sm-4 POMPProviderBoxInfo text-right">
+                            <p>
+                                @if (options.Any(x => x == (int)MarketPlace.Models.General.enumProviderSubMenu.QueryDetails))
+                                {
+                                    <a href="@(Url.RouteUrl
+                                           (MarketPlace.Models.General.Constants.C_Routes_Default,
+                                           new
+                                           {
+                                               controller = MVC.ThirdKnowledge.Name,
+                                               action = MVC.ThirdKnowledge.ActionNames.TKDetailSingleSearch,
+                                               QueryPublicId = subItem.QueryPublicId,
+                                               QueryInfoPublicId = subItem.QueryBasicPublicId,
+                                               ElasticId = subItem.ElasticId,
+                                               ReturnUrl = Url.Action
+                                                       (MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeDetail,
+                                                       MVC.ThirdKnowledge.Name,
+                                                       new
+                                                       {
+                                                          QueryPublicId = subItem.QueryPublicId,
+                                                          QueryInfoPublicId =subItem.QueryBasicPublicId,
+                                                          ElasticId = subItem.ElasticId,
+
+                                                       })
+                                           }))">Ver Detalle</a>
+                                }
+                            </p>
+                        </div>
+
+                    </div>
+                    <br />
+                }
+                <br />
+                <br />
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12 POMPTKDetailTitle"><strong>@col.Item1</strong></div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-1 POMPProviderBoxInfo text-center"><strong>Prioridad</strong></div>
+                    <div class="col-sm-3 POMPProviderBoxInfo text-center"><strong>Nom. Consultado</strong></div>
+                    <div class="col-sm-1 POMPProviderBoxInfo text-center"><strong>Id.Consulta</strong></div>
+                    <div class="col-sm-3 POMPProviderBoxInfo text-center"><strong>Nom. Encontrado</strong></div>
+                    <div class="col-sm-1 POMPProviderBoxInfo text-center"><strong>Id.Encontrada</strong></div>
+                    <div class="col-sm-2 POMPProviderBoxInfo text-center"><strong>Nombre Lista</strong></div>
+                    <div class="col-sm-1 POMPProviderBoxInfo text-center"></div>
+                </div>
+                <br />
+                foreach (var subItem in col.Item2)
+                {
+                    <div class="row POMPBorderbottom">
+                        <div class="col-sm-1 POMPProviderBoxInfo text-center"><p>@subItem.Priority</p></div>
+                        <div class="col-sm-3 POMPProviderBoxInfo text-center"><p>@subItem.RequestName</p></div>
+                        <div class="col-sm-1 POMPProviderBoxInfo text-center"><p>@subItem.IdNumberRequest</p></div>
+                        <div class="col-sm-3 POMPProviderBoxInfo text-center"><p>@subItem.NameResult</p></div>
+                        <div class="col-sm-1 POMPProviderBoxInfo text-center"><p>@subItem.IdentificationNumberResult</p></div>
+                        <div class="col-sm-2 POMPProviderBoxInfo text-center"><p>@subItem.ListName</p></div>
+
+
+                        <div class="col-sm-1 POMPProviderBoxInfo text-center">
+                            <p>
+                                @if (options.Any(x => x == (int)MarketPlace.Models.General.enumProviderSubMenu.QueryDetails))
+                                {
+                                    <a href="@(Url.RouteUrl
+                                   (MarketPlace.Models.General.Constants.C_Routes_Default,
+                                   new
+                                   {
+                                       controller = MVC.ThirdKnowledge.Name,
+                                       action = MVC.ThirdKnowledge.ActionNames.TKDetailSingleSearch,
+                                       QueryPublicId = subItem.QueryPublicId,
+                                       QueryInfoPublicId = subItem.QueryBasicPublicId,
+                                       ElasticId = subItem.ElasticId,
+                                       ReturnUrl = Url.Action
+                                               (MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeDetail,
+                                               MVC.ThirdKnowledge.Name,
+                                               new
+                                               {
+                                                   QueryPublicId = subItem.QueryPublicId,
+                                                   QueryInfoPublicId =subItem.QueryBasicPublicId,
+                                                   ElasticId = subItem.ElasticId,
+                                               })
+                                   }))">Ver_Detalle</a>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                    <br />
+                }
+                <br />
+                <br />
+            }
+        }
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-12 col-sm-12 text-center">
+                @{
+                    if (Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Count > 0)
+                    {
+                        var obbkRQB = Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.RelatedQueryInfoModel != null).FirstOrDefault();
+                        <br /><br />
+                        <label>LA BÚSQUEDA POR</label>
+                        <br />
+                        if (!string.IsNullOrEmpty(obbkRQB.RelatedQueryInfoModel.Select(x => x.QueryName).FirstOrDefault()))
+                        {
+                            <label class="POMPNoresultRequestText">Nombre:&nbsp;@obbkRQB.RelatedQueryInfoModel.Select(x => x.QueryName).FirstOrDefault()</label>
+                        }
+                        if (!string.IsNullOrEmpty(obbkRQB.RelatedQueryInfoModel.Select(x => x.QueryName).FirstOrDefault()))
+                        {
+                            <label class="POMPNoresultRequestText">&nbsp; / &nbsp;</label>
+                        }
+                        if (!string.IsNullOrEmpty(obbkRQB.RelatedQueryInfoModel.Select(x => x.QueryIdentification).FirstOrDefault()))
+                        {
+                            <label class="POMPNoresultRequestText">Identificación:&nbsp;@obbkRQB.RelatedQueryInfoModel.Select(x => x.QueryName).FirstOrDefault()</label>
+                        }
+                        <br /><br />
+                        <label class="POMPNoresultText">no arrojó coincidencias</label>
+                    }
+                    else
+                    {
+                        <br /><br />
+                        <label>LA BÚSQUEDA</label>
+                        <br />
+                        <br />
+                        <label class="POMPNoresultText">no arrojó coincidencias</label>
+                    }
+                }
+            </div>
+        </div>
+                    }
+</div>
+
+<div class="POMPSearchResultsPager">
+    <!--Pager-->
+    @Html.Partial(MVC.Desktop.Shared.Views._TK_ThirdKnowledgeSearch_Result_Pager, Model.RelatedThidKnowledgeSearch)
+</div>
+
+
