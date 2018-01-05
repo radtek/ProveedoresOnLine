@@ -195,22 +195,22 @@ namespace MarketPlace.Web.Controllers
                     Bool(f => f
                     //.Query(qi => qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId))
                     //&& qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User)).Query(SessionModel.CurrentLoginUser.Email)))
-                    .Filter(f2 =>
+                    .Should(f2 =>
                     {
                         QueryContainer qb = null;
-                        qb &= q.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId))
-                            && q.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User)).Query(SessionModel.CurrentLoginUser.Email));
+                        qb &= f2.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId))
+                            && f2.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User)).Query(SessionModel.CurrentLoginUser.Email));
                         #region Status Srv Filters
-                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y).FirstOrDefault() != null)
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.SurveyStatusId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.SurveyStatusId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y.Item1).FirstOrDefault());
                         }
                         #endregion
 
                         #region Type Srv Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.SurveyTypeId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.SurveyTypeId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y.Item1).FirstOrDefault());
                         }
                         #endregion
                         
@@ -262,19 +262,19 @@ namespace MarketPlace.Web.Controllers
                 .Query(q => q.
                     Bool(f => f
                     //.Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
-                    .Filter(f2 =>
+                    .Should(f2 =>
                     {
                         QueryContainer qb = null;
 
-                        qb &= q.MatchAll() && q.QueryString(qs => qs.Query(SearchParam));
+                        qb &= f2.MatchAll() && f2.QueryString(qs => qs.Query(SearchParam));
                         #region Basic Providers Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
                         }
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
                         }
                         #endregion
 
@@ -282,7 +282,7 @@ namespace MarketPlace.Web.Controllers
 
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Terms(tms => tms
+                            qb &= f2.Terms(tms => tms
                                       .Field(fi => fi.CompanyPublicId)
                                       .Terms<string>(oModel.ElasticSurveyModel.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
                                   );
@@ -292,14 +292,14 @@ namespace MarketPlace.Web.Controllers
                         #region Type Srv Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Terms(tms => tms
+                            qb &= f2.Terms(tms => tms
                                        .Field(fi => fi.CompanyPublicId)
                                        .Terms<string>(oModel.ElasticSurveyModel.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
                                    );
                         }
                         #endregion
 
-                        qb &= q.Nested(n => n
+                        qb &= f2.Nested(n => n
                            .Path(p => p.oCustomerProviderIndexModel)
                                .Query(fq => fq
                                    .Match(match => match
