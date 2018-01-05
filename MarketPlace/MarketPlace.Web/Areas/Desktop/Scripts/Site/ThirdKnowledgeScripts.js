@@ -16,131 +16,140 @@ var Third_KnowledgeSimpleSearchObject = {
         }
     },
 
-    SimpleSearch: function () {        
-        Third_KnowledgeSimpleSearchObject.Loading_Generic_Show();
-        if ($('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_Form').length > 0) {
-            $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_DivResult').html('')
-            var validator = $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_EditProjectDialog_Form').data("kendoValidator");
+    SimpleSearch: function () {      
+        if ($("#IdentificationNumber").val().length > 0) {
+            Third_KnowledgeSimpleSearchObject.Loading_Generic_Show();
+            if ($('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_Form').length > 0) {
+                $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_DivResult').html('')
+                var validator = $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_EditProjectDialog_Form').data("kendoValidator");
 
-            $.ajax({
-                type: "POST",
-                url: $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_Form').attr('action'),
-                data: $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_Form').serialize(),
-                success: function (result) {                    
-                    //Set param to send report
-                    $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_FormQueryPublicId').val(result.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId);
-                    $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_showreport').show();                    
+                $.ajax({
+                    type: "POST",
+                    url: $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_Form').attr('action'),
+                    data: $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_Form').serialize(),
+                    success: function (result) {
+                        //Set param to send report
+                        $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_FormQueryPublicId').val(result.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId);
+                        $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_showreport').show();
 
-                    Third_KnowledgeSimpleSearchObject.Loading_Generic_Hidden();
-                    $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_DivResult').html('')
-                    var tittlestDiv = '';
-                    var resultDiv = '';
+                        Third_KnowledgeSimpleSearchObject.Loading_Generic_Hidden();
+                        $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_DivResult').html('')
+                        var tittlestDiv = '';
+                        var resultDiv = '';
 
-                    if (result.TKGroupByListViewModel != null && result.TKGroupByListViewModel.length > 0) {
-                        
-                        var queryResult = Enumerable.From(result.TKGroupByListViewModel).GroupBy(function (item) { return item.m_Item1; }).ToArray();
-                        
-                        $.each(queryResult, function (a, group) {
-                            
-                            resultDiv = '';
-                            
-                            if (group.First().m_Item2 == "Registraduria - Puesto de Votación") {
+                        if (result.TKGroupByListViewModel != null && result.TKGroupByListViewModel.length > 0) {
 
-                                resultDiv += '<div class="row">' +
-                                    '<div class="col-sm-12 col-lg-12 POMPTKDetailTitle"><strong>' + group.First().m_Item1 + ' - ' + group.First().m_Item2 + '</strong></div>' +
-                                    '</div>' +
-                                    '<br />';
+                            var queryResult = Enumerable.From(result.TKGroupByListViewModel).GroupBy(function (item) { return item.m_Item1; }).ToArray();
 
-                                resultDiv += '<div class="row">';
-                                if (group.First().m_Item4 != null && group.First().m_Item4.length > 0) {
-                                    resultDiv += '<div class="col-md-6 POMPProviderBoxInfo text-left"><strong>' + group.First().m_Item4[0].replace(/['"]+/g, '') + '</strong></div>';
-                                } else {
-                                    resultDiv += '<div class="col-md-6 POMPProviderBoxInfo text-left"><strong>NOMBRE NO REGISTRA</strong></div>';
-                                }
-                                resultDiv += '<div class="col-md-6 POMPProviderBoxInfo text-left"><strong>C.C. ' + $("#IdentificationNumber").val() + '</strong></div>' +
-                                    '</div><br />';
+                            $.each(queryResult, function (a, group) {
 
-                                if (group.First().m_Item4 != null && group.First().m_Item4.length > 0) {
+                                resultDiv = '';
+
+                                if (group.First().m_Item2 == "Registraduria - Puesto de Votación") {
+
                                     resultDiv += '<div class="row">' +
-                                        '<div class="col-md-12 POMPProviderBoxInfo text-left"><strong><a href="' + group.First().m_Item3 + '" target="_blank">Ver Puesto de Votación</a></strong></div>' +
-                                        '</div>';
-                                }
+                                        '<div class="col-sm-12 col-lg-12 POMPTKDetailTitle"><strong>' + group.First().m_Item1 + ' - ' + group.First().m_Item2 + '</strong></div>' +
+                                        '</div>' +
+                                        '<br />';
 
-                            } else if (group.First().m_Item2 == "RUES" || group.First().m_Item2 == "DIAN") {
-
-                                resultDiv += '<div class="row">' +
-                                    '<div class="col-sm-12 col-lg-12 POMPTKDetailTitle"><strong>' + group.First().m_Item1 + ' - ' + group.First().m_Item2 + '</strong></div>' +
-                                    '</div>' +
-                                    '<br />';
-
-                                resultDiv += '<div class="row">';
-                                if (group.First().m_Item4 != null && group.First().m_Item4.length > 0) {
-                                    resultDiv += '<div class="col-md-6 POMPProviderBoxInfo text-left"><strong>' + group.First().m_Item4[0].replace(/['"]+/g, '') + '</strong></div>';
-                                } else {
-                                    resultDiv += '<div class="col-md-6 POMPProviderBoxInfo text-left"><strong>NOMBRE NO REGISTRA</strong></div>';
-                                }
-                                resultDiv += '<div class="col-md-6 POMPProviderBoxInfo text-left"><strong>NIT ' + $("#IdentificationNumber").val() + '</strong></div>' +
-                                    '</div><br />';
-
-                                if (group.First().m_Item4 != null && group.First().m_Item4.length > 0) {
-                                    resultDiv += '<div class="row">' +
-                                        '<div class="col-md-12 POMPProviderBoxInfo text-left"><strong><a href="' + group.First().m_Item3 + '" target="_blank">Ver RUES</a></strong></div>' +
-                                        '</div>';
-                                }
-                            } else {
-                                resultDiv += '<div class="row">' +
-                                    '<div class="col-sm-12 col-lg-12 POMPTKDetailTitle"><strong>' + group.First().m_Item1 + '</strong></div>' +
-                                    '</div>' +
-                                    '<br />';
-
-                                resultDiv += '<div class="POMPProviderBoxInfo"><div class="row">';
-                                resultDiv += '<table class="table table-striped table-hover">' +
-                                    '<thead><th class="col-md-7">Nombre de la Lista</th><th class="col-md-2">Presenta posible Riesgo</th><th class="col-md-2">Mas Información</th></thead>' +
-                                    '<tbody>'
-
-                                $.each(group.source, function (c, d) {
-
-                                    var val = d.m_Item5 == true ? 'SI' : 'NO';
-
-                                    resultDiv += '<tr>' +
-                                        '<td>' + d.m_Item2 + '</td>';
-
-                                    if (d.m_Item5 == true) {
-                                        resultDiv += '<td><span class="badge badge-danger">' + val + '</span></td>' +
-                                            '<td><strong><a target = "_blank" href= "' + BaseUrl.SiteUrl + 'ThirdKnowledge/TKDetailSingleSearch?QueryPublicId=' + d.m_Item4[5] + '&QueryBasicPublicId=' + d.m_Item4[5] + '&ElasticId=' + d.m_Item4[4] +
-                                       '&ReturnUrl=null">Ver Detalle</a></strong></td>';
+                                    resultDiv += '<div class="row">';
+                                    if (group.First().m_Item4 != null && group.First().m_Item4.length > 0) {
+                                        resultDiv += '<div class="col-md-6 POMPProviderBoxInfo text-left"><strong>' + group.First().m_Item4[0].replace(/['"]+/g, '') + '</strong></div>';
                                     } else {
-                                        resultDiv += '<td>' + val + '</td>' +
-                                            '<td><strong></strong></td>';
+                                        resultDiv += '<div class="col-md-6 POMPProviderBoxInfo text-left"><strong>NOMBRE NO REGISTRA</strong></div>';
+                                    }
+                                    resultDiv += '<div class="col-md-6 POMPProviderBoxInfo text-left"><strong>C.C. ' + $("#IdentificationNumber").val() + '</strong></div>' +
+                                        '</div><br />';
+
+                                    if (group.First().m_Item4 != null && group.First().m_Item4.length > 0) {
+                                        resultDiv += '<div class="row">' +
+                                            '<div class="col-md-12 POMPProviderBoxInfo text-left"><strong><a href="' + group.First().m_Item3 + '" target="_blank">Ver Puesto de Votación</a></strong></div>' +
+                                            '</div>';
                                     }
 
+                                } else if (group.First().m_Item2 == "RUES" || group.First().m_Item2 == "DIAN") {
 
-                                    resultDiv += '</tr>';
-                                    resultDiv += '</div></div>';
+                                    resultDiv += '<div class="row">' +
+                                        '<div class="col-sm-12 col-lg-12 POMPTKDetailTitle"><strong>' + group.First().m_Item1 + ' - ' + group.First().m_Item2 + '</strong></div>' +
+                                        '</div>' +
+                                        '<br />';
 
-                                })
-                                resultDiv += '</tbody>' +
-                                    '</table>';
-                            }
+                                    resultDiv += '<div class="row">';
+                                    if (group.First().m_Item4 != null && group.First().m_Item4.length > 0) {
+                                        resultDiv += '<div class="col-md-6 POMPProviderBoxInfo text-left"><strong>' + group.First().m_Item4[0].replace(/['"]+/g, '') + '</strong></div>';
+                                    } else {
+                                        resultDiv += '<div class="col-md-6 POMPProviderBoxInfo text-left"><strong>NOMBRE NO REGISTRA</strong></div>';
+                                    }
+                                    resultDiv += '<div class="col-md-6 POMPProviderBoxInfo text-left"><strong>NIT ' + $("#IdentificationNumber").val() + '</strong></div>' +
+                                        '</div><br />';
 
-                            $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_DivResult').append(resultDiv);
-                        })
-                        
-                    }
-                    else {
-                        resultDiv = '<div class="row"><div class="col-md-11 col-sm-11 text-center"><br/><br/><br/><label>LA BÚSQUEDA</label><br/><label class="POMPNoresultText">no arrojó coincidencias</label></div></div>',
-                        $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_DivResult').append(resultDiv);
-                    }
+                                    if (group.First().m_Item4 != null && group.First().m_Item4.length > 0) {
+                                        resultDiv += '<div class="row">' +
+                                            '<div class="col-md-12 POMPProviderBoxInfo text-left"><strong><a href="' + group.First().m_Item3 + '" target="_blank">Ver RUES</a></strong></div>' +
+                                            '</div>';
+                                    }
+                                } else {
+                                    resultDiv += '<div class="row">' +
+                                        '<div class="col-sm-12 col-lg-12 POMPTKDetailTitle"><strong>' + group.First().m_Item1 + '</strong></div>' +
+                                        '</div>' +
+                                        '<br />';
 
-                    $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_Queries').html('');
-                    $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_Queries').append(result.RelatedThirdKnowledge.CurrentPlanModel.RelatedPeriodModel[0].TotalQueries);
+                                    resultDiv += '<div class="POMPProviderBoxInfo"><div class="row">';
+                                    resultDiv += '<table class="table table-striped table-hover">' +
+                                        '<thead><th class="col-md-7">Nombre de la Lista</th><th class="col-md-2">Presenta posible Riesgo</th><th class="col-md-2">Mas Información</th></thead>' +
+                                        '<tbody>'
 
-                },
-                error: function (result) {
-                    Third_KnowledgeSimpleSearchObject.Loading_Generic_Hidden();
-                },
-            })
+                                    $.each(group.source, function (c, d) {
+
+                                        var val = d.m_Item5 == true ? 'SI' : 'NO';
+
+                                        resultDiv += '<tr>' +
+                                            '<td>' + d.m_Item2 + '</td>';
+
+                                        if (d.m_Item5 == true) {
+                                            resultDiv += '<td><span class="badge badge-danger">' + val + '</span></td>' +
+                                                '<td><strong><a target = "_blank" href= "' + BaseUrl.SiteUrl + 'ThirdKnowledge/TKDetailSingleSearch?QueryPublicId=' + d.m_Item4[5] + '&QueryBasicPublicId=' + d.m_Item4[5] + '&ElasticId=' + d.m_Item4[4] +
+                                                '&ReturnUrl=null">Ver Detalle</a></strong></td>';
+                                        } else {
+                                            resultDiv += '<td>' + val + '</td>' +
+                                                '<td><strong></strong></td>';
+                                        }
+
+
+                                        resultDiv += '</tr>';
+                                        resultDiv += '</div></div>';
+
+                                    })
+                                    resultDiv += '</tbody>' +
+                                        '</table>';
+                                }
+
+                                $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_DivResult').append(resultDiv);
+                            })
+
+                        }
+                        else {
+                            resultDiv = '<div class="row"><div class="col-md-11 col-sm-11 text-center"><br/><br/><br/><label>LA BÚSQUEDA</label><br/><label class="POMPNoresultText">no arrojó coincidencias</label></div></div>',
+                                $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_DivResult').append(resultDiv);
+                        }
+
+                        $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_Queries').html('');
+                        $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_Queries').append(result.RelatedThirdKnowledge.CurrentPlanModel.RelatedPeriodModel[0].TotalQueries);
+
+                    },
+                    error: function (result) {
+                        Third_KnowledgeSimpleSearchObject.Loading_Generic_Hidden();
+                    },
+                })
+            }
+        } else {
+            $("#message").css('display','');
+            $("#message").html('');
+            $("#message").append('<div class="alert alert-info">Por favor llenar los campos obligatorios(*).</div>');
+            return false;
         }
+
+        
     },
 
     Loading_Generic_Show: function () {
@@ -485,7 +494,7 @@ function Numeros(e) {
     }
 }
 
-$("#IdentificationNumber").keydown(function (e) {
+$("#IdentificationNumber").keydown(function (e) {    
     if ($('#ThirdKnowledgeIdType').val() == "213002" || $('#ThirdKnowledgeIdType').val() == "213001") {// Juridica y Natural
         Numeros(e);
     }
