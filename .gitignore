@@ -162,3 +162,4 @@ $RECYCLE.BIN/
 *.lock
 /ProveedoresOnLine.ThirdKnowledge/ProveedoresOnLine.ThirdKnowledge.Test/TempDirectory/DA5C572E_ThirdKnowledgeFile_DA5C572E_20171227145104.xlsx
 /MarketPlace/MarketPlace.Web/TempDirectory/DA5C572E_ThirdKnowledgeFile_DA5C572E_20180104081645.xlsx
+*.xlsx
