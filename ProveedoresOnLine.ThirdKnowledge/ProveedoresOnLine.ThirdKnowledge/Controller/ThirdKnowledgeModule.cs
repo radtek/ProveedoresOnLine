@@ -174,7 +174,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         Link = RegEntityResult.FirstOrDefault().Item1,
                         ListName = "Registraduria - Puesto de Votación",
                         ElasticId = (int)enumElasticGroupId.RegistersList,
-                        NameResult = !string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1) ? RegDianResult.FirstOrDefault().Item1 : string.Empty,
+                        NameResult = RegDianResult != null && RegDianResult.Count >0  ? RegDianResult.FirstOrDefault().Item1 : string.Empty,
                         QueryIdentification = IdType == 1 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : IdType == 2 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty,
                     };
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
