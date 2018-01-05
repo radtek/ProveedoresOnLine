@@ -567,6 +567,48 @@ namespace ProveedoresOnLine.Reports.Controller
 
         }
 
+        public static Tuple<byte[], string, string> TK_MasiveQueryReport(string FormatType, DataTable data_Query, List<ReportParameter> ReportData, string FilePath)
+        {
+            LocalReport localReport = new LocalReport();
+
+            localReport.EnableExternalImages = true;
+            localReport.ReportPath = FilePath;
+            localReport.SetParameters(ReportData);
+
+            Microsoft.Reporting.WebForms.ReportDataSource src_rst = new Microsoft.Reporting.WebForms.ReportDataSource();
+            src_rst.Name = "DS_ListDataQuery";
+            src_rst.Value = data_Query != null ? data_Query : new DataTable();
+
+            ReportDataSource source = new ReportDataSource();
+            source.Name = "DS_ThirdKnowlegde_MasiveQuery";
+
+            localReport.DataSources.Add(src_rst);
+
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            string deviceInfo =
+                       "<DeviceInfo>" +
+                       "  <OutputFormat>" + FormatType + "</OutputFormat>" +
+
+                       "</DeviceInfo>";
+            Warning[] warnings;
+            string[] streams;
+            byte[] renderedBytes;
+
+            renderedBytes = localReport.Render(
+                FormatType,
+                deviceInfo,
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings);
+            if (FormatType == "Excel") { FormatType = "xls"; }
+            return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_ThirdKnowledgeQueryReport + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
+
+        }
+
         public static Tuple<byte[], string, string> TK_QueryDetailReport(string FormatType, List<ReportParameter> ReportData, string FilePath)
         {
             LocalReport localReport = new LocalReport();

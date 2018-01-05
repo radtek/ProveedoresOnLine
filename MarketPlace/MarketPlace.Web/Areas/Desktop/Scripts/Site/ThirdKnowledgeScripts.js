@@ -39,7 +39,7 @@ var Third_KnowledgeSimpleSearchObject = {
                     if (result.TKGroupByListViewModel != null && result.TKGroupByListViewModel.length > 0) {
                         
                         var queryResult = Enumerable.From(result.TKGroupByListViewModel).GroupBy(function (item) { return item.m_Item1; }).ToArray();
-                        console.log(queryResult);
+                        
                         $.each(queryResult, function (a, group) {
                             
                             resultDiv = '';

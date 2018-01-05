@@ -190,6 +190,7 @@ namespace MarketPlace.Web.Controllers
             public readonly string EndDate = "EndDate";
             public readonly string Enable = "Enable";
             public readonly string IsSuccess = "IsSuccess";
+            public readonly string IsDetail = "IsDetail";
         }
         static readonly ActionParamsClass_TKThirdKnowledgeDetailNew s_params_TKThirdKnowledgeDetailNew = new ActionParamsClass_TKThirdKnowledgeDetailNew();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -198,6 +199,7 @@ namespace MarketPlace.Web.Controllers
         public class ActionParamsClass_TKThirdKnowledgeDetailNew
         {
             public readonly string QueryPublicId = "QueryPublicId";
+            public readonly string SearchParam = "SearchParam";
             public readonly string PageNumber = "PageNumber";
             public readonly string InitDate = "InitDate";
             public readonly string EndDate = "EndDate";
@@ -216,6 +218,7 @@ namespace MarketPlace.Web.Controllers
             public readonly string EndDate = "EndDate";
             public readonly string Enable = "Enable";
             public readonly string IsSuccess = "IsSuccess";
+            public readonly string DownloadReport = "DownloadReport";
         }
         static readonly ActionParamsClass_GetPdfFileBytes s_params_GetPdfFileBytes = new ActionParamsClass_GetPdfFileBytes();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -314,10 +317,10 @@ namespace MarketPlace.Web.Controllers
         }
 
         [NonAction]
-        partial void TKThirdKnowledgeDetailOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess);
+        partial void TKThirdKnowledgeDetailOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess, string IsDetail);
 
         [NonAction]
-        public override System.Web.Mvc.ActionResult TKThirdKnowledgeDetail(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess)
+        public override System.Web.Mvc.ActionResult TKThirdKnowledgeDetail(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess, string IsDetail)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.TKThirdKnowledgeDetail);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "QueryPublicId", QueryPublicId);
@@ -326,32 +329,34 @@ namespace MarketPlace.Web.Controllers
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "EndDate", EndDate);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "Enable", Enable);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "IsSuccess", IsSuccess);
-            TKThirdKnowledgeDetailOverride(callInfo, QueryPublicId, PageNumber, InitDate, EndDate, Enable, IsSuccess);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "IsDetail", IsDetail);
+            TKThirdKnowledgeDetailOverride(callInfo, QueryPublicId, PageNumber, InitDate, EndDate, Enable, IsSuccess, IsDetail);
             return callInfo;
         }
 
         [NonAction]
-        partial void TKThirdKnowledgeDetailNewOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess);
+        partial void TKThirdKnowledgeDetailNewOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string QueryPublicId, string SearchParam, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess);
 
         [NonAction]
-        public override System.Web.Mvc.ActionResult TKThirdKnowledgeDetailNew(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess)
+        public override System.Web.Mvc.ActionResult TKThirdKnowledgeDetailNew(string QueryPublicId, string SearchParam, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.TKThirdKnowledgeDetailNew);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "QueryPublicId", QueryPublicId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "SearchParam", SearchParam);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "PageNumber", PageNumber);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "InitDate", InitDate);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "EndDate", EndDate);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "Enable", Enable);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "IsSuccess", IsSuccess);
-            TKThirdKnowledgeDetailNewOverride(callInfo, QueryPublicId, PageNumber, InitDate, EndDate, Enable, IsSuccess);
+            TKThirdKnowledgeDetailNewOverride(callInfo, QueryPublicId, SearchParam, PageNumber, InitDate, EndDate, Enable, IsSuccess);
             return callInfo;
         }
 
         [NonAction]
-        partial void TKMasiveDetailOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess);
+        partial void TKMasiveDetailOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess, string DownloadReport);
 
         [NonAction]
-        public override System.Web.Mvc.ActionResult TKMasiveDetail(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess)
+        public override System.Web.Mvc.ActionResult TKMasiveDetail(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess, string DownloadReport)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.TKMasiveDetail);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "QueryPublicId", QueryPublicId);
@@ -360,7 +365,8 @@ namespace MarketPlace.Web.Controllers
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "EndDate", EndDate);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "Enable", Enable);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "IsSuccess", IsSuccess);
-            TKMasiveDetailOverride(callInfo, QueryPublicId, PageNumber, InitDate, EndDate, Enable, IsSuccess);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "DownloadReport", DownloadReport);
+            TKMasiveDetailOverride(callInfo, QueryPublicId, PageNumber, InitDate, EndDate, Enable, IsSuccess, DownloadReport);
             return callInfo;
         }
 

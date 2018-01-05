@@ -79,23 +79,20 @@
                 oInfoToManage = Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().RelatedQueryInfoModel.Where(x => x.QueryIdentification != null).GroupBy(x => new { x.QueryIdentification }).Select(x => x.Last()).ToList();
                 oInfoToManage.AddRange(Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().RelatedQueryInfoModel.Where(x => x.QueryName != null).GroupBy(x => new { x.QueryName }).Select(x => x.Last()).ToList());
 
-                Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().RelatedQueryInfoModel =
-                    Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().RelatedQueryInfoModel.Where(x => x.GroupName != "Registraduria/Dian" && x.GroupName != "Registraduria - Puesto de Votación" && x.GroupName != "RUES").Select(x => x).ToList();
-
                 oInfoToManage.All(x =>
                 {
                     if (!string.IsNullOrEmpty(x.QueryName))
                     {
                         if (Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().RelatedQueryInfoModel.Where(y => y.QueryName == x.QueryName).Select(y => y).FirstOrDefault() != null)
                         {
-                            oModelToSend.Add(new Tuple<string, string, string, ProveedoresOnLine.ThirdKnowledge.Models.TDQueryInfoModel>(x.QueryName, x.GroupName != "SIN COINCIDENCIAS" ? "SI" : "NO", x.QueryInfoPublicId, x));
+                            oModelToSend.Add(new Tuple<string, string, string, ProveedoresOnLine.ThirdKnowledge.Models.TDQueryInfoModel>(x.QueryName, x.GroupName != "SIN COINCIDENCIAS" && x.GroupName != "Registraduria/Dian" && x.GroupName != "Registraduria - Puesto de Votación" && x.GroupName != "RUES" ? "SI" : "NO", x.QueryPublicId, x));
                         }
                     }
                     else
                     {
-                        if (Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().RelatedQueryInfoModel.Where(y => y.IdentificationNumber == x.IdentificationNumber).Select(y => y).FirstOrDefault() != null)
+                        if (Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().RelatedQueryInfoModel.Where(y => y.QueryIdentification == x.QueryIdentification).Select(y => y).FirstOrDefault() != null)
                         {
-                            oModelToSend.Add(new Tuple<string, string, string, ProveedoresOnLine.ThirdKnowledge.Models.TDQueryInfoModel>(x.QueryName, x.GroupName != "SIN COINCIDENCIAS" ? "SI" : "NO", x.QueryInfoPublicId, x));
+                            oModelToSend.Add(new Tuple<string, string, string, ProveedoresOnLine.ThirdKnowledge.Models.TDQueryInfoModel>(x.QueryIdentification, x.GroupName != "SIN COINCIDENCIAS" && x.GroupName != "Registraduria/Dian" && x.GroupName != "Registraduria - Puesto de Votación" && x.GroupName != "RUES" ? "SI" : "NO", x.QueryPublicId, x));
                         }
                     }
 
