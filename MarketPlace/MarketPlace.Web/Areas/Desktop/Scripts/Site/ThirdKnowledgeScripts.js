@@ -16,8 +16,9 @@ var Third_KnowledgeSimpleSearchObject = {
         }
     },
 
-    SimpleSearch: function () {      
-        if ($("#IdentificationNumber").val().length > 0) {
+    SimpleSearch: function () {     
+        var valueQuery = $.trim($("#IdentificationNumber").val());
+        if (valueQuery.length > 0) {
             Third_KnowledgeSimpleSearchObject.Loading_Generic_Show();
             if ($('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_Form').length > 0) {
                 $('#' + Third_KnowledgeSimpleSearchObject.ObjectId + '_DivResult').html('')
