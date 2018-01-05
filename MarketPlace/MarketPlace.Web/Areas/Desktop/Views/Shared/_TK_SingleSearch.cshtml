@@ -30,8 +30,11 @@
     <form id="ThirdKnowledge_Form" action="@Url.Content("~/api/ThirdKnowledgeApi?TKSingleSearch=true")" method="post">
         <div class="container-fluid">
             <div class="row">
+                <div class="col-md-12" id="message" style="display:none;">
+                   
+                </div>
                 <div class="col-md-6">
-                    <label>Criterio de Búsqueda</label>
+                    <label>Criterio de Búsqueda (*)</label>
                     <select name="ThirdKnowledgeIdType" class="form-control ThirdKnowledgeIdType" id="ThirdKnowledgeIdType" onchange="$('#IdentificationNumber').val('')">
                         @{
                             var selected = new ProveedoresOnLine.Company.Models.Util.CatalogModel();
@@ -54,7 +57,7 @@
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <label>Valor a Buscar</label>
+                    <label>Valor a Buscar (*)</label>
                     @if (!string.IsNullOrEmpty(Model.RelatedThirdKnowledge.SearchIdNumberParam))
                     {
                         <input class="ThirdKnowledgeSeachBox" type="text" name="IdentificationNumber" id="IdentificationNumber" value="@Model.RelatedThirdKnowledge.SearchIdNumberParam" placeholder="Nombre o Número de Identificación" />
