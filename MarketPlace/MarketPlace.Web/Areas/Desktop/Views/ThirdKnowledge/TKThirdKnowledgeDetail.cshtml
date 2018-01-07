@@ -85,6 +85,8 @@
         IsDetail = "true",
         InitDate = Model.RelatedThidKnowledgeSearch.InitDate.ToString("yyyy-MM-dd"),
         EndDate = Model.RelatedThidKnowledgeSearch.EndDate.ToString("yyyy-MM-dd"),
+        SearchParam =  Model.RelatedThidKnowledgeSearch.RequestName != null ? Model.RelatedThidKnowledgeSearch.RequestName
+                                            : Model.RelatedThidKnowledgeSearch.IdNumberRequest,
     })" method="post"></form>
 </div>
 
