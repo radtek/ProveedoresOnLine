@@ -124,7 +124,7 @@ namespace MarketPlace.Web.Controllers
         /// <returns>Detail View</returns>
         /// 
 
-        public virtual ActionResult TKDetailSingleSearch(string QueryPublicId, string QueryInfoPublicId, string ElasticId, string ReturnUrl)
+        public virtual ActionResult TKDetailSingleSearch(string QueryPublicId, string QueryInfoPublicId, string ElasticId, string ReturnUrl, string SearchParam)
         {
             ProviderViewModel oModel = new ProviderViewModel();
 
@@ -167,8 +167,22 @@ namespace MarketPlace.Web.Controllers
                     parameters.Add(new ReportParameter("CustomerIdentification", SessionModel.CurrentCompany.IdentificationNumber));
                     parameters.Add(new ReportParameter("CustomerIdentificationType", SessionModel.CurrentCompany.IdentificationType.ItemName));
                     parameters.Add(new ReportParameter("CustomerImage", SessionModel.CurrentCompany_CompanyLogo));
-                    parameters.Add(new ReportParameter("SearchName", oModel.RelatedThidKnowledgeSearch.RequestName));
-                    parameters.Add(new ReportParameter("SearchIdentification", oModel.RelatedThidKnowledgeSearch.IdNumberRequest));
+                    if (oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult != null)
+                    {
+                        if (oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().SearchType.ItemId == (int)enumThirdKnowledgeQueryType.Masive)
+                        {
+                            oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().RelatedQueryInfoModel =
+                                    oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().RelatedQueryInfoModel.
+                                    Where(x => x.QueryIdentification == SearchParam || x.QueryName == SearchParam).
+                                    Select(x => x).ToList();
+                        }
+                    }
+
+                    if (oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().RelatedQueryInfoModel.Where(y => y.QueryIdentification != null).Count() > 0)
+                        parameters.Add(new ReportParameter("SearchName", oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().RelatedQueryInfoModel.Where(y => y.QueryIdentification != null).FirstOrDefault().QueryIdentification));
+                    else
+                        parameters.Add(new ReportParameter("SearchName", oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().RelatedQueryInfoModel.Where(y => y.QueryName != null).FirstOrDefault().QueryName));
+                    
                     //Query Detail Info
                     parameters.Add(new ReportParameter("ThirdKnowledgeText", MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.MP_TK_TextImage].Value));
                     parameters.Add(new ReportParameter("NameResult", !string.IsNullOrEmpty(oModel.RelatedThidKnowledgeSearch.NameResult) ? oModel.RelatedThidKnowledgeSearch.NameResult : "--"));
@@ -563,7 +577,7 @@ namespace MarketPlace.Web.Controllers
             return View(oModel);
         }
 
-        public virtual ActionResult TKThirdKnowledgeDetail(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess, string IsDetail)
+        public virtual ActionResult TKThirdKnowledgeDetail(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess, string IsDetail, string SearchParam)
         {
             if (SessionModel.CurrentURL != null)
                 SessionModel.CurrentURL = null;
@@ -587,10 +601,14 @@ namespace MarketPlace.Web.Controllers
 
             List<TDQueryModel> oQueryResult = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearchByPublicId(QueryPublicId, oModel.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.PageNumber, oTotalRowsAux, out TotalRows);
 
+            if (oQueryResult != null && oQueryResult.Count > 0)
+                oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult = oQueryResult;
+
             //call new controller
-            if (IsDetail != "true")
+
+            if (oQueryResult != null && oQueryResult.FirstOrDefault().SearchType.ItemId == (int)enumThirdKnowledgeQueryType.Masive)
             {
-                if (oQueryResult != null && oQueryResult.FirstOrDefault().SearchType.ItemId == (int)enumThirdKnowledgeQueryType.Masive)
+                if (IsDetail != "true")
                 {
                     //redirect
                     return RedirectToRoute
@@ -608,6 +626,17 @@ namespace MarketPlace.Web.Controllers
                             DownloadReport = Request["DownloadReport"]
                         });
                 }
+
+                if (oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult != null)
+                {
+                    if (oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().SearchType.ItemId == (int)enumThirdKnowledgeQueryType.Masive)
+                    {
+                        oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().RelatedQueryInfoModel =
+                                oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().RelatedQueryInfoModel.
+                                Where(x => x.QueryIdentification == SearchParam || x.QueryName == SearchParam).
+                                Select(x => x).ToList();
+                    }
+                }
             }
             
             //Call Function to build object
@@ -619,9 +648,6 @@ namespace MarketPlace.Web.Controllers
             
             oModel.TKGroupByListViewModel = new List<Tuple<string, string, string, List<string>, bool>>();
             oModel.TKGroupByListViewModel = ObjResult;
-
-            if (oQueryResult != null && oQueryResult.Count > 0)
-                oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult = oQueryResult;
 
 
             //Get report generator
@@ -777,6 +803,7 @@ namespace MarketPlace.Web.Controllers
             if (oQueryResult != null && oQueryResult.Count > 0)
                 oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult = oQueryResult;
 
+            oModel.RelatedThidKnowledgeSearch.RequestName = SearchParam;
 
             //Get report generator
             if (Request["DownloadReport"] == "true")
@@ -989,15 +1016,10 @@ namespace MarketPlace.Web.Controllers
                 parameters.Add(new ReportParameter("CustomerIdentificationType", SessionModel.CurrentCompany.IdentificationType.ItemName));
                 parameters.Add(new ReportParameter("CustomerImage", SessionModel.CurrentCompany_CompanyLogo));
 
-                //Query Info Parameters
-                //parameters.Add(new ReportParameter("ThirdKnowledgeText", MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.MP_TK_TextImage].Value));
+                //Query Info Parameters                
                 parameters.Add(new ReportParameter("User", oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.User != null).Select(x => x.User).DefaultIfEmpty("No hay campo").FirstOrDefault()));
                 parameters.Add(new ReportParameter("CreateDate", oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.CreateDate != null).Select(x => x.CreateDate.AddHours(-5).ToString().ToString()).DefaultIfEmpty("No hay campo").FirstOrDefault()));
-                //parameters.Add(new ReportParameter("QueryType", oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.SearchType != null).Select(x => x.SearchType.ItemName).DefaultIfEmpty("No hay campo").FirstOrDefault()));
-                //parameters.Add(new ReportParameter("Status", oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.QueryStatus != null).Select(x => x.QueryStatus.ItemName).DefaultIfEmpty("No hay campo").FirstOrDefault()));
-                //parameters.Add(new ReportParameter("searchName", searchName));
-                //parameters.Add(new ReportParameter("searchIdentification", searchIdentification));
-                //parameters.Add(new ReportParameter("IsSuccess", oModel.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x != null).Select(x => x.IsSuccess).FirstOrDefault().ToString()));
+                
 
                 /*data for Matches with High Critical*/
                 DataTable data_Query = new DataTable();

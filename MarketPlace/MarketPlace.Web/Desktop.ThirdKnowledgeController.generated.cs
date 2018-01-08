@@ -163,6 +163,7 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             public readonly string QueryInfoPublicId = "QueryInfoPublicId";
             public readonly string ElasticId = "ElasticId";
             public readonly string ReturnUrl = "ReturnUrl";
+            public readonly string SearchParam = "SearchParam";
         }
         static readonly ActionParamsClass_TKThirdKnowledgeSearch s_params_TKThirdKnowledgeSearch = new ActionParamsClass_TKThirdKnowledgeSearch();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -191,6 +192,7 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             public readonly string Enable = "Enable";
             public readonly string IsSuccess = "IsSuccess";
             public readonly string IsDetail = "IsDetail";
+            public readonly string SearchParam = "SearchParam";
         }
         static readonly ActionParamsClass_TKThirdKnowledgeDetailNew s_params_TKThirdKnowledgeDetailNew = new ActionParamsClass_TKThirdKnowledgeDetailNew();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -309,17 +311,18 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
         }
 
         [NonAction]
-        partial void TKDetailSingleSearchOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string QueryPublicId, string QueryInfoPublicId, string ElasticId, string ReturnUrl);
+        partial void TKDetailSingleSearchOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string QueryPublicId, string QueryInfoPublicId, string ElasticId, string ReturnUrl, string SearchParam);
 
         [NonAction]
-        public override System.Web.Mvc.ActionResult TKDetailSingleSearch(string QueryPublicId, string QueryInfoPublicId, string ElasticId, string ReturnUrl)
+        public override System.Web.Mvc.ActionResult TKDetailSingleSearch(string QueryPublicId, string QueryInfoPublicId, string ElasticId, string ReturnUrl, string SearchParam)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.TKDetailSingleSearch);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "QueryPublicId", QueryPublicId);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "QueryInfoPublicId", QueryInfoPublicId);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "ElasticId", ElasticId);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "ReturnUrl", ReturnUrl);
-            TKDetailSingleSearchOverride(callInfo, QueryPublicId, QueryInfoPublicId, ElasticId, ReturnUrl);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "SearchParam", SearchParam);
+            TKDetailSingleSearchOverride(callInfo, QueryPublicId, QueryInfoPublicId, ElasticId, ReturnUrl, SearchParam);
             return callInfo;
         }
 
@@ -342,10 +345,10 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
         }
 
         [NonAction]
-        partial void TKThirdKnowledgeDetailOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess, string IsDetail);
+        partial void TKThirdKnowledgeDetailOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess, string IsDetail, string SearchParam);
 
         [NonAction]
-        public override System.Web.Mvc.ActionResult TKThirdKnowledgeDetail(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess, string IsDetail)
+        public override System.Web.Mvc.ActionResult TKThirdKnowledgeDetail(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess, string IsDetail, string SearchParam)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.TKThirdKnowledgeDetail);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "QueryPublicId", QueryPublicId);
@@ -355,7 +358,8 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "Enable", Enable);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "IsSuccess", IsSuccess);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "IsDetail", IsDetail);
-            TKThirdKnowledgeDetailOverride(callInfo, QueryPublicId, PageNumber, InitDate, EndDate, Enable, IsSuccess, IsDetail);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "SearchParam", SearchParam);
+            TKThirdKnowledgeDetailOverride(callInfo, QueryPublicId, PageNumber, InitDate, EndDate, Enable, IsSuccess, IsDetail, SearchParam);
             return callInfo;
         }
 

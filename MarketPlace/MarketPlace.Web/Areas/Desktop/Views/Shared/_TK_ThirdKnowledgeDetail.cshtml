@@ -68,7 +68,16 @@
 
                                             <td>
                                                 <strong>
-                                                    <a target="_blank" href="/ThirdKnowledge/TKDetailSingleSearch?QueryPublicId=@item.Item4[3]&QueryBasicPublicId=@item.Item4[3]&ElasticId=@item.Item4[4]&ReturnUrl=null">Ver Detalle</a>
+                                                    <a target="_blank" href="@(Url.RouteUrl
+                                                    (MarketPlace.Models.General.Constants.C_Routes_Default,
+                                                    new
+                                                    {
+                                                        controller = MVC.ThirdKnowledge.Name,
+                                                        action = MVC.ThirdKnowledge.ActionNames.TKDetailSingleSearch,
+                                                        QueryPublicId = item.Item4[3],
+                                                        QueryBasicPublicId = item.Item4[3],
+                                                        ElasticId = item.Item4[4],
+                                                    }))">Ver Detalle</a>
                                                 </strong>
                                             </td>
                                         }
