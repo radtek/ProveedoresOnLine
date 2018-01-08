@@ -10,9 +10,9 @@ namespace ProveedoresOnLine.Process.Implement
     [DisallowConcurrentExecution]
     public class ThirdKnowledgeProcessJob : Quartz.IJob
     {
-        public void Execute(Quartz.IJobExecutionContext context)
+        public async void Execute(Quartz.IJobExecutionContext context)
         {            
-            ProveedoresOnLine.ThirdKnowledgeBatch.ThirdKnowledgeFTPProcess.StartProcess();            
+           await ProveedoresOnLine.ThirdKnowledgeBatch.ThirdKnowledgeFTPProcess.StartProcess();            
         }
     }
 }
