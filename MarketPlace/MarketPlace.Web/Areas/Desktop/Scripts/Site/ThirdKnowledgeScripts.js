@@ -494,7 +494,6 @@ function Numeros(e) {
         return;
     }
     // Aseguramos que son numeros
-    //e.ctrlKey
     if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
         e.preventDefault();
     }
