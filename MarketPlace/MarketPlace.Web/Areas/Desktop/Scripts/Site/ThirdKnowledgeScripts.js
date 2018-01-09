@@ -485,11 +485,16 @@ function Numeros(e) {
         // Permite: Ctrl+A
         (e.keyCode == 65 && e.ctrlKey === true) ||
         // Permite: home, end, left, right
-        (e.keyCode >= 35 && e.keyCode <= 39)) {
+        (e.keyCode >= 35 && e.keyCode <= 39) ||
+        //Permite: Copiar
+        (e.keyCode == 67 && e.ctrlKey === true)) {
+        //Permite: Pegar
+        //(e.keyCode == 86 && e.ctrlKey === true)){
         // solo permitir lo que no este dentro de estas condiciones es un return false
         return;
     }
     // Aseguramos que son numeros
+    //e.ctrlKey
     if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
         e.preventDefault();
     }
