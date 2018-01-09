@@ -595,7 +595,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Valor Consultado:</Value>
+                <Value>Búsqueda Realizada:</Value>
                 <Style>
                   <FontFamily>Segoe UI Light</FontFamily>
                   <FontSize>9pt</FontSize>
@@ -611,7 +611,7 @@
         <Top>1.25106cm</Top>
         <Left>0.45719cm</Left>
         <Height>0.57354cm</Height>
-        <Width>2.93943cm</Width>
+        <Width>3.60185cm</Width>
         <ZIndex>7</ZIndex>
         <Style>
           <Border>
@@ -642,7 +642,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox19</rd:DefaultName>
         <Top>1.25106cm</Top>
-        <Left>3.53869cm</Left>
+        <Left>4.16487cm</Left>
         <Height>0.57354cm</Height>
         <Width>9.33628cm</Width>
         <ZIndex>8</ZIndex>
