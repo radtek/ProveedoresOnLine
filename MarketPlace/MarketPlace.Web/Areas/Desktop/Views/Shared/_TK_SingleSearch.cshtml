@@ -35,7 +35,8 @@
 
                 </div>
                 <div class="col-md-6">
-                    <label>Criterio de Búsqueda (*)</label>
+                    <label>Criterio de Búsqueda </label>
+                    <a style="color: red;" data-toggle="tooltip" title="Campo Obligatorio">*</a>
                     <select name="ThirdKnowledgeIdType" class="form-control" id="ThirdKnowledgeIdType" onchange="$('#IdentificationNumber').val('')">
                         @{
                             var selected = new ProveedoresOnLine.Company.Models.Util.CatalogModel();
@@ -58,7 +59,8 @@
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <label>Parámetro de Búsqueda (*)</label>
+                    <label>Parámetro de Búsqueda </label>
+                    <a style="color: red;" data-toggle="tooltip" title="Campo Obligatorio">*</a>
                     @if (!string.IsNullOrEmpty(Model.RelatedThirdKnowledge.SearchIdNumberParam))
                     {
                         <input class="form-control" type="text" name="IdentificationNumber" id="IdentificationNumber" value="@Model.RelatedThirdKnowledge.SearchIdNumberParam" placeholder="Parámetro de Búsqueda" />
@@ -67,6 +69,9 @@
                     {
                         <input class="form-control" type="text" name="IdentificationNumber" id="IdentificationNumber" value="" placeholder="Parámetro de Búsqueda" />
                     }
+                </div>
+                <div class="col-md-12">
+                    <span style="color: red;">* Campo Obligatorio.</span>
                 </div>
             </div>
 
@@ -131,6 +136,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+		$('[data-toggle="tooltip"]').tooltip();
 
         Third_KnowledgeSimpleSearchObject.Init({
             ObjectId: 'ThirdKnowledge',
