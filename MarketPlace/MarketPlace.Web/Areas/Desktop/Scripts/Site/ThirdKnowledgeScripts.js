@@ -480,12 +480,16 @@ var MyQueriesSearchObj = {
 }
 
 function Numeros(e) {
-    // Permite: backspace, delete, tab, escape, enter and .
-    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+    // Permite: backspace, delete, tab, escape, and .
+    if ($.inArray(e.keyCode, [46, 8, 9, 27, 110, 190]) !== -1 ||
         // Permite: Ctrl+A
         (e.keyCode == 65 && e.ctrlKey === true) ||
         // Permite: home, end, left, right
-        (e.keyCode >= 35 && e.keyCode <= 39)) {
+        (e.keyCode >= 35 && e.keyCode <= 39) ||
+        //Permite: Copiar
+        (e.keyCode == 67 && e.ctrlKey === true)) {
+        //Permite: Pegar
+        //(e.keyCode == 86 && e.ctrlKey === true)){
         // solo permitir lo que no este dentro de estas condiciones es un return false
         return;
     }
@@ -498,5 +502,10 @@ function Numeros(e) {
 $("#IdentificationNumber").keydown(function (e) {    
     if ($('#ThirdKnowledgeIdType').val() == "213002" || $('#ThirdKnowledgeIdType').val() == "213001") {// Juridica y Natural
         Numeros(e);
+    }
+    else {
+        if (e.keyCode == 13) {
+            return false;
+        }
     }
 });

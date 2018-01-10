@@ -30,12 +30,14 @@
     <form id="ThirdKnowledge_Form" action="@Url.Content("~/api/ThirdKnowledgeApi?TKSingleSearch=true")" method="post">
         <div class="container-fluid">
             <div class="row">
+                <br />
                 <div class="col-md-12" id="message" style="display:none;">
-                   
+
                 </div>
                 <div class="col-md-6">
-                    <label>Criterio de Búsqueda (*)</label>
-                    <select name="ThirdKnowledgeIdType" class="form-control ThirdKnowledgeIdType" id="ThirdKnowledgeIdType" onchange="$('#IdentificationNumber').val('')">
+                    <label>Criterio de Búsqueda </label>
+                    <a style="color: red;" data-toggle="tooltip" title="Campo Obligatorio">*</a>
+                    <select name="ThirdKnowledgeIdType" class="form-control" id="ThirdKnowledgeIdType" onchange="$('#IdentificationNumber').val('')">
                         @{
                             var selected = new ProveedoresOnLine.Company.Models.Util.CatalogModel();
                             if (!string.IsNullOrEmpty(Model.RelatedThirdKnowledge.IdType))
@@ -60,12 +62,15 @@
                     <label>Valor a Buscar (*)</label>
                     @if (!string.IsNullOrEmpty(Model.RelatedThirdKnowledge.SearchIdNumberParam))
                     {
-                        <input class="ThirdKnowledgeSeachBox" type="text" name="IdentificationNumber" id="IdentificationNumber" value="@Model.RelatedThirdKnowledge.SearchIdNumberParam" placeholder="Parámetro de Búsqueda" />
+                        <input class="form-control" type="text" name="IdentificationNumber" id="IdentificationNumber" value="@Model.RelatedThirdKnowledge.SearchIdNumberParam" placeholder="Parámetro de Búsqueda" />
                     }
                     else
                     {
-                        <input class="ThirdKnowledgeSeachBox" type="text" name="IdentificationNumber" id="IdentificationNumber" value="" placeholder="Parámetro de Búsqueda" />
+                        <input class="form-control" type="text" name="IdentificationNumber" id="IdentificationNumber" value="" placeholder="Parámetro de Búsqueda" />
                     }
+                </div>
+                <div class="col-md-12">
+                    <span style="color: red;">* Campo Obligatorio.</span>
                 </div>
             </div>
 
@@ -130,6 +135,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+		$('[data-toggle="tooltip"]').tooltip();
 
         Third_KnowledgeSimpleSearchObject.Init({
             ObjectId: 'ThirdKnowledge',
@@ -138,7 +144,7 @@
             QueryDetailsRoleOption: '@OptionRole',
         });
 
-    });    
+    });
 </script>
 
 

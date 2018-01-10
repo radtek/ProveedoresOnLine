@@ -1317,7 +1317,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Valor Consultado:</Value>
+                <Value>Búsqueda Realizada:</Value>
                 <Style>
                   <FontFamily>Segoe UI Light</FontFamily>
                   <FontSize>9pt</FontSize>
