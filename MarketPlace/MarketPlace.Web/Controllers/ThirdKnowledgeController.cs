@@ -1285,7 +1285,11 @@ namespace MarketPlace.Web.Controllers
                             oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == pep).Select(y => y).FirstOrDefault().QueryInfoPublicId);
                             oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == pep).Select(y => y).FirstOrDefault().QueryPublicId);
                             oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.ListName == pep).Select(y => y).FirstOrDefault().ElasticId.ToString());
-                            oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.QueryName != null).Select(y => y).FirstOrDefault().QueryName);
+                            if (x.RelatedQueryInfoModel.Where(y => y.QueryName != null).Count() > 0)
+                                oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.QueryName != null).Select(y => y).FirstOrDefault().QueryName);
+                            else
+                                oDetails.Add(x.RelatedQueryInfoModel.Where(y => y.QueryIdentification != null).Select(y => y).FirstOrDefault().QueryIdentification);
+                            
                             exist = true;
                         }
                         else
