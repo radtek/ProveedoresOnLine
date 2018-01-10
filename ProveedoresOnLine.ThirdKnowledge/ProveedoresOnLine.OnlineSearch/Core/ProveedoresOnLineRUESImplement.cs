@@ -63,7 +63,7 @@ namespace ProveedoresOnLine.OnlineSearch.Core
             }
             catch (ThreadAbortException ex)
             {
-                throw ex.InnerException;
+                return null;                
             };
         }       
     }

@@ -50,8 +50,7 @@ namespace ProveedoresOnLine.OnlineSearch.Core
             }
             catch (Exception ex)
             {
-
-                throw ex.InnerException;
+                return null;
             }
         }
     }

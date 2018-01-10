@@ -4346,7 +4346,7 @@ namespace MarketPlace.Web.Controllers
                     {
                         QueryContainer qb = null;
 
-                        qb &= f2.MatchAll() && q.QueryString(qs => qs.Query(SearchParam));
+                        qb &= f2.MatchAll() && f2.QueryString(qs => qs.Query(SearchParam));
                         #region Basic Providers Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
                         {
@@ -4435,7 +4435,6 @@ namespace MarketPlace.Web.Controllers
                                 ));
                         }
                         #endregion
-
 
                         #region Calification
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y).FirstOrDefault() != null)

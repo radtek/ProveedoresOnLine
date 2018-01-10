@@ -490,27 +490,27 @@ namespace MarketPlace.Web.Controllers
 
                             if (!string.IsNullOrEmpty(Status))
                             {
-                                qb &= q.Term(m => m.QueryStatus, Status);
+                                qb &= f2.Term(m => m.QueryStatus, Status);
                                 oModel.RelatedThidKnowledgeSearch.FilterList.Add(Status, (int)enumTKFilter.StatusFilter);
                             }
                             if (!string.IsNullOrEmpty(SearchType))
                             {
-                                qb &= q.Term(m => m.SearchType, SearchType);
+                                qb &= f2.Term(m => m.SearchType, SearchType);
                                 oModel.RelatedThidKnowledgeSearch.FilterList.Add(SearchType, (int)enumTKFilter.QueryTypeFilter);
                             }
                             if (!string.IsNullOrEmpty(User))
                             {
-                                qb &= q.Term(m => m.User, User);
+                                qb &= f2.Term(m => m.User, User);
                                 oModel.RelatedThidKnowledgeSearch.FilterList.Add(User, (int)enumTKFilter.UserFilter);
                             }
                             if (!string.IsNullOrEmpty(Domain))
                             {
-                                qb &= q.Term(m => m.Domain, Domain);
+                                qb &= f2.Term(m => m.Domain, Domain);
                                 oModel.RelatedThidKnowledgeSearch.FilterList.Add(Domain, (int)enumTKFilter.DomainFilter);
                             }
                             if (!string.IsNullOrEmpty(InitDate) && !string.IsNullOrEmpty(EndDate))
                             {
-                                qb &= q.DateRange(dr => dr
+                                qb &= f2.DateRange(dr => dr
                                     .Field(t2 => t2.CreateDate)
                                     .GreaterThanOrEquals(InitDate).LessThan(EndDate)
                                 );
