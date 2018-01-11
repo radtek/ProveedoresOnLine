@@ -354,15 +354,14 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                 }
                 catch (Exception)
                 {
-
-                    throw;
+                    return null;
                 }
 
                 return oQueryToCreate;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                throw ex;
+                return null;
             }
         }
 
@@ -727,7 +726,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                 oSearchResult = client.Search<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel>(s => s
                 .TrackScores(true)
                 .From(0)
-                .Size(0)
+                .Size(1)
                  .Query(q => q.
                    Bool(b => b
                     .Must(m => m.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(SearchaParam)))))

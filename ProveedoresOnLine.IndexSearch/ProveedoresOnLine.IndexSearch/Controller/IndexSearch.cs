@@ -129,7 +129,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
 
                 ICreateIndexResponse oElasticResponse = client.
                         CreateIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CustomerProviderIndex].Value, c => c
-                        .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                        .Settings(s => s.NumberOfReplicas(0).NumberOfShards(20)
                         .Analysis(a => a.
                             Analyzers(an => an.
                                 Custom("customWhiteSpace", anc => anc.

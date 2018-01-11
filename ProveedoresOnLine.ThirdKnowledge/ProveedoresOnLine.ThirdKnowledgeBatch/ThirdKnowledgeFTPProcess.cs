@@ -398,7 +398,7 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                 else if (SearchCritery == ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.Param_Critery].Value.Split(';')[3])
                     oModelSearch = await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(Query.PeriodPublicId, 4, SearchParam, Query);
 
-                if (oModelSearch.QueryPublicId != null)
+                if (oModelSearch != null && oModelSearch.QueryPublicId != null)
                 {
                     oModelSearch.RelatedQueryInfoModel.All(x =>
                     {
