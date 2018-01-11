@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Quartz;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace ProveedoresOnLine.Process.Implement
 {
+    [DisallowConcurrentExecution]
     public class ThirdKnowledgeProcessJob : Quartz.IJob
     {
         public void Execute(Quartz.IJobExecutionContext context)
         {            
-            ProveedoresOnLine.ThirdKnowledgeBatch.ThirdKnowledgeFTPProcess.StartProcess();            
+           ProveedoresOnLine.ThirdKnowledgeBatch.ThirdKnowledgeFTPProcess.StartProcess();            
         }
     }
 }

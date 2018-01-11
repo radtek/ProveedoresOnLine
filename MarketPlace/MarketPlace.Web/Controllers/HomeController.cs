@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace MarketPlace.Web.Controllers
@@ -12,10 +13,6 @@ namespace MarketPlace.Web.Controllers
             {
                 //get user company info
 
-                //Last function
-                //List<ProveedoresOnLine.Company.Models.Company.CompanyModel> UserCompany =
-                //    ProveedoresOnLine.Company.Controller.Company.MP_RoleCompanyGetByUser(Models.General.SessionModel.CurrentLoginUser.Email);
-
                 //New function
                 List<ProveedoresOnLine.Company.Models.Company.CompanyModel> UserCompany =
                     ProveedoresOnLine.Company.Controller.Company.MP_RoleCompanyGetByUserNew(Models.General.SessionModel.CurrentLoginUser.Email);
@@ -27,6 +24,8 @@ namespace MarketPlace.Web.Controllers
                 {
                     if (Models.General.SessionModel.CurrentCompanyType == Models.General.enumCompanyType.Provider)
                     {
+                        if (Models.General.SessionModel.CurrentURL != null)
+                            return Redirect(Models.General.SessionModel.CurrentURL);
                         //redirect to provider home
                         return RedirectToRoute
                             (Models.General.Constants.C_Routes_Default,
@@ -38,6 +37,8 @@ namespace MarketPlace.Web.Controllers
                     }
                     else if (Models.General.SessionModel.CurrentCompanyType == Models.General.enumCompanyType.BuyerProvider)
                     {
+                        if (Models.General.SessionModel.CurrentURL != null)
+                            return Redirect(Models.General.SessionModel.CurrentURL);
                         //redirect to provider home
                         return RedirectToRoute
                             (Models.General.Constants.C_Routes_Default,
@@ -106,6 +107,19 @@ namespace MarketPlace.Web.Controllers
         public virtual ActionResult TermsAndConditions()
         {
             return View();
+        }
+
+        public virtual ActionResult Notifications()
+        {
+            return View();
+        }
+
+        public virtual PartialViewResult ChangeStatusNotification(int idNotification)
+        {
+            MessageModule.Client.Models.NotificationModel mNotification = MarketPlace.Models.General.SessionModel.ListNotifications.SingleOrDefault(x => x.NotificationId == idNotification);
+            
+            MarketPlace.Models.General.SessionModel.ChangeStatusNotification(mNotification);
+            return PartialView("_N_Notifications");
         }
     }
 }

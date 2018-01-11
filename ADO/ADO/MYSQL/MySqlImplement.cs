@@ -43,7 +43,7 @@ namespace ADO.MYSQL
                 CurrentCommand.Connection = Conn;
                 CurrentCommand.CommandText = QueryParams.CommandText;
                 //Time for scripts execution in seconds
-                CurrentCommand.CommandTimeout = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings[ADO.Models.Constants.C_AppSettings_CommandTimeOut]);
+                CurrentCommand.CommandTimeout = 100;
 
                 if (QueryParams.Parameters != null && QueryParams.Parameters.Count > 0)
                 {

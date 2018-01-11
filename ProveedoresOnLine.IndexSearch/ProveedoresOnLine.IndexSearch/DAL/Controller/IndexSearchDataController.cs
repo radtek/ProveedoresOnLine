@@ -88,6 +88,11 @@ namespace ProveedoresOnLine.IndexSearch.DAL.Controller
         {
             return DataFactory.GetThirdknowledgeIndex(vRowFrom,vRowTo);
         }
+
+        public List<TK_QueryIndexModel> GetAllQueryModelIndex()
+        {
+            return DataFactory.GetAllQueryModelIndex();
+        }
         #endregion
     }
 }

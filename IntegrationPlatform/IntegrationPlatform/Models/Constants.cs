@@ -3,13 +3,11 @@
     public class Constants
     {
         public const string C_POL_IntegrationPlatformConnectionName = "POL_IntegrationPlatform";
-
-        #region CustomerPublicId
-
-        public const string C_POL_CustomerPublicId_Sanofi = "7BC27832";
-
-        public const string C_POL_CustomerPublicId_Publicar = "DA5C572E";
-
-        #endregion
+        public const string C_SettingsModuleName = "IntegrationPlatform";
+        
+        public const string C_SettingsPublicIdSanofi = "C_POL_CustomerPublicId_Sanofi";
+        public const string C_SettingsPublicIdPublicar = "C_POL_CustomerPublicId_Publicar";
+        public const string C_SettingsPublicIdFalabella = "C_POL_CustomerPublicId_Falabella";
+        public const string C_SettingsPublicIdAlpina = "C_POL_CustomerPublicId_Alpina";
     }
 }

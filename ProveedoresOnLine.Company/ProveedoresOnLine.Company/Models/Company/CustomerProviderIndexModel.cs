@@ -22,7 +22,7 @@ namespace ProveedoresOnLine.Company.Models.Company
         [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
         public string CustomerPublicId { get; set; }
 
-        [String]
+        [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
         public string ProviderPublicId { get; set; }
 
         [Number]

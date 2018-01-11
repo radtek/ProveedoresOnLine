@@ -116,10 +116,12 @@ namespace T4MVC.Desktop
                 public readonly string _SV_SurveySearch_Result_Item = "_SV_SurveySearch_Result_Item";
                 public readonly string _SV_SurveySearch_Result_Pager = "_SV_SurveySearch_Result_Pager";
                 public readonly string _TK_MasiveSearch = "_TK_MasiveSearch";
+                public readonly string _TK_Search_Filter = "_TK_Search_Filter";
                 public readonly string _TK_Search_Result_Item = "_TK_Search_Result_Item";
                 public readonly string _TK_Search_Single_Detail_Result_Item = "_TK_Search_Single_Detail_Result_Item";
                 public readonly string _TK_SingleSearch = "_TK_SingleSearch";
                 public readonly string _TK_ThirdKnowledgeDetail = "_TK_ThirdKnowledgeDetail";
+                public readonly string _TK_ThirdKnowledgeMasiveDetail = "_TK_ThirdKnowledgeMasiveDetail";
                 public readonly string _TK_ThirdKnowledgeSearch_Pager = "_TK_ThirdKnowledgeSearch_Pager";
                 public readonly string _TK_ThirdKnowledgeSearch_Result_Pager = "_TK_ThirdKnowledgeSearch_Result_Pager";
             }
@@ -201,10 +203,12 @@ namespace T4MVC.Desktop
             public readonly string _SV_SurveySearch_Result_Item = "~/Areas/Desktop/Views/Shared/_SV_SurveySearch_Result_Item.cshtml";
             public readonly string _SV_SurveySearch_Result_Pager = "~/Areas/Desktop/Views/Shared/_SV_SurveySearch_Result_Pager.cshtml";
             public readonly string _TK_MasiveSearch = "~/Areas/Desktop/Views/Shared/_TK_MasiveSearch.cshtml";
+            public readonly string _TK_Search_Filter = "~/Areas/Desktop/Views/Shared/_TK_Search_Filter.cshtml";
             public readonly string _TK_Search_Result_Item = "~/Areas/Desktop/Views/Shared/_TK_Search_Result_Item.cshtml";
             public readonly string _TK_Search_Single_Detail_Result_Item = "~/Areas/Desktop/Views/Shared/_TK_Search_Single_Detail_Result_Item.cshtml";
             public readonly string _TK_SingleSearch = "~/Areas/Desktop/Views/Shared/_TK_SingleSearch.cshtml";
             public readonly string _TK_ThirdKnowledgeDetail = "~/Areas/Desktop/Views/Shared/_TK_ThirdKnowledgeDetail.cshtml";
+            public readonly string _TK_ThirdKnowledgeMasiveDetail = "~/Areas/Desktop/Views/Shared/_TK_ThirdKnowledgeMasiveDetail.cshtml";
             public readonly string _TK_ThirdKnowledgeSearch_Pager = "~/Areas/Desktop/Views/Shared/_TK_ThirdKnowledgeSearch_Pager.cshtml";
             public readonly string _TK_ThirdKnowledgeSearch_Result_Pager = "~/Areas/Desktop/Views/Shared/_TK_ThirdKnowledgeSearch_Result_Pager.cshtml";
         }

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Results;
 using System.Web.Script.Serialization;
 
 namespace MarketPlace.Web.ControllersApi
@@ -238,7 +239,7 @@ namespace MarketPlace.Web.ControllersApi
             string SurveyConfigId,
             string SurveyConfigItemType)
         {
-            List<MarketPlace.Models.Survey.SurveyConfigItemViewModel> oReturn = new List<Models.Survey.SurveyConfigItemViewModel>();
+           List<MarketPlace.Models.Survey.SurveyConfigItemViewModel> oReturn = new List<Models.Survey.SurveyConfigItemViewModel>();
 
             if (SCSurveyConfigItemGetBySurveyConfigId == "true" && SurveyConfigId != null)
             {
@@ -267,7 +268,7 @@ namespace MarketPlace.Web.ControllersApi
             string ProviderPublicId)
         {
             ProviderLiteViewModel oModel = null;
-
+            
             if (SurveyAddProvider == "true")
             {
                 Uri node = new Uri(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
@@ -291,8 +292,7 @@ namespace MarketPlace.Web.ControllersApi
                         return true;
                     });
                 }
-            }
-
+            }            
             return oModel;
         }
 

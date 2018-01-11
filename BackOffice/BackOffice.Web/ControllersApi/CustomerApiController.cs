@@ -23,7 +23,7 @@ namespace BackOffice.Web.ControllersApi
             string PageNumber,
             string RowCount)
         {
-           
+
             List<BackOffice.Models.Customer.CustomerSearchViewModel> oReturn = new List<Models.Customer.CustomerSearchViewModel>();
             #region Search Result Company
             Uri node = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
@@ -36,7 +36,7 @@ namespace BackOffice.Web.ControllersApi
             Nest.ISearchResponse<CompanyIndexModel> ElasticResult = client.Search<CompanyIndexModel>(s => s
             .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
             .TrackScores(true)
-            .Size(20)                            
+            .Size(20)
             .Query(q => q.Term(t => t.IdentificationNumber, SearchParam) ||
                     q.Term(t => t.CompanyName, SearchParam)));
 
@@ -148,7 +148,7 @@ namespace BackOffice.Web.ControllersApi
         #endregion Customer Roles
 
         #region Calification Project Config
-        
+
         [HttpPost]
         [HttpGet]
         public List<BackOffice.Models.Customer.CalificationProjectConfigViewModel> CPCalificationProjectConfigSearch
@@ -160,7 +160,7 @@ namespace BackOffice.Web.ControllersApi
 
             if (CPCalificationProjectConfigSearch == "true")
             {
-                List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel> oModel = new List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel>();
+                var oModel = new List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel>();
                 oModel = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigGetByCompanyId(CustomerPublicId, vEnable == "true" ? true : false);
 
                 if (oModel.Count > 0)
@@ -215,7 +215,7 @@ namespace BackOffice.Web.ControllersApi
         #region CalificationConfigValidate
         [HttpPost]
         [HttpGet]
-        public List<BackOffice.Models.Customer.CalificationProjectConfigValidateViewModel> CPCalificationProjectConfigValidateSearch(string CPCalificationProjectConfigValidateSearch,string CalificationProjectConfigId, string vEnable) 
+        public List<BackOffice.Models.Customer.CalificationProjectConfigValidateViewModel> CPCalificationProjectConfigValidateSearch(string CPCalificationProjectConfigValidateSearch, string CalificationProjectConfigId, string vEnable)
         {
             List<BackOffice.Models.Customer.CalificationProjectConfigValidateViewModel> oReturn = new List<BackOffice.Models.Customer.CalificationProjectConfigValidateViewModel>();
 
@@ -224,18 +224,20 @@ namespace BackOffice.Web.ControllersApi
                 List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigValidateModel> oModel = new List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigValidateModel>();
                 oModel = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectValidate_GetByProjectConfigId(Convert.ToInt32(CalificationProjectConfigId), vEnable == "true" ? true : false);
                 if (oModel.Count > 0)
-	            {
-                    oModel.All(x => { oReturn.Add(new CalificationProjectConfigValidateViewModel(x));
-                    return true;
-                    });		 
-	            }
+                {
+                    oModel.All(x =>
+                    {
+                        oReturn.Add(new CalificationProjectConfigValidateViewModel(x));
+                        return true;
+                    });
+                }
             }
             return oReturn;
         }
 
         [HttpPost]
         [HttpGet]
-        public BackOffice.Models.Customer.CalificationProjectConfigValidateViewModel CPCalificationProjectConfigValidateUpsert(string CPCalificationProjectConfigValidateUpsert, string CalificationProjectConfigId) 
+        public BackOffice.Models.Customer.CalificationProjectConfigValidateViewModel CPCalificationProjectConfigValidateUpsert(string CPCalificationProjectConfigValidateUpsert, string CalificationProjectConfigId)
         {
             BackOffice.Models.Customer.CalificationProjectConfigValidateViewModel oReturn = null;
 
@@ -248,20 +250,20 @@ namespace BackOffice.Web.ControllersApi
                     typeof(BackOffice.Models.Customer.CalificationProjectConfigValidateViewModel));
 
                 ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigValidateModel oModelToUpsert = new ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigValidateModel()
-            {
-                CalificationProjectConfigId = Convert.ToInt32(CalificationProjectConfigId),
-                CalificationProjectConfigValidateId = !string.IsNullOrEmpty(oDataToUpsert.CalificationProjectConfigValidateId) ? Convert.ToInt32(oDataToUpsert.CalificationProjectConfigValidateId) : 0,                
-                Operator = new CatalogModel()
                 {
-                    ItemId = oDataToUpsert.Operator,
-                },
-                Value = oDataToUpsert.Value,
-                Result = oDataToUpsert.Result,
-                Enable = oDataToUpsert.Enable
-            };
+                    CalificationProjectConfigId = Convert.ToInt32(CalificationProjectConfigId),
+                    CalificationProjectConfigValidateId = !string.IsNullOrEmpty(oDataToUpsert.CalificationProjectConfigValidateId) ? Convert.ToInt32(oDataToUpsert.CalificationProjectConfigValidateId) : 0,
+                    Operator = new CatalogModel()
+                    {
+                        ItemId = oDataToUpsert.Operator,
+                    },
+                    Value = oDataToUpsert.Value,
+                    Result = oDataToUpsert.Result,
+                    Enable = oDataToUpsert.Enable
+                };
                 oModelToUpsert = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigValidate_Upsert(oModelToUpsert);
 
-                 oReturn = new CalificationProjectConfigValidateViewModel(oModelToUpsert);
+                oReturn = new CalificationProjectConfigValidateViewModel(oModelToUpsert);
             }
             return oReturn;
         }
@@ -400,7 +402,7 @@ namespace BackOffice.Web.ControllersApi
                         new ProveedoresOnLine.CalificationProject.Models.CalificationProject.ConfigItemInfoModel(){
                             CalificationProjectConfigItemInfoId = !string.IsNullOrEmpty(oDataToUpsert.CalificationProjectConfigItemInfoId) ? Convert.ToInt32(oDataToUpsert.CalificationProjectConfigItemInfoId) : 0,
                             Question = new CatalogModel(){
-                              ItemId = Convert.ToInt32(oDataToUpsert.Question),  
+                              ItemId = Convert.ToInt32(oDataToUpsert.Question),
                             },
                             Rule = new CatalogModel(){
                                 ItemId = Convert.ToInt32(oDataToUpsert.Rule),
@@ -1250,5 +1252,162 @@ namespace BackOffice.Web.ControllersApi
         }
 
         #endregion Aditional Documents
+
+        #region Notifications Config
+
+        [HttpPost]
+        [HttpGet]
+        public List<NotificationsConfigViewModel> GetNotificationConfigByCustomer
+            (string GetNotificationConfigByCustomer,
+            string CustomerPublicId,
+            string ViewEnable)
+        {
+            List<NotificationsConfigViewModel> oReturn = new List<NotificationsConfigViewModel>();
+
+            if (GetNotificationConfigByCustomer == "true")
+            {
+                List<CompanyNotificationModel> oModel = ProveedoresOnLine.Company.Controller.Company.NotificationConfigGetByCompany(
+                    CustomerPublicId);
+                if (oModel != null && oModel.Count > 0)
+                {
+                    oModel.All(ad =>
+                    {
+                        oReturn.Add(new NotificationsConfigViewModel(ad));
+                        return true;
+                    });
+                }
+            }
+
+            return oReturn;
+        }
+
+        [HttpPost]
+        [HttpGet]
+        public List<NotificationsConfigViewModel> NotificationConfigByUpsert
+            (string NotificationConfigByUpsert,
+            string CustomerPublicId,
+            string ViewEnable)
+        {
+            List<NotificationsConfigViewModel> oReturn = new List<NotificationsConfigViewModel>();
+
+            if (NotificationConfigByUpsert == "true" &&
+                 !string.IsNullOrEmpty(System.Web.HttpContext.Current.Request["DataToUpsert"]))
+            {
+                NotificationsConfigViewModel oDataToUpsert = (NotificationsConfigViewModel)
+                    (new System.Web.Script.Serialization.JavaScriptSerializer()).
+                    Deserialize(System.Web.HttpContext.Current.Request["DataToUpsert"],
+                    typeof(BackOffice.Models.Customer.NotificationsConfigViewModel));
+
+                CompanyNotificationModel oNotificationConfig = new CompanyNotificationModel()
+                {
+                    CompanyPublicId = CustomerPublicId,
+                    NotificationName = oDataToUpsert.NotificationTitle,
+                    Enable = oDataToUpsert.Enable,
+                    NotificationConfigId = !string.IsNullOrEmpty(oDataToUpsert.NotificationConfigId) ? Convert.ToInt32(oDataToUpsert.NotificationConfigId) : 0,
+                    CompanyNotificationInfo = new List<CompanyNotificationInfoModel>()
+                    {
+                        new CompanyNotificationInfoModel()
+                        {
+                            CompanyNotificationInfoId = !string.IsNullOrEmpty(oDataToUpsert.NotificationCriteryId) ? Convert.ToInt32(oDataToUpsert.NotificationCriteryId) : 0,
+                            ConfigItemType = new CatalogModel()
+                            {
+                                ItemId = (int)Models.General.enumNotificationInfoType.NotificationCritery,
+                                ItemName = oDataToUpsert.NotificationCritery,
+                                ItemEnable = oDataToUpsert.Enable,
+                            },
+                            Value = oDataToUpsert.NotificationCritery,
+                            Enable = oDataToUpsert.Enable,
+                        },
+                        new CompanyNotificationInfoModel()
+                        {
+                            CompanyNotificationInfoId  = !string.IsNullOrEmpty(oDataToUpsert.DocumentId) ? Convert.ToInt32(oDataToUpsert.DocumentId) : 0,
+                            ConfigItemType = new CatalogModel()
+                            {
+                                ItemId = (int)Models.General.enumNotificationInfoType.Document,
+                            },
+                            Value = oDataToUpsert.Document,
+                            Enable = oDataToUpsert.Enable,
+                        },new CompanyNotificationInfoModel()
+                        {
+                            CompanyNotificationInfoId  = !string.IsNullOrEmpty(oDataToUpsert.DocumentTypeId) ? Convert.ToInt32(oDataToUpsert.DocumentTypeId) : 0,
+                            ConfigItemType = new CatalogModel()
+                            {
+                                ItemId = (int)Models.General.enumNotificationInfoType.DocumentType,
+                            },
+                            Value = oDataToUpsert.DocumentType,
+                            Enable = oDataToUpsert.Enable,
+                        },new CompanyNotificationInfoModel()
+                        {
+                            CompanyNotificationInfoId  = !string.IsNullOrEmpty(oDataToUpsert.MessageTypeId) ? Convert.ToInt32(oDataToUpsert.MessageTypeId) : 0,
+                            ConfigItemType = new CatalogModel()
+                            {
+                                ItemId = (int)Models.General.enumNotificationInfoType.MessageType,
+                            },
+                            Value = oDataToUpsert.MessageType,
+                            Enable = oDataToUpsert.Enable,
+                        },
+                          new CompanyNotificationInfoModel()
+                        {
+                            CompanyNotificationInfoId  = !string.IsNullOrEmpty(oDataToUpsert.MessageBodyId) ? Convert.ToInt32(oDataToUpsert.MessageBodyId) : 0,
+                            ConfigItemType = new CatalogModel()
+                            {
+                                ItemId = (int)Models.General.enumNotificationInfoType.BodyMessage,
+                            },
+                            LargeValue = oDataToUpsert.MessageBody,
+                            Enable = oDataToUpsert.Enable,
+                        },
+                          new CompanyNotificationInfoModel()
+                        {
+                            CompanyNotificationInfoId  = !string.IsNullOrEmpty(oDataToUpsert.NotificationTypeId) ? Convert.ToInt32(oDataToUpsert.NotificationTypeId) : 0,
+                            ConfigItemType = new CatalogModel()
+                            {
+                                ItemId = (int)Models.General.enumNotificationInfoType.NotificationType,
+                            },
+                            Value = oDataToUpsert.NotificationType,
+                            Enable = oDataToUpsert.Enable,
+                        },
+                        new CompanyNotificationInfoModel()
+                        {
+                            CompanyNotificationInfoId  = !string.IsNullOrEmpty(oDataToUpsert.ResponsableId) ? Convert.ToInt32(oDataToUpsert.ResponsableId) : 0,
+                            ConfigItemType = new CatalogModel()
+                            {
+                                ItemId = (int)Models.General.enumNotificationInfoType.Responsable,
+                            },
+                            LargeValue = oDataToUpsert.Responsable,
+                            Enable = oDataToUpsert.Enable,
+                        }
+                        ,new CompanyNotificationInfoModel()
+                        {
+                            CompanyNotificationInfoId  = !string.IsNullOrEmpty(oDataToUpsert.RuleTypeId) ? Convert.ToInt32(oDataToUpsert.RuleTypeId) : 0,
+                            ConfigItemType = new CatalogModel()
+                            {
+                                ItemId = (int)Models.General.enumNotificationInfoType.RuleType,
+                            },
+                            Value = oDataToUpsert.RuleType,
+                            Enable = oDataToUpsert.Enable,
+                        }
+                        ,new CompanyNotificationInfoModel()
+                        {
+                            CompanyNotificationInfoId  = !string.IsNullOrEmpty(oDataToUpsert.NotificationValueId) ? Convert.ToInt32(oDataToUpsert.NotificationValueId) : 0,
+                            ConfigItemType = new CatalogModel()
+                            {
+                                ItemId = (int)Models.General.enumNotificationInfoType.NotificationValue,
+                            },
+                            Value = oDataToUpsert.NotificationValue,
+                            Enable = oDataToUpsert.Enable,
+                        }
+                    }
+                };
+
+                    oNotificationConfig = ProveedoresOnLine.Company.Controller.Company.NotificationConfigUpsert(oNotificationConfig);
+                oReturn.Add(new NotificationsConfigViewModel(oNotificationConfig));
+            }
+
+            return oReturn;
+        }
+
+
+
+        #endregion
     }
 }

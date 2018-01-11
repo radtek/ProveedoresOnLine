@@ -100,5 +100,16 @@
         public const string C_ViewData_UserNotAutorizedText = "UserNotAutorizedText";
 
         #endregion
+
+        #region Notification URL Redirection
+        public const string C_Settings_NotificationAdditionalInfo_BO = "UrlNotificationAdditionalInfo_BO";
+        public const string C_Settings_NotificationHSEQ_BO = "UrlNotificationHSEQ_BO";
+        public const string C_Settings_NotificationGeneralInfo_BO = "UrlNotificationGeneralInfo_BO";
+
+        public const string C_Settings_NotificationIconAdditionalInfo = "UrlNotificationIconAdditionalInfo";
+        public const string C_Settings_NotificationIconHSEQ = "UrlNotificationIconHSEQ";
+        public const string C_Settings_NotificationIconGeneralInfo = "UrlNotificationIconGeneralInfo";
+        #endregion
+
     }
 }

@@ -14,7 +14,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
         public async Task SimpleRequest()
         {
             TDQueryModel oQuery = new TDQueryModel();
-            await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest("",1, "71984381", "Camilo Torres Martinez", oQuery);
+            await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest("",4, "Camilo Torres Martinez",oQuery);
         }
 
         [TestMethod]
@@ -62,7 +62,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
             int TotalRows = 0;
 
             List<TDQueryModel> oReturn = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.ThirdKnowledgeSearch
-                ("DA5C572E", null, "2016-02-02", "2016-02-14", 0, 1, "201001", "501001", out TotalRows);
+                ("DA5C572E", null,"gmail.com", null, null, 0, 1, null, null, out TotalRows);
 
             Assert.AreEqual(true, oReturn != null);
         }

@@ -13,7 +13,7 @@ namespace ProveedoresOnLine.CalificationBatch.Interfaces
 
         List<ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel> CalificationProject_GetByCustomer(string vCustomerPublicid, string vProviderPublicId, bool Enable);
 
-        List<ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel> CalificationProject_GetProviderByCustomer(string CustomerPublicId, string ProviderPublicId);
+        List<ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel> CalificationProject_GetProviderByCustomer(string CustomerPublicId, string ProviderPublicId, int CalificationProjectConfigId);
 
         int CalificationProjectUpsert(int vCalificationProjectId, string vCalificatonProjectPublicId, int vCalificationProjectConfigId, string vCompanyPublicId, int vTotalScore, bool vEnable);
 
@@ -58,6 +58,14 @@ namespace ProveedoresOnLine.CalificationBatch.Interfaces
         #region Balance Module Info
 
         List<ProveedoresOnLine.CompanyProvider.Models.Provider.BalanceSheetModel> BalanceModuleInfo(string CompanyPublicId, int BalanceAccount);
+
+        #endregion
+
+        #region Aditional Documetn Module Info
+
+        string GetAditionalDocumentName(int AditionalDocumentId);
+
+        List<GenericItemModel> AditionalDocumentModuleInfo(string CompanyPublicId, string AditionalDocumentName);
 
         #endregion
 

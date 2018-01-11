@@ -441,6 +441,12 @@
         AD_File = 1702001,
         AD_RelatedCustomer = 1702002,
         AD_RelatedUser = 1702003,
+        AD_Value = 1702004,
+        AD_InitialDate = 1702005,
+        AD_EndDate = 1702008,
+        AD_Vigency = 1702006,
+        AD_Description = 1702007,
+
     }
 
     public enum enumAditionalDataInfoType
@@ -677,6 +683,23 @@
     {
         ShowAlert = 1101001,
         DontShowAlert = 1101002,
+    }
+
+    #endregion
+
+    #region Notifications
+
+    public enum enumNotificationInfoType
+    {
+        MessageType = 2008001,
+        NotificationType = 2008002,
+        Document = 2008003,
+        NotificationCritery = 2008004,
+        RuleType = 2008005,
+        NotificationValue = 2008006,
+        BodyMessage = 2008007,
+        Responsable = 2008008,
+        DocumentType = 2008009,
     }
 
     #endregion

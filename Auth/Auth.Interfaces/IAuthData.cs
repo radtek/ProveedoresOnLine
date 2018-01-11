@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Auth.Interfaces
 {
     public interface IAuthData
@@ -18,6 +19,8 @@ namespace Auth.Interfaces
         void ApplicationRoleCreate(int ApplicationRoleId);
 
         SessionManager.Models.Auth.User UserGetById(string UserPublicId);
+
+        SessionManager.Models.Auth.User UserGetByEmail(string Email);
 
         List<AdminRolesModel> ListUserRoles();
 

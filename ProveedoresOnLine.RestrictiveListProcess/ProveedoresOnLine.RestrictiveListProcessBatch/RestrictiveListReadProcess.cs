@@ -1,5 +1,4 @@
-﻿using LinqToExcel;
-using Nest;
+﻿using Nest;
 using NetOffice.ExcelApi;
 using ProveedoresOnLine.Company.Models.Company;
 using ProveedoresOnLine.Company.Models.Util;
@@ -14,17 +13,14 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+
 
 namespace ProveedoresOnLine.RestrictiveListProcessBatch
 {
     public class RestrictiveListReadProcess
     {
         public static void StartProcess()
-       {
+        {
             try
             {
                 //Start Process
@@ -40,12 +36,12 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                         Application app = new Application();
 
                         string FileName = Process.FilePath.Split('/').LastOrDefault();
-                        
+
                         //Call Function to get Coincidences
                         List<ExcelModel> oExcelFileProcess = null;
-                       
+
                         if (FileName != null)
-                        {                            
+                        {
                             //Download Current File
                             System.Data.DataTable DT_Excel;
                             using (WebClient webClient = new WebClient())
@@ -62,12 +58,12 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         oExcelFileProcess.Add(new ExcelModel(item));
                                     }
-                                    
+
                                 }
 
                             }
                             var objCoincidences = SearchInfoFromFile(DT_Excel, new TDQueryModel());
-                            List<TDQueryInfoModel> oCoincidences = new List<TDQueryInfoModel>(objCoincidences.Item2.RelatedQueryBasicInfoModel);                          
+                            List<TDQueryInfoModel> oCoincidences = new List<TDQueryInfoModel>(objCoincidences.Item2.RelatedQueryInfoModel);
                             //Get Provider by Status                        
                             Process.RelatedProvider = new List<ProviderModel>();
 
@@ -121,9 +117,10 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                             Process.RelatedProvider.All(prv =>
                             {
                                 if (prv.RelatedLegal != null && prv.RelatedLegal.Count > 0)
-                                {                                   
+                                {
                                     oRelatedLegaToComapare.AddRange(prv.RelatedLegal.Where(y => oCoincidences.Any(c => c.NameResult == y.ItemInfo.Where(inf => inf.ItemInfoType.ItemId == (int)enumLegalDesignationsInfoType.CD_PartnerName).Select(inf => inf.Value).FirstOrDefault() ||
-                                                                                                                   c.IdentificationResult == y.ItemInfo.Where(inf => inf.ItemInfoType.ItemId == (int)enumLegalDesignationsInfoType.CD_PartnerIdentificationNumber).Select(inf => inf.Value).FirstOrDefault())).ToList());                                }
+                                                                                                                   c.IdentificationResult == y.ItemInfo.Where(inf => inf.ItemInfoType.ItemId == (int)enumLegalDesignationsInfoType.CD_PartnerIdentificationNumber).Select(inf => inf.Value).FirstOrDefault())).ToList());
+                                }
 
                                 return true;
                             });
@@ -131,10 +128,10 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                             TDQueryModel oQuery = new TDQueryModel()
                             {
                                 CompayPublicId = Process.RelatedProvider.FirstOrDefault().RelatedCompany.CompanyPublicId,
-                                FileName = Process.FilePath,                                
+                                FileName = Process.FilePath,
 
                             };
-                            
+
                             //Create Private Function to update blackList                            
                             if (CreateBlackListProcess(oProvidersToCompare, oRelatedLegaToComapare, oCoincidences))
                             {
@@ -145,7 +142,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                             //Remove all Files
                             //remove temporal file
                             if (System.IO.File.Exists(strFolder + FileName))
-                                System.IO.File.Delete(strFolder + FileName);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+                                System.IO.File.Delete(strFolder + FileName);
 
                             //remove temporal file
                             if (System.IO.File.Exists(strFolder + FileName.Replace("xlsx", "xls")))
@@ -170,7 +167,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
             {
                 LogFile("Fatal error::" + err.Message + " - " + err.StackTrace);
             }
-        }      
+        }
 
         private static bool CreateBlackListProcess(List<ProviderModel> oProvidersToUpdate, List<GenericItemModel> oRelatedPersons, List<TDQueryInfoModel> oCoincidences)
         {
@@ -268,7 +265,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Alias",
                                     },
-                                    Value = c.Alias,
+                                    Value = c.AKA,
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -308,7 +305,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Fecha Registro",
                                     },
-                                    Value = c.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.RegisterDate).Select(x => x.Value).FirstOrDefault(),
+                                    Value = c.CreateDate.ToString(),
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -318,7 +315,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Nombre Completo",
                                     },
-                                    Value = c.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.NameResult).Select(x => x.Value).FirstOrDefault(),
+                                    Value = c.FullName,
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -328,7 +325,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Documento de Identidad",
                                     },
-                                    Value = c.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdentificationNumberResult).Select(x => x.Value).FirstOrDefault(),
+                                    Value = c.IdentificationNumber,
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -338,7 +335,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Fecha de Actualizacion",
                                     },
-                                    Value = c.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.LastModifyDate).Select(x => x.Value).FirstOrDefault(),
+                                    Value = c.UpdateDate,
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -348,7 +345,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Nombre del Grupo",
                                     },
-                                    Value = c.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.GroupName).Select(x => x.Value).FirstOrDefault(),
+                                    Value = c.GroupName,
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -358,7 +355,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Nombre de la Lista",
                                     },
-                                    Value = c.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.ListName).Select(x => x.Value).FirstOrDefault(),
+                                    Value = c.ListName,
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -378,7 +375,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Zona",
                                     },
-                                    Value = c.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Zone).Select(x => x.Value).FirstOrDefault(),
+                                    Value = c.Zone,
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -388,7 +385,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Link",
                                     },
-                                    Value = c.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Link).Select(x => x.Value).FirstOrDefault(),
+                                    Value = c.Link,
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -398,7 +395,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Otra Información",
                                     },
-                                    Value = c.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.MoreInfo).Select(x => x.Value).FirstOrDefault(),
+                                    Value = c.MoreInfo,
                                     Enable = true,
                                 });
                                 List<ProviderModel> oProviderResultList = new List<ProviderModel>();
@@ -440,14 +437,14 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                     oRelatedPersons.All(prs =>
                         {
                             oPersonsTuple.Add(new Tuple<ProviderModel, string>(new ProviderModel()
+                            {
+                                RelatedCompany = new CompanyModel()
                                 {
-                                    RelatedCompany = new CompanyModel()
-                                    {
-                                        CompanyPublicId = ProveedoresOnLine.RestrictiveListProcess.Controller.RestrictiveListProcessModule.GetCompanyPublicIdByLegalId(prs.ItemId),
-                                        CompanyName = prs.ItemInfo.Where(inf => inf.ItemInfoType.ItemId == (int)enumLegalDesignationsInfoType.CD_PartnerName).Select(inf => inf.Value).FirstOrDefault(),
-                                        IdentificationNumber = prs.ItemInfo.Where(inf => inf.ItemInfoType.ItemId == (int)enumLegalDesignationsInfoType.CD_PartnerIdentificationNumber).Select(inf => inf.Value).FirstOrDefault(),
-                                    },
+                                    CompanyPublicId = ProveedoresOnLine.RestrictiveListProcess.Controller.RestrictiveListProcessModule.GetCompanyPublicIdByLegalId(prs.ItemId),
+                                    CompanyName = prs.ItemInfo.Where(inf => inf.ItemInfoType.ItemId == (int)enumLegalDesignationsInfoType.CD_PartnerName).Select(inf => inf.Value).FirstOrDefault(),
+                                    IdentificationNumber = prs.ItemInfo.Where(inf => inf.ItemInfoType.ItemId == (int)enumLegalDesignationsInfoType.CD_PartnerIdentificationNumber).Select(inf => inf.Value).FirstOrDefault(),
                                 },
+                            },
                                 prs.ItemInfo.Where(inf => inf.ItemInfoType.ItemId == (int)enumLegalDesignationsInfoType.CD_PartnerRank).
                                 Select(inf => inf.Value).FirstOrDefault()));
                             return true;
@@ -526,7 +523,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Alias",
                                     },
-                                    Value = c.Alias,
+                                    Value = c.AKA,
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -596,7 +593,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Fecha Registro",
                                     },
-                                    Value = c.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.RegisterDate).Select(x => x.Value).FirstOrDefault(),
+                                    Value = c.CreateDate.ToString(),
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -606,7 +603,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Documento de Identidad",
                                     },
-                                    Value = c.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdentificationNumberResult).Select(x => x.Value).FirstOrDefault(),
+                                    Value = c.IdentificationNumber,
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -616,7 +613,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Fecha de Actualizacion",
                                     },
-                                    Value = c.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.LastModifyDate).Select(x => x.Value).FirstOrDefault(),
+                                    Value = c.UpdateDate,
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -626,7 +623,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Nombre del Grupo",
                                     },
-                                    Value = c.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.GroupName).Select(x => x.Value).FirstOrDefault(),
+                                    Value = c.GroupName,
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -636,7 +633,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Nombre Completo",
                                     },
-                                    Value = c.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.NameResult).Select(x => x.Value).FirstOrDefault(),
+                                    Value = c.FullName,
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -646,7 +643,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Nombre de la Lista",
                                     },
-                                    Value = c.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.ListName).Select(x => x.Value).FirstOrDefault(),
+                                    Value = c.ListName,
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -656,7 +653,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Otra Información",
                                     },
-                                    Value = c.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.MoreInfo).Select(x => x.Value).FirstOrDefault(),
+                                    Value = c.MoreInfo,
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -666,7 +663,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Zona",
                                     },
-                                    Value = c.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Zone).Select(x => x.Value).FirstOrDefault(),
+                                    Value = c.Zone,
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -676,7 +673,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                                     {
                                         ItemName = "Link",
                                     },
-                                    Value = c.DetailInfo.Where(x => x.ItemInfoType.ItemId == (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Link).Select(x => x.Value).FirstOrDefault(),
+                                    Value = c.Link,
                                     Enable = true,
                                 });
                                 oProviderToInsert.RelatedBlackList.FirstOrDefault().BlackListInfo.Add(new GenericItemInfoModel()
@@ -745,7 +742,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
             }
         }
 
-        private static System.Data.DataTable ReadExcelFile(string path) 
+        private static System.Data.DataTable ReadExcelFile(string path)
         {
             bool HasHeader = true;
             using (var ExcelPackage = new OfficeOpenXml.ExcelPackage())
@@ -782,7 +779,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                     {
                         if (cell.Text != null && cell.Text != " " && cell.Text != "")
                         {
-                            
+
                             row[cell.Start.Column - 1] = cell.Text;
                         }
                     }
@@ -790,7 +787,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
                 return DT_Excel;
             }
         }
-
+        
         #region Log File
 
         private static void LogFile(string LogMessage)
@@ -824,7 +821,7 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
         private static Tuple<List<Tuple<string, string>>, TDQueryModel> SearchInfoFromFile(System.Data.DataTable ExcelDs, TDQueryModel Query)
         {
             Tuple<List<Tuple<string, string>>, TDQueryModel> oReturn;
-            Query.RelatedQueryBasicInfoModel = new List<TDQueryInfoModel>();
+            Query.RelatedQueryInfoModel = new List<TDQueryInfoModel>();
 
             Uri node = new Uri(ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledge.Models.Constants.C_Settings_ElasticSearchUrl].Value);
             var settings = new ConnectionSettings(node);
@@ -834,297 +831,136 @@ namespace ProveedoresOnLine.RestrictiveListProcessBatch
 
             ElasticClient ThirdKnowledgeClient = new ElasticClient(settings);
             int page = 0;
-            
+
             for (int i = 0; i < ExcelDs.Rows.Count; i++)
             {
                 string Name = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeNameCollumn].Value].ToString();
                 string IdentificationNumber = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeIdNumberCollumn].Value].ToString();
 
-                Nest.ISearchResponse<ThirdknowledgeIndexSearchModel> result = ThirdKnowledgeClient.Search<ThirdknowledgeIndexSearchModel>(s => s
+                if (!string.IsNullOrEmpty(Name)&&!string.IsNullOrEmpty(IdentificationNumber))
+                {
+                    Nest.ISearchResponse<ThirdknowledgeIndexSearchModel> result = ThirdKnowledgeClient.Search<ThirdknowledgeIndexSearchModel>(s => s
                .From(0)
                    .TrackScores(true)
                    .From(page)
                    .Size(10)
-                    .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Name)) ||
+                    .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Name)) &&
                             q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
                  ).MinScore(2));
-                
-                if (result.Documents.Count() > 0)
-                {
-                    result.Documents.All(x =>
+                    if (result.Documents.Count() > 0)
                     {
-                        TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
-                        oInfoCreate.Alias = x.AKA;
-                        oInfoCreate.IdentificationResult = x.TypeId;
-                        oInfoCreate.Offense = x.RelatedWiht;
-                        oInfoCreate.NameResult = x.CompleteName;
+                        result.Documents.All(x =>
+                        {
+                            TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
+                            oInfoCreate.AKA = x.AKA;
+                            oInfoCreate.IdentificationResult = x.TypeId;
+                            oInfoCreate.Offense = x.RelatedWiht;
+                            oInfoCreate.NameResult = x.CompleteName;
 
-                        if (x.ListType == "FIGURAS PUBLICAS" || x.ListType == "PEPS INTERNACIONALES")
-                            oInfoCreate.Peps = x.ListType;
-                        else
-                            oInfoCreate.Peps = "N/A";
+                            if (x.ListType == "FIGURAS PUBLICAS" || x.ListType == "PEPS INTERNACIONALES")
+                                oInfoCreate.Peps = x.ListType;
+                            else
+                                oInfoCreate.Peps = "N/A";
 
-                        #region Group by Priority
-                        if (!string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(IdentificationNumber) && x.TypeId == IdentificationNumber.Trim() && x.CompleteName == Name.Trim())
-                            oInfoCreate.Priority = "1";
-                        else if (!string.IsNullOrEmpty(IdentificationNumber) && x.TypeId == IdentificationNumber.Trim() && x.CompleteName != Name.Trim())
-                            oInfoCreate.Priority = "2";
-                        else if (!string.IsNullOrEmpty(Name) && x.TypeId != IdentificationNumber.Trim() && x.CompleteName == Name.Trim())
-                            oInfoCreate.Priority = "3";
-                        else
-                            oInfoCreate.Priority = "3";
-                        #endregion
+                            #region Group by Priority
+                            if (!string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(IdentificationNumber) && x.TypeId == IdentificationNumber.Trim() && x.CompleteName == Name.Trim())
+                                oInfoCreate.Priority = "1";
+                            else if (!string.IsNullOrEmpty(IdentificationNumber) && x.TypeId == IdentificationNumber.Trim() && x.CompleteName != Name.Trim())
+                                oInfoCreate.Priority = "2";
+                            else if (!string.IsNullOrEmpty(Name) && x.TypeId != IdentificationNumber.Trim() && x.CompleteName == Name.Trim())
+                                oInfoCreate.Priority = "3";
+                            else
+                                oInfoCreate.Priority = "3";
+                            #endregion
 
-                        oInfoCreate.Status = x.Status;
-                        oInfoCreate.Enable = true;
-                        oInfoCreate.QueryPublicId = Query.QueryPublicId;
-                        oInfoCreate.DetailInfo = new List<TDQueryDetailInfoModel>();
+                            oInfoCreate.Status = x.Status;
+                            oInfoCreate.Enable = true;
+                            oInfoCreate.QueryPublicId = Query.QueryPublicId;
 
-                        #region Create Detail
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = Query.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdNumberRequest,
-                            },
-                            Value = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty,
-                            Enable = true,
-                        });
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = Query.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.RequestName,
-                            },
-                            Value = !string.IsNullOrEmpty(Name) ? Name : string.Empty,
-                            Enable = true,
-                        });
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = Query.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Alias,
-                            },
-                            Value = !string.IsNullOrEmpty(x.AKA) ? x.AKA : string.Empty,
-                            Enable = true,
-                        });
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = Query.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdList,
-                            },
-                            Value = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty,
-                            Enable = true,
-                        });
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = Query.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Priotity,
-                            },
-                            Value = !string.IsNullOrEmpty(oInfoCreate.Priority) ? oInfoCreate.Priority : string.Empty,
-                            Enable = true,
-                        });
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = Query.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.RegisterDate,
-                            },
-                            Value = !string.IsNullOrEmpty(x.LastModify) ? x.LastModify : string.Empty,
-                            Enable = true,
-                        });
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = Query.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.LastModifyDate,
-                            },
-                            Value = !string.IsNullOrEmpty(x.LastModify) ? x.LastModify : string.Empty,
-                            Enable = true,
-                        });
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = Query.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Offense,
-                            },
-                            Value = !string.IsNullOrEmpty(x.RelatedWiht) ? x.RelatedWiht : string.Empty,
-                            Enable = true,
-                        });
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = Query.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdentificationNumberResult,
-                            },
-                            Value = !string.IsNullOrEmpty(x.TypeId) ? x.TypeId : string.Empty,
-                            Enable = true,
-                        });
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = Query.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Status,
-                            },
-                            Value = !string.IsNullOrEmpty(x.Status) ? x.Status : string.Empty,
-                            Enable = true,
-                        });
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.QueryId,
-                            },
-                            Value = !string.IsNullOrEmpty(x.Registry.ToString()) ? x.Registry.ToString() : string.Empty,
-                            Enable = true,
-                        });
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.GroupName,
-                            },
-                            Value = !string.IsNullOrEmpty(x.ListType) &&
-                                     x.ListType.Contains("BOLETIN")
-                                     || x.ListType == "FOREIGN CORRUPT PRACTICES ACT EEUU"
-                                     || x.ListType == "FOREIGN FINANCIAL INSTITUTIONS PART 561_EEUU"
-                                     || x.ListType == "FOREIGN SANCTIONS EVADERS LIST_EEUU"
-                                     || x.ListType == "FOREIGN_TERRORIST_ORGANIZATIONS_EEUU_FTO"
-                                     || x.ListType == "INTERPOL"
-                                     || x.ListType == "MOST WANTED FBI"
-                                     || x.ListType == "NACIONES UNIDAS"
-                                     || x.ListType == "NON-SDN IRANIAN SANCTIONS ACT LIST (NS-ISA)_EEUU"
-                                     || x.ListType == "OFAC"
-                                     || x.ListType == "PALESTINIAN LEGISLATIVE COUNCIL LIST_EEUU"
-                                     || x.ListType == "VINCULADOS" ?
-                                     "LISTAS RESTRICTIVAS" + " - Criticidad Alta" :
-                                     x.ListType == "CONSEJO NACIONAL ELECTORAL"
-                                     || x.ListType == "CONSEJO SUPERIOR DE LA JUDICATURA"
-                                     || x.ListType == "CORTE CONSTITUCIONAL"
-                                     || x.ListType == "CORTE SUPREMA DE JUSTICIA"
-                                     || x.ListType == "DENIED PERSONS LIST_EEUU"
-                                     || x.ListType == "DESMOVILIZADOS"
-                                     || x.ListType == "EMBAJADAS EN COLOMBIA"
-                                     || x.ListType == "EMBAJADAS EN EL EXTERIOR"
-                                     || x.ListType == "ENTITY_LIST_EEUU"
-                                     || x.ListType == "FUERZAS MILITARES"
-                                     || x.ListType == "GOBIERNO DEPARTAMENTAL"
-                                     || x.ListType == "GOBIERNO MUNICIPAL"
-                                     || x.ListType == "GOBIERNO NACIONAL"
-                                     || x.ListType == "HM_TREASURY (BOE)"
-                                     || x.ListType == "ONU_RESOLUCION_1929"
-                                     || x.ListType == "ONU_RESOLUCION_1970"
-                                     || x.ListType == "ONU_RESOLUCION_1973"
-                                     || x.ListType == "ONU_RESOLUCION_1975"
-                                     || x.ListType == "ONU_RESOLUCION_1988"
-                                     || x.ListType == "ONU_RESOLUCION_1988"
-                                     || x.ListType == "ONU_RESOLUCION_1988"
-                                     || x.ListType == "ONU_RESOLUCION_2023"
-                                     || x.ListType == "SECTORAL SANCTIONS IDENTIFICATIONS_LIST_EEUU"
-                                     || x.ListType == "SPECIALLY DESIGNATED NATIONALS LIST_EEUU"
-                                     || x.ListType == "SUPER SOCIEDADES"
-                                     || x.ListType == "UNVERIFIED_LIST_EEUU" ?
-                                     x.ListType + " - Criticidad Media" :
-                                     x.ListType == "ESTRUCTURA DE GOBIERNO"
-                                     || x.ListType == "FIGURAS PUBLICAS"
-                                     || x.ListType == "PANAMA PAPERS"
-                                     || x.ListType == "PARTIDOS Y MOVIMIENTOS POLITICOS"
-                                     || x.ListType == "PEPS INTERNACIONALES" ?
-                                     x.ListType + " - Criticidad Baja" : "NA",
-                            Enable = true,
-                        });
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.GroupId,
-                            },
-                            Value = !string.IsNullOrEmpty(x.Code) ? x.Code : string.Empty,
-                            Enable = true,
-                        });
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.IdList,
-                            },
-                            Value = !string.IsNullOrEmpty(x.TableCodeID) ? x.TableCodeID : string.Empty,
-                            Enable = true,
-                        });
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Link,
-                            },
-                            Value = !string.IsNullOrEmpty(x.Source) ? x.Source : string.Empty,
-                            Enable = true,
-                        });
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.NameResult,
-                            },
-                            Value = !string.IsNullOrEmpty(x.CompleteName) ? x.CompleteName : string.Empty,
-                            Enable = true,
-                        });
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.ListName,
-                            },
-                            Value = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty,
-                            Enable = true,
-                        });
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.MoreInfo,
-                            },
-                            Value = !string.IsNullOrEmpty(x.ORoldescription1) || !string.IsNullOrEmpty(x.ORoldescription2) ? x.ORoldescription1 : string.Empty,
-                            Enable = true,
-                        });
-                        oInfoCreate.DetailInfo.Add(new TDQueryDetailInfoModel()
-                        {
-                            QueryBasicPublicId = oInfoCreate.QueryPublicId,
-                            ItemInfoType = new TDCatalogModel()
-                            {
-                                ItemId = (int)ProveedoresOnLine.ThirdKnowledge.Models.Enumerations.enumThirdKnowledgeColls.Zone,
-                            },
-                            Value = !string.IsNullOrEmpty(x.NationalitySourceCountry) ? x.NationalitySourceCountry : string.Empty,
-                            Enable = true,
-                        });
-                        #endregion
 
-                        //Create Info Conincidences                                        
-                        oCoincidences.Add(new Tuple<string, string>(IdentificationNumber, Name));                        
-                        Query.RelatedQueryBasicInfoModel.Add(oInfoCreate);
-                        return true;
-                    });
+                            #region Create Detail
+                            oInfoCreate.IdentificationNumber = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty;
+                            oInfoCreate.QueryName = !string.IsNullOrEmpty(Name) ? Name : string.Empty;
+                            oInfoCreate.AKA = !string.IsNullOrEmpty(x.AKA) ? x.AKA : string.Empty;
+                            oInfoCreate.IdList = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;
+                            oInfoCreate.Priority = !string.IsNullOrEmpty(oInfoCreate.Priority) ? oInfoCreate.Priority : string.Empty;
+
+
+                            oInfoCreate.CreateDate = DateTime.Now;
+                            oInfoCreate.LastModify = DateTime.Now;
+
+                            oInfoCreate.Offense = !string.IsNullOrEmpty(x.RelatedWiht) ? x.RelatedWiht : string.Empty;
+                            oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(x.TypeId) ? x.TypeId : string.Empty;
+                            oInfoCreate.Status = !string.IsNullOrEmpty(x.Status) ? x.Status : string.Empty;
+                            oInfoCreate.GroupName = !string.IsNullOrEmpty(x.ListType) &&
+                                         x.ListType.Contains("BOLETIN")
+                                         || x.ListType == "FOREIGN CORRUPT PRACTICES ACT EEUU"
+                                         || x.ListType == "FOREIGN FINANCIAL INSTITUTIONS PART 561_EEUU"
+                                         || x.ListType == "FOREIGN SANCTIONS EVADERS LIST_EEUU"
+                                         || x.ListType == "FOREIGN_TERRORIST_ORGANIZATIONS_EEUU_FTO"
+                                         || x.ListType == "INTERPOL"
+                                         || x.ListType == "MOST WANTED FBI"
+                                         || x.ListType == "NACIONES UNIDAS"
+                                         || x.ListType == "NON-SDN IRANIAN SANCTIONS ACT LIST (NS-ISA)_EEUU"
+                                         || x.ListType == "OFAC"
+                                         || x.ListType == "PALESTINIAN LEGISLATIVE COUNCIL LIST_EEUU"
+                                         || x.ListType == "VINCULADOS" ?
+                                         "LISTAS RESTRICTIVAS" + " - Criticidad Alta" :
+                                         x.ListType == "CONSEJO NACIONAL ELECTORAL"
+                                         || x.ListType == "CONSEJO SUPERIOR DE LA JUDICATURA"
+                                         || x.ListType == "CORTE CONSTITUCIONAL"
+                                         || x.ListType == "CORTE SUPREMA DE JUSTICIA"
+                                         || x.ListType == "DENIED PERSONS LIST_EEUU"
+                                         || x.ListType == "DESMOVILIZADOS"
+                                         || x.ListType == "EMBAJADAS EN COLOMBIA"
+                                         || x.ListType == "EMBAJADAS EN EL EXTERIOR"
+                                         || x.ListType == "ENTITY_LIST_EEUU"
+                                         || x.ListType == "FUERZAS MILITARES"
+                                         || x.ListType == "GOBIERNO DEPARTAMENTAL"
+                                         || x.ListType == "GOBIERNO MUNICIPAL"
+                                         || x.ListType == "GOBIERNO NACIONAL"
+                                         || x.ListType == "HM_TREASURY (BOE)"
+                                         || x.ListType == "ONU_RESOLUCION_1929"
+                                         || x.ListType == "ONU_RESOLUCION_1970"
+                                         || x.ListType == "ONU_RESOLUCION_1973"
+                                         || x.ListType == "ONU_RESOLUCION_1975"
+                                         || x.ListType == "ONU_RESOLUCION_1988"
+                                         || x.ListType == "ONU_RESOLUCION_1988"
+                                         || x.ListType == "ONU_RESOLUCION_1988"
+                                         || x.ListType == "ONU_RESOLUCION_2023"
+                                         || x.ListType == "SECTORAL SANCTIONS IDENTIFICATIONS_LIST_EEUU"
+                                         || x.ListType == "SPECIALLY DESIGNATED NATIONALS LIST_EEUU"
+                                         || x.ListType == "SUPER SOCIEDADES"
+                                         || x.ListType == "UNVERIFIED_LIST_EEUU" ?
+                                         x.ListType + " - Criticidad Media" :
+                                         x.ListType == "ESTRUCTURA DE GOBIERNO"
+                                         || x.ListType == "FIGURAS PUBLICAS"
+                                         || x.ListType == "PANAMA PAPERS"
+                                         || x.ListType == "PARTIDOS Y MOVIMIENTOS POLITICOS"
+                                         || x.ListType == "PEPS INTERNACIONALES" ?
+                                         x.ListType + " - Criticidad Baja" : "NA";
+
+                            oInfoCreate.GroupId = !string.IsNullOrEmpty(x.Code) ? x.Code : string.Empty;
+                            oInfoCreate.IdList = !string.IsNullOrEmpty(x.TableCodeID) ? x.TableCodeID : string.Empty;
+                            oInfoCreate.Link = !string.IsNullOrEmpty(x.Source) ? x.Source : string.Empty;
+                            oInfoCreate.FullName = !string.IsNullOrEmpty(x.CompleteName) ? x.CompleteName : string.Empty;
+                            oInfoCreate.ListName = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;
+                            oInfoCreate.MoreInfo = !string.IsNullOrEmpty(x.ORoldescription1) || !string.IsNullOrEmpty(x.ORoldescription2) ? x.ORoldescription1 : string.Empty;
+                            oInfoCreate.Zone = !string.IsNullOrEmpty(x.NationalitySourceCountry) ? x.NationalitySourceCountry : string.Empty;
+
+                            #endregion
+
+                            //Create Info Conincidences                                        
+                            oCoincidences.Add(new Tuple<string, string>(IdentificationNumber, Name));
+                            Query.RelatedQueryInfoModel.Add(oInfoCreate);
+                            return true;
+                        });
+                    }
                 }
+
+                
+
+                
             }
             oReturn = new Tuple<List<Tuple<string, string>>, TDQueryModel>(oCoincidences, Query);
             return oReturn;

@@ -156,6 +156,8 @@
                                         QueryInfoPublicId = Model.RelatedThidKnowledgeSearch.QueryBasicPublicId,
                                         ElasticId = Model.RelatedThidKnowledgeSearch.ElasticId,
                                         ReturnUrl = Model.RelatedThidKnowledgeSearch.ReturnUrl,
+                                        SearchParam = Model.RelatedThidKnowledgeSearch.RequestName != null ? Model.RelatedThidKnowledgeSearch.RequestName
+                                            : Model.RelatedThidKnowledgeSearch.IdNumberRequest
                                     }))" method="post"></form>
 </div>
 

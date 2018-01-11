@@ -9,6 +9,8 @@
     @Styles.Render("~/site/styles/bootstrap")
     @Styles.Render("~/site/styles/kendo")
     @Styles.Render("~/site/styles")
+    @Styles.Render("~/site/FontAwesomeIcon")
+    @Scripts.Render("~/site/scripts/jquery")
 </head>
 <body>
     <div class="POBORenderHeader">
@@ -26,13 +28,13 @@
     </div>
 
     @*bundle render scripts*@
-    @Scripts.Render("~/site/scripts/jquery")
+    
     @Scripts.Render("~/site/scripts/jqueryval")
     @Scripts.Render("~/site/scripts/modernizr")
     @Scripts.Render("~/site/scripts/bootstrap")
     @Scripts.Render("~/site/scripts/kendo")
     @Scripts.Render("~/site/scripts")
-
+    
     <script type="text/javascript">
         $(document).ready(function () {
             //start base url object

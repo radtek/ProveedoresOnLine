@@ -1,4 +1,5 @@
 ﻿using ProveedoresOnLine.CalificationProject.Models.CalificationProject;
+using ProveedoresOnLine.Company.Models.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -136,7 +137,7 @@ namespace ProveedoresOnLine.CalificationProject.DAL.Controller
 
         #region CalificationProjectConfigOptions
 
-        public List<ProveedoresOnLine.Company.Models.Util.CatalogModel> CalificationProjectConfigOptions()
+        public List<CatalogModel> CalificationProjectConfigOptions()
         {
             return DataFactory.CalificationProjectConfigOptions();
         }
@@ -144,6 +145,11 @@ namespace ProveedoresOnLine.CalificationProject.DAL.Controller
         public List<Models.CalificationProject.CalificationProjectCategoryModel> CalificationProjectConfigCategoryOptions()
         {
             return DataFactory.CalificationProjectConfigCategoryOptions();
+        }
+
+        public List<CatalogModel> CalificationProjectConfigAditionalDocumentsOptions(string CustomerPublicId)
+        {
+            return DataFactory.CalificationProjectConfigAditionalDocumentsOptions(CustomerPublicId);
         }
 
         #endregion

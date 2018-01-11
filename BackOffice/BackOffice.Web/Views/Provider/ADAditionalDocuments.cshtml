@@ -71,6 +71,7 @@
                 ObjectId: 'divGridAditionalDocument',
                 ProviderPublicId: '@Model.RelatedProvider.RelatedCompany.CompanyPublicId',
                 AditionalType: '@((int)BackOffice.Models.General.enumAditionalDocumentType.AditionalDocument)',
+                DateFormat: '@(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_Kendo].Value)',
             });
 
             Provider_AditionalDocumentObject.RenderAsync();

@@ -11,19 +11,19 @@ namespace ADO.Test
         {
             ADO.MYSQL.MySqlImplement DataInstance = new MYSQL.MySqlImplement("Conn");
 
-            var param = DataInstance.CreateTypedParameter();
-            param.ParameterName = "vUserPublicId";
-            param.Value = "asdfadf";
+            //var param = DataInstance.CreateTypedParameter();
+            //param.ParameterName = "vUserPublicId";
+            //param.Value = "asdfadf";
 
             ADO.Models.ADOModelRequest req = new Models.ADOModelRequest()
             {
-                CommandText = "UI_GetUser",
+                CommandText = "Sanofi_LastProcessLog_Get",
                 CommandType = System.Data.CommandType.StoredProcedure,
                 CommandExecutionType = Models.enumCommandExecutionType.DataTable,
                 Parameters = new System.Collections.Generic.List<System.Data.IDbDataParameter>(),
             };
 
-            req.Parameters.Add(param);
+            //req.Parameters.Add(param);
 
             var result = DataInstance.ExecuteQuery(req);
         }

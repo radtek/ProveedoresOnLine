@@ -1,0 +1,146 @@
+﻿@model MarketPlace.Models.Provider.ProviderViewModel
+@{
+    ViewBag.Title = "Proveedores OnLine - Consulta Individual";
+    Layout = MVC.Desktop.Shared.Views._Layout;
+    Model.RenderScripts = false;
+}
+@*ESTE ES EL ENVUELTO COMPLETO DE MENU LATERAL Y CONTENIDO*@
+<div class="POMPProviderGreatWrapper">
+    @*ESTE ES QUE TRAE EL PARCIAL QUE PINTA EL MENU LATERAL*@
+    <div class="POMPProviderSideMenuWrapper">
+        @Html.Partial(MVC.Desktop.Shared.Views._P_ProviderMenu, Model)
+    </div>
+    <div class="POMPProviderDataWrapper">
+        <label class="POMPSectionTitles">Información Detallada</label>
+        <div class="container-fluid POMPContainerDetail">
+            <br />
+            @if (Model.RelatedThidKnowledgeSearch != null &&
+        Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult != null &&
+        Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Count > 0)
+            {
+                foreach (var item in Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult)
+                {
+                    <div class="col-xs-12 POMPDetailTitle">
+                        <div class="col-xs-8">
+                            <p>Tipo de consulta:&nbsp;<span class="ThirdKnowledge_FilterDetail">@item.SearchType.ItemName</span></p>
+                            <p>Realizada por:&nbsp;<span class="ThirdKnowledge_FilterDetail">@item.User</span></p>
+                            <p class="ThirdKnowledge_marginBottom">Fecha:&nbsp;<span class="ThirdKnowledge_FilterDetail">@item.CreateDate.AddHours(-5)</span></p>
+                        </div>
+                        <div class="col-xs-4 text-center ThirdKnowledge_ListDetail">
+                            @{
+                                List<int> oCurrentReport = MarketPlace.Models.General.SessionModel.CurrentReport();
+
+                                if (oCurrentReport.Any(x => x == (int)MarketPlace.Models.General.enumReports.TKReport))
+                                {
+                                    <div class="row text-center">
+                                        @{
+                                            <a class="POMPButtons" title="Generar Reporte" href="javascript:ReportViewerObj.RenderReportViewer({Options:['@MarketPlace.Models.General.enumCategoryInfoType.PDF.ToString()','@MarketPlace.Models.General.enumCategoryInfoType.Excel.ToString()'],ObjectId:'ThirdKnowledge',Tittle:'Reporte General'})">Generar Reporte</a>
+                                        }
+                                    </div>
+                                            }
+                            }
+                            <div class="row text-center ThirdKnowledge_GoBack">
+                                @*Return Buttom*@
+                                @if (!string.IsNullOrEmpty(Model.RelatedThidKnowledgeSearch.InitDate.ToString("yyyy-MM-dd")) && Model.RelatedThidKnowledgeSearch.InitDate.ToString("dd/MM/yyyy") != "01/01/0001" &&
+                         !string.IsNullOrEmpty(Model.RelatedThidKnowledgeSearch.EndDate.ToString("yyyy-MM-dd")) && Model.RelatedThidKnowledgeSearch.EndDate.ToString("dd/MM/yyyy") != "01/01/0001")
+                                {
+                                    <a href="@(Url.RouteUrl
+                                (MarketPlace.Models.General.Constants.C_Routes_Default,
+                                new
+                                {
+                                    controller = MVC.ThirdKnowledge.Name,
+                                    action = MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeSearch,
+                                    InitDate = Model.RelatedThidKnowledgeSearch.InitDate.ToString("yyyy-MM-dd"),
+                                    EndDate = Model.RelatedThidKnowledgeSearch.EndDate.ToString("yyyy-MM-dd"),
+                                }))">Regresar a la búsqueda</a>
+                                }
+                                else
+                                {
+                                    <a href="@(Url.RouteUrl
+                                       (MarketPlace.Models.General.Constants.C_Routes_Default,
+                                       new
+                                       {
+                                           controller = MVC.ThirdKnowledge.Name,
+                                           action = MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeSearch,
+                                       }))">Regresar a la búsqueda</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            @*Partial*@
+            <br />
+            @{
+                //SearchParam, Esta o no está, QueryInfoPublicId, QUeryInfoModel
+                List<Tuple<string, string, string, ProveedoresOnLine.ThirdKnowledge.Models.TDQueryInfoModel>> oModelToSend = new List<Tuple<string, string, string, ProveedoresOnLine.ThirdKnowledge.Models.TDQueryInfoModel>>();
+
+                List<ProveedoresOnLine.ThirdKnowledge.Models.TDQueryInfoModel> oInfoToManage = new List<ProveedoresOnLine.ThirdKnowledge.Models.TDQueryInfoModel>();
+                oInfoToManage = Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().RelatedQueryInfoModel.Where(x => x.QueryIdentification != null).GroupBy(x => new { x.QueryIdentification }).Select(x => x.Last()).ToList();
+                oInfoToManage.AddRange(Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().RelatedQueryInfoModel.Where(x => x.QueryName != null).GroupBy(x => new { x.QueryName }).Select(x => x.Last()).ToList());
+
+                oInfoToManage.All(x =>
+                {
+                    if (!string.IsNullOrEmpty(x.QueryName))
+                    {
+                        if (Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().RelatedQueryInfoModel.Where(y => y.QueryName == x.QueryName).Select(y => y).FirstOrDefault() != null)
+                        {
+                            oModelToSend.Add(new Tuple<string, string, string, ProveedoresOnLine.ThirdKnowledge.Models.TDQueryInfoModel>(x.QueryName, x.GroupName != "SIN COINCIDENCIAS" && x.GroupName != "Registraduria/Dian" && x.GroupName != "Registraduria - Puesto de Votación" && x.GroupName != "RUES" ? "SI" : "NO", x.QueryPublicId, x));
+                        }
+                    }
+                    else
+                    {
+                        if (Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().RelatedQueryInfoModel.Where(y => y.QueryIdentification == x.QueryIdentification).Select(y => y).FirstOrDefault() != null)
+                        {
+                            oModelToSend.Add(new Tuple<string, string, string, ProveedoresOnLine.ThirdKnowledge.Models.TDQueryInfoModel>(x.QueryIdentification, x.GroupName != "SIN COINCIDENCIAS" && x.GroupName != "Registraduria/Dian" && x.GroupName != "Registraduria - Puesto de Votación" && x.GroupName != "RUES" ? "SI" : "NO", x.QueryPublicId, x));
+                        }
+                    }
+
+                    return true;
+                });
+
+                Model.TKMasiveDetailModel = oModelToSend;
+            }
+
+            &nbsp;
+            @Html.Partial(MVC.Desktop.Shared.Views._TK_ThirdKnowledgeMasiveDetail, Model)
+        </div>
+    </div>
+</div>
+
+@* Templates *@
+<div id="ThirdKnowledge_Dialog">
+    <form id="ThirdKnowledge_DialogForm" action="@Url.Action(MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeDetail, MVC.ThirdKnowledge.Name, new
+                    {
+                        QueryPublicId = Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Where(x => x.QueryPublicId != null).Select(x => x.QueryPublicId).DefaultIfEmpty(string.Empty).FirstOrDefault(),
+                        InitDate = Model.RelatedThidKnowledgeSearch.InitDate.ToString("yyyy-MM-dd"),
+                        EndDate = Model.RelatedThidKnowledgeSearch.EndDate.ToString("yyyy-MM-dd"),
+                    })" method="post"></form>
+</div>
+
+@{
+    Model.RenderScripts = true;
+}
+@{
+    var QueryPublicId = Model.RelatedThidKnowledgeSearch != null && Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.Count > 0 ? Model.RelatedThidKnowledgeSearch.ThirdKnowledgeResult.FirstOrDefault().QueryPublicId : string.Empty;
+}
+@section inlinescripts
+{
+    @Html.Partial(MVC.Desktop.Shared.Views._P_ProviderMenu, Model)
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            Third_KnowledgeDetailSearch.Init({
+                ObjectId: 'ThirdKnowledge',
+                QueryPublicId: '@QueryPublicId',
+                SearchUrl: '@(Url.RouteUrl(MarketPlace.Models.General.Constants.C_Routes_Default,
+new
+{
+    controller = MVC.ThirdKnowledge.Name,
+    action = MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeDetail
+}))',
+            });
+        });
+    </script>
+}

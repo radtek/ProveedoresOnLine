@@ -86,6 +86,8 @@ namespace ProveedoresOnLine.Company.Interfaces
 
         List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> MPCategorySearchByActivity(int TreeId, string SearchParam, int RowCount);
 
+        List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> MPCategorySearchByIdCategory(int idCatalog, int RowCount);
+
         #endregion
 
         #region Company CRUD
@@ -172,6 +174,19 @@ namespace ProveedoresOnLine.Company.Interfaces
 
         void CompanyActivityInfoIndex();
 
+        List<CalificationIndexModel> CalificationGetAll();
+
+        List<CustomFiltersIndexModel> CustomFiltersGetAll();
+
+        #endregion
+
+        #region Notifications
+        List<CompanyNotificationModel> NotificationConfigGetAll();
+        List<CompanyNotificationModel> NotificationConfigGetByCompany(string CompanyPublicId);
+
+        int NotificationConfigUpsert(string CompanyPublicId, int? NotificationConfigId, string NotificationName, bool Enable);
+
+        int NotificationConfigInfoUpsert(int NotificationConfigId, int? NotificationConfigInfoId, int ConfigItemType, string Value, string LargeValue, bool Enable);
         #endregion
     }
 }

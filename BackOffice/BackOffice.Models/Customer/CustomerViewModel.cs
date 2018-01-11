@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProveedoresOnLine.Company.Models.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,5 +61,7 @@ namespace BackOffice.Models.Customer
         public List<ProveedoresOnLine.Company.Models.Util.CatalogModel> CalificationProjectOptions { get; set; }
 
         public List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectCategoryModel> CalificationProjectCategoryOptions { get; set; }
+
+        public List<CatalogModel> CalificationProjectConfigAditionalDocumentsOptions { get; set; }
     }
 }

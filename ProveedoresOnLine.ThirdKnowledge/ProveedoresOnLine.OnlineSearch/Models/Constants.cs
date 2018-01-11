@@ -27,6 +27,7 @@ namespace ProveedoresOnLine.OnlineSearch.Models
         public const string Proc_Questionlbl = "Proc_Questionlbl";
         public const string Proc_Url = "Proc_Url";
         #endregion
+
         #region Panama Papers
         public const string PanamaPapers_Url = "PanamaPapers_Url";
 
@@ -40,6 +41,32 @@ namespace ProveedoresOnLine.OnlineSearch.Models
         public const string JudicialProcessResult_Url = "JudicialPResult_Url";
 
         public const string JudicialP_Proxy = "JudicialP_Proxy";
+
+        #endregion
+
+        #region Register and Dian Page Service
+
+        public const string RegisterServiceURL = "RegisterService_URL";
+
+        public const string RegisterServiceToken = "RegisterService_Token";
+        #endregion
+
+        #region Regirte Page to get the vote info
+        public const string RegisterPageUrl = "Registraduria_Url";
+
+        #endregion
+        #region Paradise Papers
+
+        public const string ParadisePapers_Url = "ParadisePapers_Url";
+        #endregion
+
+        #region RUES
+
+        public const string RUES_Url = "RUES_Url";
+
+        public const string RUES_txtParam = "txtNIT";
+
+        public const string RUES_Domine = "RUES_Domine";
 
         #endregion
     }

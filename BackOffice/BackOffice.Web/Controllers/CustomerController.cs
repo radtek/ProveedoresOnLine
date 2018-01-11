@@ -865,9 +865,31 @@ namespace BackOffice.Web.Controllers
                 RelatedCalificationProjectConfig = new Models.Customer.CalificationProjectConfigViewModel(ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfig_GetByCalificationProjectConfigId(Convert.ToInt32(CalificationProjectConfigId))),
                 CalificationProjectOptions = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigOptions(),
                 CalificationProjectCategoryOptions = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigCategoryOptions(),
+                CalificationProjectConfigAditionalDocumentsOptions = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigAditionalDocumentsOptions(CustomerPublicId)
             };
 
             //Get provider menu
+            oModel.CustomerMenu = GetCustomerMenu(oModel);
+
+            return View(oModel);
+        }
+
+        #endregion
+
+        #region NotificationsConfig
+        public virtual ActionResult NCNotificationsConfigUpsert(string CustomerPublicId)
+        {
+            //generic model info
+            BackOffice.Models.Customer.CustomerViewModel oModel = new Models.Customer.CustomerViewModel()
+            {
+                CustomerOptions = ProveedoresOnLine.CompanyCustomer.Controller.CompanyCustomer.CatalogGetCustomerOptions(),
+                RelatedCustomer = new ProveedoresOnLine.CompanyCustomer.Models.Customer.CustomerModel()
+                {
+                    RelatedCompany = ProveedoresOnLine.Company.Controller.Company.CompanyGetBasicInfo(CustomerPublicId),
+                },
+            };
+
+            //get provider menu
             oModel.CustomerMenu = GetCustomerMenu(oModel);
 
             return View(oModel);
@@ -953,7 +975,7 @@ namespace BackOffice.Web.Controllers
                     Position = 0,
                     ChildMenu = new List<Models.General.GenericMenu>(),
                 };
-
+                
                 //Basic info
                 oMenuAux.ChildMenu.Add(new Models.General.GenericMenu()
                 {
@@ -1094,6 +1116,39 @@ namespace BackOffice.Web.Controllers
                     Position = 0,
                     IsSelected =
                         (oCurrentAction == MVC.Customer.ActionNames.CPCCalificationProjectConfigUpsert &&
+                        oCurrentController == MVC.Customer.Name),
+                });
+
+                //get is selected menu
+                oMenuAux.IsSelected = oMenuAux.ChildMenu.Any(x => x.IsSelected);
+
+                //add menu
+                oReturn.Add(oMenuAux);
+
+                #endregion
+
+                #region Notifications config
+
+                //header
+                oMenuAux = new Models.General.GenericMenu()
+                {
+                    Name = "Notificaciones",
+                    Position = 5,
+                    ChildMenu = new List<Models.General.GenericMenu>(),
+                };
+
+                //Company User
+                oMenuAux.ChildMenu.Add(new Models.General.GenericMenu()
+                {
+                    Name = "Configuración",
+                    Url = Url.Action
+                        (MVC.Customer.ActionNames.NCNotificationsConfigUpsert,
+                        MVC.Customer.Name,
+                        new { CustomerPublicId = vCustomerInfo.RelatedCustomer.RelatedCompany.CompanyPublicId }),
+                    Position = 0,
+                    IsSelected =
+                        ((oCurrentAction == MVC.Customer.ActionNames.PCProjectConfigUpsert ||
+                        oCurrentAction == MVC.Customer.ActionNames.PCEvaluationItemUpsert) &&
                         oCurrentController == MVC.Customer.Name),
                 });
 

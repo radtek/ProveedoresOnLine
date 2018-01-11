@@ -4,6 +4,14 @@
     Layout = MVC.Desktop.Shared.Views._Layout;
 
     Model.RenderScripts = false;
+
+    string pageNumber = Request.Params["PageNumber"] == null ? "" : Request.Params["PageNumber"].ToString().Replace(",", "");
+    string initdate = Request.Params["InitDate"] == null ? "" : Request.Params["InitDate"].ToString().Replace(",", "");
+    string endate = Request.Params["EndDate"] == null ? "" : endate = Request.Params["EndDate"].ToString().Replace(",", "");
+    string searchtype = Request.Params["SearchType"] == null ? "" : searchtype = Request.Params["SearchType"].ToString().Replace(",", "");
+    string status = Request.Params["Status"] == null ? "" : status = Request.Params["Status"].ToString().Replace(",", "");
+    string user = Request.Params["User"] == null ? "" : user = Request.Params["User"].ToString().Replace(",", "");
+    string domain = Request.Params["Domain"] == null ? "" : domain = Request.Params["Domain"].ToString().Replace(",", "");
 }
 @*ESTE ES EL ENVUELTO COMPLETO DE MENU LATERAL Y CONTENIDO*@
 <div class="POMPProviderGreatWrapper">
@@ -40,7 +48,7 @@
                 </div>
                 <br />
             }
-            @{ 
+            @{
                 string initDate = "";
                 string endDate = "";
                 if (Request.Params["InitDate"] != null)
@@ -53,65 +61,12 @@
                 }
             }
 
-            <div class="row POMPTKSearchContainer">
-                <div class="col-sm-2 TKSearchRow">
-                    <span>Desde:</span>
-                    <br />
-                    <input type="date" name="ThirdKnoledge_InitDate" id="ThirdKnowledge_InitDateId" class="form-control" value="@initDate" />
-                </div>
-                <div class="col-sm-2 TKSearchRow">
-                    <span>Hasta:</span>
-                    <br />
-                    <input type="date" name="ThirdKnowledge_EndDate" id="ThirdKnowledge_EndDateId" class="form-control" value="@endDate" />
-                </div>
-                <div class="col-sm-2 TKSearchRow">
-                    <span>Tipo:</span>
-                    <br />
-                    @{ 
-                        string selected_masive = "";
-                        string selected_single = "";
-                        string selected_single_tpy = "";
-                        string selected_option_sts = "";                        
-                        if (Request.Params["SearchType"] != null)
-                        {
-                            switch (Request.Params["SearchType"])
-                            {
-                                case "":
-                                    selected_single_tpy = "selected";
-                                    break;
-                                case "201001":
-                                    selected_single = "selected";
-                                    break;
-                                case "201002":
-                                    selected_masive = "selected";
-                                    break;
-                            }
-                        }
-                    }
-                    <select id="ThirdKnowledge_QueryType" class="form-control">
-                        <option value="" @selected_single_tpy>Seleccionar</option>
-                        <option value="@((int)MarketPlace.Models.General.enumThirdKnowledgeQueryType.Simple)" @selected_single>Individual</option>
-                        <option value="@((int)MarketPlace.Models.General.enumThirdKnowledgeQueryType.Masive)" @selected_masive>Masiva</option>
-
-                    </select>
-                </div>
-                <div class="col-sm-3 TKSearchRow">
-                    <span>Usuario:</span>
-                                                            
-                    <select id="ThirdKnowledge_QueryStatus" class="form-control">                       
-                        <option value="">Seleccionar</option>                        
-                        @foreach (var item in @Model.RelatedThirdKnowledge.Users)
-                        {
-                            <option value="@item">@item</option>
-                        }
-                    </select>                                           
-                </div>
-                <div class="col-sm-2 TKSearchRow">
-                    <input class="TKSearchButton" type="button" name="ThirdKnowledge_FilterId" id="ThirdKnowledge_FilterId" value="Filtrar" />
-                </div>
-            </div>
             <div class="row POMPSearchResultsPager POMPTKSearchPager">
                 <div class="col-sm-12 text-right">
+                    <div class="col-md-3 text-left">
+                        <a class="POMPButtons" id="ThirdKnowledge_GenerateReport" name="ThirdKnowledge_GenerateReport" title="Generar Reporte"
+                           href="javascript:ThirdKnowledge_ReportViewerObj.RenderReportViewer({Options:['@MarketPlace.Models.General.enumCategoryInfoType.PDF.ToString()','@MarketPlace.Models.General.enumCategoryInfoType.Excel.ToString()'],ObjectId:'ThirdKnowledge',Tittle:'Reporte General'})">Generar Reporte</a>
+                    </div>
                     <!--Pager-->
                     @Html.Partial(MVC.Desktop.Shared.Views._TK_ThirdKnowledgeSearch_Pager, Model.RelatedThidKnowledgeSearch)&nbsp;|&nbsp;
                     <span class="POMPTKTotalPagesText">Total Páginas: @(Model.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.TotalPages)</span>
@@ -130,6 +85,22 @@
 @*Templates*@
 <div id="loading"></div>
 
+<input type="hidden" name="ThirdKnowledge_FormQueryPublicId" id="ThirdKnowledge_FormQueryPublicId" value="" />
+@* Report Viewer*@
+@{
+    <div id="ThirdKnowledge_Dialog">
+        <form id="ThirdKnowledge_DialogForm" action="@Url.Action(MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeSearch,MVC.ThirdKnowledge.Name,new
+        {   
+            PageNumber = pageNumber,
+            InitDate = initdate,
+            EndDate = endate,
+            SearchType = searchtype,
+            Status = status, 
+            user = user,
+            Domain = domain,
+        })" method="post"></form>
+    </div>
+}
 
 
 @{
@@ -137,7 +108,7 @@
 }
 @section inlinescripts
 {
-    @Html.Partial(MVC.Desktop.Shared.Views._P_ProviderMenu, Model)
+    @Html.Partial(MVC.Desktop.Shared.Views._P_ProviderMenu, Model)   
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -151,6 +122,15 @@
                                 }))',
             });
             Third_KnowledgeSearch.RenderAsync();
+            MyQueriesSearchObj.Init({
+                ObjectId: 'Search',
+                SearchUrl: '@(Url.RouteUrl(MarketPlace.Models.General.Constants.C_Routes_Default,
+                            new
+                            {
+                                controller = MVC.ThirdKnowledge.Name,
+                                action = MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeSearch
+                            }))',                
+              });
         });
     </script>
 }

@@ -4,43 +4,120 @@
 {
     <div id="Survey_SurveyReport">
         <div id="Survey_SurveyReport_Dialog">
-            <form id="Survey_SurveyReport_Form" action="@Url.Content("~/Desktop/Provider/SVSurveySearch?RPSurveyFilterReport=true&ProviderPublicId=" + Model.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyPublicId)" method="post">
-                <ul>
-                    <li>
-                        <label>Observación</label>
-                        <textarea id="Survey_SurveyReport_Observation" rows="4" cols="40" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_Observation).ToString())_"></textarea>
-                    </li>
-                    <li>
-                        <label>Plan de Acción</label>
-                        <textarea id="Survey_SurveyReport_ActionPlan" rows="4" cols="40" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_ImprovementPlan).ToString())_"></textarea>
-                    </li>
-                </ul>
+            <form id="Survey_SurveyReport_Form" class="SurveyReportDialog" action="@Url.Content("~/Desktop/Provider/SVSurveySearch?RPSurveyFilterReport=true&ProviderPublicId=" + Model.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyPublicId)" method="post">
+
+                <div class="form-group">
+                    <label for="Survey_SurveyReport_Observation">Observación</label>
+                    <textarea id="Survey_SurveyReport_Observation" class="form-control" rows="4" cols="40" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_Observation).ToString())_"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="Survey_SurveyReport_ActionPlan">Plan de Acción</label>
+                    <textarea id="Survey_SurveyReport_ActionPlan" class="form-control" rows="4" cols="40" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_ImprovementPlan).ToString())_"></textarea>
+                </div>
+
+                @{
+                    List<Tuple<string, string>> oEmailToDraw = new List<Tuple<string, string>>();
+                    if (Model.ContactCompanyInfo != null)
+                    {
+                        Model.ContactCompanyInfo.All(x =>
+                        {
+                            if (x.ItemInfo.Where(inf => inf.Value == "210001").Select(inf => inf).ToList() != null &&
+                                x.ItemInfo.Where(inf => inf.Value == "210001").Select(inf => inf).ToList().Count > 0
+                             || x.ItemInfo.Where(inf => inf.Value == "210006").Select(inf => inf).ToList() != null &&
+                                x.ItemInfo.Where(inf => inf.Value == "210006").Select(inf => inf).ToList().Count > 0
+                             || x.ItemInfo.Where(inf => inf.Value == "210009").Select(inf => inf).ToList() != null &&
+                                x.ItemInfo.Where(inf => inf.Value == "210009").Select(inf => inf).ToList().Count > 0)
+                            {
+                                oEmailToDraw.Add(new Tuple<string, string>(x.ItemInfo.Where(inf => inf.ItemInfoType.ItemId == 206007).Select(inf => inf.Value).FirstOrDefault(), x.ItemInfo.Where(s => s.ItemInfoType.ItemId == 206001).Select(s => s.Value).FirstOrDefault()));
+                            }
+                            return true;
+                        });
+                    }
+
+
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">Enviar Reporte de Evaluación</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                @{
+                                    <label>Otro:  <em class="small">(Separar correos por Punto y Coma)</em>
+                                        <input type="text" name="OtherEmails" id="OtherEmails" />
+                                    </label>
+                                    <hr />
+
+                                    if (oEmailToDraw.Count > 0)
+                                    {
+                                        foreach (var item in oEmailToDraw)
+                                        {
+                                            if (item.Item2 == "210001")
+                                            {
+                                            <h5>Contacto Comercial</h5>
+                                            <label for="ComercialEmail">
+                                                <input type="checkbox" name="Emails_@item.Item1"/>
+                                                @item.Item1
+                                            </label>
+                                            }
+                                            if (item.Item2 == "210006")
+                                            {
+                                            <h5>Contacto HSEQ</h5>
+                                            <label for="HSEQEmail">
+                                                <input type="checkbox" name="Emails_@item.Item1" />
+                                                @item.Item1
+                                            </label>
+                                            }
+                                            if (item.Item2 == "210009")
+                                            {
+                                            <h5>Contacto Compras</h5>
+                                            <label for="BuyerEmail">
+                                                <input type="checkbox" name="Emails_@item.Item1" />
+                                                @item.Item1
+                                            </label>
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <label class="col-lg-12 alert alert-info">
+                                            No hay Información de Contactos
+                                        </label>
+                                    }
+                                }
+
+                            </div>
+                        </div>                         
+                    </div>
+
+                }
+
                 @{
                     if (Model.RelatedSurveySearch.SurveySearchResult != null && Model.RelatedSurveySearch.SurveySearchResult.Count > 0)
                     {
-                        <div style="display:none">
-                            <input type="hidden" id="UpsertRequest" name="UpsertRequest" value="true">
-                            <input type="hidden" id="Survey_SurveyReport_InitDateId" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_InitDateReport).ToString())_" value="@Model.RelatedSurveySearch.SurveySearchResult.FirstOrDefault().FilterDateIni">
-                            <input type="hidden" id="Survey_SurveyReport_EndDateId" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_EndDateReport).ToString())_" value="@Model.RelatedSurveySearch.SurveySearchResult.FirstOrDefault().FilterEndDate">
-                            <input type="hidden" id="Survey_SurveyReport_AverageId" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_ReportAverage).ToString())_" value="@Model.RelatedSurveySearch.SurveySearchResult.FirstOrDefault().Average">
-                            <input type="hidden" id="Survey_SurveyReport_ReportDate" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_ReportDate).ToString())_" value="@DateTime.Now">
-                            <input type="hidden" id="Survey_SurveyReport_ProviderPublicId" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_ProviderPublicId).ToString())_" value="@Model.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyPublicId">
-                            <input type="hidden" id="Survey_SurveyReport_ResponsableId" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_ReportResponsable).ToString())_" value="@MarketPlace.Models.General.SessionModel.CurrentLoginUser.Email">
+                        <div class="form-group">
+                            <div style="display:none">
+                                <input type="hidden" id="UpsertRequest" class="form-control" name="UpsertRequest" value="true">
+                                <input type="hidden" id="Survey_SurveyReport_InitDateId" class="form-control" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_InitDateReport).ToString())_" value="@Model.RelatedSurveySearch.SurveySearchResult.FirstOrDefault().FilterDateIni">
+                                <input type="hidden" id="Survey_SurveyReport_EndDateId" class="form-control" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_EndDateReport).ToString())_" value="@Model.RelatedSurveySearch.SurveySearchResult.FirstOrDefault().FilterEndDate">
+                                <input type="hidden" id="Survey_SurveyReport_AverageId" class="form-control" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_ReportAverage).ToString())_" value="@Model.RelatedSurveySearch.SurveySearchResult.FirstOrDefault().Average">
+                                <input type="hidden" id="Survey_SurveyReport_ReportDate" class="form-control" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_ReportDate).ToString())_" value="@DateTime.Now">
+                                <input type="hidden" id="Survey_SurveyReport_ProviderPublicId" class="form-control" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_ProviderPublicId).ToString())_" value="@Model.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyPublicId">
+                                <input type="hidden" id="Survey_SurveyReport_ResponsableId" class="form-control" name="ReportSurveyInfo_@(((int)MarketPlace.Models.General.enumSurveyInfoType.RP_ReportResponsable).ToString())_" value="@MarketPlace.Models.General.SessionModel.CurrentLoginUser.Email">
+                            </div>
                         </div>
                     }
                 }
-                
+
             </form>
         </div>
     </div>
-}
-else
-{
-    <script type="text/javascript">
-        $(document).ready(function () {
-            Provider_SurveyReports.Init({
-                ObjectId: 'Survey_SurveyReport',
-            });
-        });
-    </script>
-}
+                    }
+                    else
+                    {
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                Provider_SurveyReports.Init({
+                                    ObjectId: 'Survey_SurveyReport',
+                                });
+                            });
+                        </script>
+                    }

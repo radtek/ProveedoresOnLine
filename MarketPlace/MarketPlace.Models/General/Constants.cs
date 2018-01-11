@@ -45,6 +45,8 @@
 
         public const string C_Settings_Analytics = "{AreaName}_Analytics";
 
+        public const string C_Settings_ProcablesPublicId = "C_Settings_ProcablesPublicId";
+
         #endregion
 
         #region File
@@ -100,6 +102,8 @@
 
         public const string CC_CompanyPublicId_ClientePolipropileno = "CompanyPublicId_ClientePolipropileno";
 
+        public const string CC_CompanyPublicId_FalabellaCustomer = "CompanyPublicId_FalabellaCustomer";
+
         #endregion
 
         #region Index
@@ -112,9 +116,13 @@
 
         public const string C_Settings_CompanySurveyIndex = "CompanySurveyIndex";
 
-        public const string C_Settings_SurveyIndex = "SurveyIndex";
+        public const string C_Settings_SurveyIndex = "SurveyIndex";        
 
-        public const string C_Settings_ProviderGeneralReport = "ProviderGeneralReportSize";
+        public const string C_Settings_QueryModelIndex = "QueryIndex";
+
+        public const string C_Settings_CalificarionIndex = "CalificationIndex";
+
+        public const string C_Settings_CustomFiltersIndex = "CustomFiltersIndex";
 
         #endregion
 
@@ -144,6 +152,8 @@
 
         #region Report
 
+        public const string C_Settings_ProviderGeneralReport = "ProviderGeneralReportSize";
+
         public const string MP_CP_ReportPath = "MP_CP_ReportPath";
 
         public const string MP_Report_ExcelReportIcon = "Report_ExcelReportIcon";
@@ -151,6 +161,9 @@
         public const string MP_Report_PdfReportIcon = "Report_PdfReportIcon";
 
         public const string MP_TK_TextImage = "TK_TextImage";
+
+        public const string MP_SV_SurveyGeneralReport = "File_SurveyReportS3FilePath";
+       
 
         #endregion
 
@@ -160,16 +173,23 @@
 
         public const string MP_CP_ColPersonType = "MP_CP_ColPersonType";
 
-        public const string MP_CP_ColIdNumber = "MP_CP_ColIdNumber";
+        public const string MP_CP_ColSearchCritery = "MP_CP_ColSearchCritery";
 
-        public const string MP_CP_ColIdName = "MP_CP_ColIdName";
+        public const string MP_CP_ColSearchParam = "MP_CP_ColSearchParam";
 
         public const string C_Settings_TK_UploadSuccessFileAgent = "TK_UploadSuccessFileAgent";
 
         public const string TK_Research_Image = "TK_Research_Image";
 
         public const string TK_File_S3FilePath = "File_S3FilePath";
+        public const string File_S3FileSurveyReportsPath = "File_S3FileSurveyReportsPath";
 
+        public const string TK_ListToValidateSancioned = "TK_ListToValidateSancioned";
+
+        public const string TK_ListToValidatePEP = "TK_ListToValidatePEP";
+
+        public const string TK_ListToValidateGeneralInfo = "TK_ListToValidateGeneralInfo";
+        
         #endregion
 
         #region Notifications
@@ -182,6 +202,8 @@
 
         public const string N_ThirdKnowledgeSingleMessage = "N_ThirdKnowledgeSingleMessage";
 
+        public const string N_Survey_Procables_Mail = "N_Survey_Procables_Mail";
+
         #endregion
 
         #region Url redirect
@@ -190,12 +212,14 @@
 
         #endregion
 
-        #region NotificationIcon
+        #region Notification URL Redirection and Icons
+        public const string C_Settings_NotificationAdditionalInfo_MK = "UrlNotificationAdditionalInfo_MK";
+        public const string C_Settings_NotificationHSEQ_MK = "UrlNotificationHSEQ_MK";
+        public const string C_Settings_NotificationGeneralInfo_Mk = "UrlNotificationGeneralInfo_Mk";
 
-        public const string N_NewNotification = "N_NewNotification";
-
-        public const string N_OldNotification = "N_OldNotification";
-
+        public const string C_Settings_NotificationIconAdditionalInfo = "UrlNotificationIconAdditionalInfo";
+        public const string C_Settings_NotificationIconHSEQ = "UrlNotificationIconHSEQ";
+        public const string C_Settings_NotificationIconGeneralInfo = "UrlNotificationIconGeneralInfo"; 
         #endregion
 
         #endregion

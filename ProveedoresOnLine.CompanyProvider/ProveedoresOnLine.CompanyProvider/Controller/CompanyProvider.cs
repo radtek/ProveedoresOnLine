@@ -1484,6 +1484,11 @@ namespace ProveedoresOnLine.CompanyProvider.Controller
             return DAL.Controller.CompanyProviderDataController.Instance.MPAditionalDocumentGetInfoByType(CustomerPublicId, AditionalDocumentType, ProviderPublicId);
         }
 
+        public static List<Company.Models.Util.GenericItemModel> MPAditionalDocumentGetInfoByCustomer(string CustomerPublicId, int? AditionalDocumentType)
+        {
+            return DAL.Controller.CompanyProviderDataController.Instance.MPAditionalDocumentGetInfoByCustomer(CustomerPublicId, AditionalDocumentType);
+        }
+
         #region MP Reports
 
         public static string MPCreateReportByType(int ReportType, GenericItemModel oReportToBuild)

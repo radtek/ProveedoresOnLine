@@ -1624,7 +1624,7 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
             }
             return oReturn;
         }
-        
+
         #endregion
 
         #region Util MP
@@ -1663,6 +1663,39 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
             return oReturn;
         }
 
+        public List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> MPCategorySearchByIdCategory(int idCatalog, int RowCount)
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
+
+            lstParams.Add(DataInstance.CreateTypedParameter("vIdCatalog", idCatalog));
+            //lstParams.Add(DataInstance.CreateTypedParameter("vSearchParam", SearchParam));
+            lstParams.Add(DataInstance.CreateTypedParameter("vRowCount", RowCount));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "MP_U_Category_SearchByidCategory",
+                CommandType = CommandType.StoredProcedure,
+                Parameters = lstParams,
+            });
+
+            List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> oReturn = null;
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn =
+                    (from cat in response.DataTableResult.AsEnumerable()
+                     //where !cat.IsNull("CategoryId")
+                     select new ProveedoresOnLine.Company.Models.Util.GenericItemModel()
+                     {
+                         ItemId = cat.Field<int>("ItemId"),
+                         ItemName = cat.Field<string>("Name"),
+                     }).ToList();
+            }
+
+            return oReturn;
+        }
         #endregion
 
         #region Company CRUD
@@ -2443,13 +2476,13 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
                                          RoleCompanyId = rc.Field<int>("RoleCompanyId"),
                                          RoleCompanyName = rc.Field<string>("RoleCompanyName"),
                                          ParentRoleCompany = rc.Field<int?>("ParentRoleCompany"),
-                                     }into rcg
+                                     } into rcg
                                      select new RoleCompanyModel()
                                      {
                                          RoleCompanyId = rcg.Key.RoleCompanyId,
                                          RoleCompanyName = rcg.Key.RoleCompanyName,
                                          ParentRoleCompany = rcg.Key.ParentRoleCompany,
-                                         RoleModule = 
+                                         RoleModule =
                                             (from rm in response.DataTableResult.AsEnumerable()
                                              where !rm.IsNull("RoleModuleId") &&
                                                     rm.Field<int>("RoleCompanyId") == rcg.Key.RoleCompanyId
@@ -2459,7 +2492,7 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
                                                  RoleModuleTypeId = rm.Field<int>("RoleModuleTypeId"),
                                                  RoleModuleTypeName = rm.Field<string>("RoleModuleTypeName"),
                                                  RoleModuleName = rm.Field<string>("RoleModuleName"),
-                                             }into rmg
+                                             } into rmg
                                              select new RoleModuleModel()
                                              {
                                                  RoleModuleId = rmg.Key.RoleModuleId,
@@ -2479,7 +2512,7 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
                                                          ModuleOptionTypeId = mo.Field<int>("ModuleOptionTypeId"),
                                                          ModuleOptionTypeName = mo.Field<string>("ModuleOptionTypeName"),
                                                          ModuleOptionName = mo.Field<string>("ModuleOptionName"),
-                                                     }into mog
+                                                     } into mog
                                                      select new GenericItemModel()
                                                      {
                                                          ItemId = mog.Key.ModuleOptionId,
@@ -2500,13 +2533,13 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
                                                                  ModuleOptionIngoTypeName = moi.Field<string>("ModuleOptionIngoTypeName"),
                                                                  ModuleOptionInfoValue = moi.Field<string>("ModuleOptionInfoValue"),
                                                                  ModuleOptionInfoLargeValue = moi.Field<string>("ModuleOptionInfoLargeValue"),
-                                                             }into moig
+                                                             } into moig
                                                              select new GenericItemInfoModel()
                                                              {
                                                                  ItemInfoId = moig.Key.ModuleOptionInfoId,
                                                                  ItemInfoType = new CatalogModel()
                                                                  {
-                                                                     ItemId =  moig.Key.ModuleOptionInfoTypeId,
+                                                                     ItemId = moig.Key.ModuleOptionInfoTypeId,
                                                                      ItemName = moig.Key.ModuleOptionIngoTypeName,
                                                                  },
                                                                  Value = moig.Key.ModuleOptionInfoValue,
@@ -2524,7 +2557,7 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
                                                  ReportRoleTypeId = rr.Field<int>("ReportRoleTypeId"),
                                                  ReportRoleTypeName = rr.Field<string>("ReportRoleTypeName"),
                                                  ReportRoleName = rr.Field<string>("ReportRoleName"),
-                                             }into rrg
+                                             } into rrg
                                              select new GenericItemModel()
                                              {
                                                  ItemId = rrg.Key.ReportRoleId,
@@ -2640,7 +2673,7 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
 
             return Convert.ToInt32(response.ScalarResult);
         }
-        
+
         public int ReportRoleUpsert(int RoleCompanyId, int? ReportRoleId, int ReportRoleType, string ReportRole, bool Enable)
         {
             List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
@@ -2650,7 +2683,7 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
             lstParams.Add(DataInstance.CreateTypedParameter("vReportRoleType", ReportRoleType));
             lstParams.Add(DataInstance.CreateTypedParameter("vReportRole", ReportRole));
             lstParams.Add(DataInstance.CreateTypedParameter("vEnable", Enable == true ? 1 : 0));
-           
+
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
                 CommandExecutionType = ADO.Models.enumCommandExecutionType.NonQuery,
@@ -3062,6 +3095,272 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
                 CommandType = CommandType.StoredProcedure,
             });
         }
+
+
+        public List<CalificationIndexModel> CalificationGetAll()
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "C_IndexCalificationProject",
+                CommandType = System.Data.CommandType.StoredProcedure,
+                Parameters = lstParams
+            });
+
+            List<CalificationIndexModel> oReturn = null;
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn =
+                          (from cp in response.DataTableResult.AsEnumerable()
+                           where !cp.IsNull("CustomerPublicId")
+                           group cp by new
+                           {
+                               CalificationProjectConfigId = !cp.IsNull("CalificationProjectConfigId") ? cp.Field<int>("CalificationProjectConfigId") : 0,
+                               CalificationProjectName = !cp.IsNull("CalificationProjectConfigName") ? cp.Field<string>("CalificationProjectConfigName") : "",
+                               CustomerPublicId = !cp.IsNull("CustomerPublicId") ? cp.Field<string>("CustomerPublicId") : "",
+                               ProviderPublicId = !cp.IsNull("ProviderPublicId") ? cp.Field<string>("ProviderPublicId") : "",
+                               TotalScore = !cp.IsNull("TotalScore") ? cp.Field<int>("TotalScore") : 0,
+                               Result = !cp.IsNull("Result") ? cp.Field<string>("Result") : "",
+                           }
+                               into cpg
+                           select new CalificationIndexModel()
+                           {
+                               CalificationaProjectId = cpg.Key.CalificationProjectConfigId,
+                               CalificationProjectName = cpg.Key.CalificationProjectName,
+                               CustomerPublicId = cpg.Key.CustomerPublicId,
+                               ProviderPublicId = cpg.Key.ProviderPublicId,
+                               TotalScore = cpg.Key.TotalScore,
+                               TotalResult = cpg.Key.Result
+                           }).ToList();
+            }
+            return oReturn;
+        }
+
+        public List<CustomFiltersIndexModel> CustomFiltersGetAll()
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "C_IndexCustomFilters",
+                CommandType = System.Data.CommandType.StoredProcedure,
+                Parameters = lstParams
+            });
+
+            List<CustomFiltersIndexModel> oReturn = null;
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn =
+                          (from cp in response.DataTableResult.AsEnumerable()
+                           where !cp.IsNull("CustomerPublicId")
+                           group cp by new
+                           {
+                               CustomerPublicId = !cp.IsNull("CustomerPublicId") ? cp.Field<string>("CustomerPublicId") : "",
+                               ProviderPublicId = !cp.IsNull("ProviderPublicId") ? cp.Field<string>("ProviderPublicId") : "",
+                               Label = !cp.IsNull("Label") ? cp.Field<string>("Label") : "",
+                               value = !cp.IsNull("value") ? cp.Field<string>("value") : "",
+                           }
+                               into cpg
+                           select new CustomFiltersIndexModel()
+                           {
+                               CustomerPublicId = cpg.Key.CustomerPublicId,
+                               ProviderPublicId = cpg.Key.ProviderPublicId,
+                               Label = cpg.Key.Label,
+                               value = cpg.Key.value
+                           }).ToList();
+            }
+            return oReturn;
+        }
+        #endregion
+
+        #region Notifications Config
+
+        public List<CompanyNotificationModel> NotificationConfigGetByCompany(string CompanyPublicId)
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
+
+            lstParams.Add(DataInstance.CreateTypedParameter("vCompanyPublicId", CompanyPublicId));
+            
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "CC_NotificationConfig_GetByCompanyPublicId",
+                CommandType = System.Data.CommandType.StoredProcedure,
+                Parameters = lstParams
+            });
+
+            List<CompanyNotificationModel> oReturn = null;
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn =
+                    (from c in response.DataTableResult.AsEnumerable()
+                     where !c.IsNull("NotificationConfigId")
+                     group c by new
+                     {
+                         NotificationConfigId = c.Field<int>("NotificationConfigId"),
+                         CustomerPublicId = c.Field<string>("CompanyPublicId"),
+                         NotificationName = c.Field<string>("NotificationName"),
+
+                         LastModify = c.Field<DateTime>("NoficationConfigLastModify"),
+                         CreateDate = c.Field<DateTime>("NoficationConfigCreateDate"),
+                         NotificationEnable = c.Field<UInt64>("Enable") == 1 ? true : false,
+                     } into cg
+                     select new CompanyNotificationModel()
+                     {
+                         CompanyPublicId = cg.Key.CustomerPublicId,
+                         NotificationConfigId = cg.Key.NotificationConfigId,
+                         NotificationName = cg.Key.NotificationName,
+                         LastModify = cg.Key.LastModify,
+                         CreateDate = cg.Key.CreateDate,
+                         Enable = cg.Key.NotificationEnable,
+                         CompanyNotificationInfo = 
+                             (from ci in response.DataTableResult.AsEnumerable()
+                              where !ci.IsNull("InfoNotificationConfigId") &&
+                                    ci.Field<int>("InfoNotificationConfigId") == cg.Key.NotificationConfigId
+                              group ci by new
+                              {
+                                  CompanyNotificationInfoId = ci.Field<int>("NotificationConfigInfoId"),
+                                  ConfigItemTypeId = ci.Field<int>("ConfigItemTypeId"),
+                                  ConfigItemTypeName = ci.Field<string>("ConfigItemTypeName"),
+                                  Value = ci.Field<string>("Value"),
+                                  LargeValue = ci.Field<string>("LargeValue"),
+                              } into cig
+                              select new CompanyNotificationInfoModel()
+                              {
+                                  CompanyNotificationInfoId = cig.Key.CompanyNotificationInfoId,                                  
+                                  ConfigItemType = new CatalogModel()
+                                  {
+                                      ItemId = cig.Key.ConfigItemTypeId,
+                                      ItemName = cig.Key.ConfigItemTypeName,
+                                  },
+                                  Value = cig.Key.Value,
+                                  LargeValue = cig.Key.LargeValue,                                  
+                              }).ToList(),                         
+                             
+                     }).ToList();
+            }
+            return oReturn;
+        }
+
+
+        public List<CompanyNotificationModel> NotificationConfigGetAll()
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
+            
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "CC_NotificationConfig_GetAll",
+                CommandType = System.Data.CommandType.StoredProcedure,
+                Parameters = lstParams
+            });
+
+            List<CompanyNotificationModel> oReturn = null;
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn =
+                    (from c in response.DataTableResult.AsEnumerable()
+                     where !c.IsNull("NotificationConfigId")
+                     group c by new
+                     {
+                         NotificationConfigId = c.Field<int>("NotificationConfigId"),
+                         CustomerPublicId = c.Field<string>("CustomerPublicId"),
+                         NotificationName = c.Field<string>("NotificationName"),
+
+                         LastModify = c.Field<DateTime>("NoficationConfigLastModify"),
+                         CreateDate = c.Field<DateTime>("NoficationConfigCreateDate"),
+                         NotificationEnable = c.Field<UInt64>("Enable") == 1 ? true : false,
+                     } into cg
+                     select new CompanyNotificationModel()
+                     {
+                         CompanyPublicId = cg.Key.CustomerPublicId,
+                         NotificationConfigId = cg.Key.NotificationConfigId,
+                         NotificationName = cg.Key.NotificationName,
+                         LastModify = cg.Key.LastModify,
+                         CreateDate = cg.Key.CreateDate,
+                         Enable = cg.Key.NotificationEnable,
+                         CompanyNotificationInfo =
+                             (from ci in response.DataTableResult.AsEnumerable()
+                              where !ci.IsNull("InfoNotificationConfigId") &&
+                                    ci.Field<int>("InfoNotificationConfigId") == cg.Key.NotificationConfigId
+                              group ci by new
+                              {
+                                  CompanyNotificationInfoId = ci.Field<int>("NotificationConfigInfoId"),
+                                  ConfigItemTypeId = ci.Field<int>("ConfigItemTypeId"),
+                                  ConfigItemTypeName = ci.Field<string>("ConfigItemTypeName"),
+                                  Value = ci.Field<string>("Value"),
+                                  LargeValue = ci.Field<string>("LargeValue"),
+                              } into cig
+                              select new CompanyNotificationInfoModel()
+                              {
+                                  CompanyNotificationInfoId = cig.Key.CompanyNotificationInfoId,
+                                  ConfigItemType = new CatalogModel()
+                                  {
+                                      ItemId = cig.Key.ConfigItemTypeId,
+                                      ItemName = cig.Key.ConfigItemTypeName,
+                                  },
+                                  Value = cig.Key.Value,
+                                  LargeValue = cig.Key.LargeValue,
+                              }).ToList(),
+
+                     }).ToList();
+            }
+            return oReturn;
+        }
+
+        public int NotificationConfigUpsert(string CompanyPublicId, int? NotificationConfigId, string NotificationName, bool Enable)
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
+
+            lstParams.Add(DataInstance.CreateTypedParameter("vCompanyPublicId", CompanyPublicId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vNotificationConfigId", NotificationConfigId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vNotificationName", NotificationName));            
+            lstParams.Add(DataInstance.CreateTypedParameter("vEnable", Enable));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.Scalar,
+                CommandText = "CC_NotificationConfig_Upsert",
+                CommandType = System.Data.CommandType.StoredProcedure,
+                Parameters = lstParams
+            });
+
+            return Convert.ToInt32(response.ScalarResult);
+        }
+
+        public int NotificationConfigInfoUpsert(int NotificationConfigId, int? NotificationConfigInfoId, int ConfigItemType, string Value, string LargeValue, bool Enable)
+        { 
+            List <System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
+            
+            lstParams.Add(DataInstance.CreateTypedParameter("vNotificationConfigId", NotificationConfigId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vNotificationConfigInfoId", NotificationConfigInfoId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vConfigItemType", ConfigItemType));
+            lstParams.Add(DataInstance.CreateTypedParameter("vValue", Value));
+            lstParams.Add(DataInstance.CreateTypedParameter("vLargeValue", LargeValue));
+            lstParams.Add(DataInstance.CreateTypedParameter("vEnable", Enable));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.Scalar,
+                CommandText = "CC_NotificationConfigInfo_Upsert",
+                CommandType = System.Data.CommandType.StoredProcedure,
+                Parameters = lstParams
+            });
+
+            return Convert.ToInt32(response.ScalarResult);
+        }
+
 
         #endregion
     }

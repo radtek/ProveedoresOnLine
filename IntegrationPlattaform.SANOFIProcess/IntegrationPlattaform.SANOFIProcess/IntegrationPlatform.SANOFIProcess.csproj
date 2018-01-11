@@ -89,6 +89,7 @@
     <Compile Include="DAL\MySQLDAO\SANOFIProcess_MySqlDao.cs" />
     <Compile Include="Interfaces\IIntegrationPlatformSANOFIProcessData.cs" />
     <Compile Include="Models\Constants.cs" />
+    <Compile Include="Models\Enumerators.cs" />
     <Compile Include="Models\InternalSettings.cs" />
     <Compile Include="Models\SanofiComercialInfoModel.cs" />
     <Compile Include="Models\SanofiContableInfoModel.cs" />

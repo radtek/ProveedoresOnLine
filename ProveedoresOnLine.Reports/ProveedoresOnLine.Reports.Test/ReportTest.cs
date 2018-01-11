@@ -148,5 +148,53 @@ namespace ProveedoresOnLine.Reports.Test
         }
 
         #endregion
+
+        [TestMethod]
+        public void SurveyReportGenerator()
+        {
+            var oReturn = ProveedoresOnLine.Reports.Controller.ReportModule.SurveyReportGenerator(new List<string>(), "DA5C572E");
+
+            Assert.AreEqual(true, oReturn != null);
+        }
+
+        #region ThirdKnowledgeReport
+
+        [TestMethod]
+        public void TK_QueryNewReport()
+        {
+            List<ReportParameter> parameters = new List<ReportParameter>();
+            parameters.Add(new ReportParameter("CustomerName", "Representante de prueba"));
+            parameters.Add(new ReportParameter("CustomerIdentification", "124235345"));
+            parameters.Add(new ReportParameter("User", "sergio.palacios@proveedoresonline.co"));
+            parameters.Add(new ReportParameter("CreateDate", DateTime.Now.ToString()));
+            parameters.Add(new ReportParameter("QueryType", "345"));
+            parameters.Add(new ReportParameter("Status", "1"));
+            parameters.Add(new ReportParameter("CustomerIdentificationType", "54"));
+            parameters.Add(new ReportParameter("CustomerImage", "345345"));
+
+            //Query Info Parameters
+            parameters.Add(new ReportParameter("ThirdKnowledgeText", "34534"));
+            parameters.Add(new ReportParameter("IsSuccess", "true"));
+
+            parameters.Add(new ReportParameter("searchName", ""));
+            parameters.Add(new ReportParameter("searchIdentification", ""));
+            
+            parameters.Add(new ReportParameter("GroupNameDce", "sdfsd"));
+
+            DataTable data = new DataTable();
+            DataTable data1 = new DataTable();
+
+            Tuple<byte[], string, string> report =
+                ProveedoresOnLine.Reports.Controller.ReportModule.TK_QueryReportNew("PDF",
+                                                                                     data,
+                                                                                     data1,
+                                                                                     parameters,
+                                                                                     "C:\\Users\\Yamile García Vega\\source\\repos\\ProveedoresOnLine\\ProveedoresOnLine.Reports\\ProveedoresOnLine.Reports\\Reports\\TK_Report_ThirdKnowledgeQueryNew.rdlc");
+            parameters = null;            
+        }
+         
+        #endregion
+
+
     }
 }

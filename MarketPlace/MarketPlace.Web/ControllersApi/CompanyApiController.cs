@@ -113,46 +113,5 @@ namespace MarketPlace.Web.ControllersApi
 
         #endregion
 
-        #region Notifications
-
-        [HttpPost]
-        [HttpGet]
-        public List<MarketPlace.Models.General.NotificationViewModel> NGetNotifications
-            (string NGetNotifications, string User, string CompanyPublicId, string Enable)
-        {
-            List<MarketPlace.Models.General.NotificationViewModel> oReturn = new List<NotificationViewModel>();
-
-            if (NGetNotifications == "true")
-            {
-                List<MessageModule.Client.Models.NotificationModel> oNotifications =
-                    MessageModule.Client.Controller.ClientController.NotificationGetByUser
-                    (CompanyPublicId, User, Enable == "true" ? true : false);
-
-                if (oNotifications != null &&
-                    oNotifications.Count > 0)
-                {
-                    oNotifications.All(x =>
-                    {
-                        oReturn.Add(new NotificationViewModel(x));
-                        return true;
-                    });
-                }
-            }
-
-            return oReturn;
-        }
-
-        [HttpPost]
-        [HttpGet]
-        public void NDeleteNotifications
-            (string NDeleteNotifications, string NotificationId)
-        {
-            if (NDeleteNotifications == "true")
-            {
-                MessageModule.Client.Controller.ClientController.NotificationDeleteById(Convert.ToInt32(NotificationId));
-            }
-        }
-
-        #endregion
     }
 }

@@ -21,7 +21,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Interfaces
 
         List<Models.PlanModel> GetCurrenPeriod(string CustomerPublicId, bool Enable);
 
-        List<Models.TDQueryModel> ThirdKnowledgeSearch(string CustomerPublicId, string RelatedUser, string StartDate, string EndtDate, int PageNumber, int RowCount, string SearchType, string Status, out int TotalRows);
+        List<Models.TDQueryModel> ThirdKnowledgeSearch(string CustomerPublicId, string RelatedUser,string Domain, string StartDate, string EndtDate, int PageNumber, int RowCount, string SearchType, string Status, out int TotalRows);
 
         List<Models.TDQueryModel> ThirdKnowledgeSearchByPublicId(string QueryPublicId, int PageNumber, int RowCount, out int TotalRows);
         List<string> GetUsersBycompanyPublicId(string vCompanyPublicId);

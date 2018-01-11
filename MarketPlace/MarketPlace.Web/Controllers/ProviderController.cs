@@ -13,12 +13,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using ProveedoresOnLine.CalificationProject.Models.CalificationProject;
-using ProveedoresOnLine.CalificationBatch.Models;
 using Nest;
 using ProveedoresOnLine.Company.Models.Company;
-using MarketPlace.Models.ElasticSearchModels;
-using MarketPlace.Models.Survey;
-
+using System.IO.MemoryMappedFiles;
+using MessageModule.Client.Models;
 
 namespace MarketPlace.Web.Controllers
 {
@@ -75,6 +73,10 @@ namespace MarketPlace.Web.Controllers
                     BlackListFilter = new List<ElasticSearchFilter>(),
                     MyProvidersFilter = new List<ElasticSearchFilter>(),
                     OtherProvidersFilter = new List<ElasticSearchFilter>(),
+                    CalificationResultFilter = new List<ElasticSearchFilter>(),
+                    CalificationTypeProcessFilter = new List<ElasticSearchFilter>(),
+                    CustomTypeFilter = new List<ElasticSearchFilter>(),
+                    CustomerFilterObject = new Tuple<List<ElasticSearchFilter>, List<string>>(new List<ElasticSearchFilter>(), new List<string>()),
                 };
 
                 #region ElasticSearch
@@ -103,6 +105,23 @@ namespace MarketPlace.Web.Controllers
                                 )
                             )
                         )
+                        .Nested("calification_avg", x => x.
+                            Path(p => p.oCalificationIndexModel).
+                                Aggregations(aggs => aggs.Terms("calification", term => term.Field(fi => fi.oCalificationIndexModel.First().CalificationProjectName)
+                                )
+                            )
+                        ).Nested("calification_result_avg", x => x.
+                            Path(p => p.oCalificationIndexModel).
+                                Aggregations(aggs => aggs.Terms("calification_result", term => term.Field(fi => fi.oCalificationIndexModel.First().TotalResult)
+                                )
+                            )
+                        ).Nested("customfiltertype_avg", x => x.
+                            Path(p => p.oCustomFiltersIndexModel).
+                                Aggregations(aggs => aggs.Terms("customfiltertype", term => term.Field(fi => fi.oCustomFiltersIndexModel.First().Label).Size(50)
+                                )
+                            )
+                        )                   
+
                     .Terms("ica", aggv => aggv
                         .Field(fi => fi.ICAId))
                     .Terms("city", aggv => aggv
@@ -112,35 +131,39 @@ namespace MarketPlace.Web.Controllers
                     .Terms("blacklist", bl => bl
                         .Field(fi => fi.InBlackList)))
                 .Query(q => q.
-                    Filtered(f => f
-                    .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
-                    .Filter(f2 =>
+                    Bool(bl => bl
+                    //Filtered(f => f
+                    //.Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
+                    .Should(f2 =>
                     {
                         QueryContainer qb = null;
+                        //qb &= q.QueryString(qs => qs.Query(SearchParam));
 
+                        qb &= f2.QueryString(qs => qs.Query(SearchParam));
+                        #region Filters
                         #region Basic Providers Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
                         }
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
                         }
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
                         }
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
                         }
                         #endregion
 
                         #region My Providers Filter
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.MyProviders).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                             .Path(p => p.oCustomerProviderIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
@@ -154,7 +177,7 @@ namespace MarketPlace.Web.Controllers
                         #region Other Providers Filter
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.OtherProviders).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                             .Path(p => p.oCustomerProviderIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
@@ -167,13 +190,17 @@ namespace MarketPlace.Web.Controllers
                         #region Provider Status
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                              .Path(p => p.oCustomerProviderIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
                                 .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
                                 .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault())
-                                )
+                                ) &&
+                                f2.Match(m => m
+                                        .Field(Field => Field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                        .Query(SessionModel.CurrentCompany.CompanyPublicId.ToLower())
+                                    )
                               )
                            );
                         }
@@ -184,7 +211,7 @@ namespace MarketPlace.Web.Controllers
                         if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1"
                                                         && SessionModel.CurrentCompany.CompanyPublicId != Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                             .Path(p => p.oCustomerProviderIndexModel)
                                 .Query(fq => fq
                                     .Match(match => match
@@ -193,170 +220,367 @@ namespace MarketPlace.Web.Controllers
                         }
                         else
                         {
-                            qb &= q.Nested(n => n
-                            .Path(p => p.oCustomerProviderIndexModel)
-                                .Query(fq => fq
-                                    .Match(match => match
-                                    .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                                    .Query(SessionModel.CurrentCompany.CompanyPublicId))
-                                ));
+                            qb &= f2.Nested(n => n
+                           .Path(p => p.oCustomerProviderIndexModel)
+                               .Query(fq => fq
+                                   .Match(match => match
+                                   .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                   .Query(SessionModel.CurrentCompany.CompanyPublicId))
+                               ));
                         }
                         #endregion
 
-                        qb &= q.Term(m => m.CompanyEnable, true);
+                        #region Calification
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= f2.Nested(n => n
+                             .Path(p => p.oCalificationIndexModel)
+                            .Query(fq => fq
+                                .Match(match => match
+                                .Field(field => field.oCalificationIndexModel.First().CalificationProjectName)
+                                .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y.Item1).FirstOrDefault())
+                                )
+                                 && f2.Match(m => m
+                                        .Field(Field => Field.oCalificationIndexModel.First().CustomerPublicId)
+                                        .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                    )
+                              )
+                           );
+                        }
+
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= f2.Nested(n => n
+                             .Path(p => p.oCalificationIndexModel)
+                            .Query(fq => fq
+                                .Match(match => match
+                                .Field(field => field.oCalificationIndexModel.First().TotalResult)
+                                 .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y.Item1).FirstOrDefault())
+                                )
+                                && f2.Match(m => m
+                                        .Field(Field => Field.oCalificationIndexModel.First().CustomerPublicId)
+                                        .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                    )
+
+                              )
+                           );
+                        }
+
+                        #endregion
+
+                        #region Custom Filters
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= f2.Nested(n => n
+                             .Path(p => p.oCustomFiltersIndexModel)
+                            .Query(fq => fq
+                                .Match(match => match
+                                .Field(field => field.oCustomFiltersIndexModel.First().value)
+                                .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y.Item1).FirstOrDefault())
+                                )
+                                 && f2.Match(m => m
+                                        .Field(Field => Field.oCustomFiltersIndexModel.First().CustomerPublicId)
+                                        .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                    )
+                              )
+                           );
+                        }
+
+                        #endregion 
+                        #endregion
+                        qb &= f2.Term(m => m.CompanyEnable, true);
                         return qb;
                     })
                     ))
                 );
 
                 var settings2 = new ConnectionSettings(node);
-                settings2.DisableDirectStreaming(true);
+                settings2.DisableDirectStreaming();
                 settings2.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CustomerProviderIndex].Value);
+                settings2.RequestTimeout(TimeSpan.FromMilliseconds(60000));
+                #region All Providers
 
-                #region Customer Provider Search
+                var settings3 = new ConnectionSettings(node);
+                settings3.DisableDirectStreaming(true);
+                settings3.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanyIndex].Value);
+                
 
-                ElasticClient CustomerProviderClient = new ElasticClient(settings2);
-                Nest.ISearchResponse<CustomerProviderIndexModel> result = CustomerProviderClient.Search<CustomerProviderIndexModel>((s => s
+                ElasticClient Providers = new ElasticClient(settings3);
+                Nest.ISearchResponse<CompanyIndexModel> resultPrv = Providers.Search<CompanyIndexModel>((t => t
                     .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
                     .TrackScores(true)
-                    .Size(20)
-                    .Aggregations
-                        (agg => agg
-                        .Terms("myproviders", aggv => aggv
-                        .Field(fi => fi.CustomerPublicId))
-                        .Terms("status", aggv => aggv
-                            .Field(fi => fi.StatusId)))
-                    .Query(q => q.
-                        Filtered(f => f                            
-                            .Query(q1 => q.Term(m => m.CustomerPublicId, lstSearchFilter.Where(x => int.Parse(x.Item3) == (int)enumFilterType.OtherProviders).Select(x => x).ToList().Count > 0
-                                                                                                ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.CC_CompanyPublicId_Publicar].Value.ToLower() : SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
-                            .Filter(f2 =>
+                    .Size(9000000)
+                    .Query(qw => qw.
+                        Bool(fw => fw
+                            //.Query(q1 => q1.MatchAll() && qw.QueryString(qs => qs.Query(SearchParam)))
+                            .Should(f3 =>
                             {
-                                QueryContainer qb = null;
+                                QueryContainer qb2 = null;
 
+                                qb2 &= f3.MatchAll() && f3.QueryString(qs => qs.Query(SearchParam));
+                                #region Basic Providers Filters
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= f3.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
+                                }
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= f3.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
+                                }
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= f3.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
+                                }
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= f3.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
+                                }
+                                #endregion
+
+                                #region My Providers Filter
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.MyProviders).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= f3.Nested(n => n
+                                    .Path(p => p.oCustomerProviderIndexModel)
+                                    .Query(fq => fq
+                                        .Match(match => match
+                                        .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                        .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                        )
+                                   ));
+                                }
+                                #endregion
+
+                                #region Other Providers Filter
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.OtherProviders).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= f3.Nested(n => n
+                                    .Path(p => p.oCustomerProviderIndexModel)
+                                    .Query(fq => fq
+                                        .Match(match => match
+                                        .Field(field => field.oCustomerProviderIndexModel.Where(y => y.CustomerPublicId != SessionModel.CurrentCompany.CompanyPublicId).Select(y => y).First().CustomerPublicId)
+                                        )
+                                   ));
+                                }
+                                #endregion
+
+                                #region Provider Status
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb &= q.Term(m => m.StatusId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault());
-                                }                                
-                                    var settings3 = new ConnectionSettings(node);
-                                    settings3.DisableDirectStreaming(true);
-                                    settings3.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanyIndex].Value);
+                                    qb2 &= f3.Nested(n => n
+                                     .Path(p => p.oCustomerProviderIndexModel)
+                                    .Query(fq => fq
+                                        .Match(match => match
+                                        .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
+                                        .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault())
+                                        )
+                                        &&
+                                        fq.Match(m => m
+                                            .Field(Field => Field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                            .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                        )
+                                      )
+                                   );
+                                }
 
-                                    ElasticClient Providers = new ElasticClient(settings3);
-                                    Nest.ISearchResponse<CompanyIndexModel> resultPrv = Providers.Search<CompanyIndexModel>((t => t
-                                        .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
-                                        .TrackScores(true)
-                                        .Size(9000000)
-                                        .Query(qw => qw.
-                                            Filtered(fw => fw
-                                                .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
-                                                .Filter(f3 =>
-                                                {
-                                                    QueryContainer qb2 = null;
-                                                    #region Basic Providers Filters
-                                                    if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
-                                                    {
-                                                        qb2 &= qw.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
-                                                    }
-                                                    if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
-                                                    {
-                                                        qb2 &= qw.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
-                                                    }
-                                                    if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y).FirstOrDefault() != null)
-                                                    {
-                                                        qb2 &= qw.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
-                                                    }
-                                                    if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y).FirstOrDefault() != null)
-                                                    {
-                                                        qb2 &= qw.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
-                                                    }
-                                                    #endregion
+                                #endregion
 
-                                                    #region My Providers Filter
-                                                    if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.MyProviders).Select(y => y).FirstOrDefault() != null)
-                                                    {
-                                                        qb2 &= qw.Nested(n => n
-                                                        .Path(p => p.oCustomerProviderIndexModel)
-                                                        .Query(fq => fq
-                                                            .Match(match => match
-                                                            .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                                                            .Query(SessionModel.CurrentCompany.CompanyPublicId)
-                                                            )
-                                                       ));
-                                                    }
-                                                    #endregion
+                                #region Calification
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= f3.Nested(n => n
+                                     .Path(p => p.oCalificationIndexModel)
+                                    .Query(fq => fq
+                                        .Match(match => match
+                                        .Field(field => field.oCalificationIndexModel.First().CalificationProjectName)
+                                        .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y.Item1).FirstOrDefault())
+                                        )
+                                      )
+                                   );
+                                }
 
-                                                    #region Other Providers Filter
-                                                    if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.OtherProviders).Select(y => y).FirstOrDefault() != null)
-                                                    {
-                                                        qb2 &= qw.Nested(n => n
-                                                        .Path(p => p.oCustomerProviderIndexModel)
-                                                        .Query(fq => fq
-                                                            .Match(match => match
-                                                            .Field(field => field.oCustomerProviderIndexModel.Where(y => y.CustomerPublicId != SessionModel.CurrentCompany.CompanyPublicId).Select(y => y).First().CustomerPublicId)
-                                                            )
-                                                       ));
-                                                    }
-                                                    #endregion
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= f3.Nested(n => n
+                                     .Path(p => p.oCalificationIndexModel)
+                                    .Query(fq => fq
+                                        .Match(match => match
+                                        .Field(field => field.oCalificationIndexModel.First().TotalResult)
+                                        .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y.Item1).FirstOrDefault())
+                                        )
+                                      )
+                                   );
+                                }
 
-                                                    #region Provider Status
-                                                    if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
-                                                    {
-                                                        qb2 &= qw.Nested(n => n
-                                                         .Path(p => p.oCustomerProviderIndexModel)
-                                                        .Query(fq => fq
-                                                            .Match(match => match
-                                                            .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
-                                                            .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault())
-                                                            )
-                                                          )
-                                                       );
-                                                    }
+                                #endregion
 
-                                                    #endregion
+                                #region Custom Filters
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= f3.Nested(n => n
+                                     .Path(p => p.oCustomFiltersIndexModel)
+                                    .Query(fq => fq
+                                        .Match(match => match
+                                        .Field(field => field.oCustomFiltersIndexModel.First().value)
+                                        .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y.Item1).FirstOrDefault())
+                                        )
+                                         && fq.Match(m => m
+                                                .Field(Field => Field.oCustomFiltersIndexModel.First().CustomerPublicId)
+                                                .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                            )
+                                      )
+                                   );
+                                }
 
-                                                    #region Can see other Providers?
-                                                    if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1"
-                                                        && SessionModel.CurrentCompany.CompanyPublicId != Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value)
-                                                    {
-                                                        qb2 &= qw.Nested(n => n
-                                                        .Path(p => p.oCustomerProviderIndexModel)
-                                                            .Query(fq => fq
-                                                                .Match(match => match
-                                                                .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId))
-                                                              ));
-                                                    }
-                                                    else
-                                                    {
-                                                        qb2 &= qw.Nested(n => n
-                                                        .Path(p => p.oCustomerProviderIndexModel)
-                                                            .Query(fq => fq
-                                                                .Match(match => match
-                                                                .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                                                                .Query(SessionModel.CurrentCompany.CompanyPublicId))
-                                                            ));
-                                                    }
-                                                    #endregion
-                                                    return qb2;
-                                                })
-                                            )))
-                                        );
+                                #endregion
 
+                                #region Can see other Providers?
+                                if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1"
+                                     && SessionModel.CurrentCompany.CompanyPublicId != Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value)
+                                {
+                                    qb2 &= f3.Nested(n => n
+                                    .Path(p => p.oCustomerProviderIndexModel)
+                                        .Query(fq => fq
+                                            .Match(match => match
+                                            .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId))
+                                          ));
+                                }
+                                else
+                                {
+                                    qb2 &= f3.Nested(n => n
+                                    .Path(p => p.oCustomerProviderIndexModel)
+                                        .Query(fq => fq
+                                            .Match(match => match
+                                            .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                            .Query(SessionModel.CurrentCompany.CompanyPublicId))
+                                        ));
+                                }
 
-
-                                    qb &= q.Terms(tms => tms
-                                     .Field(fi => fi.ProviderPublicId)
-                                     .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
-                                    );
-                                //}
-
-                                return qb;
+                                #endregion
+                                return qb2;
                             })
                         )))
                     );
 
+                #endregion
 
+                #region Customer Provider Search
+                               
+                ElasticClient CustomerProviderClient = new ElasticClient(settings2);
+                Nest.ISearchResponse<CustomerProviderIndexModel> result = CustomerProviderClient.Search<CustomerProviderIndexModel>((s => s
+                .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
+                .TrackScores(true)
+                .Size(20)
+
+                .Aggregations
+                    (agg => agg
+                    .Terms("myproviders", aggv => aggv
+                    .Field(fi => fi.CustomerPublicId))
+                    .Terms("status", aggv => aggv
+                        .Field(fi => fi.StatusId)))
+                .Query(q => q.
+                    Bool(f => f                       
+                        .Should(f2 =>
+                        {
+                            QueryContainer qb = null;
+                            qb &= f2.Term(m => m.CustomerPublicId, lstSearchFilter.Where(x => int.Parse(x.Item3) == (int)enumFilterType.OtherProviders).Select(x => x).ToList().Count > 0
+                                                                                            ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.CC_CompanyPublicId_Publicar].Value.ToLower() : SessionModel.CurrentCompany.CompanyPublicId.ToLower());
+                            if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
+                            {
+                                qb &= f2.Term(m => m.StatusId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault());
+                            }
+                            qb &= f2.Term(tms => tms.CustomerPublicId.ToLower(), SessionModel.CurrentCompany.CompanyPublicId.ToLower());                         
+                           return qb;
+                        })
+                    )))
+                );
+                
                 oModel.TotalRows = (int)oModel.ElasticCompanyModel.Total;
+                #endregion
+
+                #region Calification Search
+                var calificationSettings = new ConnectionSettings(node);
+                calificationSettings.DisableDirectStreaming(true);
+                calificationSettings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CalificarionIndex].Value);
+
+                ElasticClient CalificationClient = new ElasticClient(calificationSettings);
+                Nest.ISearchResponse<CalificationIndexModel> resultCalification = CalificationClient.Search<CalificationIndexModel>((s => s
+                    .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
+                    .TrackScores(true)
+                    .Size(9000000)
+                    .Aggregations
+                        (agg => agg
+                        .Terms("calification_avg", aggv => aggv
+                        .Field(fi => fi.CalificationProjectName))
+                        .Terms("calification_result_avg", aggv => aggv
+                            .Field(fi => fi.TotalResult)))
+                         .Query(q => q.
+                          Bool(f => f
+                            //.Query(q1 => q.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
+                            .Must(f2 =>
+                            {
+                                QueryContainer qb = null;
+                                qb &= f2.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower());
+                                #region Calification
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb &= f2.Term(m => m.CalificationProjectName, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y.Item1).FirstOrDefault());
+
+                                }
+
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb &= f2.Term(m => m.TotalResult, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y.Item1).FirstOrDefault());
+                                }
+
+                                #endregion
+
+                                //qb &= f2.Terms(tms => tms
+                                // .Field(fi => fi.ProviderPublicId.ToLower())
+                                // .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList().Take(1000))
+                                //);
+                                return qb;
+
+                            })))));
+
+                #endregion
+
+                #region Custom Filter Search
+                var customSettings = new ConnectionSettings(node);
+                customSettings.DisableDirectStreaming(true);
+                customSettings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CustomFiltersIndex].Value);
+
+                ElasticClient CustomClient = new ElasticClient(customSettings);
+                Nest.ISearchResponse<CustomFiltersIndexModel> resultCustom = CustomClient.Search<CustomFiltersIndexModel>((s => s
+                    .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
+                    .TrackScores(true)
+                    .Size(9000000)
+                    .Aggregations
+                        (agg => agg
+                        .Terms("customfiltertype_avg", aggv => aggv
+                        .Field(fi => fi.Label).Size(50))
+                        .Terms("customfilter_item_avg", aggv => aggv
+                            .Field(fi => fi.value).Size(50)))
+                         .Query(q => q.
+                          Bool(f => f
+                            //.Query(q1 => q.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
+                            .Should(f2 =>
+                            {
+                                QueryContainer qb = null;
+                                qb &= f2.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower());
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb &= f2.Term(m => m.value, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y.Item1).FirstOrDefault());
+                                }
+
+                                //qb &= f2.Terms(tms => tms
+                                // .Field(fi => fi.CustomerPublicId)
+                                // .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList().Take(1000))
+                                //);
+                                return qb;
+
+                            })))));
+
                 #endregion
 
                 //parse view model
@@ -403,15 +627,15 @@ namespace MarketPlace.Web.Controllers
                 #region Status Aggregation
 
                 result.Aggs.Terms("status").Buckets.All(x =>
+                {
+                    oModel.StatusFilter.Add(new ElasticSearchFilter
                     {
-                        oModel.StatusFilter.Add(new ElasticSearchFilter
-                        {
-                            FilterCount = (int)x.DocCount,
-                            FilterType = x.Key,
-                            FilterName = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(x.Key.Split('.')[0]),
-                        });
-                        return true;
+                        FilterCount = (int)x.DocCount,
+                        FilterType = x.Key,
+                        FilterName = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(x.Key.Split('.')[0]),
                     });
+                    return true;
+                });
                 #endregion
 
                 #region ICA Aggregation
@@ -458,7 +682,7 @@ namespace MarketPlace.Web.Controllers
                       {
                           oModel.MyProvidersFilter.Add(new ElasticSearchFilter
                           {
-                              FilterCount = ProvidersStatusCount,
+                              FilterCount = (int)x.DocCount,
                               FilterType = x.Key,
                           });
                           ProvidersForClientcount = (int)x.DocCount;
@@ -496,23 +720,83 @@ namespace MarketPlace.Web.Controllers
                     }
                     else
                     {
-                        oModel.OtherProvidersFilter.Add(new ElasticSearchFilter
-                       {
-                           FilterCount = (int)oModel.ElasticCompanyModel.Total,
-                           FilterType = enumFilterType.OtherProviders.ToString(),
-                       });
+                        if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1")
+                        {
+                            oModel.OtherProvidersFilter.Add(new ElasticSearchFilter
+                            {
+                                FilterCount = (int)oModel.ElasticCompanyModel.Total - ProvidersStatusCount,
+                                FilterType = enumFilterType.OtherProviders.ToString(),
+                            });
+                        }
                     }
 
                 }
                 else
                 {
-                    oModel.OtherProvidersFilter.Add(new ElasticSearchFilter
+
+                    if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1")
                     {
-                        FilterCount = (int)oModel.ElasticCompanyModel.Total - ProvidersStatusCount,
-                        FilterType = enumFilterType.OtherProviders.ToString(),
-                    });
+                        oModel.OtherProvidersFilter.Add(new ElasticSearchFilter
+                        {
+                            FilterCount = (int)oModel.ElasticCompanyModel.Total,
+                            FilterType = enumFilterType.OtherProviders.ToString(),
+                        });
+                    }
                 }
 
+
+                #endregion
+
+                #region Calification Type
+
+                resultCalification.Aggs.Terms("calification_avg").Buckets.All(x =>
+                      {
+                          oModel.CalificationTypeProcessFilter.Add(new ElasticSearchFilter
+                          {
+                              FilterCount = (int)x.DocCount,
+                              FilterName = x.Key,
+                              FilterType = enumFilterType.CalificationType.ToString(),
+                          });
+                          ProvidersForClientcount = (int)x.DocCount;
+                          return true;
+                      });
+
+                #endregion
+
+                #region Calification Score
+
+                resultCalification.Aggs.Terms("calification_result_avg").Buckets.All(x =>
+                      {
+                          oModel.CalificationResultFilter.Add(new ElasticSearchFilter
+                          {
+                              FilterCount = (int)x.DocCount,
+                              FilterName = x.Key,
+                              FilterType = enumFilterType.CalificationResult.ToString(),
+                          });
+                          ProvidersForClientcount = (int)x.DocCount;
+                          return true;
+                      });
+
+                #endregion
+
+                #region Custom Filters Type
+
+                List<string> oFilterName = new List<string>();
+                resultCustom.Aggs.Terms("customfilter_item_avg").Buckets.All(x =>
+                {
+
+                    oModel.CustomTypeFilter.Add(new ElasticSearchFilter
+                    {
+                        FilterCount = (int)x.DocCount,
+                        FilterName = x.Key,
+                        FilterType = enumFilterType.CustomFilterType.ToString(),
+                    });
+                    ProvidersForClientcount = (int)x.DocCount;
+
+                    oFilterName.Add(x.Key.Split('/').ToList()[0]);
+                    oModel.CustomerFilterObject = new Tuple<List<ElasticSearchFilter>, List<string>>(oModel.CustomTypeFilter, oFilterName);
+                    return true;
+                });
 
                 #endregion
 
@@ -604,13 +888,19 @@ namespace MarketPlace.Web.Controllers
                             if (int.Parse(x.Item3) == (int)enumFilterType.OtherProviders && oModel.OtherProvidersFilter.Count > 0)
                                 newFilterUrl += "," + x.Item1 + ";" + oModel.OtherProvidersFilter.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
 
+                            if (int.Parse(x.Item3) == (int)enumFilterType.CalificationType && oModel.OtherProvidersFilter.Count > 0)
+                                newFilterUrl += "," + x.Item1 + ";" + oModel.CalificationTypeProcessFilter.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
+
+                            if (int.Parse(x.Item3) == (int)enumFilterType.CalificationResult && oModel.OtherProvidersFilter.Count > 0)
+                                newFilterUrl += "," + x.Item1 + ";" + oModel.CalificationResultFilter.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
+
+                            if (int.Parse(x.Item3) == (int)enumFilterType.CustomFilterItem && oModel.CustomerFilterObject.Item1.Count > 0)
+                                newFilterUrl += "," + x.Item1 + ";" + oModel.CustomerFilterObject.Item1.FirstOrDefault().FilterCount + ";" + x.Item3 + ",";
                             return true;
                         });
                     oModel.SearchFilter = newFilterUrl;
                 }
             }
-
-
             return View(oModel);
         }
 
@@ -1261,7 +1551,7 @@ namespace MarketPlace.Web.Controllers
 
                 oOrderGroup.Add(oGroupListName.Where(x => x.Contains("Criticidad Alta")).Select(x => x).FirstOrDefault());
                 oOrderGroup.Add(oGroupListName.Where(x => x.Contains("Criticidad Media")).Select(x => x).FirstOrDefault());
-                oOrderGroup.Add(oGroupListName.Where(x => x.Contains("Criticidad Baja")).Select(x => x).FirstOrDefault());                
+                oOrderGroup.Add(oGroupListName.Where(x => x.Contains("Criticidad Baja")).Select(x => x).FirstOrDefault());
                 oOrderGroup.Add(oGroupListName.Where(x => x.Contains("SIN COINCIDENCIAS")).Select(x => x).FirstOrDefault());
 
                 string searchName = "";
@@ -3177,80 +3467,220 @@ namespace MarketPlace.Web.Controllers
 
             if (Request["UpsertRequest"] == "true")
             {
+                var CompanyPublicId = SessionModel.CurrentCompany.CompanyPublicId;
                 List<ReportParameter> parameters = new List<ReportParameter>();
-                ProviderModel oToInsert = new ProviderModel()
+                Tuple<byte[], string, string> report;
+                ProviderModel oToInsert = new ProviderModel();
+                if (Models.General.InternalSettings.Instance[Models.General.Constants.C_Settings_ProcablesPublicId].Value == CompanyPublicId)
                 {
-                    RelatedCompany = new ProveedoresOnLine.Company.Models.Company.CompanyModel()
+                    oToInsert = new ProviderModel()
                     {
-                        CompanyPublicId = ProviderPublicId,
-                    },
-                    RelatedReports = new List<GenericItemModel>(),
-                };
-                oToInsert.RelatedReports.Add(this.GetSurveyReportFilterRequest());
-                ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPReportUpsert(oToInsert);
+                        RelatedCompany = new ProveedoresOnLine.Company.Models.Company.CompanyModel()
+                        {
+                            CompanyPublicId = ProviderPublicId,
+                        },
+                        RelatedReports = new List<GenericItemModel>(),
+                    };
+                    oToInsert.RelatedReports.Add(this.GetSurveyReportFilterRequest());
+                    ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPReportUpsert(oToInsert);
+                    DataTable data = new DataTable();
+                    data.Columns.Add("ProviderName");
+                    data.Columns.Add("StartDate");
+                    data.Columns.Add("EndDate");
+                    data.Columns.Add("EvaluationType");
+                    data.Columns.Add("SurveyScore");
 
-                parameters.Add(new ReportParameter("currentCompanyName", SessionModel.CurrentCompany.CompanyName));
-                parameters.Add(new ReportParameter("currentCompanyTipoDni", SessionModel.CurrentCompany.IdentificationType.ItemName));
-                parameters.Add(new ReportParameter("currentCompanyDni", SessionModel.CurrentCompany.IdentificationNumber));
-                parameters.Add(new ReportParameter("currentCompanyLogo", SessionModel.CurrentCompany_CompanyLogo));
-                parameters.Add(new ReportParameter("providerName", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName.ToString()));
-                parameters.Add(new ReportParameter("providerTipoDni", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationType.ItemName.ToString()));
-                parameters.Add(new ReportParameter("providerDni", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationNumber.ToString()));
-                //order items reports
-                if (oToInsert.RelatedReports != null)
+                    DataRow row;
+
+                    //order items reports
+                    if (oToInsert.RelatedReports != null)
+                    {
+                        oToInsert.RelatedReports.All(x =>
+                        {
+                            row = data.NewRow();
+
+                            parameters.Add(new ReportParameter("ProviderName", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName.ToString()));
+                            row["ProviderName"] = oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName.ToString();
+
+                            parameters.Add(new ReportParameter("StartDate", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                                (int)enumSurveyInfoType.RP_InitDateReport).Select(y => y.Value).
+                                                DefaultIfEmpty("-").
+                                                FirstOrDefault()).ToString("dd/MM/yyyy")));
+                            row["StartDate"] = Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                                (int)enumSurveyInfoType.RP_InitDateReport).Select(y => y.Value).
+                                                DefaultIfEmpty("-").
+                                                FirstOrDefault()).ToString("dd/MM/yyyy");
+
+                            parameters.Add(new ReportParameter("EndDate", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                        (int)enumSurveyInfoType.RP_EndDateReport).Select(y => y.Value).
+                                        DefaultIfEmpty("-").
+                                        FirstOrDefault()).ToString("dd/MM/yyyy")));
+                            row["EndDate"] = Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                         (int)enumSurveyInfoType.RP_EndDateReport).Select(y => y.Value).
+                                        DefaultIfEmpty("-").
+                                        FirstOrDefault()).ToString("dd/MM/yyyy");
+
+                            parameters.Add(new ReportParameter("EvaluationType", "Evaluación"));
+                            row["EndDate"] = "Evaluación";
+
+                            parameters.Add(new ReportParameter("SurveyScore", x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                        (int)enumSurveyInfoType.RP_ReportAverage).Select(y => y.Value).
+                                        DefaultIfEmpty("-").
+                                        FirstOrDefault()));
+
+                            row["SurveyScore"] = x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                        (int)enumSurveyInfoType.RP_ReportAverage).Select(y => y.Value).
+                                        DefaultIfEmpty("-").
+                                        FirstOrDefault();
+                            data.Rows.Add(row);
+                            return true;
+                        });
+                    }
+                    report = Report_SurveyProcable(parameters, data);
+                    
+                }
+                else
                 {
-                    oToInsert.RelatedReports.All(x =>
+                    oToInsert = new ProviderModel()
                     {
-                        parameters.Add(new ReportParameter("remarks",
-                            x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                            (int)enumSurveyInfoType.RP_Observation).Select(y => y.Value).
-                            DefaultIfEmpty("-").
-                            FirstOrDefault() + "."));
+                        RelatedCompany = new ProveedoresOnLine.Company.Models.Company.CompanyModel()
+                        {
+                            CompanyPublicId = ProviderPublicId,
+                        },
+                        RelatedReports = new List<GenericItemModel>(),
+                    };
+                    oToInsert.RelatedReports.Add(this.GetSurveyReportFilterRequest());
+                    ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPReportUpsert(oToInsert);
 
-                        parameters.Add(new ReportParameter("actionPlan",
-                            x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                            (int)enumSurveyInfoType.RP_ImprovementPlan).Select(y => y.Value).
-                            DefaultIfEmpty("-").
-                            FirstOrDefault() + "."));
+                    parameters.Add(new ReportParameter("currentCompanyName", SessionModel.CurrentCompany.CompanyName));
+                    parameters.Add(new ReportParameter("currentCompanyTipoDni", SessionModel.CurrentCompany.IdentificationType.ItemName));
+                    parameters.Add(new ReportParameter("currentCompanyDni", SessionModel.CurrentCompany.IdentificationNumber));
+                    parameters.Add(new ReportParameter("currentCompanyLogo", SessionModel.CurrentCompany_CompanyLogo));
+                    parameters.Add(new ReportParameter("providerName", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName.ToString()));
+                    parameters.Add(new ReportParameter("providerTipoDni", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationType.ItemName.ToString()));
+                    parameters.Add(new ReportParameter("providerDni", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationNumber.ToString()));
+                    //order items reports
+                    if (oToInsert.RelatedReports != null)
+                    {
+                        oToInsert.RelatedReports.All(x =>
+                        {
+                            parameters.Add(new ReportParameter("remarks",
+                                x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                (int)enumSurveyInfoType.RP_Observation).Select(y => y.Value).
+                                DefaultIfEmpty("-").
+                                FirstOrDefault() + "."));
 
-                        parameters.Add(new ReportParameter("dateStart", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                                    (int)enumSurveyInfoType.RP_InitDateReport).Select(y => y.Value).
-                                    DefaultIfEmpty("-").
-                                    FirstOrDefault()).ToString("dd/MM/yyyy")));
+                            parameters.Add(new ReportParameter("actionPlan",
+                                x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                (int)enumSurveyInfoType.RP_ImprovementPlan).Select(y => y.Value).
+                                DefaultIfEmpty("-").
+                                FirstOrDefault() + "."));
 
-                        parameters.Add(new ReportParameter("dateEnd", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                            (int)enumSurveyInfoType.RP_EndDateReport).Select(y => y.Value).
-                            DefaultIfEmpty("-").
-                            FirstOrDefault()).ToString("dd/MM/yyyy")));
+                            parameters.Add(new ReportParameter("dateStart", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                        (int)enumSurveyInfoType.RP_InitDateReport).Select(y => y.Value).
+                                        DefaultIfEmpty("-").
+                                        FirstOrDefault()).ToString("dd/MM/yyyy")));
 
-                        parameters.Add(new ReportParameter("average",
-                            x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                            (int)enumSurveyInfoType.RP_ReportAverage).Select(y => y.Value).
-                            DefaultIfEmpty("-").
-                            FirstOrDefault()));
+                            parameters.Add(new ReportParameter("dateEnd", Convert.ToDateTime(x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                (int)enumSurveyInfoType.RP_EndDateReport).Select(y => y.Value).
+                                DefaultIfEmpty("-").
+                                FirstOrDefault()).ToString("dd/MM/yyyy")));
 
-                        parameters.Add(new ReportParameter("reportDate",
-                            x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                            (int)enumSurveyInfoType.RP_ReportDate).Select(y => y.Value).
-                            DefaultIfEmpty("-").
-                            FirstOrDefault()));
+                            parameters.Add(new ReportParameter("average",
+                                x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                (int)enumSurveyInfoType.RP_ReportAverage).Select(y => y.Value).
+                                DefaultIfEmpty("-").
+                                FirstOrDefault()));
 
-                        parameters.Add(new ReportParameter("responsible",
-                            x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
-                            (int)enumSurveyInfoType.RP_ReportResponsable).Select(y => y.Value).
-                            DefaultIfEmpty("-").
-                            FirstOrDefault()));
+                            parameters.Add(new ReportParameter("reportDate",
+                                x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                (int)enumSurveyInfoType.RP_ReportDate).Select(y => y.Value).
+                                DefaultIfEmpty("-").
+                                FirstOrDefault()));
+
+                            parameters.Add(new ReportParameter("responsible",
+                                x.ItemInfo.Where(y => y.ItemInfoType.ItemId ==
+                                (int)enumSurveyInfoType.RP_ReportResponsable).Select(y => y.Value).
+                                DefaultIfEmpty("-").
+                                FirstOrDefault()));
+                            return true;
+                        });
+                    }
+
+                    parameters.Add(new ReportParameter("author", SessionModel.CurrentCompanyLoginUser.RelatedUser.Name.ToString() + " " + SessionModel.CurrentCompanyLoginUser.RelatedUser.LastName.ToString()));
+
+                    report = ProveedoresOnLine.Reports.Controller.ReportModule.CP_SurveyReportDetail(
+                                                        (int)enumReportType.RP_SurveyReport,
+                                                        enumCategoryInfoType.PDF.ToString(),
+                                                        parameters,
+                                                        Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim() + "SV_Report_SurveyDetail.rdlc");
+                    parameters = null;
+                }
+
+
+                //Send Emails
+
+                //Get Emails
+                List<string> Responsables = Request.Form.AllKeys.Where(x => x.Contains("Emails_")).ToList();
+
+                //Get Other Emails
+                if (!string.IsNullOrEmpty(Request.Form["OtherEmails"]))
+                {
+                    Responsables.AddRange(Request.Form["OtherEmails"].Split(';').ToArray());
+                }
+                
+                //Send Emails
+                if (Responsables.Count > 0)
+                {
+                    Responsables.Where(x => !string.IsNullOrEmpty(x)).All(x =>
+                    {
+                        MessageModule.Client.Models.ClientMessageModel oMessage = new MessageModule.Client.Models.ClientMessageModel()
+                        {
+                            Agent = Models.General.InternalSettings.Instance[Models.General.Constants.N_Survey_Procables_Mail].Value,
+                            User = SessionModel.CurrentLoginUser.Email.ToString(),
+                            ProgramTime = DateTime.Now,
+                            MessageQueueInfo = new System.Collections.Generic.List<Tuple<string, string>>()
+                                {
+                                    new Tuple<string,string>("To",x.Replace("Emails_","")),
+                                    new Tuple<string,string>("InfoFileUrl", Models.General.InternalSettings.Instance[Models.General.Constants.File_S3FileSurveyReportsPath].Value + report.Item3),
+                                    new Tuple<string,string>("CustomerLogo",SessionModel.CurrentCompany_CompanyLogo),
+                                    new Tuple<string,string>("CustomerName",SessionModel.CurrentCompany.CompanyName),
+                                    new Tuple<string,string>("CustomerIdentificationTypeName",SessionModel.CurrentCompany.IdentificationType.ItemName),
+                                    new Tuple<string,string>("CustomerIdentificationNumber",SessionModel.CurrentCompany.IdentificationNumber),
+                                },
+                        };
+
+                        MessageModule.Client.Controller.ClientController.CreateMessage(oMessage);
+
                         return true;
                     });
                 }
-                parameters.Add(new ReportParameter("author", SessionModel.CurrentCompanyLoginUser.RelatedUser.Name.ToString() + " " + SessionModel.CurrentCompanyLoginUser.RelatedUser.LastName.ToString()));
 
-                Tuple<byte[], string, string> report = ProveedoresOnLine.Reports.Controller.ReportModule.CP_SurveyReportDetail(
-                                                    (int)enumReportType.RP_SurveyReport,
-                                                    enumCategoryInfoType.PDF.ToString(),
-                                                    parameters,
-                                                    Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim() + "SV_Report_SurveyDetail.rdlc");
-                parameters = null;
+                //Save s3 File
+                //get folder Temporary
+                string strFolder = System.Web.HttpContext.Current.Server.MapPath
+                    (Models.General.InternalSettings.Instance
+                    [Models.General.Constants.C_Settings_File_TempDirectory].Value);
+
+                //create folder
+                if (!System.IO.Directory.Exists(strFolder))
+                    System.IO.Directory.CreateDirectory(strFolder);
+
+                //get
+
+                var UploadFile = File(report.Item1, report.Item2, report.Item3);
+
+                string strFilePath = System.IO.Path.Combine(strFolder, report.Item3);
+                System.IO.File.WriteAllBytes(strFilePath, report.Item1);
+
+                string strRemoteFile = ProveedoresOnLine.FileManager.FileController.LoadFile
+                            (strFilePath,
+                            Models.General.InternalSettings.Instance[Models.General.Constants.MP_SV_SurveyGeneralReport].Value);
+
+                //remove temporal file
+                if (System.IO.File.Exists(strFilePath))
+                    System.IO.File.Delete(strFilePath);
+
                 return File(report.Item1, report.Item2, report.Item3);
             }
 
@@ -3746,15 +4176,15 @@ namespace MarketPlace.Web.Controllers
                     if (CalificationProjectBatch.CalificationProjectItemBatchModel.Any(y => y.CalificationProjectConfigItem.CalificationProjectConfigItemId == CalificationProjectConfigItem.CalificationProjectConfigItemId))
                     {
                         var CalificaitonProjectItemBatch = CalificationProjectBatch.CalificationProjectItemBatchModel.Where(y => y.CalificationProjectConfigItem.CalificationProjectConfigItemId == CalificationProjectConfigItem.CalificationProjectConfigItemId).Select(x => x).FirstOrDefault();
-                        var Score=0;
+                        var Score = 0;
                         row4 = data4.NewRow();
                         row4["ItemModuleName"] = CalificationProjectConfigItem.CalificationProjectConfigItemName != "" ? CalificationProjectConfigItem.CalificationProjectConfigItemName : CalificationProjectConfigItem.CalificationProjectConfigItemType.ItemName;
                         row4["ItemScore"] = CalificaitonProjectItemBatch.ItemScore;
-                        CalificationProjectConfigItem.CalificationProjectConfigItemInfoModel.All(z=> 
+                        CalificationProjectConfigItem.CalificationProjectConfigItemInfoModel.All(z =>
                         {
                             Score += int.Parse(z.Score);
                             row4["ModuleScore"] = Score;
-                            return true; 
+                            return true;
                         });
                         data4.Rows.Add(row4);
                     }
@@ -3773,7 +4203,7 @@ namespace MarketPlace.Web.Controllers
                         data4.Rows.Add(row4);
                     }
                 }
-            }            
+            }
 
             parameters.Add(new ReportParameter("CalificationProjectName", oModel.ProviderCalification.ProRelatedCalificationProject != null && oModel.ProviderCalification.ProRelatedCalificationProject.Count > 0 ? oModel.ProviderCalification.ProRelatedCalificationProject.FirstOrDefault().ProjectConfigModel.CalificationProjectConfigName : " "));
             parameters.Add(new ReportParameter("CalificationProjectTotalScore", oModel.ProviderCalification.ProRelatedCalificationProject != null && oModel.ProviderCalification.ProRelatedCalificationProject.Count > 0 ? oModel.ProviderCalification.ProRelatedCalificationProject.FirstOrDefault().TotalScore.ToString() : " "));
@@ -3820,6 +4250,8 @@ namespace MarketPlace.Web.Controllers
             if (SessionModel.CurrentCompany != null &&
                 !string.IsNullOrEmpty(SessionModel.CurrentCompany.CompanyPublicId))
             {
+                Uri node = new Uri(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
+                var settings = new ConnectionSettings(node);
                 //get basic search model
                 oModel = new ProviderSearchViewModel()
                 {
@@ -3849,8 +4281,6 @@ namespace MarketPlace.Web.Controllers
                 {
                     lstSearchFilter = oModel.GetlstSearchFilter();
                 }
-                Uri node = new Uri(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
-                var settings = new ConnectionSettings(node);
 
                 #region Search Result Company
 
@@ -3859,11 +4289,34 @@ namespace MarketPlace.Web.Controllers
                 ElasticClient client = new ElasticClient(settings);
 
                 oModel.ElasticCompanyModel = client.Search<CompanyIndexModel>(s => s
-                .From(0)
+                .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
                 .TrackScores(true)
-                .Size(2000000)
+                .Size(9000000)
                 .Aggregations
-                    (agg => agg                        
+                    (agg => agg
+                        .Nested("myproviders_avg", x => x.
+                            Path(p => p.oCustomerProviderIndexModel).
+                                Aggregations(aggs => aggs.Terms("myproviders", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                )
+                            )
+                        )
+                        .Nested("calification_avg", x => x.
+                            Path(p => p.oCalificationIndexModel).
+                                Aggregations(aggs => aggs.Terms("calification", term => term.Field(fi => fi.oCalificationIndexModel.First().CalificationProjectName)
+                                )
+                            )
+                        ).Nested("calification_result_avg", x => x.
+                            Path(p => p.oCalificationIndexModel).
+                                Aggregations(aggs => aggs.Terms("calification_result", term => term.Field(fi => fi.oCalificationIndexModel.First().TotalResult)
+                                )
+                            )
+                        ).Nested("customfiltertype_avg", x => x.
+                            Path(p => p.oCustomFiltersIndexModel).
+                                Aggregations(aggs => aggs.Terms("customfiltertype", term => term.Field(fi => fi.oCustomFiltersIndexModel.First().Label).Size(50)
+                                )
+                            )
+                        )
+
                     .Terms("ica", aggv => aggv
                         .Field(fi => fi.ICAId))
                     .Terms("city", aggv => aggv
@@ -3873,35 +4326,36 @@ namespace MarketPlace.Web.Controllers
                     .Terms("blacklist", bl => bl
                         .Field(fi => fi.InBlackList)))
                 .Query(q => q.
-                    Filtered(f => f
-                    .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
-                    .Filter(f2 =>
+                    Bool(f => f
+                    //.Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
+                    .Should(f2 =>
                     {
                         QueryContainer qb = null;
 
+                        qb &= f2.MatchAll() && f2.QueryString(qs => qs.Query(SearchParam));
                         #region Basic Providers Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
                         }
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
                         }
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
                         }
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
                         }
                         #endregion
 
                         #region My Providers Filter
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.MyProviders).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                             .Path(p => p.oCustomerProviderIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
@@ -3915,7 +4369,7 @@ namespace MarketPlace.Web.Controllers
                         #region Other Providers Filter
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.OtherProviders).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                             .Path(p => p.oCustomerProviderIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
@@ -3928,13 +4382,17 @@ namespace MarketPlace.Web.Controllers
                         #region Provider Status
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                              .Path(p => p.oCustomerProviderIndexModel)
                             .Query(fq => fq
                                 .Match(match => match
                                 .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
                                 .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault())
-                                )
+                                ) &&
+                                f2.Match(m => m
+                                        .Field(Field => Field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                        .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                    )
                               )
                            );
                         }
@@ -3945,7 +4403,7 @@ namespace MarketPlace.Web.Controllers
                         if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1"
                                                         && SessionModel.CurrentCompany.CompanyPublicId != Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value)
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                             .Path(p => p.oCustomerProviderIndexModel)
                                 .Query(fq => fq
                                     .Match(match => match
@@ -3954,7 +4412,7 @@ namespace MarketPlace.Web.Controllers
                         }
                         else
                         {
-                            qb &= q.Nested(n => n
+                            qb &= f2.Nested(n => n
                             .Path(p => p.oCustomerProviderIndexModel)
                                 .Query(fq => fq
                                     .Match(match => match
@@ -3964,140 +4422,268 @@ namespace MarketPlace.Web.Controllers
                         }
                         #endregion
 
-                        qb &= q.Term(m => m.CompanyEnable, true);
+                        #region Calification
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= f2.Nested(n => n
+                             .Path(p => p.oCalificationIndexModel)
+                            .Query(fq => fq
+                                .Match(match => match
+                                .Field(field => field.oCalificationIndexModel.First().CalificationProjectName)
+                                .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y.Item1).FirstOrDefault())
+                                )
+                                 && f2.Match(m => m
+                                        .Field(Field => Field.oCalificationIndexModel.First().CustomerPublicId)
+                                        .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                    )
+                              )
+                           );
+                        }
+
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= f2.Nested(n => n
+                             .Path(p => p.oCalificationIndexModel)
+                            .Query(fq => fq
+                                .Match(match => match
+                                .Field(field => field.oCalificationIndexModel.First().TotalResult)
+                                 .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y.Item1).FirstOrDefault())
+                                )
+                                && f2.Match(m => m
+                                        .Field(Field => Field.oCalificationIndexModel.First().CustomerPublicId)
+                                        .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                    )
+
+                              )
+                           );
+                        }
+
+                        #endregion
+
+                        #region Custom Filters
+                        if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y).FirstOrDefault() != null)
+                        {
+                            qb &= f2.Nested(n => n
+                             .Path(p => p.oCustomFiltersIndexModel)
+                            .Query(fq => fq
+                                .Match(match => match
+                                .Field(field => field.oCustomFiltersIndexModel.First().value)
+                                .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y.Item1).FirstOrDefault())
+                                )
+                                 && f2.Match(m => m
+                                        .Field(Field => Field.oCustomFiltersIndexModel.First().CustomerPublicId)
+                                        .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                    )
+                              )
+                           );
+                        }
+
+                        #endregion
+                        qb &= f2.Term(m => m.CompanyEnable, true);
                         return qb;
                     })
                     ))
                 );
-                #region Customer Provider Search
+
                 var settings2 = new ConnectionSettings(node);
                 settings2.DisableDirectStreaming(true);
                 settings2.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CustomerProviderIndex].Value);
 
-                ElasticClient CustomerProviderClient = new ElasticClient(settings2);
-                Nest.ISearchResponse<CustomerProviderIndexModel> result = CustomerProviderClient.Search<CustomerProviderIndexModel>((s => s
-                    .From(0)
-                    .TrackScores(true)
-                    .Size(20000000)
-                    .Query(q => q.
-                        Filtered(f => f
-                            .Query(q1 => q.Term(m => m.CustomerPublicId, lstSearchFilter.Where(x => int.Parse(x.Item3) == (int)enumFilterType.OtherProviders).Select(x => x).ToList().Count > 0
-                                                                                                ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.CC_CompanyPublicId_Publicar].Value.ToLower() : SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
-                            .Filter(f2 =>
-                            {
-                                QueryContainer qb = null;
+                #region All Providers
 
+                var settings3 = new ConnectionSettings(node);
+                settings3.DisableDirectStreaming(true);
+                settings3.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanyIndex].Value);
+
+                ElasticClient Providers = new ElasticClient(settings3);
+                Nest.ISearchResponse<CompanyIndexModel> resultPrv = Providers.Search<CompanyIndexModel>((t => t
+                    .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
+                    .TrackScores(true)
+                    .Size(9000000)
+                    .Query(qw => qw.
+                        Bool(fw => fw
+                            //.Query(q1 => q1.MatchAll() && qw.QueryString(qs => qs.Query(SearchParam)))
+                            .Should(f3 =>
+                            {
+                                QueryContainer qb2 = null;
+
+                                qb2 &= f3.MatchAll() && f3.QueryString(qs => qs.Query(SearchParam));
+                                #region Basic Providers Filters
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= f3.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
+                                }
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= f3.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
+                                }
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= f3.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
+                                }
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= f3.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
+                                }
+                                #endregion
+
+                                #region My Providers Filter
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.MyProviders).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= f3.Nested(n => n
+                                    .Path(p => p.oCustomerProviderIndexModel)
+                                    .Query(fq => fq
+                                        .Match(match => match
+                                        .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                        .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                        )
+                                   ));
+                                }
+                                #endregion
+
+                                #region Other Providers Filter
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.OtherProviders).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= f3.Nested(n => n
+                                    .Path(p => p.oCustomerProviderIndexModel)
+                                    .Query(fq => fq
+                                        .Match(match => match
+                                        .Field(field => field.oCustomerProviderIndexModel.Where(y => y.CustomerPublicId != SessionModel.CurrentCompany.CompanyPublicId).Select(y => y).First().CustomerPublicId)
+                                        )
+                                   ));
+                                }
+                                #endregion
+
+                                #region Provider Status
                                 if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
                                 {
-                                    qb &= q.Term(m => m.StatusId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault());
+                                    qb2 &= f3.Nested(n => n
+                                     .Path(p => p.oCustomerProviderIndexModel)
+                                    .Query(fq => fq
+                                        .Match(match => match
+                                        .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
+                                        .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault())
+                                        )
+                                        &&
+                                        fq.Match(m => m
+                                            .Field(Field => Field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                            .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                        )
+                                      )
+                                   );
                                 }
-                                var settings3 = new ConnectionSettings(node);
-                                settings3.DisableDirectStreaming(true);
-                                settings3.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CompanyIndex].Value);
 
-                                ElasticClient Providers = new ElasticClient(settings3);
-                                Nest.ISearchResponse<CompanyIndexModel> resultPrv = Providers.Search<CompanyIndexModel>((t => t
-                                    .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
-                                    .TrackScores(true)
-                                    .Size(9000000)
-                                    .Query(qw => qw.
-                                        Filtered(fw => fw
-                                            .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
-                                            .Filter(f3 =>
-                                            {
-                                                QueryContainer qb2 = null;
-                                                #region Basic Providers Filters
-                                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
-                                                {
-                                                    qb2 &= qw.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
-                                                }
-                                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
-                                                {
-                                                    qb2 &= qw.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
-                                                }
-                                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y).FirstOrDefault() != null)
-                                                {
-                                                    qb2 &= qw.Term(m => m.InBlackList, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.RestrictiveListProvider).Select(y => y.Item1).FirstOrDefault());
-                                                }
-                                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y).FirstOrDefault() != null)
-                                                {
-                                                    qb2 &= qw.Term(m => m.ICAId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.EconomicActivity).Select(y => y.Item1).FirstOrDefault());
-                                                }
-                                                #endregion
+                                #endregion
 
-                                                #region My Providers Filter
-                                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.MyProviders).Select(y => y).FirstOrDefault() != null)
-                                                {
-                                                    qb2 &= qw.Nested(n => n
-                                                    .Path(p => p.oCustomerProviderIndexModel)
-                                                    .Query(fq => fq
-                                                        .Match(match => match
-                                                        .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                                                        .Query(SessionModel.CurrentCompany.CompanyPublicId)
-                                                        )
-                                                   ));
-                                                }
-                                                #endregion
+                                #region Calification
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= f3.Nested(n => n
+                                     .Path(p => p.oCalificationIndexModel)
+                                    .Query(fq => fq
+                                        .Match(match => match
+                                        .Field(field => field.oCalificationIndexModel.First().CalificationProjectName)
+                                        .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y.Item1).FirstOrDefault())
+                                        )
+                                      )
+                                   );
+                                }
 
-                                                #region Other Providers Filter
-                                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.OtherProviders).Select(y => y).FirstOrDefault() != null)
-                                                {
-                                                    qb2 &= qw.Nested(n => n
-                                                    .Path(p => p.oCustomerProviderIndexModel)
-                                                    .Query(fq => fq
-                                                        .Match(match => match
-                                                        .Field(field => field.oCustomerProviderIndexModel.Where(y => y.CustomerPublicId != SessionModel.CurrentCompany.CompanyPublicId).Select(y => y).First().CustomerPublicId)
-                                                        )
-                                                   ));
-                                                }
-                                                #endregion
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= f3.Nested(n => n
+                                     .Path(p => p.oCalificationIndexModel)
+                                    .Query(fq => fq
+                                        .Match(match => match
+                                        .Field(field => field.oCalificationIndexModel.First().TotalResult)
+                                        .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y.Item1).FirstOrDefault())
+                                        )
+                                      )
+                                   );
+                                }
 
-                                                #region Provider Status
-                                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
-                                                {
-                                                    qb2 &= qw.Nested(n => n
-                                                     .Path(p => p.oCustomerProviderIndexModel)
-                                                    .Query(fq => fq
-                                                        .Match(match => match
-                                                        .Field(field => field.oCustomerProviderIndexModel.First().StatusId)
-                                                        .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault())
-                                                        )
-                                                      )
-                                                   );
-                                                }
-
-                                                #endregion
-
-                                                #region Can see other Providers?
-                                                if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1"
-                                                && SessionModel.CurrentCompany.CompanyPublicId != Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value)
-                                                {
-                                                    qb2 &= qw.Nested(n => n
-                                                    .Path(p => p.oCustomerProviderIndexModel)
-                                                        .Query(fq => fq
-                                                            .Match(match => match
-                                                            .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId))
-                                                          ));
-                                                }
-                                                else
-                                                {
-                                                    qb2 &= qw.Nested(n => n
-                                                    .Path(p => p.oCustomerProviderIndexModel)
-                                                        .Query(fq => fq
-                                                            .Match(match => match
-                                                            .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
-                                                            .Query(SessionModel.CurrentCompany.CompanyPublicId))
-                                                        ));
-                                                }
-                                                #endregion
-                                                return qb2;
-                                            })
-                                        )))
-                                    );
+                                #endregion
 
 
+                                #region Custom Filters
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb2 &= f3.Nested(n => n
+                                     .Path(p => p.oCustomFiltersIndexModel)
+                                    .Query(fq => fq
+                                        .Match(match => match
+                                        .Field(field => field.oCustomFiltersIndexModel.First().value)
+                                        .Query(lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y.Item1).FirstOrDefault())
+                                        )
+                                         && fq.Match(m => m
+                                                .Field(Field => Field.oCustomFiltersIndexModel.First().CustomerPublicId)
+                                                .Query(SessionModel.CurrentCompany.CompanyPublicId)
+                                            )
+                                      )
+                                   );
+                                }
 
-                                qb &= q.Terms(tms => tms
+                                #endregion
+
+                                #region Can see other Providers?
+                                if (SessionModel.CurrentCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.OtherProviders).Select(x => x.Value).FirstOrDefault() == "1"
+                                     && SessionModel.CurrentCompany.CompanyPublicId != Models.General.InternalSettings.Instance[Models.General.Constants.CC_CompanyPublicId_Publicar].Value)
+                                {
+                                    qb2 &= f3.Nested(n => n
+                                    .Path(p => p.oCustomerProviderIndexModel)
+                                        .Query(fq => fq
+                                            .Match(match => match
+                                            .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId))
+                                          ));
+                                }
+                                else
+                                {
+                                    qb2 &= f3.Nested(n => n
+                                    .Path(p => p.oCustomerProviderIndexModel)
+                                        .Query(fq => fq
+                                            .Match(match => match
+                                            .Field(field => field.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                            .Query(SessionModel.CurrentCompany.CompanyPublicId))
+                                        ));
+                                }
+
+                                #endregion
+                                return qb2;
+                            })
+                        )))
+                    );
+
+                #endregion
+
+                #region Customer Provider Search
+
+                ElasticClient CustomerProviderClient = new ElasticClient(settings2);
+                Nest.ISearchResponse<CustomerProviderIndexModel> result = CustomerProviderClient.Search<CustomerProviderIndexModel>((s => s
+                    .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
+                    .TrackScores(true)
+                    .Size(9000000)
+                    .Aggregations
+                        (agg => agg
+                        .Terms("myproviders", aggv => aggv
+                        .Field(fi => fi.CustomerPublicId))
+                        .Terms("status", aggv => aggv
+                            .Field(fi => fi.StatusId)))
+                    .Query(q => q.
+                        Bool(f => f
+                            //.Query(q1 => q.Term(m => m.CustomerPublicId, lstSearchFilter.Where(x => int.Parse(x.Item3) == (int)enumFilterType.OtherProviders).Select(x => x).ToList().Count > 0
+                            //                                                                    ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.CC_CompanyPublicId_Publicar].Value.ToLower() : SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
+                            .Should(f2 =>
+                            {
+                            QueryContainer qb = null;
+
+                            qb &= f2.Term(m => m.CustomerPublicId, lstSearchFilter.Where(x => int.Parse(x.Item3) == (int)enumFilterType.OtherProviders).Select(x => x).ToList().Count > 0
+                                                                                            ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.CC_CompanyPublicId_Publicar].Value.ToLower() : SessionModel.CurrentCompany.CompanyPublicId.ToLower());
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb &= f2.Term(m => m.StatusId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.ProviderStatus).Select(y => y.Item1).FirstOrDefault());
+                                }
+
+                                qb &= f2.Terms(tms => tms
                                  .Field(fi => fi.ProviderPublicId)
                                  .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
                                 );
@@ -4108,9 +4694,93 @@ namespace MarketPlace.Web.Controllers
                         )))
                     );
 
-
                 oModel.TotalRows = (int)oModel.ElasticCompanyModel.Total;
                 #endregion
+
+                #region Calification Search
+                var calificationSettings = new ConnectionSettings(node);
+                calificationSettings.DisableDirectStreaming(true);
+                calificationSettings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CalificarionIndex].Value);
+
+                ElasticClient CalificationClient = new ElasticClient(calificationSettings);
+                Nest.ISearchResponse<CalificationIndexModel> resultCalification = CalificationClient.Search<CalificationIndexModel>((s => s
+                    .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
+                    .TrackScores(true)
+                    .Size(9000000)
+                    .Aggregations
+                        (agg => agg
+                        .Terms("calification_avg", aggv => aggv
+                        .Field(fi => fi.CalificationProjectName))
+                        .Terms("calification_result_avg", aggv => aggv
+                            .Field(fi => fi.TotalResult)))
+                         .Query(q => q.
+                          Bool(f => f
+                            //.Query(q1 => q.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
+                            .Should(f2 =>
+                            {
+                                QueryContainer qb = null;
+                                qb &= f2.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower());
+                                #region Calification
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb &= f2.Term(m => m.CalificationProjectName, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationType).Select(y => y.Item1).FirstOrDefault());
+
+                                }
+
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb &= f2.Term(m => m.TotalResult, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CalificationResult).Select(y => y.Item1).FirstOrDefault());
+                                }
+
+                                #endregion
+
+                                qb &= f2.Terms(tms => tms
+                                 .Field(fi => fi.ProviderPublicId)
+                                 .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
+                                );
+                                return qb;
+
+                            })))));
+
+                #endregion
+
+                #region Custom Filter Search
+                var customSettings = new ConnectionSettings(node);
+                customSettings.DisableDirectStreaming(true);
+                customSettings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CustomFiltersIndex].Value);
+
+                ElasticClient CustomClient = new ElasticClient(customSettings);
+                Nest.ISearchResponse<CustomFiltersIndexModel> resultCustom = CustomClient.Search<CustomFiltersIndexModel>((s => s
+                    .From(string.IsNullOrEmpty(PageNumber) ? 0 : Convert.ToInt32(PageNumber) * 20)
+                    .TrackScores(true)
+                    .Size(9000000)
+                    .Aggregations
+                        (agg => agg
+                        .Terms("customfiltertype_avg", aggv => aggv
+                        .Field(fi => fi.Label).Size(50))
+                        .Terms("customfilter_item_avg", aggv => aggv
+                            .Field(fi => fi.value).Size(50)))
+                         .Query(q => q.
+                          Bool(f => f
+                            //.Query(q1 => q.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower()))
+                            .Should(f2 =>
+                            {
+                                QueryContainer qb = null;
+
+                                qb &= f2.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower());
+
+                                if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y).FirstOrDefault() != null)
+                                {
+                                    qb &= f2.Term(m => m.value, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.CustomFilterItem).Select(y => y.Item1).FirstOrDefault());
+                                }
+
+                                qb &= f2.Terms(tms => tms
+                                 .Field(fi => fi.ProviderPublicId)
+                                 .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
+                                );
+                                return qb;
+
+                            })))));
 
                 #endregion
 
@@ -4119,11 +4789,18 @@ namespace MarketPlace.Web.Controllers
                 {
                     oModel.ElasticCompanyModel.Documents.All(x =>
                     {
-                        ProviderList.AddRange(ProveedoresOnLine.Reports.Controller.ReportModule.R_ProviderGeneralReport(SessionModel.CurrentCompany.CompanyPublicId, x.CompanyPublicId));
+                        if (x.oCustomerProviderIndexModel.SingleOrDefault(y => y.CustomerPublicId == SessionModel.CurrentCompany.CompanyPublicId) != null)
+                        {
+                            ProviderList.AddRange(ProveedoresOnLine.Reports.Controller.ReportModule.R_ProviderGeneralReport(SessionModel.CurrentCompany.CompanyPublicId, x.CompanyPublicId));
+                        }
                         return true;
                     });
                 }
+
+
                 #endregion
+
+                #endregion ElasticSearch
 
                 #region CreateExcel
 
@@ -5601,7 +6278,7 @@ namespace MarketPlace.Web.Controllers
                             (x.RelatedCompany.CompanyPublicId == ProviderPublicId) :
                             x.RelatedCompany.CompanyPublicId == ProviderPublicId).FirstOrDefault();
 
-            oModel.CustomData = IntegrationPlatform.Controller.IntegrationPlatform.MP_CustomerProvider_GetCustomData(SessionModel.CurrentCompany.CompanyPublicId, ProviderPublicId);
+            oModel.CustomData = IntegrationPlatform.Controller.IntegrationPlatformController.MP_CustomerProvider_GetCustomData(SessionModel.CurrentCompany.CompanyPublicId, ProviderPublicId);
 
             //validate provider permisions
             if (oProvider != null)
@@ -5609,7 +6286,7 @@ namespace MarketPlace.Web.Controllers
                 //get provider view model
                 oModel.RelatedLiteProvider = new ProviderLiteViewModel(oProvider);
                 oModel.ProviderMenu = GetProviderMenu(oModel);
-                oModel.ProviderOptions = oModel.ProviderOptions = IntegrationPlatform.Controller.IntegrationPlatform.CatalogGetSanofiOptions();
+                oModel.ProviderOptions = oModel.ProviderOptions = IntegrationPlatform.Controller.IntegrationPlatformController.CatalogGetCustomerOptions(SessionModel.CurrentCompany.CompanyPublicId);
             }
 
             return View(oModel);
@@ -5720,7 +6397,7 @@ namespace MarketPlace.Web.Controllers
                     row2["QuestionWeight"] = subrep.Item3.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumSurveyConfigItemInfoType.Weight).Select(x => x.Value).FirstOrDefault();
                     row2["QuestionRating"] = subrep.Item4.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumSurveyItemInfoType.Ratting).Select(x => x.Value).FirstOrDefault();
                     row2["TotalAreaRating"] = Convert.ToDouble(row2["QuestionWeight"].ToString()) * Convert.ToDouble(row2["QuestionRating"].ToString()) / 100;
-                    row2["QuestionDescription"] = subrep.Item4.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumSurveyInfoType.Comments).Select(x => x.Value).FirstOrDefault();
+                    row2["QuestionDescription"] = subrep.Item4.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumSurveyItemInfoType.DescriptionText).Select(x => x.Value).FirstOrDefault();
                     if (string.IsNullOrEmpty(row2["QuestionDescription"].ToString()))
                         row2["QuestionDescription"] = "Sin Comentarios";
 
@@ -6150,24 +6827,63 @@ namespace MarketPlace.Web.Controllers
             return oObjToReturn.Distinct().ToList();
         }
 
-        //public CompareViewModel GetCompareProcess()
-        //{
-        //    if (!string.IsNullOrEmpty(CompareId))
-        //    {
-        //        //get current compare
-        //        ProveedoresOnLine.CompareModule.Models.CompareModel oCompareResult = ProveedoresOnLine.CompareModule.Controller.CompareModule.
-        //            CompareGetCompanyBasicInfo
-        //            (Convert.ToInt32(CompareId.Replace(" ", "")),
-        //            SessionModel.CurrentLoginUser.Email,
-        //            SessionModel.CurrentCompany.CompanyPublicId);
+        private Tuple<byte[], string, string> Report_SurveyProcable(List<ReportParameter> ReportData, DataTable data)
+        {
 
-        //        if (oCompareResult != null && oCompareResult.CompareId > 0)
-        //        {
-        //            oModel.RelatedCompare = new Models.Compare.CompareViewModel(oCompareResult);
-        //        }
-        //    }
-        //}
+            Tuple<byte[], string, string> Report = ProveedoresOnLine.Reports.Controller.ReportModule.MP_SV_ProcablesReport((int)enumReportType.RP_SurveyReport,
+                                                            data,
+                                                            enumCategoryInfoType.PDF.ToString(),
+                                                            ReportData,
+                                                            Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim() + "SV_Report_Procables.rdlc");
 
+            return Report;
+        }
+        
+        //TODO: Do This correctly
+        private static void SendProcablesMessage(NotificationModel oDataMessage)
+        {
+            if (!string.IsNullOrEmpty(oDataMessage.User))
+            {
+                #region Email
+
+                //Create message object
+                //MessageModule.Client.Models.ClientMessageModel oMessageToSend = new MessageModule.Client.Models.ClientMessageModel()
+                //{
+                //    Agent = Models.General.InternalSettings.Instance[Models.General.Constants.N_Survey_Procables_Mail].Value,
+                //    User = oDataMessage.User,
+                //    ProgramTime = DateTime.Now,
+                //    MessageQueueInfo = new List<Tuple<string, string>>(),
+                //};
+
+                //oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("To", "diego,jaramillo@proveedoresonline.co"));
+                //oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("InfoFileUrl", oDataMessage.Url));
+
+                ////get customer info
+                //oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
+                //    ("CustomerLogo", oDataMessage.CompanyLogo));
+
+                //oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
+                //    ("CustomerName", oDataMessage.CompanyName));
+
+                //oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
+                //    ("CustomerIdentificationTypeName", oDataMessage.IdentificationType));
+
+                //oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
+                //    ("CustomerIdentificationNumber", oDataMessage.IdentificationNumber));
+
+                //MessageModule.Client.Controller.ClientController.CreateMessage(oMessageToSend);
+
+                #endregion
+
+                #region Notification
+
+                //oDataMessage.NotificationId = MessageModule.Client.Controller.ClientController.NotificationUpsert(oDataMessage);
+
+                #endregion
+            }
+
+
+        }
         #endregion Pivate Functions
 
         #region Menu

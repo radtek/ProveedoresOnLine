@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch;
+using ProveedoresOnLine.Company.Models.Util;
 
 namespace ProveedoresOnLine.CalificationBatch.Controller
 {
@@ -16,9 +15,9 @@ namespace ProveedoresOnLine.CalificationBatch.Controller
             return DAL.Controller.CalificationProjectBatchDataController.Instance.CalificationProject_GetByCustomer(vCustomerPublicid,vProviderPublicId,Enable);
         }
 
-        public static List<ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel> CalificationProject_GetProviderByCustomer(string CustomerPublicId, string ProviderPublicId)
+        public static List<ProveedoresOnLine.CalificationBatch.Models.CalificationProjectBatch.CalificationProjectBatchModel> CalificationProject_GetProviderByCustomer(string CustomerPublicId, string ProviderPublicId, int CalificationProjectConfigId)
         {
-            return DAL.Controller.CalificationProjectBatchDataController.Instance.CalificationProject_GetProviderByCustomer(CustomerPublicId, ProviderPublicId);
+            return DAL.Controller.CalificationProjectBatchDataController.Instance.CalificationProject_GetProviderByCustomer(CustomerPublicId, ProviderPublicId, CalificationProjectConfigId);
         }
 
         public static CalificationProjectBatchModel CalificationProjectUpsert(CalificationProjectBatchModel oCalProject) 
@@ -215,6 +214,20 @@ namespace ProveedoresOnLine.CalificationBatch.Controller
         public static List<ProveedoresOnLine.CompanyProvider.Models.Provider.BalanceSheetModel> BalanceModuleInfo(string CompanyPublicId, int BalanceAccount)
         {
             return DAL.Controller.CalificationProjectBatchDataController.Instance.BalanceModuleInfo(CompanyPublicId, BalanceAccount);
+        }
+
+        #endregion
+
+        #region Aditional Document
+
+        public static string GetAditionalDocumentName(int AditionalDocumentId)
+        {
+            return DAL.Controller.CalificationProjectBatchDataController.Instance.GetAditionalDocumentName(AditionalDocumentId);
+        }
+
+        public static List<GenericItemModel> AditionalDocumentModuleInfo(string CompanyPublicId, string AditionalDocumentName)
+        {
+            return DAL.Controller.CalificationProjectBatchDataController.Instance.AditionalDocumentModuleInfo(CompanyPublicId, AditionalDocumentName);
         }
 
         #endregion

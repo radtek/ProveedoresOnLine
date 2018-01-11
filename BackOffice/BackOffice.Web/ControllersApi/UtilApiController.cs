@@ -1,7 +1,9 @@
 ﻿using BackOffice.Models.Admin;
 using BackOffice.Models.General;
+using ProveedoresOnLine.Company.Controller;
 using ProveedoresOnLine.Company.Models.Role;
 using ProveedoresOnLine.Company.Models.Util;
+using ProveedoresOnLine.CompanyProvider.Controller;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -1255,7 +1257,7 @@ namespace BackOffice.Web.ControllersApi
 
             return oReturn;
         }
-        
+
         [HttpPost]
         [HttpGet]
         public List<AdminModuleOptionViewModel> ModuleOptionAdmin
@@ -1463,6 +1465,28 @@ namespace BackOffice.Web.ControllersApi
             }
 
             return oReturn;
+        }
+
+        #endregion
+
+        #region Util for Notification
+
+        [HttpPost]
+        [HttpGet]
+        public List<GenericItemModel> AditionalDataByCustomer(string AditionalDataByCustomer, string CustomerPublicId)
+        {
+            List<GenericItemModel> result = CompanyProvider.MPAditionalDocumentGetInfoByCustomer(CustomerPublicId, 1701001);
+            result = result.GroupBy(x => x.ItemName).Select(g => g.First()).ToList();
+            return result;
+        }
+
+        [HttpPost]
+        [HttpGet]
+        public List<GenericItemModel>  GeneralInfoByCustomer()
+        {
+            List<GenericItemModel> result = Company.MPCategorySearchByIdCategory(2012, 300);
+            result = result.GroupBy(x => x.ItemName).Select(g => g.First()).ToList();
+            return result;
         }
 
         #endregion

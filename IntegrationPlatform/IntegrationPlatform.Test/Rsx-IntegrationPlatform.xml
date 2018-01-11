@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Settings>
   <IntegrationPlatform>
+    <key name="C_POL_CustomerPublicId_Sanofi">7BC27832</key>
+    <key name="C_POL_CustomerPublicId_Publicar">DA5C572E</key>
+    <key name="C_POL_CustomerPublicId_Falabella">163B3310</key>
+    <key name="C_POL_CustomerPublicId_Alpina">1EA5A78A</key>
     
   </IntegrationPlatform>
 </Settings>

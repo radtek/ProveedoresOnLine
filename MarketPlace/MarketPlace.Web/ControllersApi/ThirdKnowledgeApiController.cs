@@ -2,10 +2,12 @@
 using MarketPlace.Models.General;
 using MarketPlace.Models.Provider;
 using MarketPlace.Models.ThirdKnowledge;
+using Nest;
 using NetOffice.ExcelApi;
 using NetOffice.ExcelApi.Enums;
 using OfficeOpenXml;
 using ProveedoresOnLine.Company.Models.Util;
+using ProveedoresOnLine.IndexSearch.Models;
 using ProveedoresOnLine.ThirdKnowledge.Models;
 using System;
 using System.Collections.Generic;
@@ -27,7 +29,7 @@ namespace MarketPlace.Web.ControllersApi
             ProviderViewModel oModel = new ProviderViewModel();
             oModel.RelatedThirdKnowledge = new ThirdKnowledgeViewModel();
             List<PlanModel> oCurrentPeriodList = new List<PlanModel>();
-            
+
             try
             {
                 //Get The Active Plan By Customer
@@ -50,6 +52,7 @@ namespace MarketPlace.Web.ControllersApi
                             //Save Query
                             TDQueryModel oQueryToCreate = new TDQueryModel()
                             {
+                                CompayPublicId = SessionModel.CurrentCompany.CompanyPublicId,
                                 IsSuccess = true,
                                 PeriodPublicId = oModel.RelatedThirdKnowledge.CurrentPlanModel.RelatedPeriodModel.FirstOrDefault().PeriodPublicId,
                                 SearchType = new TDCatalogModel()
@@ -68,89 +71,160 @@ namespace MarketPlace.Web.ControllersApi
                             //Get Result
 
                             //Identification Type
-                            int IdType = System.Web.HttpContext.Current.Request["ThirdKnowledgeIdType"] == "213002" ? 1 : System.Web.HttpContext.Current.Request["ThirdKnowledgeIdType"] == "213001" ? 2 : 0;
-                            string rNamer = System.Web.HttpContext.Current.Request["Name"];
-                            string rIdNumber = System.Web.HttpContext.Current.Request["IdentificationNumber"];
+                            int IdType = System.Web.HttpContext.Current.Request["ThirdKnowledgeIdType"] == "213002" ? 1 :
+                                         System.Web.HttpContext.Current.Request["ThirdKnowledgeIdType"] == "213001" ? 2 :
+                                         System.Web.HttpContext.Current.Request["ThirdKnowledgeIdType"] == "213003" ? 3 :
+                                         System.Web.HttpContext.Current.Request["ThirdKnowledgeIdType"] == "213004" ? 4 : 0;
+                            string SearchParam = System.Web.HttpContext.Current.Request["IdentificationNumber"];
 
                             var qTask = await Task.WhenAll(ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(oCurrentPeriodList.FirstOrDefault().
-                                            RelatedPeriodModel.FirstOrDefault().PeriodPublicId, IdType,
-                                           rIdNumber, rNamer, oQueryToCreate)).ConfigureAwait(false);
+                                            RelatedPeriodModel.FirstOrDefault().PeriodPublicId, IdType, SearchParam, oQueryToCreate)).ConfigureAwait(false);
+                            #region Index TDQueryInfo
+
+                            var oModelToIndex = new ProveedoresOnLine.IndexSearch.Models.TK_QueryIndexModel(oQueryToCreate);
+
+                            oModelToIndex.Domain = oQueryToCreate.User.Split('@')[1];
+
+                            Uri node = new Uri(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
+                            var settings = new ConnectionSettings(node);
+                            settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_QueryModelIndex].Value);
+                            ElasticClient client = new ElasticClient(settings);
+
+                            ICreateIndexResponse oElasticResponse = client.
+                                    CreateIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_QueryModelIndex].Value, c => c
+                                    .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                                    .Analysis(a => a.
+                                        Analyzers(an => an.
+                                            Custom("customWhiteSpace", anc => anc.
+                                                Filters("asciifolding", "lowercase").
+                                                Tokenizer("whitespace")
+                                                    )
+                                                ).TokenFilters(tf => tf
+                                                .EdgeNGram("customEdgeNGram", engrf => engrf
+                                                .MinGram(1)
+                                                .MaxGram(10))
+                                            )
+                                        ).NumberOfShards(1)
+                                    )
+                                );
+                            client.Map<TK_QueryIndexModel>(m => m.AutoMap());
+                            var Index = client.Index(oModelToIndex);
+
+                            #endregion
 
                             oModel.RelatedThidKnowledgeSearch.CollumnsResult = qTask.FirstOrDefault();
-                            
+
                             List<Tuple<string, List<ThirdKnowledgeViewModel>>> Group = new List<Tuple<string, List<ThirdKnowledgeViewModel>>>();
                             List<string> Item1 = new List<string>();
                             List<string> ItemGroup = new List<string>();
-                            
+
+                            //1 Order y Register entity - Name Like General Info
+                            //2 Sancioned Lists
+                            //3 Peps
+
+                            List<string> SancionedList = MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.TK_ListToValidateSancioned].Value.Split(';').ToList();
+                            List<string> PepList = MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.TK_ListToValidatePEP].Value.Split(';').ToList();
+                            List<string> GeneralList = MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.TK_ListToValidateGeneralInfo].Value.Split(';').ToList();
+
+                            //Item1 GroupName, Item2 ListName, Item3 link , item4 Details
+                            oModel.TKGroupByListViewModel = new List<Tuple<string, string, string, List<string>, bool>>();
                             if (oModel.RelatedThidKnowledgeSearch.CollumnsResult != null)
                             {
-                                oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.All(x =>
+                                #region GeneralInfo                                
+                                List<string> oDetails = new List<string>();
+                                if (IdType != 4)
                                 {
-                                    Item1.Add(x.GroupName);
-                                    return true;
-                                });                             
-                                ItemGroup.Add(Item1.Where(x => x.Contains("Criticidad Alta")).Select(x => x).DefaultIfEmpty("").FirstOrDefault());
-                                ItemGroup.AddRange(Item1.Where(x => x.Contains("Criticidad Media")).Select(x => x).DefaultIfEmpty("").Distinct().ToList());
-                                ItemGroup.Add(Item1.Where(x => x.Contains("Criticidad Baja")).Select(x => x).DefaultIfEmpty("").FirstOrDefault());
-                                ItemGroup.Add(Item1.Where(x => x.Contains("SIN COINCIDENCIAS")).Select(x => x).DefaultIfEmpty("").FirstOrDefault());                                
-
-                                Item1 = ItemGroup.Where(x => !string.IsNullOrEmpty(x)).Select(x => x).ToList();
-
-                                List<ThirdKnowledgeViewModel> oItem2 = new List<ThirdKnowledgeViewModel>();
-                                Tuple<string, List<ThirdKnowledgeViewModel>> oTupleItem = new Tuple<string, List<ThirdKnowledgeViewModel>>("", new List<ThirdKnowledgeViewModel>());
-
-                                Item1.All(x =>
-                                {
-                                    oItem2 = new List<ThirdKnowledgeViewModel>();
-                                    if (oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(td => td.GroupName.Contains(x)) != null)
+                                    //GetName
+                                    if (IdType == 2 && oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[2]).Select(x => x.NameResult).FirstOrDefault() != null)
                                     {
-                                        if (x.Contains("Criticidad Alta"))
-                                        {
-                                            oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(td => td.GroupName.Contains("Criticidad Alta")).All(d =>
-                                            {
-                                                d.QueryPublicId = oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId;
-                                                oItem2.Add(new ThirdKnowledgeViewModel(d));
-                                                return true;
-                                            });
-                                        }
-                                        else if (x.Contains("Criticidad Media"))
-                                        {
-                                            oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(td => td.GroupName == x).All(d =>
-                                            {
-                                                d.QueryPublicId = oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId;
-                                                oItem2.Add(new ThirdKnowledgeViewModel(d));
-                                                return true;
-                                            });
-                                        }
-                                        else if (x.Contains("Criticidad Baja"))
-                                        {
-                                            oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(td => td.GroupName.Contains("Criticidad Baja")).All(d =>
-                                            {
-                                                d.QueryPublicId = oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId;
-                                                oItem2.Add(new ThirdKnowledgeViewModel(d));
-                                                return true;
-                                            });
-                                        }
-                                        else if (x.Contains("SIN COINCIDENCIAS"))
-                                        {
-                                            oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(td => td.GroupName.Contains("SIN COINCIDENCIAS")).All(d =>
-                                            {
-                                                d.QueryPublicId = oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId;
-                                                oItem2.Add(new ThirdKnowledgeViewModel(d));
-                                                return true;
-                                            });
-                                        }
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[2]).Select(x => x.NameResult).FirstOrDefault());
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[2]).Select(x => x.ElasticId.ToString()).FirstOrDefault());
 
-                                        oTupleItem = new Tuple<string, List<ThirdKnowledgeViewModel>>(x, oItem2);
-                                        Group.Add(oTupleItem);
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId);
+                                        Tuple<string, string, string, List<string>, bool> oDetail = new
+                                                    Tuple<string, string, string, List<string>, bool>("INFORMACIÓN BÁSICA",
+                                                        IdType == 2 ? GeneralList[2] : GeneralList[1],
+                                                        IdType == 2 ? oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[2]).Select(x => x.Link).FirstOrDefault() :
+                                                        IdType == 1 ? oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[1]).Select(x => x.Link).FirstOrDefault() : "", oDetails,
+                                                                    oDetails.Count > 0 ? true : false);
+                                        oModel.TKGroupByListViewModel.Add(oDetail);
                                     }
-                                    return true;
-                                });
-                                if (Group != null)
-                                {
-                                    oModel.RelatedSingleSearch = Group;
+
+                                    else if (IdType == 1 && oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[0]).Select(x => x.NameResult).FirstOrDefault() != null)
+                                    {
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[0]).Select(x => x.NameResult).FirstOrDefault());
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[0]).Select(x => x.ElasticId.ToString()).FirstOrDefault());
+
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId);
+                                        Tuple<string, string, string, List<string>, bool> oDetail = new
+                                                    Tuple<string, string, string, List<string>, bool>("INFORMACIÓN BÁSICA",
+                                                        IdType == 2 ? GeneralList[2] : GeneralList[1],
+                                                        IdType == 2 ? oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[2]).Select(x => x.Link).FirstOrDefault() :
+                                                        IdType == 1 ? oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(x => x.ListName == GeneralList[1]).Select(x => x.Link).FirstOrDefault() : "", oDetails,
+                                                                    oDetails.Count > 0 ? true : false);
+                                        oModel.TKGroupByListViewModel.Add(oDetail);
+                                    }
+
+                                    
                                 }
 
+                                #endregion
+
+                                #region Sancioned Group List
+                                SancionedList.All(x =>
+                                    {
+                                        oDetails = new List<string>();
+                                        bool exist = false;
+                                        if (oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y =>  y).FirstOrDefault()!= null)
+                                        {
+                                            oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault().NameResult);
+                                            oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault().IdentificationResult);
+                                            oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault().QueryInfoPublicId);
+                                            oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault().QueryPublicId);
+                                            oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault().ElasticId.ToString());
+                                            exist = true;
+                                        }
+                                        else                                        
+                                            exist = false;
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId);
+                                        
+                                        Tuple<string, string, string, List<string>, bool> oDetail = new
+                                               Tuple<string, string, string, List<string>, bool>("LISTAS RESTRICTIVAS, SANCIONES NACIONALES E INTERNACIONALES",
+                                                   x, "",oDetails, exist);
+                                        oModel.TKGroupByListViewModel.Add(oDetail);
+                                        return true;
+                                    });
+                                #endregion
+
+                                #region Peps
+                                PepList.All(x =>
+                                {
+                                    oDetails = new List<string>();
+                                    bool exist = false;
+                                    if (oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault() != null)
+                                    {
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault().NameResult);
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault().IdentificationResult);
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault().QueryInfoPublicId);
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault().QueryPublicId);
+                                        oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.RelatedQueryInfoModel.Where(y => y.ListName == x).Select(y => y).FirstOrDefault().ElasticId.ToString());
+                                        exist = true;
+                                    }
+                                    else
+                                        exist = false;
+                                    oDetails.Add(oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId);
+                                    oDetails.Add(oModel.RelatedThidKnowledgeSearch.ElasticId.ToString());
+                                    Tuple<string, string, string, List<string>, bool> oDetail = new
+                                           Tuple<string, string, string, List<string>, bool>("PEPS -  PERSONAS POLITICAMENTE Y PUBLICAMENTE EXPUESTAS",
+                                               x, "", oDetails, exist);
+                                    oModel.TKGroupByListViewModel.Add(oDetail);
+                                    return true;
+                                });
+                                #endregion
+                            }
+
+                            if (oModel.TKGroupByListViewModel != null)
+                            {
                                 if (oModel.RelatedThidKnowledgeSearch.CollumnsResult.QueryPublicId != null)
                                 {
                                     //Set New Score
@@ -159,8 +233,8 @@ namespace MarketPlace.Web.ControllersApi
                                     //Period Upsert
                                     oModel.RelatedThirdKnowledge.CurrentPlanModel.RelatedPeriodModel.FirstOrDefault().PeriodPublicId = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.PeriodoUpsert(
                                         oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault());
-                                }                                                                                                 
-                            }                            
+                                }
+                            }
                         }
                         else
                         {
@@ -234,15 +308,15 @@ namespace MarketPlace.Web.ControllersApi
                                 },
                             };
 
-                            Task<TDQueryModel> qTask = Task.Run(() =>  ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(oCurrentPeriodList.FirstOrDefault().
-                                            RelatedPeriodModel.FirstOrDefault().PeriodPublicId,1,
-                                           System.Web.HttpContext.Current.Request["IdentificationNumber"], System.Web.HttpContext.Current.Request["Name"], oQueryToCreate));
+                            Task<TDQueryModel> qTask = Task.Run(() => ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(oCurrentPeriodList.FirstOrDefault().
+                                            RelatedPeriodModel.FirstOrDefault().PeriodPublicId, 1,
+                                           System.Web.HttpContext.Current.Request["IdentificationNumber"], oQueryToCreate));
 
                             oModel.RelatedThidKnowledgeSearch.CollumnsResult = await qTask;
 
                             oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel();
                             oModel.RelatedThidKnowledgeSearch.CollumnsResult = new TDQueryModel();
-                            
+
                             if (oModel.RelatedThidKnowledgeSearch.CollumnsResult.IsSuccess == true)
                             {
                                 //Set New Score
@@ -342,25 +416,57 @@ namespace MarketPlace.Web.ControllersApi
 
                         oQueryToCreate = await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryUpsert(oQueryToCreate);
 
-                        //Send Message
-                        MessageModule.Client.Models.NotificationModel oDataMessage = new MessageModule.Client.Models.NotificationModel();
-                        oDataMessage.CompanyPublicId = CompanyPublicId;
-                        oDataMessage.User = SessionModel.CurrentLoginUser.Email;
-                        oDataMessage.CompanyLogo = SessionModel.CurrentCompany_CompanyLogo;
-                        oDataMessage.CompanyName = SessionModel.CurrentCompany.CompanyName;
-                        oDataMessage.IdentificationType = SessionModel.CurrentCompany.IdentificationType.ItemName;
-                        oDataMessage.IdentificationNumber = SessionModel.CurrentCompany.IdentificationNumber;
+                        #region Index TDQueryInfo
 
-                        #region Notification
+                        var oModelToIndex = new ProveedoresOnLine.IndexSearch.Models.TK_QueryIndexModel(oQueryToCreate);
 
-                        oDataMessage.Label = Models.General.InternalSettings.Instance
-                                [Models.General.Constants.N_ThirdKnowledgeUploadMassiveMessage].Value;
-                        oDataMessage.Url = Models.General.InternalSettings.Instance
-                                [Models.General.Constants.N_UrlThirdKnowledgeQuery].Value.Replace("{{QueryPublicId}}", oQueryToCreate.QueryPublicId);
-                        oDataMessage.NotificationType = (int)MarketPlace.Models.General.enumNotificationType.ThirdKnowledgeNotification;
-                        oDataMessage.Enable = true;
+                        oModelToIndex.Domain = oQueryToCreate.User.Split('@')[1];
+
+                        Uri node = new Uri(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
+                        var settings = new ConnectionSettings(node);
+                        settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_QueryModelIndex].Value);
+                        ElasticClient client = new ElasticClient(settings);
+
+                        ICreateIndexResponse oElasticResponse = client.
+                                CreateIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_QueryModelIndex].Value, c => c
+                                .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                                .Analysis(a => a.
+                                    Analyzers(an => an.
+                                        Custom("customWhiteSpace", anc => anc.
+                                            Filters("asciifolding", "lowercase").
+                                            Tokenizer("whitespace")
+                                                )
+                                            ).TokenFilters(tf => tf
+                                            .EdgeNGram("customEdgeNGram", engrf => engrf
+                                            .MinGram(1)
+                                            .MaxGram(10))
+                                        )
+                                    ).NumberOfShards(1)
+                                )
+                            );
+                        client.Map<TK_QueryIndexModel>(m => m.AutoMap());
+                        var Index = client.Index(oModelToIndex);
 
                         #endregion
+
+                        ////Send Message
+                        MessageModule.Client.Models.ClientMessageModel oDataMessage = new MessageModule.Client.Models.ClientMessageModel();
+
+                        oDataMessage.User = SessionModel.CurrentLoginUser.Email;
+
+                        oDataMessage.MessageQueueInfo = new List<Tuple<string, string>>();
+                        oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                        ("CustomerLogo", SessionModel.CurrentCompany_CompanyLogo));
+                        oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                        ("CompanyPublicId", CompanyPublicId));
+                        oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                        ("CustomerName", SessionModel.CurrentCompany.CompanyName));
+                        oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                        ("CustomerIdentificationTypeName", SessionModel.CurrentCompany.IdentificationType.ItemName));
+                        oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                        ("CustomerIdentificationNumber", SessionModel.CurrentCompany.IdentificationNumber));
+                        oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                        ("To", SessionModel.CurrentLoginUser.Email));
 
                         ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.CreateUploadNotification(oDataMessage);
                     }
@@ -403,7 +509,7 @@ namespace MarketPlace.Web.ControllersApi
                 {
                     //Get file from S3 using File Name           
                     webClient.DownloadFile(Models.General.InternalSettings.Instance[
-                    Models.General.Constants.TK_File_S3FilePath].Value + FileName, strFolder + "ReSearch_" + FileName);                                     
+                    Models.General.Constants.TK_File_S3FilePath].Value + FileName, strFolder + "ReSearch_" + FileName);
                 }
 
                 string oFileName = "ReSearch_" + FileName;
@@ -437,27 +543,59 @@ namespace MarketPlace.Web.ControllersApi
                         FileName = oFileName,
                     };
 
-                    oQueryToCreate =  await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryUpsert(oQueryToCreate);
+                    oQueryToCreate = await ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.QueryUpsert(oQueryToCreate);
 
-                    //Send Message
-                    MessageModule.Client.Models.NotificationModel oDataMessage = new MessageModule.Client.Models.NotificationModel();
-                    oDataMessage.CompanyPublicId = CompanyPublicId;
-                    oDataMessage.User = SessionModel.CurrentLoginUser.Email;
-                    oDataMessage.CompanyLogo = SessionModel.CurrentCompany_CompanyLogo;
-                    oDataMessage.CompanyName = SessionModel.CurrentCompany.CompanyName;
-                    oDataMessage.IdentificationType = SessionModel.CurrentCompany.IdentificationType.ItemName;
-                    oDataMessage.IdentificationNumber = SessionModel.CurrentCompany.IdentificationNumber;
+                    #region Index TDQueryInfo
 
-                    #region Notification
+                    var oModelToIndex = new ProveedoresOnLine.IndexSearch.Models.TK_QueryIndexModel(oQueryToCreate);
 
-                    oDataMessage.Label = Models.General.InternalSettings.Instance
-                            [Models.General.Constants.N_ThirdKnowledgeUploadMassiveMessage].Value;
-                    oDataMessage.Url = Models.General.InternalSettings.Instance
-                            [Models.General.Constants.N_UrlThirdKnowledgeQuery].Value.Replace("{{QueryPublicId}}", oQueryToCreate.QueryPublicId);
-                    oDataMessage.NotificationType = (int)MarketPlace.Models.General.enumNotificationType.ThirdKnowledgeNotification;
-                    oDataMessage.Enable = true;
+                    oModelToIndex.Domain = oQueryToCreate.User.Split('@')[1];
+
+                    Uri node = new Uri(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
+                    var settings = new ConnectionSettings(node);
+                    settings.DefaultIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_QueryModelIndex].Value);
+                    ElasticClient client = new ElasticClient(settings);
+
+                    ICreateIndexResponse oElasticResponse = client.
+                            CreateIndex(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_QueryModelIndex].Value, c => c
+                            .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                            .Analysis(a => a.
+                                Analyzers(an => an.
+                                    Custom("customWhiteSpace", anc => anc.
+                                        Filters("asciifolding", "lowercase").
+                                        Tokenizer("whitespace")
+                                            )
+                                        ).TokenFilters(tf => tf
+                                        .EdgeNGram("customEdgeNGram", engrf => engrf
+                                        .MinGram(1)
+                                        .MaxGram(10))
+                                    )
+                                ).NumberOfShards(1)
+                            )
+                        );
+                    client.Map<TK_QueryIndexModel>(m => m.AutoMap());
+                    var Index = client.Index(oModelToIndex);
 
                     #endregion
+
+                    //Send Message
+                    MessageModule.Client.Models.ClientMessageModel oDataMessage = new MessageModule.Client.Models.ClientMessageModel();
+
+                    oDataMessage.User = SessionModel.CurrentLoginUser.Email;
+
+                    oDataMessage.MessageQueueInfo = new List<Tuple<string, string>>();
+                    oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                    ("CustomerLogo", SessionModel.CurrentCompany_CompanyLogo));
+                    oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                    ("CompanyPublicId", CompanyPublicId));
+                    oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                    ("CustomerName", SessionModel.CurrentCompany.CompanyName));
+                    oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                    ("CustomerIdentificationTypeName", SessionModel.CurrentCompany.IdentificationType.ItemName));
+                    oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                    ("CustomerIdentificationNumber", SessionModel.CurrentCompany.IdentificationNumber));
+                    oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                    ("To", SessionModel.CurrentLoginUser.Email));
 
                     ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.CreateUploadNotification(oDataMessage);
 
@@ -522,38 +660,47 @@ namespace MarketPlace.Web.ControllersApi
         [HttpGet]
         public Tuple<bool, string> FileVerify(string FilePath, string FileName, string PeriodPublicId)
         {
-            var Excel = new FileInfo(FilePath);
-
-            Tuple<bool, string> oReturn = new Tuple<bool, string>(false, "");
-            List<PlanModel> oCurrentPeriodList = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetCurrenPeriod(SessionModel.CurrentCompany.CompanyPublicId, true);
-            using (var package = new ExcelPackage(Excel))
+            try
             {
-                // Get the work book in the file
-                ExcelWorkbook workBook = package.Workbook;
+                var Excel = new FileInfo(FilePath);
 
-                if (workBook != null)
+                Tuple<bool, string> oReturn = new Tuple<bool, string>(false, "");
+                List<PlanModel> oCurrentPeriodList = ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.GetCurrenPeriod(SessionModel.CurrentCompany.CompanyPublicId, true);
+                using (var package = new ExcelPackage(Excel))
                 {
-                    object[,] values = (object[,])workBook.Worksheets.First().Cells["A1:C1"].Value;
+                    // Get the work book in the file
+                    ExcelWorkbook workBook = package.Workbook;
 
-                    string UncodifiedObj = new JavaScriptSerializer().Serialize(values);
-                    if (UncodifiedObj.Contains(Models.General.InternalSettings.Instance
-                                    [Models.General.Constants.MP_CP_ColIdNumber].Value)
-                        && UncodifiedObj.Contains(Models.General.InternalSettings.Instance
-                                    [Models.General.Constants.MP_CP_ColIdName].Value))
+                    if (workBook != null)
                     {
-                        //Get The Active Plan By Customer                            
-                        oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries += (workBook.Worksheets[1].Dimension.End.Row - 1);
-                        ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.PeriodoUpsert(oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault());
+                        object[,] values = (object[,])workBook.Worksheets.First().Cells["A1:C1"].Value;
 
-                        oReturn = new Tuple<bool, string>(true, oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries.ToString());                        
-                    }
-                    else
-                    {
-                        oReturn = new Tuple<bool, string>(false, oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries.ToString());
+                        string UncodifiedObj = new JavaScriptSerializer().Serialize(values);
+                        if (UncodifiedObj.Contains(Models.General.InternalSettings.Instance
+                                        [Models.General.Constants.MP_CP_ColSearchCritery].Value)
+                            && UncodifiedObj.Contains(Models.General.InternalSettings.Instance
+                                        [Models.General.Constants.MP_CP_ColSearchParam].Value))
+                        {
+                            //Get The Active Plan By Customer                            
+                            oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries += (workBook.Worksheets[1].Dimension.End.Row - 1);
+                            ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.PeriodoUpsert(oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault());
+
+                            oReturn = new Tuple<bool, string>(true, oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries.ToString());
+                        }
+                        else
+                        {
+                            oReturn = new Tuple<bool, string>(false, oCurrentPeriodList.FirstOrDefault().RelatedPeriodModel.FirstOrDefault().TotalQueries.ToString());
+                        }
                     }
                 }
+                return oReturn;
             }
-            return oReturn;            
+            catch (Exception ex)
+            {
+
+                throw ex.InnerException;
+            }
+
         }
 
         #endregion Private Functions
@@ -603,14 +750,17 @@ namespace MarketPlace.Web.ControllersApi
                             oModel.RelatedThidKnowledgeSearch = new ThirdKnowledgeViewModel();
                             oModel.RelatedThidKnowledgeSearch.CollumnsResult = new TDQueryModel();
 
-                            //Get Reqsult
-                            int IdNumberType = IdType == "213002" ? 1 : IdType == "213001" ? 2 : 0;
+                            //Identification Type
+                            int IdNumberType = IdType == "213002" ? 1 :
+                                         IdType == "213001" ? 2 :
+                                         IdType == "213003" ? 3 :
+                                         IdType == "213004" ? 4 : 0;
 
                             Task<TDQueryModel> qTask = Task.Run(() => ProveedoresOnLine.ThirdKnowledge.Controller.ThirdKnowledgeModule.SimpleRequest(oCurrentPeriodList.FirstOrDefault().
-                                            RelatedPeriodModel.FirstOrDefault().PeriodPublicId, IdNumberType, IdentificationNumber, Name, oQueryToCreate));
+                                            RelatedPeriodModel.FirstOrDefault().PeriodPublicId, IdNumberType, IdentificationNumber, oQueryToCreate));
 
                             oModel.RelatedThidKnowledgeSearch.CollumnsResult = await qTask;
-                            
+
                             //Init Finally Tuple, Group by ItemGroup Name
                             List<Tuple<string, List<ThirdKnowledgeViewModel>>> Group = new List<Tuple<string, List<ThirdKnowledgeViewModel>>>();
                             List<string> Item1 = new List<string>();

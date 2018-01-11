@@ -1,0 +1,103 @@
+﻿@model BackOffice.Models.Customer.CustomerViewModel
+
+@{
+    ViewBag.Title = "Comprador - Configuración de Notificaciones";
+    Layout = MVC.Shared.Views._Layout;
+
+    Model.RenderScripts = false;
+}
+
+@*ESTE ES EL ENVUELTO COMPLETO DE MENU LATERAL Y CONTENIDO*@
+<div class="POBOProviderWrapper">
+    @*ESTE ES QUE TRAE EL PARCIAL QUE PINTA EL MENU LATERAL*@
+    <div class="POBOProviderSideMenuWrapper">
+        @Html.Partial(MVC.Shared.Views._C_CustomerMenu, Model)
+    </div>
+    <div class="POBOProviderContentWrapper">
+        <div id="POBOProviderUpsertForm">
+            <label class="POBOSectionTitles">Configuración de Notificaciones</label>
+            @{
+                Model.IsForm = false;
+                Html.RenderPartial(MVC.Shared.Views._C_CustomerActions, Model);
+            }
+            <div id="loading"></div>
+            <div id="divGridNotificationConfig"></div>
+            <br />
+            @{
+                Model.IsForm = false;
+                Html.RenderPartial(MVC.Shared.Views._C_CustomerActions, Model);
+            }
+        </div>
+    </div>
+</div>
+
+<!--templates-->
+<div style="display:none;">
+
+    <div id="divGridNotificationConfig_ShortcutToolTipTemplate">
+        <img class="divGrid_kbtooltip" src="@Url.Content(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_InfoTooltip].Value)" title=" Nuevo (alt+shift+n) - Guardar (alt+shift+g) - Descartar (alt+shift+d) " />
+    </div>
+
+    <div id="divGridNotificationConfig_ViewEnablesTemplate">
+        <label class="POBOProviderGridVerSoloTrue">Ver solo los habilitados</label>
+        <input class="POBOProviderGridEnableContact" id="divGridSurveyConfig_ViewEnable" type="checkbox" checked="checked" />
+    </div>
+
+    @*<div id="divGridNotificationConfig_SearchTemplate">
+            <input class="POBOSurveySearchInput" id="divGridSurveyConfig_txtSearch" type="text" value="@Request["SearchParam"]" placeholder="Buscar evaluación por nombre o por grupo" />
+            <a class="POBOSearchEvaluations" href="javascript:Customer_SurveyObject.Search();">Buscar</a>
+        </div>*@
+</div>
+
+@{
+    Model.RenderScripts = true;
+}
+
+@section inlinescripts
+{
+    @Html.Partial(MVC.Shared.Views._C_CustomerMenu, Model)
+
+    @{
+        //get ThirKnowledge Options
+        string oNotificationOptions = "[]";
+        if (Model.CustomerOptions != null &&
+            Model.CustomerOptions.Count > 0)
+        {
+            Dictionary<int, List<ProveedoresOnLine.Company.Models.Util.CatalogModel>> oOptionNotification =
+                Model.CustomerOptions.
+                GroupBy(x => x.CatalogId).
+                Select(x =>
+                    new
+                    {
+                        okey = x.Key,
+                        ovalue = Model.CustomerOptions.Where(y => y.CatalogId == x.Key).OrderBy(y => y.ItemName).ToList(),
+                    }).ToDictionary(k => k.okey, v => v.ovalue);
+
+            //oNotificationOptions = (new System.Web.Script.Serialization.JavaScriptSerializer()).
+            //        Serialize(oOptionCustomer.Select(x => new { Key = x.Key, Value = x.Value }));
+            oNotificationOptions = (new System.Web.Script.Serialization.JavaScriptSerializer()).
+                            Serialize(oOptionNotification.Select(x => new { Key = x.Key, Value = x.Value }));
+        }
+
+        string oPeriodURL = Url.Action
+            (MVC.Customer.ActionNames.PCEvaluationCriteriaUpsert,
+            MVC.Customer.Name,
+            new
+            {
+                CustomerPublicId = Model.RelatedCustomer.RelatedCompany.CompanyPublicId
+            }) + "&ProjectProviderId=${ProjectProviderId}"
+            + "&EvaluationItemId=${EvaluationItemId}";
+    }
+    <script type="text/javascript">
+        var vNotificationOptionList = @(Html.Raw(oNotificationOptions));
+        $(document).ready(function () {
+            Customer_NotificationsObject.Init({
+                ObjectId: 'divGridNotificationConfig',
+                CustomerPublicId: '@Model.RelatedCustomer.RelatedCompany.CompanyPublicId',
+                NotificationsOptions: vNotificationOptionList,
+            });
+
+            Customer_NotificationsObject.RenderAsync();
+        });
+    </script>
+}

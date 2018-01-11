@@ -48,7 +48,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="ProveedoresOnLine.Company">
+    <Reference Include="ProveedoresOnLine.Company, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.Company\developer\ProveedoresOnLine.Company.dll</HintPath>
     </Reference>
     <Reference Include="ProveedoresOnLine.SurveyIndexSearch">
@@ -106,6 +107,9 @@
       <Project>{414215a5-ad37-4434-8b56-5503f593cd3e}</Project>
       <Name>ProveedoresOnline.ThirdknowledgeIndexSearch</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

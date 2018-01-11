@@ -61,7 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\IntegrationPlatform.cs" />
+    <Compile Include="Controller\IntegrationPlatformController.cs" />
     <Compile Include="DAL\Controller\IntegrationPlatformDataController.cs" />
     <Compile Include="DAL\Controller\IntegrationPlatformDataFactory.cs" />
     <Compile Include="DAL\MySQLDAO\IntegrationPlatform_MySqlDao.cs" />
@@ -70,6 +70,7 @@
     <Compile Include="Models\Enumerations.cs" />
     <Compile Include="Models\Integration\CustomDataModel.cs" />
     <Compile Include="Models\Integration\CustomFieldModel.cs" />
+    <Compile Include="Models\Util\InternalSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

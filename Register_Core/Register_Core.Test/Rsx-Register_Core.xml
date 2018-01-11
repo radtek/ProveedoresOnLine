@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Settings>
+  <Register_Core>
+
+    <!--Judicial Process Estrucutre Page-->
+    <key name="Register_Url">https://www.reportecolombia.com/detalle/{1}/</key>   
+
+  </Register_Core>
+</Settings>

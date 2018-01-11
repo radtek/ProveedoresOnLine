@@ -25,6 +25,7 @@ namespace Auth.Web.Controllers
 
         #region public properties
 
+        public string EmailValidate { get; set; }
         /// <summary>
         /// Return url
         /// </summary>
