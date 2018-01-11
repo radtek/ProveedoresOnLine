@@ -69,7 +69,7 @@ var Provider_SearchObject = {
     },
 
     /*{SearchFilter{Enable,Value},SearchOrderType,OrderOrientation,PageNumber}*/
-    Search: function (vSearchObject) {        
+    Search: function (vSearchObject) {
         /*get serach param*/
         if (this.SearchParam != $('#' + Provider_SearchObject.ObjectId + '_txtSearchBox').val()) {
             /*Init pager*/
@@ -83,7 +83,7 @@ var Provider_SearchObject = {
                 if (vSearchObject.SearchFilter.Enable == true) {
                     this.SearchFilter += ',' + vSearchObject.SearchFilter.Value;
                 }
-                else {                    
+                else {
                     this.SearchFilter = this.SearchFilter.replace(new RegExp(vSearchObject.SearchFilter.Value, 'gi'), '').replace(/,,/gi, '');
                 }
 
@@ -116,11 +116,11 @@ var Provider_SearchObject = {
             document.getElementById('frmProviderSearch').submit();
         }
         else {
-        window.location = Provider_SearchObject.GetSearchUrl();
+            window.location = Provider_SearchObject.GetSearchUrl();
         }
     },
 
-    GetSearchUrl: function () {        
+    GetSearchUrl: function () {
         var oUrl = this.SearchUrl;
 
         oUrl += '?CompareId=' + this.CompareId;
@@ -138,7 +138,7 @@ var Provider_SearchObject = {
         $.ajax({
             url: BaseUrl.ApiUrl + '/ProviderApi?ReportGeneralCompare=true&SearchParam=' + Provider_SearchObject.SearchParam + '&SearchFilter=' + Provider_SearchObject.SearchFilter,
             dataType: 'json',
-            success: function (result) {                
+            success: function (result) {
                 if (result != null) {
                     window.location = result;
                 }
@@ -155,6 +155,7 @@ var Provider_SearchObject = {
             url: BaseUrl.ApiUrl + '/CompareApi?CMCompareGet=true&CompareId=' + vCompareId,
             dataType: 'json',
             success: function (result) {
+                debugger;
                 if (result != null) {
                     var oUrl = this.SearchUrl;
                     debugger;
@@ -173,44 +174,55 @@ var Provider_SearchObject = {
 
                     //show all compare search button
                     $("a[href*='Provider_SearchObject.AddCompareProvider']").show();
-
+                    debugger;
                     //render compare items
-                    $.each(result.RelatedProvider, function (item, value) {
-                        //get item html
-                        var oItemHtml = $('#' + Provider_SearchObject.ObjectId + '_Compare_Item_Template').html();
+                    $.each(result.RelatedCompare, function (item, value) {
 
-                        //replace provider info
-                        oItemHtml = oItemHtml.replace(/{ProviderPublicId}/gi, value.RelatedProvider.RelatedCompany.CompanyPublicId);
-                        oItemHtml = oItemHtml.replace(/{ProviderLogoUrl}/gi, value.ProviderLogoUrl);
-                        oItemHtml = oItemHtml.replace(/{CompanyName}/gi, value.RelatedProvider.RelatedCompany.CompanyName);
-                        oItemHtml = oItemHtml.replace(/{IdentificationType}/gi, value.RelatedProvider.RelatedCompany.IdentificationType.ItemName);
-                        oItemHtml = oItemHtml.replace(/{IdentificationNumber}/gi, value.RelatedProvider.RelatedCompany.IdentificationNumber);
-                        oItemHtml = oItemHtml.replace(/{ProviderRateClass}/gi, 'rateit');
-                        oItemHtml = oItemHtml.replace(/{ProviderRate}/gi, value.ProviderRate);
-                        oItemHtml = oItemHtml.replace(/{ProviderRateCount}/gi, value.ProviderRateCount);
+                        debugger;
+                        if (value !=null && value.RelatedProvider !=null) {
+                        
+                            //replace provider info
+                            $.each(value.RelatedProvider, function (item2, value2) {
+                                if (value2 =!null && value2.RelatedCompany) {
+                                    
+                                    $.each(value2.RelatedCompany, function (item3, value3) {
+                                        //get item html
+                                        var oItemHtml = $('#' + Provider_SearchObject.ObjectId + '_Compare_Item_Template').html();
+                                        oItemHtml = oItemHtml.replace(/{ProviderPublicId}/gi, value3.CompanyPublicId);
+                                        oItemHtml = oItemHtml.replace(/{ProviderLogoUrl}/gi, value2.ProviderLogoUrl);
+                                        oItemHtml = oItemHtml.replace(/{CompanyName}/gi, value3.CompanyName);
+                                        oItemHtml = oItemHtml.replace(/{IdentificationType}/gi, value3.IdentificationType);
+                                        oItemHtml = oItemHtml.replace(/{IdentificationNumber}/gi, value3.IdentificationNumber);
+                                        oItemHtml = oItemHtml.replace(/{ProviderRateClass}/gi, 'rateit');
+                                        oItemHtml = oItemHtml.replace(/{ProviderRate}/gi, value2.ProviderRate);
+                                        oItemHtml = oItemHtml.replace(/{ProviderRateCount}/gi, value2.ProviderRateCount);
 
-                        //validate item certified
-                        if (value.ProviderIsCertified != null && value.ProviderIsCertified == true) {
-                            oItemHtml = oItemHtml.replace(/{ProviderIsCertified}/gi, '');
+                                        //validate item certified
+                                        if (value.ProviderIsCertified != null && value.ProviderIsCertified == true) {
+                                            oItemHtml = oItemHtml.replace(/{ProviderIsCertified}/gi, '');
+                                        }
+                                        else {
+                                            oItemHtml = oItemHtml.replace(/{ProviderIsCertified}/gi, 'none');
+                                        }
+
+                                        //validate black list
+                                        if (value.ProviderAlertRisk != Provider_SearchObject.BlackListStatusShowAlert) {
+                                            oItemHtml = oItemHtml.replace(/{ProviderAlertRisk}/gi, 'none');
+                                        }
+                                        else {
+                                            oItemHtml = oItemHtml.replace(/{ProviderAlertRisk}/gi, '');
+                                        }
+
+                                        $('#' + Provider_SearchObject.ObjectId + '_Compare_ItemContainer').append(oItemHtml);
+
+                                        //remove search result add comparison button
+                                        $("a[href*='Provider_SearchObject.AddCompareProvider(\\\'" + value3.CompanyPublicId + "\\\')']").hide();
+                                    });
+                                }
+                            });
                         }
-                        else {
-                            oItemHtml = oItemHtml.replace(/{ProviderIsCertified}/gi, 'none');
-                        }
-
-                        //validate black list
-                        if (value.ProviderAlertRisk != Provider_SearchObject.BlackListStatusShowAlert) {
-                            oItemHtml = oItemHtml.replace(/{ProviderAlertRisk}/gi, 'none');
-                        }
-                        else {
-                            oItemHtml = oItemHtml.replace(/{ProviderAlertRisk}/gi, '');
-                        }
-
-                        $('#' + Provider_SearchObject.ObjectId + '_Compare_ItemContainer').append(oItemHtml);
-
-                        //remove search result add comparison button
-                        $("a[href*='Provider_SearchObject.AddCompareProvider(\\\'" + value.RelatedProvider.RelatedCompany.CompanyPublicId + "\\\')']").hide();
                     });
-
+                    
                     //re-init all rates
                     $('.rateit').rateit();
 
@@ -293,14 +305,14 @@ var Provider_SearchObject = {
                 transport: {
                     read: function (options) {
                         var oSearchParam = $('#' + Provider_SearchObject.ObjectId + '_Compare_Search_ToolTip_Grid').find('input[type=text]').val();
-                       
+
                         debugger;
                         $.ajax({
                             url: BaseUrl.ApiUrl + '/CompareApi?CMCompareSearch=true&SearchParam=' + oSearchParam + '&PageNumber=' + (new Number(options.data.page) - 1) + '&RowCount=' + options.data.pageSize,
                             dataType: 'json',
                             success: function (result) {
                                 options.success(result);
-                                
+
                             },
                             error: function (result) {
                                 options.error(result);
@@ -750,7 +762,7 @@ var Provider_SurveyReports = {
                 },
                 'Generar Reporte': function () {
                     DialogDiv.find('#' + Provider_SurveyReports.ObjectId + '_Form').submit();
-                    DialogDiv.dialog("close");               
+                    DialogDiv.dialog("close");
                 }
             }
         });

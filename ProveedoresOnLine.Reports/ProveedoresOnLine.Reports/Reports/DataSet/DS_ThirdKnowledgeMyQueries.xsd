@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DS_ThirdKnowledgeMyQueries" targetNamespace="http://tempuri.org/DS_ThirdKnowledgeMyQueries.xsd" xmlns:mstns="http://tempuri.org/DS_ThirdKnowledgeMyQueries.xsd" xmlns="http://tempuri.org/DS_ThirdKnowledgeMyQueries.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DS_ThirdKnowledgeMyQueries" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DS_ThirdKnowledgeMyQueries" msprop:Generator_UserDSName="DS_ThirdKnowledgeMyQueries">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DS_ThirdknowledgeMyQueries" msprop:Generator_TableClassName="DS_ThirdknowledgeMyQueriesDataTable" msprop:Generator_TableVarName="tableDS_ThirdknowledgeMyQueries" msprop:Generator_TablePropName="DS_ThirdknowledgeMyQueries" msprop:Generator_RowDeletingName="DS_ThirdknowledgeMyQueriesRowDeleting" msprop:Generator_RowChangingName="DS_ThirdknowledgeMyQueriesRowChanging" msprop:Generator_RowEvHandlerName="DS_ThirdknowledgeMyQueriesRowChangeEventHandler" msprop:Generator_RowDeletedName="DS_ThirdknowledgeMyQueriesRowDeleted" msprop:Generator_UserTableName="DS_ThirdknowledgeMyQueries" msprop:Generator_RowChangedName="DS_ThirdknowledgeMyQueriesRowChanged" msprop:Generator_RowEvArgName="DS_ThirdknowledgeMyQueriesRowChangeEvent" msprop:Generator_RowClassName="DS_ThirdknowledgeMyQueriesRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="User" msprop:Generator_ColumnVarNameInTable="columnUser" msprop:Generator_ColumnPropNameInRow="User" msprop:Generator_ColumnPropNameInTable="UserColumn" msprop:Generator_UserColumnName="User" type="xs:string" minOccurs="0" />
+              <xs:element name="QueryDate" msprop:Generator_ColumnVarNameInTable="columnQueryDate" msprop:Generator_ColumnPropNameInRow="QueryDate" msprop:Generator_ColumnPropNameInTable="QueryDateColumn" msprop:Generator_UserColumnName="QueryDate" type="xs:string" minOccurs="0" />
+              <xs:element name="Status" msprop:Generator_ColumnVarNameInTable="columnStatus" msprop:Generator_ColumnPropNameInRow="Status" msprop:Generator_ColumnPropNameInTable="StatusColumn" msprop:Generator_UserColumnName="Status" type="xs:string" minOccurs="0" />
+              <xs:element name="QueryType" msprop:Generator_ColumnVarNameInTable="columnQueryType" msprop:Generator_ColumnPropNameInRow="QueryType" msprop:Generator_ColumnPropNameInTable="QueryTypeColumn" msprop:Generator_UserColumnName="QueryType" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

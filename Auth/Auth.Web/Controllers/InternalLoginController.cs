@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SessionManager;
 
 namespace Auth.Web.Controllers
 {
     public partial class InternalLoginController : BaseController
     {
+        
         public virtual ActionResult Index(string UrlRetorno)
         {
             //get return url
@@ -31,8 +33,11 @@ namespace Auth.Web.Controllers
                 new { mode = "select" });
         }
 
-        public virtual ActionResult oauth2callback()
+        public virtual ActionResult oauth2callback(string EmailValid)
         {
+            if (Session["Email"] != null)            
+                EmailValid = Session["Email"].ToString();
+            
             //get current application name
             string oAppName = base.GetAppNameByDomain(base.ReturnUrl);
             ViewBag.AppName = oAppName;
@@ -46,19 +51,68 @@ namespace Auth.Web.Controllers
             string oCallbackUrl = Url.Action(MVC.InternalLogin.ActionNames.oauth2callback, MVC.InternalLogin.Name);
             ViewBag.CallbackUrl = oCallbackUrl;
 
-            //validate user login
-            if (Request.Cookies.AllKeys.Any(x => x == oCookieName) &&
+            if (EmailValid != null && EmailValid.Split('@').ToList()[1] == "alpina.com")
+            {
+                Session.Add("Email",EmailValid);
+                base.EmailValidate = EmailValid;
+                //user is logged in
+                SessionManager.Models.Auth.User oUser = DAL.Controller.AuthDataController.Instance.UserGetByEmail(EmailValid);
+                //create model login
+                SessionManager.Models.Auth.User UserToLogin = new SessionManager.Models.Auth.User()
+                {
+                    Name = oUser.Name,
+                    LastName = oUser.LastName,
+                    Email = oUser.Email,
+
+                    RelatedUserProvider = new List<SessionManager.Models.Auth.UserProvider>()
+                            {
+                                new SessionManager.Models.Auth.UserProvider()
+                                {
+                                    ProviderId = oUser.RelatedUserProvider.FirstOrDefault().ProviderId,
+                                    Provider = SessionManager.Models.Auth.enumProvider.InternalLogin,
+                                    ProviderUrl = null,
+                                }
+                            },
+
+                    RelatedUserInfo = new List<SessionManager.Models.Auth.UserInfo>()
+                            {
+                                new SessionManager.Models.Auth.UserInfo()
+                                {
+                                    UserInfoType = SessionManager.Models.Auth.enumUserInfoType.ProfileImage,
+                                    Value = "",
+                                },
+                            },
+                };
+
+                //login user
+                UserToLogin = base.LoginUser(UserToLogin);
+
+                //Add Log 
+                LogManager.ClientLog.AddLog(new LogManager.Models.LogModel()
+                {
+                    User = UserToLogin.UserPublicId,
+                    Application = Auth.Interfaces.Constants.C_ApplicationName,
+                    Source = Request.Url.ToString(),
+                    IsSuccess = true,
+                    LogObject = UserToLogin,
+                });
+
+                //return to site
+                Response.Redirect(base.ReturnUrl.ToString());
+            }
+            else if (Request.Cookies.AllKeys.Any(x => x == oCookieName) &&
                 oCallbackUrl == Request.Url.PathAndQuery)
             {
                 //get service client
                 Google.Apis.IdentityToolkit.v3.IdentityToolkitService service = GetILClient(false, oAppName);
-
+                Google.Apis.IdentityToolkit.v3.Data.IdentitytoolkitRelyingpartyGetAccountInfoRequest oRequestData = new Google.Apis.IdentityToolkit.v3.Data.IdentitytoolkitRelyingpartyGetAccountInfoRequest();
                 //validate client login
-                Google.Apis.IdentityToolkit.v3.Data.IdentitytoolkitRelyingpartyGetAccountInfoRequest oRequestData =
-                    new Google.Apis.IdentityToolkit.v3.Data.IdentitytoolkitRelyingpartyGetAccountInfoRequest()
-                    {
-                        IdToken = Request.Cookies[oCookieName].Value,
-                    };
+
+                oRequestData =
+                        new Google.Apis.IdentityToolkit.v3.Data.IdentitytoolkitRelyingpartyGetAccountInfoRequest()
+                        {
+                            IdToken = Request.Cookies[oCookieName].Value,
+                        };
 
                 Google.Apis.IdentityToolkit.v3.RelyingpartyResource.GetAccountInfoRequest oRequest = service.Relyingparty.GetAccountInfo(oRequestData);
 
@@ -75,15 +129,15 @@ namespace Auth.Web.Controllers
                         LastName = "",
                         Email = oResponse.Users[0].Email,
 
-                        RelatedUserProvider = new List<SessionManager.Models.Auth.UserProvider>() 
-                        { 
-                            new SessionManager.Models.Auth.UserProvider() 
-                            { 
-                                ProviderId = (oResponse.Users[0].ProviderUserInfo != null && 
-                                                oResponse.Users[0].ProviderUserInfo.Any(x=>!string.IsNullOrEmpty(x.FederatedId))) ?   
+                        RelatedUserProvider = new List<SessionManager.Models.Auth.UserProvider>()
+                        {
+                            new SessionManager.Models.Auth.UserProvider()
+                            {
+                                ProviderId = (oResponse.Users[0].ProviderUserInfo != null &&
+                                                oResponse.Users[0].ProviderUserInfo.Any(x=>!string.IsNullOrEmpty(x.FederatedId))) ?
                                                     oResponse.Users[0].ProviderUserInfo.Where(x=>!string.IsNullOrEmpty(x.FederatedId)).
-                                                    Select(x=>x.FederatedId).DefaultIfEmpty(oResponse.Users[0].LocalId).FirstOrDefault() :  
-                                                oResponse.Users[0].LocalId, 
+                                                    Select(x=>x.FederatedId).DefaultIfEmpty(oResponse.Users[0].LocalId).FirstOrDefault() :
+                                                oResponse.Users[0].LocalId,
                                 Provider = SessionManager.Models.Auth.enumProvider.InternalLogin,
                                 ProviderUrl = null,
                             }
@@ -114,18 +168,31 @@ namespace Auth.Web.Controllers
 
                     //return to site
                     Response.Redirect(base.ReturnUrl.ToString());
+                    
                 }
             }
 
-            return View();
+            return View(this);
+
+            //validate user login
         }
 
-        public virtual JsonResult oobActionUrl()
+        public virtual ActionResult oobActionUrl()
         {
             //get current application name
             string oAppName = base.GetAppNameByDomain(base.ReturnUrl);
             ViewBag.AppName = oAppName;
-
+            string EmailValid = "";
+            if (Request.Form["email"] != null)
+            {
+                char Separator = '@';
+                string domain = Request.Form["email"].Split(Separator).ToList()[1];
+                if (domain == "alpina.com")
+                {                   
+                    EmailValid = Request.Form["email"];
+                    return RedirectToAction(MVC.InternalLogin.ActionNames.oauth2callback,MVC.InternalLogin.Name,new { mode = "select", EmailValid = EmailValid });
+                }
+            }
             //validate reset password
             if (!string.IsNullOrEmpty(Request["action"]) &&
                 Request["action"].Trim().ToLower() == "resetpassword")
@@ -187,8 +254,17 @@ namespace Auth.Web.Controllers
 
         public virtual ActionResult ResetPassword(string Success, string Email)
         {
+            return RedirectToAction
+                (MVC.InternalLogin.ActionNames.oauth2callback,
+                MVC.InternalLogin.Name,
+                new { mode = "select" });
+        }
+
+        public virtual ActionResult RedirectToNewLoggin()
+        {
             return View();
         }
+
 
         #region private methods
 

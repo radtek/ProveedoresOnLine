@@ -371,7 +371,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
             return oReturn;
         }
 
-        public List<Models.TDQueryModel> ThirdKnowledgeSearch(string CustomerPublicId, string RelatedUser, string StartDate, string EndtDate, int PageNumber, int RowCount, string SearchType, string Status, out int TotalRows)
+        public List<Models.TDQueryModel> ThirdKnowledgeSearch(string CustomerPublicId, string RelatedUser,string Domain, string StartDate, string EndtDate, int PageNumber, int RowCount, string SearchType, string Status, out int TotalRows)
         {
             List<IDbDataParameter> lstParams = new List<IDbDataParameter>();
 
@@ -383,6 +383,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
             lstParams.Add(DataInstance.CreateTypedParameter("vSearchType", SearchType));
             lstParams.Add(DataInstance.CreateTypedParameter("vStatus", Status));
             lstParams.Add(DataInstance.CreateTypedParameter("vRelatedUser", RelatedUser));
+            lstParams.Add(DataInstance.CreateTypedParameter("vDomain", Domain));
 
             TotalRows = 0;
 
@@ -613,7 +614,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.DAL.MySQLDAO
                                  QueryInfoPublicId = qinfg.Key.QueryInfoPublicId,
                                  QueryPublicId = qinfg.Key.QueryPublicId,
                                  NameResult = qinfg.Key.NameResult,
-                                 IdentificationResult = qinfg.Key.NameResult,
+                                 IdentificationResult = qinfg.Key.IdentificationResult,
                                  Priority = qinfg.Key.Priority,
                                  Peps = qinfg.Key.Peps,
                                  Status = qinfg.Key.Status,

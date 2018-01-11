@@ -15,11 +15,13 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
     {
         private ADO.Interfaces.IADO DataInstance;
         private ADO.Interfaces.IADO DataInstanceTopbls;
+        private ADO.Interfaces.IADO DataInstanceThirdKnowledge;
 
         public IndexSearch_MySqlDao()
         {
             DataInstance = new ADO.MYSQL.MySqlImplement(Models.Constants.C_POL_SearchConnectionName);
             DataInstanceTopbls = new ADO.MYSQL.MySqlImplement(Models.Constants.C_Topbls_SearchConnectionName);
+            DataInstanceThirdKnowledge = new ADO.MYSQL.MySqlImplement(Models.Constants.C_ThirdKnowledge_ConnectionName);
         }
 
         #region Company Index
@@ -39,7 +41,11 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                 response.DataSetResult.Tables[0] != null &&
                 response.DataSetResult.Tables[0].Rows.Count > 0 &&
                 response.DataSetResult.Tables[1] != null &&
-                response.DataSetResult.Tables[1].Rows.Count > 0)
+                response.DataSetResult.Tables[1].Rows.Count > 0 &&
+                response.DataSetResult.Tables[2] != null &&
+                response.DataSetResult.Tables[2].Rows.Count > 0 &&
+                response.DataSetResult.Tables[3] != null &&
+                response.DataSetResult.Tables[3].Rows.Count > 0)
             {
                 oReturn =
                     (from ci in response.DataSetResult.Tables[1].AsEnumerable()
@@ -104,6 +110,50 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                                  StatusId = cpg.Key.StatusId,
                                  Status = cpg.Key.Status,
                                  CustomerProviderEnable = cpg.Key.CustomerProviderEnable,
+                             }).ToList(),
+
+                        oCalificationIndexModel =
+                            (from cp in response.DataSetResult.Tables[2].AsEnumerable()
+                             where !cp.IsNull("CustomerPublicId") &&
+                                   cp.Field<string>("ProviderPublicId") == cig.Key.CompanyPublicId
+                             group cp by new
+                             {
+                                 CalificationProjectConfigId = !cp.IsNull("CalificationProjectConfigId") ? cp.Field<int>("CalificationProjectConfigId") : 0,
+                                 CalificationProjectName  = !cp.IsNull("CalificationProjectConfigName") ? cp.Field<string>("CalificationProjectConfigName") : "",
+                                 CustomerPublicId = !cp.IsNull("CustomerPublicId") ? cp.Field<string>("CustomerPublicId") : "",
+                                 ProviderPublicId = !cp.IsNull("ProviderPublicId") ? cp.Field<string>("ProviderPublicId") : "",
+                                 TotalScore = !cp.IsNull("TotalScore") ? cp.Field<int>("TotalScore") : 0,
+                                 Result = !cp.IsNull("Result") ? cp.Field<string>("Result") : "",
+                             }
+                                 into cpg
+                             select new CalificationIndexModel()
+                             {
+                                 CalificationaProjectId = cpg.Key.CalificationProjectConfigId,
+                                 CalificationProjectName = cpg.Key.CalificationProjectName,
+                                 CustomerPublicId = cpg.Key.CustomerPublicId,
+                                 ProviderPublicId = cpg.Key.ProviderPublicId,
+                                 TotalScore = cpg.Key.TotalScore,
+                                 TotalResult = cpg.Key.Result
+                             }).ToList(),
+
+                        oCustomFiltersIndexModel =
+                            (from cp in response.DataSetResult.Tables[3].AsEnumerable()
+                             where !cp.IsNull("CustomerPublicId") &&
+                                   cp.Field<string>("ProviderPublicId") == cig.Key.CompanyPublicId
+                             group cp by new
+                             {
+                                 CustomerPublicId = !cp.IsNull("CustomerPublicId") ? cp.Field<string>("CustomerPublicId") : "",
+                                 ProviderPublicId = !cp.IsNull("ProviderPublicId") ? cp.Field<string>("ProviderPublicId") : "",
+                                 Label = !cp.IsNull("Label") ? cp.Field<string>("Label") : "",
+                                 value = !cp.IsNull("value") ? cp.Field<string>("value") : "",
+                             }
+                                 into cpg
+                             select new CustomFiltersIndexModel()
+                             {
+                                 CustomerPublicId = cpg.Key.CustomerPublicId,
+                                 ProviderPublicId = cpg.Key.ProviderPublicId,
+                                 Label = cpg.Key.Label,
+                                 value = cpg.Key.value
                              }).ToList()
                      }).ToList();
             }
@@ -190,6 +240,8 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
 
             return oRetun;
         }
+
+
 
         #endregion
 
@@ -335,7 +387,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                          SurveyStatusId = sv.Field<int?>("SurveyStatusId").ToString(),
                          SurveyStatus = sv.Field<string>("SurveyStatus"),
                          //SurveyUserId = sv.Field<int?>("UserId").ToString(),
-                         //SurveyUser = sv.Field<string>("User"),
+                         SurveyUser = sv.Field<string>("User"),
                      }
                          into svg
                      select new SurveyIndexSearchModel()
@@ -348,7 +400,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                          SurveyStatusId = svg.Key.SurveyStatusId,
                          SurveyStatus = svg.Key.SurveyStatus,
                          //UserId = svg.Key.SurveyUserId,
-                         //User = svg.Key.SurveyUser,
+                         User = svg.Key.SurveyUser,
                      }).ToList();
             }
 
@@ -402,10 +454,10 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
         {
             List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
 
-            lstParams.Add(DataInstanceTopbls.CreateTypedParameter("vRowFrom", vRowFrom));
-            lstParams.Add(DataInstanceTopbls.CreateTypedParameter("vRowTo", vRowTo));
+            lstParams.Add(DataInstanceThirdKnowledge.CreateTypedParameter("vRowFrom", vRowFrom));
+            lstParams.Add(DataInstanceThirdKnowledge.CreateTypedParameter("vRowTo", vRowTo));
 
-            ADO.Models.ADOModelResponse response = DataInstanceTopbls.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            ADO.Models.ADOModelResponse response = DataInstanceThirdKnowledge.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
                 CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
                 CommandText = "MP_TK_GetAllTOPBLSDATA",
@@ -473,6 +525,59 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
                          Status = thkg.Key.Status,
                          ImageKey = thkg.Key.ImageKey,
 
+                     }).ToList();
+            }
+
+            return oReturn;
+        }
+
+        public List<TK_QueryIndexModel> GetAllQueryModelIndex()
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
+            
+            ADO.Models.ADOModelResponse response = DataInstanceThirdKnowledge.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "MP_TK_GetThirdknowledgeIndex",
+                CommandType = CommandType.StoredProcedure,
+                Parameters = lstParams,
+            });
+            List<TK_QueryIndexModel> oReturn = null;
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn =
+                    (from thk in response.DataTableResult.AsEnumerable()
+                     where !thk.IsNull("QueryId")
+                     group thk by new
+                     {
+                         CustomerPublicId = thk.Field<string>("CustomerPublicId"),
+                         QueryPublicId = thk.Field<string>("QueryPublicId"),
+                         SearchType = thk.Field<int>("SearchType"),
+                         User = thk.Field<string>("User"),
+                         QueryStatus = thk.Field<int>("QueryStatus"),
+                         FileName = thk.Field<string>("FileName"),
+                         IsSuccess = thk.Field<UInt64>("IsSuccess"),
+                         CreateDate = thk.Field<DateTime>("CreateDate"),
+                         LastModify = thk.Field<DateTime>("LastModify"),
+                         Enable = thk.Field<UInt64>("Enable"),
+                         Domain = thk.Field<string>("User").Split('@')[1],                         
+                     }
+                     into thkg
+                     select new TK_QueryIndexModel()
+                     {                         
+                         CustomerPublicId = thkg.Key.CustomerPublicId,
+                         QueryPublicId = thkg.Key.QueryPublicId,                      
+                         SearchType = thkg.Key.SearchType.ToString(),
+                         User = thkg.Key.User.ToString(),
+                         Domain = thkg.Key.Domain,
+                         QueryStatus = thkg.Key.QueryStatus.ToString(),
+                         FileName = thkg.Key.FileName,
+                         IsSuccess = thkg.Key.IsSuccess == 1 ? true : false,
+                         CreateDate = thkg.Key.CreateDate,
+                         LastModify = thkg.Key.LastModify,
+                         Enable = thkg.Key.Enable == 1 ? true : false
                      }).ToList();
             }
 

@@ -28,7 +28,7 @@
     
     <key name="CompanyCustomerIndex">dev_companycustomerindex</key>
 
-    <key name="CompanySurveyIndex">dev_companysurveyindex</key>
+    <key name="CompanySurveyIndex">dev_surveyindex</key>
     
     <key name="CustomerProviderIndex">dev_customerproviderindex</key>
       
@@ -48,6 +48,15 @@
     <key name="File_TempDirectory">/TempDirectory/</key>
     <key name="File_RemoteDirectory">\BackOffice\</key>
     <key name="File_ExcelDirectory">\BackOffice\BlackListFiles\</key>
+
+    <!--Notification URL Redirection and Icons-->
+    <key name="UrlNotificationAdditionalInfo_BO">localhost:55537/Provider/LIChaimberOfCommerceUpsert?ProviderPublicId=18474D1D</key>
+    <key name="UrlNotificationHSEQ_BO">localhost:55537/Provider/LIChaimberOfCommerceInfo?ProviderPublicId=</key>
+    <key name="UrlNotificationGeneralInfo_BO">localhost:55537/Provider/LIChaimberOfCommerceInfo?ProviderPublicId=</key>
+
+    <key name="UrlNotificationIconAdditionalInfo">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/doc1.png</key>
+    <key name="UrlNotificationIconHSEQ">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/doc2.png</key>
+    <key name="UrlNotificationIconGeneralInfo">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/doc3.png</key>
 
   </BackOffice>
 </Settings>

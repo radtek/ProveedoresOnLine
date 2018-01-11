@@ -94,7 +94,7 @@ var Customer_SearchObject = {
                 width: '36px',
             }, {
                 field: 'IdentificationNumber',
-                title: 'Identification',                
+                title: 'Identification',
                 width: '50px',
             }, {
                 title: 'Reporte',
@@ -616,7 +616,7 @@ var Customer_CalificationProjectObject = {
     CustomerPublicId: '',
     CalificationProjectItemUrl: '',
     CalificationProjectConfigId: '',
-    CalificationProjectConfigValidateId:'',
+    CalificationProjectConfigValidateId: '',
     CalificationProjectValidateUrl: '',
     CalificationProjectConfigType: '',
     CustomerOptions: new Array(),
@@ -631,9 +631,7 @@ var Customer_CalificationProjectObject = {
         this.CalificationProjectValidateUrl = vInitObject.CalificationProjectValidateUrl;
         this.CalificationProjectConfigType = vInitObject.CalificationProjectConfigType;
         this.PageSize = vInitObject.PageSize;
-        debugger;
         if (vInitObject.CustomerOptions != null) {
-            debugger;
             $.each(vInitObject.CustomerOptions, function (item, value) {
                 Customer_CalificationProjectObject.CustomerOptions[value.Key] = value.Value;
             });
@@ -826,7 +824,7 @@ var Customer_CalificationProjectObject = {
                     name: '',
                     text: 'Agregar Validación',
                     click: function (e) {
-                        
+
                         // e.target is the DOM element representing the button
                         var tr = $(e.target).closest("tr"); // get the current table row (tr)
                         // get the data bound to the current table row
@@ -870,8 +868,8 @@ var Customer_CalificationProjectObject = {
                         fields: {
                             CalificationProjectConfigValidateId: { editable: false, nullable: true },
                             Operator: { editable: true, validation: { required: true } },
-                            Value: { editable: true},
-                            Result: {editable: true},
+                            Value: { editable: true },
+                            Result: { editable: true },
                             Enable: { editable: true, type: 'boolean', defaultValue: true },
                         },
                     }
@@ -955,12 +953,11 @@ var Customer_CalificationProjectObject = {
             }, {
                 field: 'Operator',
                 title: 'Operador',
-                width: '200px',              
+                width: '200px',
                 template: function (dataItem) {
-                    debugger;
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.Operator != null) {
-                        
+
                         $.each(Customer_CalificationProjectObject.CustomerOptions[2001], function (item, value) {
                             if (dataItem.Operator == value.ItemId) {
                                 oReturn = value.ItemName;
@@ -970,8 +967,7 @@ var Customer_CalificationProjectObject = {
                     return oReturn;
                 },
                 editor: function (container, options) {
-                    debugger;
-                    $('<input required data-bind="value:' + options.field + '"/>')                        
+                    $('<input required data-bind="value:' + options.field + '"/>')
                         .appendTo(container)
                         .kendoDropDownList({
                             dataSource: Customer_CalificationProjectObject.CustomerOptions[2001],
@@ -989,9 +985,9 @@ var Customer_CalificationProjectObject = {
                 field: 'Result',
                 title: 'Resultado',
                 width: '50px',
-                format: '{0:n0}'            
+                format: '{0:n0}'
             }],
-        });        
+        });
     },
 };
 
@@ -1004,6 +1000,7 @@ var Customer_CalificationProjectItemObject = {
     CustomerOptions: new Array(),
     CalificationProjectConfigOptions: new Array(),
     CalificationProjectConfigCategoryOptions: new Array(),
+    CalificationProjectConfigAditionalDocumentsOptions: new Array(),
 
     Init: function (vInitObject) {
         this.ObjectId = vInitObject.ObjectId;
@@ -1023,6 +1020,12 @@ var Customer_CalificationProjectItemObject = {
         if (vInitObject.CalificationProjectConfigCategoryOptions != null) {
             $.each(vInitObject.CalificationProjectConfigCategoryOptions, function (item, value) {
                 Customer_CalificationProjectItemObject.CalificationProjectConfigCategoryOptions[value.Key] = value.Value;
+            });
+        }
+        if (vInitObject.CalificationProjectConfigAditionalDocumentsOptions != null) {
+
+            $.each(vInitObject.CalificationProjectConfigAditionalDocumentsOptions, function (item, value) {
+                Customer_CalificationProjectItemObject.CalificationProjectConfigAditionalDocumentsOptions[value.Key] = value.Value;
             });
         }
     },
@@ -1402,11 +1405,18 @@ var Customer_CalificationProjectItemObject = {
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.Question != null) {
                         var oModule = 0;
+
                         if (vRenderObject.Module == 2003005) /*Balance*/ {
-                            
+                            debugger;
                             $.each(Customer_CalificationProjectItemObject.CalificationProjectConfigCategoryOptions[10], function (item, value) {
                                 if (dataItem.Question == value.CategoryId) {
                                     oReturn = value.CategoryName;
+                                }
+                            });
+                        } else if (vRenderObject.Module == 2003006)/*Aditional Documents*/ {
+                            $.each(Customer_CalificationProjectItemObject.CalificationProjectConfigAditionalDocumentsOptions[1], function (item, value) {
+                                if (dataItem.Question == value.ItemId) {
+                                    oReturn = value.ItemName;
                                 }
                             });
                         }
@@ -1423,18 +1433,17 @@ var Customer_CalificationProjectItemObject = {
                             else if (vRenderObject.Module == 2003004) /*HSEQ info*/ {
                                 oModule = 701;
                             }
-
                             $.each(Customer_CalificationProjectItemObject.CalificationProjectConfigOptions[oModule], function (item, value) {
                                 if (dataItem.Question == value.ItemId) {
                                     oReturn = value.ItemName;
                                 }
                             });
-                        }                        
+                        }
                     }
                     return oReturn;
                 },
                 editor: function (container, options) {
-                    
+
                     var oModule = 0;
 
                     if (vRenderObject.Module == 2003005) /*Balance*/ {
@@ -1458,6 +1467,27 @@ var Customer_CalificationProjectItemObject = {
                             },
                             dataSource: Customer_CalificationProjectItemObject.CalificationProjectConfigCategoryOptions[10],
                         });
+                    } else if (vRenderObject.Module == 2003006) {
+                        // create an input element
+                        var input = $('<input/>');
+                        // set its name to the field to which the column is bound ('name' in this case)
+                        input.attr('value', options.model[options.field]);
+                        // append it to the container
+                        input.appendTo(container);
+                        // initialize a Kendo UI AutoComplete
+                        input.kendoAutoComplete({
+                            dataTextField: 'ItemName',
+                            select: function (e) {
+                                var selectedItem = this.dataItem(e.item.index());
+                                //set server fiel name
+                                options.model[options.field] = selectedItem.ItemName;
+                                options.model['QuestionName'] = selectedItem.ItemName;
+                                options.model['Question'] = selectedItem.ItemId;
+                                //enable made changes
+                                options.model.dirty = true;
+                            },
+                            dataSource: Customer_CalificationProjectItemObject.CalificationProjectConfigAditionalDocumentsOptions[1],
+                        });
                     }
                     else {
                         if (vRenderObject.Module == 2003001) /*Legal info*/ {
@@ -1471,6 +1501,8 @@ var Customer_CalificationProjectItemObject = {
                         }
                         else if (vRenderObject.Module == 2003004) /*HSEQ info*/ {
                             oModule = 701;
+                        } else if (vRenderObject.Module == 2003006)/*Aditional Documents*/ {
+                            oModule = 1701;
                         }
 
                         // create an input element
@@ -1483,7 +1515,7 @@ var Customer_CalificationProjectItemObject = {
                         input.kendoAutoComplete({
                             dataTextField: 'ItemName',
                             select: function (e) {
-                                
+
                                 var selectedItem = this.dataItem(e.item.index());
                                 //set server fiel name
                                 options.model[options.field] = selectedItem.ItemName;
@@ -2923,17 +2955,17 @@ var Customer_ProjectModule = {
                 editor: function (container, options) {
                     if (options.model.EA_EvaluatorType == '1405001') {
                         $('<input required data-bind="value:' + options.field + '"/>')
-                                .appendTo(container)
-                                .kendoDropDownList({
-                                    dataSource: Customer_ProjectModule.RoleCompanyList,
-                                    dataTextField: 'RoleName',
-                                    dataValueField: 'RoleId',
-                                    optionLabel: 'Seleccione una opción'
-                                });
+                            .appendTo(container)
+                            .kendoDropDownList({
+                                dataSource: Customer_ProjectModule.RoleCompanyList,
+                                dataTextField: 'RoleName',
+                                dataValueField: 'RoleId',
+                                optionLabel: 'Seleccione una opción'
+                            });
                     }
                     else {
                         $('<input type="text" class="k-input k-textbox" name="EA_Evaluator" required data-bind="value:' + options.field + '"/>')
-                        .appendTo(container);
+                            .appendTo(container);
                     }
                 },
                 width: '190px',
@@ -3041,9 +3073,9 @@ var ThirdKnowledgeObject = {
 
     Init: function (vInitObject) {
         this.ObjectId = vInitObject.ObjectId,
-        this.CustomerPublicId = vInitObject.CustomerPublicId,
-        this.IsEnable = vInitObject.Enable,
-        this.DateFormat = vInitObject.DateFormat
+            this.CustomerPublicId = vInitObject.CustomerPublicId,
+            this.IsEnable = vInitObject.Enable,
+            this.DateFormat = vInitObject.DateFormat
 
         if (vInitObject.ThirdKnowledgeOptions != null) {
             $.each(vInitObject.ThirdKnowledgeOptions, function (item, value) {
@@ -3266,30 +3298,30 @@ var ThirdKnowledgeObject = {
                     return oReturn;
                 },
             },
-                 {
-                     title: "Acciones",
-                     width: "200px",
-                     command: [{
-                         name: 'edit',
-                         text: 'Editar',
-                     }, {
-                         name: 'Detail',
-                         text: 'Ver Detalle',
-                         click: function (e) {
-                             // e.target is the DOM element representing the button
-                             var tr = $(e.target).closest("tr"); // get the current table row (tr)
-                             // get the data bound to the current table row
-                             var data = this.dataItem(tr);
+            {
+                title: "Acciones",
+                width: "200px",
+                command: [{
+                    name: 'edit',
+                    text: 'Editar',
+                }, {
+                    name: 'Detail',
+                    text: 'Ver Detalle',
+                    click: function (e) {
+                        // e.target is the DOM element representing the button
+                        var tr = $(e.target).closest("tr"); // get the current table row (tr)
+                        // get the data bound to the current table row
+                        var data = this.dataItem(tr);
 
-                             //validate Plan attribute
-                             if (data.PlanPublicId != null) {
-                                 vRenderObject.PlanPublicId = data.PlanPublicId;
-                                 vRenderObject.ThirdKnowledgeType = '1601002';
-                                 ThirdKnowledgeObject.RenderAsync(vRenderObject);
-                             }
-                         }
-                     }, ],
-                 }
+                        //validate Plan attribute
+                        if (data.PlanPublicId != null) {
+                            vRenderObject.PlanPublicId = data.PlanPublicId;
+                            vRenderObject.ThirdKnowledgeType = '1601002';
+                            ThirdKnowledgeObject.RenderAsync(vRenderObject);
+                        }
+                    }
+                }, ],
+            }
             ]
         })
     },
@@ -3306,7 +3338,7 @@ var ThirdKnowledgeObject = {
                     return $('#' + ThirdKnowledgeObject.ObjectId + '_TitleTemplate').html().replace(/\${Title}/gi, vRenderObject.Title);
                 }
             },
-                { name: 'ViewEnable', template: $('#' + ThirdKnowledgeObject.ObjectId + '_ViewEnablesTemplate').html() },
+            { name: 'ViewEnable', template: $('#' + ThirdKnowledgeObject.ObjectId + '_ViewEnablesTemplate').html() },
             ],
             dataSource: {
                 pageSize: ThirdKnowledgeObject.PageSize,
@@ -3420,28 +3452,28 @@ var ThirdKnowledgeObject = {
                 width: '170px',
                 format: ThirdKnowledgeObject.DateFormat,
                 editor:
-                    function timeEditor(container, options) {
-                        var input = $('<input type="date" name="'
-                            + options.field
-                            + '" value="'
-                            + options.model.get(options.field)
-                            + '" />');
-                        input.appendTo(container);
-                    }
+                function timeEditor(container, options) {
+                    var input = $('<input type="date" name="'
+                        + options.field
+                        + '" value="'
+                        + options.model.get(options.field)
+                        + '" />');
+                    input.appendTo(container);
+                }
             }, {
                 field: 'PeriodEndDate',
                 title: 'Fin',
                 width: '170px',
                 format: ThirdKnowledgeObject.DateFormat,
                 editor:
-                    function timeEditor(container, options) {
-                        var input = $('<input type="date" name="'
-                            + options.field
-                            + '" value="'
-                            + options.model.get(options.field)
-                            + '" />');
-                        input.appendTo(container);
-                    }
+                function timeEditor(container, options) {
+                    var input = $('<input type="date" name="'
+                        + options.field
+                        + '" value="'
+                        + options.model.get(options.field)
+                        + '" />');
+                    input.appendTo(container);
+                }
             }, {
                 field: 'TotalQueries',
                 title: 'Consultas Realizadas',
@@ -3466,19 +3498,19 @@ var ThirdKnowledgeObject = {
                 width: '170px',
                 format: ThirdKnowledgeObject.DateFormat,
                 editor:
-                    function timeEditor(container, options) {
-                        var input = $('<input type="date" name="'
-                            + options.field
-                            + '" value="'
-                            + options.model.get(options.field)
-                            + '" />');
-                        input.appendTo(container);
-                    }
+                function timeEditor(container, options) {
+                    var input = $('<input type="date" name="'
+                        + options.field
+                        + '" value="'
+                        + options.model.get(options.field)
+                        + '" />');
+                    input.appendTo(container);
+                }
             },
-                {
-                    title: "Acciones",
-                    width: "200px",
-                    command: [
+            {
+                title: "Acciones",
+                width: "200px",
+                command: [
                     {
                         name: 'Detail',
                         text: 'Ver Detalle',
@@ -3498,7 +3530,7 @@ var ThirdKnowledgeObject = {
                             }
                         }
                     }, ],
-                }
+            }
             ]
         })
     },
@@ -3564,14 +3596,14 @@ var ThirdKnowledgeObject = {
                 width: '170px',
                 format: ThirdKnowledgeObject.DateFormat,
                 editor:
-                    function timeEditor(container, options) {
-                        var input = $('<input type="date" name="'
-                            + options.field
-                            + '" value="'
-                            + options.model.get(options.field)
-                            + '" />');
-                        input.appendTo(container);
-                    }
+                function timeEditor(container, options) {
+                    var input = $('<input type="date" name="'
+                        + options.field
+                        + '" value="'
+                        + options.model.get(options.field)
+                        + '" />');
+                    input.appendTo(container);
+                }
             }]
         })
     },
@@ -3759,3 +3791,510 @@ var Customer_AditionalDocumentsObject = {
         });
     },
 };
+
+var Customer_NotificationsObject = {
+    ObjectId: '',
+    CustomerPublicId: '',
+    NotificationsOptions: new Array(),
+    Init: function (vInitObject) {
+        this.ObjectId = vInitObject.ObjectId;
+        this.CustomerPublicId = vInitObject.CustomerPublicId;
+
+        if (vInitObject.NotificationsOptions != null) {
+            $.each(vInitObject.NotificationsOptions, function (item, value) {
+                Customer_NotificationsObject.NotificationsOptions[value.Key] = value.Value;
+            });
+        }
+        
+    },
+
+    RenderAsync: function () {
+        Customer_NotificationsObject.Render_NotificationsConfig();
+        Customer_NotificationsObject.ConfigEvents();
+    },
+
+    Render_NotificationsConfig: function () {
+        $('#' + Customer_NotificationsObject.ObjectId).kendoGrid({
+            editable: true,
+            navigatable: true,
+            pageable: false,
+            scrollable: true,
+            toolbar: [
+                { name: 'create', text: 'Nuevo' },
+                { name: 'save', text: 'Guardar datos del listado' },
+                { name: 'cancel', text: 'Descartar' },
+                { name: 'ViewEnable', template: $('#' + Customer_NotificationsObject.ObjectId + '_ViewEnablesTemplate').html() },
+                { name: 'ShortcutToolTip', template: $('#' + Customer_NotificationsObject.ObjectId + '_ShortcutToolTipTemplate').html() },
+            ],
+            dataSource: {
+                schema: {
+                    model: {
+                        id: "NotificationConfigId",
+                        fields: {
+                            NotificationConfigId: { editable: false, nullable: true, defaultValue: '0' },
+                            NotificationTitle: { editable: true, validation: { required: true } },
+                            MessageTypeId: { editable: false},
+                            MessageType: { editable: true, validation: { required: true } },
+                            NotificationType: { editable: true, validation: { required: true } },
+                            NotificationTypeId: { editable: false },
+                            DocumentType: { editable: true, validation: { required: false } },
+                            DocumentTypeId: { editable: false },
+                            Document: { editable: true, validation: { required: false } },
+                            DocumentId: { editable: false},
+                            NotificationCritery: { editable: true, validation: { required: true } },
+                            NotificationCriteryId: { editable: false },
+                            RuleType: { editable: true, validation: { required: true } },
+                            RuleTypeId: { editable: false },
+                            NotificationValue: { editable: true, validation: { required: true } },
+                            NotificationValueId: { editable: false },
+                            MessageBody: { editable: true, validation: { required: true } },
+                            MessageBodyId: { editable: false },
+                            Responsable: { editable: true, validation: { required: true } },
+                            ResponsableId: { editable: false },
+                            Enable: { editable: true, type: 'boolean', defaultValue: true },
+                        },
+                    }
+                },
+                transport: {
+                    read: function (options) {
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/CustomerApi?GetNotificationConfigByCustomer=true&CustomerPublicId=' + Customer_NotificationsObject.CustomerPublicId + '&ViewEnable=' + Customer_NotificationsObject.GetViewEnableInfo(),
+                            dataType: 'json',
+                            success: function (result) {
+                                options.success(result);
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', result);
+                            },
+                        });
+                    },
+                    create: function (options) {
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/CustomerApi?NotificationConfigByUpsert=true&CustomerPublicId=' + Customer_NotificationsObject.CustomerPublicId + '&ViewEnable=' + Customer_NotificationsObject.GetViewEnableInfo(), 
+                            dataType: 'json',
+                            type: 'post',
+                            data: {
+                                DataToUpsert: kendo.stringify(options.data)
+                            },
+                            success: function (result) {
+                                options.success(result);
+                                Message('success', 'Se creó el registro.');
+
+                                $('#' + Customer_NotificationsObject.ObjectId).data('kendoGrid').dataSource.read();
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', result);
+                            },
+                        });
+                    },
+                    update: function (options) {
+                        $.ajax({
+                            url: BaseUrl.ApiUrl + '/CustomerApi?NotificationConfigByUpsert=true&CustomerPublicId=' + Customer_NotificationsObject.CustomerPublicId + '&ViewEnable=' + Customer_NotificationsObject.GetViewEnableInfo(), 
+                            dataType: 'json',
+                            type: 'post',
+                            data: {
+                                DataToUpsert: kendo.stringify(options.data)
+                            },
+                            success: function (result) {
+                                options.success(result);
+                                Message('success', 'Se editó el registro.');
+
+                                $('#' + Customer_NotificationsObject.ObjectId).data('kendoGrid').dataSource.read();
+                            },
+                            error: function (result) {
+                                options.error(result);
+                                Message('error', 'Error al actualizar el registro.');
+                            },
+                        });
+                    },
+                },
+                requestStart: function () {
+                    kendo.ui.progress($("#loading"), true);
+                },
+                requestEnd: function () {
+                    kendo.ui.progress($("#loading"), false);
+                }
+            },
+            columns: [{
+                field: 'Enable',
+                title: 'Habilitado',
+                width: '100px',
+            },
+            {
+                field: 'NotificationTitle',
+                title: 'Titulo de Notificación',
+                width: '250px',
+            },
+            {
+                field: 'MessageType',
+                title: 'Tipo Mensaje',
+                width: '190px',
+                template: function (dataItem) {
+                    var oReturn = 'Seleccione una opción.';
+                    if (dataItem != null && dataItem.MessageType != null) {
+                        $.each(Customer_NotificationsObject.NotificationsOptions[2005], function (item, value) {
+                            if (dataItem.MessageType == value.ItemId) {
+                                oReturn = value.ItemName;
+                            }
+                        });
+                    }
+                    return oReturn;
+                },
+                editor: function (container, options) {
+                    $('<input required data-bind="value:' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({                            
+                            dataSource: Customer_NotificationsObject.NotificationsOptions[2005],
+                            dataTextField: 'ItemName',
+                            dataValueField: 'ItemId',
+                            optionLabel: 'Seleccione una opción'
+                        });
+                },
+            }, {
+                field: 'NotificationType',
+                title: 'Tipo de Notificación',
+                width: '180px',
+                template: function (dataItem) {
+                    var oReturn = 'Seleccione una opción.';
+                    if (dataItem != null && dataItem.NotificationType != null) {
+                        $.each(Customer_NotificationsObject.NotificationsOptions[2006], function (item, value) {
+                            if (dataItem.NotificationType == value.ItemId) {
+                                oReturn = value.ItemName;
+                            }
+                        });
+                    }
+                    return oReturn;
+                },
+                editor: function (container, options) {
+                    $('<input required data-bind="value:' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({                            
+                            dataSource: Customer_NotificationsObject.NotificationsOptions[2006],
+                            dataTextField: 'ItemName',
+                            dataValueField: 'ItemId',
+                            optionLabel: 'Seleccione una opción'
+                        });
+                },
+            },{
+                field: 'DocumentType',
+                title: 'Tipo de Documento',
+                width: '180px',
+                template: function (dataItem) {
+                    var oReturn = 'Seleccione una opción.';
+                    if (dataItem != null && dataItem.DocumentType != null) {
+                        $.each(Customer_NotificationsObject.NotificationsOptions[2009], function (item, value) {
+                            if (dataItem.DocumentType == value.ItemId) {
+                                oReturn = value.ItemName;
+                            }
+                        });
+                    }
+                    return oReturn;
+                },
+                editor: function (container, options) {
+                    $('<input required data-bind="value:' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({                            
+                            dataSource: Customer_NotificationsObject.NotificationsOptions[2009],
+                            dataTextField: 'ItemName',
+                            dataValueField: 'ItemId',
+                            optionLabel: 'Seleccione una opción'
+                        });
+                },                
+            }, {
+                field: 'Document',
+                title: 'Documento',
+                width: '280px',
+                editor: function (container, options) {
+                    var oReturn = '';
+                    debugger;
+                    if (options.model.DocumentType == "2009003") {//HSEQ
+                        // create an input element
+                        var input = $('<input/>');
+                        // set its name to the field to which the column is bound ('name' in this case)
+                        input.attr('value', options.model[options.field]);
+                        // append it to the container
+                        input.appendTo(container);
+                        // initialize a Kendo UI AutoComplete
+                        input.kendoAutoComplete({
+                            dataTextField: 'ItemName',
+                            select: function (e) {
+                                var selectedItem = this.dataItem(e.item.index());
+                                //set server fiel name
+                                options.model[options.field] = selectedItem.ItemName;
+                                //options.model['DocumentId'] = selectedItem.ItemId;
+                                options.model['Document'] = selectedItem.ItemName;
+                                //enable made changes
+                                options.model.dirty = true;
+                            },
+                            dataSource: {
+                                type: 'json',
+                                serverFiltering: true,
+                                transport: {
+                                    read: function (options) {
+                                        $.ajax({
+                                            url: BaseUrl.ApiUrl + '/UtilApi?CategorySearchByRule=true&SearchParam=' + options.data.filter.filters[0].value,
+                                            dataType: 'json',
+                                            success: function (result) {
+                                                debugger;
+                                                options.success(result);
+                                            },
+                                            error: function (result) {
+                                                options.error(result);
+                                            }
+                                        });
+                                    },
+                                }
+                            }
+                        });
+                    }
+                    if (options.model.DocumentType == "2009002") {// Información Adicional
+                        // create an input element
+                        var input = $('<input/>');
+                        // set its name to the field to which the column is bound ('name' in this case)
+                        input.attr('value', options.model[options.field]);
+                        // append it to the container
+                        input.appendTo(container);
+                        // initialize a Kendo UI AutoComplete
+                        input.kendoAutoComplete({
+                            dataTextField: 'ItemName',
+                            select: function (e) {
+                                var selectedItem = this.dataItem(e.item.index());
+                                //set server fiel name
+                                options.model[options.field] = selectedItem.ItemName;
+                                //options.model['DocumentId'] = selectedItem.ItemId;
+                                options.model['Document'] = selectedItem.ItemName;
+                                //enable made changes
+                                options.model.dirty = true;
+                            },
+                            dataSource: {
+                                type: 'json',
+                                serverFiltering: true,
+                                transport: {
+                                    read: function (options) {
+                                        $.ajax({
+                                            url: BaseUrl.ApiUrl + '/UtilApi?AditionalDataByCustomer=true&CustomerPublicId=' + Customer_NotificationsObject.CustomerPublicId,
+                                            dataType: 'json',
+                                            success: function (result) {
+                                                debugger;
+                                                options.success(result);
+                                            },
+                                            error: function (result) {
+                                                options.error(result);
+                                            }
+                                        });
+                                    },
+                                }
+                            }
+                        });
+                    }     
+                    if (options.model.DocumentType == "2009001") {//Información General
+                        // create an input element
+                        var input = $('<input/>');
+                        // set its name to the field to which the column is bound ('name' in this case)
+                        input.attr('value', options.model[options.field]);
+                        // append it to the container
+                        input.appendTo(container);
+                        // initialize a Kendo UI AutoComplete
+                        input.kendoAutoComplete({
+                            dataTextField: 'ItemName',
+                            select: function (e) {
+                                var selectedItem = this.dataItem(e.item.index());
+                                //set server fiel name
+                                options.model[options.field] = selectedItem.ItemName;
+                                //options.model['Document'] = selectedItem.ItemId;
+                                options.model['Document'] = selectedItem.ItemName;
+                                //enable made changes
+                                options.model.dirty = true;
+                            },
+                            dataSource: {
+                                type: 'json',
+                                serverFiltering: true,
+                                transport: {
+                                    read: function (options) {
+                                        $.ajax({
+                                            url: BaseUrl.ApiUrl + '/UtilApi?GeneralInfoByCustomer=true',
+                                            dataType: 'json',
+                                            success: function (result) {
+                                                debugger;
+                                                options.success(result);
+                                            },
+                                            error: function (result) {
+                                                options.error(result);
+                                            }
+                                        });
+                                    },
+                                }
+                            }
+                        });
+                    }     
+                    return oReturn;
+                },
+            }, {
+                field: 'NotificationCritery',
+                title: 'Criterio de Notificación',
+                width: '180px',
+                template: function (dataItem) {
+                    var oReturn = 'Seleccione una opción.';
+                    if (dataItem != null && dataItem.NotificationCritery != null) {                        
+                        $.each(Customer_NotificationsObject.NotificationsOptions[2007], function (item, value) {
+                            if (dataItem.NotificationCritery == value.ItemId) {
+                                oReturn = value.ItemName;
+                            }
+                        });
+                    }
+                    return oReturn;
+                },
+                editor: function (container, options) {
+                    $('<input required data-bind="value:' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataSource: Customer_NotificationsObject.NotificationsOptions[2007],
+                            dataTextField: 'ItemName',
+                            dataValueField: 'ItemId',
+                            optionLabel: 'Seleccione una opción'
+                        });
+                },
+            }, {
+                field: 'RuleType',
+                title: 'Tipo de Regla',
+                width: '180px',
+                template: function (dataItem) {
+                    var oReturn = 'Seleccione una opción.';
+                    if (dataItem != null && dataItem.RuleType != null) {
+                        $.each(Customer_NotificationsObject.NotificationsOptions[2001], function (item, value) {
+                            if (dataItem.RuleType == value.ItemId) {
+                                oReturn = value.ItemName;
+                            }
+                        });
+                    }
+                    return oReturn;
+                },
+                editor: function (container, options) {
+                    $('<input required data-bind="value:' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataSource: Customer_NotificationsObject.NotificationsOptions[2001],
+                            dataTextField: 'ItemName',
+                            dataValueField: 'ItemId',
+                            optionLabel: 'Seleccione una opción'
+                        });
+                },
+            }, 
+            {
+                field: 'NotificationValue',
+                title: 'Valor',
+                width: '280px',
+                template: function (dataItem) {
+                    var oReturn = 'Seleccione una opción.';
+                    if (dataItem.NotificationCritery == "2007001") {
+                        $.each(Customer_NotificationsObject.NotificationsOptions[2010], function (item, value) {
+                            if (dataItem.NotificationValue == value.ItemId) {
+                                oReturn = value.ItemName;
+                            }
+                        });
+                    }
+                    if (dataItem.NotificationCritery == "2007002") {
+                        $.each(Customer_NotificationsObject.NotificationsOptions[2011], function (item, value) {
+                            if (dataItem.NotificationValue == value.ItemId) {
+                                oReturn = value.ItemName;
+                            }
+                        });
+                    }
+                    if (dataItem.NotificationCritery == "2007003") {
+                        $.each(Customer_NotificationsObject.NotificationsOptions[902], function (item, value) {
+                            if (dataItem.NotificationValue == value.ItemId) {
+                                oReturn = value.ItemName;
+                            }
+                        });
+                    }
+                    return oReturn;
+                },                
+                editor: function (container, options) {
+                    var oReturn = '';
+                    if (options.model.NotificationCritery == "2007001") {
+                        $('<input required data-bind="value:' + options.field + '"/>')
+                       .appendTo(container)
+                       .kendoDropDownList({
+                           dataSource: Customer_NotificationsObject.NotificationsOptions[2010],
+                           dataTextField: 'ItemName',
+                           dataValueField: 'ItemId',
+                           optionLabel: 'Seleccione una opción'
+                       });
+                        oReturn = 'Seleccione una opción.';
+                        if (options.model.NotificationCritery == "2007001") {
+                            $.each(Customer_NotificationsObject.NotificationsOptions[2010], function (item, value) {
+                                oReturn = value.ItemName;
+                            });
+                        }
+                        return oReturn;
+                    }
+                    if (options.model.NotificationCritery == "2007003") {
+                        $('<input required data-bind="value:' + options.field + '"/>')
+                       .appendTo(container)
+                       .kendoDropDownList({
+                           dataSource: Customer_NotificationsObject.NotificationsOptions[902],
+                           dataTextField: 'ItemName',
+                           dataValueField: 'ItemId',
+                           optionLabel: 'Seleccione una opción'
+                       });
+                        oReturn = 'Seleccione una opción.';
+                        if (options.model.NotificationCritery == "2007003") {
+                            $.each(Customer_NotificationsObject.NotificationsOptions[902], function (item, value) {
+                                oReturn = value.ItemName;
+                            });
+                        }
+                        
+                    }
+                    if (options.model.NotificationCritery == "2007002") {
+                        $('<input required data-bind="value:' + options.field + '"/>')
+                       .appendTo(container)
+                       .kendoDropDownList({
+                           dataSource: Customer_NotificationsObject.NotificationsOptions[2011],
+                           dataTextField: 'ItemName',
+                           dataValueField: 'ItemId',
+                           optionLabel: 'Seleccione una opción'
+                       });
+                        oReturn = 'Seleccione una opción.';
+                        if (options.model.NotificationCritery == "2007002") {
+                            $.each(Customer_NotificationsObject.NotificationsOptions[2011], function (item, value) {
+                                oReturn = value.ItemName;
+                            });
+                        }
+                        
+                    }
+                    return oReturn;
+                    
+                },
+            },
+            {
+                field: 'MessageBody',
+                title: 'Message Body',
+                width: '350px',
+            },
+            {
+                field: 'Responsable',
+                title: 'Responsable',
+                width: '450px',
+            },
+            {
+                field: 'NotificationConfigId',
+                title: 'Id Interno',
+                width: '78px',
+            }
+            ],
+        });
+    },
+
+    ConfigEvents: function () {
+        //config grid infro visible enable event
+        $('#' + Customer_NotificationsObject.ObjectId + '_ViewEnable').change(function () {
+            $('#' + Customer_NotificationsObject.ObjectId).data('kendoGrid').dataSource.read();
+        });
+    },
+
+    GetViewEnableInfo: function () {
+        return $('#' + Customer_NotificationsObject.ObjectId + '_ViewEnable').length > 0 ? $('#' + Customer_NotificationsObject.ObjectId + '_ViewEnable').is(':checked') : true;
+    },
+}

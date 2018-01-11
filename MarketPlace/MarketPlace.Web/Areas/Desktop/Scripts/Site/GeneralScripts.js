@@ -15,54 +15,6 @@ function Header_ShowHideUserMenu(divId) {
     $('#' + divId).toggle('slow');
 }
 
-/*Show notifications*/
-function Header_ShowHideNotifications(DivId, User, companyPublicId) {
-    $('#' + DivId).text('');
-    $.ajax({
-        url: BaseUrl.ApiUrl + '/CompanyApi?NGetNotifications=true&User=' + User + '&CompanyPublicId=' + companyPublicId + '&Enable=true',
-        dataType: 'json',
-        success: function (result) {
-            if (result != null && result.length > 0) {
-                $.each(result, function (item, value) {
-                    $('#' + DivId).append('<li class="row list-group-item text-left POMP_NotifyItemList"><i class="glyphicon glyphicon-info-sign POMP_NotifyItemListIcon"></i><a onclick="javascript: DeleteNotifications(' + value.NotificationId + ', \'' + value.Url + '\')">' + value.Label + '</a></li>');
-                });
-            }
-            else {
-                $('#' + DivId).text('');
-                $('#' + DivId).append('<div class="POMPNotificationsList"><li class="row list-group-item text-left POMP_NotifyItemList"><i class="glyphicon glyphicon-thumbs-up POMP_NotifyItemListIcon"></i>&nbsp;&nbsp;<span>Usted no tiene notificaciones</span></li></div>');
-            }
-        },
-        error: function (result) {
-            $('#' + DivId).text('');
-        }
-    });
-
-    $('#' + DivId).toggle('slow');
-}
-
-function Header_NewNotification() {
-    $('#OldNotification').hide();
-    $('#NewNotification').show();
-}
-
-function Header_OldNotification() {
-    $('#OldNotification').show();
-    $('#NewNotification').hide();
-}
-
-function DeleteNotifications(NotificationId, UrlRedirect) {
-    if (NotificationId > 0) {
-        $.ajax({
-            url: BaseUrl.ApiUrl + '/CompanyApi?NDeleteNotifications=true&NotificationId=' + NotificationId,
-            dataType: 'json',
-            success: function (result) {},
-            error: function (result) {}
-        });
-
-        window.location.replace(UrlRedirect);
-    }
-}
-
 /*init generic tooltip*/
 function Tooltip_InitGeneric() {
     $('.SelGenericTooltip').tooltip();

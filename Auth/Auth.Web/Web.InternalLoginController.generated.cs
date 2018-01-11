@@ -67,6 +67,12 @@ namespace Auth.Web.Areas.Web.Controllers
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.ActionResult oauth2callback()
+        {
+            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.oauth2callback);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public virtual System.Web.Mvc.ActionResult ResetPassword()
         {
             return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.ResetPassword);
@@ -91,6 +97,7 @@ namespace Auth.Web.Areas.Web.Controllers
             public readonly string oauth2callback = "oauth2callback";
             public readonly string oobActionUrl = "oobActionUrl";
             public readonly string ResetPassword = "ResetPassword";
+            public readonly string RedirectToNewLoggin = "RedirectToNewLoggin";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -100,6 +107,7 @@ namespace Auth.Web.Areas.Web.Controllers
             public const string oauth2callback = "oauth2callback";
             public const string oobActionUrl = "oobActionUrl";
             public const string ResetPassword = "ResetPassword";
+            public const string RedirectToNewLoggin = "RedirectToNewLoggin";
         }
 
 
@@ -110,6 +118,14 @@ namespace Auth.Web.Areas.Web.Controllers
         public class ActionParamsClass_Index
         {
             public readonly string UrlRetorno = "UrlRetorno";
+        }
+        static readonly ActionParamsClass_oauth2callback s_params_oauth2callback = new ActionParamsClass_oauth2callback();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_oauth2callback oauth2callbackParams { get { return s_params_oauth2callback; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_oauth2callback
+        {
+            public readonly string EmailValid = "EmailValid";
         }
         static readonly ActionParamsClass_ResetPassword s_params_ResetPassword = new ActionParamsClass_ResetPassword();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -158,23 +174,24 @@ namespace Auth.Web.Areas.Web.Controllers
         }
 
         [NonAction]
-        partial void oauth2callbackOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
+        partial void oauth2callbackOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string EmailValid);
 
         [NonAction]
-        public override System.Web.Mvc.ActionResult oauth2callback()
+        public override System.Web.Mvc.ActionResult oauth2callback(string EmailValid)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.oauth2callback);
-            oauth2callbackOverride(callInfo);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "EmailValid", EmailValid);
+            oauth2callbackOverride(callInfo, EmailValid);
             return callInfo;
         }
 
         [NonAction]
-        partial void oobActionUrlOverride(T4MVC_System_Web_Mvc_JsonResult callInfo);
+        partial void oobActionUrlOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
 
         [NonAction]
-        public override System.Web.Mvc.JsonResult oobActionUrl()
+        public override System.Web.Mvc.ActionResult oobActionUrl()
         {
-            var callInfo = new T4MVC_System_Web_Mvc_JsonResult(Area, Name, ActionNames.oobActionUrl);
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.oobActionUrl);
             oobActionUrlOverride(callInfo);
             return callInfo;
         }
@@ -189,6 +206,17 @@ namespace Auth.Web.Areas.Web.Controllers
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "Success", Success);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "Email", Email);
             ResetPasswordOverride(callInfo, Success, Email);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void RedirectToNewLogginOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult RedirectToNewLoggin()
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.RedirectToNewLoggin);
+            RedirectToNewLogginOverride(callInfo);
             return callInfo;
         }
 

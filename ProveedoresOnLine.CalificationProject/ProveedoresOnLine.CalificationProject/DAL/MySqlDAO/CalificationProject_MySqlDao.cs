@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using ProveedoresOnLine.CalificationProject.Models.CalificationProject;
+using ProveedoresOnLine.Company.Models.Util;
+
 namespace ProveedoresOnLine.CalificationProject.DAL.MySqlDAO
 {
     internal class CalificationProject_MySqlDao : ICalificationProjectData
@@ -851,6 +853,48 @@ namespace ProveedoresOnLine.CalificationProject.DAL.MySqlDAO
             return oReturn;
         }
 
+        public List<CatalogModel> CalificationProjectConfigAditionalDocumentsOptions(string CustomerPublicId)
+        {
+
+            List<System.Data.IDbDataParameter> lstparams = new List<IDbDataParameter>();
+
+            lstparams.Add(DataInstance.CreateTypedParameter("vCustomerPublicId", CustomerPublicId));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "U_Catalog_GetCalificationProjectConfigAditionalDocumentOptions",
+                Parameters = lstparams,
+                CommandType = CommandType.StoredProcedure,                
+            });
+
+            List<CatalogModel> oReturn = new List<CatalogModel>();
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn =
+                    (from ci in response.DataTableResult.AsEnumerable()
+                     where !ci.IsNull("ItemId")
+                     group ci by new
+                     {   
+                         CatalogId = ci.Field<int>("CatalogId"),
+                         ItemId = ci.Field<int>("ItemId"),
+                         ItemName = ci.Field<string>("ItemName"),
+                         ItemEnable = ci.Field<UInt64>("ItemEnable") == 1 ? true : false,
+                     }
+                         into cig
+                     select new ProveedoresOnLine.Company.Models.Util.CatalogModel()
+                     {     
+                         CatalogId = cig.Key.CatalogId,
+                         ItemId = cig.Key.ItemId,
+                         ItemName = cig.Key.ItemName,
+                         ItemEnable = cig.Key.ItemEnable,
+                     }).ToList();
+            }
+
+            return oReturn;
+        }
         #endregion
     }
 }

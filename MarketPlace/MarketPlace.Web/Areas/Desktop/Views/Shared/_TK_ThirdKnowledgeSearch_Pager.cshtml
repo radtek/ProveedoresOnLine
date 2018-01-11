@@ -1,10 +1,13 @@
 ﻿@model MarketPlace.Models.ThirdKnowledge.ThirdKnowledgeViewModel
 @{
     Tuple<int, int> oPageInfo = Model.RelatedThidKnowledgePager.GetStartEndPage();
+        
     string initdate = Request.Params["InitDate"] == null ? "" : Request.Params["InitDate"].ToString().Replace(",", "") ;
     string endate = Request.Params["EndDate"] == null ? "" : endate = Request.Params["EndDate"].ToString().Replace(",", "");
     string searchtype = Request.Params["SearchType"] == null ? "" : searchtype = Request.Params["SearchType"].ToString().Replace(",", "");
     string status = Request.Params["Status"] == null ? "" : status = Request.Params["Status"].ToString().Replace(",", "");
+    string user = Request.Params["User"] == null ? "" : user = Request.Params["User"].ToString().Replace(",", "");
+    string domain = Request.Params["Domain"] == null ? "" : domain = Request.Params["Domain"].ToString().Replace(",", "");
 }
 @if (oPageInfo.Item2 > oPageInfo.Item1)
 {
@@ -12,7 +15,7 @@
         @if (Model.RelatedThidKnowledgePager.PageNumber > 0)
         {
             <li>
-                <a href="javascript:Third_KnowledgeSearch.Search({PageNumber:@(Model.RelatedThidKnowledgePager.PageNumber - 1),CustomerPublicId:'@(Model.ThirdKnowledgeResult.Select(x => x.QueryPublicId).FirstOrDefault().ToString())',InitDate:'@initdate', EndDate:'@endate',SearchType:'@searchtype', Status:'@status'});">< Anterior</a>
+                <a href="javascript:MyQueriesSearchObj.Search({PageNumber:@(Model.RelatedThidKnowledgePager.PageNumber - 1),CustomerPublicId:'@(Model.ThirdKnowledgeResult.Select(x => x.QueryPublicId).FirstOrDefault().ToString())',InitDate:'@initdate', EndDate:'@endate',SearchType:'@searchtype', Status:'@status', User:'@user', Domain:'@domain'});">< Anterior</a>
             </li>
         }
         @for (int i = oPageInfo.Item1; i <= oPageInfo.Item2; i++)
@@ -21,11 +24,11 @@
                 @if ((Model.RelatedThidKnowledgePager.PageNumber + 1) == i)
                 {
                    
-                    <a class="selected" href="javascript:Third_KnowledgeSearch.Search({PageNumber:@(i - 1),CustomerPublicId:'@(Model.ThirdKnowledgeResult.Select(x => x.QueryPublicId).FirstOrDefault().ToString())',InitDate:'@initdate', EndDate:'@endate', SearchType:'@searchtype', Status:'@status'});">@i</a>
+                    <a class="selected" href="javascript:MyQueriesSearchObj.Search({PageNumber:@(i - 1),CustomerPublicId:'@(Model.ThirdKnowledgeResult.Select(x => x.QueryPublicId).FirstOrDefault().ToString())',InitDate:'@initdate', EndDate:'@endate', SearchType:'@searchtype', Status:'@status', User:'@user', Domain:'@domain'});">@i</a>
                 }
                 else
                 {
-                    <a href="javascript:Third_KnowledgeSearch.Search({PageNumber:@(i - 1),CustomerPublicId:'@(Model.ThirdKnowledgeResult.Select(x => x.QueryPublicId).FirstOrDefault().ToString())',InitDate:'@initdate', EndDate:'@endate',SearchType:'@searchtype', Status:'@status'});">@i</a>
+                    <a href="javascript:MyQueriesSearchObj.Search({PageNumber:@(i - 1),CustomerPublicId:'@(Model.ThirdKnowledgeResult.Select(x => x.QueryPublicId).FirstOrDefault().ToString())',InitDate:'@initdate', EndDate:'@endate',SearchType:'@searchtype', Status:'@status', User:'@user', Domain:'@domain'});">@i</a>
                 }
 
             </li>
@@ -33,7 +36,7 @@
         @if ((Model.RelatedThidKnowledgePager.PageNumber + 1) < Model.RelatedThidKnowledgePager.TotalPages)
         {
             <li>
-                <a href="javascript:Third_KnowledgeSearch.Search({PageNumber:@(Model.RelatedThidKnowledgePager.PageNumber + 1),CustomerPublicId:'@(Model.ThirdKnowledgeResult.Select(x => x.QueryPublicId).FirstOrDefault().ToString())',InitDate:'@initdate', EndDate:'@endate',SearchType:'@searchtype', Status:'@status'});">Siguiente ></a>
+                <a href="javascript:MyQueriesSearchObj.Search({PageNumber:@(Model.RelatedThidKnowledgePager.PageNumber + 1),CustomerPublicId:'@(Model.ThirdKnowledgeResult.Select(x => x.QueryPublicId).FirstOrDefault().ToString())',InitDate:'@initdate', EndDate:'@endate',SearchType:'@searchtype', Status:'@status', User:'@user', Domain:'@domain'});">Siguiente ></a>
             </li>
         }
     </ul>

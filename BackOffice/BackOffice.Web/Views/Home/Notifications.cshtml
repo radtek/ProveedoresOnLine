@@ -1,0 +1,92 @@
+﻿@{
+    ViewBag.Title = "Proveedores OnLine - Mis Notificaciones";
+    Layout = MVC.Shared.Views._Layout;
+}
+
+@*ESTE ES EL ENVUELTO COMPLETO DE MENU LATERAL Y CONTENIDO*@
+<div class="POBOProviderWrapper">
+    @*ESTE ES QUE TRAE EL PARCIAL QUE PINTA EL MENU LATERAL*@
+    <div class="POBOProviderSideMenuWrapper">
+        
+    </div>
+    <div class="POBOProviderContentWrapper">
+        <div class="POBOProviderUpsertForm">
+            <label class="POBOSectionTitles">Mis Notificaciones</label>
+
+
+            @if (BackOffice.Models.General.SessionModel.NewNotifications)
+            {
+                if (BackOffice.Models.General.SessionModel.ListNotifications != null)
+                {
+                    <table class="table table-hover">
+                        <thead>
+                        </thead>
+                        <tbody>
+                            @foreach (var Notification in BackOffice.Models.General.SessionModel.ListNotifications)
+                    {
+                        var companyInfo = ProveedoresOnLine.Company.Controller.Company.CompanyGetBasicInfo(Notification.CompanyPublicId);
+
+                        var NotificatioBody = Notification.ListNotificationInfo.SingleOrDefault(x => x.NotificationInfoType == 2008007) != null
+                            ? Notification.ListNotificationInfo.SingleOrDefault(x => x.NotificationInfoType == 2008007).LargeValue
+                            : "";
+
+                        var logo = companyInfo != null
+                            ? companyInfo.CompanyInfo.Where(y => y.ItemInfoType.ItemId == 203005).Select(y => y.Value).FirstOrDefault()
+                            : Notification.NotificationType == 2009001 // GeneralInfo
+                            ? BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_NotificationIconGeneralInfo].Value.Trim()
+                            : Notification.NotificationType == 2009002 //AdditionalInfo
+                            ? BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_NotificationIconAdditionalInfo].Value.Trim()
+                            : Notification.NotificationType == 2009003 //HSEQ
+                            ? BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_NotificationIconHSEQ].Value.Trim()
+                            : "";
+
+                        var UrlRedirection = Notification.NotificationType == 2009001 // GeneralInfo
+                            ? BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_NotificationGeneralInfo_BO].Value.Trim() + Notification.CompanyPublicId
+                            : Notification.NotificationType == 2009002 //AdditionalInfo
+                            ? BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_NotificationAdditionalInfo_BO].Value.Trim() + Notification.CompanyPublicId
+                            : Notification.NotificationType == 2009003 //HSEQ
+                            ? BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_NotificationHSEQ_BO].Value.Trim() + Notification.CompanyPublicId
+                            : "#";
+
+                        var classLeido = Notification.State == 2013002 ? "background : #EFF5F5;" : "";
+                                <tr style="@classLeido">
+                                    <td>
+                                        @Html.Raw(
+                                                    Ajax.ActionLink(
+                                                                "[replacetext]",
+                                                                "ChangeStatusNotification",
+                                                                "Home",
+                                                                new
+                                                                {
+                                                                    idNotification = Notification.NotificationId
+                                                                },
+                                                                new AjaxOptions
+                                                                {
+                                                                    UpdateTargetId = "Notification",
+                                                                    InsertionMode = InsertionMode.Replace,
+                                                                    HttpMethod = "POST",
+                                                                    OnBegin = "actualizaEstado('" + UrlRedirection + "', this)"
+                                                                },
+                                                                null)
+                                                    .ToHtmlString()
+                                                    .Replace("[replacetext]", "<img class=\"img img-circle\" style=\" width: 35px; height: 35px; margin-right: 10px;\" src=\"" + logo + "\" />" + Notification.Label + "<span class=\"pull-right text-muted small\">" + Notification.CreateDate.ToShortDateString() + Notification.CreateDate.ToLongTimeString() + "</span><br><em class=\"small\" style=\"padding-left: 50px;\">" + NotificatioBody + "</em>"))
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                }
+            }
+        </div>
+    </div>
+</div>
+   
+<script>
+    function actualizaEstado(url, e) {
+        $(e).closest('tr').css("background", '');
+        window.open(url, '_blank');
+    }
+
+</script>
+

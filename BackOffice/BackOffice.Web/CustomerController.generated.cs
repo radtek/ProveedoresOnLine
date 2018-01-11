@@ -139,6 +139,12 @@ namespace BackOffice.Web.Controllers
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.ActionResult NCNotificationsConfigUpsert()
+        {
+            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.NCNotificationsConfigUpsert);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public virtual System.Web.Mvc.ActionResult DownloadReport()
         {
             return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.DownloadReport);
@@ -179,6 +185,7 @@ namespace BackOffice.Web.Controllers
             public readonly string CPCCalificationProjectConfigUpsert = "CPCCalificationProjectConfigUpsert";
             public readonly string CPCCalificationProjectConfigValidateUpsert = "CPCCalificationProjectConfigValidateUpsert";
             public readonly string CPCCalificationProjectConfigItemUpsert = "CPCCalificationProjectConfigItemUpsert";
+            public readonly string NCNotificationsConfigUpsert = "NCNotificationsConfigUpsert";
             public readonly string DownloadReport = "DownloadReport";
             public readonly string GetPdfFileBytes = "GetPdfFileBytes";
         }
@@ -200,6 +207,7 @@ namespace BackOffice.Web.Controllers
             public const string CPCCalificationProjectConfigUpsert = "CPCCalificationProjectConfigUpsert";
             public const string CPCCalificationProjectConfigValidateUpsert = "CPCCalificationProjectConfigValidateUpsert";
             public const string CPCCalificationProjectConfigItemUpsert = "CPCCalificationProjectConfigItemUpsert";
+            public const string NCNotificationsConfigUpsert = "NCNotificationsConfigUpsert";
             public const string DownloadReport = "DownloadReport";
             public const string GetPdfFileBytes = "GetPdfFileBytes";
         }
@@ -318,6 +326,14 @@ namespace BackOffice.Web.Controllers
             public readonly string CustomerPublicId = "CustomerPublicId";
             public readonly string CalificationProjectConfigId = "CalificationProjectConfigId";
         }
+        static readonly ActionParamsClass_NCNotificationsConfigUpsert s_params_NCNotificationsConfigUpsert = new ActionParamsClass_NCNotificationsConfigUpsert();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_NCNotificationsConfigUpsert NCNotificationsConfigUpsertParams { get { return s_params_NCNotificationsConfigUpsert; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_NCNotificationsConfigUpsert
+        {
+            public readonly string CustomerPublicId = "CustomerPublicId";
+        }
         static readonly ActionParamsClass_DownloadReport s_params_DownloadReport = new ActionParamsClass_DownloadReport();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ActionParamsClass_DownloadReport DownloadReportParams { get { return s_params_DownloadReport; } }
@@ -350,6 +366,7 @@ namespace BackOffice.Web.Controllers
                 public readonly string CPCCalificationProjectConfigValidateUpsert = "CPCCalificationProjectConfigValidateUpsert";
                 public readonly string GICustomerUpsert = "GICustomerUpsert";
                 public readonly string Index = "Index";
+                public readonly string NCNotificationsConfigUpsert = "NCNotificationsConfigUpsert";
                 public readonly string PCEvaluationCriteriaUpsert = "PCEvaluationCriteriaUpsert";
                 public readonly string PCEvaluationItemShowCriteria = "PCEvaluationItemShowCriteria";
                 public readonly string PCEvaluationItemUpsert = "PCEvaluationItemUpsert";
@@ -365,6 +382,7 @@ namespace BackOffice.Web.Controllers
             public readonly string CPCCalificationProjectConfigValidateUpsert = "~/Views/Customer/CPCCalificationProjectConfigValidateUpsert.cshtml";
             public readonly string GICustomerUpsert = "~/Views/Customer/GICustomerUpsert.cshtml";
             public readonly string Index = "~/Views/Customer/Index.cshtml";
+            public readonly string NCNotificationsConfigUpsert = "~/Views/Customer/NCNotificationsConfigUpsert.cshtml";
             public readonly string PCEvaluationCriteriaUpsert = "~/Views/Customer/PCEvaluationCriteriaUpsert.cshtml";
             public readonly string PCEvaluationItemShowCriteria = "~/Views/Customer/PCEvaluationItemShowCriteria.cshtml";
             public readonly string PCEvaluationItemUpsert = "~/Views/Customer/PCEvaluationItemUpsert.cshtml";
@@ -554,6 +572,18 @@ namespace BackOffice.Web.Controllers
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "CustomerPublicId", CustomerPublicId);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "CalificationProjectConfigId", CalificationProjectConfigId);
             CPCCalificationProjectConfigItemUpsertOverride(callInfo, CustomerPublicId, CalificationProjectConfigId);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void NCNotificationsConfigUpsertOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string CustomerPublicId);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult NCNotificationsConfigUpsert(string CustomerPublicId)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.NCNotificationsConfigUpsert);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "CustomerPublicId", CustomerPublicId);
+            NCNotificationsConfigUpsertOverride(callInfo, CustomerPublicId);
             return callInfo;
         }
 

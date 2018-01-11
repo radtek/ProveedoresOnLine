@@ -21,6 +21,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -60,7 +61,8 @@
     <Reference Include="FileRepository.S3">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\FileRepository.S3\developer\FileRepository.S3.dll</HintPath>
     </Reference>
-    <Reference Include="IntegrationPlatform">
+    <Reference Include="IntegrationPlatform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\IntegrationPlatform\developer\IntegrationPlatform.dll</HintPath>
     </Reference>
     <Reference Include="LinqToExcel, Version=1.10.1.0, Culture=neutral, PublicKeyToken=9c8ea65a58f03f1f, processorArchitecture=x86">
@@ -72,6 +74,10 @@
     </Reference>
     <Reference Include="LogManager">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\LogManager\developer\LogManager.dll</HintPath>
+    </Reference>
+    <Reference Include="MessageModule.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\MessageModule.Client\developer\MessageModule.Client.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationServer.Caching.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -293,6 +299,8 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\FontAwesomeIcon\font-awesome.css" />
+    <Content Include="Content\FontAwesomeIcon\font-awesome.min.css" />
     <Content Include="Content\Images\arrowSelectedMenuSmall.png" />
     <Content Include="Content\Images\cerrar.png" />
     <Content Include="Content\Images\dafaultProvider.png" />
@@ -491,9 +499,12 @@
     </Content>
     <Content Include="Content\Styles\Site\POBOTopSearchBar.css" />
     <Content Include="Content\Styles\Site\POBOEvaluations.css" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Rsx-Company.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\Site\AdminScripts.js" />
     <Content Include="Scripts\Site\CustomerScripts.js" />
     <Content Include="Scripts\Site\ProviderScripts.js" />
@@ -545,11 +556,17 @@
     <Content Include="fonts\OpenSans-Regular.otf" />
     <Content Include="fonts\OpenSans-Regular.ttf" />
     <Content Include="fonts\OpenSans-Regular.woff" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
     <None Include="Properties\PublishProfiles\DFJBackOffice.pubxml" />
     <None Include="Properties\PublishProfiles\Sebastian Office_Backoffice.pubxml" />
     <None Include="Properties\PublishProfiles\Sebastian.pubxml" />
     <None Include="Properties\PublishProfiles\SebastianHome.pubxml" />
     <None Include="Properties\PublishProfiles\Sebastian_BackOffice_ASUSPC.pubxml" />
+    <None Include="Properties\PublishProfiles\Sergio Palacios.pubxml" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Rsx-BackOffice.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1164,6 +1181,9 @@
     <Content Include="Views\Administrator\AdminSurvey.cshtml" />
     <Content Include="Views\Administrator\AdminThirdknowledge.cshtml" />
     <Content Include="Views\Provider\CPCProviderCalificationProjectUpsert.cshtml" />
+    <Content Include="Views\Customer\NCNotificationsConfigUpsert.cshtml" />
+    <Content Include="Views\Shared\_N_Notifications.cshtml" />
+    <Content Include="Views\Home\Notifications.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

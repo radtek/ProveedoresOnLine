@@ -604,6 +604,7 @@ var Survey_SearchObject = {
     AddSurveyProvider: function (vProviderPublicId) {
         $.ajax({
             url: BaseUrl.ApiUrl + '/SurveyApi?SurveyAddProvider=true&ProviderPublicId=' + vProviderPublicId,
+data:"{''}",
             dataType: 'json',
             success: function (result) {
                 if (result != null) {
@@ -612,7 +613,7 @@ var Survey_SearchObject = {
                     if (($('#Search_Survey_Item_Template li').size() + 1) > 0) {
                         document.getElementById("SurveyProgramButtom").style.display = "inline";
                     }
-
+                    debugger;
                     var oItemHtml = $('#POMPProviderSurvey').html();
 
                     //replace provider info
@@ -669,7 +670,7 @@ var Survey_SearchObject = {
             oProviderList.forEach(function (prv) {
                 $.ajax({
                     url: BaseUrl.ApiUrl + '/SurveyApi?SurveyAddProvider=true&ProviderPublicId=' + prv,
-                    dataType: 'json',
+                    dataType: 'JSON',
                     success: function (result) {
                         if (result != null) {
 
@@ -677,7 +678,7 @@ var Survey_SearchObject = {
                             if (($('#Search_Survey_Item_Template li').size() + 1) > 0) {
                                 document.getElementById("SurveyProgramButtom").style.display = "inline";
                             }
-
+                            debugger;
                             var oItemHtml = $('#POMPProviderSurvey').html();
 
                             //replace provider info

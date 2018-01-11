@@ -17,8 +17,8 @@
     {
         Juridica = 213001,
         Natural = 213002,
-        PersonaExtranjera = 213003
-
+        CCExtranjera = 213003,
+        DenominatioName = 213004
     }
 
     #endregion
@@ -422,6 +422,10 @@
         SurveyType = 111012,
         SurveyRank = 111013,
         SurveyEvaluator = 111014,
+        CalificationType  = 111019,
+        CalificationResult = 111020,
+        CustomFilterType = 111021,
+        CustomFilterItem = 111022,
 
         ProviderStatus = 112001,
         ProviderRate = 112002,
@@ -545,7 +549,7 @@
         ExpirationDate = 1204013,
         CurrentArea = 1204014,
         Reminder = 1204015,
-
+        Eval_Reeval= 1204016,
         //SurveyRepor
 
         //Report By Date
@@ -569,6 +573,12 @@
         EvaluatorRol = 1205005,
         EvaluatorName = 1205006,
         AreaDescription = 1205007,
+    }
+
+    public enum enumSurveyEvalReeval
+    {
+        Evaluate = 1209001,
+        Reevaluate = 1209002
     }
 
     public enum enumSurveyConfigInfoType
@@ -603,8 +613,7 @@
     public enum enumSurveyQuestionType
     {
         Question =118001,
-        File = 118002
-        
+        File = 118002        
     }
 
 
@@ -764,6 +773,16 @@
     {
         Finalized = 501001,
         InProcess = 501002,
+    }
+
+    public enum enumTKFilter
+    {
+        UserFilter = 701001,
+        QueryTypeFilter = 701002,
+        StatusFilter = 701003,
+        DomainFilter = 701004,
+        DateFromFilter = 701005,
+        DateToFilter = 701006,        
     }
 
     #endregion
@@ -936,6 +955,8 @@
         ForeignNoContact = 902010,
         NationalInactive = 902011,
         ForeignInactive = 902012,
+        SpecialNational = 902013,
+        SpecialInternational = 902014,
     }
 
     #endregion

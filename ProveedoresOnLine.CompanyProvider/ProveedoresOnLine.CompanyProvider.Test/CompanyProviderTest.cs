@@ -2048,7 +2048,7 @@ namespace ProveedoresOnLine.CompanyProvider.Test
         public void MPBlackListGetBasicInfo()
         {
             List<BlackListModel> oReturn =
-               ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.BlackListGetBasicInfo("50583E9D");
+               ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.BlackListGetBasicInfo("A118B4DE");
             Assert.AreEqual(true, oReturn.Count >= 1);
         }
 
@@ -2057,6 +2057,15 @@ namespace ProveedoresOnLine.CompanyProvider.Test
         {
             var oReturn = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPGetBasicInfo("9677120A");
         }
+
+        [TestMethod]
+        public void MPAditionalDocumentGetInfoByCustomer()
+        {
+            var oReturn = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPAditionalDocumentGetInfoByCustomer("DA5C572E", 1701001);
+            Assert.AreEqual(true, oReturn.Count >= 1);
+        }
+
+
         #endregion
 
         #region Charts

@@ -1,5 +1,6 @@
 ﻿using MarketPlace.Models.General;
 using MarketPlace.Models.ThirdKnowledge;
+using ProveedoresOnLine.IndexSearch.Models;
 using ProveedoresOnLine.ThirdKnowledge.Models;
 using System;
 using System.Collections.Generic;
@@ -83,6 +84,10 @@ namespace MarketPlace.Models.Provider
 
         public List<Tuple<string, List<ThirdKnowledgeViewModel>>> Group { get; set; }
 
+        public List<Tuple<string, string, string, List<string>, bool>>  TKGroupByListViewModel { get; set; }
+
+        public List<Tuple<string, string, string, TDQueryInfoModel>> TKMasiveDetailModel { get; set; }
+
         public IntegrationPlatform.Models.Integration.CustomDataModel CustomData { get; set; }
 
         public List<ProveedoresOnLine.Company.Models.Util.CatalogModel> ProviderOptions { get; set; }
@@ -90,6 +95,6 @@ namespace MarketPlace.Models.Provider
         public ProviderCalificationViewModel ProviderCalification { get; set; }
 
         public string RelatedSurveyProviders { get; set; }
-        public string ViewMessage { get; set; }
+        public string ViewMessage { get; set; }       
     }
 }

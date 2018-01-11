@@ -57,8 +57,16 @@ namespace MarketPlace.Web
 
                     #region site scripts
 
-                    bundles.Add(new ScriptBundle("~/site/scripts").IncludeDirectory("~/Areas/" + MarketPlace.Models.General.AreaModel.CurrentAreaName + "/Scripts/Site", "*.js", true));                    
+                    bundles.Add(new ScriptBundle("~/site/scripts").IncludeDirectory("~/Areas/" + MarketPlace.Models.General.AreaModel.CurrentAreaName + "/Scripts/Site", "*.js", true));
 
+                    #endregion
+
+                    #region Angular
+                    bundles.Add(new ScriptBundle("~/site/scripts/angular").Include(
+                      "~/Areas/" + MarketPlace.Models.General.AreaModel.CurrentAreaName + "/Scripts/Angular/angular.js",
+                      "~/Areas/" + MarketPlace.Models.General.AreaModel.CurrentAreaName + "/Scripts/Angular/angular-route.js",
+                      "~/Areas/" + MarketPlace.Models.General.AreaModel.CurrentAreaName + "/Scripts/Angular/angular-resource.js",
+                      "~/Areas/" + MarketPlace.Models.General.AreaModel.CurrentAreaName + "/Scripts/Angular/ui-bootstrap.js"));
                     #endregion
 
                     #endregion
@@ -98,6 +106,15 @@ namespace MarketPlace.Web
 
                     bundles.Add(new StyleBundle("~/site/styles").IncludeDirectory(
                               "~/Areas/" + MarketPlace.Models.General.AreaModel.CurrentAreaName + "/Content/Styles/Site",
+                              "*.css",
+                              true));
+
+                    #endregion
+
+                    #region Font Awesome Icon
+
+                    bundles.Add(new StyleBundle("~/site/FontAwesomeIcon").IncludeDirectory(
+                              "~/Areas/" + MarketPlace.Models.General.AreaModel.CurrentAreaName + "/Content/FontAwesomeIcon/",
                               "*.css",
                               true));
 

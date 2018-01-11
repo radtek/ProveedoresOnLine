@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -41,10 +44,7 @@
       <Private>True</Private>
       <HintPath>..\packages\MicrosoftReportViewerWebForms.11.0.0.0\lib\Microsoft.ReportViewer.ProcessingObjectModel.DLL</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\MicrosoftReportViewerWebForms.11.0.0.0\lib\Microsoft.ReportViewer.WebForms.DLL</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="MySql.Data">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ADO\developer\MySql.Data.dll</HintPath>
     </Reference>
@@ -194,6 +194,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DS_GIBlackListreport.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Reports\DataSet\DS_ThirdKnowlegde_MasiveQuery.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DS_ThirdKnowlegde_MasiveQuery.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Reports\DataSet\DS_SelectionProcessReport.cs">
       <DependentUpon>DS_SelectionProcessReport.xsd</DependentUpon>
     </Compile>
@@ -260,6 +265,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DS_SurveyGeneralInfoAreas.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Reports\DataSet\DS_Survey_ProcablesReport.cs">
+      <DependentUpon>DS_Survey_ProcablesReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\DataSet\DS_Survey_ProcablesReport.designer.cs">
+      <DependentUpon>DS_Survey_ProcablesReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\DataSet\DS_ThirdKnowledgeMyQueries.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DS_ThirdKnowledgeMyQueries.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Reports\DataSet\DS_ThirdKnowledgeReport.cs">
       <DependentUpon>DS_ThirdKnowledgeReport.xsd</DependentUpon>
     </Compile>
@@ -267,6 +283,14 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DS_ThirdKnowledgeReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\DataSet\DS_ThirdKnowledgeReportNew.cs">
+      <DependentUpon>DS_ThirdKnowledgeReportNew.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\DataSet\DS_ThirdKnowledgeReportNew.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DS_ThirdKnowledgeReportNew.xsd</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -425,6 +449,17 @@
     <None Include="Reports\DataSet\DS_GIBlackListreport.xss">
       <DependentUpon>DS_GIBlackListreport.xsd</DependentUpon>
     </None>
+    <None Include="Reports\DataSet\DS_ThirdKnowlegde_MasiveQuery.xsc">
+      <DependentUpon>DS_ThirdKnowlegde_MasiveQuery.xsd</DependentUpon>
+    </None>
+    <None Include="Reports\DataSet\DS_ThirdKnowlegde_MasiveQuery.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DS_ThirdKnowlegde_MasiveQuery.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reports\DataSet\DS_ThirdKnowlegde_MasiveQuery.xss">
+      <DependentUpon>DS_ThirdKnowlegde_MasiveQuery.xsd</DependentUpon>
+    </None>
     <None Include="Reports\DataSet\DS_SelectionProcessReport.xsc">
       <DependentUpon>DS_SelectionProcessReport.xsd</DependentUpon>
     </None>
@@ -524,6 +559,28 @@
     <None Include="Reports\DataSet\DS_SurveyGeneralInfoAreas.xss">
       <DependentUpon>DS_SurveyGeneralInfoAreas.xsd</DependentUpon>
     </None>
+    <None Include="Reports\DataSet\DS_Survey_ProcablesReport.xsc">
+      <DependentUpon>DS_Survey_ProcablesReport.xsd</DependentUpon>
+    </None>
+    <None Include="Reports\DataSet\DS_Survey_ProcablesReport.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DS_Survey_ProcablesReport1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Reports\DataSet\DS_Survey_ProcablesReport.xss">
+      <DependentUpon>DS_Survey_ProcablesReport.xsd</DependentUpon>
+    </None>
+    <None Include="Reports\DataSet\DS_ThirdKnowledgeMyQueries.xsc">
+      <DependentUpon>DS_ThirdKnowledgeMyQueries.xsd</DependentUpon>
+    </None>
+    <None Include="Reports\DataSet\DS_ThirdKnowledgeMyQueries.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DS_ThirdKnowledgeMyQueries.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reports\DataSet\DS_ThirdKnowledgeMyQueries.xss">
+      <DependentUpon>DS_ThirdKnowledgeMyQueries.xsd</DependentUpon>
+    </None>
     <None Include="Reports\DataSet\DS_ThirdKnowledgeReport.xsc">
       <DependentUpon>DS_ThirdKnowledgeReport.xsd</DependentUpon>
     </None>
@@ -535,11 +592,25 @@
     <None Include="Reports\DataSet\DS_ThirdKnowledgeReport.xss">
       <DependentUpon>DS_ThirdKnowledgeReport.xsd</DependentUpon>
     </None>
+    <None Include="Reports\DataSet\DS_ThirdKnowledgeReportNew.xsc">
+      <DependentUpon>DS_ThirdKnowledgeReportNew.xsd</DependentUpon>
+    </None>
+    <None Include="Reports\DataSet\DS_ThirdKnowledgeReportNew.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DS_ThirdKnowledgeReportNew.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reports\DataSet\DS_ThirdKnowledgeReportNew.xss">
+      <DependentUpon>DS_ThirdKnowledgeReportNew.xsd</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Reports\C_Report_CalificationProject.rdlc" />
     <EmbeddedResource Include="Reports\C_Report_GerencialInfo.rdlc" />
     <EmbeddedResource Include="Reports\F_FinancialReport.rdlc" />
+    <EmbeddedResource Include="Reports\SV_Report_Procables.rdlc" />
+    <EmbeddedResource Include="Reports\TK_Report_ThirdKnowledgeMasiveQuery.rdlc" />
+    <EmbeddedResource Include="Reports\TK_Report_ThirdKnowledgeMyQueries.rdlc" />
     <EmbeddedResource Include="Reports\PJ_Report_SelectionProcessDetail.rdlc" />
     <EmbeddedResource Include="Reports\SV_Report_GeneralInfo.rdlc" />
     <EmbeddedResource Include="Reports\PJ_Report_SelectionProcess.rdlc" />
@@ -547,6 +618,7 @@
     <EmbeddedResource Include="Reports\SV_Report_SurveyDetail.rdlc" />
     <EmbeddedResource Include="Reports\BL_Report_BlackListReport.rdlc" />
     <EmbeddedResource Include="Reports\TK_Report_GIBlackListReport.rdlc" />
+    <EmbeddedResource Include="Reports\TK_Report_ThirdKnowledgeQueryNew.rdlc" />
     <EmbeddedResource Include="Reports\TK_Report_ThirdKnowledgeQuery.rdlc" />
     <EmbeddedResource Include="Reports\TK_Report_GIBlackListReportDetail.rdlc" />
     <EmbeddedResource Include="Reports\TK_Report_ThirdKnowledgeQueryDetail.rdlc" />
@@ -554,6 +626,11 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>XCOPY "$(ProjectDir)$(OutDir)*.dll" "\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.Reports\developer\" /y</PostBuildEvent>
+  </PropertyGroup>
+  <Import Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="'$(SQLDBExtensionsRefPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="'$(SQLDBExtensionsRefPath)' == ''" />
+  <PropertyGroup>
+    <SsdtUnitTestVersion>2.0</SsdtUnitTestVersion>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

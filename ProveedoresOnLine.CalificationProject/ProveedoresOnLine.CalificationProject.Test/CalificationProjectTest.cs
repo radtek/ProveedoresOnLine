@@ -245,6 +245,14 @@ namespace ProveedoresOnLine.CalificationProject.Test
 
             Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
         }
+
+        [TestMethod]
+        public void CalificationProjectConfigAditionalDocumentsOptions()
+        {
+            var oReturn = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigAditionalDocumentsOptions("DA5C572E");
+
+            Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
+        }
         #endregion
     }
 }

@@ -744,91 +744,97 @@ namespace BackOffice.Web.ControllersApi
                   .Size(1)
                   .Query(q => q.QueryString(qs => qs.Query(ProviderPublicId))));
 
-                //Model to index 
-                #region Model
-
-                ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel oCompanySurveyIndexModel = new ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel()
+                if (oResult2.Documents != null)
                 {
-                    CatlificationRating = oResult2.Documents.FirstOrDefault().CatlificationRating,
+                    if (oResult2.Documents.Count() > 0)
+                    {
+                        //Model to index 
+                        #region Model
 
-                    City = oResult2.Documents.FirstOrDefault().City,
-                    CityId = oResult2.Documents.FirstOrDefault().CityId,
+                        ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel oCompanySurveyIndexModel = new ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel()
+                        {
+                            CatlificationRating = oResult2.Documents.FirstOrDefault().CatlificationRating,
 
-                    CommercialCompanyName = oResult2.Documents.FirstOrDefault().CommercialCompanyName,
+                            City = oResult2.Documents.FirstOrDefault().City,
+                            CityId = oResult2.Documents.FirstOrDefault().CityId,
 
-                    CompanyEnable = oResult2.Documents.FirstOrDefault().CompanyEnable,
+                            CommercialCompanyName = oResult2.Documents.FirstOrDefault().CommercialCompanyName,
 
-                    CompanyName = oResult2.Documents.FirstOrDefault().CompanyName,
+                            CompanyEnable = oResult2.Documents.FirstOrDefault().CompanyEnable,
 
-                    CompanyPublicId = oResult2.Documents.FirstOrDefault().CompanyPublicId,
+                            CompanyName = oResult2.Documents.FirstOrDefault().CompanyName,
 
-                    Country = oResult2.Documents.FirstOrDefault().Country,
-                    CountryId = oResult2.Documents.FirstOrDefault().CountryId,
-                    CustomerPublicId = oResult2.Documents.FirstOrDefault().CustomerPublicId,
+                            CompanyPublicId = oResult2.Documents.FirstOrDefault().CompanyPublicId,
 
-                    ICA = oResult2.Documents.FirstOrDefault().ICA,
-                    ICAId = oResult2.Documents.FirstOrDefault().ICAId,
+                            Country = oResult2.Documents.FirstOrDefault().Country,
+                            CountryId = oResult2.Documents.FirstOrDefault().CountryId,
+                            CustomerPublicId = oResult2.Documents.FirstOrDefault().CustomerPublicId,
 
-                    IdentificationNumber = oResult2.Documents.FirstOrDefault().IdentificationNumber,
+                            ICA = oResult2.Documents.FirstOrDefault().ICA,
+                            ICAId = oResult2.Documents.FirstOrDefault().ICAId,
+
+                            IdentificationNumber = oResult2.Documents.FirstOrDefault().IdentificationNumber,
 
 
-                    IdentificationType = oResult2.Documents.FirstOrDefault().IdentificationType,
-                    IdentificationTypeId = oResult2.Documents.FirstOrDefault().IdentificationTypeId,
+                            IdentificationType = oResult2.Documents.FirstOrDefault().IdentificationType,
+                            IdentificationTypeId = oResult2.Documents.FirstOrDefault().IdentificationTypeId,
 
-                    InBlackList = oResult2.Documents.FirstOrDefault().InBlackList,
+                            InBlackList = oResult2.Documents.FirstOrDefault().InBlackList,
 
-                    LogoUrl = oResult2.Documents.FirstOrDefault().LogoUrl,
+                            LogoUrl = oResult2.Documents.FirstOrDefault().LogoUrl,
 
-                    oCustomerProviderIndexModel = oResult2.Documents.FirstOrDefault().oCustomerProviderIndexModel,
+                            oCustomerProviderIndexModel = oResult2.Documents.FirstOrDefault().oCustomerProviderIndexModel,
 
-                    PrincipalActivity = oResult2.Documents.FirstOrDefault().PrincipalActivity,
-                    PrincipalActivityId = oResult2.Documents.FirstOrDefault().PrincipalActivityId,
+                            PrincipalActivity = oResult2.Documents.FirstOrDefault().PrincipalActivity,
+                            PrincipalActivityId = oResult2.Documents.FirstOrDefault().PrincipalActivityId,
 
-                    ProviderStatus = oResult2.Documents.FirstOrDefault().ProviderStatus,
-                    ProviderStatusId = oResult2.Documents.FirstOrDefault().ProviderStatusId,
-                };
+                            ProviderStatus = oResult2.Documents.FirstOrDefault().ProviderStatus,
+                            ProviderStatusId = oResult2.Documents.FirstOrDefault().ProviderStatusId,
+                        };
 
-                #endregion
+                        #endregion
 
-                if (oDataToUpsert.BR_IsPrincipal == true && oDataToUpsert.Enable == true)
-                {
-                    oCompanySurveyIndexModel.CityId = Convert.ToInt32(oDataToUpsert.BR_City);
-                    oCompanySurveyIndexModel.City = oDataToUpsert.BR_CityName;
-                    oCompanySurveyIndexModel.CountryId = oCities.Where(x => x.City.ItemId == Convert.ToInt32(oDataToUpsert.BR_City)).Select(y => y.Country.ItemId).DefaultIfEmpty(0).FirstOrDefault();
-                    oCompanySurveyIndexModel.Country = oCities.Where(x => x.City.ItemId == Convert.ToInt32(oDataToUpsert.BR_City)).Select(y => y.Country.ItemName).FirstOrDefault();
+                        if (oDataToUpsert.BR_IsPrincipal == true && oDataToUpsert.Enable == true)
+                        {
+                            oCompanySurveyIndexModel.CityId = Convert.ToInt32(oDataToUpsert.BR_City);
+                            oCompanySurveyIndexModel.City = oDataToUpsert.BR_CityName;
+                            oCompanySurveyIndexModel.CountryId = oCities.Where(x => x.City.ItemId == Convert.ToInt32(oDataToUpsert.BR_City)).Select(y => y.Country.ItemId).DefaultIfEmpty(0).FirstOrDefault();
+                            oCompanySurveyIndexModel.Country = oCities.Where(x => x.City.ItemId == Convert.ToInt32(oDataToUpsert.BR_City)).Select(y => y.Country.ItemName).FirstOrDefault();
 
-                    ICreateIndexResponse oElasticResponse2 = client2.CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value, c => c
-                        .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
-                        .Analysis(a => a.Analyzers(an => an.Custom("customWhiteSpace", anc => anc.Filters("asciifolding", "lowercase")
-                            .Tokenizer("whitespace")
-                            )).TokenFilters(tf => tf
-                                    .EdgeNGram("customEdgeNGram", engrf => engrf
-                                    .MinGram(1)
-                                    .MaxGram(10)))).NumberOfShards(1)
-                        ));
+                            ICreateIndexResponse oElasticResponse2 = client2.CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value, c => c
+                                .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                                .Analysis(a => a.Analyzers(an => an.Custom("customWhiteSpace", anc => anc.Filters("asciifolding", "lowercase")
+                                    .Tokenizer("whitespace")
+                                    )).TokenFilters(tf => tf
+                                            .EdgeNGram("customEdgeNGram", engrf => engrf
+                                            .MinGram(1)
+                                            .MaxGram(10)))).NumberOfShards(1)
+                                ));
 
-                    var Index = client2.Index(oCompanySurveyIndexModel);
+                            var Index = client2.Index(oCompanySurveyIndexModel);
+                        }
+                        else
+                        {
+                            oCompanySurveyIndexModel.CityId = 0;
+                            oCompanySurveyIndexModel.City = string.Empty;
+                            oCompanySurveyIndexModel.CountryId = 0;
+                            oCompanySurveyIndexModel.Country = string.Empty;
+
+                            ICreateIndexResponse oElasticResponse2 = client2.CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value, c => c
+                                .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                                .Analysis(a => a.Analyzers(an => an.Custom("customWhiteSpace", anc => anc.Filters("asciifolding", "lowercase")
+                                    .Tokenizer("whitespace")
+                                    )).TokenFilters(tf => tf
+                                            .EdgeNGram("customEdgeNGram", engrf => engrf
+                                            .MinGram(1)
+                                            .MaxGram(10)))).NumberOfShards(1)
+                                ));
+
+                            var Index = client2.Index(oCompanySurveyIndexModel);
+                        }
+
+                    }
                 }
-                else
-                {
-                    oCompanySurveyIndexModel.CityId = 0;
-                    oCompanySurveyIndexModel.City = string.Empty;
-                    oCompanySurveyIndexModel.CountryId = 0;
-                    oCompanySurveyIndexModel.Country = string.Empty;
-
-                    ICreateIndexResponse oElasticResponse2 = client2.CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value, c => c
-                        .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
-                        .Analysis(a => a.Analyzers(an => an.Custom("customWhiteSpace", anc => anc.Filters("asciifolding", "lowercase")
-                            .Tokenizer("whitespace")
-                            )).TokenFilters(tf => tf
-                                    .EdgeNGram("customEdgeNGram", engrf => engrf
-                                    .MinGram(1)
-                                    .MaxGram(10)))).NumberOfShards(1)
-                        ));
-
-                    var Index = client2.Index(oCompanySurveyIndexModel);
-                }
-
                 #endregion
 
 
@@ -2657,7 +2663,86 @@ namespace BackOffice.Web.ControllersApi
                             Value = oDataToUpsert.AD_File,
                             Enable = true,
                         });
-
+                    //New Data for the grid
+                    oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.Add(
+                        new GenericItemInfoModel()
+                        {
+                            ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.AD_ValueId) ? 0 : Convert.ToInt32(oDataToUpsert.AD_ValueId.Trim()),
+                            ItemInfoType = new CatalogModel()
+                            {
+                                ItemId = (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_Value,
+                            },
+                            Value = oDataToUpsert.AD_Value,
+                            Enable = true,
+                        });
+                    oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.Add(
+                        new GenericItemInfoModel()
+                        {
+                            ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.AD_InitialDateId) ? 0 : Convert.ToInt32(oDataToUpsert.AD_InitialDateId.Trim()),
+                            ItemInfoType = new CatalogModel()
+                            {
+                                ItemId = (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_InitialDate,
+                            },
+                            Value = string.IsNullOrEmpty(oDataToUpsert.AD_InitialDate) ?
+                            string.Empty :
+                            oDataToUpsert.AD_InitialDate.Replace(" ", "").Length == BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_Server].Value.Replace(" ", "").Length ?
+                            oDataToUpsert.AD_InitialDate :
+                            DateTime.ParseExact(
+                                oDataToUpsert.AD_InitialDate,
+                                BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_KendoToServer].Value,
+                                System.Globalization.CultureInfo.InvariantCulture).
+                            ToString(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_Server].Value),
+                            Enable = true,
+                        });
+                    oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.Add(
+                       new GenericItemInfoModel()
+                       {
+                           ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.AD_EndDateId) ? 0 : Convert.ToInt32(oDataToUpsert.AD_EndDateId.Trim()),
+                           ItemInfoType = new CatalogModel()
+                           {
+                               ItemId = (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_EndDate,
+                           },
+                           Value = string.IsNullOrEmpty(oDataToUpsert.AD_EndDate) ?
+                            string.Empty :
+                            oDataToUpsert.AD_EndDate.Replace(" ", "").Length == BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_Server].Value.Replace(" ", "").Length ?
+                            oDataToUpsert.AD_EndDate :
+                            DateTime.ParseExact(
+                                oDataToUpsert.AD_EndDate,
+                                BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_KendoToServer].Value,
+                                System.Globalization.CultureInfo.InvariantCulture).
+                            ToString(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_Server].Value),
+                           Enable = true,
+                       });
+                    oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.Add(
+                       new GenericItemInfoModel()
+                       {
+                           ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.AD_VigencyId) ? 0 : Convert.ToInt32(oDataToUpsert.AD_VigencyId.Trim()),
+                           ItemInfoType = new CatalogModel()
+                           {
+                               ItemId = (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_Vigency,
+                           },
+                           Value = string.IsNullOrEmpty(oDataToUpsert.AD_Vigency) ?
+                            string.Empty :
+                            oDataToUpsert.AD_Vigency.Replace(" ", "").Length == BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_Server].Value.Replace(" ", "").Length ?
+                            oDataToUpsert.AD_Vigency :
+                            DateTime.ParseExact(
+                                oDataToUpsert.AD_Vigency,
+                                BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_KendoToServer].Value,
+                                System.Globalization.CultureInfo.InvariantCulture).
+                            ToString(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_Server].Value),
+                           Enable = true,
+                       });
+                    oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.Add(
+                       new GenericItemInfoModel()
+                       {
+                           ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.AD_DescriptionId) ? 0 : Convert.ToInt32(oDataToUpsert.AD_DescriptionId.Trim()),
+                           ItemInfoType = new CatalogModel()
+                           {
+                               ItemId = (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_Description,
+                           },
+                           LargeValue = oDataToUpsert.AD_Description,
+                           Enable = true,
+                       });
                     lstUsedFiles.Add(oDataToUpsert.AD_File);
                 }
                 else if (oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemType.ItemId == (int)BackOffice.Models.General.enumAditionalDocumentType.AditionalData)
@@ -3293,77 +3378,83 @@ namespace BackOffice.Web.ControllersApi
                         .Size(1)
                         .Query(q => q.QueryString(qs => qs.Query(ProviderPublicId))));
 
-                    //Model to index 
-                    #region Model
-
-                    ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel oCompanySurveyIndexModel = new ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel()
+                    if (oResult2.Documents != null)
                     {
-                        CatlificationRating = oResult2.Documents.FirstOrDefault().CatlificationRating,
-
-                        City = oResult2.Documents.FirstOrDefault().City,
-                        CityId = oResult2.Documents.FirstOrDefault().CityId,
-
-                        CommercialCompanyName = oResult2.Documents.FirstOrDefault().CommercialCompanyName,
-
-                        CompanyEnable = oResult2.Documents.FirstOrDefault().CompanyEnable,
-
-                        CompanyName = oResult2.Documents.FirstOrDefault().CompanyName,
-
-                        CompanyPublicId = oResult2.Documents.FirstOrDefault().CompanyPublicId,
-
-                        Country = oResult2.Documents.FirstOrDefault().Country,
-                        CountryId = oResult2.Documents.FirstOrDefault().CountryId,
-                        CustomerPublicId = oResult2.Documents.FirstOrDefault().CustomerPublicId,
-
-                        ICA = oResult2.Documents.FirstOrDefault().ICA,
-                        ICAId = oResult2.Documents.FirstOrDefault().ICAId,
-
-                        IdentificationNumber = oResult2.Documents.FirstOrDefault().IdentificationNumber,
-
-
-                        IdentificationType = oResult2.Documents.FirstOrDefault().IdentificationType,
-                        IdentificationTypeId = oResult2.Documents.FirstOrDefault().IdentificationTypeId,
-
-                        InBlackList = oResult2.Documents.FirstOrDefault().InBlackList,
-
-                        LogoUrl = oResult2.Documents.FirstOrDefault().LogoUrl,
-
-                        oCustomerProviderIndexModel = oResult2.Documents.FirstOrDefault().oCustomerProviderIndexModel,
-
-                        PrincipalActivity = oResult2.Documents.FirstOrDefault().PrincipalActivity,
-                        PrincipalActivityId = oResult2.Documents.FirstOrDefault().PrincipalActivityId,
-
-                        ProviderStatus = oResult2.Documents.FirstOrDefault().ProviderStatus,
-                        ProviderStatusId = oResult2.Documents.FirstOrDefault().ProviderStatusId,
-                    };
-
-                    #endregion
-
-                    if (oCompanySurveyIndexModel.oCustomerProviderIndexModel.Any(x => x.CustomerPublicId == customer))
-                    {
-                        oCompanySurveyIndexModel.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == customer).All(x =>
+                        if (oResult2.Documents.Count() > 0)
                         {
-                            x.ProviderPublicId = ProviderPublicId;
-                            x.StatusId = Convert.ToInt32(System.Web.HttpContext.Current.Request.Form["SH_Currency"]);
-                            x.Status = oModel.ProviderOptions.Where(y => y.ItemId == Convert.ToInt32(System.Web.HttpContext.Current.Request.Form["SH_Currency"])).Select(y => y.ItemName).DefaultIfEmpty(string.Empty).FirstOrDefault();
-                            return true;
-                        });
+                            //Model to index 
+                            #region Model
+
+                            ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel oCompanySurveyIndexModel = new ProveedoresOnLine.SurveyModule.Models.Index.CompanySurveyIndexModel()
+                            {
+                                CatlificationRating = oResult2.Documents.FirstOrDefault().CatlificationRating,
+
+                                City = oResult2.Documents.FirstOrDefault().City,
+                                CityId = oResult2.Documents.FirstOrDefault().CityId,
+
+                                CommercialCompanyName = oResult2.Documents.FirstOrDefault().CommercialCompanyName,
+
+                                CompanyEnable = oResult2.Documents.FirstOrDefault().CompanyEnable,
+
+                                CompanyName = oResult2.Documents.FirstOrDefault().CompanyName,
+
+                                CompanyPublicId = oResult2.Documents.FirstOrDefault().CompanyPublicId,
+
+                                Country = oResult2.Documents.FirstOrDefault().Country,
+                                CountryId = oResult2.Documents.FirstOrDefault().CountryId,
+                                CustomerPublicId = oResult2.Documents.FirstOrDefault().CustomerPublicId,
+
+                                ICA = oResult2.Documents.FirstOrDefault().ICA,
+                                ICAId = oResult2.Documents.FirstOrDefault().ICAId,
+
+                                IdentificationNumber = oResult2.Documents.FirstOrDefault().IdentificationNumber,
+
+
+                                IdentificationType = oResult2.Documents.FirstOrDefault().IdentificationType,
+                                IdentificationTypeId = oResult2.Documents.FirstOrDefault().IdentificationTypeId,
+
+                                InBlackList = oResult2.Documents.FirstOrDefault().InBlackList,
+
+                                LogoUrl = oResult2.Documents.FirstOrDefault().LogoUrl,
+
+                                oCustomerProviderIndexModel = oResult2.Documents.FirstOrDefault().oCustomerProviderIndexModel,
+
+                                PrincipalActivity = oResult2.Documents.FirstOrDefault().PrincipalActivity,
+                                PrincipalActivityId = oResult2.Documents.FirstOrDefault().PrincipalActivityId,
+
+                                ProviderStatus = oResult2.Documents.FirstOrDefault().ProviderStatus,
+                                ProviderStatusId = oResult2.Documents.FirstOrDefault().ProviderStatusId,
+                            };
+
+                            #endregion
+
+                            if (oCompanySurveyIndexModel.oCustomerProviderIndexModel.Any(x => x.CustomerPublicId == customer))
+                            {
+                                oCompanySurveyIndexModel.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == customer).All(x =>
+                                {
+                                    x.ProviderPublicId = ProviderPublicId;
+                                    x.StatusId = Convert.ToInt32(System.Web.HttpContext.Current.Request.Form["SH_Currency"]);
+                                    x.Status = oModel.ProviderOptions.Where(y => y.ItemId == Convert.ToInt32(System.Web.HttpContext.Current.Request.Form["SH_Currency"])).Select(y => y.ItemName).DefaultIfEmpty(string.Empty).FirstOrDefault();
+                                    return true;
+                                });
+                            }
+
+                            ICreateIndexResponse oElasticResponse2 = client2.CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value, c => c
+                                    .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                                    .Analysis(a => a.Analyzers(an => an.Custom("customWhiteSpace", anc => anc.Filters("asciifolding", "lowercase")
+                                        .Tokenizer("whitespace")
+                                        )).TokenFilters(tf => tf
+                                                .EdgeNGram("customEdgeNGram", engrf => engrf
+                                                .MinGram(1)
+                                                .MaxGram(10)))).NumberOfShards(1)
+                                    ));
+
+                            var Index2 = client2.Index(oCompanySurveyIndexModel);
+                        }
                     }
 
-                    ICreateIndexResponse oElasticResponse2 = client2.CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value, c => c
-                            .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
-                            .Analysis(a => a.Analyzers(an => an.Custom("customWhiteSpace", anc => anc.Filters("asciifolding", "lowercase")
-                                .Tokenizer("whitespace")
-                                )).TokenFilters(tf => tf
-                                        .EdgeNGram("customEdgeNGram", engrf => engrf
-                                        .MinGram(1)
-                                        .MaxGram(10)))).NumberOfShards(1)
-                            ));
-
-                    var Index2 = client2.Index(oCompanySurveyIndexModel);
-
                     #endregion
-
+                    
                     #endregion
                 }
 
@@ -3636,19 +3727,19 @@ namespace BackOffice.Web.ControllersApi
         [HttpGet]
         public List<BackOffice.Models.Provider.ProviderCustomerViewModel> GetAllCustomers
         (string GetAllCustomers,
-            string ProviderPublicId)
+            string ProviderPublicId, string SearchParam)
         {
             List<BackOffice.Models.Provider.ProviderCustomerViewModel> oReturn = new List<Models.Provider.ProviderCustomerViewModel>();
 
             if (GetAllCustomers == "true")
             {
                 ProveedoresOnLine.CompanyCustomer.Models.Customer.CustomerModel oCustomerByProvider =
-                    ProveedoresOnLine.CompanyCustomer.Controller.CompanyCustomer.GetCustomerByProvider(ProviderPublicId, null);
-
+                    ProveedoresOnLine.CompanyCustomer.Controller.CompanyCustomer.GetCustomerByProvider(ProviderPublicId, null);                
                 List<CustomerProviderModel> oCustomerProvider = new List<CustomerProviderModel>();
 
                 if (oCustomerByProvider != null && oCustomerByProvider.RelatedProvider != null && oCustomerByProvider.RelatedProvider.Count > 0)
                 {
+                    
                     oCustomerByProvider.RelatedProvider.All(x =>
                         {
                             oReturn.Add(new ProviderCustomerViewModel(
@@ -3658,7 +3749,9 @@ namespace BackOffice.Web.ControllersApi
                                 ));
                             return true;
                         });
-
+                    if (!string.IsNullOrEmpty(SearchParam))                    
+                        oReturn = oReturn.Where(x => x.CP_Customer.ToLower().Contains(SearchParam)).Select(x => x).ToList();
+                                       
                     oReturn.Add(new ProviderCustomerViewModel
                     {
                         CP_Customer = "A Quien Interese",

@@ -7,6 +7,8 @@ using System.Text;
 using ProveedoresOnLine.Company.Models.Util;
 using ProveedoresOnLine.SurveyModule.Models;
 using ProveedoresOnLine.Reports.Models.Reports;
+using System.IO.MemoryMappedFiles;
+using System.IO;
 
 namespace ProveedoresOnLine.Reports.Controller
 {
@@ -344,8 +346,7 @@ namespace ProveedoresOnLine.Reports.Controller
             return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_SelectionProcess + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
 
         }
-
-
+        
         public static Tuple<byte[], string, string> PJ_SelectionProcessReportDetail(DataTable DtHSEQ, DataTable DtExperiences, DataTable DtFinancial, DataTable DtLegal, DataTable DtTotal, List<ReportParameter> ReportData, string FormatType, string FilePath)
         {
             LocalReport localReport = new LocalReport();
@@ -519,6 +520,95 @@ namespace ProveedoresOnLine.Reports.Controller
 
         }
 
+        public static Tuple<byte[], string, string> TK_QueryReportNew(string FormatType, DataTable data_rst, DataTable data_basicInfo, List<ReportParameter> ReportData, string FilePath)
+        {
+            LocalReport localReport = new LocalReport();
+
+            localReport.EnableExternalImages = true;
+            localReport.ReportPath = FilePath;
+            localReport.SetParameters(ReportData);
+
+            Microsoft.Reporting.WebForms.ReportDataSource src_rst = new Microsoft.Reporting.WebForms.ReportDataSource();
+            src_rst.Name = "DataSet_rst";
+            src_rst.Value = data_rst != null ? data_rst : new DataTable();
+
+            Microsoft.Reporting.WebForms.ReportDataSource src_basicInfo = new Microsoft.Reporting.WebForms.ReportDataSource();
+            src_basicInfo.Name = "DataSet_InfoBasic";
+            src_basicInfo.Value = data_basicInfo != null ? data_basicInfo : new DataTable();
+
+            ReportDataSource source = new ReportDataSource();
+            source.Name = "DS_ThirdKnowledgeReport";
+
+            localReport.DataSources.Add(src_rst);
+            localReport.DataSources.Add(src_basicInfo);
+
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            string deviceInfo =
+                       "<DeviceInfo>" +
+                       "  <OutputFormat>" + FormatType + "</OutputFormat>" +
+
+                       "</DeviceInfo>";
+            Warning[] warnings;
+            string[] streams;
+            byte[] renderedBytes;
+
+            renderedBytes = localReport.Render(
+                FormatType,
+                deviceInfo,
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings);
+            if (FormatType == "Excel") { FormatType = "xls"; }
+            return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_ThirdKnowledgeQueryReport + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
+
+        }
+
+        public static Tuple<byte[], string, string> TK_MasiveQueryReport(string FormatType, DataTable data_Query, List<ReportParameter> ReportData, string FilePath)
+        {
+            LocalReport localReport = new LocalReport();
+
+            localReport.EnableExternalImages = true;
+            localReport.ReportPath = FilePath;
+            localReport.SetParameters(ReportData);
+
+            Microsoft.Reporting.WebForms.ReportDataSource src_rst = new Microsoft.Reporting.WebForms.ReportDataSource();
+            src_rst.Name = "DS_ListDataQuery";
+            src_rst.Value = data_Query != null ? data_Query : new DataTable();
+
+            ReportDataSource source = new ReportDataSource();
+            source.Name = "DS_ThirdKnowlegde_MasiveQuery";
+
+            localReport.DataSources.Add(src_rst);
+
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            string deviceInfo =
+                       "<DeviceInfo>" +
+                       "  <OutputFormat>" + FormatType + "</OutputFormat>" +
+
+                       "</DeviceInfo>";
+            Warning[] warnings;
+            string[] streams;
+            byte[] renderedBytes;
+
+            renderedBytes = localReport.Render(
+                FormatType,
+                deviceInfo,
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings);
+            if (FormatType == "Excel") { FormatType = "xls"; }
+            return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_ThirdKnowledgeQueryReport + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
+
+        }
+
         public static Tuple<byte[], string, string> TK_QueryDetailReport(string FormatType, List<ReportParameter> ReportData, string FilePath)
         {
             LocalReport localReport = new LocalReport();
@@ -554,6 +644,47 @@ namespace ProveedoresOnLine.Reports.Controller
                 out warnings);
             if (FormatType == "Excel") { FormatType = "xls"; }
             return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_ThirdKnowledgeQueryDetailReport + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
+
+        }
+
+        public static Tuple<byte[],string, string>TK_MyQueriesReport(string FormatType, List<ReportParameter> ReportData,DataTable DT_Query, string FilePath)
+        {
+            LocalReport localReport = new LocalReport();
+            localReport.EnableExternalImages = true;
+            localReport.ReportPath = FilePath;
+            localReport.SetParameters(ReportData);
+
+            Microsoft.Reporting.WebForms.ReportDataSource src_query = new Microsoft.Reporting.WebForms.ReportDataSource();
+            src_query.Name = "DS_ThirdKnowledgeMyQueries";
+            src_query.Value = DT_Query != null ? DT_Query : new DataTable();
+
+            ReportDataSource source = new ReportDataSource();
+            source.Name = "DS_ThirdKnowledgeMyQueries";
+
+            localReport.DataSources.Add(src_query);
+
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            string deviceInfo =
+                       "<DeviceInfo>" +
+                       "  <OutputFormat>" + FormatType + "</OutputFormat>" +
+
+                       "</DeviceInfo>";
+            Warning[] warnings;
+            string[] streams;
+            byte[] renderedBytes;
+
+            renderedBytes = localReport.Render(
+                FormatType,
+                deviceInfo,
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings);
+            if (FormatType == "Excel") { FormatType = "xls"; }
+            return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_ThirdKnowledgeMyQueriesReport + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
 
         }
         #endregion
@@ -849,5 +980,71 @@ namespace ProveedoresOnLine.Reports.Controller
 
         #endregion
 
+        public static Tuple<byte[], string, string> MP_SV_ProcablesReport(int ReportType, DataTable data, string FormatType, List<ReportParameter> ReportData, string FilePath)
+        {
+            LocalReport localReport = new LocalReport();
+            localReport.EnableExternalImages = true;
+            localReport.ReportPath = FilePath;
+            localReport.SetParameters(ReportData);
+
+            ReportDataSource source = new ReportDataSource();
+            source.Name = "DS_Survey_ProcablesReport";
+            localReport.DataSources.Add(source);
+            source.Value = data != null ? data : new DataTable();
+
+
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            string deviceInfo =
+                       "<DeviceInfo>" +
+                       "  <OutputFormat>" + FormatType + "</OutputFormat>" +
+                       "  <PageWidth>8.5in</PageWidth>" +
+                       "  <PageHeight>11in</PageHeight>" +
+                       "  <MarginTop>0.3in</MarginTop>" +
+                       "  <MarginLeft>0.3in</MarginLeft>" +
+                       "  <MarginRight>0.3in</MarginRight>" +
+                       "  <MarginBottom>0.3in</MarginBottom>" +
+                       "</DeviceInfo>";
+            Warning[] warnings;
+            string[] streams;
+            byte[] renderedBytes;
+            renderedBytes = localReport.Render(
+                FormatType,
+                deviceInfo,
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings);
+            if (FormatType == "Excel") { FormatType = "xls"; }
+            return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_SurveyReport + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
+        }
+
+        public static byte[] SurveyReportGenerator(List<string> Params, string CustomerPublicId)
+        {
+            string SettingFile = Models.Constants.R_SVFileReport.Replace("{CustomerPublicId}", CustomerPublicId);
+
+            FileStream fStream = new FileStream(SettingFile, FileMode.Open, FileAccess.Read);
+            using (StreamReader sr = new StreamReader(fStream, ASCIIEncoding.ASCII))
+            {
+                while (!sr.EndOfStream)
+                {
+                    var line = sr.ReadLine();
+                    var lineWords = line.Split(' ');
+                }
+            }
+            //Obtain the Report to replace
+            using (var mappedFile1 = MemoryMappedFile.CreateFromFile(ProveedoresOnLine.Reports.Models.Util.InternalSettings.Instance[SettingFile].Value))
+            {
+                using (Stream mmStream = mappedFile1.CreateViewStream())
+                {
+                    
+                }
+            }
+
+
+            return null;
+        }
     }
 }

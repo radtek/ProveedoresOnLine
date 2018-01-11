@@ -81,7 +81,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                             oComercialBasicRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialBasicInfoByProvider(p.CompanyPublicId, LastProcess.LastModify).FirstOrDefault();
                             oContableRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetContableInfoByProvider(p.CompanyPublicId, LastProcess.LastModify).FirstOrDefault();
 
-                            if (oGeneralRow != null && oComercialGeneralRow != null && oComercialBasicRow != null && oContableRow != null)
+                            if (oGeneralRow != null && oComercialGeneralRow != null && oComercialBasicRow != null && oContableRow != null && int.Parse(oGeneralRow.ProviderType) == (int)IntegrationPlattaform.SANOFIProcess.Models.enumProviderType.Provider)
                             {
                                 oGeneralRow.Comentaries = "Creación Proveedor: " + DateTime.Now.Day + " " + DateTime.Now.ToString("MMMM", culture) + " " + DateTime.Now.Year;
                                 oGeneralInfo.Add(oGeneralRow);
@@ -95,27 +95,29 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
 
                         LogFile("::::::::::::::Generating Files::::::::::::");
 
-                        //Call Function to create the txt;
-                        if (oGeneralInfo != null && oGeneralInfo.Count > 0)
-                        {
-                            oGeneralResult = GeneralInfoProcess(oGeneralInfo);
-                            LogFile("General Info for " + oGeneralInfo.Count);
-                        }
+                        
+                        
+                            //Call Function to create the txt;
+                            if (oGeneralInfo != null && oGeneralInfo.Count > 0)
+                            {
+                                oGeneralResult = GeneralInfoProcess(oGeneralInfo);
+                                LogFile("General Info for " + oGeneralInfo.Count);
+                            }
 
-                        //Call Function to create the txt;
-                        if (oComercialInfo != null && oComercialBasicInfo != null && oComercialInfo.Count > 0 && oComercialBasicInfo.Count > 0)
-                        {
-                            oComercialResult = ComercialInfoProcess(oComercialInfo, oComercialBasicInfo);
-                            LogFile("Commercial Info for " + oComercialBasicInfo.Count);
-                        }
+                            //Call Function to create the txt;
+                            if (oComercialInfo != null && oComercialBasicInfo != null && oComercialInfo.Count > 0 && oComercialBasicInfo.Count > 0)
+                            {
+                                oComercialResult = ComercialInfoProcess(oComercialInfo, oComercialBasicInfo);
+                                LogFile("Commercial Info for " + oComercialBasicInfo.Count);
+                            }
 
-                        //Call Function to create the txt;
-                        if (oContableInfo != null && oContableInfo.Count > 0)
-                        {
-                            oContableResult = ContableInfoProcess(oContableInfo);
-                            LogFile("Countable Info for " + oContableInfo.Count);
-                        }
-
+                            //Call Function to create the txt;
+                            if (oContableInfo != null && oContableInfo.Count > 0)
+                            {
+                                oContableResult = ContableInfoProcess(oContableInfo);
+                                LogFile("Countable Info for " + oContableInfo.Count);
+                            }
+                        
                         LogFile("::::::::::::::Files Process Finish::::::::::::");
 
                         LogFile("Set Up Process finish " + DateTime.Now);
@@ -168,7 +170,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                                 oContableRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetContableInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
 
                                 //if not exists validate all modules information, like set up process
-                                if (oGeneralRow != null && oComercialGeneralRow != null && oComercialBasicRow != null && oContableRow != null)
+                                if (oGeneralRow != null && oComercialGeneralRow != null && oComercialBasicRow != null && oContableRow != null && int.Parse(oGeneralRow.ProviderType) == (int)IntegrationPlattaform.SANOFIProcess.Models.enumProviderType.Provider)
                                 {
                                     oGeneralRow.Comentaries = "Creación Proveedor: " + DateTime.Now.Day + " " + DateTime.Now.ToString("MMMM", culture) + " " + DateTime.Now.Year;
                                     oGeneralInfo.Add(oGeneralRow);
@@ -194,22 +196,22 @@ namespace IntegrationPlattaform.SANOFIProcess.Controller
                                 oGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
                                 oComercialGeneralRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
                                 oComercialBasicRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetComercialBasicInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
-                                oContableRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetContableInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();
+                                oContableRow = DAL.Controller.IntegrationPlatformSANOFIDataController.Instance.GetContableInfoByProvider(l, LastProcess.LastModify).FirstOrDefault();                                
 
-                                //if exists get modules information
-                                if (oGeneralRow != null)
-                                {
-                                    oGeneralRow.Comentaries = "Actualizacion Proveedor: " + DateTime.Now.Day + " " + DateTime.Now.ToString("MMMM", culture) + " " + DateTime.Now.Year;
-                                    oGeneralInfo.Add(oGeneralRow);
-                                }
-                                if (oComercialGeneralRow != null && oComercialBasicRow != null)
-                                {
-                                    oComercialInfo.Add(oComercialGeneralRow);
-                                    oComercialBasicInfo.Add(oComercialBasicRow);
-                                }
-                                if (oContableRow != null)
-                                    oContableInfo.Add(oContableRow);
-
+                                    //if exists get modules information
+                                    if (oGeneralRow != null)
+                                    {
+                                        oGeneralRow.Comentaries = "Actualizacion Proveedor: " + DateTime.Now.Day + " " + DateTime.Now.ToString("MMMM", culture) + " " + DateTime.Now.Year;
+                                        oGeneralInfo.Add(oGeneralRow);
+                                    }
+                                    if (oComercialGeneralRow != null && oComercialBasicRow != null)
+                                    {
+                                        oComercialInfo.Add(oComercialGeneralRow);
+                                        oComercialBasicInfo.Add(oComercialBasicRow);
+                                    }
+                                    if (oContableRow != null)
+                                        oContableInfo.Add(oContableRow);
+                                                                    
                                 LogFile(count + 1 + " Update info for Provider: " + l);
                                 count++;
                                 return true;

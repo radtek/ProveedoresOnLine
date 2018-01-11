@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nest;
+using ProveedoresOnLine.IndexSearch.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,18 @@ namespace ProveedoresOnLine.IndexSearch.Test
         {
             ProveedoresOnline.ThirdknowledgeIndexSearch.ThirdknowledgeIndexProcess.StartProcess();           
         }
+        
+        [TestMethod]
+        public void QueryModelIndeAll()
+        {
+            Controller.IndexSearch.QueryModelIndeAll();
+        }
+
+        [TestMethod]
+        public void QueryModelIndexSearch()
+        {
+             Controller.IndexSearch.QueryModelIndexSearch();
+        }
+
     }
 }

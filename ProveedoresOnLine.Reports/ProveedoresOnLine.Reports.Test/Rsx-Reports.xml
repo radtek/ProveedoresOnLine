@@ -3,8 +3,9 @@
   <Reports>
     <key name="ReportPath">
       <![CDATA[
-        D:\ProveedoresOnLine\repos\ProveedoresOnLine.Reports\ProveedoresOnLine.Reports\Reports
+        C:\Users\Yamile García Vega\source\repos\ProveedoresOnLine.Reports\ProveedoresOnLine.Reports\Reports
       ]]>
      </key>
+    <key name="DA5C572E_SVFileReport">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/MP_Survey/PROCABLES/carta+resultados+evaluaci%C3%B3n.doc</key>
   </Reports>
 </Settings>

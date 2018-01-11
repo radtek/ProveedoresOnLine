@@ -18,58 +18,61 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 {
     public class ThirdKnowledgeModule
     {
-        public static async Task<TDQueryModel> SimpleRequest(string PeriodPublicId, int IdType, string IdentificationNumber, string Name, TDQueryModel oQueryToCreate)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="PeriodPublicId">Period To descount queries</param>
+        /// <param name="IdType">1 CC, 2 NIT, 3 CC Extranjera, 4 Denominación o Razon Social</param>
+        /// <param name="IdentificationNumber"></param>
+        /// <param name="Name"></param>
+        /// <param name="oQueryToCreate"></param>
+        /// <returns></returns>
+        public static async Task<TDQueryModel> SimpleRequest(string PeriodPublicId, int IdType, string SearchParam, TDQueryModel oQueryToCreate)
         {
             try
             {
                 List<Tuple<string, List<string>, List<string>>> procResult = new List<Tuple<string, List<string>, List<string>>>();
                 List<Tuple<string, List<string>, List<string>>> ppResult = new List<Tuple<string, List<string>, List<string>>>();
                 List<Tuple<string, List<string>, List<string>>> judProcResult = new List<Tuple<string, List<string>, List<string>>>();
+                List<Tuple<string, List<string>, List<string>>> RegDianResult = new List<Tuple<string, List<string>, List<string>>>();
+                List<Tuple<string, List<string>, List<string>>> RegEntityResult = new List<Tuple<string, List<string>, List<string>>>();
+                List<Tuple<string, List<string>, List<string>>> RUESResult = new List<Tuple<string, List<string>, List<string>>>();
 
-                if (!string.IsNullOrEmpty(IdentificationNumber))
-                    judProcResult = await JudicialProcessSearch(3, Name, IdentificationNumber);
-
-                //Proc Request
-                if (!string.IsNullOrEmpty(IdentificationNumber) && IdType != 0)
-                    procResult = await OnLnieSearch(IdType, IdentificationNumber);
-
-                //PanamaPapers Search
-                if (!string.IsNullOrEmpty(Name))
-                    ppResult = await PPSearch(IdType == 2 ? 0 : 1, Name, IdentificationNumber);
-
-                if (!string.IsNullOrEmpty(Name))
-                {
-                    if (Name.ToLower().Contains("sas"))
-                        Name = Name.ToLower().Replace("sas", "");
-                    else if (Name.ToLower().Contains("s.a.s"))
-                        Name = Name.ToLower().Replace("s.a.s", "");
-                    else if (Name.ToLower().Contains("s.a"))
-                        Name = Name.ToLower().Replace("s.a", "");
-                    else if (Name.ToLower().Contains("ltda"))
-                        Name = Name.ToLower().Replace("ltda", "");
-                    else if (Name.ToLower().Contains("l.t.d.a"))
-                        Name = Name.ToLower().Replace("l.t.d.a", "");
-                }
-                List<PlanModel> oPlanModel = new List<PlanModel>();
-                PeriodModel oCurrentPeriod = new PeriodModel();
-
-                //Search Elastic
-                Uri node = new Uri(InternalSettings.Instance[Constants.C_Settings_ElasticSearchUrl].Value);
-
-                var settings = new ConnectionSettings(node);
-                settings.DefaultIndex(InternalSettings.Instance[Constants.C_Settings_ThirdKnowledgeIndex].Value);
-                settings.DisableDirectStreaming(true);
-                ElasticClient client = new ElasticClient(settings);
-
-                var oSearchResult = client.Search<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel>(s => s
-                .TrackScores(true)
-                .From(0)
-                .Size(10)
-                 .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Name)) ||
-                            q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(IdentificationNumber))
-                 ).MinScore(2));
+                var oSearchResult = ElasticSearch(IdType, SearchParam);
 
                 oQueryToCreate.RelatedQueryInfoModel = new List<TDQueryInfoModel>();
+
+                //Identify personType and Call the respective function
+                //Persons
+                if (IdType != 4)
+                {
+                    if (!string.IsNullOrEmpty(SearchParam))
+                    {
+                        //Judicial proces Search
+                        judProcResult = await JudicialProcessSearch(3, null, SearchParam);
+
+                        //Proc Request                    
+                        procResult = await OnLnieSearch(IdType, SearchParam);
+
+                        //Register Search                    
+                        RegDianResult = await RegisterSearch(IdType, null, SearchParam);
+
+                        if (IdType == 1)
+                        {
+                            //Register Search Vote information                    
+                            RegEntityResult = await RegisterEntitySearch(IdType, null, SearchParam);
+                        }
+
+                        if (RegDianResult.Count > 0 && !string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1))
+                            ppResult = await PPSearch(1, RegDianResult.FirstOrDefault().Item1, SearchParam);
+
+                        //RUES Implement
+                        if (IdType == 2)
+                            RUESResult = await RUESSearch(2, "", SearchParam);
+                    }
+                }
+
+                #region Procuraduria
                 if (procResult != null && procResult.Count > 0)
                 {
                     string detailMoreInfo = "";
@@ -96,11 +99,10 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         Status = "Vigente",
                         Enable = true,
                         QueryPublicId = oQueryToCreate.QueryPublicId,
-                        QueryIdentification = IdentificationNumber,
-                        IdentificationResult = IdentificationNumber,
-                        QueryName = Name,
+                        QueryIdentification = SearchParam,
+                        IdentificationResult = SearchParam,
                         IdList = "Procuraduría General de la Nación",
-                        IdentificationNumber = IdentificationNumber,
+                        IdentificationNumber = SearchParam,
                         GroupName = "Procuraduría General de la Nación - Criticidad Media",
                         Link = InternalSettings.Instance[Constants.Proc_Url].Value,
                         ListName = "Procuraduría General de la Nación",
@@ -111,40 +113,103 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                 }
+                #endregion
 
+                #region Panama Papers
                 if (ppResult != null && ppResult.Count > 0)
                 {
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
                     {
                         AKA = string.Empty,
-                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : "",
+                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "NIT" : IdType == 3 ? "C. Extranjería" : "",
                         Offense = "Presenta Reporte en Panama Papers",
-                        NameResult = Name,
+                        NameResult = !string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1) ? RegDianResult.FirstOrDefault().Item1 : string.Empty,
                         MoreInfo = "Panama Papers no hace refierencia necesariamente a un delito o una investigación por LA/FT.",
                         Priority = "2",
                         Status = "Vigente",
                         Enable = true,
                         QueryPublicId = oQueryToCreate.QueryPublicId,
-                        QueryIdentification = "N/A",
-                        QueryName = Name,
+                        QueryIdentification = SearchParam,
                         IdList = "Panama Papers",
-                        IdentificationNumber = IdentificationNumber,
+                        IdentificationNumber = SearchParam,
                         GroupName = "Panama Papers - Criticidad Baja",
                         Link = ppResult.FirstOrDefault().Item1,
                         ListName = "Panama Papers",
                         Zone = "N/A",
-                        ChargeOffense = "Presenta antecedentes en la Prcuraduría General de la Nación.",
+                        ChargeOffense = "Aparece registrado en la lista de Panama Papers",
                         ElasticId = (int)enumElasticGroupId.PanamaPElasticId,
                     };
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                 }
+                #endregion
 
+                #region Registraduría/Dian get Name
+                if (RegDianResult.Count > 0 && !string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1))
+                {
+                    TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
+                    {
+                        NameResult = !string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1) ? RegDianResult.FirstOrDefault().Item1 : "",
+                        IdentificationResult = SearchParam,
+                        QueryPublicId = oQueryToCreate.QueryPublicId,
+                        IdList = "Registraduria/Dian",
+                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "NIT" : IdType == 3 ? "C. Extranjería" : IdType == 4 ? "Denominación o Razon Social" : "",
+                        GroupName = "Registraduria/Dian",
+                        ListName = "Registraduria/Dian",
+                        ElasticId = (int)enumElasticGroupId.RegisterDian,
+                        QueryIdentification = SearchParam,
+                    };
+                    oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
+                }
+                #endregion
+
+                #region Registraduría Puesto de Votación
+                if (RegEntityResult.Count > 0 && !string.IsNullOrEmpty(RegEntityResult.FirstOrDefault().Item1))
+                {
+                    TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
+                    {
+                        QueryPublicId = oQueryToCreate.QueryPublicId,
+                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "NIT" : IdType == 3 ? "C. Extranjería" : IdType == 4 ? "Denominación o Razon Social" : "",
+                        IdList = "Registraduria",
+                        GroupName = "Registraduria - Puesto de Votación",
+                        Link = RegEntityResult.FirstOrDefault().Item1,
+                        ListName = "Registraduria - Puesto de Votación",
+                        ElasticId = (int)enumElasticGroupId.RegistersList,
+                        NameResult = RegDianResult != null && RegDianResult.Count > 0 ? RegDianResult.FirstOrDefault().Item1 : string.Empty,
+                        QueryIdentification = IdType == 1 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : IdType == 2 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty,
+                    };
+                    oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
+                }
+                #endregion
+
+                #region RUES
+
+                if (RUESResult.Count > 0 && RUESResult.FirstOrDefault().Item2 != null && RUESResult.FirstOrDefault().Item2.Count > 0)
+                {
+                    TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
+                    {
+                        QueryPublicId = oQueryToCreate.QueryPublicId,
+                        IdList = "RUES",
+                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "NIT" : IdType == 3 ? "C. Extranjería" : IdType == 4 ? "Denominación o Razon Social" : "",
+                        GroupName = "RUES",
+                        NameResult = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[1]) ? RUESResult.FirstOrDefault().Item2[1] : "No aparece registro en RUES",
+                        IdentificationResult = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[0]) ? RUESResult.FirstOrDefault().Item2[0] : "No aparece registro en RUES",
+                        Status = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[3]) ? RUESResult.FirstOrDefault().Item2[3] : "No aparece registro en RUES",
+                        Link = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[4]) ? RUESResult.FirstOrDefault().Item2[4] : "No aparece registro en RUES",
+                        ListName = "RUES",
+                        ElasticId = (int)enumElasticGroupId.RUES,
+                        QueryIdentification = IdType == 1 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : IdType == 2 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty,
+                    };
+                    oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
+                }
+                #endregion
+
+                #region Judicial Process
                 if (judProcResult != null && judProcResult.Count > 0)
                 {
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
                     {
                         AKA = string.Empty,
-                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "Pasaporte" : IdType == 3 ? "C. Extranjería" : "",
+                        DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "NIT" : IdType == 3 ? "C. Extranjería" : "",
                         Offense = "El tercero " + judProcResult.FirstOrDefault().Item2[1] + "Con Identificación No. " + judProcResult.FirstOrDefault().Item2[0] + "Presenta Antecedentes Judiciales",
                         NameResult = judProcResult.FirstOrDefault().Item2[1],
                         MoreInfo = "El tercero " + judProcResult.FirstOrDefault().Item2[1] + "Con Identificación No. " + judProcResult.FirstOrDefault().Item2[0] + "Presenta Antecedentes Judiciales vigentes de acuerdo a la Fuente oficial de la RAMA JUDICIAL DEL PODER PUBLICO, CONSEJO SUPERIOR DE LA JUDICATURA y/o JUZGADOS DE EJECUCION DE PENAS Y MEDIDAS DE SEGURIDAD",
@@ -152,12 +217,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         Status = "Vigente",
                         Enable = true,
                         QueryPublicId = oQueryToCreate.QueryPublicId,
-                        QueryIdentification = IdentificationNumber,
-                        IdentificationResult = IdentificationNumber,
+                        QueryIdentification = SearchParam,
+                        IdentificationResult = SearchParam,
                         FullName = judProcResult.FirstOrDefault().Item2[1],
-                        QueryName = Name,
                         IdList = "RAMA JUDICIAL DEL PODER PUBLICO",
-                        IdentificationNumber = IdentificationNumber,
+                        IdentificationNumber = SearchParam,
                         GroupName = "RAMA JUDICIAL DEL PODER PUBLICO - Criticidad Media",
                         Link = judProcResult.FirstOrDefault().Item1,
                         ListName = "RAMA JUDICIAL DEL PODER PUBLICO, CONSEJO SUPERIOR DE LA JUDICATURA y/o JUZGADOS DE EJECUCION DE PENAS Y MEDIDAS DE SEGURIDAD",
@@ -167,38 +231,35 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     };
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                 }
-
-                if (oSearchResult.Documents.Count() > 0 || procResult.Count > 0 || ppResult != null && ppResult.Count > 0
-                    || judProcResult != null && judProcResult.Count > 0)
+                #endregion
+                try
                 {
-                    oSearchResult.Documents.All(x =>
+                    if (oSearchResult.Documents.Count() > 0 || procResult.Count > 0 || ppResult != null && ppResult.Count > 0
+                    || judProcResult != null && judProcResult.Count > 0)
+                    {
+                        oSearchResult.Documents.All(x =>
                         {
                             TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
 
                             oInfoCreate.AKA = x.AKA;
-                            oInfoCreate.DocumentType = x.TypeId;
+                            oInfoCreate.DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "NIT" : IdType == 3 ? "C. Extranjería" : "";
                             oInfoCreate.Offense = x.RelatedWiht;
                             oInfoCreate.NameResult = x.CompleteName;
-                            if (x.ListType == "FIGURAS PUBLICAS" || x.ListType == "PEPS INTERNACIONALES")
+                            if (x.ListType == "FIGURAS PUBLICAS" || x.ListType == "PEPS INTERNACIONALES"
+                                                                 || x.ListType == "CONSEJO NACIONAL ELECTORAL"
+                                                                 || x.ListType == "FUERZAS MILITARES"
+                                                                 || x.ListType == "GOBIERNO DEPARTAMENTAL"
+                                                                 || x.ListType == "GOBIERNO MUNICIPAL"
+                                                                 || x.ListType == "GOBIERNO NACIONAL"
+                                                                 || x.ListType == "ESTRUCTURA DE GOBIERNO"
+                                                                 || x.ListType == "PARTIDOS Y MOVIMIENTOS POLITICOS")
                                 oInfoCreate.Peps = x.ListType;
                             else
                                 oInfoCreate.Peps = "N/A";
 
-                            #region Group by Priority
-                            if (!string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(IdentificationNumber) && x.TypeId == IdentificationNumber && x.CompleteName == Name)
-                                oInfoCreate.Priority = "1";
-                            else if (!string.IsNullOrEmpty(IdentificationNumber) && x.TypeId == IdentificationNumber && x.CompleteName != Name)
-                                oInfoCreate.Priority = "2";
-                            else if (!string.IsNullOrEmpty(Name) && x.TypeId != IdentificationNumber && x.CompleteName == Name)
-                                oInfoCreate.Priority = "3";
-                            else
-                                oInfoCreate.Priority = "3";
-                            #endregion
-
                             oInfoCreate.Enable = true;
                             oInfoCreate.QueryPublicId = oQueryToCreate.QueryPublicId;
-                            oInfoCreate.IdentificationNumber = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty;
-                            oInfoCreate.QueryName = !string.IsNullOrEmpty(Name) ? Name : string.Empty;
+                            oInfoCreate.IdentificationNumber = !string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty;
                             oInfoCreate.UpdateDate = !string.IsNullOrEmpty(x.LastModify) ? x.LastModify : string.Empty;
                             oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(x.TypeId) ? x.TypeId : string.Empty;
                             oInfoCreate.Status = !string.IsNullOrEmpty(x.Status) ? x.Status : string.Empty;
@@ -215,6 +276,8 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                                                              || x.ListType == "NACIONES UNIDAS"
                                                              || x.ListType == "NON-SDN IRANIAN SANCTIONS ACT LIST (NS-ISA)_EEUU"
                                                              || x.ListType == "OFAC"
+                                                             || x.ListType == "SECTORAL SANCTIONS IDENTIFICATIONS_LIST_EEUU"
+                                                             || x.ListType == "SPECIALLY DESIGNATED NATIONALS LIST_EEUU"
                                                              || x.ListType == "PALESTINIAN LEGISLATIVE COUNCIL LIST_EEUU"
                                                              || x.ListType == "VINCULADOS" ?
                                                              "LISTAS RESTRICTIVAS" + " - Criticidad Alta" :
@@ -240,8 +303,6 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                                                              || x.ListType == "ONU_RESOLUCION_1988"
                                                              || x.ListType == "ONU_RESOLUCION_1988"
                                                              || x.ListType == "ONU_RESOLUCION_2023"
-                                                             || x.ListType == "SECTORAL SANCTIONS IDENTIFICATIONS_LIST_EEUU"
-                                                             || x.ListType == "SPECIALLY DESIGNATED NATIONALS LIST_EEUU"
                                                              || x.ListType == "SUPER SOCIEDADES"
                                                              || x.ListType == "UNVERIFIED_LIST_EEUU" ?
                                                              x.ListType + " - Criticidad Media" :
@@ -260,33 +321,47 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             oInfoCreate.ListName = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;
                             oInfoCreate.MoreInfo = x.RelatedWiht + " " + x.ORoldescription1 + " " + x.ORoldescription2;
                             oInfoCreate.Zone = x.NationalitySourceCountry;
-                            oInfoCreate.QueryIdentification = IdentificationNumber;
+                            if (IdType == 4)
+                                oInfoCreate.QueryName = SearchParam;
+                            else
+                                oInfoCreate.QueryIdentification = SearchParam;
 
                             oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                             return true;
                         });
-                    oQueryToCreate.IsSuccess = true;
+                        oQueryToCreate.IsSuccess = true;
+                    }
+                    else
+                    {
+                        TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
+                        oInfoCreate.QueryPublicId = oQueryToCreate.QueryPublicId;
+                        if (IdType != 4)
+                        {
+                            oInfoCreate.QueryIdentification = !string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty;
+                            oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty;
+                        }
+                        else
+                            oInfoCreate.QueryName = SearchParam;
+
+                        oInfoCreate.GroupName = "SIN COINCIDENCIAS";
+                        oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
+
+                        oQueryToCreate.IsSuccess = false;
+                    }
+                    oQueryToCreate.QueryPublicId = await QueryCreate(oQueryToCreate);
+
+                    Task.Run(async () => await QueryUpsert(oQueryToCreate));
                 }
-                else
+                catch (Exception)
                 {
-                    TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
-                    oInfoCreate.QueryPublicId = oQueryToCreate.QueryPublicId;
-                    oInfoCreate.QueryName = Name;
-                    oInfoCreate.QueryIdentification = !string.IsNullOrEmpty(IdentificationNumber) ? IdentificationNumber : string.Empty;
-                    oInfoCreate.GroupName = "SIN COINCIDENCIAS";
-
-                    oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
-
-                    oQueryToCreate.IsSuccess = false;
+                    return null;
                 }
-                oQueryToCreate.QueryPublicId = await QueryCreate(oQueryToCreate);
 
-                Task.Run(async () => await QueryUpsert(oQueryToCreate));
                 return oQueryToCreate;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                throw ex;
+                return null;
             }
         }
 
@@ -438,9 +513,9 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                        oPeriodModel.PlanPublicId, oPeriodModel.AssignedQueries, oPeriodModel.IsLimited, oPeriodModel.TotalQueries, oPeriodModel.InitDate, oPeriodModel.EndDate, oPeriodModel.Enable);
         }
 
-        public static List<Models.TDQueryModel> ThirdKnowledgeSearch(string CustomerPublicId, string RelatedUser, string StartDate, string EndtDate, int PageNumber, int RowCount, string SearchType, string Status, out int TotalRows)
+        public static List<Models.TDQueryModel> ThirdKnowledgeSearch(string CustomerPublicId, string RelatedUser, string Domain, string StartDate, string EndtDate, int PageNumber, int RowCount, string SearchType, string Status, out int TotalRows)
         {
-            return ThirdKnowledgeDataController.Instance.ThirdKnowledgeSearch(CustomerPublicId, RelatedUser, StartDate, EndtDate, PageNumber, RowCount, SearchType, Status, out TotalRows);
+            return ThirdKnowledgeDataController.Instance.ThirdKnowledgeSearch(CustomerPublicId, RelatedUser, Domain, StartDate, EndtDate, PageNumber, RowCount, SearchType, Status, out TotalRows);
         }
 
         public static List<Models.TDQueryModel> ThirdKnowledgeSearchByPublicId(string QueryPublicId, int PageNumber, int RowCount, out int TotalRows)
@@ -535,7 +610,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
         #region Messenger
 
-        public static void CreateUploadNotification(MessageModule.Client.Models.NotificationModel DataMessage)
+        public static void CreateUploadNotification(MessageModule.Client.Models.ClientMessageModel DataMessage)
         {
             try
             {
@@ -547,33 +622,13 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     Agent = ThirdKnowledge.Models.InternalSettings.Instance[Constants.C_Settings_TK_UploadSuccessFileAgent].Value,
                     User = DataMessage.User,
                     ProgramTime = DateTime.Now,
-                    MessageQueueInfo = new List<Tuple<string, string>>(),
+                    MessageQueueInfo = DataMessage.MessageQueueInfo,
                 };
-
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>("To", DataMessage.User));
-
-                //get customer info
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                    ("CustomerLogo", DataMessage.CompanyLogo));
-
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                    ("CustomerName", DataMessage.CompanyName));
-
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                    ("CustomerIdentificationTypeName", DataMessage.IdentificationType));
-
-                oMessageToSend.MessageQueueInfo.Add(new Tuple<string, string>
-                    ("CustomerIdentificationNumber", DataMessage.IdentificationNumber));
 
                 MessageModule.Client.Controller.ClientController.CreateMessage(oMessageToSend);
 
                 #endregion
 
-                #region Notification
-
-                DataMessage.NotificationId = MessageModule.Client.Controller.ClientController.NotificationUpsert(DataMessage);
-
-                #endregion
             }
             catch (Exception)
             {
@@ -610,6 +665,77 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
             var container = builder.Build();
             return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber);
         }
+
+        public static async Task<List<Tuple<string, List<string>, List<string>>>> RegisterSearch(int IdType, string Name, string IndentificationNumber)
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterType<OnlineSearch.Core.ProveedoresOnLineRegImplement>().As<OnlineSearch.Interfaces.IOnLineSearch>();
+            var container = builder.Build();
+            return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber);
+        }
+
+        public static async Task<List<Tuple<string, List<string>, List<string>>>> RegisterEntitySearch(int IdType, string Name, string IndentificationNumber)
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterType<OnlineSearch.Core.ProveedoresOnLineRegistreImplement>().As<OnlineSearch.Interfaces.IOnLineSearch>();
+            var container = builder.Build();
+            return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber);
+        }
+
+        public static async Task<List<Tuple<string, List<string>, List<string>>>> ParadisePapersSearch(int IdType, string Name, string IndentificationNumber)
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterType<OnlineSearch.Core.ProveedoresOnLineParadiseImplement>().As<OnlineSearch.Interfaces.IOnLineSearch>();
+            var container = builder.Build();
+            return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber);
+        }
+        public static async Task<List<Tuple<string, List<string>, List<string>>>> RUESSearch(int IdType, string Name, string IndentificationNumber)
+        {
+            var builder = new ContainerBuilder();
+            builder.RegisterType<OnlineSearch.Core.ProveedoresOnLineRUESImplement>().As<OnlineSearch.Interfaces.IOnLineSearch>();
+            var container = builder.Build();
+            return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber);
+        }
+
+        #endregion
+
+        #region Private Function
+
+        public static ISearchResponse<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel> ElasticSearch(int IdType, string SearchaParam)
+        {
+            Uri node = new Uri(InternalSettings.Instance[Constants.C_Settings_ElasticSearchUrl].Value);
+
+            var settings = new ConnectionSettings(node);
+            settings.DefaultIndex(InternalSettings.Instance[Constants.C_Settings_ThirdKnowledgeIndex].Value);
+            settings.DisableDirectStreaming(true);
+            ElasticClient client = new ElasticClient(settings);
+
+            ISearchResponse<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel> oSearchResult = null;
+            if (IdType != 4)
+            {
+                oSearchResult = client.Search<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel>(s => s
+                .TrackScores(true)
+                .From(0)
+                .Size(5)
+                 .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(SearchaParam))
+                 )
+                );
+            }
+            else
+            {
+                oSearchResult = client.Search<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel>(s => s
+                .TrackScores(true)
+                .From(0)
+                .Size(1)
+                 .Query(q => q.
+                   Bool(b => b
+                    .Must(m => m.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(SearchaParam)))))
+                );
+            }
+
+            return oSearchResult;
+        }
+
         #endregion
     }
 }

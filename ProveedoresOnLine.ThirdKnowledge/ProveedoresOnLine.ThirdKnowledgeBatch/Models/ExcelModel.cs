@@ -9,12 +9,11 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch.Models
 {
     public class ExcelModel
     {
-        public string TIPOPERSONA { get; set; }
+        public string SEARCHPARAM { get; set; }
 
-        public string NUMEIDEN { get; set; }
+        public string SEARCHCRITERY { get; set; }
 
-        public string NOMBRES { get; set; }
-
+        
         public ExcelModel()
         {
 
@@ -22,8 +21,8 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch.Models
 
         public ExcelModel(DataRow Row)
         {
-            this.NUMEIDEN = Row[ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeIdNumberCollumn].Value].ToString();
-            this.NOMBRES = Row[ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.C_Settings_ThirdKnowledgeNameCollumn].Value].ToString();
+            this.SEARCHPARAM = Row[ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.MP_CP_ColSearchParam].Value].ToString();
+            this.SEARCHCRITERY = Row[ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.MP_CP_ColSearchCritery].Value].ToString();
         }
     }
 }

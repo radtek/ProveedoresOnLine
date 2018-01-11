@@ -25,11 +25,19 @@ namespace MarketPlace.Models.Provider
         public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> CountryFilter { get; set; }
         public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> IcaFilter { get; set; }
         public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> MyProvidersFilter { get; set; }
-        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> OtherProvidersFilter { get; set; } 
+        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> OtherProvidersFilter { get; set; }
+
+        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> CalificationTypeProcessFilter { get; set; }
+
+        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> CalificationResultFilter { get; set; }
 
         public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> SurveyType { get; set; }
 
         public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> SurveyStatus { get; set; }
+
+        public List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter> CustomTypeFilter { get; set; }
+
+        public Tuple<List<ProveedoresOnLine.Company.Models.Util.ElasticSearchFilter>, List<string>> CustomerFilterObject { get; set; }
 
         public string SearchParam { get; set; }
 
@@ -54,7 +62,7 @@ namespace MarketPlace.Models.Provider
 
         public Nest.ISearchResponse<CustomerProviderIndexModel> ElasticCustomerProviderModel { get; set; }
      
-        public Nest.ISearchResponse<CompanySurveyIndexModel> ElasticCompanySurveyModel { get; set; }
+        public Nest.ISearchResponse<CompanySurveyIndexModel> ElasticCompanySurveyModel { get; set; }        
 
         public string RelatedSurveyProviders { get; set; }
 

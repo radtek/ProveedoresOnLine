@@ -124,7 +124,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                     }
                                                     else
                                                     {
-                                                        BalanceScore = 0;
+                                                        mprule.ItemInfoScore = 0;
                                                     }
 
                                                     break;
@@ -149,7 +149,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                     }
                                                     else
                                                     {
-                                                        BalanceScore = 0;
+                                                        mprule.ItemInfoScore = 0;
                                                     }
 
                                                     break;
@@ -180,7 +180,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                             }
                                                             else
                                                             {
-                                                                BalanceScore = 0;
+                                                                mprule.ItemInfoScore = 0;
                                                             }
 
                                                             break;
@@ -205,7 +205,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                             }
                                                             else
                                                             {
-                                                                BalanceScore = 0;
+                                                                mprule.ItemInfoScore = 0;
                                                             }
 
                                                             break;
@@ -241,7 +241,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                             }
                                                             else
                                                             {
-                                                                BalanceScore = 0;
+                                                                mprule.ItemInfoScore = 0;
                                                             }
 
                                                             break;
@@ -266,7 +266,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                             }
                                                             else
                                                             {
-                                                                BalanceScore = 0;
+                                                                mprule.ItemInfoScore = 0;
                                                             }
 
                                                             break;
@@ -302,7 +302,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                             }
                                                             else
                                                             {
-                                                                BalanceScore = 0;
+                                                                mprule.ItemInfoScore = 0;
                                                             }
 
                                                             break;
@@ -327,7 +327,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                             }
                                                             else
                                                             {
-                                                                BalanceScore = 0;
+                                                                mprule.ItemInfoScore = 0;
                                                             }
 
                                                             break;
@@ -363,7 +363,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                             }
                                                             else
                                                             {
-                                                                BalanceScore = 0;
+                                                                mprule.ItemInfoScore = 0;
                                                             }
 
                                                             break;
@@ -388,7 +388,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                             }
                                                             else
                                                             {
-                                                                BalanceScore = 0;
+                                                                mprule.ItemInfoScore = 0;
                                                             }
 
                                                             break;
@@ -424,7 +424,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                             }
                                                             else
                                                             {
-                                                                BalanceScore = 0;
+                                                                mprule.ItemInfoScore = 0;
                                                             }
 
                                                             break;
@@ -449,7 +449,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                             }
                                                             else
                                                             {
-                                                                BalanceScore = 0;
+                                                                mprule.ItemInfoScore = 0;                                                                
                                                             }
 
                                                             break;
@@ -493,7 +493,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                             }
                                                             else
                                                             {
-                                                                BalanceScore = 0;
+                                                                mprule.ItemInfoScore = 0;
                                                             }
 
                                                             break;
@@ -526,7 +526,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                             }
                                                             else
                                                             {
-                                                                BalanceScore = 0;
+                                                                mprule.ItemInfoScore = 0;
                                                             }
 
                                                             break;

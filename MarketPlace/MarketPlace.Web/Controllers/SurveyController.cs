@@ -5,14 +5,15 @@ using Microsoft.Reporting.WebForms;
 using Nest;
 using ProveedoresOnLine.Company.Models.Company;
 using ProveedoresOnLine.Company.Models.Util;
+using ProveedoresOnLine.CompanyProvider.Controller;
 using ProveedoresOnLine.CompanyProvider.Models.Provider;
 using ProveedoresOnLine.IndexSearch.Models;
 using ProveedoresOnLine.SurveyModule.Models;
-using ProveedoresOnLine.SurveyModule.Models.Index;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace MarketPlace.Web.Controllers
@@ -31,12 +32,12 @@ namespace MarketPlace.Web.Controllers
 
             //get survey info
             if (oModel.RelatedSurvey.RelatedSurvey.ParentSurveyPublicId == null)
-            {            
+            {
                 oModel.RelatedSurvey = new SurveyViewModel(
                     ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetByUser
                     (SurveyPublicId, SessionModel.CurrentCompany.RelatedUser.FirstOrDefault().User));
             }
-            
+
             List<GenericItemInfoModel> oAssignedAreas = oModel.RelatedSurvey.RelatedSurvey.SurveyInfo.Where(inf => inf.ItemInfoType.ItemId == (int)enumSurveyInfoType.CurrentArea).Select(inf => inf).ToList();
             oAssignedAreas = oAssignedAreas.GroupBy(x => x.ItemInfoId).Select(grp => grp.First()).ToList();
 
@@ -191,26 +192,28 @@ namespace MarketPlace.Web.Controllers
                     .Terms("srv_type", c => c
                         .Field(fi => fi.SurveyTypeId)))
                 .Query(q => q.
-                    Filtered(f => f
-                     .Query(qi => qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId)))
-                    .Filter(f2 =>
+                    Bool(f => f
+                    //.Query(qi => qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId))
+                    //&& qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User)).Query(SessionModel.CurrentLoginUser.Email)))
+                    .Should(f2 =>
                     {
                         QueryContainer qb = null;
-
+                        qb &= f2.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId))
+                            && f2.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User)).Query(SessionModel.CurrentLoginUser.Email));
                         #region Status Srv Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.SurveyStatusId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.SurveyStatusId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y.Item1).FirstOrDefault());
                         }
                         #endregion
 
                         #region Type Srv Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.SurveyTypeId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.SurveyTypeId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y.Item1).FirstOrDefault());
                         }
                         #endregion
-
+                        
                         return qb;
                     })
                     ))
@@ -257,20 +260,21 @@ namespace MarketPlace.Web.Controllers
                 .TrackScores(true)
                 .Size(20)
                 .Query(q => q.
-                    Filtered(f => f
-                    .Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
-                    .Filter(f2 =>
+                    Bool(f => f
+                    //.Query(q1 => q1.MatchAll() && q.QueryString(qs => qs.Query(SearchParam)))
+                    .Should(f2 =>
                     {
                         QueryContainer qb = null;
 
+                        qb &= f2.MatchAll() && f2.QueryString(qs => qs.Query(SearchParam));
                         #region Basic Providers Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.CityId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.City).Select(y => y.Item1).FirstOrDefault());
                         }
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
+                            qb &= f2.Term(m => m.CountryId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.Country).Select(y => y.Item1).FirstOrDefault());
                         }
                         #endregion
 
@@ -278,7 +282,7 @@ namespace MarketPlace.Web.Controllers
 
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Terms(tms => tms
+                            qb &= f2.Terms(tms => tms
                                       .Field(fi => fi.CompanyPublicId)
                                       .Terms<string>(oModel.ElasticSurveyModel.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
                                   );
@@ -288,14 +292,14 @@ namespace MarketPlace.Web.Controllers
                         #region Type Srv Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y).FirstOrDefault() != null)
                         {
-                            qb &= q.Terms(tms => tms
+                            qb &= f2.Terms(tms => tms
                                        .Field(fi => fi.CompanyPublicId)
                                        .Terms<string>(oModel.ElasticSurveyModel.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList())
                                    );
                         }
                         #endregion
 
-                        qb &= q.Nested(n => n
+                        qb &= f2.Nested(n => n
                            .Path(p => p.oCustomerProviderIndexModel)
                                .Query(fq => fq
                                    .Match(match => match
@@ -619,6 +623,10 @@ namespace MarketPlace.Web.Controllers
                 Where(x => SessionModel.CurrentCompany.CompanyType.ItemId == (int)enumCompanyType.BuyerProvider ?
                             (x.RelatedCompany.CompanyPublicId == ProviderPublicId) :
                             x.RelatedCompany.CompanyPublicId == ProviderPublicId).FirstOrDefault();
+
+            //Get all 
+            oModel.ContactCompanyInfo = new List<GenericItemModel>();
+            oModel.ContactCompanyInfo = CompanyProvider.MPContactGetBasicInfo(oProvider.RelatedCompany.CompanyPublicId, (int)enumContactType.PersonContact);
 
             //validate provider permisions
             if (oProvider == null)
@@ -974,6 +982,8 @@ namespace MarketPlace.Web.Controllers
             //Clean the season url saved
             if (SessionModel.CurrentURL != null)
                 SessionModel.CurrentURL = null;
+
+            //Request.Url.OriginalString
 
             //get basic provider info
             List<ProviderModel> olstProvider = new List<ProviderModel>();

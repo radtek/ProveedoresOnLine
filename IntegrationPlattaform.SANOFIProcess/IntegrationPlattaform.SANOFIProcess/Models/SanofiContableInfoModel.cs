@@ -12,7 +12,7 @@ namespace IntegrationPlattaform.SANOFIProcess.Models
 
         public string BankCountNumber { get; set; }
 
-        public Int64 CountType { get; set; }
+        public int CountType { get; set; }
 
         public string IBAN { get; set; }
 

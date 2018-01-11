@@ -21,7 +21,9 @@ namespace MarketPlace.Web.Controllers.Filters
                         action = MVC.Home.ActionNames.Index
                     });
 
-                MarketPlace.Models.General.SessionModel.CurrentURL = HttpContext.Current.Request.Url.AbsoluteUri;
+                if (MarketPlace.Models.General.SessionModel.CurrentURL == null)                
+                    MarketPlace.Models.General.SessionModel.CurrentURL = HttpContext.Current.Request.Url.AbsoluteUri;                
+                
                 filterContext.HttpContext.Response.End();
             }            
         }

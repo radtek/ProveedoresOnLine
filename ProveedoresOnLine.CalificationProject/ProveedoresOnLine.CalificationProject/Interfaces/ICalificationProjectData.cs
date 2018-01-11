@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProveedoresOnLine.Company.Models.Util;
+
 
 namespace ProveedoresOnLine.CalificationProject.Interfaces
 {
@@ -66,10 +68,12 @@ namespace ProveedoresOnLine.CalificationProject.Interfaces
 
         #region CalificationProjectConfigOptions
 
-        List<ProveedoresOnLine.Company.Models.Util.CatalogModel> CalificationProjectConfigOptions();
+        List<CatalogModel> CalificationProjectConfigOptions();
 
         List<Models.CalificationProject.CalificationProjectCategoryModel> CalificationProjectConfigCategoryOptions();
-
+      
+        List<CatalogModel> CalificationProjectConfigAditionalDocumentsOptions(string CustomerPublicId);
+        
         #endregion
     }
 }

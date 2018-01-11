@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DS_Report_ThirdknowLegde_MasiveQuery" targetNamespace="http://tempuri.org/DS_Report_ThirdknowLegde_MasiveQuery.xsd" xmlns:mstns="http://tempuri.org/DS_Report_ThirdknowLegde_MasiveQuery.xsd" xmlns="http://tempuri.org/DS_Report_ThirdknowLegde_MasiveQuery.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DS_Report_ThirdknowLegde_MasiveQuery" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DS_Report_ThirdknowLegde_MasiveQuery" msprop:Generator_UserDSName="DS_Report_ThirdknowLegde_MasiveQuery">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DT_ListDataQuery" msprop:Generator_TableClassName="DT_ListDataQueryDataTable" msprop:Generator_TableVarName="tableDT_ListDataQuery" msprop:Generator_TablePropName="DT_ListDataQuery" msprop:Generator_RowDeletingName="DT_ListDataQueryRowDeleting" msprop:Generator_RowChangingName="DT_ListDataQueryRowChanging" msprop:Generator_RowEvHandlerName="DT_ListDataQueryRowChangeEventHandler" msprop:Generator_RowDeletedName="DT_ListDataQueryRowDeleted" msprop:Generator_UserTableName="DT_ListDataQuery" msprop:Generator_RowChangedName="DT_ListDataQueryRowChanged" msprop:Generator_RowEvArgName="DT_ListDataQueryRowChangeEvent" msprop:Generator_RowClassName="DT_ListDataQueryRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="DataSearch" msprop:Generator_ColumnVarNameInTable="columnDataSearch" msprop:Generator_ColumnPropNameInRow="DataSearch" msprop:Generator_ColumnPropNameInTable="DataSearchColumn" msprop:Generator_UserColumnName="DataSearch" type="xs:string" minOccurs="0" />
+              <xs:element name="Result" msprop:Generator_ColumnVarNameInTable="columnResult" msprop:Generator_ColumnPropNameInRow="Result" msprop:Generator_ColumnPropNameInTable="ResultColumn" msprop:Generator_UserColumnName="Result" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

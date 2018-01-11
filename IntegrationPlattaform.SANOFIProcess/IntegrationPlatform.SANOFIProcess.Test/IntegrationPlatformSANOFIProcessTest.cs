@@ -39,7 +39,7 @@ namespace IntegrationPlatform.SANOFIProcess.Test
         {
             List<SanofiContableInfoModel> oReturn = new List<SanofiContableInfoModel>();
             DateTime startdate = new DateTime(01, 01, 0001);
-            oReturn = IntegrationPlattaform.SANOFIProcess.Controller.IntegrationPlatformSANOFIIProcess.GetContableInfoByProvider("A24EB150", startdate);
+            oReturn = IntegrationPlattaform.SANOFIProcess.Controller.IntegrationPlatformSANOFIIProcess.GetContableInfoByProvider("2DB32482", startdate);
 
             Assert.AreEqual(true, oReturn.Count > 0);
         }

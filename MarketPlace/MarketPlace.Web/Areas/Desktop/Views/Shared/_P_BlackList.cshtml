@@ -41,108 +41,110 @@
 
                     oOrderGroup.Add(oGroupListName.Where(x => x.Contains("Criticidad Alta")).Select(x => x).FirstOrDefault());
                     oOrderGroup.Add(oGroupListName.Where(x => x.Contains("Criticidad Media")).Select(x => x).FirstOrDefault());
-                    oOrderGroup.Add(oGroupListName.Where(x => x.Contains("Criticidad Baja")).Select(x => x).FirstOrDefault());                    
+                    oOrderGroup.Add(oGroupListName.Where(x => x.Contains("Criticidad Baja")).Select(x => x).FirstOrDefault());
                     oOrderGroup.Add(oGroupListName.Where(x => x.Contains("SIN COINCIDENCIAS")).Select(x => x).FirstOrDefault());
+
+                    oOrderGroup = oOrderGroup.GroupBy(x => x).Where(x => x != null).Select(x => x.First()).ToList();
 
                     foreach (var grp in oOrderGroup)
                     {
                         List<ProveedoresOnLine.CompanyProvider.Models.Provider.BlackListModel> oInfoToPrint = new List<ProveedoresOnLine.CompanyProvider.Models.Provider.BlackListModel>();
 
                         oInfoToPrint = Model.RelatedBlackListInfo.Where(x => x.BlackListInfo.Any(a => a.Value == grp)).Select(x => x).ToList();
-                        if (grp!=null)
+                        if (grp != null)
                         {
                             <div class="row POMPSectionTitlesBox">
                                 <div class="col-xs-10">
                                     <strong>@grp</strong>
                                 </div>
                             </div>
-                        }
-                        <div class="POMPTKDetailContainer">
-                            @if (grp == "SIN COINCIDENCIAS")
-                            {
-                                foreach (var item in oInfoToPrint)
+
+                            <div class="POMPTKDetailContainer">
+                                @if (grp == "SIN COINCIDENCIAS")
                                 {
-                                    <br />
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <strong>Nombre Consultado</strong>
+                                    foreach (var item in oInfoToPrint)
+                                    {
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <strong>Nombre Consultado</strong>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <strong>Identificación Consultada</strong>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <strong>Cargo</strong>
+                                            </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <strong>Identificación Consultada</strong>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Razón Social" || x.ItemInfoType.ItemName == "Nombre Consultado").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault()</span>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Identificación Consultada").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault()</span>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Cargo").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault()</span>
+                                            </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <strong>Cargo</strong>
-                                        </div>                                        
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Razón Social" || x.ItemInfoType.ItemName == "Nombre Consultado").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault()</span>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Identificación Consultada").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault()</span>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Cargo").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault()</span>
-                                        </div>                                        
-                                    </div>
-                                    <br />                                    
+                                        <br />
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                foreach (var item in oInfoToPrint)
+                                else
                                 {
-                                    <br />
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <strong>Nombre Consultado</strong>
+                                    foreach (var item in oInfoToPrint)
+                                    {
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <strong>Nombre Consultado</strong>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <strong>Identificación Consultada</strong>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <strong>Nombre Encontrado</strong>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <strong>Identificación Encontrada</strong>
+                                            </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <strong>Identificación Consultada</strong>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Razón Social" || x.ItemInfoType.ItemName == "Nombre Consultado").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault()</span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Identificación Consultada").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault()</span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Nombre Completo").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault()</span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Documento de Identidad").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault()</span>
+                                            </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <strong>Nombre Encontrado</strong>
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <strong>Cargo</strong>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <strong>Prioridad</strong>
+                                            </div>
+                                            @*<div class="col-md-3">
+                                                    <strong>Estado</strong>
+                                                </div>*@
                                         </div>
-                                        <div class="col-md-3">
-                                            <strong>Identificación Encontrada</strong>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Razón Social" || x.ItemInfoType.ItemName == "Nombre Consultado").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault()</span>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Identificación Consultada").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault()</span>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Nombre Completo").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault()</span>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Documento de Identidad").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault()</span>
-                                        </div>
-                                    </div>
-                                    <br />
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <strong>Cargo</strong>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <strong>Prioridad</strong>
-                                        </div>
-                                        @*<div class="col-md-3">
-                                            <strong>Estado</strong>
-                                        </div>*@
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Cargo").Select(x => x.Value).FirstOrDefault()</span>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Prioridad").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault()</span>
-                                        </div>                                       
-                                        <div class="col-md-3 pull-right">
-                                            <p>
-                                                <a href="@(Url.RouteUrl
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Cargo").Select(x => x.Value).FirstOrDefault()</span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span>@item.BlackListInfo.Where(x => x.ItemInfoType.ItemName == "Prioridad").Select(x => x.Value).DefaultIfEmpty("N/D").FirstOrDefault()</span>
+                                            </div>
+                                            <div class="col-md-3 pull-right">
+                                                <p>
+                                                    <a href="@(Url.RouteUrl
                                                                     (MarketPlace.Models.General.Constants.C_Routes_Default,
                                                                     new
                                                                     {
@@ -159,35 +161,35 @@
                                                                                     BlackListId = item.BlackListId,
                                                                                 })
                                                                         }))">Ver Detalle</a>
-                                            </p>
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <br />
-                                    <hr class="POMPProviderRestrictiveLIstSeparator" />
+                                        <br />
+                                        <hr class="POMPProviderRestrictiveLIstSeparator" />
+                                    }
                                 }
-                            }                           
-                        </div>
+                            </div>
+                        }
                     }
                 }
             </div>
-        }
-        else
-        {
-            <div class="POMPEvalTitle" id="POMPEvalTitleMargin">
-                <div class="col-xs-12">
-                    <label>Consulta Listas Restrictivas - Última Validación @Model.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == 203012).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault()</label><p>No se encontraron coincidencias en listas restrictivas.</p>
-                </div>
-            </div>
-        }
+                    }
+                    else
+                    {
+                        <div class="POMPEvalTitle" id="POMPEvalTitleMargin">
+                            <div class="col-xs-12">
+                                <label>Consulta Listas Restrictivas - Última Validación @Model.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == 203012).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault()</label><p>No se encontraron coincidencias en listas restrictivas.</p>
+                            </div>
+                        </div>
+                        }
 
-    }
+                    }
 </div>
 
 @* Templates *@
 <div id="ThirdKnowledge_Dialog">
-    <form id="ThirdKnowledge_DialogForm" action="@(Url.Action (MVC.Provider.ActionNames.GIBlackList, MVC.Provider.Name, 
-        new { ProviderPublicId = Request["ProviderPublicId"], }))" method="post">
-    </form>
+    <form id="ThirdKnowledge_DialogForm" action="@(Url.Action (MVC.Provider.ActionNames.GIBlackList, MVC.Provider.Name,
+        new { ProviderPublicId = Request["ProviderPublicId"], }))" method="post"></form>
 </div>
 
 @{

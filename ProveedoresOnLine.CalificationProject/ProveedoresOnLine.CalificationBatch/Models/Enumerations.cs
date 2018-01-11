@@ -10,6 +10,7 @@
             CP_CommercialModule = 2003003,
             CP_HSEQModule = 2003004,
             CP_BalanceModule = 2003005,
+            CP_AditionalDocumentModule = 2003006
         }
 
         //Tipo Operador

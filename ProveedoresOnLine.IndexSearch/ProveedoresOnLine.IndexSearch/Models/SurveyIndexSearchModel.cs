@@ -28,7 +28,8 @@ namespace ProveedoresOnLine.IndexSearch.Models
         public string SurveyStatus { get; set; }
         [String]
         public string UserId { get; set; }
-        [String]
+
+        [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
         public string User { get; set; }
     }
 }

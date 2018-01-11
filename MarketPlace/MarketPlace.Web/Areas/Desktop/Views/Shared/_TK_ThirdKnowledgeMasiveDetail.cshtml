@@ -1,0 +1,62 @@
+﻿@model MarketPlace.Models.Provider.ProviderViewModel
+@{
+    ViewBag.Title = "Proveedores OnLine - Consulta Individual";
+    Model.RenderScripts = false;
+}
+<div class="POMPSearchResultsPager">
+    <!--Pager-->
+    @Html.Partial(MVC.Desktop.Shared.Views._TK_ThirdKnowledgeSearch_Result_Pager, Model.RelatedThidKnowledgeSearch)&nbsp;|&nbsp;
+    <span class="POMPTKTotalPagesText">Total Páginas: @(Model.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.TotalPages)</span>
+</div>
+<div class="container-fluid POMPTKDetailContainer" id="TKDetailContainer">
+    @if (Model.TKMasiveDetailModel != null && Model.TKMasiveDetailModel.Count >= 0)
+    {
+
+        <table class="table table-responsive table-hover">
+            <thead>
+                <tr>
+                    <th>Busqueda Realizada</th>
+                    <th>Presenta Posibles Riesgos</th>
+                    <th>Mas Información</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.TKMasiveDetailModel)
+                {
+                    <tr>
+                        <td>@item.Item1</td>
+                        <td>
+                            @if (item.Item2 == "SI")
+                            {
+                                <div class="badge badge-danger"><strong>@item.Item2</strong></div>
+                            }
+                            else
+                            {
+                                @item.Item2
+                            }
+                        </td>
+                        <td>
+                            @if (item.Item2 == "SI")
+                            {
+                                <strong><a href="@Url.Action(MVC.ThirdKnowledge.ActionNames.TKThirdKnowledgeDetailNew,MVC.ThirdKnowledge.Name,new
+                                        {
+                                            QueryPublicId = item.Item3,
+                                            SearchParam = item.Item1,
+                                            InitDate = DateTime.Now,
+                                            EndDate = DateTime.Now,
+                                        })">Ver Detalle</a></strong>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+<div class="POMPSearchResultsPager">
+    <!--Pager-->
+    @Html.Partial(MVC.Desktop.Shared.Views._TK_ThirdKnowledgeSearch_Result_Pager, Model.RelatedThidKnowledgeSearch)
+</div>
+
+

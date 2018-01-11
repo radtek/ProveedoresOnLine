@@ -13,6 +13,12 @@
     string oCookieName = SettingsManager.SettingsController.SettingsInstance.ModulesParams
             [Auth.Interfaces.Constants.C_SettingsModuleName]
             [Auth.Interfaces.Constants.C_IL_Cookie.Replace("{AppName}", ViewBag.AppName)].Value;
+    string oEmail = "";
+    if (ViewBag.Email != null)
+    {
+        oEmail = ViewBag.Email;
+    }
+
 }
 
 <div class="POMPInternalLoginGreatWrapper">
@@ -35,7 +41,7 @@
         </div>
     </div>
 </div>
-
+<input type="hidden" name="Email" value="@ViewBag.Email" />
 @section inlinescripts {
     <script type="text/javascript" src="//www.gstatic.com/authtoolkit/js/gitkit.js"></script>
     <link type="text/css" rel="stylesheet" href="//www.gstatic.com/authtoolkit/css/gitkit.css" />
@@ -44,6 +50,7 @@
     </style>
 
     <script type="text/javascript">
+
         var config = {
             apiKey: '@oApiKey',
             siteName: '@oApiName',
@@ -54,7 +61,7 @@
             language: 'es',
             cookieName: '@oCookieName',
 
-            ajaxSender: function (url, data, completed) {
+           ajaxSender: function (url, data, completed) {
 
                 var oUrlSender = '@Url.Action(MVC.InternalLogin.ActionNames.ResetPassword, MVC.InternalLogin.Name, new { Success = "{success}", Email = "{email}" })'
 

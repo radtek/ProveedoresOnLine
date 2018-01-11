@@ -1,4 +1,5 @@
-﻿using ProveedoresOnLine.Company.Models.Role;
+﻿using ProveedoresOnLine.Company.Models.Company;
+using ProveedoresOnLine.Company.Models.Role;
 using ProveedoresOnLine.Company.Models.Util;
 using System;
 using System.Collections.Generic;
@@ -213,6 +214,11 @@ namespace ProveedoresOnLine.Company.DAL.Controller
             return DataFactory.MPCategorySearchByActivity(TreeId, SearchParam, RowCount);
         }
 
+        public List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> MPCategorySearchByIdCategory(int idCatalog, int RowCount)
+        {
+            return DataFactory.MPCategorySearchByIdCategory(idCatalog, RowCount);
+        }
+
         #endregion
 
         #region Company CRUD
@@ -389,6 +395,41 @@ namespace ProveedoresOnLine.Company.DAL.Controller
         public void CompanyActivityInfoIndex()
         {
             DataFactory.CompanyActivityInfoIndex();
+        }
+
+        public List<CalificationIndexModel> CalificationGetAll()
+        {
+           return DataFactory.CalificationGetAll();
+        }
+
+        public List<CustomFiltersIndexModel> CustomFiltersGetAll()
+        {
+            return DataFactory.CustomFiltersGetAll();
+        }
+
+        #endregion
+
+        #region Notifications Config
+
+        
+        public List<CompanyNotificationModel> NotificationConfigGetByCompany(string CompanyPublicId)
+        {
+            return DataFactory.NotificationConfigGetByCompany(CompanyPublicId);
+        }
+
+        public int NotificationConfigUpsert(string CompanyPublicId, int? NotificationConfigId, string NotificationName, bool Enable)
+        {
+            return DataFactory.NotificationConfigUpsert(CompanyPublicId, NotificationConfigId, NotificationName, Enable);
+        }
+
+        public int NotificationConfigInfoUpsert(int NotificationConfigId, int? NotificationConfigInfoId, int ConfigItemType, string Value, string LargeValue, bool Enable)
+        {
+            return DataFactory.NotificationConfigInfoUpsert(NotificationConfigId, NotificationConfigInfoId, ConfigItemType, Value, LargeValue, Enable);
+        }
+
+        public List<CompanyNotificationModel> NotificationConfigGetAll()
+        {
+            return DataFactory.NotificationConfigGetAll();
         }
 
         #endregion

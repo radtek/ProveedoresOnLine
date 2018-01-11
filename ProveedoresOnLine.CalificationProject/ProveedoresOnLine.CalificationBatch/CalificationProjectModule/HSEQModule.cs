@@ -94,7 +94,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                         {
                             oRelatedCalificationProjectItemModel.CalificatioProjectItemInfoModel.Where(mprule => mprule.CalificationProjectConfigItemInfoModel.CalificationProjectConfigItemInfoId == rule.CalificationProjectConfigItemInfoId).All(mprule =>
                             {
-                                //add mp rule
+                                //update mp rule
                                 oHSEQProviderInfo = ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CertificationModuleInfo(CompanyPublicId, rule.Question.ItemId);
 
                                 oHSEQProviderInfo.Where(pinf => pinf != null).All(pinf =>
@@ -121,7 +121,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                 }
                                                 else
                                                 {
-                                                    HSEQScore = 0;
+                                                    mprule.ItemInfoScore = 0;
                                                 }
 
                                                 break;
@@ -146,7 +146,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                 }
                                                 else
                                                 {
-                                                    HSEQScore = 0;
+                                                    mprule.ItemInfoScore = 0;
                                                 }
 
                                                 break;
@@ -177,7 +177,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -202,7 +202,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -227,7 +227,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -263,7 +263,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -288,7 +288,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -313,7 +313,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -349,7 +349,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -374,7 +374,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -399,7 +399,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -435,7 +435,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -460,7 +460,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -485,7 +485,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -521,7 +521,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -546,7 +546,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -571,7 +571,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -596,7 +596,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -640,7 +640,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -673,7 +673,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -706,7 +706,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -742,7 +742,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -765,7 +765,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;
@@ -792,7 +792,7 @@ namespace ProveedoresOnLine.CalificationBatch.CalificationProjectModule
                                                         }
                                                         else
                                                         {
-                                                            HSEQScore = 0;
+                                                            mprule.ItemInfoScore = 0;
                                                         }
 
                                                         break;

@@ -7,6 +7,10 @@
     <key name="CompanySurveyIndex">prod_companysurveyindex</key>
     <key name="SurveyIndex">prod_surveyindex</key>
     <key name="CustomerProviderIndex">prod_customerproviderindex</key>
-    <key name="ThirdknowledgeIndex">stg_thirdknowledgeindex</key>
+    <key name="ThirdknowledgeIndex">prod_thirdknowledgeindex</key>
+    <key name="CalificationIndex">prod_calificationindex</key>
+    <key name="CustomFiltersIndex">prod_customfiltersindex</key>    
+    <key name="QueryIndex">prod_queryindex</key>
   </IndexSearch>
 </Settings>
+

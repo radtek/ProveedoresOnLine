@@ -36,5 +36,19 @@ namespace BackOffice.Web.Controllers
             SessionManager.SessionController.Logout();
             return RedirectToAction(MVC.Home.ActionNames.Index, MVC.Home.Name);
         }
+
+        public virtual ActionResult Notifications()
+        {
+            return View();
+        }
+
+        public virtual PartialViewResult ChangeStatusNotification(int idNotification)
+        {
+            MessageModule.Client.Models.NotificationModel mNotification = BackOffice.Models.General.SessionModel.ListNotifications.SingleOrDefault(x => x.NotificationId == idNotification);
+
+            BackOffice.Models.General.SessionModel.ChangeStatusNotification(mNotification);
+            return PartialView("_N_Notifications");
+        }
+
     }
 }
