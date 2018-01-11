@@ -10,9 +10,9 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
     public class ThirdKnowledgeBatchTest
     {
         [TestMethod]
-        public async Task  StartProcess()
+        public void  StartProcess()
         {
-            await ProveedoresOnLine.ThirdKnowledgeBatch.ThirdKnowledgeFTPProcess.StartProcess();
+             ProveedoresOnLine.ThirdKnowledgeBatch.ThirdKnowledgeFTPProcess.StartProcess();
         }
     }
 }

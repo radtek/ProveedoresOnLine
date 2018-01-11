@@ -30,7 +30,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
         public static async Task<TDQueryModel> SimpleRequest(string PeriodPublicId, int IdType, string SearchParam, TDQueryModel oQueryToCreate)
         {
             try
-            {   
+            {
                 List<Tuple<string, List<string>, List<string>>> procResult = new List<Tuple<string, List<string>, List<string>>>();
                 List<Tuple<string, List<string>, List<string>>> ppResult = new List<Tuple<string, List<string>, List<string>>>();
                 List<Tuple<string, List<string>, List<string>>> judProcResult = new List<Tuple<string, List<string>, List<string>>>();
@@ -47,7 +47,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                 if (IdType != 4)
                 {
                     if (!string.IsNullOrEmpty(SearchParam))
-                    {   
+                    {
                         //Judicial proces Search
                         judProcResult = await JudicialProcessSearch(3, null, SearchParam);
 
@@ -61,14 +61,14 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         {
                             //Register Search Vote information                    
                             RegEntityResult = await RegisterEntitySearch(IdType, null, SearchParam);
-                        }                       
+                        }
 
                         if (RegDianResult.Count > 0 && !string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1))
                             ppResult = await PPSearch(1, RegDianResult.FirstOrDefault().Item1, SearchParam);
 
                         //RUES Implement
-                        if (IdType == 2)                        
-                            RUESResult = await RUESSearch(2,"", SearchParam);
+                        if (IdType == 2)
+                            RUESResult = await RUESSearch(2, "", SearchParam);
                     }
                 }
 
@@ -100,7 +100,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         Enable = true,
                         QueryPublicId = oQueryToCreate.QueryPublicId,
                         QueryIdentification = SearchParam,
-                        IdentificationResult = SearchParam,                        
+                        IdentificationResult = SearchParam,
                         IdList = "Procuraduría General de la Nación",
                         IdentificationNumber = SearchParam,
                         GroupName = "Procuraduría General de la Nación - Criticidad Media",
@@ -108,11 +108,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         ListName = "Procuraduría General de la Nación",
                         ChargeOffense = "Presenta antecedentes en la Prcuraduría General de la Nación.",
                         Zone = "Colombia",
-                        ElasticId = (int)enumElasticGroupId.ProcElasticId,                        
+                        ElasticId = (int)enumElasticGroupId.ProcElasticId,
                     };
 
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
-                } 
+                }
                 #endregion
 
                 #region Panama Papers
@@ -129,7 +129,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         Status = "Vigente",
                         Enable = true,
                         QueryPublicId = oQueryToCreate.QueryPublicId,
-                        QueryIdentification = SearchParam,                        
+                        QueryIdentification = SearchParam,
                         IdList = "Panama Papers",
                         IdentificationNumber = SearchParam,
                         GroupName = "Panama Papers - Criticidad Baja",
@@ -140,11 +140,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         ElasticId = (int)enumElasticGroupId.PanamaPElasticId,
                     };
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
-                } 
+                }
                 #endregion
 
                 #region Registraduría/Dian get Name
-                if (RegDianResult.Count > 0 &&!string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1))
+                if (RegDianResult.Count > 0 && !string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1))
                 {
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
                     {
@@ -155,11 +155,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         DocumentType = IdType == 1 ? "CC" : IdType == 2 ? "NIT" : IdType == 3 ? "C. Extranjería" : IdType == 4 ? "Denominación o Razon Social" : "",
                         GroupName = "Registraduria/Dian",
                         ListName = "Registraduria/Dian",
-                        ElasticId = (int)enumElasticGroupId.RegisterDian,                        
+                        ElasticId = (int)enumElasticGroupId.RegisterDian,
                         QueryIdentification = SearchParam,
                     };
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
-                } 
+                }
                 #endregion
 
                 #region Registraduría Puesto de Votación
@@ -174,7 +174,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         Link = RegEntityResult.FirstOrDefault().Item1,
                         ListName = "Registraduria - Puesto de Votación",
                         ElasticId = (int)enumElasticGroupId.RegistersList,
-                        NameResult = RegDianResult != null && RegDianResult.Count >0  ? RegDianResult.FirstOrDefault().Item1 : string.Empty,
+                        NameResult = RegDianResult != null && RegDianResult.Count > 0 ? RegDianResult.FirstOrDefault().Item1 : string.Empty,
                         QueryIdentification = IdType == 1 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : IdType == 2 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty,
                     };
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
@@ -198,9 +198,9 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         ListName = "RUES",
                         ElasticId = (int)enumElasticGroupId.RUES,
                         QueryIdentification = IdType == 1 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : IdType == 2 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty,
-                };
+                    };
                     oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
-                } 
+                }
                 #endregion
 
                 #region Judicial Process
@@ -219,7 +219,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         QueryPublicId = oQueryToCreate.QueryPublicId,
                         QueryIdentification = SearchParam,
                         IdentificationResult = SearchParam,
-                        FullName = judProcResult.FirstOrDefault().Item2[1],                        
+                        FullName = judProcResult.FirstOrDefault().Item2[1],
                         IdList = "RAMA JUDICIAL DEL PODER PUBLICO",
                         IdentificationNumber = SearchParam,
                         GroupName = "RAMA JUDICIAL DEL PODER PUBLICO - Criticidad Media",
@@ -321,11 +321,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             oInfoCreate.ListName = !string.IsNullOrEmpty(x.ListType) ? x.ListType : string.Empty;
                             oInfoCreate.MoreInfo = x.RelatedWiht + " " + x.ORoldescription1 + " " + x.ORoldescription2;
                             oInfoCreate.Zone = x.NationalitySourceCountry;
-                            if (IdType == 4)                            
-                                oInfoCreate.QueryName = SearchParam;                            
-                            else                            
-                                oInfoCreate.QueryIdentification = SearchParam;                           
-                            
+                            if (IdType == 4)
+                                oInfoCreate.QueryName = SearchParam;
+                            else
+                                oInfoCreate.QueryIdentification = SearchParam;
+
                             oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
                             return true;
                         });
@@ -338,11 +338,11 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         if (IdType != 4)
                         {
                             oInfoCreate.QueryIdentification = !string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty;
-                            oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty;                            
+                            oInfoCreate.IdentificationResult = !string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty;
                         }
-                        else                        
+                        else
                             oInfoCreate.QueryName = SearchParam;
-                        
+
                         oInfoCreate.GroupName = "SIN COINCIDENCIAS";
                         oQueryToCreate.RelatedQueryInfoModel.Add(oInfoCreate);
 
@@ -354,15 +354,14 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                 }
                 catch (Exception)
                 {
-
-                    throw;
+                    return null;
                 }
-                
+
                 return oQueryToCreate;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                throw ex;
+                return null;
             }
         }
 
@@ -624,12 +623,12 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     User = DataMessage.User,
                     ProgramTime = DateTime.Now,
                     MessageQueueInfo = DataMessage.MessageQueueInfo,
-                };                
+                };
 
                 MessageModule.Client.Controller.ClientController.CreateMessage(oMessageToSend);
 
                 #endregion
-                
+
             }
             catch (Exception)
             {
@@ -727,9 +726,10 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                 oSearchResult = client.Search<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel>(s => s
                 .TrackScores(true)
                 .From(0)
-                .Size(2)
-                 .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(SearchaParam))
-                 )
+                .Size(1)
+                 .Query(q => q.
+                   Bool(b => b
+                    .Must(m => m.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(SearchaParam)))))
                 );
             }
 
