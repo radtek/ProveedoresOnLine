@@ -3891,6 +3891,7 @@ namespace MarketPlace.Web.Controllers
 
             //ProviderInfo
             parameters.Add(new ReportParameter("ProviderName", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName));
+            parameters.Add(new ReportParameter("ProviderImage", oModel.RelatedLiteProvider.ProviderLogoUrl));
             parameters.Add(new ReportParameter("ProviderIdentificationType", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationType.ItemName));
             parameters.Add(new ReportParameter("ProviderIdentificationNumber", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationNumber));
             parameters.Add(new ReportParameter("ProviderVerificationDigit", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCompanyInfoType.CheckDigit).Select(x => x.Value).FirstOrDefault()));
