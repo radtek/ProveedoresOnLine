@@ -583,7 +583,8 @@
               </Style>
             </ChartBorderSkin>
             <ChartNoDataMessage Name="NoDataMessage">
-              <Caption>No Data Available</Caption>
+              <Caption>Sin Información</Caption>
+              <Hidden>true</Hidden>
               <Style>
                 <BackgroundGradientType>None</BackgroundGradientType>
                 <TextAlign>General</TextAlign>
@@ -1205,6 +1206,9 @@
         <Height>9.87893cm</Height>
         <Width>16.87202cm</Width>
         <ZIndex>1</ZIndex>
+        <Visibility>
+          <Hidden>= Iif (CountRows("DS_GerencialReport_CalificationInfo") &gt; 0, false, true)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Color>Silver</Color>
@@ -3019,7 +3023,7 @@
                   <Paragraph>
                     <TextRuns>
                       <TextRun>
-                        <Value>Información Básica</Value>
+                        <Value>Información Básica:</Value>
                         <Style>
                           <FontWeight>Bold</FontWeight>
                           <Color>#044c84</Color>
@@ -3063,7 +3067,7 @@
           <Image Name="Image2">
             <Source>External</Source>
             <Value>=Parameters!ProviderImage.Value</Value>
-            <Sizing>FitProportional</Sizing>
+            <Sizing>Fit</Sizing>
             <Top>1.24778cm</Top>
             <Left>10.62756cm</Left>
             <Height>2.22791cm</Height>
@@ -3072,7 +3076,7 @@
             <Style>
               <Border>
                 <Color>Silver</Color>
-                <Style>Solid</Style>
+                <Style>None</Style>
               </Border>
             </Style>
           </Image>
@@ -3923,6 +3927,9 @@
         <Height>2.61139cm</Height>
         <Width>16.89808cm</Width>
         <ZIndex>10</ZIndex>
+        <Visibility>
+          <Hidden>= Iif (CountRows("DS_GerencialReport_Contact") &gt; 0, false, true)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Color>Silver</Color>

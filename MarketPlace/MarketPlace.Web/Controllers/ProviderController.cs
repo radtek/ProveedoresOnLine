@@ -4026,7 +4026,7 @@ namespace MarketPlace.Web.Controllers
                 parameters.Add(new ReportParameter("LastUpdate", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == 203012).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault()));
             }
 
-            if (oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCompanyInfoType.AlertRisk).Select(x => x.Value).FirstOrDefault() == MarketPlace.Models.General.enumBlackListStatus.DontShowAlert.ToString())
+            if (oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCompanyInfoType.AlertRisk).Select(x => x.Value).FirstOrDefault() == ((int)MarketPlace.Models.General.enumBlackListStatus.DontShowAlert).ToString())
             {
                 parameters.Add(new ReportParameter("Alert", "No se encontraron coincidencias en listas restrictivas."));
             }
