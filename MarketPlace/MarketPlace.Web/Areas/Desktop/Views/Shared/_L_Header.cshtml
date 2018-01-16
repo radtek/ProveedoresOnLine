@@ -27,7 +27,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/Customer">
+            <a class="navbar-brand" href="@(Url.RouteUrl(MarketPlace.Models.General.Constants.C_Routes_Default,
+                                            new
+                                            {
+                                                controller = MVC.Provider.Name,
+                                                action = MVC.Home.ActionNames.Index
+                                            }))">
                 <img src="@strCompanyLogo">
             </a>
         </div>
