@@ -74,6 +74,7 @@
                     <Value>Empresa de sistema de riesgos:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -106,6 +107,7 @@
                     <Value>=Parameters!SystemOccupationalHazards.Value</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -138,6 +140,7 @@
                     <Value>Nivel de riesgo ARL:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -170,6 +173,7 @@
                     <Value>=Parameters!RateARL.Value</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -194,7 +198,7 @@
           </Textbox>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
-        <Top>33.70166cm</Top>
+        <Top>34.01916cm</Top>
         <Left>0.10846cm</Left>
         <Height>3.42188cm</Height>
         <Width>16.87202cm</Width>
@@ -616,6 +620,7 @@
                     <Value>Módulos Ejecutados</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
+                      <FontSize>9pt</FontSize>
                       <FontWeight>Normal</FontWeight>
                     </Style>
                   </TextRun>
@@ -623,6 +628,7 @@
                     <Value>:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
+                      <FontSize>9pt</FontSize>
                       <FontWeight>Bold</FontWeight>
                     </Style>
                   </TextRun>
@@ -659,6 +665,7 @@
                     <Value>Puntaje:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -694,6 +701,7 @@
                     <Value>=Parameters!CalificationProjectTotalScore.Value</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -728,6 +736,7 @@
                     <Value>=Parameters!CalificationProjectName.Value</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -763,6 +772,7 @@
                     <Value>=Parameters!CalificationProjectCal.Value</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -798,6 +808,7 @@
                     <Value>=Parameters!CalificationProjectLastModify.Value</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -833,6 +844,7 @@
                     <Value>Nombre:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -868,6 +880,7 @@
                     <Value>Calificación:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -903,6 +916,7 @@
                     <Value>Fecha Ejecución:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
+                      <FontSize>9pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -1201,7 +1215,7 @@
           </Tablix>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
-        <Top>23.64381cm</Top>
+        <Top>23.96131cm</Top>
         <Left>0.10846cm</Left>
         <Height>9.87893cm</Height>
         <Width>16.87202cm</Width>
@@ -2067,7 +2081,7 @@
           </Textbox>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
-        <Top>16.92628cm</Top>
+        <Top>17.24378cm</Top>
         <Left>0.09144cm</Left>
         <Height>6.40885cm</Height>
         <Width>16.88904cm</Width>
@@ -2681,7 +2695,7 @@
           </Textbox>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
-        <Top>13.14163cm</Top>
+        <Top>13.45913cm</Top>
         <Left>0.10846cm</Left>
         <Height>3.46715cm</Height>
         <Width>16.87202cm</Width>
@@ -2868,7 +2882,7 @@
                   </TextRun>
                 </TextRuns>
                 <Style>
-                  <TextAlign>Left</TextAlign>
+                  <TextAlign>General</TextAlign>
                 </Style>
               </Paragraph>
             </Paragraphs>
@@ -2988,7 +3002,7 @@
           </Textbox>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
-        <Top>8.57747cm</Top>
+        <Top>8.89497cm</Top>
         <Left>0.0824cm</Left>
         <Height>4.42305cm</Height>
         <Width>16.89808cm</Width>
@@ -3510,7 +3524,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox64</rd:DefaultName>
-        <Top>37.54229cm</Top>
+        <Top>37.85979cm</Top>
         <Left>0.67025cm</Left>
         <Height>1.558cm</Height>
         <Width>15.67477cm</Width>
@@ -3591,7 +3605,7 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>2.97761cm</Width>
+                  <Width>2.38322cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>4.68207cm</Width>
@@ -3600,7 +3614,7 @@
                   <Width>3.94546cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>4.16776cm</Width>
+                  <Width>4.73151cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -3907,10 +3921,10 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DS_GerencialReport_Contact</DataSetName>
-            <Top>1.07625cm</Top>
+            <Top>1.39375cm</Top>
             <Left>0.80289cm</Left>
             <Height>1.2cm</Height>
-            <Width>15.7729cm</Width>
+            <Width>15.74226cm</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
@@ -3924,7 +3938,7 @@
         <KeepTogether>true</KeepTogether>
         <Top>5.72226cm</Top>
         <Left>0.0824cm</Left>
-        <Height>2.61139cm</Height>
+        <Height>2.99632cm</Height>
         <Width>16.89808cm</Width>
         <ZIndex>10</ZIndex>
         <Visibility>
@@ -3938,7 +3952,7 @@
         </Style>
       </Rectangle>
       <Line Name="Line9">
-        <Top>37.43645cm</Top>
+        <Top>37.75395cm</Top>
         <Left>0.20358cm</Left>
         <Height>0cm</Height>
         <Width>16.73228cm</Width>
@@ -4017,7 +4031,7 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>15.46673in</Height>
+    <Height>15.51881in</Height>
     <Style>
       <Border>
         <Style>None</Style>
