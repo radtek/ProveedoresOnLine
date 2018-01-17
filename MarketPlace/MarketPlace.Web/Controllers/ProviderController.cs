@@ -3891,6 +3891,7 @@ namespace MarketPlace.Web.Controllers
 
             //ProviderInfo
             parameters.Add(new ReportParameter("ProviderName", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName));
+            parameters.Add(new ReportParameter("ProviderImage", oModel.RelatedLiteProvider.ProviderLogoUrl));
             parameters.Add(new ReportParameter("ProviderIdentificationType", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationType.ItemName));
             parameters.Add(new ReportParameter("ProviderIdentificationNumber", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationNumber));
             parameters.Add(new ReportParameter("ProviderVerificationDigit", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCompanyInfoType.CheckDigit).Select(x => x.Value).FirstOrDefault()));
@@ -4025,7 +4026,7 @@ namespace MarketPlace.Web.Controllers
                 parameters.Add(new ReportParameter("LastUpdate", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == 203012).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault()));
             }
 
-            if (oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCompanyInfoType.AlertRisk).Select(x => x.Value).FirstOrDefault() == MarketPlace.Models.General.enumBlackListStatus.DontShowAlert.ToString())
+            if (oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCompanyInfoType.AlertRisk).Select(x => x.Value).FirstOrDefault() == ((int)MarketPlace.Models.General.enumBlackListStatus.DontShowAlert).ToString())
             {
                 parameters.Add(new ReportParameter("Alert", "No se encontraron coincidencias en listas restrictivas."));
             }
