@@ -81,8 +81,9 @@
 }
 
     .POMPSearchResultStatusCertified img {
-        width: 100%;
+        width: 30px;
         height: auto;
+        padding-top:10px;
     }
 
 /************ SEGUNDO BLOQUE DE DATOS LOGO Y DEMAS ************/
@@ -169,10 +170,10 @@
     margin: 0px;
     padding: 0px;
     vertical-align: top;
-    background-image: url('http://devproveedoresonline.s3.amazonaws.com/MarketPlace/SiteImages/POMPsprite1.png');
+    /*background-image: url('https://s3.amazonaws.com/proveedoresonline/MarketPlace/SiteImages/listrestrictive.png');
     background-repeat: no-repeat;
     background-position: -24px 0px;
-    background-size: 101px auto;
+    background-size: 101px auto;*/
 }
 
 .POMPSearchResultIncludeCoparisonIcon {
