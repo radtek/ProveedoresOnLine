@@ -219,9 +219,14 @@
 
         public const string C_Settings_NotificationIconAdditionalInfo = "UrlNotificationIconAdditionalInfo";
         public const string C_Settings_NotificationIconHSEQ = "UrlNotificationIconHSEQ";
-        public const string C_Settings_NotificationIconGeneralInfo = "UrlNotificationIconGeneralInfo"; 
+        public const string C_Settings_NotificationIconGeneralInfo = "UrlNotificationIconGeneralInfo";
         #endregion
 
+        #region Icons Alert Provider
+        public const string C_Settings_UrlIconAlert = "UrlIconAlert";
+        public const string C_Settings_UrlIconChulo = "UrlIconChulo";
+        public const string C_Settings_UrlIconMedalla = "UrlIconMedalla";
+        #endregion
         #endregion
 
     }

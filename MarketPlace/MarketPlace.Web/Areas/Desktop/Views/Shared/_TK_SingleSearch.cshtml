@@ -59,7 +59,8 @@
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <label>Valor a Buscar (*)</label>
+                    <label>Parámetro de Busqueda </label>
+                    <a style="color: red;" data-toggle="tooltip" title="Campo Obligatorio">*</a>
                     @if (!string.IsNullOrEmpty(Model.RelatedThirdKnowledge.SearchIdNumberParam))
                     {
                         <input class="form-control" type="text" name="IdentificationNumber" id="IdentificationNumber" value="@Model.RelatedThirdKnowledge.SearchIdNumberParam" placeholder="Parámetro de Búsqueda" />
@@ -70,7 +71,7 @@
                     }
                 </div>
                 <div class="col-md-12">
-                    <span style="color: red;">* Campo Obligatorio.</span>
+                    <span style="color: red; font-size: 10px; font-style: italic;">* Campo Obligatorio.</span>
                 </div>
             </div>
 

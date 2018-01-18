@@ -47,13 +47,13 @@
 
     <key name="ElasticSearchUrl">http://192.168.0.94:9200/</key>
         
-    <key name="CompanyIndex">prod_companyindex</key>
+    <key name="CompanyIndex">dev_companyindex</key>
     
-    <key name="CustomerProviderIndex">prod_customerproviderindex</key>
+    <key name="CustomerProviderIndex">dev_customerproviderindex</key>
 
-    <key name="CompanySurveyIndex">prod_companysurveyindex</key>
+    <key name="CompanySurveyIndex">dev_companysurveyindex</key>
     
-    <key name="SurveyIndex">prod_surveyindex</key>
+    <key name="SurveyIndex">dev_surveyindex</key>
 
     <key name="ProviderGeneralReportSize">20000000</key>
     
@@ -133,6 +133,10 @@
     <key name="UrlNotificationIconHSEQ">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/doc2.png</key>
     <key name="UrlNotificationIconGeneralInfo">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/doc3.png</key>
 
+    <!--Icons Alert Provider-->
+    <key name="UrlIconAlert">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/AlertaPOL.png</key>
+    <key name="UrlIconChulo">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/ChuloVerde.png</key>
+    <key name="UrlIconMedalla">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/MedallaPOL.png</key>
   </MarketPlace>
 </Settings>
 

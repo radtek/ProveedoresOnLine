@@ -136,30 +136,40 @@
             <div class="POMPSearchResultAlertComparWrapper">
                 @if (oCurrentSubMenu.Any(x => x == (int)MarketPlace.Models.General.enumProviderSubMenu.RestrictiveList))
                 {
+                    <div>
+                        <div class="POMPSearchResultAlertComparWrapperIcon">
+                            @if (Model.Item2.ProviderIsCertified)
+                            {
+                                <img src="@MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_UrlIconMedalla].Value"  data-toggle="tooltip" title="Proveedor validado" />
+                            }
+                        </div>
+                    </div>
+
+                    <div >
+                        <div class="POMPSearchResultAlertComparWrapperIcon">
+                            @if (Model.Item2.ElasticRealtedProvider.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == MarketPlace.Models.General.SessionModel.CurrentCompany.CompanyPublicId).Count() > 0)
+                            {
+                                <img src="@MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_UrlIconChulo].Value" data-toggle="tooltip" title="Proveedor de @MarketPlace.Models.General.SessionModel.CurrentCompany.CompanyName" />
+                            }
+                        </div>
+                    </div>
+
                     if (Model.Item2.IsProviderCustomer && Model.Item2.ProviderAlertRisk == MarketPlace.Models.General.enumBlackListStatus.ShowAlert)
                     {
                         <a class="SelGenericTooltip POMPSearchResultProvAlert" title="Este proveedor está en listas restrictivas" href="@(Url.RouteUrl
-                        (MarketPlace.Models.General.Constants.C_Routes_Default,
-                        new
-                        {
-                            controller = MVC.Provider.Name,
-                            action = MVC.Provider.ActionNames.GIBlackList,
-                            ProviderPublicId = Model.Item2.ElasticRealtedProvider.CompanyPublicId
-                        }))">
-                            <img  style="width:30px;" src="https://s3.amazonaws.com/proveedoresonline/MarketPlace/SiteImages/listrestrictive.png" />
+                                (MarketPlace.Models.General.Constants.C_Routes_Default,
+                                new
+                                {
+                                    controller = MVC.Provider.Name,
+                                    action = MVC.Provider.ActionNames.GIBlackList,
+                                    ProviderPublicId = Model.Item2.ElasticRealtedProvider.CompanyPublicId
+                                }))">
+                            <img style="width:30px;" src="@MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_UrlIconAlert].Value" />
                         </a>
-                    }
-                    if (Model.Item2.ProviderIsCertified)
-                    {
-                        <img  style="width:30px;" title="Proveedor validado" src="https://s3.amazonaws.com/proveedoresonline/MarketPlace/SiteImages/validate.png" />
-                    }
-                    if (Model.Item2.ElasticRealtedProvider.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == MarketPlace.Models.General.SessionModel.CurrentCompany.CompanyPublicId).Count() > 0)
-                    {
-                        <img style="width:30px;" src="https://s3.amazonaws.com/proveedoresonline/MarketPlace/SiteImages/miprovider.png" data-toggle="tooltip" title="PROVEEDOR DE @MarketPlace.Models.General.SessionModel.CurrentCompany.CompanyName" />
                     }
                 }
                 @if (oCurrentModule.Any(x => x == (int)MarketPlace.Models.General.enumModule.ComparisionInfo) ||
-            oCurrentModule.Any(x => x == (int)MarketPlace.Models.General.enumModule.SelectionInfo))
+oCurrentModule.Any(x => x == (int)MarketPlace.Models.General.enumModule.SelectionInfo))
                 {
                     if (Model.Item2.ProviderAddRemoveEnable && MarketPlace.Models.General.SessionModel.CurrentCompanyType != MarketPlace.Models.General.enumCompanyType.BuyerProvider)
                     {

@@ -199,38 +199,6 @@
                     </ul>
                 </li>
             }
-            if (CurrentCustomer != FalabellaCustomerPublicId)
-            {
-                //Ica Filter
-                if (Model.IcaFilter != null && Model.IcaFilter.Count > 0)
-                {
-                    <li>
-                        <span>ICA</span>
-                        <ul>
-                            @foreach (var oFilterItem in Model.IcaFilter)
-                            {
-                                if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
-                                {
-                                    <li>
-                                        <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.EconomicActivity)'}});" />
-                                        <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
-                                    </li>
-                                }
-                                else
-                                {
-                                    if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
-                                    {
-                                        <li>
-                                            <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.EconomicActivity)'}});" />
-                                            <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
-                                        </li>
-                                    }
-                                }
-                            }
-                        </ul>
-                    </li>
-                }
-            }
 
             //BlackList Filter
             if (Model.BlackListFilter != null && Model.BlackListFilter.Count > 0)
@@ -289,7 +257,7 @@
                         }
                     </ul>
                 </li>
-            }            
+            }
 
             //Calification Filter
             if (Model.CalificationTypeProcessFilter != null && Model.CalificationTypeProcessFilter.Count > 0)
@@ -341,18 +309,51 @@
                                 {
                                     <li>
                                         <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterName + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.CalificationResult)'}});" />
-                                        <span>@oFilterItem.FilterName.Replace("_"," ") (@oFilterItem.FilterCount) </span>
+                                        <span>@oFilterItem.FilterName.Replace("_", " ") (@oFilterItem.FilterCount) </span>
                                     </li>
                                 }
                             }
                         }
                     </ul>
                 </li>
-            }           
+            }
+
+            if (CurrentCustomer != FalabellaCustomerPublicId)
+            {
+                //Ica Filter
+                if (Model.IcaFilter != null && Model.IcaFilter.Count > 0)
+                {
+                    <li>
+                        <span>ICA</span>
+                        <ul>
+                            @foreach (var oFilterItem in Model.IcaFilter)
+                            {
+                                if (lstSearchFilter.Any(x => x.Item1 == oFilterItem.FilterType.ToString()))
+                                {
+                                    <li>
+                                        <input type="checkbox" checked="checked" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:false,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.EconomicActivity)'}});" />
+                                        <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                    </li>
+                                }
+                                else
+                                {
+                                    if (oFilterItem.FilterCount != 0 && oFilterItem.FilterName != "")
+                                    {
+                                        <li>
+                                            <input type="checkbox" onchange="javascript: Provider_SearchObject.Search({SearchFilter:{Enable:true,Value:'@(oFilterItem.FilterType + ";" + oFilterItem.FilterCount + ";" + (int)MarketPlace.Models.General.enumFilterType.EconomicActivity)'}});" />
+                                            <span>@oFilterItem.FilterName (@oFilterItem.FilterCount) </span>
+                                        </li>
+                                    }
+                                }
+                            }
+                        </ul>
+                    </li>
+                }
+            }
 
         }
         @if (oCurrentModule.Any(x => x == (int)MarketPlace.Models.General.enumModule.Survey) &&
-            Model.ElasticSurveyModel != null)
+        Model.ElasticSurveyModel != null)
         {
             //Survey Type filter
             if (Model.SurveyType != null && Model.SurveyType.Count > 0)
