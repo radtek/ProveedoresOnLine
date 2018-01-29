@@ -120,6 +120,32 @@ namespace ProveedoresOnLine.Notification.Notification.Core
                                                     if (dateToValidate.Date == DateTime.Now.Date)
                                                         BuildMsgObject = true;
                                                 }
+                                                break;
+                                            case ((int)enumRuleType.MoreThan):
+                                                if (RuleValue == (int)enumVigencyType.ThirtyDays)
+                                                {
+                                                    dateToValidate = dateToValidate.AddMonths(1);
+                                                    if (dateToValidate.Date == DateTime.Now.Date)
+                                                        BuildMsgObject = true;
+                                                }
+                                                if (RuleValue == (int)enumVigencyType.SixtyDays)
+                                                {
+                                                    dateToValidate = dateToValidate.AddMonths(2);
+                                                    if (dateToValidate.Date == DateTime.Now.Date)
+                                                        BuildMsgObject = true;
+                                                }
+                                                if (RuleValue == (int)enumVigencyType.NinetyDays)
+                                                {
+                                                    dateToValidate = dateToValidate.AddMonths(3);
+                                                    if (dateToValidate.Date == DateTime.Now.Date)
+                                                        BuildMsgObject = true;
+                                                }
+                                                if (RuleValue == (int)enumVigencyType.OneYear)
+                                                {
+                                                    dateToValidate = dateToValidate.AddYears(1);
+                                                    if (dateToValidate.Date == DateTime.Now.Date)
+                                                        BuildMsgObject = true;
+                                                }
 
                                                 //Send notification
                                                 if (BuildMsgObject)

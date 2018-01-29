@@ -46,7 +46,7 @@ namespace ProveedoresOnLine.OnlineSearch.Core
                                       .First(x => x.Attributes["class"] != null
                                                && x.Attributes["class"].Value == "c-blue");
 
-                        string linkPath = InternalSettings.Instance[Models.Constants.RUES_Domine].Value + link.Attributes["href"].Value;
+                        string linkPath = InternalSettings.Instance[Models.Constants.RUES_Domine].Value;
 
                         stringResult.Add(deserializedProduct.rows.FirstOrDefault().identificacion);
                         stringResult.Add(deserializedProduct.rows.FirstOrDefault().razon_social);

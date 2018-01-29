@@ -382,7 +382,7 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                 string SearchCritery = "";
                 string SearchParam = "";
 
-                if (ExcelDs.Rows[i].ItemArray.Count() > 2)
+                if (ExcelDs.Rows[i].ItemArray.Count() > 0)
                 {
                     SearchCritery = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.MP_CP_ColSearchCritery].Value].ToString();
                     SearchParam = ExcelDs.Rows[i][ProveedoresOnLine.ThirdKnowledgeBatch.Models.InternalSettings.Instance[ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.MP_CP_ColSearchParam].Value].ToString();
