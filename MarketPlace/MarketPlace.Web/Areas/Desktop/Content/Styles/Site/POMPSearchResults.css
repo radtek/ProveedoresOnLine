@@ -54,7 +54,7 @@
     .POMPSearchResultsList > li {
         list-style-type: none;
         margin: 0px;
-        padding: 20px 0px;
+        padding: 20px 0px 0px 0px;
         border-bottom: 1px solid #ff8300;
     }
 /*********** ENLACES **********/
@@ -148,6 +148,7 @@
     width: 18%;
     height: 26px;
     vertical-align: top;
+    margin-top: -13px;
 }
 
     .POMPSearchResultAlertComparWrapper div,
@@ -162,9 +163,6 @@
             width: 32px;
         }
 
-    .POMPSearchResultAlertComparWrapper a {
-        float: right;
-    }
 /************ ALERTA Y COMPARACION ************/
 .POMPSearchResultProvAlert {
     border: none !important;
@@ -197,7 +195,7 @@
     /*border: 1px solid #ff8300;*/
     float: right;
     height: auto;
-    margin: -25px 0 0;
+    margin: 0 0 7px 0;
     padding: 0;
     width: 80%;
     text-align: right;
