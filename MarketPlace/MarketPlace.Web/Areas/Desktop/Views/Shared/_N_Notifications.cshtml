@@ -7,7 +7,7 @@
 
         <li class="dropdown">
             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" aria-expanded="true">
-                <i class="fa fa-bell"></i>  
+                <i class="fa fa-bell"></i>
                 @if (cant > 0)
                 {
                     <span class="label label-warning">@cant</span>
@@ -18,7 +18,7 @@
                 {
                     if (MarketPlace.Models.General.SessionModel.ListNotifications != null)
                     {
-                        foreach (var Notification in MarketPlace.Models.General.SessionModel.ListNotifications)
+                        foreach (var Notification in MarketPlace.Models.General.SessionModel.ListNotifications.OrderByDescending(x => x.CreateDate))
                         {
                             var companyInfo = ProveedoresOnLine.Company.Controller.Company.CompanyGetBasicInfo(Notification.CompanyPublicId);
 
@@ -26,7 +26,7 @@
                                                     ? Notification.ListNotificationInfo.SingleOrDefault(x => x.NotificationInfoType == 2008007).LargeValue
                                                     : "";
 
-                            if (! string.IsNullOrEmpty(NotificatioBody))
+                            if (!string.IsNullOrEmpty(NotificatioBody))
                             {
                                 if (NotificatioBody.Length > 40)
                                 {
@@ -34,49 +34,54 @@
                                 }
                             }
 
-                            var logo = companyInfo != null
-                                    ? companyInfo.CompanyInfo.Where(y => y.ItemInfoType.ItemId == 203005).Select(y => y.Value).FirstOrDefault()
-                                    : Notification.NotificationType == 2009001 // GeneralInfo
-                                    ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_NotificationIconGeneralInfo].Value.Trim()
-                                    : Notification.NotificationType == 2009002 //AdditionalInfo
-                                    ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_NotificationIconAdditionalInfo].Value.Trim()
-                                    : Notification.NotificationType == 2009003 //HSEQ 
-                                    ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_NotificationIconHSEQ].Value.Trim()
-                                    : "";
+                            var logo = Notification.NotificationType == 2009001 // GeneralInfo
+                                            ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_NotificationIconGeneralInfo].Value.Trim()
+                                            : Notification.NotificationType == 2009002 //AdditionalInfo
+                                            ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_NotificationIconAdditionalInfo].Value.Trim()
+                                            : Notification.NotificationType == 2009003 //HSEQ
+                                            ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_NotificationIconHSEQ].Value.Trim()
+                                            : "";
+
+                            if (companyInfo != null)
+                            {
+                                logo = companyInfo.CompanyInfo.Where(y => y.ItemInfoType.ItemId == 203005).Select(y => y.Value).FirstOrDefault() != null
+                                   ? companyInfo.CompanyInfo.Where(y => y.ItemInfoType.ItemId == 203005).Select(y => y.Value).FirstOrDefault()
+                                  : logo;
+                            }
 
                             var UrlRedirection = Notification.NotificationType == 2009001 // GeneralInfo
                                 ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_NotificationGeneralInfo_Mk].Value.Trim() + Notification.CompanyPublicId
                                 : Notification.NotificationType == 2009002 //AdditionalInfo
                                 ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_NotificationAdditionalInfo_MK].Value.Trim() + Notification.CompanyPublicId
-                                : Notification.NotificationType == 2009003 //HSEQ 
+                                : Notification.NotificationType == 2009003 //HSEQ
                                 ? MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_NotificationHSEQ_MK].Value.Trim() + Notification.CompanyPublicId
                                 : "#";
 
                             var classLeido = Notification.State == 2013002 ? "background : #EFF5F5;" : "";
 
-                            <li style=" @classLeido border-bottom: solid 1px #dddddd; padding-bottom: 14px; padding-top: 4px;" >
+                            <li style=" @classLeido border-bottom: solid 1px #dddddd; padding-bottom: 14px; padding-top: 4px;">
                                 @Html.Raw(
-                                    Ajax.ActionLink(
-                                                "[replacetext]",
-                                                "ChangeStatusNotification",
-                                                "Home",
-                                                new
-                                                {
-                                                    idNotification = Notification.NotificationId
-                                                },
-                                                new AjaxOptions
-                                                {
-                                                    UpdateTargetId = "Notification",
-                                                    InsertionMode = InsertionMode.Replace,
-                                                    HttpMethod = "POST",
-                                                    OnBegin = "window.open('" + @UrlRedirection + "', '_blank')"
-                                                },
-                                                null)
-                                    .ToHtmlString()
-                                    .Replace("[replacetext]", "<img class=\"img img-circle\" style=\" width: 35px; height: 35px; margin-right: 10px;\" src=\"" + @logo + "\" />" + Notification.Label + "<br><em class=\"small\" style=\"padding-left: 30px; \">" + @NotificatioBody + "</em><span class=\"pull-right text-muted small\">" + Notification.CreateDate.ToShortDateString() + Notification.CreateDate.ToLongTimeString() + "</span>"))
-                                
+                                         Ajax.ActionLink(
+                                                     "[replacetext]",
+                                                     "ChangeStatusNotification",
+                                                     "Home",
+                                                     new
+                                                     {
+                                                         idNotification = Notification.NotificationId
+                                                     },
+                                                     new AjaxOptions
+                                                     {
+                                                         UpdateTargetId = "Notification",
+                                                         InsertionMode = InsertionMode.Replace,
+                                                         HttpMethod = "POST",
+                                                         OnBegin = "window.open('" + @UrlRedirection + "', '_blank')"
+                                                     },
+                                                     null)
+                                         .ToHtmlString()
+                                         .Replace("[replacetext]", "<img class=\"img img-circle\" style=\" width: 35px; height: 35px; margin-right: 10px;\" src=\"" + @logo + "\" />" + Notification.Label + "<br><em class=\"small\" style=\"padding-left: 30px; \">" + @NotificatioBody + "</em><span class=\"pull-right text-muted small\">" + Notification.CreateDate.ToShortDateString() + Notification.CreateDate.ToLongTimeString() + "</span>"))
+
                             </li>
-                            
+
                         }
                     }
 
