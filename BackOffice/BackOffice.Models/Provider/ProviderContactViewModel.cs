@@ -178,51 +178,7 @@ namespace BackOffice.Models.Provider
                 Select(y => y.ItemInfoId.ToString()).
                 DefaultIfEmpty(string.Empty).
                 FirstOrDefault();
-
-            CP_IdentificationType = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.CP_IdentificationType).
-                Select(y => y.Value).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-            CP_IdentificationTypeId = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.CP_IdentificationType).
-                Select(y => y.ItemInfoId.ToString()).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-
-            CP_IdentificationNumber = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.CP_IdentificationNumber).
-                Select(y => y.Value).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-            CP_IdentificationNumberId = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.CP_IdentificationNumber).
-                Select(y => y.ItemInfoId.ToString()).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-
-            CP_IdentificationCity = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.CP_IdentificationCity).
-                Select(y => y.Value).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-            CP_IdentificationCityId = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.CP_IdentificationCity).
-                Select(y => y.ItemInfoId.ToString()).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-
-            CP_IdentificationFile = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.CP_IdentificationFile).
-                Select(y => y.Value).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-            CP_IdentificationFileId = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.CP_IdentificationFile).
-                Select(y => y.ItemInfoId.ToString()).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-
+        
             CP_Phone = RelatedContact.ItemInfo.
                 Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.CP_Phone).
                 Select(y => y.Value).
@@ -232,18 +188,7 @@ namespace BackOffice.Models.Provider
                 Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.CP_Phone).
                 Select(y => y.ItemInfoId.ToString()).
                 DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-
-            CP_Extent = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.CP_Extent).
-                Select(y => y.Value).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-            CP_ExtentId = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.CP_Extent).
-                Select(y => y.ItemInfoId.ToString()).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
+                FirstOrDefault();                      
 
             CP_Email = RelatedContact.ItemInfo.
                 Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.CP_Email).
@@ -255,18 +200,7 @@ namespace BackOffice.Models.Provider
                 Select(y => y.ItemInfoId.ToString()).
                 DefaultIfEmpty(string.Empty).
                 FirstOrDefault();
-
-            CP_Negotiation = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.CP_Negotiation).
-                Select(y => y.Value).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-            CP_NegotiationId = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.CP_Negotiation).
-                Select(y => y.ItemInfoId.ToString()).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-
+         
             #endregion
 
             #region Branch
@@ -434,17 +368,7 @@ namespace BackOffice.Models.Provider
                     Select(y => y.ItemInfoId.ToString()).
                     DefaultIfEmpty(string.Empty).
                     FirstOrDefault();
-
-            //DT_DueDate = RelatedContact.ItemInfo.
-            //       Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.DT_DueDate).
-            //       Select(y => y.Value).
-            //       DefaultIfEmpty(string.Empty).
-            //       FirstOrDefault();
-            //DT_DueDateId = RelatedContact.ItemInfo.
-            //        Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.DT_DueDate).
-            //        Select(y => y.ItemInfoId.ToString()).
-            //        DefaultIfEmpty(string.Empty).
-            //        FirstOrDefault();
+           
 
             DT_DistributorFile = RelatedContact.ItemInfo.
                    Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.DT_DistributorFile).

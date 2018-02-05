@@ -151,7 +151,7 @@ namespace BackOffice.Web.ControllersApi
             string ProviderPublicId,
             string ContactType,
             string ViewEnable)
-        {
+{
             int oTotalRows;
             List<BackOffice.Models.Provider.ProviderContactViewModel> oReturn = new List<Models.Provider.ProviderContactViewModel>();
 
@@ -263,49 +263,7 @@ namespace BackOffice.Web.ControllersApi
                         Enable = true,
                     });
 
-                    oCompany.RelatedContact.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CP_IdentificationTypeId) ? 0 : Convert.ToInt32(oDataToUpsert.CP_IdentificationTypeId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumContactInfoType.CP_IdentificationType
-                        },
-                        Value = oDataToUpsert.CP_IdentificationType,
-                        Enable = true,
-                    });
-
-                    oCompany.RelatedContact.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CP_IdentificationNumberId) ? 0 : Convert.ToInt32(oDataToUpsert.CP_IdentificationNumberId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumContactInfoType.CP_IdentificationNumber
-                        },
-                        Value = oDataToUpsert.CP_IdentificationNumber,
-                        Enable = true,
-                    });
-
-                    oCompany.RelatedContact.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CP_IdentificationCityId) ? 0 : Convert.ToInt32(oDataToUpsert.CP_IdentificationCityId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumContactInfoType.CP_IdentificationCity
-                        },
-                        Value = oDataToUpsert.CP_IdentificationCity,
-                        Enable = true,
-                    });
-
-                    oCompany.RelatedContact.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CP_IdentificationFileId) ? 0 : Convert.ToInt32(oDataToUpsert.CP_IdentificationFileId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumContactInfoType.CP_IdentificationFile
-                        },
-                        Value = oDataToUpsert.CP_IdentificationFile,
-                        Enable = true,
-                    });
+                  
 
                     lstUsedFiles.Add(oDataToUpsert.CP_IdentificationFile);
 
@@ -320,17 +278,6 @@ namespace BackOffice.Web.ControllersApi
                         Enable = true,
                     });
 
-                    oCompany.RelatedContact.FirstOrDefault().ItemInfo.Add(new GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CP_ExtentId) ? 0 : Convert.ToInt32(oDataToUpsert.CP_ExtentId.Trim()),
-                        ItemInfoType = new CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumContactInfoType.CP_Extent,
-                        },
-                        Value = oDataToUpsert.CP_Extent,
-                        Enable = true,
-                    });
-
                     oCompany.RelatedContact.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
                     {
                         ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CP_EmailId) ? 0 : Convert.ToInt32(oDataToUpsert.CP_EmailId.Trim()),
@@ -342,16 +289,6 @@ namespace BackOffice.Web.ControllersApi
                         Enable = true,
                     });
 
-                    oCompany.RelatedContact.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CP_NegotiationId) ? 0 : Convert.ToInt32(oDataToUpsert.CP_NegotiationId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumContactInfoType.CP_Negotiation
-                        },
-                        Value = oDataToUpsert.CP_Negotiation,
-                        Enable = true,
-                    });
                 }
                 #endregion
 

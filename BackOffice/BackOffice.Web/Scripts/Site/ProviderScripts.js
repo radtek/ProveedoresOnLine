@@ -442,34 +442,18 @@ var Provider_CompanyContactObject = {
                             Enable: { editable: true, type: 'boolean', defaultValue: true },
 
                             CP_PersonContactType: { editable: true, validation: { required: false } },
-                            CP_PersonContactTypeId: { editable: false },
-
-                            CP_IdentificationType: { editable: true, validation: { required: false } },
-                            CP_IdentificationTypeId: { editable: false },
-
-                            CP_IdentificationNumber: { editable: true, validation: { required: false } },
-                            CP_IdentificationNumberId: { editable: false },
-
-                            CP_IdentificationCity: { editable: true, validation: { required: false } },
-                            CP_IdentificationCityId: { editable: false },
-
-                            CP_IdentificationFile: { editable: true, validation: { required: false } },
-                            CP_IdentificationFileId: { editable: false },
+                            CP_PersonContactTypeId: { editable: false },                          
 
                             CP_Name: { editable: true, validation: { required: true } },
                             CP_NameId: { editable: false },
 
                             CP_Phone: { editable: true, validation: { required: false } },
                             CP_PhoneId: { editable: false },
-
-                            CP_Extent: { editable: true, validation: { required: false } },
-                            CP_ExtentId: { editable: false },
+                      
 
                             CP_Email: { editable: true, validation: { required: false, email: true } },
                             CP_EmailId: { editable: false },
-
-                            CP_Negotiation: { editable: true, validation: { required: false } },
-                            CP_NegotiationId: { editable: false },
+                        
                         }
                     }
                 },
@@ -587,61 +571,6 @@ var Provider_CompanyContactObject = {
                         });
                 },
             }, {
-                field: 'CP_IdentificationType',
-                title: 'Tipo de identificación',
-                width: '180px',
-                template: function (dataItem) {
-                    var oReturn = 'Seleccione una opción.';
-                    if (dataItem != null && dataItem.CP_IdentificationType != null) {
-                        $.each(Provider_CompanyContactObject.ProviderOptions[101], function (item, value) {
-                            if (dataItem.CP_IdentificationType == value.ItemId) {
-                                oReturn = value.ItemName;
-                            }
-                        });
-                    }
-                    return oReturn;
-                },
-                editor: function (container, options) {
-                    $('<input required data-bind="value:' + options.field + '"/>')
-                        .appendTo(container)
-                        .kendoDropDownList({
-                            dataSource: Provider_CompanyContactObject.ProviderOptions[101],
-                            dataTextField: 'ItemName',
-                            dataValueField: 'ItemId',
-                            optionLabel: 'Seleccione una opción'
-                        });
-                },
-            }, {
-                field: 'CP_IdentificationNumber',
-                title: 'Número de identificación',
-                width: '180px',
-                template: function (dataItem) {
-                    var oReturn = '';
-
-                    if (dataItem.CP_IdentificationNumber == '') {
-                        oReturn = '<label class="PlaceHolder">Ej: 79982877</label>';
-                    }
-                    else {
-                        oReturn = dataItem.CP_IdentificationNumber;
-                    }
-                    return oReturn;
-                },
-            }, {
-                field: 'CP_IdentificationCity',
-                title: 'Ciudad de expedicion del documento',
-                width: '180px',
-                template: function (dataItem) {
-                    var oReturn = '';
-
-                    if (dataItem.CP_IdentificationCity == '') {
-                        oReturn = '<label class="PlaceHolder">Ej: Bogotá Distrito Capital</label>';
-                    }
-                    else {
-                        oReturn = dataItem.CP_IdentificationCity;
-                    }
-                    return oReturn;
-                },
-            }, {
                 field: 'CP_Phone',
                 title: 'Telefono',
                 width: '150px',
@@ -656,20 +585,6 @@ var Provider_CompanyContactObject = {
                     return oReturn;
                 },
             }, {
-                field: 'CP_Extent',
-                title: 'Extensión',
-                width: '150px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem.CP_Extent == null) {
-                        oReturn = '<label class="PlaceHolder">Ej: ext 22</label>';
-                    }
-                    else {
-                        oReturn = dataItem.CP_Extent;
-                    }
-                    return oReturn;
-                }
-            }, {
                 field: 'CP_Email',
                 title: 'Correo electronico',
                 width: '200px',
@@ -683,75 +598,6 @@ var Provider_CompanyContactObject = {
                         oReturn = dataItem.CP_Email;
                     }
                     return oReturn;
-                },
-            }, {
-                field: 'CP_Negotiation',
-                title: 'Capacidad de negociación',
-                width: '190px',
-                template: function (dataItem) {
-                    var oReturn = '';
-
-                    if (dataItem.CP_Negotiation == '') {
-                        oReturn = '<label class="PlaceHolder">Ej: COP 589500000</label>';
-                    }
-                    else {
-                        oReturn = dataItem.CP_Negotiation;
-                    }
-                    return oReturn;
-                },
-            }, {
-                field: 'CP_IdentificationFile',
-                title: 'Doc representante legal.',
-                width: '292px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem != null && dataItem.CP_IdentificationFile != null && dataItem.CP_IdentificationFile.length > 0) {
-                        if (dataItem.dirty != null && dataItem.dirty == true) {
-                            oReturn = '<span class="k-dirty"></span>';
-                        }
-                        oReturn = oReturn + $('#' + Provider_CompanyContactObject.ObjectId + '_File').html();
-                    }
-                    else {
-                        oReturn = $('#' + Provider_CompanyContactObject.ObjectId + '_NoFile').html();
-                    }
-
-                    oReturn = oReturn.replace(/\${CP_IdentificationFile}/gi, dataItem.CP_IdentificationFile);
-
-                    return oReturn;
-                },
-                editor: function (container, options) {
-                    var oFileExit = true;
-                    $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyContactObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
-                    $(container).focusout(function () {
-                        if (oFileExit == false) {
-                            //mantain file input focus
-                            $('#files').focus();
-                        }
-                    });
                 },
             }, {
                 field: 'ContactId',

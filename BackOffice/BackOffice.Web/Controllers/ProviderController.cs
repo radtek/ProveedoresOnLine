@@ -48,7 +48,7 @@ namespace BackOffice.Web.Controllers
         {
             BackOffice.Models.Provider.ProviderViewModel oModel = new Models.Provider.ProviderViewModel()
             {
-                ProviderOptions = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.CatalogGetProviderOptions(),
+                ProviderOptions = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.CatalogGetProviderOptions().Where(x => x.ItemId != (int)enumCompanyType.Buyer).Select(x => x).ToList(),
             };
 
             if (!string.IsNullOrEmpty(ProviderPublicId))

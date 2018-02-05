@@ -181,15 +181,9 @@
         CC_Value = 205002,
 
         //PersonContact
-        CP_PersonContactType = 206001,
-        CP_IdentificationType = 206002,
-        CP_IdentificationNumber = 206003,
-        CP_IdentificationCity = 206004,
-        CP_IdentificationFile = 206005,
+        CP_PersonContactType = 206001,        
         CP_Phone = 206006,
-        CP_Email = 206007,
-        CP_Negotiation = 206008,
-        CP_Extent = 206009,
+        CP_Email = 206007,      
 
         //Branch
         BR_Address = 207002,
