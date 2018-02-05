@@ -7104,6 +7104,7 @@ var Provider_CalificationProjectConfigInfo = {
     },
    
     RenderRelatedCalificationConfig: function () {
+        debugger;
         var ddl;
         $('#' + Provider_CalificationProjectConfigInfo.ObjectId).kendoGrid({
             editable: true,
@@ -7138,7 +7139,7 @@ var Provider_CalificationProjectConfigInfo = {
                 },                
                 transport: {
                     read: function (options) {
-                         
+                        debugger;
                         $.ajax({                           
                             url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderGetbyProvider=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId + '&Enable=' + Provider_CalificationProjectConfigInfo.GetViewEnable(),
                             dataType: 'json',
@@ -7152,7 +7153,7 @@ var Provider_CalificationProjectConfigInfo = {
                         });
                     },
                     create: function (options) {
-                         
+                        debugger;
                         $.ajax({
                             url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderUpsert=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId,
                             dataType: 'json',
@@ -7161,6 +7162,7 @@ var Provider_CalificationProjectConfigInfo = {
                                 DataToUpsert: kendo.stringify(options.data)
                             },
                             success: function (result) {
+                                debugger;
                                 options.success(result);
                                 $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data('kendoGrid').dataSource.read();
                                 Message('success', 'Se creó el registro.');
@@ -7227,7 +7229,7 @@ var Provider_CalificationProjectConfigInfo = {
                      
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.CompanyId != null) {
-
+                        debugger;
                         $.each(Provider_CalificationProjectConfigInfo.Companies[1], function (item, value) {
                             if (dataItem.CompanyId == value.ItemId) {                               
                                 oReturn = value.ItemName;
@@ -7239,7 +7241,7 @@ var Provider_CalificationProjectConfigInfo = {
                     return oReturn;
                 },
                 editor: function (container, options) {
-                                         
+                    debugger;
                         ddl = $('<input required data-bind="value:' + options.field + '"/>')
                              .appendTo(container)
                              .kendoDropDownList({
@@ -7259,9 +7261,9 @@ var Provider_CalificationProjectConfigInfo = {
                 title: 'Proceso de Calificación',
                 width: '200px',
                 template: function (dataItem) {
-                     
+                    debugger;
                     var oReturn = 'Seleccione una opción.';
-                    if (dataItem != null && dataItem.CalificationProjectConfigId != null && dataItem.CalificationProjectConfigId > 0) {
+                    if (dataItem != null && dataItem.CalificationProjectConfigId != null && dataItem.CalificationProjectConfigId != "" && dataItem.CalificationProjectConfigId > 0) {
                         $.each(Provider_CalificationProjectConfigInfo.CPCConfig[parseInt(Provider_CalificationProjectConfigInfo.CalValueId)], function (item, value) {
                             if (dataItem.CalificationProjectConfigId == value.ItemId) {
                                 oReturn = value.ItemName;

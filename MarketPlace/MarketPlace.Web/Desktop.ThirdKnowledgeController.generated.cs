@@ -221,6 +221,7 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             public readonly string Enable = "Enable";
             public readonly string IsSuccess = "IsSuccess";
             public readonly string DownloadReport = "DownloadReport";
+            public readonly string ThirdKnowledge_cmbFormat = "ThirdKnowledge_cmbFormat";
         }
         static readonly ActionParamsClass_GetPdfFileBytes s_params_GetPdfFileBytes = new ActionParamsClass_GetPdfFileBytes();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -382,10 +383,10 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
         }
 
         [NonAction]
-        partial void TKMasiveDetailOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess, string DownloadReport);
+        partial void TKMasiveDetailOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess, string DownloadReport, string ThirdKnowledge_cmbFormat);
 
         [NonAction]
-        public override System.Web.Mvc.ActionResult TKMasiveDetail(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess, string DownloadReport)
+        public override System.Web.Mvc.ActionResult TKMasiveDetail(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess, string DownloadReport, string ThirdKnowledge_cmbFormat)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.TKMasiveDetail);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "QueryPublicId", QueryPublicId);
@@ -395,7 +396,8 @@ namespace MarketPlace.Web.Areas.Desktop.Controllers
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "Enable", Enable);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "IsSuccess", IsSuccess);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "DownloadReport", DownloadReport);
-            TKMasiveDetailOverride(callInfo, QueryPublicId, PageNumber, InitDate, EndDate, Enable, IsSuccess, DownloadReport);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "ThirdKnowledge_cmbFormat", ThirdKnowledge_cmbFormat);
+            TKMasiveDetailOverride(callInfo, QueryPublicId, PageNumber, InitDate, EndDate, Enable, IsSuccess, DownloadReport, ThirdKnowledge_cmbFormat);
             return callInfo;
         }
 

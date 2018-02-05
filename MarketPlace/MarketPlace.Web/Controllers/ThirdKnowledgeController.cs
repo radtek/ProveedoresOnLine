@@ -623,7 +623,8 @@ namespace MarketPlace.Web.Controllers
                             EndDate = EndDate,
                             Enable = Enable,
                             IsSuccess = IsSuccess,
-                            DownloadReport = Request["DownloadReport"]
+                            DownloadReport = Request["DownloadReport"],
+                            ThirdKnowledge_cmbFormat = Request["ThirdKnowledge_cmbFormat"]
                         });
                 }
 
@@ -905,7 +906,7 @@ namespace MarketPlace.Web.Controllers
         }
 
 
-        public virtual ActionResult TKMasiveDetail(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess, string DownloadReport)
+        public virtual ActionResult TKMasiveDetail(string QueryPublicId, string PageNumber, string InitDate, string EndDate, string Enable, string IsSuccess, string DownloadReport, string ThirdKnowledge_cmbFormat)
         {
             if (SessionModel.CurrentURL != null)
                 SessionModel.CurrentURL = null;
@@ -1055,7 +1056,7 @@ namespace MarketPlace.Web.Controllers
                     return true;
                 });
 
-                string fileFormat = Request["ThirdKnowledge_cmbFormat"] != null ? Request["ThirdKnowledge_cmbFormat"].ToString() : "pdf";
+                string fileFormat = ThirdKnowledge_cmbFormat != null ? ThirdKnowledge_cmbFormat : "pdf";
                 Tuple<byte[], string, string> ThirdKnowledgeReport = ProveedoresOnLine.Reports.Controller.ReportModule.TK_MasiveQueryReport(
                                                                 fileFormat,
                                                                 data_Query,
