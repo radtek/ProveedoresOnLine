@@ -1898,19 +1898,6 @@ namespace BackOffice.Web.Controllers
                         oCurrentController == MVC.Provider.Name),
                 });
 
-                //Company contact info
-                oMenuAux.ChildMenu.Add(new Models.General.GenericMenu()
-                {
-                    Name = "Contacto principal de la empresa",
-                    Url = Url.Action
-                        (MVC.Provider.ActionNames.GICompanyContactUpsert,
-                        MVC.Provider.Name,
-                        new { ProviderPublicId = vProviderInfo.RelatedProvider.RelatedCompany.CompanyPublicId }),
-                    Position = 1,
-                    IsSelected =
-                        (oCurrentAction == MVC.Provider.ActionNames.GICompanyContactUpsert &&
-                        oCurrentController == MVC.Provider.Name),
-                });
 
                 //Branch info
                 oMenuAux.ChildMenu.Add(new Models.General.GenericMenu()
@@ -1938,20 +1925,6 @@ namespace BackOffice.Web.Controllers
                     Position = 3,
                     IsSelected =
                         (oCurrentAction == MVC.Provider.ActionNames.GIPersonContactUpsert &&
-                        oCurrentController == MVC.Provider.Name),
-                });
-
-                //Distributor info
-                oMenuAux.ChildMenu.Add(new Models.General.GenericMenu()
-                {
-                    Name = "Distribuidores",
-                    Url = Url.Action
-                        (MVC.Provider.ActionNames.GIDistributorUpsert,
-                        MVC.Provider.Name,
-                        new { ProviderPublicId = vProviderInfo.RelatedProvider.RelatedCompany.CompanyPublicId }),
-                    Position = 4,
-                    IsSelected =
-                        (oCurrentAction == MVC.Provider.ActionNames.GIDistributorUpsert &&
                         oCurrentController == MVC.Provider.Name),
                 });
 
@@ -2160,6 +2133,20 @@ namespace BackOffice.Web.Controllers
                     Position = 0,
                     IsSelected =
                         (oCurrentAction == MVC.Provider.ActionNames.CIExperiencesUpsert &&
+                        oCurrentController == MVC.Provider.Name),
+                });
+
+                //Distributor info
+                oMenuAux.ChildMenu.Add(new Models.General.GenericMenu()
+                {
+                    Name = "Distribuidores",
+                    Url = Url.Action
+                        (MVC.Provider.ActionNames.GIDistributorUpsert,
+                        MVC.Provider.Name,
+                        new { ProviderPublicId = vProviderInfo.RelatedProvider.RelatedCompany.CompanyPublicId }),
+                    Position = 4,
+                    IsSelected =
+                        (oCurrentAction == MVC.Provider.ActionNames.GIDistributorUpsert &&
                         oCurrentController == MVC.Provider.Name),
                 });
 

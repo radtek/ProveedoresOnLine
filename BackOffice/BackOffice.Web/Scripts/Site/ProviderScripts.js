@@ -782,10 +782,7 @@ var Provider_CompanyContactObject = {
                             ContactId: { editable: false, nullable: true },
                             ContactName: { editable: true },
                             Enable: { editable: true, type: 'boolean', defaultValue: true },
-
-                            BR_Representative: { editable: true },
-                            BR_RepresentativeId: { editable: false },
-
+                            
                             BR_Address: { editable: true, validation: { required: true } },
                             BR_AddressId: { editable: false },
 
@@ -796,26 +793,14 @@ var Provider_CompanyContactObject = {
                             BR_Phone: { editable: true, validation: { required: false } },
                             BR_PhoneId: { editable: false },
 
-                            BR_Extent: { editable: true, type: 'number', validation: { required: false } },
-                            BR_ExtentId: { editable: false },
-
                             BR_Cellphone: { editable: true, validation: { required: false } },
                             BR_CellphoneId: { editable: false },
-
-                            BR_Fax: { editable: true },
-                            BR_FaxId: { editable: false, validation: { required: true } },
-
+                            
                             BR_Email: { editable: true, validation: { required: false, email: true } },
                             BR_EmailId: { editable: false },
 
                             BR_Website: { editable: true, validation: { required: false } },
                             BR_WebsiteId: { editable: false },
-
-                            BR_Latitude: { editable: true, validation: { required: false } },
-                            BR_LatitudeId: { editable: false },
-
-                            BR_Longitude: { editable: true, validation: { required: false } },
-                            BR_LongitudeId: { editable: false },
 
                             BR_IsPrincipal: { editable: true, type: 'boolean', defaultValue: true },
                             BR_IsPrincipalId: { editable: false },
@@ -912,21 +897,6 @@ var Provider_CompanyContactObject = {
                     return oReturn;
                 },
             }, {
-                field: 'BR_Representative',
-                title: 'Representante',
-                width: '229px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem.BR_Representative == '') {
-                        oReturn = '<label class="PlaceHolder">Nombre Apellidos</label>';
-                    }
-                    else {
-                        oReturn = dataItem.BR_Representative;
-                    }
-                    return oReturn;
-                },
-
-            }, {
                 field: 'BR_Address',
                 title: 'Dirección',
                 width: '300px',
@@ -1016,22 +986,6 @@ var Provider_CompanyContactObject = {
                 },
             },
             {
-                field: 'BR_Extent',
-                title: 'Extensión',
-                width: '140px',
-                type: 'number',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem.BR_Extent == '') {
-                        oReturn = '<label class="PlaceHolder">Ej: ext 22 </label>';
-                    }
-                    else {
-                        oReturn = dataItem.BR_Extent;
-                    }
-                    return oReturn;
-                }
-            },
-            {
                 field: 'BR_Cellphone',
                 title: 'Celular',
                 width: '120px',
@@ -1049,22 +1003,8 @@ var Provider_CompanyContactObject = {
                     return oReturn;
                 },
             }, {
-                field: 'BR_Fax',
-                title: 'Fax',
-                width: '120px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem.BR_Fax == '') {
-                        oReturn = '<label class="PlaceHolder">Ej: 7666777</label>';
-                    }
-                    else {
-                        oReturn = dataItem.BR_Fax;
-                    }
-                    return oReturn;
-                },
-            }, {
                 field: 'BR_Email',
-                title: 'Correo electrónico',
+                title: 'Correo Coorporativo',
                 width: '290px',
                 template: function (dataItem) {
                     var oReturn = '';
@@ -1087,34 +1027,6 @@ var Provider_CompanyContactObject = {
                     }
                     else {
                         oReturn = dataItem.BR_Website;
-                    }
-                    return oReturn;
-                },
-            }, {
-                field: 'BR_Latitude',
-                title: 'Latitud',
-                width: '70px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem.BR_Latitude == '') {
-                        oReturn = '<label class="PlaceHolder">Ej: 67.8557995</label>';
-                    }
-                    else {
-                        oReturn = dataItem.BR_Latitude;
-                    }
-                    return oReturn;
-                },
-            }, {
-                field: 'BR_Longitude',
-                title: 'Longitud',
-                width: '80px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem.BR_Longitude == '') {
-                        oReturn = '<label class="PlaceHolder">Ej: 20.2252820</label>';
-                    }
-                    else {
-                        oReturn = dataItem.BR_Longitude;
                     }
                     return oReturn;
                 },
