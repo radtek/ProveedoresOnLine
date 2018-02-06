@@ -1974,20 +1974,6 @@ namespace BackOffice.Web.Controllers
                         oCurrentController == MVC.Provider.Name),
                 });
 
-                //CIFIN
-                oMenuAux.ChildMenu.Add(new Models.General.GenericMenu()
-                {
-                    Name = "CIFIN",
-                    Url = Url.Action
-                        (MVC.Provider.ActionNames.LICIFINUpsert,
-                        MVC.Provider.Name,
-                        new { ProviderPublicId = vProviderInfo.RelatedProvider.RelatedCompany.CompanyPublicId }),
-                    Position = 2,
-                    IsSelected =
-                        (oCurrentAction == MVC.Provider.ActionNames.LICIFINUpsert &&
-                        oCurrentController == MVC.Provider.Name),
-                });
-
                 //SARLAFT
                 oMenuAux.ChildMenu.Add(new Models.General.GenericMenu()
                 {
@@ -2045,20 +2031,6 @@ namespace BackOffice.Web.Controllers
                     Position = 0,
                     IsSelected =
                         (oCurrentAction == MVC.Provider.ActionNames.FIBalanceSheetUpsert &&
-                        oCurrentController == MVC.Provider.Name),
-                });
-
-                //tax info
-                oMenuAux.ChildMenu.Add(new Models.General.GenericMenu()
-                {
-                    Name = "Impuestos",
-                    Url = Url.Action
-                        (MVC.Provider.ActionNames.FITaxUpsert,
-                        MVC.Provider.Name,
-                        new { ProviderPublicId = vProviderInfo.RelatedProvider.RelatedCompany.CompanyPublicId }),
-                    Position = 1,
-                    IsSelected =
-                        (oCurrentAction == MVC.Provider.ActionNames.FITaxUpsert &&
                         oCurrentController == MVC.Provider.Name),
                 });
 
