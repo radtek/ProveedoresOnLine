@@ -347,7 +347,7 @@
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>0.66733in</Top>
         <Height>0.22223in</Height>
-        <Width>6.50293in</Width>
+        <Width>6.42562in</Width>
         <ZIndex>5</ZIndex>
         <Style>
           <Border>
@@ -369,7 +369,7 @@
     <Height>1.75in</Height>
     <Style />
   </Body>
-  <Width>6.50293in</Width>
+  <Width>6.42562in</Width>
   <Page>
     <PageHeader>
       <Height>0.696in</Height>
@@ -401,7 +401,7 @@
               <rd:DefaultName>Textbox2</rd:DefaultName>
               <Top>0.45768cm</Top>
               <Height>0.65291cm</Height>
-              <Width>12.85759cm</Width>
+              <Width>12.62898cm</Width>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -418,7 +418,7 @@
           <Top>0.054in</Top>
           <Left>3.65984cm</Left>
           <Height>1.47015cm</Height>
-          <Width>12.85759cm</Width>
+          <Width>12.66123cm</Width>
           <Style>
             <Border>
               <Style>None</Style>
