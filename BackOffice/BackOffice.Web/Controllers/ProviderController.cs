@@ -2309,7 +2309,7 @@ namespace BackOffice.Web.Controllers
                     //header
                     oMenuAux = new Models.General.GenericMenu()
                     {
-                        Name = "Datos Personalizados",
+                        Name = "Información Personalizada",
                         Position = 7,
                         ChildMenu = new List<Models.General.GenericMenu>(),
                     };
