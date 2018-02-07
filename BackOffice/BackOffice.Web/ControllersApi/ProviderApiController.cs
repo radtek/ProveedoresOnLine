@@ -295,16 +295,6 @@ namespace BackOffice.Web.ControllersApi
                 #region Branch
                 else if (oCompany.RelatedContact.FirstOrDefault().ItemType.ItemId == (int)BackOffice.Models.General.enumContactType.Brach)
                 {
-                    oCompany.RelatedContact.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.BR_RepresentativeId) ? 0 : Convert.ToInt32(oDataToUpsert.BR_RepresentativeId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumContactInfoType.BR_Representative
-                        },
-                        Value = oDataToUpsert.BR_Representative,
-                        Enable = true,
-                    });
 
                     oCompany.RelatedContact.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
                     {
@@ -339,17 +329,6 @@ namespace BackOffice.Web.ControllersApi
                         Enable = true,
                     });
 
-                    oCompany.RelatedContact.FirstOrDefault().ItemInfo.Add(new GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.BR_ExtentId) ? 0 : Convert.ToInt32(oDataToUpsert.BR_ExtentId.Trim()),
-                        ItemInfoType = new CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumContactInfoType.BR_Extent,
-                        },
-                        Value = oDataToUpsert.BR_Extent,
-                        Enable = true,
-                    });
-
                     oCompany.RelatedContact.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
                     {
                         ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.BR_CellphoneId) ? 0 : Convert.ToInt32(oDataToUpsert.BR_CellphoneId.Trim()),
@@ -358,17 +337,6 @@ namespace BackOffice.Web.ControllersApi
                             ItemId = (int)BackOffice.Models.General.enumContactInfoType.BR_Cellphone
                         },
                         Value = oDataToUpsert.BR_Cellphone,
-                        Enable = true,
-                    });
-
-                    oCompany.RelatedContact.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.BR_FaxId) ? 0 : Convert.ToInt32(oDataToUpsert.BR_FaxId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumContactInfoType.BR_Fax
-                        },
-                        Value = oDataToUpsert.BR_Fax,
                         Enable = true,
                     });
 
@@ -394,27 +362,6 @@ namespace BackOffice.Web.ControllersApi
                         Enable = true,
                     });
 
-                    oCompany.RelatedContact.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.BR_LatitudeId) ? 0 : Convert.ToInt32(oDataToUpsert.BR_LatitudeId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumContactInfoType.BR_Latitude
-                        },
-                        Value = oDataToUpsert.BR_Latitude,
-                        Enable = true,
-                    });
-
-                    oCompany.RelatedContact.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.BR_LongitudeId) ? 0 : Convert.ToInt32(oDataToUpsert.BR_LongitudeId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumContactInfoType.BR_Longitude
-                        },
-                        Value = oDataToUpsert.BR_Longitude,
-                        Enable = true,
-                    });
                     oCompany.RelatedContact.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
                     {
                         ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.BR_IsPrincipalId) ? 0 : Convert.ToInt32(oDataToUpsert.BR_IsPrincipalId.Trim()),

@@ -186,18 +186,13 @@
         CP_Email = 206007,      
 
         //Branch
-        BR_Representative = 207001,
         BR_Address = 207002,
         BR_City = 207003,
         BR_Phone = 207004,        
-        BR_Fax = 207005,
         BR_Email = 207006,
-        BR_Website = 207007,
-        BR_Latitude = 207008,
-        BR_Longitude = 207009,
+        BR_Website = 207007,        
         BR_IsPrincipal = 207010,
         BR_Cellphone = 207011,
-        BR_Extent = 207012,
 
         //Distributor
         DT_DistributorType = 208001,

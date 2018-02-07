@@ -205,17 +205,6 @@ namespace BackOffice.Models.Provider
 
             #region Branch
 
-            BR_Representative = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.BR_Representative).
-                Select(y => y.Value).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-            BR_RepresentativeId = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.BR_Representative).
-                Select(y => y.ItemInfoId.ToString()).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-
             BR_Address = RelatedContact.ItemInfo.
                 Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.BR_Address).
                 Select(y => y.Value).
@@ -258,17 +247,6 @@ namespace BackOffice.Models.Provider
                 DefaultIfEmpty(string.Empty).
                 FirstOrDefault();
 
-            BR_Extent = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.BR_Extent).
-                Select(y => y.Value).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-            BR_ExtentId = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.BR_Extent).
-                Select(y => y.ItemInfoId.ToString()).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault(); 
-
             BR_Cellphone = RelatedContact.ItemInfo.
                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.BR_Cellphone).
                Select(y => y.Value).
@@ -276,17 +254,6 @@ namespace BackOffice.Models.Provider
                FirstOrDefault();
             BR_CellphoneId = RelatedContact.ItemInfo.
                 Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.BR_Cellphone).
-                Select(y => y.ItemInfoId.ToString()).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-
-            BR_Fax = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.BR_Fax).
-                Select(y => y.Value).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-            BR_FaxId = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.BR_Fax).
                 Select(y => y.ItemInfoId.ToString()).
                 DefaultIfEmpty(string.Empty).
                 FirstOrDefault();
@@ -309,28 +276,6 @@ namespace BackOffice.Models.Provider
                 FirstOrDefault();
             BR_WebsiteId = RelatedContact.ItemInfo.
                 Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.BR_Website).
-                Select(y => y.ItemInfoId.ToString()).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-
-            BR_Latitude = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.BR_Latitude).
-                Select(y => y.Value).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-            BR_LatitudeId = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.BR_Latitude).
-                Select(y => y.ItemInfoId.ToString()).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-
-            BR_Longitude = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.BR_Longitude).
-                Select(y => y.Value).
-                DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
-            BR_LongitudeId = RelatedContact.ItemInfo.
-                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumContactInfoType.BR_Longitude).
                 Select(y => y.ItemInfoId.ToString()).
                 DefaultIfEmpty(string.Empty).
                 FirstOrDefault();
