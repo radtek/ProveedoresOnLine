@@ -19,14 +19,19 @@ function Header_ShowHideUserMenu(divId) {
 function UploadFile(initObject) {
     
     var oFileExit = true;
-    $('#GenericLoadFile')
+    $('.GenericLoadFile')
     .kendoUpload({
         multiple: false,
         async: {            
             saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + initObject.ProviderPublicId,
             autoUpload: true
         },
-        success: function (e) {            
+        success: function (e) {
+            
+            if (this.element[0].dataset.fieldid != "") {
+                initObject.ControlellerResponseId = this.element[0].dataset.fieldid;
+            }
+            
             if (e.response != null && e.response.length > 0) {
                 //set server fiel name
                 $('#' + initObject.ControlellerResponseId).val(e.response[0].ServerName);

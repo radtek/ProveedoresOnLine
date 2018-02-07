@@ -836,6 +836,26 @@ namespace BackOffice.Web.Controllers
                                 LargeValue = Request["SocialObject"],
                                 Enable = true
                             },
+                             new GenericItemInfoModel()
+                            {
+                                ItemInfoId =  Convert.ToInt32(Request["CompositionURLId"]),
+                                ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
+                                {
+                                    ItemId = (int)enumLegalInfoType.CP_CertificateComposition
+                                },
+                                Value = Request["CompositionURL"],
+                                Enable = true
+                            },
+                              new GenericItemInfoModel()
+                            {
+                                ItemInfoId =  Convert.ToInt32(Request["NegotiationCapacityId"]),
+                                ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
+                                {
+                                    ItemId = (int)enumLegalInfoType.CP_NegotiationCapacity
+                                },
+                                Value = Request["NegotiationCapacity"],
+                                Enable = true
+                            },
                         }
                 };
                 //Validación del archivo cuando viene desocupado en el formulario
@@ -846,7 +866,19 @@ namespace BackOffice.Web.Controllers
                         RelatedLegal.ItemInfo.Remove(RelatedLegal.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumLegalInfoType.CP_ExistenceAndLegalPersonCertificate).Select(x => x).FirstOrDefault());
                     }
                 }
+
+                if (RelatedLegal.ItemInfo != null && RelatedLegal.ItemInfo.Count() > 0)
+                {
+                    if (string.IsNullOrEmpty(RelatedLegal.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumLegalInfoType.CP_CertificateComposition).Select(x => x.Value).FirstOrDefault()))
+                    {
+                        RelatedLegal.ItemInfo.Remove(RelatedLegal.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumLegalInfoType.CP_CertificateComposition).Select(x => x).FirstOrDefault());
+                    }
+                }
                 return RelatedLegal;
+                
+
+               
+
             }
             return null;
         }
