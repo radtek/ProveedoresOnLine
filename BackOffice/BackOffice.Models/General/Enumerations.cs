@@ -262,6 +262,8 @@
         CP_CertificateExpeditionDate = 602007,
         CP_SocialObject = 602008,
         CP_UndefinedDate = 602012,
+        CP_NegotiationCapacity = 602013,
+        CP_CertificateComposition = 602014,
 
         //RUT
         R_PersonType = 603001,
@@ -301,6 +303,7 @@
         CD_PartnerName = 607001,
         CD_PartnerIdentificationNumber = 607002,
         CD_PartnerRank = 607003,
+        CD_Partnerdocument = 607004,
 
     }
 

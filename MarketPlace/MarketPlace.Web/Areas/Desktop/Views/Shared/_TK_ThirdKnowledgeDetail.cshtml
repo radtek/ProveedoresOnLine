@@ -75,7 +75,7 @@
                                                         controller = MVC.ThirdKnowledge.Name,
                                                         action = MVC.ThirdKnowledge.ActionNames.TKDetailSingleSearch,
                                                         QueryPublicId = item.Item4[3],
-                                                        QueryBasicPublicId = item.Item4[3],
+                                                        QueryInfoPublicId = item.Item4[2],
                                                         ElasticId = item.Item4[4],
                                                     }))">Ver Detalle</a>
                                                 </strong>
@@ -98,9 +98,5 @@
     }
 </div>
 
-<div class="POMPSearchResultsPager">
-    <!--Pager-->
-    @Html.Partial(MVC.Desktop.Shared.Views._TK_ThirdKnowledgeSearch_Result_Pager, Model.RelatedThidKnowledgeSearch)
-</div>
 
 

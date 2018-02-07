@@ -5188,6 +5188,10 @@ var Provider_LegalInfoObject = {
 
                             CD_PartnerRank: { editable: true, validation: { required: true } },
                             CD_PartnerRankId: { editable: false },
+
+                            CD_Partnerdocument: { editable: true, validation: { required: true } },
+                            CD_PartnerdocumentId: { editable: false },
+                            //this
                         },
                     }
                 },
@@ -5224,6 +5228,7 @@ var Provider_LegalInfoObject = {
                         });
                     },
                     update: function (options) {
+                        
                         $.ajax({
                             url: BaseUrl.ApiUrl + '/ProviderApi?LILegalInfoUpsert=true&ProviderPublicId=' + Provider_LegalInfoObject.ProviderPublicId + '&LegalInfoType=' + Provider_LegalInfoObject.LegalInfoType + '&LegalId=' + Provider_LegalInfoObject.LegalId,
                             dataType: 'json',
@@ -5309,6 +5314,61 @@ var Provider_LegalInfoObject = {
                             dataValueField: 'ItemId',
                             optionLabel: 'Seleccione una opción'
                         });
+                },
+            }, {
+                field: 'CD_Partnerdocument',
+                title: 'Carga de Documento',
+                width: '292px',
+                template: function (dataItem) {
+                    debugger;
+                    var oReturn = '';
+                    if (dataItem != null && dataItem.CD_Partnerdocument != null && dataItem.CD_Partnerdocument.length > 0) {
+                        if (dataItem.dirty != null && dataItem.dirty == true) {
+                            oReturn = '<span class="k-dirty"></span>';
+                        }
+                        oReturn = oReturn + $('#' + Provider_LegalInfoObject.ObjectId + '_File').html();
+                    }
+                    else {
+                        oReturn = $('#' + Provider_LegalInfoObject.ObjectId + '_NoFile').html();
+                    }
+
+                    oReturn = oReturn.replace(/\${CD_Partnerdocument}/gi, dataItem.CD_Partnerdocument);
+
+                    return oReturn;
+                },
+                editor: function (container, options) {
+                    var oFileExit = true;
+                    $('<input type="file" id="files" name="files"/>')
+                    .appendTo(container)
+                    .kendoUpload({
+                        multiple: false,
+                        async: {
+                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyCommercialObject.ProviderPublicId,
+                            autoUpload: true
+                        },
+                        success: function (e) {
+                            if (e.response != null && e.response.length > 0) {
+                                //set server fiel name
+                                options.model[options.field] = e.response[0].ServerName;
+                                //enable made changes
+                                options.model.dirty = true;
+                            }
+                        },
+                        complete: function (e) {
+                            //enable lost focus
+                            oFileExit = true;
+                        },
+                        select: function (e) {
+                            //disable lost focus while upload file
+                            oFileExit = false;
+                        },
+                    });
+                    $(container).focusout(function () {
+                        if (oFileExit == false) {
+                            //mantain file input focus
+                            $('#files').focus();
+                        }
+                    });
                 },
             }, {
                 field: 'LegalId',
@@ -6921,7 +6981,7 @@ var Provider_CustomData = {
 
     /*UploadFile Generic Function*/
     UploadFile: function (initObject) {
-
+        
         var oFileExit = true;
         $('#LoadFile_' + initObject.CustomerPublicId)
             .kendoUpload({

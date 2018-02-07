@@ -130,6 +130,7 @@ namespace MarketPlace.Web
 
             //allow bundles in debug mode
             bundles.IgnoreList.Clear();
+            bundles.UseCdn = true;
         }
     }
 }

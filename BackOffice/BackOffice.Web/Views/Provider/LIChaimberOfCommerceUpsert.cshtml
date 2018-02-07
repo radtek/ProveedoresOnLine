@@ -15,7 +15,7 @@
     </div>
     <div class="POBOProviderContentWrapper">
         <div class="POBOProviderUpsertForm">
-            <label class="POBOSectionTitles">Cámara de comercio</label>
+            <label class="POBOSectionTitles">Miembros de Cámara de Comercio y/o Composición Accionaria</label>
             @{
                 var ConsitutionDate = Model.RelatedProvider != null && Model.RelatedProvider.RelatedLegal != null ?
                                 Model.RelatedProvider.RelatedLegal.Where(x => x.ItemInfo != null).
@@ -101,6 +101,27 @@
                             Model.RelatedProvider.RelatedLegal.Where(x => x.ItemInfo != null).
                                 Select(x => x.ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumLegalInfoType.CP_ExistenceAndLegalPersonCertificate).
                                     Select(y => y.ItemInfoId).FirstOrDefault()).FirstOrDefault() : 0;
+
+                var NegotiationCapacity  = Model.RelatedProvider != null && Model.RelatedProvider.RelatedLegal != null ?
+                           Model.RelatedProvider.RelatedLegal.Where(x => x.ItemInfo != null).
+                               Select(x => x.ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumLegalInfoType.CP_NegotiationCapacity).
+                                   Select(y => y.Value).FirstOrDefault()).FirstOrDefault() : string.Empty;
+
+                var  NegotiationCapacityId = Model.RelatedProvider != null && Model.RelatedProvider.RelatedLegal != null ?
+                            Model.RelatedProvider.RelatedLegal.Where(x => x.ItemInfo != null).
+                                Select(x => x.ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumLegalInfoType.CP_NegotiationCapacity).
+                                    Select(y => y.ItemInfoId).FirstOrDefault()).FirstOrDefault() : 0;
+
+                var CompositionURL = Model.RelatedProvider != null && Model.RelatedProvider.RelatedLegal != null ?
+                                Model.RelatedProvider.RelatedLegal.Where(x => x.ItemInfo != null).
+                                    Select(x => x.ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumLegalInfoType.CP_CertificateComposition).
+                                        Select(y => y.Value).FirstOrDefault()).FirstOrDefault() : string.Empty;
+
+                var CompositionURLId = Model.RelatedProvider != null && Model.RelatedProvider.RelatedLegal != null ?
+                Model.RelatedProvider.RelatedLegal.Where(x => x.ItemInfo != null).
+                    Select(x => x.ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumLegalInfoType.CP_CertificateComposition).
+                        Select(y => y.ItemInfoId).FirstOrDefault()).FirstOrDefault() : 0;
+
             }
             @{
                 Model.IsForm = true;
@@ -115,18 +136,30 @@
                 }))">
 
                 <ul>
-                    <li>
-                        <label>Nombre</label>
+                    <li class="POBOCamposProblematicos">
+                        <label>Ciudad</label>
                         <br />
-                        <input type="text" name="ChaimberName" value="@(Model.RelatedProvider != null && Model.RelatedProvider.RelatedLegal != null ? Model.RelatedProvider.RelatedLegal.Where(x => x.ItemName != null).Select(x => x.ItemName).FirstOrDefault() : string.Empty) " />
-                        <input type="hidden" name="NameInfoId" value="@(Model.RelatedProvider != null && Model.RelatedProvider.RelatedLegal != null ? Model.RelatedProvider.RelatedLegal.Where(x => x.ItemId != null).Select(x => x.ItemId).FirstOrDefault() : 0) " />
+                        <input type="text" id="CityId" name="CityId" value="@City" />
+                        <input type="hidden" id="SelectedCity" name="SelectedCity" value="@CityItemId" />
+                        <input type="hidden" id="SelectedCityId" name="SelectedCityId" value="@CityId" />
+                    </li>
+                    <li>
+                        <label>Fecha de Expedición del Certificado</label>
+                        <br />
+                        <input type="date" id="ExpeditionCertificatedDateId" name="ExpeditionCertificatedDate" value="@CertificateExpeditionDate" placeholder="yyyy-mm-dd" />
+                        <input type="hidden" name="ExpeditionCertificatedDateId" value="@CertificateExpeditionDateId" />
+                    </li>
+                    <li>
+                        <label>Número de Matricula</label>
+                        <br />
+                        <input type="text" name="InscriptionNumber" value="@InscriptionNumber" />
+                        <input type="hidden" name="InscriptionNumberId" id="InscriptionNumberId" value="@InscriptionNumberId" />
                     </li>
                     <li>
                         <label>Fecha de Constitución</label>
                         <br />
                         <input type="date" id="ConstitutionDateId" name="ConstitutionDate" value="@ConsitutionDate" placeholder="yyyy-mm-dd" />
                         <input type="hidden" name="ConstitutionDateId" value="@ConsitutionDateId" />
-
                     </li>
                     <li>
                         <label>Fecha de Vigencia</label>
@@ -148,23 +181,29 @@
 
                         <input type="hidden" name="UndefinedDateId" id="UndefinedDateId" value="@UndefinedDateId" />
                     </li>
-                    <li class="POBOCamposProblematicos">
-                        <label>Ciudad</label>
+                    <li id="POBOSocialObject">
+                        <label>Objeto Social</label>
                         <br />
-                        <input type="text" id="CityId" name="CityId" value="@City" />
-                        <input type="hidden" id="SelectedCity" name="SelectedCity" value="@CityItemId" />
-                        <input type="hidden" id="SelectedCityId" name="SelectedCityId" value="@CityId" />
+                        <textarea id="POBOTA" rows="4" cols="50" name="SocialObject" id="SocialObjectId"> @SocialObj </textarea>
+                        <input type="hidden" name="SocialObjectId" value="@SocialObjId" />
                     </li>
                     <li>
-                        <label>Número de Matricula</label>
+                        <label>Capacidad de Negociacion</label>
                         <br />
-                        <input type="text" name="InscriptionNumber" value="@InscriptionNumber" />
-                        <input type="hidden" name="InscriptionNumberId" id="InscriptionNumberId" value="@InscriptionNumberId" />
+                        <input type="text" name="NegotiationCapacity" value="@NegotiationCapacity" />
+                        <input type="hidden" name="NegotiationCapacityId" id="NegotiationCapacityId" value="@NegotiationCapacityId" />
+                    </li>
+
+                    <li class="hidden">
+                        <label>Nombre</label>
+                        <br />
+                        <input type="text" name="ChaimberName" value="@(Model.RelatedProvider != null && Model.RelatedProvider.RelatedLegal != null ? Model.RelatedProvider.RelatedLegal.Where(x => x.ItemName != null).Select(x => x.ItemName).FirstOrDefault() : string.Empty) " />
+                        <input type="hidden" name="NameInfoId" value="@(Model.RelatedProvider != null && Model.RelatedProvider.RelatedLegal != null ? Model.RelatedProvider.RelatedLegal.Where(x => x.ItemId != null).Select(x => x.ItemId).FirstOrDefault() : 0) " />
                     </li>
                     <li>
                         <label>Certificado de Existencia y Representación Legal</label>
                         <br />
-                        @Html.Partial(MVC.Shared.Views._F_FileUpload)
+                        @Html.Partial(MVC.Shared.Views._F_FileUpload, new ViewDataDictionary { { "input", "CertificateURL" } })
                         <input type="hidden" name="CertificateURL" id="CertificateURL" />
                         <input type="hidden" name="CertificateURLId" id="CertificateURLId" value="@CertificateURLId" />
                         @if (CertificateURL != null && CertificateURL.Length > 0)
@@ -175,16 +214,17 @@
                         }
                     </li>
                     <li>
-                        <label>Fecha de Expedición del Certificado</label>
+                        <label>Composicion Accionaria</label>
                         <br />
-                        <input type="date" id="ExpeditionCertificatedDateId" name="ExpeditionCertificatedDate" value="@CertificateExpeditionDate" placeholder="yyyy-mm-dd" />
-                        <input type="hidden" name="ExpeditionCertificatedDateId" value="@CertificateExpeditionDateId" />
-                    </li>
-                    <li id="POBOSocialObject">
-                        <label>Objeto Social</label>
-                        <br />
-                        <textarea id="POBOTA" rows="4" cols="50" name="SocialObject" id="SocialObjectId"> @SocialObj </textarea>
-                        <input type="hidden" name="SocialObjectId" value="@SocialObjId" />
+                        @Html.Partial(MVC.Shared.Views._F_FileUpload, new ViewDataDictionary { { "input", "CompositionURL" } })
+                        <input type="hidden" name="CompositionURL" id="CompositionURL" />
+                        <input type="hidden" name="CompositionURLId" id="CompositionURLId" value="@CompositionURLId" />
+                        @if (CompositionURL != null && CompositionURL.Length > 0)
+                        {
+                            <div id="CompositionDIvId">
+                                <a target="_blank" href="@CompositionURL">Ver archivo</a>
+                            </div>
+                        }
                     </li>
                 </ul>
                 <div style="display:none">
@@ -197,7 +237,19 @@
                     <label>Socios, Miembros junta directiva, entre otros</label>
                     <br />
                     <div id="loading"></div>
-                    <div id="divGridChaimberOfComerce"></div>
+                    <div id="divGridChaimberOfComerce">
+                        <div style="display:none;" id="divGridChaimberOfComerce_NoFile">
+                            <div>
+                                <span>Seleccione un archivo</span>
+                            </div>
+                        </div>
+                        <div  style="display:none;" id="divGridChaimberOfComerce_File">
+                            <div>
+                                <a target="_blank" href="${CD_Partnerdocument}">Ver archivo</a>
+                            </div>
+                        </div>
+                    </div>
+
                 </li>
             </ul>
             @{
@@ -209,7 +261,7 @@
 </div>
 <div style="display:none;">
     <div id="divGridChaimberOfComerce_ShortcutToolTipTemplate">
-        <img class="divGrid_kbtooltip" src="@Url.Content(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_InfoTooltip].Value)" title=" Nuevo (alt+shift+n) -  Guardar (alt+shift+g) - Descartar (alt+shift+d) " />
+        <img class="divGrid_kbtooltip" src="@Url.Content(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_InfoTooltip].Value)" title=" Nuevo (alt+shift+n) - Guardar (alt+shift+g) - Descartar (alt+shift+d) " />
     </div>
 
     <div id="divGridChaimberOfComerce_ViewEnablesTemplate">

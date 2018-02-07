@@ -1953,6 +1953,16 @@ namespace BackOffice.Web.ControllersApi
                         Value = oDataToUpsert.CD_PartnerRank,
                         Enable = oDataToUpsert.Enable,
                     });
+                    oProvider.RelatedLegal.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
+                    {
+                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CD_PartnerdocumentId) ? 0 : Convert.ToInt32(oDataToUpsert.CD_PartnerdocumentId.Trim()),
+                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
+                        {
+                            ItemId = (int)BackOffice.Models.General.enumLegalInfoType.CD_Partnerdocument
+                        },
+                        Value = oDataToUpsert.CD_Partnerdocument,
+                        Enable = oDataToUpsert.Enable,
+                    });
                 }
                 #endregion
 

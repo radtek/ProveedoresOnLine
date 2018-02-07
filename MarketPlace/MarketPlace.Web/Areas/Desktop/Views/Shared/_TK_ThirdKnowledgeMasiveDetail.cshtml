@@ -3,11 +3,7 @@
     ViewBag.Title = "Proveedores OnLine - Consulta Individual";
     Model.RenderScripts = false;
 }
-<div class="POMPSearchResultsPager">
-    <!--Pager-->
-    @Html.Partial(MVC.Desktop.Shared.Views._TK_ThirdKnowledgeSearch_Result_Pager, Model.RelatedThidKnowledgeSearch)&nbsp;|&nbsp;
-    <span class="POMPTKTotalPagesText">Total Páginas: @(Model.RelatedThidKnowledgeSearch.RelatedThidKnowledgePager.TotalPages)</span>
-</div>
+
 <div class="container-fluid POMPTKDetailContainer" id="TKDetailContainer">
     @if (Model.TKMasiveDetailModel != null && Model.TKMasiveDetailModel.Count >= 0)
     {
