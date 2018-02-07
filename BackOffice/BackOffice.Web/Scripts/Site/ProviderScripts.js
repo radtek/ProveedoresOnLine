@@ -358,7 +358,7 @@ var Provider_CompanyContactObject = {
                 title: 'Tipo de contacto',
                 width: '190px',
                 template: function (dataItem) {
-                    
+
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.CC_CompanyContactType != null) {
                         $.each(Provider_CompanyContactObject.ProviderOptions[209], function (item, value) {
@@ -444,32 +444,16 @@ var Provider_CompanyContactObject = {
                             CP_PersonContactType: { editable: true, validation: { required: false } },
                             CP_PersonContactTypeId: { editable: false },
 
-                            CP_IdentificationType: { editable: true, validation: { required: false } },
-                            CP_IdentificationTypeId: { editable: false },
-
-                            CP_IdentificationNumber: { editable: true, validation: { required: false } },
-                            CP_IdentificationNumberId: { editable: false },
-
-                            CP_IdentificationCity: { editable: true, validation: { required: false } },
-                            CP_IdentificationCityId: { editable: false },
-
-                            CP_IdentificationFile: { editable: true, validation: { required: false } },
-                            CP_IdentificationFileId: { editable: false },
-
                             CP_Name: { editable: true, validation: { required: true } },
                             CP_NameId: { editable: false },
 
                             CP_Phone: { editable: true, validation: { required: false } },
                             CP_PhoneId: { editable: false },
 
-                            CP_Extent: { editable: true, validation: { required: false } },
-                            CP_ExtentId: { editable: false },
 
                             CP_Email: { editable: true, validation: { required: false, email: true } },
                             CP_EmailId: { editable: false },
 
-                            CP_Negotiation: { editable: true, validation: { required: false } },
-                            CP_NegotiationId: { editable: false },
                         }
                     }
                 },
@@ -587,61 +571,6 @@ var Provider_CompanyContactObject = {
                         });
                 },
             }, {
-                field: 'CP_IdentificationType',
-                title: 'Tipo de identificación',
-                width: '180px',
-                template: function (dataItem) {
-                    var oReturn = 'Seleccione una opción.';
-                    if (dataItem != null && dataItem.CP_IdentificationType != null) {
-                        $.each(Provider_CompanyContactObject.ProviderOptions[101], function (item, value) {
-                            if (dataItem.CP_IdentificationType == value.ItemId) {
-                                oReturn = value.ItemName;
-                            }
-                        });
-                    }
-                    return oReturn;
-                },
-                editor: function (container, options) {
-                    $('<input required data-bind="value:' + options.field + '"/>')
-                        .appendTo(container)
-                        .kendoDropDownList({
-                            dataSource: Provider_CompanyContactObject.ProviderOptions[101],
-                            dataTextField: 'ItemName',
-                            dataValueField: 'ItemId',
-                            optionLabel: 'Seleccione una opción'
-                        });
-                },
-            }, {
-                field: 'CP_IdentificationNumber',
-                title: 'Número de identificación',
-                width: '180px',
-                template: function (dataItem) {
-                    var oReturn = '';
-
-                    if (dataItem.CP_IdentificationNumber == '') {
-                        oReturn = '<label class="PlaceHolder">Ej: 79982877</label>';
-                    }
-                    else {
-                        oReturn = dataItem.CP_IdentificationNumber;
-                    }
-                    return oReturn;
-                },
-            }, {
-                field: 'CP_IdentificationCity',
-                title: 'Ciudad de expedicion del documento',
-                width: '180px',
-                template: function (dataItem) {
-                    var oReturn = '';
-
-                    if (dataItem.CP_IdentificationCity == '') {
-                        oReturn = '<label class="PlaceHolder">Ej: Bogotá Distrito Capital</label>';
-                    }
-                    else {
-                        oReturn = dataItem.CP_IdentificationCity;
-                    }
-                    return oReturn;
-                },
-            }, {
                 field: 'CP_Phone',
                 title: 'Telefono',
                 width: '150px',
@@ -656,20 +585,6 @@ var Provider_CompanyContactObject = {
                     return oReturn;
                 },
             }, {
-                field: 'CP_Extent',
-                title: 'Extensión',
-                width: '150px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem.CP_Extent == null) {
-                        oReturn = '<label class="PlaceHolder">Ej: ext 22</label>';
-                    }
-                    else {
-                        oReturn = dataItem.CP_Extent;
-                    }
-                    return oReturn;
-                }
-            }, {
                 field: 'CP_Email',
                 title: 'Correo electronico',
                 width: '200px',
@@ -683,75 +598,6 @@ var Provider_CompanyContactObject = {
                         oReturn = dataItem.CP_Email;
                     }
                     return oReturn;
-                },
-            }, {
-                field: 'CP_Negotiation',
-                title: 'Capacidad de negociación',
-                width: '190px',
-                template: function (dataItem) {
-                    var oReturn = '';
-
-                    if (dataItem.CP_Negotiation == '') {
-                        oReturn = '<label class="PlaceHolder">Ej: COP 589500000</label>';
-                    }
-                    else {
-                        oReturn = dataItem.CP_Negotiation;
-                    }
-                    return oReturn;
-                },
-            }, {
-                field: 'CP_IdentificationFile',
-                title: 'Doc representante legal.',
-                width: '292px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem != null && dataItem.CP_IdentificationFile != null && dataItem.CP_IdentificationFile.length > 0) {
-                        if (dataItem.dirty != null && dataItem.dirty == true) {
-                            oReturn = '<span class="k-dirty"></span>';
-                        }
-                        oReturn = oReturn + $('#' + Provider_CompanyContactObject.ObjectId + '_File').html();
-                    }
-                    else {
-                        oReturn = $('#' + Provider_CompanyContactObject.ObjectId + '_NoFile').html();
-                    }
-
-                    oReturn = oReturn.replace(/\${CP_IdentificationFile}/gi, dataItem.CP_IdentificationFile);
-
-                    return oReturn;
-                },
-                editor: function (container, options) {
-                    var oFileExit = true;
-                    $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyContactObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
-                    $(container).focusout(function () {
-                        if (oFileExit == false) {
-                            //mantain file input focus
-                            $('#files').focus();
-                        }
-                    });
                 },
             }, {
                 field: 'ContactId',
@@ -783,9 +629,6 @@ var Provider_CompanyContactObject = {
                             ContactName: { editable: true },
                             Enable: { editable: true, type: 'boolean', defaultValue: true },
 
-                            BR_Representative: { editable: true },
-                            BR_RepresentativeId: { editable: false },
-
                             BR_Address: { editable: true, validation: { required: true } },
                             BR_AddressId: { editable: false },
 
@@ -796,26 +639,14 @@ var Provider_CompanyContactObject = {
                             BR_Phone: { editable: true, validation: { required: false } },
                             BR_PhoneId: { editable: false },
 
-                            BR_Extent: { editable: true, type: 'number', validation: { required: false } },
-                            BR_ExtentId: { editable: false },
-
                             BR_Cellphone: { editable: true, validation: { required: false } },
                             BR_CellphoneId: { editable: false },
-
-                            BR_Fax: { editable: true },
-                            BR_FaxId: { editable: false, validation: { required: true } },
 
                             BR_Email: { editable: true, validation: { required: false, email: true } },
                             BR_EmailId: { editable: false },
 
                             BR_Website: { editable: true, validation: { required: false } },
                             BR_WebsiteId: { editable: false },
-
-                            BR_Latitude: { editable: true, validation: { required: false } },
-                            BR_LatitudeId: { editable: false },
-
-                            BR_Longitude: { editable: true, validation: { required: false } },
-                            BR_LongitudeId: { editable: false },
 
                             BR_IsPrincipal: { editable: true, type: 'boolean', defaultValue: true },
                             BR_IsPrincipalId: { editable: false },
@@ -912,21 +743,6 @@ var Provider_CompanyContactObject = {
                     return oReturn;
                 },
             }, {
-                field: 'BR_Representative',
-                title: 'Representante',
-                width: '229px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem.BR_Representative == '') {
-                        oReturn = '<label class="PlaceHolder">Nombre Apellidos</label>';
-                    }
-                    else {
-                        oReturn = dataItem.BR_Representative;
-                    }
-                    return oReturn;
-                },
-
-            }, {
                 field: 'BR_Address',
                 title: 'Dirección',
                 width: '300px',
@@ -1016,22 +832,6 @@ var Provider_CompanyContactObject = {
                 },
             },
             {
-                field: 'BR_Extent',
-                title: 'Extensión',
-                width: '140px',
-                type: 'number',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem.BR_Extent == '') {
-                        oReturn = '<label class="PlaceHolder">Ej: ext 22 </label>';
-                    }
-                    else {
-                        oReturn = dataItem.BR_Extent;
-                    }
-                    return oReturn;
-                }
-            },
-            {
                 field: 'BR_Cellphone',
                 title: 'Celular',
                 width: '120px',
@@ -1049,22 +849,8 @@ var Provider_CompanyContactObject = {
                     return oReturn;
                 },
             }, {
-                field: 'BR_Fax',
-                title: 'Fax',
-                width: '120px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem.BR_Fax == '') {
-                        oReturn = '<label class="PlaceHolder">Ej: 7666777</label>';
-                    }
-                    else {
-                        oReturn = dataItem.BR_Fax;
-                    }
-                    return oReturn;
-                },
-            }, {
                 field: 'BR_Email',
-                title: 'Correo electrónico',
+                title: 'Correo Coorporativo',
                 width: '290px',
                 template: function (dataItem) {
                     var oReturn = '';
@@ -1087,34 +873,6 @@ var Provider_CompanyContactObject = {
                     }
                     else {
                         oReturn = dataItem.BR_Website;
-                    }
-                    return oReturn;
-                },
-            }, {
-                field: 'BR_Latitude',
-                title: 'Latitud',
-                width: '70px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem.BR_Latitude == '') {
-                        oReturn = '<label class="PlaceHolder">Ej: 67.8557995</label>';
-                    }
-                    else {
-                        oReturn = dataItem.BR_Latitude;
-                    }
-                    return oReturn;
-                },
-            }, {
-                field: 'BR_Longitude',
-                title: 'Longitud',
-                width: '80px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem.BR_Longitude == '') {
-                        oReturn = '<label class="PlaceHolder">Ej: 20.2252820</label>';
-                    }
-                    else {
-                        oReturn = dataItem.BR_Longitude;
                     }
                     return oReturn;
                 },
@@ -1409,14 +1167,14 @@ var Provider_CompanyContactObject = {
                 width: '160px',
                 format: Provider_CompanyContactObject.DateFormat,
                 editor:
-                    function timeEditor(container, options) {
-                        var input = $('<input type="date" name="'
-                            + options.field
-                            + '" value="'
-                            + options.model.get(options.field)
-                            + '" />');
-                        input.appendTo(container);
-                    }
+                function timeEditor(container, options) {
+                    var input = $('<input type="date" name="'
+                        + options.field
+                        + '" value="'
+                        + options.model.get(options.field)
+                        + '" />');
+                    input.appendTo(container);
+                }
             }, {
                 field: 'DT_DistributorFile',
                 title: 'Doc soporte.',
@@ -1440,30 +1198,30 @@ var Provider_CompanyContactObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyContactObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyContactObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -2024,30 +1782,30 @@ var Provider_CompanyCommercialObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyCommercialObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyCommercialObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -2449,30 +2207,30 @@ var Provider_CompanyHSEQObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -2670,30 +2428,30 @@ var Provider_CompanyHSEQObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -2724,30 +2482,30 @@ var Provider_CompanyHSEQObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -2778,30 +2536,30 @@ var Provider_CompanyHSEQObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -2832,30 +2590,30 @@ var Provider_CompanyHSEQObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -2886,30 +2644,30 @@ var Provider_CompanyHSEQObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -2940,30 +2698,30 @@ var Provider_CompanyHSEQObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -2994,30 +2752,30 @@ var Provider_CompanyHSEQObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -3048,30 +2806,30 @@ var Provider_CompanyHSEQObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -3102,30 +2860,30 @@ var Provider_CompanyHSEQObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -3156,30 +2914,30 @@ var Provider_CompanyHSEQObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -3383,30 +3141,30 @@ var Provider_CompanyHSEQObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -4090,30 +3848,30 @@ var Provider_CompanyFinancialObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyFinancialObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyFinancialObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -4308,30 +4066,30 @@ var Provider_CompanyFinancialObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyFinancialObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyFinancialObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -4617,7 +4375,7 @@ var Provider_CompanyFinancialObject = {
                             type: 'json',
                             serverFiltering: true,
                             transport: {
-                                read: function (options) {                                    
+                                read: function (options) {
                                     $.ajax({
                                         url: BaseUrl.ApiUrl + '/ProviderApi?GetAllCustomers=true&ProviderPublicId=' + Provider_CompanyFinancialObject.ProviderPublicId + '&SearchParam=' + options.data.filter.filters[0].value,
                                         dataType: 'json',
@@ -4657,30 +4415,30 @@ var Provider_CompanyFinancialObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyFinancialObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyFinancialObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -4923,30 +4681,30 @@ var Provider_AditionalDocumentObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_AditionalDocumentObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_AditionalDocumentObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -5709,7 +5467,7 @@ var Provider_LegalInfoObject = {
                 },
             }, {
                 field: 'R_PersonType',
-                title: 'Tipo de Persona',
+                title: 'Tipo de Contribuyente',
                 width: '180px',
                 template: function (dataItem) {
                     var oReturn = 'Seleccione una opción.';
@@ -5733,58 +5491,14 @@ var Provider_LegalInfoObject = {
                         });
                 },
             }, {
-                field: 'R_LargeContributor',
-                title: 'Gran Contribuyente',
+                field: 'R_TaxPayerType',
+                title: 'Tipo de Régimen',
                 width: '190px',
-            }, {
-                field: 'R_LargeContributorReceipt',
-                title: 'Gran contribuyente resolución',
-                width: '210px',
-            }, {
-                field: 'R_LargeContributorDate',
-                title: 'Gran Contribuyente Fecha',
-                width: '190px',
-                format: Provider_LegalInfoObject.DateFormat,
-                editor: function timeEditor(container, options) {
-                    var input = $('<input type="date" name="'
-                        + options.field
-                        + '" value="'
-                        + options.model.get(options.field)
-                        + '" />');
-                    input.appendTo(container);
-                },
-            }, {
-                field: 'R_SelfRetainer',
-                title: 'Autorretenedor',
-                width: '120px',
-            }, {
-                field: 'R_SelfRetainerReciept',
-                title: 'Autorretenedor Resolucion',
-                width: '188px',
-            }, {
-                field: 'R_SelfRetainerDate',
-                title: 'Autorretenedor Fecha',
-                width: '160px',
-                format: Provider_LegalInfoObject.DateFormat,
-                editor: function timeEditor(container, options) {
-                    var input = $('<input type="date" name="'
-                        + options.field
-                        + '" value="'
-                        + options.model.get(options.field)
-                        + '" />');
-                    input.appendTo(container);
-                },
-            }, {
-                field: 'R_ClassTax',
-                title: 'Clase de impuesto',
-                width: '180px',
                 template: function (dataItem) {
-
                     var oReturn = 'Seleccione una opción.';
-                    if (dataItem != null && dataItem.R_ClassTax != null) {
-
-                        $.each(Provider_LegalInfoObject.ChaimberOfComerceOptionList[221], function (item, value) {
-                            if (dataItem.R_ClassTax == value.ItemId) {
+                    if (dataItem != null && dataItem.R_TaxPayerType != null) {
+                        $.each(Provider_LegalInfoObject.ChaimberOfComerceOptionList[215], function (item, value) {
+                            if (dataItem.R_TaxPayerType == value.ItemId) {
                                 oReturn = value.ItemName;
                             }
                         });
@@ -5795,7 +5509,7 @@ var Provider_LegalInfoObject = {
                     $('<input required data-bind="value:' + options.field + '"/>')
                         .appendTo(container)
                         .kendoDropDownList({
-                            dataSource: Provider_LegalInfoObject.ChaimberOfComerceOptionList[221],
+                            dataSource: Provider_LegalInfoObject.ChaimberOfComerceOptionList[215],
                             dataTextField: 'ItemName',
                             dataValueField: 'ItemId',
                             optionLabel: 'Seleccione una opción'
@@ -5831,31 +5545,6 @@ var Provider_LegalInfoObject = {
                 field: 'R_IVA',
                 title: 'IVA',
                 width: '80px',
-            }, {
-                field: 'R_TaxPayerType',
-                title: 'Tipo de Régimen',
-                width: '190px',
-                template: function (dataItem) {
-                    var oReturn = 'Seleccione una opción.';
-                    if (dataItem != null && dataItem.R_TaxPayerType != null) {
-                        $.each(Provider_LegalInfoObject.ChaimberOfComerceOptionList[215], function (item, value) {
-                            if (dataItem.R_TaxPayerType == value.ItemId) {
-                                oReturn = value.ItemName;
-                            }
-                        });
-                    }
-                    return oReturn;
-                },
-                editor: function (container, options) {
-                    $('<input required data-bind="value:' + options.field + '"/>')
-                        .appendTo(container)
-                        .kendoDropDownList({
-                            dataSource: Provider_LegalInfoObject.ChaimberOfComerceOptionList[215],
-                            dataTextField: 'ItemName',
-                            dataValueField: 'ItemId',
-                            optionLabel: 'Seleccione una opción'
-                        });
-                },
             }, {
                 field: 'R_ICAName',
                 title: 'ICA',
@@ -5916,7 +5605,7 @@ var Provider_LegalInfoObject = {
                 },
             }, {
                 field: 'R_RUTFile',
-                title: 'RUT Anexo',
+                title: 'Adjuntar Documento',//RUT Anexo
                 width: '292px',
                 template: function (dataItem) {
                     var oReturn = '';
@@ -5937,30 +5626,30 @@ var Provider_LegalInfoObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyCommercialObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyCommercialObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -5969,8 +5658,104 @@ var Provider_LegalInfoObject = {
                     });
                 },
             }, {
+                field: 'R_SelfRetainer',
+                title: 'Autorretenedor',
+                width: '120px',
+            }, {
+                field: 'R_SelfRetainerReciept',
+                title: 'Resolución Numero',//Autorretenedor
+                width: '188px',
+            }, {
+                field: 'R_SelfRetainerDate',
+                title: 'Fecha Autorización',//Autorretenedor Fecha
+                width: '160px',
+                format: Provider_LegalInfoObject.DateFormat,
+                editor: function timeEditor(container, options) {
+                    var input = $('<input type="date" name="'
+                        + options.field
+                        + '" value="'
+                        + options.model.get(options.field)
+                        + '" />');
+                    input.appendTo(container);
+                },
+            }, {
+                field: 'R_SelfRetainerFile',
+                title: 'Cargue del Documento',//Autorretenedor Anexo
+                width: '292px',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem != null && dataItem.R_SelfRetainerFile != null && dataItem.R_SelfRetainerFile.length > 0) {
+                        if (dataItem.dirty != null && dataItem.dirty == true) {
+                            oReturn = '<span class="k-dirty"></span>';
+                        }
+                        oReturn = oReturn + $('#' + Provider_LegalInfoObject.ObjectId + '_File').html();
+                    }
+                    else {
+                        oReturn = $('#' + Provider_LegalInfoObject.ObjectId + '_NoFile').html();
+                    }
+
+                    oReturn = oReturn.replace(/\${R_RUTFile}/gi, dataItem.R_SelfRetainerFile);
+
+                    return oReturn;
+                },
+                editor: function (container, options) {
+                    var oFileExit = true;
+                    $('<input type="file" id="files" name="files"/>')
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyCommercialObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
+                    $(container).focusout(function () {
+                        if (oFileExit == false) {
+                            //mantain file input focus
+                            $('#files').focus();
+                        }
+                    });
+                },
+            }, {
+                field: 'R_LargeContributor',
+                title: 'Gran Contribuyente',
+                width: '190px',
+            }, {
+                field: 'R_LargeContributorReceipt',
+                title: 'Resolución Número',//Gran contribuyente resolución
+                width: '210px',
+            }, {
+                field: 'R_LargeContributorDate',
+                title: 'Fecha de Autorización',//Gran Contribuyente Fecha
+                width: '190px',
+                format: Provider_LegalInfoObject.DateFormat,
+                editor: function timeEditor(container, options) {
+                    var input = $('<input type="date" name="'
+                        + options.field
+                        + '" value="'
+                        + options.model.get(options.field)
+                        + '" />');
+                    input.appendTo(container);
+                },
+            }, {
                 field: 'R_LargeContributorFile',
-                title: 'Gran Contribuyente Anexo',
+                title: 'Cargue del Documento',//Gran Contribuyente Anexo
                 width: '292px',
                 template: function (dataItem) {
 
@@ -5992,30 +5777,30 @@ var Provider_LegalInfoObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyCommercialObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyCommercialObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -6023,65 +5808,43 @@ var Provider_LegalInfoObject = {
                         }
                     });
                 },
-            }, {
-                field: 'R_SelfRetainerFile',
-                title: 'Autorretenedor Anexo',
-                width: '292px',
+            }
+
+
+
+
+                , {
+                field: 'R_ClassTax',
+                title: 'Clase de impuesto',
+                width: '180px',
                 template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem != null && dataItem.R_SelfRetainerFile != null && dataItem.R_SelfRetainerFile.length > 0) {
-                        if (dataItem.dirty != null && dataItem.dirty == true) {
-                            oReturn = '<span class="k-dirty"></span>';
-                        }
-                        oReturn = oReturn + $('#' + Provider_LegalInfoObject.ObjectId + '_File').html();
-                    }
-                    else {
-                        oReturn = $('#' + Provider_LegalInfoObject.ObjectId + '_NoFile').html();
-                    }
 
-                    oReturn = oReturn.replace(/\${R_RUTFile}/gi, dataItem.R_SelfRetainerFile);
+                    var oReturn = 'Seleccione una opción.';
+                    if (dataItem != null && dataItem.R_ClassTax != null) {
 
+                        $.each(Provider_LegalInfoObject.ChaimberOfComerceOptionList[221], function (item, value) {
+                            if (dataItem.R_ClassTax == value.ItemId) {
+                                oReturn = value.ItemName;
+                            }
+                        });
+                    }
                     return oReturn;
                 },
                 editor: function (container, options) {
-                    var oFileExit = true;
-                    $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyCommercialObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
-                    $(container).focusout(function () {
-                        if (oFileExit == false) {
-                            //mantain file input focus
-                            $('#files').focus();
-                        }
-                    });
+                    $('<input required data-bind="value:' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataSource: Provider_LegalInfoObject.ChaimberOfComerceOptionList[221],
+                            dataTextField: 'ItemName',
+                            dataValueField: 'ItemId',
+                            optionLabel: 'Seleccione una opción'
+                        });
                 },
             }, {
                 field: 'LegalName',
                 title: 'Nombre',
                 width: '200px',
-            }, ],
+            },],
         });
     },
 
@@ -6231,30 +5994,30 @@ var Provider_LegalInfoObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyCommercialObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyCommercialObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -6438,30 +6201,30 @@ var Provider_LegalInfoObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyCommercialObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyCommercialObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -6668,30 +6431,30 @@ var Provider_LegalInfoObject = {
                 editor: function (container, options) {
                     var oFileExit = true;
                     $('<input type="file" id="files" name="files"/>')
-                    .appendTo(container)
-                    .kendoUpload({
-                        multiple: false,
-                        async: {
-                            saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyCommercialObject.ProviderPublicId,
-                            autoUpload: true
-                        },
-                        success: function (e) {
-                            if (e.response != null && e.response.length > 0) {
-                                //set server fiel name
-                                options.model[options.field] = e.response[0].ServerName;
-                                //enable made changes
-                                options.model.dirty = true;
-                            }
-                        },
-                        complete: function (e) {
-                            //enable lost focus
-                            oFileExit = true;
-                        },
-                        select: function (e) {
-                            //disable lost focus while upload file
-                            oFileExit = false;
-                        },
-                    });
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyCommercialObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
                     $(container).focusout(function () {
                         if (oFileExit == false) {
                             //mantain file input focus
@@ -7056,7 +6819,7 @@ var Provider_CustomerInfoObject = {
                         $('#' + Provider_CustomerInfoObject.ObjectId + '_Customer_List_Dialog').append('<li class="Company">' + result[i].CP_Customer + '</li>')
                         $('#' + Provider_CustomerInfoObject.ObjectId + '_Customer_List_Dialog').append('<li><input id="PublicId" type="hidden" value="' + result[i].CP_CustomerPublicId + '" /></li>')
                     }
-                    
+
                 }
             },
             error: function (result) {
@@ -7161,27 +6924,27 @@ var Provider_CustomData = {
 
         var oFileExit = true;
         $('#LoadFile_' + initObject.CustomerPublicId)
-        .kendoUpload({
-            multiple: false,
-            async: {
-                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + initObject.ProviderPublicId,
-                autoUpload: true
-            },
-            success: function (e) {
-                if (e.response != null && e.response.length > 0) {
-                    //set server fiel name
-                    $('#' + initObject.ControlellerResponseId).val(e.response[0].ServerName);
-                }
-            },
-            complete: function (e) {
-                //enable lost focus
-                oFileExit = true;
-            },
-            select: function (e) {
-                //disable lost focus while upload file
-                oFileExit = false;
-            },
-        });
+            .kendoUpload({
+                multiple: false,
+                async: {
+                    saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + initObject.ProviderPublicId,
+                    autoUpload: true
+                },
+                success: function (e) {
+                    if (e.response != null && e.response.length > 0) {
+                        //set server fiel name
+                        $('#' + initObject.ControlellerResponseId).val(e.response[0].ServerName);
+                    }
+                },
+                complete: function (e) {
+                    //enable lost focus
+                    oFileExit = true;
+                },
+                select: function (e) {
+                    //disable lost focus while upload file
+                    oFileExit = false;
+                },
+            });
     },
 };
 
@@ -7213,7 +6976,7 @@ var Provider_CalificationProjectConfigInfo = {
     RenderAsync: function () {
 
         Provider_CalificationProjectConfigInfo.RenderRelatedCalificationConfig();
-               
+
         Provider_CalificationProjectConfigInfo.ConfigKeyBoard();
 
         Provider_CalificationProjectConfigInfo.ConfigEvents();
@@ -7256,7 +7019,7 @@ var Provider_CalificationProjectConfigInfo = {
 
         return $('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnable').length > 0 ? $('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnable').is(':checked') : true;
     },
-   
+
     RenderRelatedCalificationConfig: function () {
         debugger;
         var ddl;
@@ -7272,7 +7035,7 @@ var Provider_CalificationProjectConfigInfo = {
                 { name: 'ViewEnable', template: $('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnablesTemplate').html() },
                 { name: 'ShortcutToolTip', template: $('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ShortcutToolTipTemplate').html() },
             ],
-            dataSource: {                
+            dataSource: {
                 serverPaging: false,
                 schema: {
                     total: function (data) {
@@ -7290,11 +7053,11 @@ var Provider_CalificationProjectConfigInfo = {
                             Enable: { editable: true, type: 'boolean', defaultValue: true },
                         },
                     }
-                },                
+                },
                 transport: {
                     read: function (options) {
                         debugger;
-                        $.ajax({                           
+                        $.ajax({
                             url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderGetbyProvider=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId + '&Enable=' + Provider_CalificationProjectConfigInfo.GetViewEnable(),
                             dataType: 'json',
                             success: function (result) {
@@ -7328,7 +7091,7 @@ var Provider_CalificationProjectConfigInfo = {
                         });
                     },
                     update: function (options) {
-                         
+
                         $.ajax({
                             url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderUpsert=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId,
                             dataType: 'json',
@@ -7354,7 +7117,7 @@ var Provider_CalificationProjectConfigInfo = {
                 requestEnd: function () {
                     kendo.ui.progress($("#loading"), false);
                 }
-            },                    
+            },
             //editable: "popup",
             columns: [{
                 field: 'Enable',
@@ -7374,41 +7137,41 @@ var Provider_CalificationProjectConfigInfo = {
             },{
                 field: 'CalificationProjectConfigInfoId',
                 title: 'ID',
-                width: '50px',                
+                width: '50px',
             }, {
                 field: 'CompanyId',
                 title: 'Comprador',
                 width: '200px',
                 template: function (dataItem) {
-                     
+
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.CompanyId != null) {
                         debugger;
                         $.each(Provider_CalificationProjectConfigInfo.Companies[1], function (item, value) {
-                            if (dataItem.CompanyId == value.ItemId) {                               
+                            if (dataItem.CompanyId == value.ItemId) {
                                 oReturn = value.ItemName;
-                                Provider_CalificationProjectConfigInfo.CalValueId = value.ItemId;                                                                
+                                Provider_CalificationProjectConfigInfo.CalValueId = value.ItemId;
                             }
                         });
-                        
+
                     }
                     return oReturn;
                 },
                 editor: function (container, options) {
                     debugger;
-                        ddl = $('<input required data-bind="value:' + options.field + '"/>')
-                             .appendTo(container)
-                             .kendoDropDownList({
-                                 dataSource: Provider_CalificationProjectConfigInfo.Companies[1],
-                                 dataTextField: 'ItemName',
-                                 dataValueField: 'ItemId',
-                                 optionLabel: 'Seleccione una opción',
-                                 change: function (e) {                                     
-                                     if (ddl.val() != null && ddl.val() != "") {
-                                         Provider_CalificationProjectConfigInfo.CalValueId = ddl.val();
-                                     }                                     
-                                 },                                 
-                             });                    
+                    ddl = $('<input required data-bind="value:' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataSource: Provider_CalificationProjectConfigInfo.Companies[1],
+                            dataTextField: 'ItemName',
+                            dataValueField: 'ItemId',
+                            optionLabel: 'Seleccione una opción',
+                            change: function (e) {
+                                if (ddl.val() != null && ddl.val() != "") {
+                                    Provider_CalificationProjectConfigInfo.CalValueId = ddl.val();
+                                }
+                            },
+                        });
                 }
             }, {
                 field: 'CalificationProjectConfigId',
@@ -7428,7 +7191,7 @@ var Provider_CalificationProjectConfigInfo = {
                     return oReturn;
                 },
                 editor: function (container, options) {
-                     
+
                     $('<input required data-bind="value:' + options.field + '"/>')
                         .appendTo(container)
                         .kendoDropDownList({

@@ -181,29 +181,18 @@
         CC_Value = 205002,
 
         //PersonContact
-        CP_PersonContactType = 206001,
-        CP_IdentificationType = 206002,
-        CP_IdentificationNumber = 206003,
-        CP_IdentificationCity = 206004,
-        CP_IdentificationFile = 206005,
+        CP_PersonContactType = 206001,        
         CP_Phone = 206006,
-        CP_Email = 206007,
-        CP_Negotiation = 206008,
-        CP_Extent = 206009,
+        CP_Email = 206007,      
 
         //Branch
-        BR_Representative = 207001,
         BR_Address = 207002,
         BR_City = 207003,
         BR_Phone = 207004,        
-        BR_Fax = 207005,
         BR_Email = 207006,
-        BR_Website = 207007,
-        BR_Latitude = 207008,
-        BR_Longitude = 207009,
+        BR_Website = 207007,        
         BR_IsPrincipal = 207010,
         BR_Cellphone = 207011,
-        BR_Extent = 207012,
 
         //Distributor
         DT_DistributorType = 208001,
