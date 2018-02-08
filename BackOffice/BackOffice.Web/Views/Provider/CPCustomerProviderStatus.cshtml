@@ -14,7 +14,7 @@
         @Html.Partial(MVC.Shared.Views._P_ProviderMenu, Model)
     </div>
     <div class="POBOProviderContentWrapper">
-        <label class="POBOSectionTitles">Compradores Relacionados</label>
+        <label class="POBOSectionTitles">Seguimientos</label>
         @{
             Model.IsForm = false;
             Html.RenderPartial(MVC.Shared.Views._P_ProviderActions, Model);
@@ -77,8 +77,6 @@
                             <option value="@oItem.ItemId">@oItem.ItemName</option>
                         }
                     </select>
-                    <label class="POBOSectionTitles">Seguimiento Interno</label>
-                    <textarea id="divCustomerProviderStatus_Internal_Tracking" name="SH_InternalTracking"></textarea>
                     <label class="POBOSectionTitles">Seguimiento para el Comprador</label>
                     <textarea id="divCustomerProviderStatus_Customer_Tracking" name="SH_CustomerTracking"></textarea>
                 </div>

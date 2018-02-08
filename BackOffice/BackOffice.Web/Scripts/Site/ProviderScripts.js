@@ -2193,11 +2193,7 @@ var Provider_CompanyHSEQObject = {
                         + '" />');
                     input.appendTo(container);
                 },
-            }, /*{
-                field: 'C_CCS',
-                title: '% CCS',
-                width: '80px',
-            },*/ {
+            }, {
                 field: 'C_CertificationFile',
                 title: 'Archivo Certificación',
                 width: '292px',
@@ -2251,11 +2247,7 @@ var Provider_CompanyHSEQObject = {
                         }
                     });
                 },
-            }, /*{
-                field: 'CertificationName',
-                title: 'Nombre',
-                width: '190px',
-            },*/ {
+            },  {
                 field: 'CertificationId',
                 title: 'Id Interno',
                 width: '78px',

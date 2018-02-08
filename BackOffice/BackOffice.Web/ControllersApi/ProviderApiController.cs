@@ -1148,18 +1148,7 @@ namespace BackOffice.Web.ControllersApi
                             ToString(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_Server].Value),
                         Enable = true,
                     });
-
-                    /*oProvider.RelatedCertification.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.C_CCSId) ? 0 : Convert.ToInt32(oDataToUpsert.C_CCSId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumHSEQInfoType.C_CCS
-                        },
-                        Value = oDataToUpsert.C_CCS,
-                        Enable = true,
-                    });*/
-
+                    
                     oProvider.RelatedCertification.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
                     {
                         ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.C_CertificationFileId) ? 0 : Convert.ToInt32(oDataToUpsert.C_CertificationFileId.Trim()),
@@ -2820,10 +2809,10 @@ namespace BackOffice.Web.ControllersApi
 
                 if (oCustomerProviderInfo != null && oCustomerProviderInfo.RelatedProvider.Count > 0)
                 {
-                    oCustomerProviderInfo.RelatedProvider.First().CustomerProviderInfo
-                        .Where(x => x.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumProviderCustomerType.CustomerMonitoring ||
-                                    x.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumProviderCustomerType.InternalMonitoring)
-                        .All(x =>
+                     oCustomerProviderInfo.RelatedProvider.First().CustomerProviderInfo
+                         .Where(x => x.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumProviderCustomerType.CustomerMonitoring ||
+                                     x.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumProviderCustomerType.InternalMonitoring)
+                                      .All(x =>
                     {
                         oReturn.Add(new TrackingViewModel(x, oTotalRows));
                         return true;
@@ -3119,7 +3108,7 @@ namespace BackOffice.Web.ControllersApi
                             Description = System.Web.HttpContext.Current.Request.Form["SH_InternalTracking"],
                         };
 
-                        oInfoModel.Add(new GenericItemInfoModel()
+                       oInfoModel.Add(new GenericItemInfoModel()
                         {
                             ItemInfoId = 0,
                             ItemInfoType = new CatalogModel()
