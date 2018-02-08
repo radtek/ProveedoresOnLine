@@ -1149,7 +1149,7 @@ namespace BackOffice.Web.ControllersApi
                         Enable = true,
                     });
 
-                    oProvider.RelatedCertification.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
+                    /*oProvider.RelatedCertification.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
                     {
                         ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.C_CCSId) ? 0 : Convert.ToInt32(oDataToUpsert.C_CCSId.Trim()),
                         ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
@@ -1158,7 +1158,7 @@ namespace BackOffice.Web.ControllersApi
                         },
                         Value = oDataToUpsert.C_CCS,
                         Enable = true,
-                    });
+                    });*/
 
                     oProvider.RelatedCertification.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
                     {
