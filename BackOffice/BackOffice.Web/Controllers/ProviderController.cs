@@ -2129,7 +2129,7 @@ namespace BackOffice.Web.Controllers
                 //Experience
                 oMenuAux.ChildMenu.Add(new Models.General.GenericMenu()
                 {
-                    Name = "Experiencias",
+                    Name = "Referencias",
                     Url = Url.Action
                         (MVC.Provider.ActionNames.CIExperiencesUpsert,
                         MVC.Provider.Name,
@@ -2309,7 +2309,7 @@ namespace BackOffice.Web.Controllers
                     //header
                     oMenuAux = new Models.General.GenericMenu()
                     {
-                        Name = "Datos Personalizados",
+                        Name = "Información Personalizada",
                         Position = 7,
                         ChildMenu = new List<Models.General.GenericMenu>(),
                     };

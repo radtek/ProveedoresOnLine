@@ -515,6 +515,12 @@ var Provider_CompanyContactObject = {
                     kendo.ui.progress($("#loading"), false);
                 }
             },
+            editable: {
+                mode: "popup",
+                window: {
+                    title: "Persona de Contacto",
+                }
+            },
             columns: [{
                 field: 'Enable',
                 title: 'Visible en Market Place',
@@ -599,6 +605,13 @@ var Provider_CompanyContactObject = {
                     }
                     return oReturn;
                 },
+            },{
+                title: "Acciones",
+                width: "120px",
+                command: [{
+                    name: 'edit',
+                    text: 'Editar',
+                }],
             }, {
                 field: 'ContactId',
                 title: 'Id Interno',
