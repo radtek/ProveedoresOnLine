@@ -1963,8 +1963,8 @@ var Provider_CompanyHSEQObject = {
                             C_EndDateCertification: { editable: true },
                             C_EndDateCertificationId: { editable: false },
 
-                            C_CCS: { editable: true, type: "number" },
-                            C_CCSId: { editable: false },
+                           /* C_CCS: { editable: true, type: "number" },
+                            C_CCSId: { editable: false },*/
 
                             C_CertificationFile: { editable: true },
                             C_CertificationFileId: { editable: false },
@@ -2194,10 +2194,6 @@ var Provider_CompanyHSEQObject = {
                     input.appendTo(container);
                 },
             }, {
-                field: 'C_CCS',
-                title: '% CCS',
-                width: '80px',
-            }, {
                 field: 'C_CertificationFile',
                 title: 'Archivo Certificación',
                 width: '292px',
@@ -2251,11 +2247,7 @@ var Provider_CompanyHSEQObject = {
                         }
                     });
                 },
-            }, {
-                field: 'CertificationName',
-                title: 'Nombre',
-                width: '190px',
-            }, {
+            },  {
                 field: 'CertificationId',
                 title: 'Id Interno',
                 width: '78px',

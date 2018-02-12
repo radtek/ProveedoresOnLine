@@ -195,7 +195,7 @@ namespace BackOffice.Models.Provider
                 DefaultIfEmpty(string.Empty).
                 FirstOrDefault();
 
-            C_CCS = RelatedCertification.ItemInfo.
+           /* C_CCS = RelatedCertification.ItemInfo.
                 Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumHSEQInfoType.C_CCS).
                 Select(y => y.Value).
                 DefaultIfEmpty(string.Empty).
@@ -204,7 +204,7 @@ namespace BackOffice.Models.Provider
                 Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumHSEQInfoType.C_CCS).
                 Select(y => y.ItemInfoId.ToString()).
                 DefaultIfEmpty(string.Empty).
-                FirstOrDefault();
+                FirstOrDefault();*/
 
             C_CertificationFile = RelatedCertification.ItemInfo.
                 Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumHSEQInfoType.C_CertificationFile).
