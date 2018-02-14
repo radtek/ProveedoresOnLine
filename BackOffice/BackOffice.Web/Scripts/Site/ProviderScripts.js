@@ -863,7 +863,7 @@ var Provider_CompanyContactObject = {
                 },
             }, {
                 field: 'BR_Email',
-                title: 'Correo Coorporativo',
+                title: 'Correo Corporativo',
                 width: '290px',
                 template: function (dataItem) {
                     var oReturn = '';
