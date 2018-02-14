@@ -4560,7 +4560,7 @@ var Provider_AditionalDocumentObject = {
                             AD_RelatedCustomer: { editable: false },
                             AD_RelatedCustomerName: { editable: true },
 
-                            AD_RelatedCustomerList: { editable: true, defaultValue: null },
+                            AD_RelatedCustomerList: { editable: true, required: true },
 
                             AD_RelatedUser: { editable: false },
                             AD_RelatedUserId: { editable: false },
@@ -4599,44 +4599,54 @@ var Provider_AditionalDocumentObject = {
                         });
                     },
                     create: function (options) {
-                        $.ajax({
-                            url: BaseUrl.ApiUrl + '/ProviderApi?ADAditionalDocumentUpsert=true&ProviderPublicId=' + Provider_AditionalDocumentObject.ProviderPublicId + '&AditionalDataType=' + Provider_AditionalDocumentObject.AditionalType,
-                            dataType: 'json',
-                            type: 'post',
-                            data: {
-                                DataToUpsert: kendo.stringify(options.data)
-                            },
-                            success: function (result) {
-                                options.success(result);
-                                Message('success', 'Se creó el registro.');
+                        if (options.data.AD_RelatedCustomerList == "") {
+                            kendo.ui.progress($("#loading"), false);
+                            Message('error', 'Debe seleccionar minimo un Comprador Relacionado');
+                        } else {
+                            $.ajax({
+                                url: BaseUrl.ApiUrl + '/ProviderApi?ADAditionalDocumentUpsert=true&ProviderPublicId=' + Provider_AditionalDocumentObject.ProviderPublicId + '&AditionalDataType=' + Provider_AditionalDocumentObject.AditionalType,
+                                dataType: 'json',
+                                type: 'post',
+                                data: {
+                                    DataToUpsert: kendo.stringify(options.data)
+                                },
+                                success: function (result) {
+                                    options.success(result);
+                                    Message('success', 'Se creó el registro.');
 
-                                $('#' + Provider_AditionalDocumentObject.ObjectId).data('kendoGrid').dataSource.read();
-                            },
-                            error: function (result) {
-                                options.error(result);
-                                Message('error', result);
-                            },
-                        });
+                                    $('#' + Provider_AditionalDocumentObject.ObjectId).data('kendoGrid').dataSource.read();
+                                },
+                                error: function (result) {
+                                    options.error(result);
+                                    Message('error', result);
+                                },
+                            });
+                        }
                     },
                     update: function (options) {
-                        $.ajax({
-                            url: BaseUrl.ApiUrl + '/ProviderApi?ADAditionalDocumentUpsert=true&ProviderPublicId=' + Provider_AditionalDocumentObject.ProviderPublicId + '&AditionalDataType=' + Provider_AditionalDocumentObject.AditionalType,
-                            dataType: 'json',
-                            type: 'post',
-                            data: {
-                                DataToUpsert: kendo.stringify(options.data)
-                            },
-                            success: function (result) {
-                                options.success(result);
-                                Message('success', 'Se editó el registro');
+                        if (options.data.AD_RelatedCustomerList == "") {
+                            kendo.ui.progress($("#loading"), false);
+                            Message('error', 'Debe seleccionar minimo un Comprador Relacionado');
+                        } else {
+                            $.ajax({
+                                url: BaseUrl.ApiUrl + '/ProviderApi?ADAditionalDocumentUpsert=true&ProviderPublicId=' + Provider_AditionalDocumentObject.ProviderPublicId + '&AditionalDataType=' + Provider_AditionalDocumentObject.AditionalType,
+                                dataType: 'json',
+                                type: 'post',
+                                data: {
+                                    DataToUpsert: kendo.stringify(options.data)
+                                },
+                                success: function (result) {
+                                    options.success(result);
+                                    Message('success', 'Se editó el registro');
 
-                                $('#' + Provider_AditionalDocumentObject.ObjectId).data('kendoGrid').dataSource.read();
-                            },
-                            error: function (result) {
-                                options.error(result);
-                                Message('error', 'Error al modificar el registro');
-                            },
-                        });
+                                    $('#' + Provider_AditionalDocumentObject.ObjectId).data('kendoGrid').dataSource.read();
+                                },
+                                error: function (result) {
+                                    options.error(result);
+                                    Message('error', 'Error al modificar el registro');
+                                },
+                            });
+                        }
                     },
                 },
                 requestStart: function () {
@@ -4759,7 +4769,6 @@ var Provider_AditionalDocumentObject = {
                             itemTemplate: $('#' + Provider_AditionalDocumentObject.ObjectId + '_MultiAC_ItemTemplate').html(),
                             value: oCurrentValue,
                             change: function () {
-                                debugger;
                                 //get selected values
                                 if ($('#' + Provider_AditionalDocumentObject.ObjectId + '_RelatedCustomerListMultiselect').length > 0) {
                                     options.model[options.field] = $('#' + Provider_AditionalDocumentObject.ObjectId + '_RelatedCustomerListMultiselect').data('kendoMultiSelect')._dataItems;
@@ -4785,7 +4794,6 @@ var Provider_AditionalDocumentObject = {
                                                 url: BaseUrl.ApiUrl + '/ProviderApi?GetAllCustomers=true&ProviderPublicId=' + Provider_AditionalDocumentObject.ProviderPublicId + '&SearchParam=' + options.data.filter.filters[0].value + ',False',
                                                 dataType: 'json',
                                                 success: function (result) {
-                                                    debugger;
                                                     options.success(result);
                                                 },
                                                 error: function (result) {
@@ -5353,7 +5361,6 @@ var Provider_LegalInfoObject = {
                 title: 'Carga de Documento',
                 width: '292px',
                 template: function (dataItem) {
-                    debugger;
                     var oReturn = '';
                     if (dataItem != null && dataItem.CD_Partnerdocument != null && dataItem.CD_Partnerdocument.length > 0) {
                         if (dataItem.dirty != null && dataItem.dirty == true) {
@@ -7113,8 +7120,7 @@ var Provider_CalificationProjectConfigInfo = {
         return $('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnable').length > 0 ? $('#' + Provider_CalificationProjectConfigInfo.ObjectId + '_ViewEnable').is(':checked') : true;
     },
 
-    RenderRelatedCalificationConfig: function () {
-        debugger;
+    RenderRelatedCalificationConfig: function () {        
         var ddl;
         $('#' + Provider_CalificationProjectConfigInfo.ObjectId).kendoGrid({
             editable: true,
@@ -7149,7 +7155,6 @@ var Provider_CalificationProjectConfigInfo = {
                 },
                 transport: {
                     read: function (options) {
-                        debugger;
                         $.ajax({
                             url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderGetbyProvider=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId + '&Enable=' + Provider_CalificationProjectConfigInfo.GetViewEnable(),
                             dataType: 'json',
@@ -7163,7 +7168,6 @@ var Provider_CalificationProjectConfigInfo = {
                         });
                     },
                     create: function (options) {
-                        debugger;
                         $.ajax({
                             url: BaseUrl.ApiUrl + '/ProviderApi?CPCCalificationProjectConfigInfoProviderUpsert=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId,
                             dataType: 'json',
@@ -7172,7 +7176,6 @@ var Provider_CalificationProjectConfigInfo = {
                                 DataToUpsert: kendo.stringify(options.data)
                             },
                             success: function (result) {
-                                debugger;
                                 options.success(result);
                                 $('#' + Provider_CalificationProjectConfigInfo.ObjectId).data('kendoGrid').dataSource.read();
                                 Message('success', 'Se creó el registro.');
@@ -7239,7 +7242,6 @@ var Provider_CalificationProjectConfigInfo = {
 
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.CompanyId != null) {
-                        debugger;
                         $.each(Provider_CalificationProjectConfigInfo.Companies[1], function (item, value) {
                             if (dataItem.CompanyId == value.ItemId) {
                                 oReturn = value.ItemName;
@@ -7251,7 +7253,6 @@ var Provider_CalificationProjectConfigInfo = {
                     return oReturn;
                 },
                 editor: function (container, options) {
-                    debugger;
                     ddl = $('<input required data-bind="value:' + options.field + '"/>')
                         .appendTo(container)
                         .kendoDropDownList({
@@ -7271,7 +7272,6 @@ var Provider_CalificationProjectConfigInfo = {
                 title: 'Proceso de Calificación',
                 width: '200px',
                 template: function (dataItem) {
-                    debugger;
                     var oReturn = 'Seleccione una opción.';
                     if (dataItem != null && dataItem.CalificationProjectConfigId != null && dataItem.CalificationProjectConfigId != "" && dataItem.CalificationProjectConfigId > 0) {
                         $.each(Provider_CalificationProjectConfigInfo.CPCConfig[parseInt(Provider_CalificationProjectConfigInfo.CalValueId)], function (item, value) {
