@@ -2523,7 +2523,35 @@ namespace BackOffice.Web.ControllersApi
                         Enable = true,
                     });
 
-                    oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.Add(
+                    if (oDataToUpsert.AditionalDocumentId != null)
+                    {
+                        List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> oAditionalDocumentInfo = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.AditionalDocumentGetByType
+                           (ProviderPublicId, Convert.ToInt32(AditionalDataType), true);
+
+                        oAditionalDocumentInfo.Where(x => x.ItemId == Convert.ToInt32(oDataToUpsert.AditionalDocumentId.Trim()))
+                            .All(x => {
+                                x.ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_RelatedCustomer)
+                                    .All(z => {
+                                        if (oDataToUpsert.AD_RelatedCustomerList.Where(a => a.CP_CustomerPublicId == z.Value).SingleOrDefault() == null)
+                                        {
+                                            z.Enable = false;
+                                        }
+                                        else
+                                        {
+                                            oDataToUpsert.AD_RelatedCustomerList.RemoveAll(a => a.CP_CustomerPublicId == z.Value);
+                                            z.Enable = true;
+                                        }
+                                        return true;
+                                    });
+                                return true;
+                            });
+
+                        oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.AddRange(oAditionalDocumentInfo.Where(x => x.ItemId == Convert.ToInt32(oDataToUpsert.AditionalDocumentId.Trim())).SingleOrDefault().ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_RelatedCustomer));
+                    }
+
+
+                    oDataToUpsert.AD_RelatedCustomerList.All(x => {
+                        oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.Add(
                         new GenericItemInfoModel()
                         {
                             ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.AD_RelatedCustomerId) ? 0 : Convert.ToInt32(oDataToUpsert.AD_RelatedCustomerId.Trim()),
@@ -2531,10 +2559,12 @@ namespace BackOffice.Web.ControllersApi
                             {
                                 ItemId = (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_RelatedCustomer,
                             },
-                            Value = oDataToUpsert.AD_RelatedCustomer,
+                            Value = x.CP_CustomerPublicId,
                             Enable = true,
                         });
-
+                        return true;
+                    });
+                    
                     oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.Add(
                         new GenericItemInfoModel()
                         {
@@ -3612,6 +3642,7 @@ namespace BackOffice.Web.ControllersApi
         (string GetAllCustomers,
             string ProviderPublicId, string SearchParam)
         {
+            string[] oSearchParam = SearchParam.Split(',');
             List<BackOffice.Models.Provider.ProviderCustomerViewModel> oReturn = new List<Models.Provider.ProviderCustomerViewModel>();
 
             if (GetAllCustomers == "true")
@@ -3632,14 +3663,17 @@ namespace BackOffice.Web.ControllersApi
                                 ));
                             return true;
                         });
-                    if (!string.IsNullOrEmpty(SearchParam))                    
-                        oReturn = oReturn.Where(x => x.CP_Customer.ToLower().Contains(SearchParam)).Select(x => x).ToList();
-                                       
-                    oReturn.Add(new ProviderCustomerViewModel
+                    if (!string.IsNullOrEmpty(oSearchParam[0]))                    
+                        oReturn = oReturn.Where(x => x.CP_Customer.ToLower().Contains(oSearchParam[0])).Select(x => x).ToList();
+
+                    if (oSearchParam[1] == "True")
                     {
-                        CP_Customer = "A Quien Interese",
-                        CP_CustomerPublicId = "00000000",
-                    });
+                        oReturn.Add(new ProviderCustomerViewModel
+                        {
+                            CP_Customer = "A Quien Interese",
+                            CP_CustomerPublicId = "00000000",
+                        });
+                    }
                 }
             }
             return oReturn.OrderBy(x => x.CP_CustomerPublicId).Select(x => x).ToList();

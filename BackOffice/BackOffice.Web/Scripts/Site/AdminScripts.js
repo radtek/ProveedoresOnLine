@@ -2027,7 +2027,7 @@ var Admin_CompanyRoleObject = {
                             transport: {
                                 read: function (options) {
                                     $.ajax({
-                                        url: BaseUrl.ApiUrl + '/ProviderApi?GetAllCustomers=true&ProviderPublicId=null' + '&SearchParam=' + options.data.filter.filters[0].value,
+                                        url: BaseUrl.ApiUrl + '/ProviderApi?GetAllCustomers=true&ProviderPublicId=null' + '&SearchParam=' + options.data.filter.filters[0].value + ',True',
                                         dataType: 'json',
                                         success: function (result) {
                                             options.success(result);
