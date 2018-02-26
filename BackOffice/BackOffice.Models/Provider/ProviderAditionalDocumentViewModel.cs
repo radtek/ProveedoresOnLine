@@ -30,6 +30,8 @@ namespace BackOffice.Models.Provider
 
         public string AD_RelatedCustomerName { get; set; }
 
+        public List<ProviderCustomerViewModel> AD_RelatedCustomerList { get; set; }
+
         public string AD_RelatedUser { get; set; }
 
         public string AD_RelatedUserId { get; set; }
@@ -117,6 +119,17 @@ namespace BackOffice.Models.Provider
                  Select(x => x.RelatedProvider.CompanyName).
                  DefaultIfEmpty(string.Empty).
                  FirstOrDefault();
+
+            AD_RelatedCustomerList = new List<ProviderCustomerViewModel>();
+            RelatedAditionalDocument.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_RelatedCustomer && x.Enable == true).All(w => {
+                AD_RelatedCustomerList.Add(new ProviderCustomerViewModel()
+                {
+                    CP_Customer = oCustomerList.RelatedProvider.Where(y => y.RelatedProvider.CompanyPublicId == w.Value).Select(y => y.RelatedProvider.CompanyName).SingleOrDefault(),
+                    CP_CustomerPublicId = w.Value
+                });
+                
+                return true;
+            });
 
             AD_RelatedUserId = RelatedAditionalDocument.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_RelatedUser).
                 Select(x => x.ItemInfoId.ToString()).
