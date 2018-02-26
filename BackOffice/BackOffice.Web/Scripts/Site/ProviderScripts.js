@@ -1851,6 +1851,7 @@ var Provider_CompanyHSEQObject = {
     DateFormat: '',
     HSEQOptionList: new Array(),
     YearOptionList: new Array(),
+    CH_TypeDocumentOptionList: new Array(),
 
     Init: function (vInitiObject) {
         this.ObjectId = vInitiObject.ObjectId;
@@ -1869,6 +1870,12 @@ var Provider_CompanyHSEQObject = {
                 Provider_CompanyHSEQObject.YearOptionList[value.Key] = value.Value;
             });
         }
+        if (vInitiObject.CH_TypeDocumentOptionList != null) {
+            $.each(vInitiObject.CH_TypeDocumentOptionList, function (item, value) {
+                Provider_CompanyHSEQObject.CH_TypeDocumentOptionList[value.Key] = value.Value;
+            });
+        }
+
     },
 
     RenderAsync: function () {
@@ -2276,33 +2283,15 @@ var Provider_CompanyHSEQObject = {
                             CertificationId: { editable: false, nullable: true },
                             CertificationName: { editable: true },
                             Enable: { editable: true, type: "boolean", defaultValue: true },
+                            
+                            CH_Document: { editable: true },
+                            CH_DocumentId: { editable: false },
 
-                            CH_Year: { editable: true, validation: { required: true } },
-                            CH_YearId: { editable: false },
+                            CH_TypeDocument: { editable: true },
+                            CH_TypeDocumentId: { editable: false },
 
-                            CH_PoliticsSecurity: { editable: true },
-                            CH_PoliticsSecurityId: { editable: false },
-
-                            CH_PoliticsNoAlcohol: { editable: true },
-                            CH_PoliticsNoAlcoholId: { editable: false },
-
-                            CH_ProgramOccupationalHealth: { editable: true },
-                            CH_ProgramOccupationalHealthId: { editable: false },
-
-                            CH_RuleIndustrialSecurity: { editable: true },
-                            CH_RuleIndustrialSecurityId: { editable: false },
-
-                            CH_MatrixRiskControl: { editable: true },
-                            CH_MatrixRiskControlId: { editable: false },
-
-                            CH_CorporateSocialResponsability: { editable: true },
-                            CH_CorporateSocialResponsabilityId: { editable: false },
-
-                            CH_ProgramEnterpriseSecurity: { editable: true },
-                            CH_ProgramEnterpriseSecurityId: { editable: false },
-
-                            CH_PoliticsRecruiment: { editable: true },
-                            CH_PoliticsRecruimentId: { editable: false },
+                            CH_Other: { editable: true },
+                            CH_OtherId: { editable: false },
 
                             CH_CertificationsForm: { editable: true },
                             CH_CertificationsFormId: { editable: false },
@@ -2370,7 +2359,7 @@ var Provider_CompanyHSEQObject = {
             columns: [{
                 field: 'Enable',
                 title: 'Visible en Market Place',
-                width: '155px',
+                width: '120px',
                 template: function (dataItem) {
                     var oReturn = '';
 
@@ -2383,16 +2372,70 @@ var Provider_CompanyHSEQObject = {
                     return oReturn;
                 },
             }, {
-                field: 'CH_Year',
-                title: 'Año',
-                width: '120px',
+                field: 'CH_Document',
+                title: 'Documento',
+                width: '200px',
+                template: function (dataItem) {
+                    var oReturn = '';
+                    if (dataItem != null && dataItem.CH_Document != null && dataItem.CH_Document.length > 0) {
+                        if (dataItem.dirty != null && dataItem.dirty == true) {
+                            oReturn = '<span class="k-dirty"></span>';
+                        }
+                        oReturn = oReturn + $('#' + Provider_CompanyHSEQObject.ObjectId + '_File').html();
+                    }
+                    else {
+                        oReturn = $('#' + Provider_CompanyHSEQObject.ObjectId + '_NoFile').html();
+                    }
+
+                    oReturn = oReturn.replace(/\${FileUrl}/gi, dataItem.CH_Document);
+
+                    return oReturn;
+                },
+                editor: function (container, options) {
+                    var oFileExit = true;
+                    $('<input type="file" id="files" name="files"/>')
+                        .appendTo(container)
+                        .kendoUpload({
+                            multiple: false,
+                            async: {
+                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
+                                autoUpload: true
+                            },
+                            success: function (e) {
+                                if (e.response != null && e.response.length > 0) {
+                                    //set server fiel name
+                                    options.model[options.field] = e.response[0].ServerName;
+                                    //enable made changes
+                                    options.model.dirty = true;
+                                }
+                            },
+                            complete: function (e) {
+                                //enable lost focus
+                                oFileExit = true;
+                            },
+                            select: function (e) {
+                                //disable lost focus while upload file
+                                oFileExit = false;
+                            },
+                        });
+                    $(container).focusout(function () {
+                        if (oFileExit == false) {
+                            //mantain file input focus
+                            $('#files').focus();
+                        }
+                    });
+                },
+            }, {
+                field: 'CH_TypeDocument',
+                title: 'Tipo Documento',
+                width: '180px',
                 validation: { required: true },
                 template: function (dataItem) {
                     var oReturn = 'Seleccione una opción.';
-                    if (dataItem != null && dataItem.CH_Year != null) {
-                        $.each(Provider_CompanyHSEQObject.YearOptionList, function (item, value) {
-                            if (dataItem.CH_Year == value) {
-                                oReturn = value;
+                    if (dataItem != null && dataItem.CH_TypeDocumentId != null) {
+                        $.each(Provider_CompanyHSEQObject.CH_TypeDocumentOptionList[703], function (item, value) {
+                            if (dataItem.CH_TypeDocument == value.ItemId) {
+                                oReturn = value.ItemName;
                             }
                         });
                     }
@@ -2402,554 +2445,18 @@ var Provider_CompanyHSEQObject = {
                     $('<input  data-bind="value:' + options.field + '"/>')
                         .appendTo(container)
                         .kendoDropDownList({
-                            dataSource: Provider_CompanyHSEQObject.YearOptionList,
-                            dataTextField: '',
-                            dataValueField: '',
+                            dataSource: Provider_CompanyHSEQObject.CH_TypeDocumentOptionList[703],
+                            dataTextField: 'ItemName',
+                            dataValueField: 'ItemId',
                             optionLabel: 'Seleccione una opción'
                         });
 
 
                 },
             }, {
-                field: 'CH_PoliticsSecurity',
-                title: 'Política de Seguridad, Salud y Ambiente',
-                width: '292px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem != null && dataItem.CH_PoliticsSecurity != null && dataItem.CH_PoliticsSecurity.length > 0) {
-                        if (dataItem.dirty != null && dataItem.dirty == true) {
-                            oReturn = '<span class="k-dirty"></span>';
-                        }
-                        oReturn = oReturn + $('#' + Provider_CompanyHSEQObject.ObjectId + '_File').html();
-                    }
-                    else {
-                        oReturn = $('#' + Provider_CompanyHSEQObject.ObjectId + '_NoFile').html();
-                    }
-
-                    oReturn = oReturn.replace(/\${FileUrl}/gi, dataItem.CH_PoliticsSecurity);
-
-                    return oReturn;
-                },
-                editor: function (container, options) {
-                    var oFileExit = true;
-                    $('<input type="file" id="files" name="files"/>')
-                        .appendTo(container)
-                        .kendoUpload({
-                            multiple: false,
-                            async: {
-                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                                autoUpload: true
-                            },
-                            success: function (e) {
-                                if (e.response != null && e.response.length > 0) {
-                                    //set server fiel name
-                                    options.model[options.field] = e.response[0].ServerName;
-                                    //enable made changes
-                                    options.model.dirty = true;
-                                }
-                            },
-                            complete: function (e) {
-                                //enable lost focus
-                                oFileExit = true;
-                            },
-                            select: function (e) {
-                                //disable lost focus while upload file
-                                oFileExit = false;
-                            },
-                        });
-                    $(container).focusout(function () {
-                        if (oFileExit == false) {
-                            //mantain file input focus
-                            $('#files').focus();
-                        }
-                    });
-                },
-            }, {
-                field: 'CH_PoliticIntegral',
-                title: 'Política integral de HSEQ',
-                width: '292px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem != null && dataItem.CH_PoliticIntegral != null && dataItem.CH_PoliticIntegral.length > 0) {
-                        if (dataItem.dirty != null && dataItem.dirty == true) {
-                            oReturn = '<span class="k-dirty"></span>';
-                        }
-                        oReturn = oReturn + $('#' + Provider_CompanyHSEQObject.ObjectId + '_File').html();
-                    }
-                    else {
-                        oReturn = $('#' + Provider_CompanyHSEQObject.ObjectId + '_NoFile').html();
-                    }
-
-                    oReturn = oReturn.replace(/\${FileUrl}/gi, dataItem.CH_PoliticIntegral);
-
-                    return oReturn;
-                },
-                editor: function (container, options) {
-                    var oFileExit = true;
-                    $('<input type="file" id="files" name="files"/>')
-                        .appendTo(container)
-                        .kendoUpload({
-                            multiple: false,
-                            async: {
-                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                                autoUpload: true
-                            },
-                            success: function (e) {
-                                if (e.response != null && e.response.length > 0) {
-                                    //set server fiel name
-                                    options.model[options.field] = e.response[0].ServerName;
-                                    //enable made changes
-                                    options.model.dirty = true;
-                                }
-                            },
-                            complete: function (e) {
-                                //enable lost focus
-                                oFileExit = true;
-                            },
-                            select: function (e) {
-                                //disable lost focus while upload file
-                                oFileExit = false;
-                            },
-                        });
-                    $(container).focusout(function () {
-                        if (oFileExit == false) {
-                            //mantain file input focus
-                            $('#files').focus();
-                        }
-                    });
-                },
-            }, {
-                field: 'CH_PoliticsNoAlcohol',
-                title: 'Política de no alcohol, Drogas y Fumadores',
-                width: '292px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem != null && dataItem.CH_PoliticsNoAlcohol != null && dataItem.CH_PoliticsNoAlcohol.length > 0) {
-                        if (dataItem.dirty != null && dataItem.dirty == true) {
-                            oReturn = '<span class="k-dirty"></span>';
-                        }
-                        oReturn = oReturn + $('#' + Provider_CompanyHSEQObject.ObjectId + '_File').html();
-                    }
-                    else {
-                        oReturn = $('#' + Provider_CompanyHSEQObject.ObjectId + '_NoFile').html();
-                    }
-
-                    oReturn = oReturn.replace(/\${FileUrl}/gi, dataItem.CH_PoliticsNoAlcohol);
-
-                    return oReturn;
-                },
-                editor: function (container, options) {
-                    var oFileExit = true;
-                    $('<input type="file" id="files" name="files"/>')
-                        .appendTo(container)
-                        .kendoUpload({
-                            multiple: false,
-                            async: {
-                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                                autoUpload: true
-                            },
-                            success: function (e) {
-                                if (e.response != null && e.response.length > 0) {
-                                    //set server fiel name
-                                    options.model[options.field] = e.response[0].ServerName;
-                                    //enable made changes
-                                    options.model.dirty = true;
-                                }
-                            },
-                            complete: function (e) {
-                                //enable lost focus
-                                oFileExit = true;
-                            },
-                            select: function (e) {
-                                //disable lost focus while upload file
-                                oFileExit = false;
-                            },
-                        });
-                    $(container).focusout(function () {
-                        if (oFileExit == false) {
-                            //mantain file input focus
-                            $('#files').focus();
-                        }
-                    });
-                },
-            }, {
-                field: 'CH_ProgramOccupationalHealth',
-                title: 'Sistema de Gestión de Seguridad y Salud en el Trabajo',
-                width: '292px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem != null && dataItem.CH_ProgramOccupationalHealth != null && dataItem.CH_ProgramOccupationalHealth.length > 0) {
-                        if (dataItem.dirty != null && dataItem.dirty == true) {
-                            oReturn = '<span class="k-dirty"></span>';
-                        }
-                        oReturn = oReturn + $('#' + Provider_CompanyHSEQObject.ObjectId + '_File').html();
-                    }
-                    else {
-                        oReturn = $('#' + Provider_CompanyHSEQObject.ObjectId + '_NoFile').html();
-                    }
-
-                    oReturn = oReturn.replace(/\${FileUrl}/gi, dataItem.CH_ProgramOccupationalHealth);
-
-                    return oReturn;
-                },
-                editor: function (container, options) {
-                    var oFileExit = true;
-                    $('<input type="file" id="files" name="files"/>')
-                        .appendTo(container)
-                        .kendoUpload({
-                            multiple: false,
-                            async: {
-                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                                autoUpload: true
-                            },
-                            success: function (e) {
-                                if (e.response != null && e.response.length > 0) {
-                                    //set server fiel name
-                                    options.model[options.field] = e.response[0].ServerName;
-                                    //enable made changes
-                                    options.model.dirty = true;
-                                }
-                            },
-                            complete: function (e) {
-                                //enable lost focus
-                                oFileExit = true;
-                            },
-                            select: function (e) {
-                                //disable lost focus while upload file
-                                oFileExit = false;
-                            },
-                        });
-                    $(container).focusout(function () {
-                        if (oFileExit == false) {
-                            //mantain file input focus
-                            $('#files').focus();
-                        }
-                    });
-                },
-            }, {
-                field: 'CH_RuleIndustrialSecurity',
-                title: 'Reglamento de Higiene y Seguridad Industrial',
-                width: '292px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem != null && dataItem.CH_RuleIndustrialSecurity != null && dataItem.CH_RuleIndustrialSecurity.length > 0) {
-                        if (dataItem.dirty != null && dataItem.dirty == true) {
-                            oReturn = '<span class="k-dirty"></span>';
-                        }
-                        oReturn = oReturn + $('#' + Provider_CompanyHSEQObject.ObjectId + '_File').html();
-                    }
-                    else {
-                        oReturn = $('#' + Provider_CompanyHSEQObject.ObjectId + '_NoFile').html();
-                    }
-
-                    oReturn = oReturn.replace(/\${FileUrl}/gi, dataItem.CH_RuleIndustrialSecurity);
-
-                    return oReturn;
-                },
-                editor: function (container, options) {
-                    var oFileExit = true;
-                    $('<input type="file" id="files" name="files"/>')
-                        .appendTo(container)
-                        .kendoUpload({
-                            multiple: false,
-                            async: {
-                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                                autoUpload: true
-                            },
-                            success: function (e) {
-                                if (e.response != null && e.response.length > 0) {
-                                    //set server fiel name
-                                    options.model[options.field] = e.response[0].ServerName;
-                                    //enable made changes
-                                    options.model.dirty = true;
-                                }
-                            },
-                            complete: function (e) {
-                                //enable lost focus
-                                oFileExit = true;
-                            },
-                            select: function (e) {
-                                //disable lost focus while upload file
-                                oFileExit = false;
-                            },
-                        });
-                    $(container).focusout(function () {
-                        if (oFileExit == false) {
-                            //mantain file input focus
-                            $('#files').focus();
-                        }
-                    });
-                },
-            }, {
-                field: 'CH_MatrixRiskControl',
-                title: 'Matriz de Identificación de Peligros, Evaluación y Control de Riesgos',
-                width: '292px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem != null && dataItem.CH_MatrixRiskControl != null && dataItem.CH_MatrixRiskControl.length > 0) {
-                        if (dataItem.dirty != null && dataItem.dirty == true) {
-                            oReturn = '<span class="k-dirty"></span>';
-                        }
-                        oReturn = oReturn + $('#' + Provider_CompanyHSEQObject.ObjectId + '_File').html();
-                    }
-                    else {
-                        oReturn = $('#' + Provider_CompanyHSEQObject.ObjectId + '_NoFile').html();
-                    }
-
-                    oReturn = oReturn.replace(/\${FileUrl}/gi, dataItem.CH_MatrixRiskControl);
-
-                    return oReturn;
-                },
-                editor: function (container, options) {
-                    var oFileExit = true;
-                    $('<input type="file" id="files" name="files"/>')
-                        .appendTo(container)
-                        .kendoUpload({
-                            multiple: false,
-                            async: {
-                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                                autoUpload: true
-                            },
-                            success: function (e) {
-                                if (e.response != null && e.response.length > 0) {
-                                    //set server fiel name
-                                    options.model[options.field] = e.response[0].ServerName;
-                                    //enable made changes
-                                    options.model.dirty = true;
-                                }
-                            },
-                            complete: function (e) {
-                                //enable lost focus
-                                oFileExit = true;
-                            },
-                            select: function (e) {
-                                //disable lost focus while upload file
-                                oFileExit = false;
-                            },
-                        });
-                    $(container).focusout(function () {
-                        if (oFileExit == false) {
-                            //mantain file input focus
-                            $('#files').focus();
-                        }
-                    });
-                },
-            }, {
-                field: 'CH_CorporateSocialResponsability',
-                title: 'Responsabilidad Social Empresarial',
-                width: '292px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem != null && dataItem.CH_CorporateSocialResponsability != null && dataItem.CH_CorporateSocialResponsability.length > 0) {
-                        if (dataItem.dirty != null && dataItem.dirty == true) {
-                            oReturn = '<span class="k-dirty"></span>';
-                        }
-                        oReturn = oReturn + $('#' + Provider_CompanyHSEQObject.ObjectId + '_File').html();
-                    }
-                    else {
-                        oReturn = $('#' + Provider_CompanyHSEQObject.ObjectId + '_NoFile').html();
-                    }
-
-                    oReturn = oReturn.replace(/\${FileUrl}/gi, dataItem.CH_CorporateSocialResponsability);
-
-                    return oReturn;
-                },
-                editor: function (container, options) {
-                    var oFileExit = true;
-                    $('<input type="file" id="files" name="files"/>')
-                        .appendTo(container)
-                        .kendoUpload({
-                            multiple: false,
-                            async: {
-                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                                autoUpload: true
-                            },
-                            success: function (e) {
-                                if (e.response != null && e.response.length > 0) {
-                                    //set server fiel name
-                                    options.model[options.field] = e.response[0].ServerName;
-                                    //enable made changes
-                                    options.model.dirty = true;
-                                }
-                            },
-                            complete: function (e) {
-                                //enable lost focus
-                                oFileExit = true;
-                            },
-                            select: function (e) {
-                                //disable lost focus while upload file
-                                oFileExit = false;
-                            },
-                        });
-                    $(container).focusout(function () {
-                        if (oFileExit == false) {
-                            //mantain file input focus
-                            $('#files').focus();
-                        }
-                    });
-                },
-            }, {
-                field: 'CH_ProgramEnterpriseSecurity',
-                title: 'Programa de Seguridad Empresarial y Logística',
-                width: '292px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem != null && dataItem.CH_ProgramEnterpriseSecurity != null && dataItem.CH_ProgramEnterpriseSecurity.length > 0) {
-                        if (dataItem.dirty != null && dataItem.dirty == true) {
-                            oReturn = '<span class="k-dirty"></span>';
-                        }
-                        oReturn = oReturn + $('#' + Provider_CompanyHSEQObject.ObjectId + '_File').html();
-                    }
-                    else {
-                        oReturn = $('#' + Provider_CompanyHSEQObject.ObjectId + '_NoFile').html();
-                    }
-
-                    oReturn = oReturn.replace(/\${FileUrl}/gi, dataItem.CH_ProgramEnterpriseSecurity);
-
-                    return oReturn;
-                },
-                editor: function (container, options) {
-                    var oFileExit = true;
-                    $('<input type="file" id="files" name="files"/>')
-                        .appendTo(container)
-                        .kendoUpload({
-                            multiple: false,
-                            async: {
-                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                                autoUpload: true
-                            },
-                            success: function (e) {
-                                if (e.response != null && e.response.length > 0) {
-                                    //set server fiel name
-                                    options.model[options.field] = e.response[0].ServerName;
-                                    //enable made changes
-                                    options.model.dirty = true;
-                                }
-                            },
-                            complete: function (e) {
-                                //enable lost focus
-                                oFileExit = true;
-                            },
-                            select: function (e) {
-                                //disable lost focus while upload file
-                                oFileExit = false;
-                            },
-                        });
-                    $(container).focusout(function () {
-                        if (oFileExit == false) {
-                            //mantain file input focus
-                            $('#files').focus();
-                        }
-                    });
-                },
-            }, {
-                field: 'CH_PoliticsRecruiment',
-                title: 'Política de Contratación de Personal',
-                width: '292px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem != null && dataItem.CH_PoliticsRecruiment != null && dataItem.CH_PoliticsRecruiment.length > 0) {
-                        if (dataItem.dirty != null && dataItem.dirty == true) {
-                            oReturn = '<span class="k-dirty"></span>';
-                        }
-                        oReturn = oReturn + $('#' + Provider_CompanyHSEQObject.ObjectId + '_File').html();
-                    }
-                    else {
-                        oReturn = $('#' + Provider_CompanyHSEQObject.ObjectId + '_NoFile').html();
-                    }
-
-                    oReturn = oReturn.replace(/\${FileUrl}/gi, dataItem.CH_PoliticsRecruiment);
-
-                    return oReturn;
-                },
-                editor: function (container, options) {
-                    var oFileExit = true;
-                    $('<input type="file" id="files" name="files"/>')
-                        .appendTo(container)
-                        .kendoUpload({
-                            multiple: false,
-                            async: {
-                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                                autoUpload: true
-                            },
-                            success: function (e) {
-                                if (e.response != null && e.response.length > 0) {
-                                    //set server fiel name
-                                    options.model[options.field] = e.response[0].ServerName;
-                                    //enable made changes
-                                    options.model.dirty = true;
-                                }
-                            },
-                            complete: function (e) {
-                                //enable lost focus
-                                oFileExit = true;
-                            },
-                            select: function (e) {
-                                //disable lost focus while upload file
-                                oFileExit = false;
-                            },
-                        });
-                    $(container).focusout(function () {
-                        if (oFileExit == false) {
-                            //mantain file input focus
-                            $('#files').focus();
-                        }
-                    });
-                },
-            }, {
-                field: 'CH_CertificationsForm',
-                title: 'Formulario Certificaciones',
-                width: '292px',
-                template: function (dataItem) {
-                    var oReturn = '';
-                    if (dataItem != null && dataItem.CH_CertificationsForm != null && dataItem.CH_CertificationsForm.length > 0) {
-                        if (dataItem.dirty != null && dataItem.dirty == true) {
-                            oReturn = '<span class="k-dirty"></span>';
-                        }
-                        oReturn = oReturn + $('#' + Provider_CompanyHSEQObject.ObjectId + '_File').html();
-                    }
-                    else {
-                        oReturn = $('#' + Provider_CompanyHSEQObject.ObjectId + '_NoFile').html();
-                    }
-
-                    oReturn = oReturn.replace(/\${FileUrl}/gi, dataItem.CH_CertificationsForm);
-
-                    return oReturn;
-                },
-                editor: function (container, options) {
-                    var oFileExit = true;
-                    $('<input type="file" id="files" name="files"/>')
-                        .appendTo(container)
-                        .kendoUpload({
-                            multiple: false,
-                            async: {
-                                saveUrl: BaseUrl.ApiUrl + '/FileApi?FileUpload=true&CompanyPublicId=' + Provider_CompanyHSEQObject.ProviderPublicId,
-                                autoUpload: true
-                            },
-                            success: function (e) {
-                                if (e.response != null && e.response.length > 0) {
-                                    //set server fiel name
-                                    options.model[options.field] = e.response[0].ServerName;
-                                    //enable made changes
-                                    options.model.dirty = true;
-                                }
-                            },
-                            complete: function (e) {
-                                //enable lost focus
-                                oFileExit = true;
-                            },
-                            select: function (e) {
-                                //disable lost focus while upload file
-                                oFileExit = false;
-                            },
-                        });
-                    $(container).focusout(function () {
-                        if (oFileExit == false) {
-                            //mantain file input focus
-                            $('#files').focus();
-                        }
-                    });
-                },
+                field: 'CH_Other',
+                title: 'Cual?',
+                width: '100px',
             }, {
                 field: 'CertificationId',
                 title: 'Id Interno',

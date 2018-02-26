@@ -2227,7 +2227,7 @@ namespace BackOffice.Web.Controllers
                 //header
                 oMenuAux = new Models.General.GenericMenu()
                 {
-                    Name = "Compradores relacionados",
+                    Name = "Seguimientos",
                     Position = 5,
                     ChildMenu = new List<Models.General.GenericMenu>(),
                 };
