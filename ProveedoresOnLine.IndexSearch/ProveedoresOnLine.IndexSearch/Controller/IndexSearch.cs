@@ -149,6 +149,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
             }
             catch (Exception err)
             {
+
                 LogFile("Index Process Failed for CustomerProvider: " + CustomerProviderId + err.Message + "Inner Exception::" + err.InnerException);
             }
 

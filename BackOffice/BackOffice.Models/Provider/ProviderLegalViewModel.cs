@@ -63,6 +63,8 @@ namespace BackOffice.Models.Provider
 
         public string CD_PartnerRank { get; set; }
         public string CD_PartnerRankId { get; set; }
+        public string CD_Partnerdocument { get; set; }
+        public string CD_PartnerdocumentId { get; set; }
         #endregion
 
         #region RUT
@@ -284,6 +286,18 @@ namespace BackOffice.Models.Provider
 
             CD_PartnerRankId = RelatedLegal.ItemInfo.
                 Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumLegalInfoType.CD_PartnerRank).
+                Select(y => y.ItemInfoId.ToString()).
+                DefaultIfEmpty(string.Empty).
+                FirstOrDefault();
+
+            CD_Partnerdocument = RelatedLegal.ItemInfo.
+                 Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumLegalInfoType.CD_Partnerdocument).
+                 Select(y => y.Value).
+                 DefaultIfEmpty(string.Empty).
+                 FirstOrDefault();
+
+            CD_PartnerdocumentId = RelatedLegal.ItemInfo.
+                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumLegalInfoType.CD_Partnerdocument).
                 Select(y => y.ItemInfoId.ToString()).
                 DefaultIfEmpty(string.Empty).
                 FirstOrDefault();

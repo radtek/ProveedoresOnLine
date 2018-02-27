@@ -32,8 +32,10 @@ namespace BackOffice.Models.Provider
             CPI_Enable = RelatedCustomerProviderInfo.Enable;
 
             if (!string.IsNullOrEmpty(RelatedCustomerProviderInfo.LargeValue) &&
-                    (RelatedCustomerProviderInfo.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumProviderCustomerType.CustomerMonitoring ||
+                   (RelatedCustomerProviderInfo.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumProviderCustomerType.CustomerMonitoring ||
                     RelatedCustomerProviderInfo.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumProviderCustomerType.InternalMonitoring))
+
+               // RelatedCustomerProviderInfo.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumProviderCustomerType.CustomerMonitoring)
             {
                 CPI_Tracking = (TrackingDetailViewModel)(new System.Web.Script.Serialization.JavaScriptSerializer()).
                         Deserialize(RelatedCustomerProviderInfo.LargeValue, typeof(TrackingDetailViewModel));

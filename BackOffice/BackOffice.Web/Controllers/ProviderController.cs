@@ -836,6 +836,26 @@ namespace BackOffice.Web.Controllers
                                 LargeValue = Request["SocialObject"],
                                 Enable = true
                             },
+                             new GenericItemInfoModel()
+                            {
+                                ItemInfoId =  Convert.ToInt32(Request["CompositionURLId"]),
+                                ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
+                                {
+                                    ItemId = (int)enumLegalInfoType.CP_CertificateComposition
+                                },
+                                Value = Request["CompositionURL"],
+                                Enable = true
+                            },
+                              new GenericItemInfoModel()
+                            {
+                                ItemInfoId =  Convert.ToInt32(Request["NegotiationCapacityId"]),
+                                ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
+                                {
+                                    ItemId = (int)enumLegalInfoType.CP_NegotiationCapacity
+                                },
+                                Value = Request["NegotiationCapacity"],
+                                Enable = true
+                            },
                         }
                 };
                 //Validación del archivo cuando viene desocupado en el formulario
@@ -846,7 +866,19 @@ namespace BackOffice.Web.Controllers
                         RelatedLegal.ItemInfo.Remove(RelatedLegal.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumLegalInfoType.CP_ExistenceAndLegalPersonCertificate).Select(x => x).FirstOrDefault());
                     }
                 }
+
+                if (RelatedLegal.ItemInfo != null && RelatedLegal.ItemInfo.Count() > 0)
+                {
+                    if (string.IsNullOrEmpty(RelatedLegal.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumLegalInfoType.CP_CertificateComposition).Select(x => x.Value).FirstOrDefault()))
+                    {
+                        RelatedLegal.ItemInfo.Remove(RelatedLegal.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)enumLegalInfoType.CP_CertificateComposition).Select(x => x).FirstOrDefault());
+                    }
+                }
                 return RelatedLegal;
+                
+
+               
+
             }
             return null;
         }
@@ -2097,7 +2129,7 @@ namespace BackOffice.Web.Controllers
                 //Experience
                 oMenuAux.ChildMenu.Add(new Models.General.GenericMenu()
                 {
-                    Name = "Experiencias",
+                    Name = "Referencias",
                     Url = Url.Action
                         (MVC.Provider.ActionNames.CIExperiencesUpsert,
                         MVC.Provider.Name,
@@ -2195,7 +2227,7 @@ namespace BackOffice.Web.Controllers
                 //header
                 oMenuAux = new Models.General.GenericMenu()
                 {
-                    Name = "Compradores relacionados",
+                    Name = "Seguimientos",
                     Position = 5,
                     ChildMenu = new List<Models.General.GenericMenu>(),
                 };
@@ -2277,7 +2309,7 @@ namespace BackOffice.Web.Controllers
                     //header
                     oMenuAux = new Models.General.GenericMenu()
                     {
-                        Name = "Datos Personalizados",
+                        Name = "Información Personalizada",
                         Position = 7,
                         ChildMenu = new List<Models.General.GenericMenu>(),
                     };

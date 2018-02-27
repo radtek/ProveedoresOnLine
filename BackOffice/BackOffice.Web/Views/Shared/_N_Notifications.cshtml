@@ -18,7 +18,7 @@
                 {
                     if (BackOffice.Models.General.SessionModel.ListNotifications != null)
                     {
-                        foreach (var Notification in BackOffice.Models.General.SessionModel.ListNotifications)
+                        foreach (var Notification in BackOffice.Models.General.SessionModel.ListNotifications.OrderByDescending(x => x.CreateDate))
                         {
                             var companyInfo = ProveedoresOnLine.Company.Controller.Company.CompanyGetBasicInfo(Notification.CompanyPublicId);
 

@@ -195,14 +195,14 @@ namespace MarketPlace.Web.Controllers
                     Bool(f => f
                     //.Query(qi => qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId))
                     //&& qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User)).Query(SessionModel.CurrentLoginUser.Email)))
-                    .Must(f2 =>
+                    .Should(f2 =>
                     {
                         QueryContainer qb = null;
-                        qb &= f2.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId));
-                        qb &= f2.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User)).Query(SessionModel.CurrentLoginUser.Email));
-                        qb &= f2.Term(m => m.User.ToLower(), SessionModel.CurrentLoginUser.Email.ToLower());
-                        //&& 
-                        //f2.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User.ToLower())).Query(SessionModel.CurrentLoginUser.Email.ToLower()));
+                        //qb &= f2.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId))
+                        //    && f2.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User)).Query(SessionModel.CurrentLoginUser.Email));
+
+                        //qb &= f2.Term(m => m.CustomerPublicId, SessionModel.CurrentCompany.CompanyPublicId.ToLower());
+                        //qb &= f2.Term(m => m.User, SessionModel.CurrentLoginUser.Email);
                         #region Status Srv Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y).FirstOrDefault() != null)
                         {
@@ -216,7 +216,9 @@ namespace MarketPlace.Web.Controllers
                             qb &= f2.Term(m => m.SurveyTypeId, lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyType).Select(y => y.Item1).FirstOrDefault());
                         }
                         #endregion
-                        
+
+                        qb &= f2.Term(x => x.User.ToLower(), SessionModel.CurrentLoginUser.Email.ToLower());
+
                         return qb;
                     })
                     ))

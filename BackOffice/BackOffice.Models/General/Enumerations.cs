@@ -47,6 +47,7 @@
         ResolucionesInfoType = 606,
 
         OrganizationStructure = 506,
+        HealtyPolitic = 703,
 
         ProviderStatus = 902,
 
@@ -262,6 +263,8 @@
         CP_CertificateExpeditionDate = 602007,
         CP_SocialObject = 602008,
         CP_UndefinedDate = 602012,
+        CP_NegotiationCapacity = 602013,
+        CP_CertificateComposition = 602014,
 
         //RUT
         R_PersonType = 603001,
@@ -301,6 +304,7 @@
         CD_PartnerName = 607001,
         CD_PartnerIdentificationNumber = 607002,
         CD_PartnerRank = 607003,
+        CD_Partnerdocument = 607004,
 
     }
 
@@ -330,7 +334,7 @@
         C_Rule = 702002,
         C_StartDateCertification = 702003,
         C_EndDateCertification = 702004,
-        C_CCS = 702005,
+      //  C_CCS = 702005,
         C_CertificationFile = 702006,
         C_Scope = 702007,
 
@@ -346,6 +350,16 @@
         CH_PoliticsRecruiment = 703009,
         CH_CertificationsForm = 703010,
         CH_PoliticIntegral = 703011,
+        CH_Other = 703012,
+        CH_EnvironmentalManagement = 703013,
+        CH_PoliticsSalary = 703014,
+        CH_ImplementationDangerPsicosocial = 703015,
+        CH_CertificationBeneficialExtralegal = 703016,
+        CH_SupportOfHoursExtras = 703017,
+        CH_SupportOfHoursRecreation = 703018,
+        CH_PoliticCompensation = 703019,
+        CH_PoliticDDHH = 703020,
+        CH_ReportSustainableAudit = 703021,
 
         //CompanyRiskPolicies
         CR_SystemOccupationalHazards = 704001,
