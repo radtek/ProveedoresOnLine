@@ -195,11 +195,14 @@ namespace MarketPlace.Web.Controllers
                     Bool(f => f
                     //.Query(qi => qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId))
                     //&& qi.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User)).Query(SessionModel.CurrentLoginUser.Email)))
-                    .Should(f2 =>
+                    .Must(f2 =>
                     {
                         QueryContainer qb = null;
-                        qb &= f2.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId))
-                            && f2.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User)).Query(SessionModel.CurrentLoginUser.Email));
+                        qb &= f2.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.CustomerPublicId)).Query(SessionModel.CurrentCompany.CompanyPublicId));
+                        qb &= f2.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User)).Query(SessionModel.CurrentLoginUser.Email));
+                        qb &= f2.Term(m => m.User.ToLower(), SessionModel.CurrentLoginUser.Email.ToLower());
+                        //&& 
+                        //f2.QueryString(qr => qr.Fields(fds => fds.Field(f1 => f1.User.ToLower())).Query(SessionModel.CurrentLoginUser.Email.ToLower()));
                         #region Status Srv Filters
                         if (lstSearchFilter.Where(y => int.Parse(y.Item3) == (int)enumFilterType.SurveyStatus).Select(y => y).FirstOrDefault() != null)
                         {
