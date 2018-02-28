@@ -434,7 +434,7 @@ namespace ProveedoresOnLine.CalificationBatch.DAL.MySqlDAO
                      group cpc by new
                      {
                          CalificationProjectConfigId = cpc.Field<int>("CalificationProjectConfigId"),
-                         CompanyPublicId = cpc.Field<string>("CompanyPublicId"),
+                                                 
                          CalificationProjectConfigName = cpc.Field<string>("CalificationProjectConfigName"),
                          CalificationProjectConfigEnable = cpc.Field<UInt64>("CalificationProjectConfigEnable") == 1 ? true : false,
                          CalificationProjectConfigLastModify = cpc.Field<DateTime>("CalificationProjectConfigLastModify"),
@@ -446,7 +446,7 @@ namespace ProveedoresOnLine.CalificationBatch.DAL.MySqlDAO
                          CalificationProjectConfigId = cpcg.Key.CalificationProjectConfigId,
                          Company = new Company.Models.Company.CompanyModel()
                          {
-                             CompanyPublicId = cpcg.Key.CompanyPublicId,
+                             //CompanyPublicId = response.DataTableResult.Rows[0].Field<string>("CompanyPublicId"),
                          },
                          CalificationProjectConfigName = cpcg.Key.CalificationProjectConfigName,
                          Enable = cpcg.Key.CalificationProjectConfigEnable,
