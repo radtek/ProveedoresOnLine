@@ -3898,11 +3898,6 @@ namespace MarketPlace.Web.Controllers
 
             #region Basic Info
 
-            if (!string.IsNullOrEmpty(oModel.RelatedGeneralInfo.Where(x => x.PC_RepresentantType == "Legal").Select(x => x.PC_ContactName).FirstOrDefault()))
-                parameters.Add(new ReportParameter("Representant", oModel.RelatedGeneralInfo.Where(x => x.PC_RepresentantType == "Legal").Select(x => x.PC_ContactName).FirstOrDefault()));
-            else
-                parameters.Add(new ReportParameter("Representant", "NA"));
-
             if (oModel.RelatedLegalInfo.Count > 0 && !string.IsNullOrEmpty(oModel.RelatedLegalInfo.Where(x => x.RelatedLegalInfo.ItemType.ItemId == (int)MarketPlace.Models.General.enumLegalType.ChaimberOfCommerce).Select(x => x.CP_InscriptionNumber).FirstOrDefault())
                 && !string.IsNullOrWhiteSpace(oModel.RelatedLegalInfo.Where(x => x.RelatedLegalInfo.ItemType.ItemId == (int)MarketPlace.Models.General.enumLegalType.ChaimberOfCommerce).Select(x => x.CP_InscriptionNumber).FirstOrDefault()))
                 parameters.Add(new ReportParameter("InscriptionNumber", oModel.RelatedLegalInfo.Where(x => x.RelatedLegalInfo.ItemType.ItemId == (int)MarketPlace.Models.General.enumLegalType.ChaimberOfCommerce).Select(x => x.CP_InscriptionNumber).FirstOrDefault()));
@@ -4213,6 +4208,38 @@ namespace MarketPlace.Web.Controllers
 
             #endregion
 
+            #region Legal Info
+            DataTable data5 = new DataTable();
+            data5.Columns.Add("Identification");
+            data5.Columns.Add("Name");
+
+            DataRow row5;
+
+
+            List<GenericItemModel> oDesignations = null;
+            oDesignations = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPLegalGetBasicInfo(oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyPublicId, (int)enumLegalType.Designations);
+            oModel.RelatedDesignationsInfo = new List<ProviderDesignationsViewModel>();
+
+            System.Globalization.TextInfo ti = System.Globalization.CultureInfo.CurrentCulture.TextInfo;
+
+            if (oDesignations != null && oDesignations.Count > 0)
+            {
+                oDesignations.All(x =>
+                {
+                    if (x.ItemInfo.Count(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumLegalInfoType.CD_PartnerRank && y.Value == "219002") > 0)
+                    {
+                        row5 = data5.NewRow();
+                        row5["Identification"] = x.ItemInfo.Where( y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumLegalInfoType.CD_PartnerIdentificationNumber).Select( y=> y.Value).SingleOrDefault();
+                        row5["Name"] = ti.ToTitleCase(x.ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumLegalInfoType.CD_PartnerName).Select(y => y.Value).SingleOrDefault().ToLower());
+                        data5.Rows.Add(row5);
+                        //oModel.RelatedDesignationsInfo.Add(new ProviderDesignationsViewModel(x));
+                    }
+                    return true;
+                });
+            }
+
+            #endregion
+
             #endregion Set Parameters
 
             string fileFormat = Request["ThirdKnowledge_cmbFormat"] != null ? Request["ThirdKnowledge_cmbFormat"].ToString() : "pdf";
@@ -4222,6 +4249,7 @@ namespace MarketPlace.Web.Controllers
                                                             data2,
                                                             data3,
                                                             data4,
+                                                            data5,
                                                             parameters,
                                                             Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim() + "C_Report_GerencialInfo.rdlc");
 

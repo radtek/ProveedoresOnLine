@@ -178,6 +178,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DS_GerencialReport_Contact.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Reports\DataSet\DS_GerencialReport_LegalRepresent.cs">
+      <DependentUpon>DS_GerencialReport_LegalRepresent.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\DataSet\DS_GerencialReport_LegalRepresent.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DS_GerencialReport_LegalRepresent.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Reports\DataSet\DS_GerencialReport_Terceros.cs">
       <DependentUpon>DS_GerencialReport_Terceros.xsd</DependentUpon>
     </Compile>
@@ -426,6 +434,17 @@
     </None>
     <None Include="Reports\DataSet\DS_GerencialReport_Contact.xss">
       <DependentUpon>DS_GerencialReport_Contact.xsd</DependentUpon>
+    </None>
+    <None Include="Reports\DataSet\DS_GerencialReport_LegalRepresent.xsc">
+      <DependentUpon>DS_GerencialReport_LegalRepresent.xsd</DependentUpon>
+    </None>
+    <None Include="Reports\DataSet\DS_GerencialReport_LegalRepresent.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DS_GerencialReport_LegalRepresent.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reports\DataSet\DS_GerencialReport_LegalRepresent.xss">
+      <DependentUpon>DS_GerencialReport_LegalRepresent.xsd</DependentUpon>
     </None>
     <None Include="Reports\DataSet\DS_GerencialReport_Terceros.xsc">
       <DependentUpon>DS_GerencialReport_Terceros.xsd</DependentUpon>

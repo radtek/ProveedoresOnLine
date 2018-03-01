@@ -2109,6 +2109,7 @@
     <Content Include="Areas\Desktop\Scripts\Angular\angular-animate.min.js.map" />
     <Content Include="Areas\Desktop\Views\ThirdKnowledge\TKMasiveDetail.cshtml" />
     <Content Include="Areas\Desktop\Views\Shared\_TK_ThirdKnowledgeMasiveDetail.cshtml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Sebastian_Martinez-Marketplace.pubxml" />
     <Content Include="T4MVC.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
