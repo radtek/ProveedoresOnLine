@@ -628,8 +628,8 @@ var Provider_CompanyContactObject = {
             scrollable: true,
             toolbar: [
                 { name: 'create', text: 'Nuevo' },
-                { name: 'save', text: 'Guardar' },
-                { name: 'cancel', text: 'Descartar' },
+                //{ name: 'save', text: 'Guardar' },
+                //{ name: 'cancel', text: 'Descartar' },
                 { name: 'ViewEnable', template: $('#' + Provider_CompanyContactObject.ObjectId + '_ViewEnablesTemplate').html() },
                 { name: 'ShortcutToolTip', template: $('#' + Provider_CompanyContactObject.ObjectId + '_ShortcutToolTipTemplate').html() },
             ],
@@ -724,7 +724,20 @@ var Provider_CompanyContactObject = {
                     kendo.ui.progress($("#loading"), false);
                 }
             },
+            editable: {
+                mode: "popup",
+                window: {
+                    title: "Sucursales",
+                }
+            },
             columns: [{
+                title: "Acciones",
+                width: "120px",
+                command: [{
+                    name: 'edit',
+                    text: 'Editar',
+                }],
+            },{
                 field: 'Enable',
                 title: 'Visible en Market Place',
                 alt: 'Visible en Market Place',
@@ -909,8 +922,8 @@ var Provider_CompanyContactObject = {
             scrollable: true,
             toolbar: [
                 { name: 'create', text: 'Nuevo' },
-                { name: 'save', text: 'Guardar' },
-                { name: 'cancel', text: 'Descartar' },
+                //{ name: 'save', text: 'Guardar' },
+                //{ name: 'cancel', text: 'Descartar' },
                 { name: 'ViewEnable', template: $('#' + Provider_CompanyContactObject.ObjectId + '_ViewEnablesTemplate').html() },
                 { name: 'ShortcutToolTip', template: $('#' + Provider_CompanyContactObject.ObjectId + '_ShortcutToolTipTemplate').html() },
             ],
@@ -1009,7 +1022,20 @@ var Provider_CompanyContactObject = {
                     kendo.ui.progress($("#loading"), false);
                 }
             },
+            editable: {
+                mode: "popup",
+                window: {
+                    title: "Distribuidores",
+                }
+            },
             columns: [{
+                title: "Acciones",
+                width: "120px",
+                command: [{
+                    name: 'edit',
+                    text: 'Editar',
+                }],
+            },{
                 field: 'Enable',
                 title: 'Visible en Market Place',
                 width: '155px',
@@ -1331,8 +1357,8 @@ var Provider_CompanyCommercialObject = {
             scrollable: true,
             toolbar: [
                 { name: 'create', text: 'Nuevo' },
-                { name: 'save', text: 'Guardar' },
-                { name: 'cancel', text: 'Descartar' },
+                //{ name: 'save', text: 'Guardar' },
+                //{ name: 'cancel', text: 'Descartar' },
                 { name: 'ViewEnable', template: $('#' + Provider_CompanyCommercialObject.ObjectId + '_ViewEnablesTemplate').html() },
                 { name: 'ShortcutToolTip', template: $('#' + Provider_CompanyCommercialObject.ObjectId + '_ShortcutToolTipTemplate').html() },
             ],
@@ -1439,7 +1465,20 @@ var Provider_CompanyCommercialObject = {
                     kendo.ui.progress($("#loading"), false);
                 }
             },
+            editable: {
+                mode: "popup",
+                window: {
+                    title: "Referencias",
+                }
+            },
             columns: [{
+                title: "Acciones",
+                width: "120px",
+                command: [{
+                    name: 'edit',
+                    text: 'Editar',
+                }],
+            },{
                 field: 'Enable',
                 title: 'Visible en Market Place',
                 width: '155px',
@@ -1942,8 +1981,8 @@ var Provider_CompanyHSEQObject = {
             scrollable: true,
             toolbar: [
                 { name: 'create', text: 'Nuevo' },
-                { name: 'save', text: 'Guardar' },
-                { name: 'cancel', text: 'Descartar' },
+                //{ name: 'save', text: 'Guardar' },
+                //{ name: 'cancel', text: 'Descartar' },
                 { name: 'ViewEnable', template: $('#' + Provider_CompanyHSEQObject.ObjectId + '_ViewEnablesTemplate').html() },
                 { name: 'ShortcutToolTip', template: $('#' + Provider_CompanyHSEQObject.ObjectId + '_ShortcutToolTipTemplate').html() },
             ],
@@ -2039,7 +2078,20 @@ var Provider_CompanyHSEQObject = {
                     kendo.ui.progress($("#loading"), false);
                 }
             },
+            editable: {
+                mode: "popup",
+                window: {
+                    title: "Certificaciones",
+                }
+            },
             columns: [{
+                title: "Acciones",
+                width: "120px",
+                command: [{
+                    name: 'edit',
+                    text: 'Editar',
+                }],
+            },{
                 field: 'Enable',
                 title: 'Visible en Market Place',
                 width: '155px',
@@ -3407,8 +3459,8 @@ var Provider_CompanyFinancialObject = {
             scrollable: true,
             toolbar: [
                 { name: 'create', text: 'Nuevo' },
-                { name: 'save', text: 'Guardar' },
-                { name: 'cancel', text: 'Descartar' },
+                //{ name: 'save', text: 'Guardar' },
+                //{ name: 'cancel', text: 'Descartar' },
                 { name: 'ViewEnable', template: $('#' + Provider_CompanyFinancialObject.ObjectId + '_ViewEnablesTemplate').html() },
                 { name: 'ShortcutToolTip', template: $('#' + Provider_CompanyFinancialObject.ObjectId + '_ShortcutToolTipTemplate').html() },
             ],
@@ -3499,7 +3551,20 @@ var Provider_CompanyFinancialObject = {
                     kendo.ui.progress($("#loading"), false);
                 }
             },
+            editable: {
+                mode: "popup",
+                window: {
+                    title: "Declaración de Renta",
+                }
+            },
             columns: [{
+                title: "Acciones",
+                width: "120px",
+                command: [{
+                    name: 'edit',
+                    text: 'Editar',
+                }],
+            },{
                 field: 'Enable',
                 title: 'Visible en Market Place',
                 width: '155px',
@@ -3625,8 +3690,8 @@ var Provider_CompanyFinancialObject = {
             scrollable: true,
             toolbar: [
                 { name: 'create', text: 'Nuevo' },
-                { name: 'save', text: 'Guardar' },
-                { name: 'cancel', text: 'Descartar' },
+                //{ name: 'save', text: 'Guardar' },
+                //{ name: 'cancel', text: 'Descartar' },
                 { name: 'ViewEnable', template: $('#' + Provider_CompanyFinancialObject.ObjectId + '_ViewEnablesTemplate').html() },
                 { name: 'ShortcutToolTip', template: $('#' + Provider_CompanyFinancialObject.ObjectId + '_ShortcutToolTipTemplate').html() },
             ],
@@ -3727,7 +3792,20 @@ var Provider_CompanyFinancialObject = {
                     kendo.ui.progress($("#loading"), false);
                 },
             },
+            editable: {
+                mode: "popup",
+                window: {
+                    title: "Información Bancaria.",
+                }
+            },
             columns: [{
+                title: "Acciones",
+                width: "120px",
+                command: [{
+                    name: 'edit',
+                    text: 'Editar',
+                }],
+            },{
                 field: 'Enable',
                 title: 'Visible en Market Place',
                 width: '155px',
@@ -4045,8 +4123,8 @@ var Provider_AditionalDocumentObject = {
             scrollable: true,
             toolbar: [
                 { name: 'create', text: 'Nuevo' },
-                { name: 'save', text: 'Guardar' },
-                { name: 'cancel', text: 'Descartar' },
+                //{ name: 'save', text: 'Guardar' },
+                //{ name: 'cancel', text: 'Descartar' },
                 { name: 'ViewEnable', template: $('#' + Provider_AditionalDocumentObject.ObjectId + '_ViewEnablesTemplate').html() },
                 { name: 'ShortcutToolTip', template: $('#' + Provider_AditionalDocumentObject.ObjectId + '_ShortcutToolTipTemplate').html() },
             ],
@@ -4163,7 +4241,20 @@ var Provider_AditionalDocumentObject = {
                     kendo.ui.progress($("#loading"), false);
                 }
             },
+            editable: {
+                mode: "popup",
+                window: {
+                    title: "Documentación Adicional",
+                }
+            },
             columns: [{
+                title: "Acciones",
+                width: "120px",
+                command: [{
+                    name: 'edit',
+                    text: 'Editar',
+                }],
+            },{
                 field: 'Enable',
                 title: 'Visible en Market Place',
                 width: '155px',
@@ -4714,8 +4805,8 @@ var Provider_LegalInfoObject = {
             scrollable: true,
             toolbar: [
                 { name: 'create', text: 'Nuevo' },
-                { name: 'save', text: 'Guardar datos del listado' },
-                { name: 'cancel', text: 'Descartar cambios' },
+                //{ name: 'save', text: 'Guardar datos del listado' },
+                //{ name: 'cancel', text: 'Descartar cambios' },
                 { name: 'ViewEnable', template: $('#' + Provider_LegalInfoObject.ObjectId + '_ViewEnablesTemplate').html() },
                 { name: 'ShortcutToolTip', template: $('#' + Provider_LegalInfoObject.ObjectId + '_ShortcutToolTipTemplate').html() },
             ],
@@ -4802,7 +4893,21 @@ var Provider_LegalInfoObject = {
                     kendo.ui.progress($("#loading"), false);
                 },
             },
+            editable: {
+                mode: "popup",
+                window: {
+                    title: "Socios, Miembros junta directiva, entre otros.",
+                }
+            },
             columns: [{
+                title: "Acciones",
+                width: "120px",
+                command: [{
+                    name: 'edit',
+                    text: 'Editar',
+                }],
+            }
+            ,{
                 field: 'Enable',
                 title: 'Visible en Market Place',
                 width: '155px',
@@ -4934,8 +5039,8 @@ var Provider_LegalInfoObject = {
             scrollable: true,
             toolbar: [
                 { name: 'create', text: 'Nuevo' },
-                { name: 'save', text: 'Guardar' },
-                { name: 'cancel', text: 'Descartar' },
+                //{ name: 'save', text: 'Guardar' },
+                //{ name: 'cancel', text: 'Descartar' },
                 { name: 'ViewEnable', template: $('#' + Provider_LegalInfoObject.ObjectId + '_ViewEnablesTemplate').html() },
                 { name: 'ShortcutToolTip', template: $('#' + Provider_LegalInfoObject.ObjectId + '_ShortcutToolTipTemplate').html() },
             ],
@@ -5057,7 +5162,20 @@ var Provider_LegalInfoObject = {
                     kendo.ui.progress($("#loading"), false);
                 },
             },
+            editable: {
+                mode: "popup",
+                window: {
+                    title: "Registro único tributario",
+                }
+            },
             columns: [{
+                title: "Acciones",
+                width: "120px",
+                command: [{
+                    name: 'edit',
+                    text: 'Editar',
+                }],
+            },{
                 field: 'Enable',
                 title: 'Visible en Market Place',
                 width: '180px',
@@ -5648,8 +5766,8 @@ var Provider_LegalInfoObject = {
             scrollable: true,
             toolbar: [
                 { name: 'create', text: 'Nuevo' },
-                { name: 'save', text: 'Guardar' },
-                { name: 'cancel', text: 'Descartar' },
+                //{ name: 'save', text: 'Guardar' },
+                //{ name: 'cancel', text: 'Descartar' },
                 { name: 'ViewEnable', template: $('#' + Provider_LegalInfoObject.ObjectId + '_ViewEnablesTemplate').html() },
                 { name: 'ShortcutToolTip', template: $('#' + Provider_LegalInfoObject.ObjectId + '_ShortcutToolTipTemplate').html() },
             ],
@@ -5731,7 +5849,20 @@ var Provider_LegalInfoObject = {
                     kendo.ui.progress($("#loading"), false);
                 },
             },
+            editable: {
+                mode: "popup",
+                window: {
+                    title: "SARLAFT",
+                }
+            },
             columns: [{
+                title: "Acciones",
+                width: "120px",
+                command: [{
+                    name: 'edit',
+                    text: 'Editar',
+                }],
+            },{
                 field: 'Enable',
                 title: 'Visible en Market Place',
                 width: '155px',
@@ -5855,8 +5986,8 @@ var Provider_LegalInfoObject = {
             scrollable: true,
             toolbar: [
                 { name: 'create', text: 'Nuevo' },
-                { name: 'save', text: 'Guardar' },
-                { name: 'cancel', text: 'Descartar' },
+                //{ name: 'save', text: 'Guardar' },
+                //{ name: 'cancel', text: 'Descartar' },
                 { name: 'ViewEnable', template: $('#' + Provider_LegalInfoObject.ObjectId + '_ViewEnablesTemplate').html() },
                 { name: 'ShortcutToolTip', template: $('#' + Provider_LegalInfoObject.ObjectId + '_ShortcutToolTipTemplate').html() },
             ],
@@ -5944,7 +6075,20 @@ var Provider_LegalInfoObject = {
                     kendo.ui.progress($("#loading"), false);
                 },
             },
+            editable: {
+                mode: "popup",
+                window: {
+                    title: "Resoluciones",
+                }
+            },
             columns: [{
+                title: "Acciones",
+                width: "120px",
+                command: [{
+                    name: 'edit',
+                    text: 'Editar',
+                }],
+            },{
                 field: 'Enable',
                 title: 'Visible en Market Place',
                 width: '155px',

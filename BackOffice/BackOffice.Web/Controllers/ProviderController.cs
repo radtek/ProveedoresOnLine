@@ -2221,46 +2221,14 @@ namespace BackOffice.Web.Controllers
                 oReturn.Add(oMenuAux);
 
                 #endregion
-
-                #region Customer Provider
-
-                //header
-                oMenuAux = new Models.General.GenericMenu()
-                {
-                    Name = "Seguimientos",
-                    Position = 5,
-                    ChildMenu = new List<Models.General.GenericMenu>(),
-                };
-
-                //Customer provider
-                oMenuAux.ChildMenu.Add(new Models.General.GenericMenu()
-                {
-                    Name = "Seguimiento",
-                    Url = Url.Action
-                        (MVC.Provider.ActionNames.CPCustomerProviderStatus,
-                        MVC.Provider.Name,
-                        new { ProviderPublicId = vProviderInfo.RelatedProvider.RelatedCompany.CompanyPublicId }),
-                    Position = 0,
-                    IsSelected =
-                        (oCurrentAction == MVC.Provider.ActionNames.CPCustomerProviderStatus &&
-                        oCurrentController == MVC.Provider.Name),
-                });
-
-                //get is selected menu
-                oMenuAux.IsSelected = oMenuAux.ChildMenu.Any(x => x.IsSelected);
-
-                //add menu
-                oReturn.Add(oMenuAux);
-
-                #endregion
-
+                
                 #region Aditional Document
 
                 //header
                 oMenuAux = new Models.General.GenericMenu()
                 {
                     Name = "Documentación Adicional",
-                    Position = 6,
+                    Position = 5,
                     ChildMenu = new List<Models.General.GenericMenu>(),
                 };
 
@@ -2310,7 +2278,7 @@ namespace BackOffice.Web.Controllers
                     oMenuAux = new Models.General.GenericMenu()
                     {
                         Name = "Información Personalizada",
-                        Position = 7,
+                        Position = 6,
                         ChildMenu = new List<Models.General.GenericMenu>(),
                     };
 
@@ -2343,7 +2311,7 @@ namespace BackOffice.Web.Controllers
                 oMenuAux = new Models.General.GenericMenu()
                 {
                     Name = "Proceso de Calificación",
-                    Position = 8,
+                    Position = 7,
                     ChildMenu = new List<Models.General.GenericMenu>(),
                 };
 
@@ -2358,6 +2326,38 @@ namespace BackOffice.Web.Controllers
                     Position = 0,
                     IsSelected =
                         (oCurrentAction == MVC.Provider.ActionNames.CPCProviderCalificationProjectUpsert &&
+                        oCurrentController == MVC.Provider.Name),
+                });
+
+                //get is selected menu
+                oMenuAux.IsSelected = oMenuAux.ChildMenu.Any(x => x.IsSelected);
+
+                //add menu
+                oReturn.Add(oMenuAux);
+
+                #endregion
+
+                #region Customer Provider
+
+                //header
+                oMenuAux = new Models.General.GenericMenu()
+                {
+                    Name = "Seguimientos",
+                    Position = 8,
+                    ChildMenu = new List<Models.General.GenericMenu>(),
+                };
+
+                //Customer provider
+                oMenuAux.ChildMenu.Add(new Models.General.GenericMenu()
+                {
+                    Name = "Seguimiento",
+                    Url = Url.Action
+                        (MVC.Provider.ActionNames.CPCustomerProviderStatus,
+                        MVC.Provider.Name,
+                        new { ProviderPublicId = vProviderInfo.RelatedProvider.RelatedCompany.CompanyPublicId }),
+                    Position = 0,
+                    IsSelected =
+                        (oCurrentAction == MVC.Provider.ActionNames.CPCustomerProviderStatus &&
                         oCurrentController == MVC.Provider.Name),
                 });
 
