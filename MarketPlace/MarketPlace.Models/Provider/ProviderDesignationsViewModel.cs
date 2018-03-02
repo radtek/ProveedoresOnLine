@@ -65,6 +65,23 @@ namespace MarketPlace.Models.Provider
             }
         }
 
+        public string oCD_Partnerdocument { get; set; }
+        public string CD_Partnerdocument
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(oCD_Partnerdocument))
+                {
+                    oCD_Partnerdocument =  RelatedLegalInfo.ItemInfo.
+                            Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumLegalInfoType.CD_Partnerdocument).
+                            Select(y => y.Value).
+                            DefaultIfEmpty(string.Empty).
+                            FirstOrDefault();
+                }
+                return oCD_Partnerdocument;
+            }
+        }
+
         #endregion
 
         public ProviderDesignationsViewModel(ProveedoresOnLine.Company.Models.Util.GenericItemModel RelatedLegal)
