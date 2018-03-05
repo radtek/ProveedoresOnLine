@@ -1111,7 +1111,7 @@ namespace BackOffice.Web.Controllers
                         {
                             ItemId = (int)enumFinancialType.BalanceSheetInfoType,
                         },
-                        Enable = !string.IsNullOrEmpty(Request["Enable"]),
+                        Enable = !string.IsNullOrEmpty(Request["Enable"]),           
                         ItemInfo = new List<GenericItemInfoModel>()
                         {
                             new GenericItemInfoModel()
@@ -1142,6 +1142,17 @@ namespace BackOffice.Web.Controllers
                                     ItemId = (int)enumFinancialInfoType.SH_Currency,
                                 },
                                 Value = Request["SH_Currency"],
+                                //Value = BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CurrencyExchange_USD].Value.Replace(" ", ""),
+                                Enable = true,
+                            },
+                           new GenericItemInfoModel()
+                            {
+                                ItemInfoId = string.IsNullOrEmpty(Request["SH_VoicedId"]) ? 0 : Convert.ToInt32(Request["SH_VoicedId"]),
+                                ItemInfoType = new CatalogModel()
+                                {
+                                    ItemId = (int)enumFinancialInfoType.SH_Voiced,
+                                },
+                                Value = Request["SH_Voiced"],
                                 //Value = BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CurrencyExchange_USD].Value.Replace(" ", ""),
                                 Enable = true,
                             },

@@ -26,10 +26,10 @@
         Convert.ToInt32(MarketPlace.Models.General.InternalSettings.Instance[MarketPlace.Models.General.Constants.C_Settings_CurrencyExchange_COP].Value);
 
     string oCurrentFile = Model.RelatedFinancialInfo.
-        Where(x => x.SH_HasValues && x.SH_Year == oCurrentYear.ToString()).
-        Select(x => x.SH_BalanceSheetFile).
-        DefaultIfEmpty(string.Empty).
-        FirstOrDefault();
+Where(x => x.SH_HasValues && x.SH_Year == oCurrentYear.ToString()).
+Select(x => x.SH_BalanceSheetFile).
+DefaultIfEmpty(string.Empty).
+FirstOrDefault();
 }
 @*ESTE ES EL ENVUELTO COMPLETO DE MENU LATERAL Y CONTENIDO*@
 <div class="POMPProviderGreatWrapper">
@@ -54,7 +54,7 @@
                             @if (Model.RelatedFinancialInfo != null && Model.RelatedFinancialInfo.Count > 0)
                             {
                                 foreach (var bi in Model.RelatedFinancialInfo.Where(x => !string.IsNullOrEmpty(x.SH_Year)).OrderByDescending(x => x.SH_Year))
-                                {
+                                {                                  
                                     if (bi.SH_Year == oCurrentYear.ToString())
                                     {
                                         <option selected="selected" value="@bi.SH_Year">@bi.SH_Year</option>
@@ -90,7 +90,7 @@
                             </select>
                         </li>
                     }
-                    <li>
+                   <li>
                         <div class="row">
                             <div class="col-md-6">
                                 <a class="POMPButtons" href="javascript:Provider_FinancialObject.BalanceSheet_Search('@oViewName');">Consultar</a>

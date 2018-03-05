@@ -17,46 +17,64 @@
         Model.RelatedBalanceSheetInfo.Count > 0)
     {
         <ul>
-            <!--Render header-->
             <li class="POMPBalanceSheetColumnHeaderColumn">
-                <span class="POMPBalanceSheetColumnOne">Cuentas</span>
-                @foreach (var oBalance in oBalanceToShow)
+                @if (!string.IsNullOrEmpty(oBalanceToShow.FirstOrDefault().SH_Voiced.Trim()))
                 {
-                    var lastYear = Convert.ToInt32(oBalance.SH_Year) - 1;
-                    if (oBalanceToShow.Count == 1)
+                     if (oBalanceToShow.FirstOrDefault().SH_Voiced == ((int)MarketPlace.Models.General.enumCategoryInfoType.BI_Millions).ToString())
                     {
-                        <span class="POMPBalanceSheetColumnTwo">
-                            Año @lastYear
-                        </span>
-                        <span class="POMPBalanceSheetColumnThree">
-                            Análisis Vertical % @lastYear
-                        </span>
-                        <span class="POMPBalanceSheetColumnTwo">
-                            Año @oBalance.SH_Year
-                        </span>
-                        <span class="POMPBalanceSheetColumnThree">
-                            Análisis Vertical % @oBalance.SH_Year
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="POMPBalanceSheetColumnTwo">
-                            Año @oBalance.SH_Year
-                        </span>
-                        <span class="POMPBalanceSheetColumnThree">
-                            Análisis Vertical % @oBalance.SH_Year
-                        </span>
+                        <center><span class="POMPBalanceSheetColumnOne">BALANCE EXPRESADO EN MILLONES</span></center>
                     }
                 }
-                <span class="POMPBalanceSheetColumnFour">Análisis Horizontal</span>
+                @if (!string.IsNullOrEmpty(oBalanceToShow.FirstOrDefault().SH_Voiced.Trim()))
+                {
+                    if (oBalanceToShow.FirstOrDefault().SH_Voiced == ((int)MarketPlace.Models.General.enumCategoryInfoType.BI_Thousand).ToString())
+                    {
+                        <center><span class="POMPBalanceSheetColumnOne">BALANCE EXPRESADO EN MILES</span></center>
+                    }
+                }
             </li>
-            <!--Render content-->
-            @foreach (var oBalanceInfo in Model.RelatedBalanceSheetInfo)
-            {                
-                <li>
-                    @Html.Partial(MVC.Desktop.Shared.Views._P_FI_BalanceItem, oBalanceInfo)
-                </li>
-            }
         </ul>
+            <ul>
+                <!--Render header-->
+                <li class="POMPBalanceSheetColumnHeaderColumn">
+                    <span class="POMPBalanceSheetColumnOne">Cuentas</span>
+                    @foreach (var oBalance in oBalanceToShow)
+                    {
+                        var lastYear = Convert.ToInt32(oBalance.SH_Year) - 1;
+                        if (oBalanceToShow.Count == 1)
+                        {
+                            <span class="POMPBalanceSheetColumnTwo">
+                                Año @lastYear
+                            </span>
+                                <span class="POMPBalanceSheetColumnThree">
+                                    Análisis Vertical % @lastYear
+                                </span>
+                                <span class="POMPBalanceSheetColumnTwo">
+                                    Año @oBalance.SH_Year
+                                </span>
+                                <span class="POMPBalanceSheetColumnThree">
+                                    Análisis Vertical % @oBalance.SH_Year
+                                </span>
+                        }
+                        else
+                        {
+                            <span class="POMPBalanceSheetColumnTwo">
+                                Año @oBalance.SH_Year
+                            </span>
+                                <span class="POMPBalanceSheetColumnThree">
+                                    Análisis Vertical % @oBalance.SH_Year
+                                </span>
+                        }
+                    }
+                    <span class="POMPBalanceSheetColumnFour">Análisis Horizontal</span>
+                </li>
+                <!--Render content-->
+                @foreach (var oBalanceInfo in Model.RelatedBalanceSheetInfo)
+                    {
+                    <li>
+                        @Html.Partial(MVC.Desktop.Shared.Views._P_FI_BalanceItem, oBalanceInfo)
+                    </li>
+                }
+            </ul>
     }
 }

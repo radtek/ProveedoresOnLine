@@ -9,6 +9,7 @@
         ActivityInfoType = 102,
         ProductType = 103,
         CoinType = 108,
+        ValueVoiced = 509,
         FilterType = 111,
         FilterTypeCustomerProvider = 112,
 
@@ -390,7 +391,8 @@
         //Balance Sheet
         SH_Year = 502001,
         SH_BalanceSheetFile = 502002,
-        SH_Currency = 502003,
+        SH_Currency = 502003,   
+        SH_Voiced  = 502004,
 
         //Taxes Info
         TX_Year = 503001,

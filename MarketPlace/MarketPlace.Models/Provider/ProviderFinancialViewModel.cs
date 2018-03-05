@@ -68,6 +68,23 @@ namespace MarketPlace.Models.Provider
             }
         }
 
+        private string oSH_Voiced;
+        public string SH_Voiced
+        {
+            get
+            {
+                if (RelatedBalanceSheetInfo != null && string.IsNullOrEmpty(oSH_Voiced))
+                {
+                    oSH_Voiced = RelatedBalanceSheetInfo.ItemInfo.
+                               Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumFinancialInfoType.SH_Voiced).
+                               Select(y => y.Value).
+                               DefaultIfEmpty(string.Empty).
+                               FirstOrDefault();
+                }
+                return oSH_Voiced;
+            }
+        }
+
         private bool? oSH_HasValues;
         public bool SH_HasValues
         {
@@ -553,7 +570,7 @@ namespace MarketPlace.Models.Provider
                 return oCurrency;
             }
         }
-
+       
         #endregion
 
         public ProviderFinancialViewModel(ProveedoresOnLine.Company.Models.Util.GenericItemModel RelatedFinancial)

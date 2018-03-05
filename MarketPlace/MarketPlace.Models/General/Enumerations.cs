@@ -113,6 +113,10 @@
         PDF = 120002,
         TXT = 120003,
         CSV = 120004,
+
+        //ValueIn? Thousand or Millions
+        BI_Thousand = 121001,
+        BI_Millions = 121002,
     }
 
     #endregion
@@ -136,7 +140,7 @@
         AlertRisk = 203008,
         OtherProviders = 203010,
         CheckDigit = 203013,
-        CustomData = 203019,
+        CustomData = 203019,       
 
         CustomEconomicActivity = 220001,
     }
@@ -342,6 +346,7 @@
         SH_Year = 502001,
         SH_BalanceSheetFile = 502002,
         SH_Currency = 502003,
+        SH_Voiced = 502004,
 
         //Taxes Info
         TX_Year = 503001,

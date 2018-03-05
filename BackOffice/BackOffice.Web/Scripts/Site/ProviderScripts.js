@@ -3434,7 +3434,7 @@ var Provider_CompanyFinancialObject = {
                     oFormHtml = oFormHtml.replace(/\${FinancialId}/gi, oFiancialId);
                     $('#' + Provider_CompanyFinancialObject.ObjectId + '_Detail').html(oFormHtml);
                     $('#' + Provider_CompanyFinancialObject.ObjectId + '_Detail').hide();
-
+                    
                     //init form controls
                     if (dataItem != null) {
                         $('#' + Provider_CompanyFinancialObject.ObjectId + '_Detail_Form_FinancialName_' + oFiancialId).val(dataItem.FinancialName);
@@ -3446,6 +3446,8 @@ var Provider_CompanyFinancialObject = {
                         $('#' + Provider_CompanyFinancialObject.ObjectId + '_Detail_Form_SH_CurrencyId_' + oFiancialId).val(dataItem.SH_CurrencyId);
                         $('#' + Provider_CompanyFinancialObject.ObjectId + '_Detail_Form_SH_Currency_' + oFiancialId).val(dataItem.SH_Currency);
 
+                        $('#' + Provider_CompanyFinancialObject.ObjectId + '_Detail_Form_SH_VoicedId_' + oFiancialId).val(dataItem.SH_VoicedId);
+                        $('#' + Provider_CompanyFinancialObject.ObjectId + '_Detail_Form_SH_Voiced_' + oFiancialId).val(dataItem.SH_Voiced);                 
                         $('#' + Provider_CompanyFinancialObject.ObjectId + '_Detail_Form_SH_BalanceSheetFile_' + oFiancialId).val(dataItem.SH_BalanceSheetFile);
                         $('#' + Provider_CompanyFinancialObject.ObjectId + '_Detail_Form_SH_BalanceSheetFileId_' + oFiancialId).val(dataItem.SH_BalanceSheetFileId);
                         $('#' + Provider_CompanyFinancialObject.ObjectId + '_Detail_Form_SH_BalanceSheetFileLink_' + oFiancialId).attr('href', dataItem.SH_BalanceSheetFile);
@@ -3461,6 +3463,8 @@ var Provider_CompanyFinancialObject = {
                         $('#' + Provider_CompanyFinancialObject.ObjectId + '_Detail_Form_SH_CurrencyId_' + oFiancialId).val('');
                         $('#' + Provider_CompanyFinancialObject.ObjectId + '_Detail_Form_SH_Currency_' + oFiancialId).val('');
 
+                        $('#' + Provider_CompanyFinancialObject.ObjectId + '_Detail_Form_SH_VoicedId_' + oFiancialId).val('');
+                        $('#' + Provider_CompanyFinancialObject.ObjectId + '_Detail_Form_SH_Voiced_' + oFiancialId).val('');
                         $('#' + Provider_CompanyFinancialObject.ObjectId + '_Detail_Form_SH_BalanceSheetFile_' + oFiancialId).val('');
                         $('#' + Provider_CompanyFinancialObject.ObjectId + '_Detail_Form_SH_BalanceSheetFileId_' + oFiancialId).val('');
                         $('#' + Provider_CompanyFinancialObject.ObjectId + '_Detail_Form_SH_BalanceSheetFileLink_' + oFiancialId).attr('href', '');

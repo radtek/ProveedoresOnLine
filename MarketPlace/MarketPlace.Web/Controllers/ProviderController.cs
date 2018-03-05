@@ -4214,7 +4214,7 @@ namespace MarketPlace.Web.Controllers
             #endregion
 
             #endregion Set Parameters
-
+            //ToDo sync - pull
             string fileFormat = Request["ThirdKnowledge_cmbFormat"] != null ? Request["ThirdKnowledge_cmbFormat"].ToString() : "pdf";
             Tuple<byte[], string, string> GerencialReport = ProveedoresOnLine.Reports.Controller.ReportModule.CP_GerencialReport(
                                                             fileFormat,
@@ -5643,7 +5643,7 @@ namespace MarketPlace.Web.Controllers
             int oYear = 0;
             if (oModel.RelatedCertificationBasicInfo != null && oModel.RelatedCertificationBasicInfo.Count > 0)
                 oYear = Int32.Parse(oModel.RelatedFinancialInfo.Where(x => x.SH_Year != null).Select(x => x.SH_Year).DefaultIfEmpty(null).FirstOrDefault());
-
+                        
             int oCurrencyValidate = 0;
 
             int oCurrencyType = !string.IsNullOrEmpty(Request["Currency"]) && int.TryParse(Request["Currency"].ToString(), out oCurrencyValidate) == true ?

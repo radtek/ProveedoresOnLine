@@ -104,10 +104,22 @@
                         <input id="divBalanceSheet_Detail_Form_SH_CurrencyId_${FinancialId}" name="SH_CurrencyId" type="hidden" />
                     </li>
                     <li>
+                        <label>Valor es expresado en:</label>
+                        <select id="divBalanceSheet_Detail_Form_SH_Voiced_${FinancialId}" name="SH_Voiced">
+                           
+                            @foreach (var oItem in Model.ProviderOptions.Where(x => x.CatalogId == 121).OrderBy(x => x.ItemName))
+                            {
+                                <option value="@oItem.ItemId">@oItem.ItemName</option>
+                                
+                            }
+                        </select>
+                        <input id="divBalanceSheet_Detail_Form_SH_VoicedId_${FinancialId}" name="SH_VoicedId" type="hidden" />
+                    </li>
+                    <li>
                         <label>Habilitado:</label>
                         <input id="divBalanceSheet_Detail_Form_Enable_${FinancialId}" name="Enable" type="checkbox" checked="checked" />
                     </li>
-                </ul>
+               </ul>
                 @*AQUI SE INSERTAN LOS CAMPOS DE DATOS FINANCIEROS*@
                 <ul class="POBOBalanceSheet_DetailWrapper">
                     <li class="POBOBalanceSheet_Detail" id="divBalanceSheet_Detail_Form_Accounts_${FinancialId}">

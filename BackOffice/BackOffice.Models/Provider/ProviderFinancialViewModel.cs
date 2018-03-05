@@ -21,12 +21,14 @@ namespace BackOffice.Models.Provider
         public string SH_Year { get; set; }
         public string SH_YearId { get; set; }
 
-        public string SH_BalanceSheetFile { get; set; }
+               public string SH_BalanceSheetFile { get; set; }
         public string SH_BalanceSheetFileId { get; set; }
 
         public string SH_Currency { get; set; }
         public string SH_CurrencyId { get; set; }
 
+        public string SH_Voiced { get; set; }
+        public string SH_VoicedId { get; set; }
         #endregion
 
         #region Taxes
@@ -121,7 +123,7 @@ namespace BackOffice.Models.Provider
                 DefaultIfEmpty(string.Empty).
                 FirstOrDefault();
 
-            SH_BalanceSheetFile = RelatedFinancial.ItemInfo.
+           SH_BalanceSheetFile = RelatedFinancial.ItemInfo.
                 Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumFinancialInfoType.SH_BalanceSheetFile).
                 Select(y => y.Value).
                 DefaultIfEmpty(string.Empty).
@@ -144,6 +146,20 @@ namespace BackOffice.Models.Provider
                 Select(y => y.ItemInfoId.ToString()).
                 DefaultIfEmpty(string.Empty).
                 FirstOrDefault();
+
+            SH_Voiced = RelatedFinancial.ItemInfo.
+                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumFinancialInfoType.SH_Voiced).
+                Select(y => y.Value).
+                DefaultIfEmpty(string.Empty).
+                FirstOrDefault();
+
+            SH_VoicedId = RelatedFinancial.ItemInfo.
+                Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumFinancialInfoType.SH_Voiced).
+                Select(y => y.ItemInfoId.ToString()).
+                DefaultIfEmpty(string.Empty).
+                FirstOrDefault();
+
+
 
             #endregion
 

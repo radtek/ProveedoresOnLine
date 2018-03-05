@@ -1607,7 +1607,7 @@ namespace BackOffice.Web.ControllersApi
                         Enable = true,
                     });
 
-                    oProvider.RelatedFinantial.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
+                 oProvider.RelatedFinantial.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
                     {
                         ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.IS_GrossIncomeId) ? 0 : Convert.ToInt32(oDataToUpsert.IS_GrossIncomeId.Trim()),
                         ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
@@ -3186,6 +3186,25 @@ namespace BackOffice.Web.ControllersApi
                         },
                     };
 
+                    CustomerModel uCustomerModel = new CustomerModel()
+                    {
+                        RelatedCompany = oCompanyModel,
+                        RelatedProvider = new List<CustomerProviderModel>(){
+                            new CustomerProviderModel(){
+                                RelatedProvider = new ProveedoresOnLine.Company.Models.Company.CompanyModel(){
+                                    CompanyPublicId = ProviderPublicId,
+                                },
+                                Status = new CatalogModel(){
+                                    ItemId = Convert.ToInt32(System.Web.HttpContext.Current.Request.Form["SH_Voiced"]),
+                                },
+                                CustomerProviderInfo = oInfoModel,
+                                Enable = true,
+                            },
+                        },
+                    };
+
+
+
                     ProveedoresOnLine.CompanyCustomer.Controller.CompanyCustomer.CustomerProviderUpsert(oCustomerModel);
 
                     #region Index
@@ -3260,6 +3279,17 @@ namespace BackOffice.Web.ControllersApi
                                 x.Status = oModel.ProviderOptions.Where(y => y.ItemId == Convert.ToInt32(System.Web.HttpContext.Current.Request.Form["SH_Currency"])).Select(y => y.ItemName).DefaultIfEmpty(string.Empty).FirstOrDefault();
                                 return true;
                             });
+                    }
+
+                    if (oCompanyIndexModel.oCustomerProviderIndexModel.Any(x => x.CustomerPublicId == customer))
+                    {
+                        oCompanyIndexModel.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == customer).All(x =>
+                        {
+                            x.ProviderPublicId = ProviderPublicId;
+                            x.StatusId = Convert.ToInt32(System.Web.HttpContext.Current.Request.Form["SH_Voiced"]);
+                            x.Status = oModel.ProviderOptions.Where(y => y.ItemId == Convert.ToInt32(System.Web.HttpContext.Current.Request.Form["SH_Voiced"])).Select(y => y.ItemName).DefaultIfEmpty(string.Empty).FirstOrDefault();
+                            return true;
+                        });
                     }
 
                     ICreateIndexResponse oElasticResponse = client.CreateIndex(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_CompanyIndex].Value, c => c
@@ -3348,6 +3378,17 @@ namespace BackOffice.Web.ControllersApi
                                     x.ProviderPublicId = ProviderPublicId;
                                     x.StatusId = Convert.ToInt32(System.Web.HttpContext.Current.Request.Form["SH_Currency"]);
                                     x.Status = oModel.ProviderOptions.Where(y => y.ItemId == Convert.ToInt32(System.Web.HttpContext.Current.Request.Form["SH_Currency"])).Select(y => y.ItemName).DefaultIfEmpty(string.Empty).FirstOrDefault();
+                                    return true;
+                                });
+                            }
+
+                            if (oCompanySurveyIndexModel.oCustomerProviderIndexModel.Any(x => x.CustomerPublicId == customer))
+                            {
+                                oCompanySurveyIndexModel.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == customer).All(x =>
+                                {
+                                    x.ProviderPublicId = ProviderPublicId;
+                                    x.StatusId = Convert.ToInt32(System.Web.HttpContext.Current.Request.Form["SH_Voiced"]);
+                                    x.Status = oModel.ProviderOptions.Where(y => y.ItemId == Convert.ToInt32(System.Web.HttpContext.Current.Request.Form["SH_Voiced"])).Select(y => y.ItemName).DefaultIfEmpty(string.Empty).FirstOrDefault();
                                     return true;
                                 });
                             }
