@@ -4241,7 +4241,6 @@ namespace MarketPlace.Web.Controllers
             #endregion
 
             #endregion Set Parameters
-            //ToDo sync - pull
             string fileFormat = Request["ThirdKnowledge_cmbFormat"] != null ? Request["ThirdKnowledge_cmbFormat"].ToString() : "pdf";
             Tuple<byte[], string, string> GerencialReport = ProveedoresOnLine.Reports.Controller.ReportModule.CP_GerencialReport(
                                                             fileFormat,
