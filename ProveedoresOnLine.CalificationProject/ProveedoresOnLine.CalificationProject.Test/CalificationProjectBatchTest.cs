@@ -183,7 +183,7 @@ namespace ProveedoresOnLine.CalificationProject.Test
         public void GetCalificationProjectConfigByCustomer()
         {
             List<ProveedoresOnLine.CalificationProject.Models.CalificationProject.CalificationProjectConfigModel> oReturn =
-                ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectConfig_GetByCustomerPublicId("DA5C572E", true);
+                ProveedoresOnLine.CalificationBatch.Controller.CalificationProjectBatch.CalificationProjectConfig_GetByCustomerPublicId("8A342927", true);
 
             Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
         }

@@ -67,8 +67,9 @@
 
         //ger CertificationTypeValues
         string oHealtyPoliticsOptionList = "[]";
+        string oCH_TypeDocumentOptionList = "[]";
         if (Model.ProviderOptions != null &&
-            Model.ProviderOptions.Count > 0)
+                Model.ProviderOptions.Count > 0)
         {
             Dictionary<int, List<ProveedoresOnLine.Company.Models.Util.CatalogModel>> oOptionoHealtyPoliticsOption =
                 Model.ProviderOptions.
@@ -82,26 +83,42 @@
 
             oHealtyPoliticsOptionList = (new System.Web.Script.Serialization.JavaScriptSerializer()).
                 Serialize(oOptionoHealtyPoliticsOption.Select(x => new { Key = x.Key, Value = x.Value }));
+
+            Dictionary<int, List<ProveedoresOnLine.Company.Models.Util.CatalogModel>> CH_TypeDocumentOptionList =
+                        Model.ProviderOptions.
+                        Where(x => x.CatalogId == (int)BackOffice.Models.General.enumCatalog.HealtyPolitic).
+                        GroupBy(x => x.CatalogId).
+                        Select(x =>
+                            new
+                            {
+                                okey = x.Key,
+                                ovalue = Model.ProviderOptions.Where(y => y.CatalogId == x.Key && y.ItemId != (int)BackOffice.Models.General.enumHSEQInfoType.CH_Year).OrderBy(y => y.ItemName).ToList(),
+                            }).ToDictionary(k => k.okey, v => v.ovalue);
+
+            oCH_TypeDocumentOptionList = (new System.Web.Script.Serialization.JavaScriptSerializer()).
+                        Serialize(CH_TypeDocumentOptionList.Select(x => new { Key = x.Key, Value = x.Value }));
+
         }
 
         string oYearList = "[]";
         Dictionary<int, string> oYearOption = new Dictionary<int, string>();
         int i = 0;
         for (int date = DateTime.Now.Year; date >= (DateTime.Now.Year - 19); date--)
-        {            
+        {
             oYearOption.Add(i, date.ToString());
             i++;
         }
 
         oYearOption = oYearOption.ToDictionary(k => k.Key, v => v.Value);
-        
+
         oYearList = (new System.Web.Script.Serialization.JavaScriptSerializer()).
             Serialize(oYearOption.Select(x => new {Key = x.Key, Value = x.Value}));
     }
 
-    <script type="text/javascript">
+<script type="text/javascript">
         var vYearOptionList = @(Html.Raw(oYearList));
         var vHealtyPoliticsOptionList = @(Html.Raw(oHealtyPoliticsOptionList));
+        var vCH_TypeDocumentOptionList = @(Html.Raw(oCH_TypeDocumentOptionList));
         $(document).ready(function () {
             Provider_CompanyHSEQObject.Init({
                 ObjectId: 'divGridHealtyPolitics',
@@ -110,8 +127,9 @@
                 DateFormat: '@(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_Kendo].Value)',
                 HSEQOptionList: vHealtyPoliticsOptionList,
                 YearOptionList: vYearOptionList,
+                CH_TypeDocumentOptionList: vCH_TypeDocumentOptionList,
             });
             Provider_CompanyHSEQObject.RenderAsync();
         });
-    </script>
+</script>
 }

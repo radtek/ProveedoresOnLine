@@ -1022,9 +1022,37 @@ namespace BackOffice.Web.ControllersApi
                         oARL = ProveedoresOnLine.Company.Controller.Company.CategorySearchByARLCompany(null, 0, 0);
                     }
 
+                    List<int> ArrayDocuments = new List<int>();
+
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticsSecurity);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticsNoAlcohol);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_ProgramOccupationalHealth);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_RuleIndustrialSecurity);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_MatrixRiskControl);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_CorporateSocialResponsability);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_ProgramEnterpriseSecurity);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticsRecruiment);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_CertificationsForm);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticIntegral);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_Other);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_EnvironmentalManagement);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticsSalary);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_ImplementationDangerPsicosocial);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_CertificationBeneficialExtralegal);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_SupportOfHoursExtras);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_SupportOfHoursRecreation);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticCompensation);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticDDHH);
+                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_ReportSustainableAudit);
+
                     oCertification.All(x =>
-                        {
-                            oReturn.Add(new BackOffice.Models.Provider.ProviderHSEQViewModel(x, oRule, oCompanyRule, oARL));
+                        {                            
+                            x.ItemInfo.
+                                Where(y => ArrayDocuments.Count(f => f == y.ItemInfoType.ItemId) > 0).All(t => {
+                                    oReturn.Add(new BackOffice.Models.Provider.ProviderHSEQViewModel(x, oRule, oCompanyRule, oARL, t.ItemInfoType.ItemId));
+                                    return true;
+                                });
+
                             return true;
                         });
                 }
@@ -1042,7 +1070,7 @@ namespace BackOffice.Web.ControllersApi
         {
             BackOffice.Models.Provider.ProviderHSEQViewModel oReturn = null;
 
-
+            int TypeDocumentId = 0;
 
             List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> oRule = null;
             List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> oCompanyRule = null;
@@ -1072,6 +1100,8 @@ namespace BackOffice.Web.ControllersApi
                     (new System.Web.Script.Serialization.JavaScriptSerializer()).
                     Deserialize(System.Web.HttpContext.Current.Request["DataToUpsert"],
                                 typeof(BackOffice.Models.Provider.ProviderHSEQViewModel));
+
+                TypeDocumentId = Convert.ToInt32(oDataToUpsert.CH_TypeDocument);
 
                 ProveedoresOnLine.CompanyProvider.Models.Provider.ProviderModel oProvider = new ProveedoresOnLine.CompanyProvider.Models.Provider.ProviderModel()
                 {
@@ -1188,133 +1218,16 @@ namespace BackOffice.Web.ControllersApi
 
                     oProvider.RelatedCertification.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
                     {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CH_PoliticsSecurityId) ? 0 : Convert.ToInt32(oDataToUpsert.CH_PoliticsSecurityId.Trim()),
+                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CH_DocumentId) ? 0 : Convert.ToInt32(oDataToUpsert.CH_DocumentId.Trim()),
                         ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
                         {
-                            ItemId = (int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticsSecurity
+                            ItemId = Convert.ToInt32(oDataToUpsert.CH_TypeDocument)
                         },
-                        Value = oDataToUpsert.CH_PoliticsSecurity,
+                        Value = oDataToUpsert.CH_Document,
+                        LargeValue = oDataToUpsert.CH_Other,
                         Enable = true,
                     });
-
-                    lstUsedFiles.Add(oDataToUpsert.CH_PoliticsSecurity);
-
-                    oProvider.RelatedCertification.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CH_PoliticIntegralId) ? 0 : Convert.ToInt32(oDataToUpsert.CH_PoliticIntegralId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticIntegral
-                        },
-                        Value = oDataToUpsert.CH_PoliticIntegral,
-                        Enable = true,
-                    });
-
-                    lstUsedFiles.Add(oDataToUpsert.CH_PoliticIntegral);
-
-                    oProvider.RelatedCertification.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CH_PoliticsNoAlcoholId) ? 0 : Convert.ToInt32(oDataToUpsert.CH_PoliticsNoAlcoholId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticsNoAlcohol
-                        },
-                        Value = oDataToUpsert.CH_PoliticsNoAlcohol,
-                        Enable = true,
-                    });
-
-                    lstUsedFiles.Add(oDataToUpsert.CH_PoliticsNoAlcohol);
-
-                    oProvider.RelatedCertification.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CH_ProgramOccupationalHealthId) ? 0 : Convert.ToInt32(oDataToUpsert.CH_ProgramOccupationalHealthId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumHSEQInfoType.CH_ProgramOccupationalHealth
-                        },
-                        Value = oDataToUpsert.CH_ProgramOccupationalHealth,
-                        Enable = true,
-                    });
-
-                    lstUsedFiles.Add(oDataToUpsert.CH_ProgramOccupationalHealth);
-
-                    oProvider.RelatedCertification.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CH_RuleIndustrialSecurityId) ? 0 : Convert.ToInt32(oDataToUpsert.CH_RuleIndustrialSecurityId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumHSEQInfoType.CH_RuleIndustrialSecurity
-                        },
-                        Value = oDataToUpsert.CH_RuleIndustrialSecurity,
-                        Enable = true,
-                    });
-
-                    lstUsedFiles.Add(oDataToUpsert.CH_RuleIndustrialSecurity);
-
-                    oProvider.RelatedCertification.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CH_MatrixRiskControlId) ? 0 : Convert.ToInt32(oDataToUpsert.CH_MatrixRiskControlId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumHSEQInfoType.CH_MatrixRiskControl
-                        },
-                        Value = oDataToUpsert.CH_MatrixRiskControl,
-                        Enable = true,
-                    });
-
-                    lstUsedFiles.Add(oDataToUpsert.CH_MatrixRiskControl);
-
-                    oProvider.RelatedCertification.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CH_CorporateSocialResponsabilityId) ? 0 : Convert.ToInt32(oDataToUpsert.CH_CorporateSocialResponsabilityId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumHSEQInfoType.CH_CorporateSocialResponsability
-                        },
-                        Value = oDataToUpsert.CH_CorporateSocialResponsability,
-                        Enable = true,
-                    });
-
-                    lstUsedFiles.Add(oDataToUpsert.CH_CorporateSocialResponsability);
-
-                    oProvider.RelatedCertification.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CH_ProgramEnterpriseSecurityId) ? 0 : Convert.ToInt32(oDataToUpsert.CH_ProgramEnterpriseSecurityId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumHSEQInfoType.CH_ProgramEnterpriseSecurity
-                        },
-                        Value = oDataToUpsert.CH_ProgramEnterpriseSecurity,
-                        Enable = true,
-                    });
-
-                    lstUsedFiles.Add(oDataToUpsert.CH_ProgramEnterpriseSecurity);
-
-                    oProvider.RelatedCertification.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CH_PoliticsRecruimentId) ? 0 : Convert.ToInt32(oDataToUpsert.CH_PoliticsRecruimentId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticsRecruiment
-                        },
-                        Value = oDataToUpsert.CH_PoliticsRecruiment,
-                        Enable = true,
-                    });
-
-                    lstUsedFiles.Add(oDataToUpsert.CH_PoliticsRecruiment);
-
-                    oProvider.RelatedCertification.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
-                    {
-                        ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.CH_CertificationsFormId) ? 0 : Convert.ToInt32(oDataToUpsert.CH_CertificationsFormId.Trim()),
-                        ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                        {
-                            ItemId = (int)BackOffice.Models.General.enumHSEQInfoType.CH_CertificationsForm
-                        },
-                        Value = oDataToUpsert.CH_CertificationsForm,
-                        Enable = true,
-                    });
-
-                    lstUsedFiles.Add(oDataToUpsert.CH_CertificationsForm);
+                    
                 }
                 else if (oProvider.RelatedCertification.FirstOrDefault().ItemType.ItemId == (int)BackOffice.Models.General.enumHSEQType.CompanyRiskPolicies)
                 {
@@ -1440,7 +1353,7 @@ namespace BackOffice.Web.ControllersApi
                 //register used files
                 LogManager.ClientLog.FileUsedCreate(lstUsedFiles);
 
-                oReturn = new Models.Provider.ProviderHSEQViewModel(oProvider.RelatedCertification.FirstOrDefault(), oRule, oCompanyRule, oARL);
+                oReturn = new Models.Provider.ProviderHSEQViewModel(oProvider.RelatedCertification.FirstOrDefault(), oRule, oCompanyRule, oARL, TypeDocumentId);
             }
 
 

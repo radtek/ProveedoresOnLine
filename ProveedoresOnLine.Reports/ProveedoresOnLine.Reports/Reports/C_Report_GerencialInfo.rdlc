@@ -198,7 +198,7 @@
           </Textbox>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
-        <Top>34.01916cm</Top>
+        <Top>34.97166cm</Top>
         <Left>0.10846cm</Left>
         <Height>3.42188cm</Height>
         <Width>16.87202cm</Width>
@@ -1215,7 +1215,7 @@
           </Tablix>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
-        <Top>23.96131cm</Top>
+        <Top>24.91381cm</Top>
         <Left>0.10846cm</Left>
         <Height>9.87893cm</Height>
         <Width>16.87202cm</Width>
@@ -2081,7 +2081,7 @@
           </Textbox>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
-        <Top>17.24378cm</Top>
+        <Top>18.19628cm</Top>
         <Left>0.09144cm</Left>
         <Height>6.40885cm</Height>
         <Width>16.88904cm</Width>
@@ -2695,7 +2695,7 @@
           </Textbox>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
-        <Top>13.45913cm</Top>
+        <Top>14.41163cm</Top>
         <Left>0.10846cm</Left>
         <Height>3.46715cm</Height>
         <Width>16.87202cm</Width>
@@ -2776,7 +2776,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Representante legal:</Value>
+                    <Value>Representantes legales:</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                     </Style>
@@ -2786,7 +2786,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox12</rd:DefaultName>
-            <Top>1.02645cm</Top>
+            <Top>1.20256cm</Top>
             <Left>0.82001cm</Left>
             <Height>0.6cm</Height>
             <Width>3.68371cm</Width>
@@ -2819,7 +2819,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox12</rd:DefaultName>
-            <Top>1.80284cm</Top>
+            <Top>2.75534cm</Top>
             <Left>0.80404cm</Left>
             <Height>0.6cm</Height>
             <Width>3.69968cm</Width>
@@ -2852,7 +2852,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox12</rd:DefaultName>
-            <Top>2.54395cm</Top>
+            <Top>3.49645cm</Top>
             <Left>0.80409cm</Left>
             <Height>0.6cm</Height>
             <Width>3.69968cm</Width>
@@ -2887,7 +2887,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>SocialObject</rd:DefaultName>
-            <Top>3.32034cm</Top>
+            <Top>4.27284cm</Top>
             <Left>0.80062cm</Left>
             <Height>0.81167cm</Height>
             <Width>15.80701cm</Width>
@@ -2920,7 +2920,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>InscriptionNumber</rd:DefaultName>
-            <Top>2.54395cm</Top>
+            <Top>3.49645cm</Top>
             <Left>4.73973cm</Left>
             <Height>0.6cm</Height>
             <Width>11.8679cm</Width>
@@ -2953,7 +2953,7 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>InscriptionNumber</rd:DefaultName>
-            <Top>1.80284cm</Top>
+            <Top>2.75534cm</Top>
             <Left>4.73973cm</Left>
             <Height>0.6cm</Height>
             <Width>5.17126cm</Width>
@@ -2968,43 +2968,122 @@
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
-          <Textbox Name="Representant">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=Parameters!Representant.Value</Value>
-                    <Style>
-                      <FontFamily>Segoe UI Light</FontFamily>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Representant</rd:DefaultName>
-            <Top>1.06173cm</Top>
-            <Left>4.73973cm</Left>
+          <Tablix Name="Tablix1">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>0.88501cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>14.90261cm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.6cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Identification">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>* </Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI Light</FontFamily>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Identification</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Name">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Name.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI Light</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Name</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <Group Name="Details" />
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>DS_GerencialReport_LegalRepresent</DataSetName>
+            <Top>1.97895cm</Top>
+            <Left>0.82001cm</Left>
             <Height>0.6cm</Height>
-            <Width>11.8679cm</Width>
+            <Width>15.78762cm</Width>
             <ZIndex>7</ZIndex>
             <Style>
               <Border>
+                <Color>White</Color>
                 <Style>None</Style>
               </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
             </Style>
-          </Textbox>
+          </Tablix>
         </ReportItems>
         <KeepTogether>true</KeepTogether>
         <Top>8.89497cm</Top>
         <Left>0.0824cm</Left>
-        <Height>4.42305cm</Height>
+        <Height>5.34027cm</Height>
         <Width>16.89808cm</Width>
         <ZIndex>4</ZIndex>
         <Style>
@@ -3524,7 +3603,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox64</rd:DefaultName>
-        <Top>37.85979cm</Top>
+        <Top>38.81229cm</Top>
         <Left>0.67025cm</Left>
         <Height>1.558cm</Height>
         <Width>15.67477cm</Width>
@@ -3952,7 +4031,7 @@
         </Style>
       </Rectangle>
       <Line Name="Line9">
-        <Top>37.75395cm</Top>
+        <Top>38.70645cm</Top>
         <Left>0.20358cm</Left>
         <Height>0cm</Height>
         <Width>16.73228cm</Width>
@@ -4031,7 +4110,7 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>15.51881in</Height>
+    <Height>15.89381in</Height>
     <Style>
       <Border>
         <Style>None</Style>
@@ -4157,7 +4236,7 @@ Parameters!CustomerName.Value + System.Environment.NewLine  + Parameters!Custome
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox9</rd:DefaultName>
-          <Top>0.17639cm</Top>
+          <Top>0.17638cm</Top>
           <Left>0.88644cm</Left>
           <Height>0.97042cm</Height>
           <Width>15.5844cm</Width>
@@ -4226,6 +4305,13 @@ Parameters!CustomerName.Value + System.Environment.NewLine  + Parameters!Custome
         <ConnectString>/* Local Connection */</ConnectString>
       </ConnectionProperties>
       <rd:DataSourceID>8a24bf5d-96f7-42b5-91e9-33676826b9b7</rd:DataSourceID>
+    </DataSource>
+    <DataSource Name="DS_GerencialReport_LegalRepresent">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>88931cfa-6168-4ad0-88d0-fea1e516065e</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
@@ -4357,6 +4443,30 @@ Parameters!CustomerName.Value + System.Environment.NewLine  + Parameters!Custome
         <rd:TableAdapterName />
       </rd:DataSetInfo>
     </DataSet>
+    <DataSet Name="DS_GerencialReport_LegalRepresent">
+      <Query>
+        <DataSourceName>DS_GerencialReport_LegalRepresent</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Identification">
+          <DataField>Identification</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Name">
+          <DataField>Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>DS_GerencialReport_LegalRepresent</rd:DataSetName>
+        <rd:SchemaPath>C:\Users\Yamile García Vega\source\repos\ProveedoresOnLine\ProveedoresOnLine.Reports\ProveedoresOnLine.Reports\Reports\DataSet\DS_GerencialReport_LegalRepresent.xsd</rd:SchemaPath>
+        <rd:TableName>DS_GeneralReport_LegalRepresent</rd:TableName>
+        <rd:TableAdapterFillMethod />
+        <rd:TableAdapterGetDataMethod />
+        <rd:TableAdapterName />
+      </rd:DataSetInfo>
+    </DataSet>
   </DataSets>
   <ReportParameters>
     <ReportParameter Name="CustomerName">
@@ -4364,10 +4474,6 @@ Parameters!CustomerName.Value + System.Environment.NewLine  + Parameters!Custome
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="CustomerIdentification">
-      <DataType>String</DataType>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="Representant">
       <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>

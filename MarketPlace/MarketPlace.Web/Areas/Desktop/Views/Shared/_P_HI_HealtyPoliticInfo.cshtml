@@ -7,92 +7,170 @@
 
         @if (Model.RelatedHSEQlInfo != null && Model.RelatedHSEQlInfo.Count > 0)
         {
-            foreach (var item in Model.RelatedHSEQlInfo.Where(cer => cer.HSEQType == MarketPlace.Models.General.enumHSEQType.CompanyHealtyPolitic))
-            {
-                <div class="row POMPSectionTitlesBox">
-                    <div class="col-sm-12 ">
-                        @if (!string.IsNullOrEmpty(item.CH_Year))
+            <div class="container-fluid POMPProviderDetailContainer">
+
+                <div class="row row-eq-height" style="margin-top:30px;">
+
+                    @foreach (var item in Model.RelatedHSEQlInfo.Where(cer => cer.HSEQType == MarketPlace.Models.General.enumHSEQType.CompanyHealtyPolitic))
+                    {
+                        if (!string.IsNullOrEmpty(item.CH_PoliticsSecurity))
                         {
-                            <strong>Año @item.CH_Year</strong>
-                        }
-                        else
-                        {
-                            <strong>N/D</strong>
-                        }
-                    </div>
-                </div>
-                <br />
-                <div class="container-fluid POMPProviderDetailContainer">
-                    <div class="row">
-                        @if (!string.IsNullOrEmpty(item.CH_PoliticsSecurity))
-                        {
-                            <div class="col-sm-4 POMPBorderbottom POMPProviderBoxInfo POMPResumeItem_FilesPolicies_Top">
-                                    <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_PoliticsSecurity">Ver Archivo de Política de Seguridad, Salud y Ambiente</a>
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_PoliticsSecurity">Ver Archivo de Política de Seguridad, Salud y Ambiente</a>
+                                <br /><br />
                             </div>
                         }
-                        @if (!string.IsNullOrEmpty(item.CH_PoliticIntegral))
+                        if (!string.IsNullOrEmpty(item.CH_PoliticIntegral))
                         {
-                            <div class="col-sm-4 POMPBorderbottom POMPProviderBoxInfo POMPResumeItem_FilesPolicies_Top">
+                            <div class="col-xs-4">
                                 <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_PoliticIntegral">Ver Archivo de Política integral de HSEQ</a>
+                                <br /><br />
                             </div>
                         }
-                        @if (!string.IsNullOrEmpty(item.CH_PoliticsNoAlcohol))
+                        if (!string.IsNullOrEmpty(item.CH_PoliticsNoAlcohol))
                         {
-                        <div class="col-sm-4 POMPBorderbottom POMPProviderBoxInfo POMPResumeItem_FilesPolicies_Top">
-                            <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_PoliticsNoAlcohol">Ver Archivo de Política de no alcohol, Drogas y Fumadores</a>
-                        </div>
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_PoliticsNoAlcohol">Ver Archivo de Política de no alcohol, Drogas y Fumadores</a>
+                                <br /><br />
+                            </div>
                         }
-                        @if (!string.IsNullOrEmpty(item.CH_ProgramOccupationalHealth))
+                        if (!string.IsNullOrEmpty(item.CH_ProgramOccupationalHealth))
                         {
-                        <div class="col-sm-4 POMPBorderbottom POMPProviderBoxInfo POMPResumeItem_FilesPolicies_Top">
-                            <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_ProgramOccupationalHealth">Ver Archivo de Sistema de Gestión de Seguridad y Salud en el Trabajo</a>
-                        </div>
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_ProgramOccupationalHealth">Ver Archivo de Sistema de Gestión de Seguridad y Salud en el Trabajo</a>
+                                <br /><br />
+                            </div>
                         }
-                        @if (!string.IsNullOrEmpty(item.CH_RuleIndustrialSecurity))
+                        if (!string.IsNullOrEmpty(item.CH_RuleIndustrialSecurity))
                         {
-                        <div class="col-sm-4 POMPBorderbottom POMPProviderBoxInfo POMPResumeItem_FilesPolicies_Top">
-                            <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_RuleIndustrialSecurity">Ver Archivo de Reglamento de Higiene y Seguridad Industrial</a>
-                        </div>
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_RuleIndustrialSecurity">Ver Archivo de Reglamento de Higiene y Seguridad Industrial</a>
+                                <br /><br />
+                            </div>
                         }
-                        @if (!string.IsNullOrEmpty(item.CH_MatrixRiskControl))
+                        if (!string.IsNullOrEmpty(item.CH_MatrixRiskControl))
                         {
-                        <div class="col-sm-4 POMPBorderbottom POMPProviderBoxInfo POMPResumeItem_FilesPolicies_Top">
-                            <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_MatrixRiskControl">Ver Archivo de Matriz de Identificación de Peligros, Evaluación y Control de Riesgos</a>
-                        </div>
-                        }
-
-                        @if (!string.IsNullOrEmpty(item.CH_CorporateSocialResponsability))
-                        {
-                        <div class="col-sm-4 POMPBorderbottom POMPProviderBoxInfo POMPResumeItem_FilesPolicies_Top">
-                            <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_CorporateSocialResponsability">Ver Archivo de Responsabilidad Social Empresarial</a>
-                        </div>
-                        }
-                        @if (!string.IsNullOrEmpty(item.CH_ProgramEnterpriseSecurity))
-                        {
-                        <div class="col-sm-4 POMPBorderbottom POMPProviderBoxInfo POMPResumeItem_FilesPolicies_Top">
-                            <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_ProgramEnterpriseSecurity">Ver Archivo de Programa de Seguridad Empresarial y Logística</a>
-                        </div>
-                        }
-                        @if (!string.IsNullOrEmpty(item.CH_PoliticsRecruiment))
-                        {
-                        <div class="col-sm-4 POMPBorderbottom POMPProviderBoxInfo POMPResumeItem_FilesPolicies_Top">
-                            <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_PoliticsRecruiment">Ver Archivo de Política de Contratación de Personal</a>
-                        </div>
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_MatrixRiskControl">Ver Archivo de Matriz de Identificación de Peligros, Evaluación y Control de Riesgos</a>
+                                <br /><br />
+                            </div>
                         }
 
-                        @if (!string.IsNullOrEmpty(item.CH_CertificationsForm))
+                        if (!string.IsNullOrEmpty(item.CH_CorporateSocialResponsability))
                         {
-                        <div class="col-sm-4  POMPProviderBoxInfo POMPResumeItem_FilesPolicies_Top">
-                            <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_CertificationsForm">Ver Archivo de Formulario Certificaciones</a>
-                        </div>
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_CorporateSocialResponsability">Ver Archivo de Responsabilidad Social Empresarial</a>
+                                <br /><br />
+                            </div>
                         }
-                    </div>
-                    <br />
+                        if (!string.IsNullOrEmpty(item.CH_ProgramEnterpriseSecurity))
+                        {
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_ProgramEnterpriseSecurity">Ver Archivo de Programa de Seguridad Empresarial y Logística</a>
+                                <br /><br />
+                            </div>
+                        }
+                        if (!string.IsNullOrEmpty(item.CH_PoliticsRecruiment))
+                        {
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_PoliticsRecruiment">Ver Archivo de Política de Contratación de Personal</a>
+                                <br /><br />
+                            </div>
+                        }
+
+                        if (!string.IsNullOrEmpty(item.CH_CertificationsForm))
+                        {
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_CertificationsForm">Ver Archivo de Formulario Certificaciones</a>
+                                <br /><br />
+                            </div>
+                        }
+
+                        if (!string.IsNullOrEmpty(item.CH_Other))
+                        {
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_Other">Ver Archivo de @item.CH_OtherWhat</a>
+                                <br /><br />
+                            </div>
+                        }
+
+                        if (!string.IsNullOrEmpty(item.CH_EnvironmentalManagement))
+                        {
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_EnvironmentalManagement">Ver Archivo de Sistema de gestión ambiental</a>
+                                <br /><br />
+                            </div>
+                        }
+
+                        if (!string.IsNullOrEmpty(item.CH_PoliticsSalary))
+                        {
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_PoliticsSalary">Ver Archivo de Políticas de Nómina y contratación</a>
+                                <br /><br />
+                            </div>
+                        }
+
+                        if (!string.IsNullOrEmpty(item.CH_ImplementationDangerPsicosocial))
+                        {
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_ImplementationDangerPsicosocial">Ver Archivo de Implementación de riesgo Psicosocial</a>
+                                <br /><br />
+                            </div>
+                        }
+
+                        if (!string.IsNullOrEmpty(item.CH_CertificationBeneficialExtralegal))
+                        {
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_CertificationBeneficialExtralegal">Ver Archivo de Certificación si cuenta con beneficios extralegales y bajo qué modelo los tiene pacto, convención y plan de beneficios</a>
+                                <br /><br />
+                            </div>
+                        }
+
+                        if (!string.IsNullOrEmpty(item.CH_SupportOfHoursExtras))
+                        {
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_SupportOfHoursExtras">Ver Archivo de Resolución de horas extras (Resolución del ministerio)</a>
+                                <br /><br />
+                            </div>
+                        }
+
+                        if (!string.IsNullOrEmpty(item.CH_SupportOfHoursRecreation))
+                        {
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_SupportOfHoursRecreation">Ver Archivo de Soporte de horas recreativas art 21 de la ley 50 de 1990</a>
+                                <br /><br />
+                            </div>
+                        }
+
+                        if (!string.IsNullOrEmpty(item.CH_PoliticCompensation))
+                        {
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_PoliticCompensation">Ver Archivo de Política de compensación y de atracción</a>
+                                <br /><br />
+                            </div>
+                        }
+
+                        if (!string.IsNullOrEmpty(item.CH_PoliticDDHH))
+                        {
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_PoliticDDHH">Ver Archivo de Política o declaración de DDHH - Firmada por el representante legal</a>
+                                <br /><br />
+                            </div>
+                        }
+
+                        if (!string.IsNullOrEmpty(item.CH_ReportSustainableAudit))
+                        {
+                            <div class="col-xs-4">
+                                <a class="POMPProviderDocumetIcon" target="_blank" href="@item.CH_ReportSustainableAudit">Ver Archivo de Informe de sostenibilidad auditado</a>
+                                <br /><br />
+                            </div>
+                        }
+
+                    }
                 </div>
                 <br />
-
-
-            }
+            </div>
+            <br />
         }
     </div>
 }

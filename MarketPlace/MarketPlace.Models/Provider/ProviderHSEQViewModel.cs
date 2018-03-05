@@ -328,6 +328,193 @@ namespace MarketPlace.Models.Provider
             }
         }
 
+        private string oCH_Other;
+        public string CH_Other
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(oCH_Other))
+                {
+                    oCH_Other = RelatedHSEQInfo.ItemInfo.
+                        Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumHSEQInfoType.CH_Other).
+                        Select(y => y.Value).
+                        DefaultIfEmpty(string.Empty).
+                        FirstOrDefault();
+                }
+                return oCH_Other;
+            }
+        }
+
+        private string oCH_OtherWhat;
+        public string CH_OtherWhat
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(oCH_OtherWhat))
+                {
+                    oCH_OtherWhat = RelatedHSEQInfo.ItemInfo.
+                        Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumHSEQInfoType.CH_Other).
+                        Select(y => y.LargeValue).
+                        DefaultIfEmpty(string.Empty).
+                        FirstOrDefault();
+                }
+                return oCH_OtherWhat;
+            }
+        }
+
+        private string oCH_EnvironmentalManagement;
+        public string CH_EnvironmentalManagement
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(oCH_EnvironmentalManagement))
+                {
+                    oCH_EnvironmentalManagement = RelatedHSEQInfo.ItemInfo.
+                        Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumHSEQInfoType.CH_EnvironmentalManagement).
+                        Select(y => y.Value).
+                        DefaultIfEmpty(string.Empty).
+                        FirstOrDefault();
+                }
+                return oCH_EnvironmentalManagement;
+            }
+        }
+
+        private string oCH_PoliticsSalary;
+        public string CH_PoliticsSalary
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(oCH_PoliticsSalary))
+                {
+                    oCH_PoliticsSalary = RelatedHSEQInfo.ItemInfo.
+                        Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumHSEQInfoType.CH_PoliticsSalary).
+                        Select(y => y.Value).
+                        DefaultIfEmpty(string.Empty).
+                        FirstOrDefault();
+                }
+                return oCH_PoliticsSalary;
+            }
+        }
+
+        private string oCH_ImplementationDangerPsicosocial;
+        public string CH_ImplementationDangerPsicosocial
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(oCH_ImplementationDangerPsicosocial))
+                {
+                    oCH_ImplementationDangerPsicosocial = RelatedHSEQInfo.ItemInfo.
+                        Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumHSEQInfoType.CH_ImplementationDangerPsicosocial).
+                        Select(y => y.Value).
+                        DefaultIfEmpty(string.Empty).
+                        FirstOrDefault();
+                }
+                return oCH_ImplementationDangerPsicosocial;
+            }
+        }
+
+        private string oCH_CertificationBeneficialExtralegal;
+        public string CH_CertificationBeneficialExtralegal
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(oCH_CertificationBeneficialExtralegal))
+                {
+                    oCH_CertificationBeneficialExtralegal = RelatedHSEQInfo.ItemInfo.
+                        Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumHSEQInfoType.CH_CertificationBeneficialExtralegal).
+                        Select(y => y.Value).
+                        DefaultIfEmpty(string.Empty).
+                        FirstOrDefault();
+                }
+                return oCH_CertificationBeneficialExtralegal;
+            }
+        }
+
+        private string oCH_SupportOfHoursExtras;
+        public string CH_SupportOfHoursExtras
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(oCH_SupportOfHoursExtras))
+                {
+                    oCH_SupportOfHoursExtras = RelatedHSEQInfo.ItemInfo.
+                        Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumHSEQInfoType.CH_SupportOfHoursExtras).
+                        Select(y => y.Value).
+                        DefaultIfEmpty(string.Empty).
+                        FirstOrDefault();
+                }
+                return oCH_SupportOfHoursExtras;
+            }
+        }
+
+        private string oCH_SupportOfHoursRecreation;
+        public string CH_SupportOfHoursRecreation
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(oCH_SupportOfHoursRecreation))
+                {
+                    oCH_SupportOfHoursRecreation = RelatedHSEQInfo.ItemInfo.
+                        Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumHSEQInfoType.CH_SupportOfHoursRecreation).
+                        Select(y => y.Value).
+                        DefaultIfEmpty(string.Empty).
+                        FirstOrDefault();
+                }
+                return oCH_SupportOfHoursRecreation;
+            }
+        }
+
+        private string oCH_PoliticCompensation;
+        public string CH_PoliticCompensation
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(oCH_PoliticCompensation))
+                {
+                    oCH_PoliticCompensation = RelatedHSEQInfo.ItemInfo.
+                        Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumHSEQInfoType.CH_PoliticCompensation).
+                        Select(y => y.Value).
+                        DefaultIfEmpty(string.Empty).
+                        FirstOrDefault();
+                }
+                return oCH_PoliticCompensation;
+            }
+        }
+
+        private string oCH_PoliticDDHH;
+        public string CH_PoliticDDHH
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(oCH_PoliticDDHH))
+                {
+                    oCH_PoliticDDHH = RelatedHSEQInfo.ItemInfo.
+                        Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumHSEQInfoType.CH_PoliticDDHH).
+                        Select(y => y.Value).
+                        DefaultIfEmpty(string.Empty).
+                        FirstOrDefault();
+                }
+                return oCH_PoliticDDHH;
+            }
+        }
+
+        private string oCH_ReportSustainableAudit;
+        public string CH_ReportSustainableAudit
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(oCH_ReportSustainableAudit))
+                {
+                    oCH_ReportSustainableAudit = RelatedHSEQInfo.ItemInfo.
+                        Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumHSEQInfoType.CH_ReportSustainableAudit).
+                        Select(y => y.Value).
+                        DefaultIfEmpty(string.Empty).
+                        FirstOrDefault();
+                }
+                return oCH_ReportSustainableAudit;
+            }
+        }
+
         #endregion
 
         #region RiskPolicies

@@ -48,6 +48,7 @@
         ResolucionesInfoType = 606,
 
         OrganizationStructure = 506,
+        HealtyPolitic = 703,
 
         ProviderStatus = 902,
 
@@ -350,6 +351,16 @@
         CH_PoliticsRecruiment = 703009,
         CH_CertificationsForm = 703010,
         CH_PoliticIntegral = 703011,
+        CH_Other = 703012,
+        CH_EnvironmentalManagement = 703013,
+        CH_PoliticsSalary = 703014,
+        CH_ImplementationDangerPsicosocial = 703015,
+        CH_CertificationBeneficialExtralegal = 703016,
+        CH_SupportOfHoursExtras = 703017,
+        CH_SupportOfHoursRecreation = 703018,
+        CH_PoliticCompensation = 703019,
+        CH_PoliticDDHH = 703020,
+        CH_ReportSustainableAudit = 703021,
 
         //CompanyRiskPolicies
         CR_SystemOccupationalHazards = 704001,
