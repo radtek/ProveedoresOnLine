@@ -2458,8 +2458,11 @@ namespace BackOffice.Web.ControllersApi
                                     });
                                 return true;
                             });
-
-                        oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.AddRange(oAditionalDocumentInfo.Where(x => x.ItemId == Convert.ToInt32(oDataToUpsert.AditionalDocumentId.Trim())).SingleOrDefault().ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_RelatedCustomer));
+                        if (oAditionalDocumentInfo.Count(x => x.ItemId == Convert.ToInt32(oDataToUpsert.AditionalDocumentId.Trim())) > 0)
+                        {
+                            oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.AddRange(oAditionalDocumentInfo.Where(x => x.ItemId == Convert.ToInt32(oDataToUpsert.AditionalDocumentId.Trim())).SingleOrDefault().ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_RelatedCustomer));
+                        }
+                        
                     }
 
 
