@@ -1299,7 +1299,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=Parameters!BalanceYear.Value</Value>
+                    <Value>=Parameters!BalanceYear.Value + " - Expresado en " + IIf(Parameters!ExpressedIn.Value = "121002","Millones",IIf(Parameters!ExpressedIn.Value = "121001","Miles","Pesos"))</Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <FontSize>9pt</FontSize>
@@ -1315,9 +1315,9 @@
             </Paragraphs>
             <rd:DefaultName>BalanceYear</rd:DefaultName>
             <Top>0.15875cm</Top>
-            <Left>13.28477cm</Left>
+            <Left>10.23161cm</Left>
             <Height>0.6cm</Height>
-            <Width>2.5cm</Width>
+            <Width>6.03078cm</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
@@ -4236,7 +4236,7 @@ Parameters!CustomerName.Value + System.Environment.NewLine  + Parameters!Custome
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox9</rd:DefaultName>
-          <Top>0.17638cm</Top>
+          <Top>0.17637cm</Top>
           <Left>0.88644cm</Left>
           <Height>0.97042cm</Height>
           <Width>15.5844cm</Width>
@@ -4631,6 +4631,12 @@ Parameters!CustomerName.Value + System.Environment.NewLine  + Parameters!Custome
     </ReportParameter>
     <ReportParameter Name="ProviderImage">
       <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ExpressedIn">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>

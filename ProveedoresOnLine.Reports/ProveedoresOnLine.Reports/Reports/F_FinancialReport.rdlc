@@ -1696,7 +1696,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=Parameters!BalanceYear.Value</Value>
+                    <Value>=Parameters!BalanceYear.Value + " - Expresado en " + IIf(Parameters!ExpressedIn.Value = "121002","Millones",IIf(Parameters!ExpressedIn.Value = "121001","Miles","Pesos"))</Value>
                     <Style>
                       <FontWeight>Bold</FontWeight>
                       <Color>DimGray</Color>
@@ -1708,9 +1708,9 @@
             </Paragraphs>
             <rd:DefaultName>Textbox6</rd:DefaultName>
             <Top>0.12347cm</Top>
-            <Left>13.23667cm</Left>
+            <Left>10.14105cm</Left>
             <Height>0.6cm</Height>
-            <Width>2.99027cm</Width>
+            <Width>6.0859cm</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -1726,7 +1726,7 @@
         <KeepTogether>true</KeepTogether>
         <Top>10.24278cm</Top>
         <Left>0.06519cm</Left>
-        <Height>0.89986cm</Height>
+        <Height>0.91721cm</Height>
         <Width>16.6cm</Width>
         <ZIndex>19</ZIndex>
         <Style>
@@ -5053,6 +5053,12 @@ Parameters!CustomerName.Value + System.Environment.NewLine  + Parameters!Custome
     </ReportParameter>
     <ReportParameter Name="BalanceYear">
       <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ExpressedIn">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>

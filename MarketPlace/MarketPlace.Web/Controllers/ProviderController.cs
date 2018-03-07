@@ -940,7 +940,7 @@ namespace MarketPlace.Web.Controllers
                 //return url provider not allowed
             }
             else
-            {
+            {                
                 // GET ALL BASIC INFO
                 ProviderModel response = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPGetBasicInfo(ProviderPublicId);
 
@@ -979,6 +979,18 @@ namespace MarketPlace.Web.Controllers
                 #endregion Legal Info
 
                 #region Basic Financial Info
+
+                oModel.RelatedLiteProvider.RelatedProvider.RelatedFinantial = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPFinancialGetBasicInfo(ProviderPublicId, (int)enumFinancialType.BalanceSheetInfoType);
+                oModel.RelatedFinancialInfo = new List<ProviderFinancialViewModel>();
+
+                if (oModel.RelatedLiteProvider.RelatedProvider.RelatedFinantial != null)
+                {
+                    oModel.RelatedLiteProvider.RelatedProvider.RelatedFinantial.All(x =>
+                    {
+                        oModel.RelatedFinancialInfo.Add(new ProviderFinancialViewModel(x));
+                        return true;
+                    });
+                }
 
                 List<GenericItemModel> oFinancial = response.RelatedFinantial;
                 oModel.RelatedFinancialBasicInfo = new List<ProviderFinancialBasicInfoViewModel>();
@@ -3896,6 +3908,16 @@ namespace MarketPlace.Web.Controllers
             parameters.Add(new ReportParameter("ProviderIdentificationNumber", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationNumber));
             parameters.Add(new ReportParameter("ProviderVerificationDigit", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCompanyInfoType.CheckDigit).Select(x => x.Value).FirstOrDefault()));
 
+            if (oModel.RelatedFinancialInfo.FirstOrDefault().RelatedFinancialInfo.ItemInfo.Count(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumFinancialInfoType.SH_Voiced) > 0)
+            {
+                parameters.Add(new ReportParameter("ExpressedIn", oModel.RelatedFinancialInfo.FirstOrDefault().RelatedFinancialInfo.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumFinancialInfoType.SH_Voiced).Select(x => x.Value).SingleOrDefault()));
+            }
+            else
+            {
+                parameters.Add(new ReportParameter("ExpressedIn", ""));
+            }
+
+
             #region Basic Info
 
             if (oModel.RelatedLegalInfo.Count > 0 && !string.IsNullOrEmpty(oModel.RelatedLegalInfo.Where(x => x.RelatedLegalInfo.ItemType.ItemId == (int)MarketPlace.Models.General.enumLegalType.ChaimberOfCommerce).Select(x => x.CP_InscriptionNumber).FirstOrDefault())
@@ -5402,6 +5424,14 @@ namespace MarketPlace.Web.Controllers
             parameters.Add(new ReportParameter("ProviderName", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName));
             parameters.Add(new ReportParameter("ProviderIdentificationType", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationType.ItemName));
             parameters.Add(new ReportParameter("ProviderIdentificationNumber", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationNumber));
+            if (oModel.RelatedFinancialInfo.FirstOrDefault().RelatedBalanceSheetInfo.ItemInfo.Count(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumFinancialInfoType.SH_Voiced) > 0)
+            {
+                parameters.Add(new ReportParameter("ExpressedIn", oModel.RelatedFinancialInfo.FirstOrDefault().RelatedBalanceSheetInfo.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumFinancialInfoType.SH_Voiced).Select(x => x.Value).SingleOrDefault()));
+            }
+            else
+            {
+                parameters.Add(new ReportParameter("ExpressedIn", ""));
+            }
 
             #region Basic Info
 
