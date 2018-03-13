@@ -2402,7 +2402,7 @@ namespace MarketPlace.Web.Controllers
 
                 //get provider view model
                 oModel.RelatedLiteProvider = new ProviderLiteViewModel(oProvider);
-                oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPCompanyGetBasicInfo(ProviderPublicId);
+                //oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPCompanyGetBasicInfo(ProviderPublicId);
 
                 //get balance info
                 List<BalanceSheetModel> oBalanceAux =
@@ -5430,8 +5430,8 @@ namespace MarketPlace.Web.Controllers
             parameters.Add(new ReportParameter("ProviderVerificationDigit", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCompanyInfoType.CheckDigit).Select(x => x.Value).FirstOrDefault()));
             if (oModel.RelatedFinancialInfo != null && oModel.RelatedFinancialInfo.Count() > 0)
             {
-                if (oModel.RelatedFinancialInfo.FirstOrDefault().RelatedFinancialInfo.ItemInfo.Count(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumFinancialInfoType.SH_Voiced) > 0)
-                    parameters.Add(new ReportParameter("ExpressedIn", oModel.RelatedFinancialInfo.FirstOrDefault().RelatedFinancialInfo.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumFinancialInfoType.SH_Voiced).Select(x => x.Value).SingleOrDefault()));
+                if (oModel.RelatedFinancialInfo.FirstOrDefault().RelatedBalanceSheetInfo.ItemInfo.Count(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumFinancialInfoType.SH_Voiced) > 0)
+                    parameters.Add(new ReportParameter("ExpressedIn", oModel.RelatedFinancialInfo.FirstOrDefault().RelatedBalanceSheetInfo.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumFinancialInfoType.SH_Voiced).Select(x => x.Value).SingleOrDefault()));
                 else
                     parameters.Add(new ReportParameter("ExpressedIn", ""));
             }
