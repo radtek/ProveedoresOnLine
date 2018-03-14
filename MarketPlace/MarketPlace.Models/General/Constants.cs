@@ -227,6 +227,13 @@
         public const string C_Settings_UrlIconChulo = "UrlIconChulo";
         public const string C_Settings_UrlIconMedalla = "UrlIconMedalla";
         #endregion
+
+        #region Icons Survey Provider
+        public const string C_Settings_UrlIconClose = "UrlIconClose";
+        public const string C_Settings_UrlIconInProgress = "UrlIconInProgress";
+        public const string C_Settings_UrlIconExpired = "UrlIconExpired";
+        #endregion
+
         #endregion
 
     }

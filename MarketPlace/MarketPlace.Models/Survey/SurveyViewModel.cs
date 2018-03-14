@@ -180,6 +180,8 @@ namespace MarketPlace.Models.Survey
             }
         }
 
+        public Dictionary<string,string> SurveyStatusEvaluatorList { get; set; } 
+
         public int SurveyStartDateId
         {
             get
@@ -471,12 +473,25 @@ namespace MarketPlace.Models.Survey
                     SurveyInfo = oRelatedSurvey.SurveyInfo,
                     SurveyPublicId = oRelatedSurvey.SurveyPublicId,
                     User = oRelatedSurvey.User
-                }; 
+                };
+
+                SurveyStatusEvaluatorList = new Dictionary<string, string>();
+
+                SurveyEvaluatorList.All(x => {
+                    var SurveyUser = ProveedoresOnLine.SurveyModule.Controller.SurveyModule.SurveyGetByUser(SurveyPublicId, x);
+                    if (SurveyUser != null)
+                    {
+                        SurveyStatusEvaluatorList.Add(x, SurveyUser.SurveyInfo.Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumSurveyInfoType.Status).Select(y => y.Value).FirstOrDefault().ToString());
+                    }
+                    
+                    return true;
+                });
+
             }
             
         }
         public SurveyViewModel()
-        {
+        {   
 
         }
 
