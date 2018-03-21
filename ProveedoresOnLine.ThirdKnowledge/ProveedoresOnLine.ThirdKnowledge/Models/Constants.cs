@@ -59,5 +59,12 @@
         #endregion
 
         #endregion
+
+        #region General Search Param List
+        
+        public const string TK_ListToValidateSancioned = "TK_ListToValidateSancioned";
+
+        public const string TK_ListToValidatePEP = "TK_ListToValidatePEP";
+        #endregion
     }
 }

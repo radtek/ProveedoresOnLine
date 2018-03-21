@@ -137,6 +137,11 @@
     <key name="UrlIconAlert">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/AlertaPOL.png</key>
     <key name="UrlIconChulo">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/ChuloVerde.png</key>
     <key name="UrlIconMedalla">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/MedallaPOL.png</key>
+
+    <!--Icons Survey Provider-->
+    <key name="UrlIconClose">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/Green+point.png</key>
+    <key name="UrlIconInProgress">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/Blue+point.png</key>
+    <key name="UrlIconExpired">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/SiteImages/Red+point.png</key>
   </MarketPlace>
 </Settings>
 
