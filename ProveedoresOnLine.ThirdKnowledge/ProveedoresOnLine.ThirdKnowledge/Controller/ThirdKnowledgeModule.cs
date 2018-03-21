@@ -193,8 +193,8 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         GroupName = "RUES",
                         NameResult = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[1]) ? RUESResult.FirstOrDefault().Item2[1] : "No aparece registro en RUES",
                         IdentificationResult = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[0]) ? RUESResult.FirstOrDefault().Item2[0] : "No aparece registro en RUES",
-                        Status = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[3]) ? RUESResult.FirstOrDefault().Item2[3] : "No aparece registro en RUES",
-                        Link = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[4]) ? RUESResult.FirstOrDefault().Item2[4] : "No aparece registro en RUES",
+                        Status = "",
+                        Link = !string.IsNullOrEmpty(RUESResult.FirstOrDefault().Item2[3]) ? RUESResult.FirstOrDefault().Item2[3] : "No aparece registro en RUES",
                         ListName = "RUES",
                         ElasticId = (int)enumElasticGroupId.RUES,
                         QueryIdentification = IdType == 1 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : IdType == 2 ? (!string.IsNullOrEmpty(SearchParam) ? SearchParam : string.Empty) : string.Empty,
@@ -364,7 +364,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
 
                 return oQueryToCreate;
             }
-            catch (Exception )
+            catch (Exception ex )
             {
                 return null;
             }

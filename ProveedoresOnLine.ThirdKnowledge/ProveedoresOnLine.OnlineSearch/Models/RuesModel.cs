@@ -10,17 +10,19 @@ namespace ProveedoresOnLine.OnlineSearch.Models
     {
         public List<RuesModel> rows { get; set; }
         public string codigo_error { get; set; }
-        public string categoria_matricula { get; set; }
-        public string clase_identificacion { get; set; }
-        public int codigo_camara { get; set; }
-        public int codigo_estado { get; set; }
-        public string identificacion { get; set; }
-        public string estado { get; set; }
-        public string matricula { get; set; }
-        public string nombre_camara { get; set; }
-        public string organizacion_juridica { get; set; }
-        public string razon_social { get; set; }
-        public string tipo { get; set; }
-        public string enlaceVer { get; set; }
+        public string tipoID { get; set; }
+        public string nit { get; set; }
+        public string razSol { get; set; }
+        public string desc_camara { get; set; }
+
+        public string desc_categoria_matricula { get; set; }
+        public string detalleRM { get; set; }
+
+        public string detalleESAL { get; set; }
+
+        public string detalleRUP { get; set; }
+
+        public string detalleRNT { get; set; }
+
     } 
 }

@@ -12,34 +12,34 @@ namespace ProveedoresOnLine.OnlineSearch.Core
 {
     public class ProveedoresOnLineSIMITImplement
     {
-        //public async Task<List<Tuple<string, List<string>v, List<string>>>> Search(int IdentificationType, string Name, string IdentificationNumber)
-        //{
-        //    try
-        //    {
-        //        List<Tuple<string, List<string>, List<string>>> oDetailinfo = new List<Tuple<string, List<string>, List<string>>>();
+        public async Task<List<Tuple<string, List<string> , List<string>>>> Search(int IdentificationType, string Name, string IdentificationNumber)
+        {
+            try
+            {
+                List<Tuple<string, List<string>, List<string>>> oDetailinfo = new List<Tuple<string, List<string>, List<string>>>();
 
-        //        string Url = ProveedoresOnLine.OnlineSearch.Models.InternalSettings.Instance[ProveedoresOnLine.OnlineSearch.Models.Constants.Proc_Url].Value;
-        //        Uri uri = new Uri(Url);
+                string Url = "http://procesos.ramajudicial.gov.co/consultaprocesos/ConsultaJusticias21.aspx?EntryId=YZGGxvuiZlXxbk0HoFK%2fFNYUHGc%3d";
+                Uri uri = new Uri(Url);
 
-        //        using (var client = new HttpClient())
-        //        {
-        //            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-        //            HttpWebRequest request = HttpWebRequest.CreateHttp(Url);
+                using (var client = new HttpClient())
+                {
+                    ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                    HttpWebRequest request = HttpWebRequest.CreateHttp(Url);
 
-        //            client.BaseAddress = new Uri(Url);
-        //            client.DefaultRequestHeaders.Add("Authorization", "1M72112Z");
+                    client.BaseAddress = new Uri(Url);
+                    client.DefaultRequestHeaders.Add("Authorization", "1M72112Z");
 
-        //            HttpResponseMessage response = await client.PostAsync(Url, null);
-        //            HtmlDocument HtmlDoc = new HtmlDocument();
-        //            HtmlDoc.LoadHtml(response.Content.ReadAsStringAsync().Result);
-        //        }
+                    HttpResponseMessage response = await client.PostAsync(Url, null);
+                    HtmlDocument HtmlDoc = new HtmlDocument();
+                    HtmlDoc.LoadHtml(response.Content.ReadAsStringAsync().Result);
+                }
+                return null;
+            }
+            catch (Exception)
+            {
 
-        //    }
-        //    catch (Exception)
-        //    {
-
-        //        throw;
-        //    }
-        //}
+                throw;
+            }
+        }
     }
 }
