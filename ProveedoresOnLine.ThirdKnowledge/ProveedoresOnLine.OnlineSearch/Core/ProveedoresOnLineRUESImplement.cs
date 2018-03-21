@@ -40,18 +40,45 @@ namespace ProveedoresOnLine.OnlineSearch.Core
                     RuesModel deserializedProduct = JsonConvert.DeserializeObject<RuesModel>(stringJsonResult.FirstOrDefault());
                     if (deserializedProduct.codigo_error == "0000")
                     {
-                        HtmlDocResponse.LoadHtml(deserializedProduct.rows.FirstOrDefault().enlaceVer);
-                        var link = HtmlDocResponse.DocumentNode
-                                      .Descendants("a")
-                                      .First(x => x.Attributes["class"] != null
-                                               && x.Attributes["class"].Value == "c-blue");
+                        HtmlNode link = null;
+                        if (!string.IsNullOrEmpty(deserializedProduct.rows.FirstOrDefault().detalleRM))
+                        {
+                            HtmlDocResponse.LoadHtml(deserializedProduct.rows.FirstOrDefault().detalleRM);
+                            link = HtmlDocResponse.DocumentNode
+                                          .Descendants("a")
+                                          .First(x => x.Attributes["class"] != null
+                                                   && x.Attributes["class"].Value == "rm");
+                        }
+                        else if (!string.IsNullOrEmpty(deserializedProduct.rows.FirstOrDefault().detalleESAL))
+                        {
+                            HtmlDocResponse.LoadHtml(deserializedProduct.rows.FirstOrDefault().detalleESAL);
+                            link = HtmlDocResponse.DocumentNode
+                                          .Descendants("a")
+                                          .First(x => x.Attributes["class"] != null
+                                                   && x.Attributes["class"].Value == "esal");
+                        }
+                        else if (!string.IsNullOrEmpty(deserializedProduct.rows.FirstOrDefault().detalleRUP))
+                        {
+                            HtmlDocResponse.LoadHtml(deserializedProduct.rows.FirstOrDefault().detalleRUP);
+                            link = HtmlDocResponse.DocumentNode
+                                          .Descendants("a")
+                                          .First(x => x.Attributes["class"] != null
+                                                   && x.Attributes["class"].Value == "rup");
+                        }
+                        else if (!string.IsNullOrEmpty(deserializedProduct.rows.FirstOrDefault().detalleRNT))
+                        {
+                            HtmlDocResponse.LoadHtml(deserializedProduct.rows.FirstOrDefault().detalleRNT);
+                            link = HtmlDocResponse.DocumentNode
+                                          .Descendants("a")
+                                          .First(x => x.Attributes["class"] != null
+                                                   && x.Attributes["class"].Value == "rnt");
+                        }
 
-                        string linkPath = InternalSettings.Instance[Models.Constants.RUES_Domine].Value;
+                        string linkPath = InternalSettings.Instance[Models.Constants.RUES_Domine].Value + link.Attributes["href"].Value;
 
-                        stringResult.Add(deserializedProduct.rows.FirstOrDefault().identificacion);
-                        stringResult.Add(deserializedProduct.rows.FirstOrDefault().razon_social);
-                        stringResult.Add(deserializedProduct.rows.FirstOrDefault().matricula);
-                        stringResult.Add(deserializedProduct.rows.FirstOrDefault().estado);
+                        stringResult.Add(deserializedProduct.rows.FirstOrDefault().nit);
+                        stringResult.Add(deserializedProduct.rows.FirstOrDefault().razSol);
+                        stringResult.Add(deserializedProduct.rows.FirstOrDefault().desc_categoria_matricula);                        
                         stringResult.Add(linkPath);
                     }                                    
 
