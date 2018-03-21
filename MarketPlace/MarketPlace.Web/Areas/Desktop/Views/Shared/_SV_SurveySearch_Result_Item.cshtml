@@ -89,19 +89,23 @@
             </div>
             <br />
             <div class="row">
-                <div class="col-sm-4"><strong>Responsable</strong></div>
-                <div class="col-sm-4"><strong>Última actualización</strong></div>
-                <div class="col-sm-4"><strong>Estado</strong></div>
+                <div class="col-sm-3"><strong>Responsable</strong></div>
+                <div class="col-sm-3"><strong>Fecha de Creación</strong></div>
+                <div class="col-sm-3"><strong>Última actualización</strong></div>
+                <div class="col-sm-3"><strong>Estado</strong></div>
 
             </div>
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <span>@Model.RelatedSurvey.SurveyResponsible</span>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
+                    <span>@Model.RelatedSurvey.RelatedSurvey.CreateDate.ToString("yyyy-MM-dd")</span>
+                </div>
+                <div class="col-sm-3">
                     <span>@Model.RelatedSurvey.SurveyLastModify</span>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <span>@Model.RelatedSurvey.SurveyStatusName</span>
                 </div>
             </div>

@@ -1011,7 +1011,7 @@ namespace BackOffice.Web.ControllersApi
 
                 if (oCertification != null)
                 {
-
+                    List<int> ArrayDocuments = new List<int>();
                     if (HSEQType == ((int)BackOffice.Models.General.enumHSEQType.Certifications).ToString())
                     {
                         oRule = ProveedoresOnLine.Company.Controller.Company.CategorySearchByRules(null, 0, 0);
@@ -1021,32 +1021,33 @@ namespace BackOffice.Web.ControllersApi
                     {
                         oARL = ProveedoresOnLine.Company.Controller.Company.CategorySearchByARLCompany(null, 0, 0);
                     }
+                    else if (HSEQType == ((int)BackOffice.Models.General.enumHSEQType.CompanyHealtyPolitic).ToString())
+                    {
+                        
 
-                    List<int> ArrayDocuments = new List<int>();
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticsSecurity);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticsNoAlcohol);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_ProgramOccupationalHealth);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_RuleIndustrialSecurity);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_MatrixRiskControl);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_CorporateSocialResponsability);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_ProgramEnterpriseSecurity);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticsRecruiment);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_CertificationsForm);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticIntegral);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_Other);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_EnvironmentalManagement);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticsSalary);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_ImplementationDangerPsicosocial);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_CertificationBeneficialExtralegal);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_SupportOfHoursExtras);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_SupportOfHoursRecreation);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticCompensation);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticDDHH);
+                        ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_ReportSustainableAudit);
 
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticsSecurity);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticsNoAlcohol);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_ProgramOccupationalHealth);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_RuleIndustrialSecurity);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_MatrixRiskControl);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_CorporateSocialResponsability);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_ProgramEnterpriseSecurity);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticsRecruiment);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_CertificationsForm);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticIntegral);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_Other);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_EnvironmentalManagement);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticsSalary);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_ImplementationDangerPsicosocial);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_CertificationBeneficialExtralegal);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_SupportOfHoursExtras);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_SupportOfHoursRecreation);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticCompensation);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticDDHH);
-                    ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_ReportSustainableAudit);
-
-                    oCertification.All(x =>
-                        {                            
+                        oCertification.All(x =>
+                        {
                             x.ItemInfo.
                                 Where(y => ArrayDocuments.Count(f => f == y.ItemInfoType.ItemId) > 0).All(t => {
                                     oReturn.Add(new BackOffice.Models.Provider.ProviderHSEQViewModel(x, oRule, oCompanyRule, oARL, t.ItemInfoType.ItemId));
@@ -1055,6 +1056,14 @@ namespace BackOffice.Web.ControllersApi
 
                             return true;
                         });
+                    }
+
+                    oCertification.All(x =>
+                    {
+                        oReturn.Add(new BackOffice.Models.Provider.ProviderHSEQViewModel(x, oRule, oCompanyRule, oARL, 0));
+                        return true;
+                    });
+
                 }
             }
 
@@ -1101,7 +1110,7 @@ namespace BackOffice.Web.ControllersApi
                     Deserialize(System.Web.HttpContext.Current.Request["DataToUpsert"],
                                 typeof(BackOffice.Models.Provider.ProviderHSEQViewModel));
 
-                TypeDocumentId = Convert.ToInt32(oDataToUpsert.CH_TypeDocument);
+                TypeDocumentId = string.IsNullOrEmpty(oDataToUpsert.CH_TypeDocument) ? 0 : Convert.ToInt32(oDataToUpsert.CH_TypeDocument);
 
                 ProveedoresOnLine.CompanyProvider.Models.Provider.ProviderModel oProvider = new ProveedoresOnLine.CompanyProvider.Models.Provider.ProviderModel()
                 {
@@ -2458,8 +2467,11 @@ namespace BackOffice.Web.ControllersApi
                                     });
                                 return true;
                             });
-
-                        oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.AddRange(oAditionalDocumentInfo.Where(x => x.ItemId == Convert.ToInt32(oDataToUpsert.AditionalDocumentId.Trim())).SingleOrDefault().ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_RelatedCustomer));
+                        if (oAditionalDocumentInfo.Count(x => x.ItemId == Convert.ToInt32(oDataToUpsert.AditionalDocumentId.Trim())) > 0)
+                        {
+                            oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.AddRange(oAditionalDocumentInfo.Where(x => x.ItemId == Convert.ToInt32(oDataToUpsert.AditionalDocumentId.Trim())).SingleOrDefault().ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_RelatedCustomer));
+                        }
+                        
                     }
 
 

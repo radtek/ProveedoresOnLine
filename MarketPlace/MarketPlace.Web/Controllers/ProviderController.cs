@@ -940,7 +940,7 @@ namespace MarketPlace.Web.Controllers
                 //return url provider not allowed
             }
             else
-            {
+            {                
                 // GET ALL BASIC INFO
                 ProviderModel response = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPGetBasicInfo(ProviderPublicId);
 
@@ -979,6 +979,18 @@ namespace MarketPlace.Web.Controllers
                 #endregion Legal Info
 
                 #region Basic Financial Info
+
+                oModel.RelatedLiteProvider.RelatedProvider.RelatedFinantial = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPFinancialGetBasicInfo(ProviderPublicId, (int)enumFinancialType.BalanceSheetInfoType);
+                oModel.RelatedFinancialInfo = new List<ProviderFinancialViewModel>();
+
+                if (oModel.RelatedLiteProvider.RelatedProvider.RelatedFinantial != null)
+                {
+                    oModel.RelatedLiteProvider.RelatedProvider.RelatedFinantial.All(x =>
+                    {
+                        oModel.RelatedFinancialInfo.Add(new ProviderFinancialViewModel(x));
+                        return true;
+                    });
+                }
 
                 List<GenericItemModel> oFinancial = response.RelatedFinantial;
                 oModel.RelatedFinancialBasicInfo = new List<ProviderFinancialBasicInfoViewModel>();
@@ -2390,7 +2402,7 @@ namespace MarketPlace.Web.Controllers
 
                 //get provider view model
                 oModel.RelatedLiteProvider = new ProviderLiteViewModel(oProvider);
-                oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPCompanyGetBasicInfo(ProviderPublicId);
+                //oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPCompanyGetBasicInfo(ProviderPublicId);
 
                 //get balance info
                 List<BalanceSheetModel> oBalanceAux =
@@ -3896,6 +3908,18 @@ namespace MarketPlace.Web.Controllers
             parameters.Add(new ReportParameter("ProviderIdentificationNumber", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationNumber));
             parameters.Add(new ReportParameter("ProviderVerificationDigit", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCompanyInfoType.CheckDigit).Select(x => x.Value).FirstOrDefault()));
 
+            if (oModel.RelatedFinancialInfo != null && oModel.RelatedFinancialInfo.Count() > 0)
+            {
+                if (oModel.RelatedFinancialInfo.FirstOrDefault().RelatedFinancialInfo.ItemInfo.Count(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumFinancialInfoType.SH_Voiced) > 0)
+                    parameters.Add(new ReportParameter("ExpressedIn", oModel.RelatedFinancialInfo.FirstOrDefault().RelatedFinancialInfo.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumFinancialInfoType.SH_Voiced).Select(x => x.Value).SingleOrDefault()));
+                else
+                    parameters.Add(new ReportParameter("ExpressedIn", ""));
+            }
+            else
+            {
+                parameters.Add(new ReportParameter("ExpressedIn", "NA"));
+            }
+
             #region Basic Info
 
             if (oModel.RelatedLegalInfo.Count > 0 && !string.IsNullOrEmpty(oModel.RelatedLegalInfo.Where(x => x.RelatedLegalInfo.ItemType.ItemId == (int)MarketPlace.Models.General.enumLegalType.ChaimberOfCommerce).Select(x => x.CP_InscriptionNumber).FirstOrDefault())
@@ -5400,8 +5424,21 @@ namespace MarketPlace.Web.Controllers
 
             //ProviderInfo
             parameters.Add(new ReportParameter("ProviderName", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyName));
+            parameters.Add(new ReportParameter("ProviderImage", oModel.RelatedLiteProvider.ProviderLogoUrl));
             parameters.Add(new ReportParameter("ProviderIdentificationType", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationType.ItemName));
             parameters.Add(new ReportParameter("ProviderIdentificationNumber", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.IdentificationNumber));
+            parameters.Add(new ReportParameter("ProviderVerificationDigit", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCompanyInfoType.CheckDigit).Select(x => x.Value).FirstOrDefault()));
+            if (oModel.RelatedFinancialInfo != null && oModel.RelatedFinancialInfo.Count() > 0)
+            {
+                if (oModel.RelatedFinancialInfo.FirstOrDefault().RelatedBalanceSheetInfo.ItemInfo.Count(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumFinancialInfoType.SH_Voiced) > 0)
+                    parameters.Add(new ReportParameter("ExpressedIn", oModel.RelatedFinancialInfo.FirstOrDefault().RelatedBalanceSheetInfo.ItemInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumFinancialInfoType.SH_Voiced).Select(x => x.Value).SingleOrDefault()));
+                else
+                    parameters.Add(new ReportParameter("ExpressedIn", ""));
+            }
+            else
+            {
+                parameters.Add(new ReportParameter("ExpressedIn", "NA"));
+            }
 
             #region Basic Info
 
@@ -5430,11 +5467,6 @@ namespace MarketPlace.Web.Controllers
                 parameters.Add(new ReportParameter("Phone", oModel.RelatedGeneralInfo.Where(x => x.BR_IsPrincipal == true).Select(x => x.BR_Phone).FirstOrDefault()));
             else
                 parameters.Add(new ReportParameter("Phone", "NA"));
-
-            if (!string.IsNullOrWhiteSpace(oModel.RelatedGeneralInfo.Where(x => x.BR_IsPrincipal == true).Select(x => x.BR_Fax).FirstOrDefault()))
-                parameters.Add(new ReportParameter("Fax", oModel.RelatedGeneralInfo.Where(x => x.BR_IsPrincipal == true).Select(x => x.BR_Fax).FirstOrDefault()));
-            else
-                parameters.Add(new ReportParameter("Fax", "NA"));
 
             if (!string.IsNullOrWhiteSpace(oModel.RelatedGeneralInfo.Where(x => x.BR_IsPrincipal == true).Select(x => x.BR_Website).FirstOrDefault()))
                 parameters.Add(new ReportParameter("WebSite", oModel.RelatedGeneralInfo.Where(x => x.BR_IsPrincipal == true).Select(x => x.BR_Website).FirstOrDefault()));
@@ -5509,13 +5541,11 @@ namespace MarketPlace.Web.Controllers
             {
                 parameters.Add(new ReportParameter("SystemOccupationalHazards", oModel.RelatedHSEQlInfo.FirstOrDefault() == null || oModel.RelatedHSEQlInfo.FirstOrDefault().CR_SystemOccupationalHazards == null ? "NA" : oModel.RelatedHSEQlInfo.FirstOrDefault().CR_SystemOccupationalHazards));
                 parameters.Add(new ReportParameter("RateARL", oModel.RelatedHSEQlInfo.FirstOrDefault() == null || oModel.RelatedHSEQlInfo.FirstOrDefault().CR_RateARL == null ? "NA" : oModel.RelatedHSEQlInfo.FirstOrDefault().CR_RateARL));
-                parameters.Add(new ReportParameter("LTIFResult", oModel.RelatedHSEQlInfo.FirstOrDefault() == null || string.IsNullOrEmpty(oModel.RelatedHSEQlInfo.FirstOrDefault().CR_LTIFResult) ? "NA" : oModel.RelatedHSEQlInfo.FirstOrDefault().CR_LTIFResult));
             }
             else
             {
                 parameters.Add(new ReportParameter("SystemOccupationalHazards", oModel.RelatedHSEQlInfo.FirstOrDefault() == null || oModel.RelatedHSEQlInfo.FirstOrDefault().CR_SystemOccupationalHazards == null ? "NA" : oModel.RelatedHSEQlInfo.FirstOrDefault().CR_SystemOccupationalHazards));
                 parameters.Add(new ReportParameter("RateARL", oModel.RelatedHSEQlInfo.FirstOrDefault() == null || oModel.RelatedHSEQlInfo.FirstOrDefault().CR_RateARL == null ? "NA" : oModel.RelatedHSEQlInfo.FirstOrDefault().CR_RateARL));
-                parameters.Add(new ReportParameter("LTIFResult", oModel.RelatedHSEQlInfo.FirstOrDefault() == null || oModel.RelatedHSEQlInfo.FirstOrDefault().CR_LTIFResult == null ? "NA" : oModel.RelatedHSEQlInfo.FirstOrDefault().CR_LTIFResult));
             }
 
             #endregion HSEQ Info
@@ -5531,7 +5561,7 @@ namespace MarketPlace.Web.Controllers
                 parameters.Add(new ReportParameter("LastUpdate", oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == 203012).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault()));
             }
 
-            if (oModel.RelatedLiteProvider.ProviderAlertRisk == MarketPlace.Models.General.enumBlackListStatus.DontShowAlert)
+            if (oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCompanyInfoType.AlertRisk).Select(x => x.Value).FirstOrDefault() == ((int)MarketPlace.Models.General.enumBlackListStatus.DontShowAlert).ToString())
             {
                 parameters.Add(new ReportParameter("Alert", "No se encontraron coincidencias en listas restrictivas."));
             }
@@ -5562,19 +5592,19 @@ namespace MarketPlace.Web.Controllers
                     row5["PersonState"] = "N/A";
                     foreach (var info in item.BlackListInfo)
                     {
-                        if (info.ItemInfoType.ItemName == "RazonSocial")
+                        if (info.ItemInfoType.ItemName == "Nombre Completo")
                         {
                             row5["PersonName"] = info.Value;
                         }
                         else if (info.ItemInfoType.ItemName == "Cargo")
                         {
-                            row5["PersonCargo"] = info.Value;
+                            row5["PersonCargo"] = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(info.Value);
                         }
-                        else if (info.ItemInfoType.ItemName == "Lista")
+                        else if (info.ItemInfoType.ItemName == "Nombre de la Lista")
                         {
                             row5["PersonLista"] = info.Value;
                         }
-                        else if (info.ItemInfoType.ItemName == "Delito, cargo o resultado de la consulta")
+                        else if (info.ItemInfoType.ItemName == "Cargo o Delito")
                         {
                             row5["PersonDelito"] = info.Value;
                         }
