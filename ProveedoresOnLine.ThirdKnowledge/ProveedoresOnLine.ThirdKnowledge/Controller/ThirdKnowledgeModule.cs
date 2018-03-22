@@ -760,7 +760,48 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                 return true;
             });
 
+            PepList.All(x =>
+            {
+                ISearchResponse<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel> uSearchResult = null;
+                if (IdType != 4)
+                {
+                    uSearchResult = client.Search<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel>(s => s
+                    .TrackScores(true)
+                    .From(0)
+                    .Size(5)
+                     .Query(q => q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.TypeId)).Query(SearchaParam))
+                     && q.QueryString(qr => qr.Fields(fds => fds.Field(f => f.ListType)).Query(x))
+                     )
+                    );
+                    if (uSearchResult.Documents.Count > 0)
+                    {
+                        oSearchResultList.Add(uSearchResult);
+                    }
+                }
+                else
+                {
+                    string Searchp = SearchaParam.Replace(" ", " AND ");
+                    uSearchResult = client.Search<ProveedoresOnLine.IndexSearch.Models.ThirdknowledgeIndexSearchModel>(s => s
+                    .TrackScores(true)
+                    .From(0)
+                    .Size(1)
+                     .Query(q => q.
+                       Bool(b => b
+                        .Must(m => m.QueryString(qr => qr.Fields(fds => fds.Field(f => f.CompleteName)).Query(Searchp))
+                     && m.QueryString(qr => qr.Fields(fds => fds.Field(f => f.ListType)).Query(x.Replace(" ", " AND "))))))
+                    );
+                    if (uSearchResult.Documents.Count > 0)
+                    {
+                        oSearchResultList.Add(uSearchResult);
+                    }
+                }
+
+                return true;
+            });
+
             return oSearchResultList;
+
+
         }
 
         #endregion
