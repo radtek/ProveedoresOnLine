@@ -32,5 +32,16 @@
         }
 
         #endregion
+
+        #region Dynamic Report
+
+        public enum enumDynamicReportType
+        {
+            RP_InfoPOLReport = 2014001, 
+            RP_InfoSurveyReport = 2014002,
+            RP_InfoThirdknowLedgeReport = 2014003,
+        }
+
+        #endregion
     }
 }

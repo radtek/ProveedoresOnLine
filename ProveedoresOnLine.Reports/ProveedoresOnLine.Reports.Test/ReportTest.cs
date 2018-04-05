@@ -10,6 +10,7 @@ using System.Web;
 using System.Threading.Tasks;
 using ProveedoresOnLine.Company.Models.Util;
 using ProveedoresOnLine.SurveyModule.Models;
+using ProveedoresOnLine.Reports.Models;
 
 namespace ProveedoresOnLine.Reports.Test
 {
@@ -194,7 +195,36 @@ namespace ProveedoresOnLine.Reports.Test
                                                                                      "C:\\Users\\Yamile García Vega\\source\\repos\\ProveedoresOnLine\\ProveedoresOnLine.Reports\\ProveedoresOnLine.Reports\\Reports\\TK_Report_ThirdKnowledgeQueryNew.rdlc");
             parameters = null;            
         }
-         
+
+        #endregion
+
+        #region Dynamic Report
+
+        [TestMethod]
+        public void CC_Report_Upsert()
+        {
+            var oReturn = ProveedoresOnLine.Reports.Controller.ReportModule.CC_Report_UpSert(null, (int)Enumerations.enumDynamicReportType.RP_InfoPOLReport, "Test Report 01", "sergio.palacios@proveedoresonline.co", true);
+
+            Assert.AreEqual(true, oReturn != null);
+        }
+
+        [TestMethod]
+        public void CC_ReportInfo_Upsert()
+        {
+            var oReturn = ProveedoresOnLine.Reports.Controller.ReportModule.CC_ReportInfo_UpSert(null, "9D6133E5", (int)Enumerations.enumDynamicReportType.RP_InfoPOLReport, null,"", "", true );
+
+            Assert.AreEqual(true, oReturn != null);
+
+        }
+
+        [TestMethod]
+        public void CC_Report_GetReportPublicId()
+        {
+            var oReturn = ProveedoresOnLine.Reports.Controller.ReportModule.CC_Report_GetReportPublicId(null);
+
+            Assert.AreEqual(true, oReturn != null);
+
+        }
         #endregion
 
 

@@ -118,5 +118,23 @@ namespace ProveedoresOnLine.Reports.DAL.Controller
         }
 
         #endregion
+
+        #region Dynamic Report
+
+        public string CC_Report_UpSert(string ReportPublic, int ReportType, string ReportName, string User, bool Enable)
+        {
+            return DataFactory.CC_Report_UpSert(ReportPublic, ReportType, ReportName, User, Enable);
+        }
+
+        public string CC_ReportInfo_UpSert(string ReportInfoId, string ReportPublic, int ReportInfoType, string Parent, string Value, string LargeValue, bool Enable)
+        {
+            return DataFactory.CC_ReportInfo_UpSert(ReportInfoId, ReportPublic, ReportInfoType, Parent, Value, LargeValue, Enable);
+        }
+
+        public List<ProveedoresOnLine.Reports.Models.Reports.ConfigReportModel> CC_Report_GetReportPublicId(string ConfigReportId)
+        {
+            return DataFactory.CC_Report_GetReportPublicId(ConfigReportId);
+        }
+        #endregion
     }
 }

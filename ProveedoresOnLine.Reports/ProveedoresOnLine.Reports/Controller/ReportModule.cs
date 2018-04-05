@@ -985,6 +985,25 @@ namespace ProveedoresOnLine.Reports.Controller
 
         #endregion
 
+        #region Dynamic Report
+
+        public static string CC_Report_UpSert(string ReportPublic, int ReportType, string ReportName, string User, bool Enable)
+        {
+            return DAL.Controller.ReportsDataController.Instance.CC_Report_UpSert(ReportPublic, ReportType, ReportName, User, Enable);
+        }
+
+        public static string CC_ReportInfo_UpSert(string ReportInfoId, string ReportPublic, int ReportInfoType, string Parent, string Value, string LargeValue, bool Enable)
+        {
+            return DAL.Controller.ReportsDataController.Instance.CC_ReportInfo_UpSert(ReportInfoId, ReportPublic, ReportInfoType, Parent, Value, LargeValue, Enable);
+        }
+
+        public static List<ProveedoresOnLine.Reports.Models.Reports.ConfigReportModel> CC_Report_GetReportPublicId(string ConfigReportId)
+        {
+            return DAL.Controller.ReportsDataController.Instance.CC_Report_GetReportPublicId(ConfigReportId);
+        }
+
+        #endregion
+
         public static Tuple<byte[], string, string> MP_SV_ProcablesReport(int ReportType, DataTable data, string FormatType, List<ReportParameter> ReportData, string FilePath)
         {
             LocalReport localReport = new LocalReport();

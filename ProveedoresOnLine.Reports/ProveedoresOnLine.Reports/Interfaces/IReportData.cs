@@ -63,6 +63,14 @@ namespace ProveedoresOnLine.Reports.Interfaces
 
         #endregion
 
+        #region Dynamic Report
+        string CC_Report_UpSert(string ReportPublic, int ReportType, string ReportName, string User, bool Enable);
+
+        string CC_ReportInfo_UpSert(string ReportInfoId, string ReportPublic, int ReportInfoType, string Parent, string Value, string LargeValue, bool Enable);
+
+        List<ProveedoresOnLine.Reports.Models.Reports.ConfigReportModel> CC_Report_GetReportPublicId(string ConfigReportId);
+        #endregion
+
         #endregion
     }
 }

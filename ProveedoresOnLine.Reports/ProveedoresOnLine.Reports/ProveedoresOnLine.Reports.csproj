@@ -92,9 +92,12 @@
     <Compile Include="Interfaces\IReportData.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\Enumerations.cs" />
+    <Compile Include="Models\Reports\ConfigReportInfoModel.cs" />
     <Compile Include="Models\Reports\CustomerProviderReportModel.cs" />
     <Compile Include="Models\Reports\GeneralProviderReportModel.cs" />
-    <Compile Include="Models\Reports\ReportsModel.cs" />
+    <Compile Include="Models\Reports\ConfigReportModel.cs" />
+    <Compile Include="Models\Util\GenericReportItemInfoModel.cs" />
+    <Compile Include="Models\Util\GenericReportItemModel.cs" />
     <Compile Include="Models\Util\InternalSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\DataSet\DS_CalificationReport_BalanceInfo.cs">
