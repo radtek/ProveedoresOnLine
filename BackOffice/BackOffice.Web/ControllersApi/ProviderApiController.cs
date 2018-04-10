@@ -1023,7 +1023,7 @@ namespace BackOffice.Web.ControllersApi
                     }
                     else if (HSEQType == ((int)BackOffice.Models.General.enumHSEQType.CompanyHealtyPolitic).ToString())
                     {
-                        
+
 
                         ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticsSecurity);
                         ArrayDocuments.Add((int)BackOffice.Models.General.enumHSEQInfoType.CH_PoliticsNoAlcohol);
@@ -1049,7 +1049,8 @@ namespace BackOffice.Web.ControllersApi
                         oCertification.All(x =>
                         {
                             x.ItemInfo.
-                                Where(y => ArrayDocuments.Count(f => f == y.ItemInfoType.ItemId) > 0).All(t => {
+                                Where(y => ArrayDocuments.Count(f => f == y.ItemInfoType.ItemId) > 0).All(t =>
+                                {
                                     oReturn.Add(new BackOffice.Models.Provider.ProviderHSEQViewModel(x, oRule, oCompanyRule, oARL, t.ItemInfoType.ItemId));
                                     return true;
                                 });
@@ -1057,12 +1058,14 @@ namespace BackOffice.Web.ControllersApi
                             return true;
                         });
                     }
-
-                    oCertification.All(x =>
+                    else
                     {
-                        oReturn.Add(new BackOffice.Models.Provider.ProviderHSEQViewModel(x, oRule, oCompanyRule, oARL, 0));
-                        return true;
-                    });
+                        oCertification.All(x =>
+                        {
+                            oReturn.Add(new BackOffice.Models.Provider.ProviderHSEQViewModel(x, oRule, oCompanyRule, oARL, 0));
+                            return true;
+                        });
+                    }
 
                 }
             }
