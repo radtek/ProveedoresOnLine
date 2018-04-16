@@ -91,5 +91,12 @@ namespace DocumentManagement.Web.ControllersApi
 
             return oReturn; 
         }
+
+        [HttpPost]
+        [HttpGet]
+        public void ChangesConSendUrltrolSearch(string SendUrl)
+        {
+            var ttt = System.Web.HttpContext.Current.Request["DataToUpsert"];
+        }
     }
 }
