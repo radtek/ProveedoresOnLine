@@ -1,21 +1,61 @@
-﻿function ProviderSearchGrid(vidDiv, cmbForm, cmbCustomer, chkName) {
-    
+﻿var checkedIds = {};
+
+function selectRow() {
+    debugger;
+    var checked = this.checked,
+        row = $(this).closest("tr"),
+        grid = $("#divGridProvider").data("kendoGrid"),
+        dataItem = grid.dataItem(row);
+
+    checkedIds[dataItem.id] = checked;
+
+    if (checked) {
+        //-select the row
+        row.addClass("k-state-selected");
+
+        var checkHeader = true;
+
+        $.each(grid.items(), function (index, item) {
+            if (!($(item).hasClass("k-state-selected"))) {
+                checkHeader = false;
+            }
+        });
+
+        $("#header-chb")[0].checked = checkHeader;
+    } else {
+        //-remove selection
+        row.removeClass("k-state-selected");
+        $("#header-chb")[0].checked = false;
+    }
+}
+
+function ProviderSearchGrid(vidDiv, cmbForm, cmbCustomer, chkName) {
     //configure grid
-    $('#' + vidDiv).kendoGrid({
+        $('#' + vidDiv).kendoGrid({
         toolbar: [{ template: $('#' + vidDiv + '_Header').html() }],
         pageable: true,
+        //persistSelection: true,
         scrollable: true,
+        sortable: true,
+        //dataBound: onDataBound,
+        editable: true,
         dataSource: {
             pageSize: 20,
             serverPaging: true,
             schema: {
-                total: function (data) {
+                model: {
+                    id: "RelatedProvider.ProviderPublicId",
+                    fields: {
+                        Selected: { editable: true, type: "boolean", defaultValue: true  }
+                    },
+                },
+                /*total: function (data) {
                     if (data != null && data.length > 0) {
                         
                         return data[0].oTotalRows;
                     }
                     return 0;
-                }
+                }*/
             },
             transport: {
                 read: function (options) {
@@ -43,6 +83,13 @@
             },
         },
         columns: [{
+            title: 'Select All',
+            headerTemplate: "<input type='checkbox' id='header-chb' class='k-checkbox header-checkbox'><label class='k-checkbox-label' for='header-chb'></label>",
+            template: function (dataItem) {
+                return "<input type='checkbox' id='" + dataItem.RelatedProvider.ProviderPublicId + "' class='k-checkbox row-checkbox'><label class='k-checkbox-label' for='" + dataItem.RelatedProvider.ProviderPublicId + "'></label>";
+            },
+            width: 80
+        }, {
             field: "RelatedProvider.ProviderPublicId",
             title: "Id Proveedor",
             width: 100
@@ -114,6 +161,49 @@
     $('#' + cmbCustomer).change(function () {
         initCmb('Form', cmbCustomer);
     });
+    //Send Email to Providers
+    $('#' + vidDiv + '_SendUrlButton').click(function () {
+        debugger;
+        $.ajax({
+            url: BaseUrl.ApiUrl + '/ProviderApi?SendUrl=true',
+            dataType: 'json',
+            type: 'post',
+            data: {
+                DataToUpsert: kendo.stringify(checkedIds)
+            },
+            success: function (result) {
+                options.success(result);
+                Message('success', 'Se editó la fila con el id ' + options.data.CertificationId + '.');
+            },
+            error: function (result) {
+                options.error(result);
+                Message('error', 'Error en la fila con el id ' + options.data.CertificationId + '.');
+            },
+        });
+
+    });
+
+    var grid = $('#' + vidDiv).data("kendoGrid");
+
+    //bind click event to the checkbox
+    grid.table.on("click", ".row-checkbox", selectRow);
+
+    $('#header-chb').change(function (ev) {
+        var checked = ev.target.checked;
+        $('.row-checkbox').each(function (idx, item) {
+            if (checked) {
+                if (!($(item).closest('tr').is('.k-state-selected'))) {
+                    $(item).click();
+                }
+            } else {
+                if ($(item).closest('tr').is('.k-state-selected')) {
+                    $(item).click();
+                }
+            }
+        });
+    });
+
+   
 }
 
 function EditDialog(ProviderPublicId, IdentificationType, IdentificationNumber, Email, CustomerPublicId, ProviderName, infoId, checkDigit, checkDigitInfoIdedit) {
@@ -286,4 +376,6 @@ function ChangesControl(vidDiv, SearchParam)
             $('#' + vidDiv + '_SearchButton').click();
         }
     });
+    
 }
+
