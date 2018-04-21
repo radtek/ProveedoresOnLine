@@ -1,4 +1,5 @@
-﻿using ProveedoresOnLine.Reports.Models.Util;
+﻿using ProveedoresOnLine.Company.Models.Util;
+using ProveedoresOnLine.Reports.Models.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace ProveedoresOnLine.Reports.Models.Reports
 {
     public class ConfigReportModel
     {
-        public int ReportId { get; set; }
+        public string ReportId { get; set; }
         public string ReportPublic { get; set; }
-        public GenericReportItemInfoModel ReportType { get; set; }
+        public GenericItemModel ReportType { get; set; }
         public string ReportName { get; set; }
         public string User { get; set; }
         public bool Enable { get; set; }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ProveedoresOnLine.Reports.Models.Reports;
 
 namespace BackOffice.Web.Controllers
 {
@@ -137,5 +138,33 @@ namespace BackOffice.Web.Controllers
         }
 
         #endregion Menu
+
+        public virtual ActionResult CC_Report_Upsert(string ReportId)
+        {
+            
+            BackOffice.Models.Provider.ProviderViewModel oModel = new Models.Provider.ProviderViewModel()
+            {
+                ProviderOptions = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.CatalogGetProviderOptions(),
+            };
+
+            //get provider menu
+            oModel.ProviderMenu = GetReportMenu(oModel);
+
+            return View(oModel);
+        }
+
+        public virtual ActionResult CC_ReportInfo_Upsert(string ReportInfoId, string ReportInfoFieldId, string ReportInfoEnableId)
+        {
+
+            BackOffice.Models.Provider.ProviderViewModel oModel = new Models.Provider.ProviderViewModel()
+            {
+                ProviderOptions = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.CatalogGetProviderOptions(),
+            };
+
+            //get provider menu
+            oModel.ProviderMenu = GetReportMenu(oModel);
+
+            return View(oModel);
+        }
     }
 }

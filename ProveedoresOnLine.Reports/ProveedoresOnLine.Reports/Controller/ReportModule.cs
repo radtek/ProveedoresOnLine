@@ -987,14 +987,14 @@ namespace ProveedoresOnLine.Reports.Controller
 
         #region Dynamic Report
 
-        public static string CC_Report_UpSert(string ReportPublic, int ReportType, string ReportName, string User, bool Enable)
+        public static string CC_Report_UpSert(ConfigReportModel oConfigReportModel)
         {
-            return DAL.Controller.ReportsDataController.Instance.CC_Report_UpSert(ReportPublic, ReportType, ReportName, User, Enable);
+            return DAL.Controller.ReportsDataController.Instance.CC_Report_UpSert(oConfigReportModel);
         }
 
-        public static string CC_ReportInfo_UpSert(string ReportInfoId, string ReportPublic, int ReportInfoType, string Parent, string Value, string LargeValue, bool Enable)
+        public static string CC_ReportInfo_UpSert(ConfigReportInfoModel oConfigReportInfoModel)
         {
-            return DAL.Controller.ReportsDataController.Instance.CC_ReportInfo_UpSert(ReportInfoId, ReportPublic, ReportInfoType, Parent, Value, LargeValue, Enable);
+            return DAL.Controller.ReportsDataController.Instance.CC_ReportInfo_UpSert(oConfigReportInfoModel);
         }
 
         public static List<ProveedoresOnLine.Reports.Models.Reports.ConfigReportModel> CC_Report_GetReportPublicId(string ConfigReportId)

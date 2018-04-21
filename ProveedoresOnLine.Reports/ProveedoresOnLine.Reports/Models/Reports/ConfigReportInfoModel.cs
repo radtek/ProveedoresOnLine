@@ -10,15 +10,14 @@ namespace ProveedoresOnLine.Reports.Models.Reports
     public class ConfigReportInfoModel
     {
         public ConfigReportInfoModel(){}
-
-        public int ReportInfoId { get; set; }
-        public int ReportId { get; set; }
+        public string ReportInfoId { get; set; }
+        public int? ReportId { get; set; }
         public GenericReportItemInfoModel ReportInfoType { get; set; }
-        public ConfigReportInfoModel Parent { get; set; }
+        public int? Parent { get; set; }
         public string Value { get; set; }
         public string LargeValue { get; set; }
-        public string Enable { get; set; }
-        public string LastModify { get; set; }
-        public string CreateDate { get; set; }
+        public bool Enable { get; set; }
+        public DateTime LastModify { get; set; }
+        public DateTime CreateDate { get; set; }
     }
 }

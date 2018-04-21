@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using ProveedoresOnLine.Company.Models.Util;
 using ProveedoresOnLine.SurveyModule.Models;
 using ProveedoresOnLine.Reports.Models;
+using ProveedoresOnLine.Reports.Models.Reports;
 
 namespace ProveedoresOnLine.Reports.Test
 {
@@ -203,15 +204,36 @@ namespace ProveedoresOnLine.Reports.Test
         [TestMethod]
         public void CC_Report_Upsert()
         {
-            var oReturn = ProveedoresOnLine.Reports.Controller.ReportModule.CC_Report_UpSert(null, (int)Enumerations.enumDynamicReportType.RP_InfoPOLReport, "Test Report 01", "sergio.palacios@proveedoresonline.co", true);
 
-            Assert.AreEqual(true, oReturn != null);
+            ConfigReportModel oReport = new ConfigReportModel();
+            oReport.ReportId = "4";
+            oReport.ReportName = "04Update";
+            oReport.ReportType = new GenericItemModel
+            {
+                ItemId = (int)Enumerations.enumDynamicReportType.RP_InfoPOLReport,
+            };  
+            oReport.User = "Serginh";
+
+            oReport.Enable = true;
+            var oReturn = ProveedoresOnLine.Reports.Controller.ReportModule.CC_Report_UpSert(oReport);
+           Assert.AreEqual(true, oReturn != null);
         }
 
         [TestMethod]
         public void CC_ReportInfo_Upsert()
         {
-            var oReturn = ProveedoresOnLine.Reports.Controller.ReportModule.CC_ReportInfo_UpSert(null, "9D6133E5", (int)Enumerations.enumDynamicReportType.RP_InfoPOLReport, null,"", "", true );
+
+            ConfigReportInfoModel oReport = new ConfigReportInfoModel();
+           
+            oReport.ReportInfoId = "3";
+            oReport.ReportInfoType = new Models.Util.GenericReportItemInfoModel
+            {
+                ItemInfoId = 2015001 
+            };
+            oReport.Value = "501001";
+            oReport.Enable = false;
+
+            var oReturn = ProveedoresOnLine.Reports.Controller.ReportModule.CC_ReportInfo_UpSert(oReport);
 
             Assert.AreEqual(true, oReturn != null);
 
