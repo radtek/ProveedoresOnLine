@@ -71,7 +71,7 @@ namespace Register_Core.Controller
                     IsSuccess = false,
                 };
                 RegisterDataController.Instance.SaveTransaction(oTransaction.Token, oTransaction.Message, oTransaction.Query, (int)oTransaction.ServiceType, oTransaction.IsSuccess);
-                return "Error - Por favor verifique el parámetro de búsqueda";
+                return " ";
             }
         }
         public static bool IsAuthorized(string Token)
