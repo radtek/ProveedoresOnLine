@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using ProveedoresOnLine.CompanyProvider.Models.Provider;
 using ProveedoresOnLine.Reports.Models.Reports;
+using ProveedoresOnLine.Reports.Models.Util;
 
 namespace ProveedoresOnLine.Reports.DAL.MySQLDAO
 {
@@ -1017,7 +1018,136 @@ namespace ProveedoresOnLine.Reports.DAL.MySQLDAO
 
         #endregion
 
+        #region Dynamic Report
+        public string CC_Report_UpSert(ConfigReportModel oConfigReportModel)
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
 
+            lstParams.Add(DataInstance.CreateTypedParameter("vReportId", oConfigReportModel.ReportId));            
+            lstParams.Add(DataInstance.CreateTypedParameter("vReportTypeId", oConfigReportModel.ReportType.ItemId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vReportName", oConfigReportModel.ReportName));
+            lstParams.Add(DataInstance.CreateTypedParameter("vUser", oConfigReportModel.User));
+            lstParams.Add(DataInstance.CreateTypedParameter("vEnable", oConfigReportModel.Enable));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.Scalar,
+                CommandText = "CC_Report_UpSert",
+                CommandType = CommandType.StoredProcedure,
+                Parameters = lstParams,
+            });
+            return response.ScalarResult.ToString();
+        }
+
+        public string CC_ReportInfo_UpSert(ConfigReportInfoModel oConfigReportInfoModel)
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<IDbDataParameter>();
+
+
+            
+            lstParams.Add(DataInstance.CreateTypedParameter("vReportInfoId", oConfigReportInfoModel.ReportInfoId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vReportId", oConfigReportInfoModel.ReportId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vReportInfoType", oConfigReportInfoModel.ReportInfoType.ItemInfoId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vParent", oConfigReportInfoModel.Parent));
+            lstParams.Add(DataInstance.CreateTypedParameter("vValue", oConfigReportInfoModel.Value));
+            lstParams.Add(DataInstance.CreateTypedParameter("vLargeValue", oConfigReportInfoModel.LargeValue));
+            lstParams.Add(DataInstance.CreateTypedParameter("vEnable", oConfigReportInfoModel.Enable));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.Scalar,
+                CommandText = "CC_ReportInfo_UpSert",
+                CommandType = CommandType.StoredProcedure,
+                Parameters = lstParams,
+            });
+            return response.ScalarResult.ToString();
+        }
+
+        public List<ConfigReportModel> CC_Report_GetReportPublicId(string ReportPublicId)
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
+
+            lstParams.Add(DataInstance.CreateTypedParameter("vReportPublicId", ReportPublicId));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "CC_Report_GetByReportPublicId",
+                CommandType = System.Data.CommandType.StoredProcedure,
+                Parameters = lstParams
+            });
+
+            List<ConfigReportModel> oReturn = null;
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                try
+                {
+                    oReturn =
+                    (from sr in response.DataTableResult.AsEnumerable()
+                     where !sr.IsNull("ReportPublic")
+                     group sr by new
+                     {
+                         ReportId = sr.Field<int>("ReportId"),
+                         ReportPublic = sr.Field<string>("ReportPublic"),
+                         ReportName = sr.Field<string>("ReportName"),
+                         ItemInfoId = sr.Field<int>("ReportTypeId"),
+                         ValueName = sr.Field<string>("ReportTypeName"),
+                         User = sr.Field<string>("User"),
+                         Enable = sr.Field<UInt64>("ReportEnable") == 1 ? true : false,
+                         LastModify = sr.Field<DateTime>("ReportLastModify"),
+                         CreateDate = sr.Field<DateTime>("ReportCreateDate"),
+                     } into srg
+                     select new ConfigReportModel()
+                     {
+                         ReportId = srg.Key.ReportId.ToString(),
+                         ReportPublic = srg.Key.ReportPublic,
+                         ReportName = srg.Key.ReportName,
+                         ReportType = new GenericItemModel()
+                         {
+                             ItemId = srg.Key.ItemInfoId,
+                             ItemName = srg.Key.ValueName,
+
+                         },
+                         User = srg.Key.User,
+                         Enable = srg.Key.Enable,
+                         LastModify = srg.Key.LastModify,
+                         CreateDate = srg.Key.CreateDate,
+
+                        
+
+                         configReportInfo = ((from sri in response.DataTableResult.AsEnumerable() //Todo: Ajustar 
+                                              where !sri.IsNull("ReportInfoId")&&
+                                                sri.Field<int>("ReportId") == srg.Key.ReportId
+                                              select new ConfigReportInfoModel()
+                                              {
+                                                 
+                                                  ReportInfoId = sri.Field<int>("ReportInfoId").ToString(),
+                                                  ReportId = sri.Field<int>("ReportId"),
+                                                  Parent = sri.Field<int?>("Parent"),
+                                                  ReportInfoType = new GenericReportItemInfoModel()
+                                                    {
+                                                        ItemInfoId = sri.Field<int>("ReportInfoType")
+                                                    },
+                                                  Value = sri.Field<string>("Value"), 
+                                                  LargeValue = sri.Field<string>("LargeValue"), 
+                                                  Enable = sri.Field<UInt64>("ReportEnable") == 1 ? true : false,
+                                                  LastModify = sri.Field<DateTime>("ReportLastModify"),
+                                                  CreateDate = sri.Field<DateTime>("ReportCreateDate"),
+                                              }).ToList()),
+                     }).ToList();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                
+            }
+            return oReturn;
+        }    
+        #endregion
     }
 }
 

@@ -132,6 +132,8 @@
     <Compile Include="Provider\ProviderViewModel.cs" />
     <Compile Include="Provider\TrackingDetailViewModel.cs" />
     <Compile Include="Provider\TrackingViewModel.cs" />
+    <Compile Include="Report\ConfigReportInfoViewModel.cs" />
+    <Compile Include="Report\ConfigReportViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
