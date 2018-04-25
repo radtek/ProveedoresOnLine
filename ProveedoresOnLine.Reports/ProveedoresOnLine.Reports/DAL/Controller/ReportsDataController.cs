@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ProveedoresOnLine.Company.Models.Util;
 using ProveedoresOnLine.Reports.Models.Reports;
 using ProveedoresOnLine.SurveyModule.Models;
+using ProveedoresOnLine.Reports.Models;
 
 namespace ProveedoresOnLine.Reports.DAL.Controller
 {
@@ -43,8 +44,9 @@ namespace ProveedoresOnLine.Reports.DAL.Controller
             return DataFactory.SurveyGetAllByCustomer(CustomerPublicId);
         }
 
-        public SurveyModel SurveyGetByParentUser(string ParentSurveyPublicId, string User) {
-            return DataFactory.SurveyGetByParentUser(ParentSurveyPublicId,User);
+        public SurveyModel SurveyGetByParentUser(string ParentSurveyPublicId, string User)
+        {
+            return DataFactory.SurveyGetByParentUser(ParentSurveyPublicId, User);
         }
 
         #endregion
@@ -58,7 +60,7 @@ namespace ProveedoresOnLine.Reports.DAL.Controller
 
         public List<ProveedoresOnLine.CompanyProvider.Models.Provider.BlackListModel> C_Report_BlackListGetBasicInfo(string CompanyPublicId)
         {
-            return DataFactory.C_Report_BlackListGetBasicInfo(CompanyPublicId);    
+            return DataFactory.C_Report_BlackListGetBasicInfo(CompanyPublicId);
         }
 
         public List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> C_Report_MPContactGetBasicInfo(string CompanyPublicId, int? ContactType)
@@ -101,7 +103,7 @@ namespace ProveedoresOnLine.Reports.DAL.Controller
         #region SelectionProcess Report
 
         #endregion
-       
+
         #region Provider Customer Report
 
         public List<ProveedoresOnLine.Reports.Models.Reports.CustomerProviderReportModel> R_ProviderCustomerReport(string CustomerPublicId)
@@ -135,6 +137,12 @@ namespace ProveedoresOnLine.Reports.DAL.Controller
         {
             return DataFactory.CC_Report_GetReportPublicId(ConfigReportId);
         }
+
+        public string CC_ReportTempleate_PublicId(string ReportPublicId, List<Tuple<Enumerations.enumDynamicReportFilters, string>> Filters)
+        {
+            return DataFactory.CC_ReportTempleate_PublicId(ReportPublicId, Filters);
+        }
+
         #endregion
     }
 }

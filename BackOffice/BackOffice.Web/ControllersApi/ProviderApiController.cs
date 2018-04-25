@@ -41,10 +41,10 @@ namespace BackOffice.Web.ControllersApi
                 BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_Grid_RowCountDefault].Value :
                 RowCount.Trim());
 
-            
+
 
             List<Tuple<string, string, string>> lstSearchFilter = new List<Tuple<string, string, string>>();
-            
+
 
             #region Search Result Company
             Uri node = new Uri(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_ElasticSearchUrl].Value);
@@ -151,7 +151,7 @@ namespace BackOffice.Web.ControllersApi
             string ProviderPublicId,
             string ContactType,
             string ViewEnable)
-{
+        {
             int oTotalRows;
             List<BackOffice.Models.Provider.ProviderContactViewModel> oReturn = new List<Models.Provider.ProviderContactViewModel>();
 
@@ -263,7 +263,7 @@ namespace BackOffice.Web.ControllersApi
                         Enable = true,
                     });
 
-                  
+
 
                     lstUsedFiles.Add(oDataToUpsert.CP_IdentificationFile);
 
@@ -1016,10 +1016,20 @@ namespace BackOffice.Web.ControllersApi
                     {
                         oRule = ProveedoresOnLine.Company.Controller.Company.CategorySearchByRules(null, 0, 0);
                         oCompanyRule = ProveedoresOnLine.Company.Controller.Company.CategorySearchByCompanyRules(null, 0, 0);
+                        oCertification.All(x =>
+                        {
+                            oReturn.Add(new BackOffice.Models.Provider.ProviderHSEQViewModel(x, oRule, oCompanyRule, oARL, 0));
+                            return true;
+                        });
                     }
                     else if (HSEQType == ((int)BackOffice.Models.General.enumHSEQType.CompanyRiskPolicies).ToString())
                     {
                         oARL = ProveedoresOnLine.Company.Controller.Company.CategorySearchByARLCompany(null, 0, 0);
+                        oCertification.All(x =>
+                        {
+                            oReturn.Add(new BackOffice.Models.Provider.ProviderHSEQViewModel(x, oRule, oCompanyRule, oARL, 0));
+                            return true;
+                        });
                     }
                     else if (HSEQType == ((int)BackOffice.Models.General.enumHSEQType.CompanyHealtyPolitic).ToString())
                     {
@@ -1190,7 +1200,7 @@ namespace BackOffice.Web.ControllersApi
                             ToString(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_DateFormat_Server].Value),
                         Enable = true,
                     });
-                    
+
                     oProvider.RelatedCertification.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
                     {
                         ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.C_CertificationFileId) ? 0 : Convert.ToInt32(oDataToUpsert.C_CertificationFileId.Trim()),
@@ -1239,7 +1249,7 @@ namespace BackOffice.Web.ControllersApi
                         LargeValue = oDataToUpsert.CH_Other,
                         Enable = true,
                     });
-                    
+
                 }
                 else if (oProvider.RelatedCertification.FirstOrDefault().ItemType.ItemId == (int)BackOffice.Models.General.enumHSEQType.CompanyRiskPolicies)
                 {
@@ -1532,7 +1542,7 @@ namespace BackOffice.Web.ControllersApi
                         Enable = true,
                     });
 
-                 oProvider.RelatedFinantial.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
+                    oProvider.RelatedFinantial.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
                     {
                         ItemInfoId = string.IsNullOrEmpty(oDataToUpsert.IS_GrossIncomeId) ? 0 : Convert.ToInt32(oDataToUpsert.IS_GrossIncomeId.Trim()),
                         ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
@@ -2474,7 +2484,7 @@ namespace BackOffice.Web.ControllersApi
                         {
                             oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.AddRange(oAditionalDocumentInfo.Where(x => x.ItemId == Convert.ToInt32(oDataToUpsert.AditionalDocumentId.Trim())).SingleOrDefault().ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumAditionalDocumentInfoType.AD_RelatedCustomer));
                         }
-                        
+
                     }
 
 
@@ -2492,7 +2502,7 @@ namespace BackOffice.Web.ControllersApi
                         });
                         return true;
                     });
-                    
+
                     oProvider.RelatedAditionalDocuments.FirstOrDefault().ItemInfo.Add(
                         new GenericItemInfoModel()
                         {
@@ -2767,14 +2777,14 @@ namespace BackOffice.Web.ControllersApi
 
                 if (oCustomerProviderInfo != null && oCustomerProviderInfo.RelatedProvider.Count > 0)
                 {
-                     oCustomerProviderInfo.RelatedProvider.First().CustomerProviderInfo
-                         .Where(x => x.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumProviderCustomerType.CustomerMonitoring ||
-                                     x.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumProviderCustomerType.InternalMonitoring)
-                                      .All(x =>
-                    {
-                        oReturn.Add(new TrackingViewModel(x, oTotalRows));
-                        return true;
-                    });
+                    oCustomerProviderInfo.RelatedProvider.First().CustomerProviderInfo
+                        .Where(x => x.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumProviderCustomerType.CustomerMonitoring ||
+                                    x.ItemInfoType.ItemId == (int)BackOffice.Models.General.enumProviderCustomerType.InternalMonitoring)
+                                     .All(x =>
+                                     {
+                                         oReturn.Add(new TrackingViewModel(x, oTotalRows));
+                                         return true;
+                                     });
                 }
             }
 
@@ -3066,7 +3076,7 @@ namespace BackOffice.Web.ControllersApi
                             Description = System.Web.HttpContext.Current.Request.Form["SH_InternalTracking"],
                         };
 
-                       oInfoModel.Add(new GenericItemInfoModel()
+                        oInfoModel.Add(new GenericItemInfoModel()
                         {
                             ItemInfoId = 0,
                             ItemInfoType = new CatalogModel()
@@ -3201,12 +3211,12 @@ namespace BackOffice.Web.ControllersApi
                     if (oCompanyIndexModel.oCustomerProviderIndexModel.Any(x => x.CustomerPublicId == customer))
                     {
                         oCompanyIndexModel.oCustomerProviderIndexModel.Where(x => x.CustomerPublicId == customer).All(x =>
-                            {
-                                x.ProviderPublicId = ProviderPublicId;
-                                x.StatusId = Convert.ToInt32(System.Web.HttpContext.Current.Request.Form["SH_Currency"]);
-                                x.Status = oModel.ProviderOptions.Where(y => y.ItemId == Convert.ToInt32(System.Web.HttpContext.Current.Request.Form["SH_Currency"])).Select(y => y.ItemName).DefaultIfEmpty(string.Empty).FirstOrDefault();
-                                return true;
-                            });
+                        {
+                            x.ProviderPublicId = ProviderPublicId;
+                            x.StatusId = Convert.ToInt32(System.Web.HttpContext.Current.Request.Form["SH_Currency"]);
+                            x.Status = oModel.ProviderOptions.Where(y => y.ItemId == Convert.ToInt32(System.Web.HttpContext.Current.Request.Form["SH_Currency"])).Select(y => y.ItemName).DefaultIfEmpty(string.Empty).FirstOrDefault();
+                            return true;
+                        });
                     }
 
                     if (oCompanyIndexModel.oCustomerProviderIndexModel.Any(x => x.CustomerPublicId == customer))
@@ -3336,7 +3346,7 @@ namespace BackOffice.Web.ControllersApi
                     }
 
                     #endregion
-                    
+
                     #endregion
                 }
 
@@ -3617,22 +3627,22 @@ namespace BackOffice.Web.ControllersApi
             if (GetAllCustomers == "true")
             {
                 ProveedoresOnLine.CompanyCustomer.Models.Customer.CustomerModel oCustomerByProvider =
-                    ProveedoresOnLine.CompanyCustomer.Controller.CompanyCustomer.GetCustomerByProvider(ProviderPublicId, null);                
+                    ProveedoresOnLine.CompanyCustomer.Controller.CompanyCustomer.GetCustomerByProvider(ProviderPublicId, null);
                 List<CustomerProviderModel> oCustomerProvider = new List<CustomerProviderModel>();
 
                 if (oCustomerByProvider != null && oCustomerByProvider.RelatedProvider != null && oCustomerByProvider.RelatedProvider.Count > 0)
                 {
-                    
+
                     oCustomerByProvider.RelatedProvider.All(x =>
-                        {
-                            oReturn.Add(new ProviderCustomerViewModel(
-                                    x.CustomerProviderId.ToString(),
-                                    x.RelatedProvider,
-                                    x.Enable
-                                ));
-                            return true;
-                        });
-                    if (!string.IsNullOrEmpty(oSearchParam[0]))                    
+                    {
+                        oReturn.Add(new ProviderCustomerViewModel(
+                                x.CustomerProviderId.ToString(),
+                                x.RelatedProvider,
+                                x.Enable
+                            ));
+                        return true;
+                    });
+                    if (!string.IsNullOrEmpty(oSearchParam[0]))
                         oReturn = oReturn.Where(x => x.CP_Customer.ToLower().Contains(oSearchParam[0])).Select(x => x).ToList();
 
                     if (oSearchParam[1] == "True")
@@ -3690,7 +3700,7 @@ namespace BackOffice.Web.ControllersApi
                     oConfigInfo.All
                         (x =>
                         {
-                            oReturn.Add( new CalificationProjectConfigInfoViewModel(x));
+                            oReturn.Add(new CalificationProjectConfigInfoViewModel(x));
                             return true;
                         });
                 }
@@ -3702,7 +3712,7 @@ namespace BackOffice.Web.ControllersApi
         [HttpPost]
         [HttpGet]
         public void CPCCalificationProjectConfigInfoProviderUpsert(string CPCCalificationProjectConfigInfoProviderUpsert, string ProviderPublicId)
-        {                    
+        {
             if (CPCCalificationProjectConfigInfoProviderUpsert == "true" &&
                !string.IsNullOrEmpty(System.Web.HttpContext.Current.Request["DataToUpsert"]) &&
                !string.IsNullOrEmpty(ProviderPublicId))

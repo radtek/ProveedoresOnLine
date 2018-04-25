@@ -29,7 +29,7 @@
 <div id="templates" style="display:none;">
 
     <div id="divGridReport_ShortcutToolTipTemplate">
-        <img class="divGrid_kbtooltip" src="@Url.Content(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_InfoTooltip].Value)" title=" Nuevo (alt+shift+n) -  Guardar (alt+shift+g) - Descartar (alt+shift+d) " />
+        <img class="divGrid_kbtooltip" src="@Url.Content(BackOffice.Models.General.InternalSettings.Instance[BackOffice.Models.General.Constants.C_Settings_InfoTooltip].Value)" title=" Nuevo (alt+shift+n) - Guardar (alt+shift+g) - Descartar (alt+shift+d) " />
     </div>
 
     <div id="divGridReport_Detail_ViewEnablesTemplate">
@@ -37,7 +37,7 @@
         <input class="POBOProviderGridEnableContact" id="divGridReport_Detail_ViewEnable" type="checkbox" checked="checked" />
     </div>
 
-    
+
 </div>
 
 
@@ -50,18 +50,65 @@
     if (Model.ProviderOptions != null &&
         Model.ProviderOptions.Count > 0)
     {
+        var temp = Model.ProviderOptions;
+
+        Model.ProviderOptions.Where(x => x.CatalogId == 2017 //GeneralInfo
+                                      || x.CatalogId == 2018 //LegalInfo
+                                      || x.CatalogId == 2019 //FinancialInfo
+                                      || x.CatalogId == 2020 //CommercialInfo
+                                      || x.CatalogId == 2021 //HseqInfo
+                                      || x.CatalogId == 2022 //AditionalInfo
+                                      || x.CatalogId == 2023 //Tracing
+
+        ).All(x =>
+        {
+            if (
+                //BASICINFO
+                x.ItemId != 2017001
+                && x.ItemId != 2017002
+                && x.ItemId != 2017003
+                && x.ItemId != 2017004
+                && x.ItemId != 2017005
+                && x.ItemId != 2017006
+                && x.ItemId != 2017018
+                && x.ItemId != 2017019
+
+                //HSEQ
+                && x.ItemId != 2021007
+                && x.ItemId != 2021008
+                && x.ItemId != 2021009
+
+                //TRACING
+                && x.ItemId != 2023001
+                && x.ItemId != 2023002
+                && x.ItemId != 2023003
+                && x.ItemId != 2023004
+                && x.ItemId != 2023005
+                && x.ItemId != 2023006
+
+                )
+            {
+                x.ItemName = temp.FirstOrDefault(y => y.ItemId == Convert.ToInt32(x.ItemName)).ItemName;
+            }
+
+            return true;
+        });
+
+
+
         Dictionary<int, List<ProveedoresOnLine.Company.Models.Util.CatalogModel>> oOptionAdminGeo =
-            Model.ProviderOptions.
-            GroupBy(x => x.CatalogId).
-            Select(x =>
-                new
-                {
-                    okey = x.Key,
-                    ovalue = Model.ProviderOptions.Where(y => y.CatalogId == x.Key).OrderBy(y => y.ItemName).ToList(),
-                }).ToDictionary(k => k.okey, v => v.ovalue);
+Model.ProviderOptions.
+GroupBy(x => x.CatalogId).
+Select(x =>
+new
+{
+    okey = x.Key,
+    ovalue = Model.ProviderOptions.Where(y => y.CatalogId == x.Key).OrderBy(y => y.ItemName).ToList(),
+}).ToDictionary(k => k.okey, v => v.ovalue);
+
 
         oReportInfoOptionList = (new System.Web.Script.Serialization.JavaScriptSerializer()).
-            Serialize(oOptionAdminGeo.Select(x => new { Key = x.Key, Value = x.Value }));
+    Serialize(oOptionAdminGeo.Select(x => new { Key = x.Key, Value = x.Value }));
     }
 }
 

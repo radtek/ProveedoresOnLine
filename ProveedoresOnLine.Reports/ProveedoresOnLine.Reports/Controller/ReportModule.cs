@@ -9,6 +9,7 @@ using ProveedoresOnLine.SurveyModule.Models;
 using ProveedoresOnLine.Reports.Models.Reports;
 using System.IO.MemoryMappedFiles;
 using System.IO;
+using ProveedoresOnLine.Reports.Models;
 
 namespace ProveedoresOnLine.Reports.Controller
 {
@@ -131,18 +132,18 @@ namespace ProveedoresOnLine.Reports.Controller
             if (oSurveyParentModel != null)
             {
                 oSurveyParentModel.All(x =>
+                {
+                    List<string> EvaluatorsList = x.SurveyInfo.Where(inf => inf.ItemInfoType.ItemId == 1204003).Select(inf => inf.Value).ToList();
+                    List<string> Evaluators = EvaluatorsList.GroupBy(y => y).Select(grp => grp.First()).ToList();
+                    x.ChildSurvey = new List<SurveyModel>();
+                    Evaluators.All(ev =>
                     {
-                        List<string> EvaluatorsList = x.SurveyInfo.Where(inf => inf.ItemInfoType.ItemId == 1204003).Select(inf => inf.Value).ToList();
-                        List<string> Evaluators = EvaluatorsList.GroupBy(y => y).Select(grp => grp.First()).ToList();
-                        x.ChildSurvey = new List<SurveyModel>();
-                        Evaluators.All(ev =>
-                            {
-                                x.ChildSurvey.Add(DAL.Controller.ReportsDataController.Instance.SurveyGetByParentUser(x.SurveyPublicId, ev));
-                                return true;
-                            });
-
+                        x.ChildSurvey.Add(DAL.Controller.ReportsDataController.Instance.SurveyGetByParentUser(x.SurveyPublicId, ev));
                         return true;
                     });
+
+                    return true;
+                });
             }
             return oSurveyParentModel;
         }
@@ -351,7 +352,7 @@ namespace ProveedoresOnLine.Reports.Controller
             return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_SelectionProcess + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
 
         }
-        
+
         public static Tuple<byte[], string, string> PJ_SelectionProcessReportDetail(DataTable DtHSEQ, DataTable DtExperiences, DataTable DtFinancial, DataTable DtLegal, DataTable DtTotal, List<ReportParameter> ReportData, string FormatType, string FilePath)
         {
             LocalReport localReport = new LocalReport();
@@ -423,8 +424,8 @@ namespace ProveedoresOnLine.Reports.Controller
             localReport.EnableExternalImages = true;
             localReport.ReportPath = @"" + FilePath + "SV_Report_GeneralInfo.rdlc";
             localReport.SetParameters(ReportData);
-            
-          
+
+
             ReportDataSource source2 = new ReportDataSource();
             source2.Name = "DS_SurveyGeneralInfoAreas";
             source2.Value = data != null ? data : new DataTable();
@@ -464,7 +465,7 @@ namespace ProveedoresOnLine.Reports.Controller
             return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_SurveyGeneralReport + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
 
         }
-        
+
         #endregion
 
         #region ThirdKnowledgeReports
@@ -477,14 +478,14 @@ namespace ProveedoresOnLine.Reports.Controller
             localReport.ReportPath = FilePath;
             localReport.SetParameters(ReportData);
 
-            Microsoft.Reporting.WebForms.ReportDataSource  src_rst = new Microsoft.Reporting.WebForms.ReportDataSource();
+            Microsoft.Reporting.WebForms.ReportDataSource src_rst = new Microsoft.Reporting.WebForms.ReportDataSource();
             src_rst.Name = "DataSet_rst";
-            src_rst.Value = data_rst != null ? data_rst : new DataTable();   
-            Microsoft.Reporting.WebForms.ReportDataSource  src_dce = new Microsoft.Reporting.WebForms.ReportDataSource();
+            src_rst.Value = data_rst != null ? data_rst : new DataTable();
+            Microsoft.Reporting.WebForms.ReportDataSource src_dce = new Microsoft.Reporting.WebForms.ReportDataSource();
             src_dce.Name = "DataSet_dce";
             src_dce.Value = data_dce != null ? data_dce : new DataTable();
             Microsoft.Reporting.WebForms.ReportDataSource src_fnc = new Microsoft.Reporting.WebForms.ReportDataSource();
-            
+
             Microsoft.Reporting.WebForms.ReportDataSource src_psp = new Microsoft.Reporting.WebForms.ReportDataSource();
             src_psp.Name = "DataSet_psp";
             src_psp.Value = data_psp != null ? data_psp : new DataTable();
@@ -496,7 +497,7 @@ namespace ProveedoresOnLine.Reports.Controller
             source.Name = "DS_ThirdKnowledgeReport";
 
             localReport.DataSources.Add(src_rst);
-            localReport.DataSources.Add(src_dce);            
+            localReport.DataSources.Add(src_dce);
             localReport.DataSources.Add(src_psp);
             localReport.DataSources.Add(src_snc);
 
@@ -652,7 +653,7 @@ namespace ProveedoresOnLine.Reports.Controller
 
         }
 
-        public static Tuple<byte[],string, string>TK_MyQueriesReport(string FormatType, List<ReportParameter> ReportData,DataTable DT_Query, string FilePath)
+        public static Tuple<byte[], string, string> TK_MyQueriesReport(string FormatType, List<ReportParameter> ReportData, DataTable DT_Query, string FilePath)
         {
             LocalReport localReport = new LocalReport();
             localReport.EnableExternalImages = true;
@@ -813,167 +814,167 @@ namespace ProveedoresOnLine.Reports.Controller
         #endregion
 
         #region BlackList
-            public static Tuple<byte[], string, string> TK_GIBlackListQueryReport(string FormatType, DataTable data_rst, DataTable data_dce, DataTable data_fnc, DataTable data_psp, DataTable data_na, List<ReportParameter> ReportData, string FilePath)
-            {
-                LocalReport localReport = new LocalReport();
-                localReport.EnableExternalImages = true;
-                localReport.ReportPath = FilePath;
-                localReport.SetParameters(ReportData);
+        public static Tuple<byte[], string, string> TK_GIBlackListQueryReport(string FormatType, DataTable data_rst, DataTable data_dce, DataTable data_fnc, DataTable data_psp, DataTable data_na, List<ReportParameter> ReportData, string FilePath)
+        {
+            LocalReport localReport = new LocalReport();
+            localReport.EnableExternalImages = true;
+            localReport.ReportPath = FilePath;
+            localReport.SetParameters(ReportData);
 
-                Microsoft.Reporting.WebForms.ReportDataSource src_rst = new Microsoft.Reporting.WebForms.ReportDataSource();
-                src_rst.Name = "DataSet_rst";
-                src_rst.Value = data_rst != null ? data_rst : new DataTable();
+            Microsoft.Reporting.WebForms.ReportDataSource src_rst = new Microsoft.Reporting.WebForms.ReportDataSource();
+            src_rst.Name = "DataSet_rst";
+            src_rst.Value = data_rst != null ? data_rst : new DataTable();
 
-                Microsoft.Reporting.WebForms.ReportDataSource src_dce = new Microsoft.Reporting.WebForms.ReportDataSource();
-                src_dce.Name = "DataSet_dce";
-                src_dce.Value = data_dce != null ? data_dce : new DataTable();
+            Microsoft.Reporting.WebForms.ReportDataSource src_dce = new Microsoft.Reporting.WebForms.ReportDataSource();
+            src_dce.Name = "DataSet_dce";
+            src_dce.Value = data_dce != null ? data_dce : new DataTable();
 
-                Microsoft.Reporting.WebForms.ReportDataSource src_fnc = new Microsoft.Reporting.WebForms.ReportDataSource();
-                src_fnc.Name = "DataSet_fnc";
-                src_fnc.Value = data_fnc != null ? data_fnc : new DataTable();
+            Microsoft.Reporting.WebForms.ReportDataSource src_fnc = new Microsoft.Reporting.WebForms.ReportDataSource();
+            src_fnc.Name = "DataSet_fnc";
+            src_fnc.Value = data_fnc != null ? data_fnc : new DataTable();
 
-                Microsoft.Reporting.WebForms.ReportDataSource src_psp = new Microsoft.Reporting.WebForms.ReportDataSource();
-                src_psp.Name = "DataSet_psp";
-                src_psp.Value = data_psp != null ? data_psp : new DataTable();
+            Microsoft.Reporting.WebForms.ReportDataSource src_psp = new Microsoft.Reporting.WebForms.ReportDataSource();
+            src_psp.Name = "DataSet_psp";
+            src_psp.Value = data_psp != null ? data_psp : new DataTable();
 
-                Microsoft.Reporting.WebForms.ReportDataSource src_na = new ReportDataSource();
-                src_na.Name = "DataSet_na";
-                src_na.Value = data_na != null ? data_na : new DataTable();
+            Microsoft.Reporting.WebForms.ReportDataSource src_na = new ReportDataSource();
+            src_na.Name = "DataSet_na";
+            src_na.Value = data_na != null ? data_na : new DataTable();
 
-                ReportDataSource source = new ReportDataSource();
-                source.Name = "DS_GIBlackListreport";
-                localReport.DataSources.Add(src_rst);
-                localReport.DataSources.Add(src_dce);
-                localReport.DataSources.Add(src_fnc);
-                localReport.DataSources.Add(src_psp);
-                localReport.DataSources.Add(src_na);
-                string mimeType;
-                string encoding;
-                string fileNameExtension;
-                string deviceInfo =
-                           "<DeviceInfo>" +
-                           "  <OutputFormat>" + FormatType + "</OutputFormat>" +
-                           "</DeviceInfo>";
-                Warning[] warnings;
-                string[] streams;
-                byte[] renderedBytes;
-                renderedBytes = localReport.Render(
-                    FormatType,
-                    deviceInfo,
-                    out mimeType,
-                    out encoding,
-                    out fileNameExtension,
-                    out streams,
-                    out warnings);
-                if (FormatType == "Excel") { FormatType = "xls"; }
-                return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_GIBlackListQueryReport + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
-            }
-            public static Tuple<byte[], string, string> TK_GIBlackListQueryDetailReport(string FormatType, List<ReportParameter> ReportData, string FilePath)
-            {
-                LocalReport localReport = new LocalReport();
-                localReport.EnableExternalImages = true;
-                localReport.ReportPath = FilePath;
-                localReport.SetParameters(ReportData);
+            ReportDataSource source = new ReportDataSource();
+            source.Name = "DS_GIBlackListreport";
+            localReport.DataSources.Add(src_rst);
+            localReport.DataSources.Add(src_dce);
+            localReport.DataSources.Add(src_fnc);
+            localReport.DataSources.Add(src_psp);
+            localReport.DataSources.Add(src_na);
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            string deviceInfo =
+                       "<DeviceInfo>" +
+                       "  <OutputFormat>" + FormatType + "</OutputFormat>" +
+                       "</DeviceInfo>";
+            Warning[] warnings;
+            string[] streams;
+            byte[] renderedBytes;
+            renderedBytes = localReport.Render(
+                FormatType,
+                deviceInfo,
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings);
+            if (FormatType == "Excel") { FormatType = "xls"; }
+            return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_GIBlackListQueryReport + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
+        }
+        public static Tuple<byte[], string, string> TK_GIBlackListQueryDetailReport(string FormatType, List<ReportParameter> ReportData, string FilePath)
+        {
+            LocalReport localReport = new LocalReport();
+            localReport.EnableExternalImages = true;
+            localReport.ReportPath = FilePath;
+            localReport.SetParameters(ReportData);
 
-                string mimeType;
-                string encoding;
-                string fileNameExtension;
-                string deviceInfo =
-                           "<DeviceInfo>" +
-                           "  <OutputFormat>" + FormatType + "</OutputFormat>" +
-                           "  <PageWidth>8.5in</PageWidth>" +
-                           "  <PageHeight>11in</PageHeight>" +
-                           "  <MarginTop>0.5in</MarginTop>" +
-                           "  <MarginLeft>1in</MarginLeft>" +
-                           "  <MarginRight>1in</MarginRight>" +
-                           "  <MarginBottom>0.5in</MarginBottom>" +
-                           "</DeviceInfo>";
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            string deviceInfo =
+                       "<DeviceInfo>" +
+                       "  <OutputFormat>" + FormatType + "</OutputFormat>" +
+                       "  <PageWidth>8.5in</PageWidth>" +
+                       "  <PageHeight>11in</PageHeight>" +
+                       "  <MarginTop>0.5in</MarginTop>" +
+                       "  <MarginLeft>1in</MarginLeft>" +
+                       "  <MarginRight>1in</MarginRight>" +
+                       "  <MarginBottom>0.5in</MarginBottom>" +
+                       "</DeviceInfo>";
 
-                Warning[] warnings;
-                string[] streams;
-                byte[] renderedBytes;
+            Warning[] warnings;
+            string[] streams;
+            byte[] renderedBytes;
 
-                renderedBytes = localReport.Render(
-                    FormatType,
-                    deviceInfo,
-                    out mimeType,
-                    out encoding,
-                    out fileNameExtension,
-                    out streams,
-                    out warnings);
-                if (FormatType == "Excel") { FormatType = "xls"; }
-                return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_GIBlackListDetailQueryReport + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
+            renderedBytes = localReport.Render(
+                FormatType,
+                deviceInfo,
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings);
+            if (FormatType == "Excel") { FormatType = "xls"; }
+            return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_GIBlackListDetailQueryReport + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
 
-            }
+        }
         #endregion
 
         #region CalificationReport
 
-            public static Tuple<byte[], string, string> CP_CalificationReport(string FormatType, DataTable LegalData, DataTable CommercialData, DataTable FinancialData, DataTable BalanceData, DataTable CertificationData, DataTable ConfigValidateData, List<ReportParameter> parameters,  string FilePath) 
-            {
-                LocalReport localReport = new LocalReport();
-                localReport.EnableExternalImages = true;
-                localReport.ReportPath = FilePath;
-                localReport.SetParameters(parameters);
+        public static Tuple<byte[], string, string> CP_CalificationReport(string FormatType, DataTable LegalData, DataTable CommercialData, DataTable FinancialData, DataTable BalanceData, DataTable CertificationData, DataTable ConfigValidateData, List<ReportParameter> parameters, string FilePath)
+        {
+            LocalReport localReport = new LocalReport();
+            localReport.EnableExternalImages = true;
+            localReport.ReportPath = FilePath;
+            localReport.SetParameters(parameters);
 
-                ReportDataSource source = new ReportDataSource();
-                source.Name = "DS_CalificationReport_LegalInfo";
-                source.Value = LegalData != null ? LegalData : new DataTable();
-                localReport.DataSources.Add(source);
+            ReportDataSource source = new ReportDataSource();
+            source.Name = "DS_CalificationReport_LegalInfo";
+            source.Value = LegalData != null ? LegalData : new DataTable();
+            localReport.DataSources.Add(source);
 
-                ReportDataSource source2 = new ReportDataSource();
-                source2.Name = "DS_CalificationReport_FinancialInfo";
-                source2.Value = FinancialData != null ? FinancialData : new DataTable();
-                localReport.DataSources.Add(source2);
+            ReportDataSource source2 = new ReportDataSource();
+            source2.Name = "DS_CalificationReport_FinancialInfo";
+            source2.Value = FinancialData != null ? FinancialData : new DataTable();
+            localReport.DataSources.Add(source2);
 
-                ReportDataSource source3 = new ReportDataSource();
-                source3.Name = "DS_CalificationReport_CommercialInfo";
-                source3.Value = CommercialData != null ? CommercialData : new DataTable();
-                localReport.DataSources.Add(source3);
+            ReportDataSource source3 = new ReportDataSource();
+            source3.Name = "DS_CalificationReport_CommercialInfo";
+            source3.Value = CommercialData != null ? CommercialData : new DataTable();
+            localReport.DataSources.Add(source3);
 
-                ReportDataSource source4 = new ReportDataSource();
-                source4.Name = "DS_CalificationReport_Certification";
-                source4.Value = CertificationData != null ? CertificationData : new DataTable();
-                localReport.DataSources.Add(source4);
+            ReportDataSource source4 = new ReportDataSource();
+            source4.Name = "DS_CalificationReport_Certification";
+            source4.Value = CertificationData != null ? CertificationData : new DataTable();
+            localReport.DataSources.Add(source4);
 
-                ReportDataSource source5 = new ReportDataSource();
-                source5.Name = "DS_CalificationReport_BalanceInfo";
-                source5.Value = BalanceData != null ? BalanceData : new DataTable();
-                localReport.DataSources.Add(source5);
+            ReportDataSource source5 = new ReportDataSource();
+            source5.Name = "DS_CalificationReport_BalanceInfo";
+            source5.Value = BalanceData != null ? BalanceData : new DataTable();
+            localReport.DataSources.Add(source5);
 
-                ReportDataSource source6 = new ReportDataSource();
-                source6.Name = "DS_CalificationReport_ValidateInfo";
-                source6.Value = ConfigValidateData != null ? ConfigValidateData : new DataTable();
-                localReport.DataSources.Add(source6);
+            ReportDataSource source6 = new ReportDataSource();
+            source6.Name = "DS_CalificationReport_ValidateInfo";
+            source6.Value = ConfigValidateData != null ? ConfigValidateData : new DataTable();
+            localReport.DataSources.Add(source6);
 
-                string mimeType;
-                string encoding;
-                string fileNameExtension;
-                string deviceInfo =
-                           "<DeviceInfo>" +
-                           "  <OutputFormat>" + FormatType + "</OutputFormat>" +
-                           "  <PageWidth>8.5in</PageWidth>" +
-                           "  <PageHeight>11in</PageHeight>" +
-                           "  <MarginTop>0.5in</MarginTop>" +
-                           "  <MarginLeft>0.8in</MarginLeft>" +
-                           "  <MarginRight>0.8in</MarginRight>" +
-                           "  <MarginBottom>0.5in</MarginBottom>" +
-                           "</DeviceInfo>";
-                Warning[] warnings;
-                string[] streams;
-                byte[] renderedBytes;
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            string deviceInfo =
+                       "<DeviceInfo>" +
+                       "  <OutputFormat>" + FormatType + "</OutputFormat>" +
+                       "  <PageWidth>8.5in</PageWidth>" +
+                       "  <PageHeight>11in</PageHeight>" +
+                       "  <MarginTop>0.5in</MarginTop>" +
+                       "  <MarginLeft>0.8in</MarginLeft>" +
+                       "  <MarginRight>0.8in</MarginRight>" +
+                       "  <MarginBottom>0.5in</MarginBottom>" +
+                       "</DeviceInfo>";
+            Warning[] warnings;
+            string[] streams;
+            byte[] renderedBytes;
 
-                renderedBytes = localReport.Render(
-                    FormatType,
-                    deviceInfo,
-                    out mimeType,
-                    out encoding,
-                    out fileNameExtension,
-                    out streams,
-                    out warnings);
-                if (FormatType == "Excel") { FormatType = "xls"; }
-                return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_CalificationReport + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
-            }
+            renderedBytes = localReport.Render(
+                FormatType,
+                deviceInfo,
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings);
+            if (FormatType == "Excel") { FormatType = "xls"; }
+            return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_CalificationReport + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
+        }
         #endregion
 
         #region ProviderGeneralReport
@@ -1000,6 +1001,11 @@ namespace ProveedoresOnLine.Reports.Controller
         public static List<ProveedoresOnLine.Reports.Models.Reports.ConfigReportModel> CC_Report_GetReportPublicId(string ConfigReportId)
         {
             return DAL.Controller.ReportsDataController.Instance.CC_Report_GetReportPublicId(ConfigReportId);
+        }
+
+        public string CC_ReportTempleate_PublicId(string ReportPublicId, List<Tuple<Enumerations.enumDynamicReportFilters, string>> Filters)
+        {
+            return DAL.Controller.ReportsDataController.Instance.CC_ReportTempleate_PublicId(ReportPublicId, Filters);
         }
 
         #endregion
@@ -1063,7 +1069,7 @@ namespace ProveedoresOnLine.Reports.Controller
             {
                 using (Stream mmStream = mappedFile1.CreateViewStream())
                 {
-                    
+
                 }
             }
 

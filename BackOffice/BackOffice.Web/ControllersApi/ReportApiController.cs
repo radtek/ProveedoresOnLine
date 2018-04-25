@@ -15,28 +15,38 @@ namespace BackOffice.Web.ControllersApi
     {
         [HttpPost]
         [HttpGet]
-        public List<ConfigReportViewModel> CC_Report()
+        public List<ConfigReportViewModel> CC_Report(
+            string CC_Report
+            )
         {
             List<ConfigReportViewModel> oReturn = new List<ConfigReportViewModel>();
 
             var ViewReport = ProveedoresOnLine.Reports.Controller.ReportModule.CC_Report_GetReportPublicId(null);
 
-            ViewReport.All(x =>
+            if (CC_Report == "true")
             {
-                oReturn.Add(new ConfigReportViewModel()
+                if (ViewReport != null)
                 {
-                    CreateDate = x.CreateDate,
-                    Enable = x.Enable,
-                    LastModify = x.LastModify,
-                    ReportId = x.ReportId,
-                    ReportName = x.ReportName,
-                    ReportPublic = x.ReportPublic,
-                    ReportTypeId = x.ReportType.ItemId.ToString(),
-                    User = x.User,
-                });
-                return true;
-            });
-
+                    if (ViewReport.Count > 0)
+                    {
+                        ViewReport.All(x =>
+                        {
+                            oReturn.Add(new ConfigReportViewModel()
+                            {
+                                CreateDate = x.CreateDate,
+                                Enable = x.Enable,
+                                LastModify = x.LastModify,
+                                ReportId = x.ReportId,
+                                ReportName = x.ReportName,
+                                ReportPublic = x.ReportPublic,
+                                ReportTypeId = x.ReportType.ItemId.ToString(),
+                                User = x.User,
+                            });
+                            return true;
+                        });
+                    }
+                }
+            }
 
             return oReturn;
         }
@@ -79,20 +89,20 @@ namespace BackOffice.Web.ControllersApi
                 var ViewReport = ProveedoresOnLine.Reports.Controller.ReportModule.CC_Report_GetReportPublicId(null);
 
                 ViewReport.Where(y => y.ReportId == asdf).FirstOrDefault(x =>
-                 {
-                     oReturn.Add(new ConfigReportViewModel()
-                     {
-                         CreateDate = x.CreateDate,
-                         Enable = x.Enable,
-                         LastModify = x.LastModify,
-                         ReportId = x.ReportId,
-                         ReportName = x.ReportName,
-                         ReportPublic = x.ReportPublic,
-                         ReportTypeId = x.ReportType.ItemId.ToString(),
-                         User = x.User,
-                     });
-                     return true;
-                 });
+                {
+                    oReturn.Add(new ConfigReportViewModel()
+                    {
+                        CreateDate = x.CreateDate,
+                        Enable = x.Enable,
+                        LastModify = x.LastModify,
+                        ReportId = x.ReportId,
+                        ReportName = x.ReportName,
+                        ReportPublic = x.ReportPublic,
+                        ReportTypeId = x.ReportType.ItemId.ToString(),
+                        User = x.User,
+                    });
+                    return true;
+                });
 
 
             }
@@ -209,7 +219,7 @@ namespace BackOffice.Web.ControllersApi
 
                 if (!string.IsNullOrEmpty(oDaTaToUpsert.ReportInfoType))
                 {
-                    
+
                     ConfigReportInfoModel TypeInformationCreated = new ConfigReportInfoModel()
                     {
 
@@ -270,7 +280,7 @@ namespace BackOffice.Web.ControllersApi
                 });
 
             }
-            
+
             return oReturn;
 
         }

@@ -352,7 +352,7 @@ var ReportObject = {
                 template: function (dataItem) {
                     var oReturn = 'Seleccione una opción.';
                     debugger;
-                    var infoTypeId = 805;
+                    var infoTypeId = 2016;
 
                     if (ReportObject.ReportSelected.ReportTypeId == "2014002") { //Survey
                         infoTypeId = 12010; //corregir
@@ -360,7 +360,7 @@ var ReportObject = {
                     else if (ReportObject.ReportSelected.ReportTypeId == "2014003") {//Thirdknowlege
                         infoTypeId = 12012;
                     } else { //POL
-                        infoTypeId = 805; //corregir
+                        infoTypeId = 2016; //corregir
                     }
                     $.each(ReportObject.ProviderOptions[infoTypeId], function (item, value) {                        
                         if (dataItem.ReportInfoType == value.ItemId) {
@@ -372,15 +372,15 @@ var ReportObject = {
                 },
                 editor: function (container, options) {
                     
-                    var infoTypeId = 805;
+                    var infoTypeId = 2016;
 
                     if (ReportObject.ReportSelected.ReportTypeId == "2014002") { //Survey
                         infoTypeId = 12010;
                     }
-                    else if (ReportObject.ReportSelected.ReportTypeId == "2014003") {//Thirdknowlege
+                    else if (ReportObject.ReportSelected.ReportTypeId == "2014003") {//Thirdknowlege 
                         infoTypeId = 12012;
                     } else { //POL
-                        infoTypeId = 805;
+                        infoTypeId = 2016;
                     }
 
                     $('<input required data-bind="value:' + options.field + '"/>')
@@ -402,9 +402,9 @@ var ReportObject = {
                     var oReturn = 'Seleccione una opción.';
 
                     //General Information
-                    if (dataItem != null && dataItem.ReportInfoType == "805001") {
+                    if (dataItem != null && dataItem.ReportInfoType == "2016001") {
                         if (dataItem != null && dataItem.Field != null) {
-                            $.each(ReportObject.ProviderOptions[203], function (item, value) {
+                            $.each(ReportObject.ProviderOptions[2017], function (item, value) {
                                 if (dataItem.Field == value.ItemId) {
                                     oReturn = value.ItemName;
                                 }
@@ -413,9 +413,9 @@ var ReportObject = {
                     }
 
                         //Legal Information
-                    else if (dataItem != null && dataItem.ReportInfoType == "805002") {
+                    else if (dataItem != null && dataItem.ReportInfoType == "2016002") {
                         if (dataItem != null && dataItem.Field != null) {
-                            $.each(ReportObject.ProviderOptions[601], function (item, value) {
+                            $.each(ReportObject.ProviderOptions[2018], function (item, value) {
                                 if (dataItem.Field == value.ItemId) {
                                     oReturn = value.ItemName;
                                 }
@@ -424,9 +424,9 @@ var ReportObject = {
                     }
 
                         //Financial Information
-                    else if (dataItem != null && dataItem.ReportInfoType == "805003") {
+                    else if (dataItem != null && dataItem.ReportInfoType == "2016003") {
                         if (dataItem != null && dataItem.Field != null) {
-                            $.each(ReportObject.ProviderOptions[501], function (item, value) {
+                            $.each(ReportObject.ProviderOptions[2019], function (item, value) {
                                 if (dataItem.Field == value.ItemId) {
                                     oReturn = value.ItemName;
                                 }
@@ -435,9 +435,9 @@ var ReportObject = {
                     }
 
                         //Commercial Information
-                    else if (dataItem != null && dataItem.ReportInfoType == "805004") {
+                    else if (dataItem != null && dataItem.ReportInfoType == "2016004") {
                         if (dataItem != null && dataItem.Field != null) {
-                            $.each(ReportObject.ProviderOptions[301], function (item, value) {
+                            $.each(ReportObject.ProviderOptions[2020], function (item, value) {
                                 if (dataItem.Field == value.ItemId) {
                                     oReturn = value.ItemName;
                                 }
@@ -446,9 +446,9 @@ var ReportObject = {
                     }
 
                         //HSEQ Information
-                    else if (dataItem != null && dataItem.ReportInfoType == "805005") {
+                    else if (dataItem != null && dataItem.ReportInfoType == "2016005") {
                         if (dataItem != null && dataItem.Field != null) {
-                            $.each(ReportObject.ProviderOptions[701], function (item, value) {
+                            $.each(ReportObject.ProviderOptions[2021], function (item, value) {
                                 if (dataItem.Field == value.ItemId) {
                                     oReturn = value.ItemName;
                                 }
@@ -457,9 +457,9 @@ var ReportObject = {
                     }
 
                         //Aditional Information
-                    else if (dataItem != null && dataItem.ReportInfoType == "805006") {
+                    else if (dataItem != null && dataItem.ReportInfoType == "2016006") {
                         if (dataItem != null && dataItem.Field != null) {
-                            $.each(ReportObject.ProviderOptions[1701], function (item, value) {
+                            $.each(ReportObject.ProviderOptions[2022], function (item, value) {
                                 if (dataItem.Field == value.ItemId) {
                                     oReturn = value.ItemName;
                                 }
@@ -467,10 +467,10 @@ var ReportObject = {
                         }
                     }
 
-                        //Performance Evaluation
-                    else if (dataItem != null && dataItem.ReportInfoType == "805007") {
+                        //Tracing
+                    else if (dataItem != null && dataItem.ReportInfoType == "2016007") {
                         if (dataItem != null && dataItem.Field != null) {
-                            $.each(ReportObject.ProviderOptions[1204], function (item, value) {
+                            $.each(ReportObject.ProviderOptions[2023], function (item, value) {
                                 if (dataItem.Field == value.ItemId) {
                                     oReturn = value.ItemName;
                                 }
@@ -539,13 +539,13 @@ var ReportObject = {
                 editor: function (container, options) {
 
                     //General Information
-                    if (options.model.ReportInfoType == "805001") {
+                    if (options.model.ReportInfoType == "2016001") {
 
 
                         $('<input required data-bind="value:' + options.field + '"/>')
                        .appendTo(container)
                        .kendoDropDownList({
-                           dataSource: ReportObject.ProviderOptions[203],
+                           dataSource: ReportObject.ProviderOptions[2017],
                            dataTextField: 'ItemName',
                            dataValueField: 'ItemId',
                            optionLabel: 'Seleccione una opción'
@@ -553,13 +553,13 @@ var ReportObject = {
                     }
 
                         ///Legal Information
-                    else if (options.model.ReportInfoType == "805002") {
+                    else if (options.model.ReportInfoType == "2016002") {
 
 
                         $('<input required data-bind="value:' + options.field + '"/>')
                        .appendTo(container)
                        .kendoDropDownList({
-                           dataSource: ReportObject.ProviderOptions[601],
+                           dataSource: ReportObject.ProviderOptions[2018],
                            dataTextField: 'ItemName',
                            dataValueField: 'ItemId',
                            optionLabel: 'Seleccione una opción'
@@ -567,13 +567,13 @@ var ReportObject = {
                     }
 
                         //Financial Information
-                    else if (options.model.ReportInfoType == "805003") {
+                    else if (options.model.ReportInfoType == "2016003") {
 
 
                         $('<input required data-bind="value:' + options.field + '"/>')
                        .appendTo(container)
                        .kendoDropDownList({
-                           dataSource: ReportObject.ProviderOptions[501],
+                           dataSource: ReportObject.ProviderOptions[2019],
                            dataTextField: 'ItemName',
                            dataValueField: 'ItemId',
                            optionLabel: 'Seleccione una opción'
@@ -581,13 +581,13 @@ var ReportObject = {
                     }
 
                         //Commercial Information
-                    else if (options.model.ReportInfoType == "805004") {
+                    else if (options.model.ReportInfoType == "2016004") {
 
 
                         $('<input required data-bind="value:' + options.field + '"/>')
                        .appendTo(container)
                        .kendoDropDownList({
-                           dataSource: ReportObject.ProviderOptions[301],
+                           dataSource: ReportObject.ProviderOptions[2020],
                            dataTextField: 'ItemName',
                            dataValueField: 'ItemId',
                            optionLabel: 'Seleccione una opción'
@@ -596,13 +596,13 @@ var ReportObject = {
 
                         //HSEQ Information
 
-                    else if (options.model.ReportInfoType == "805005") {
+                    else if (options.model.ReportInfoType == "2016005") {
 
 
                         $('<input required data-bind="value:' + options.field + '"/>')
                        .appendTo(container)
                        .kendoDropDownList({
-                           dataSource: ReportObject.ProviderOptions[701],
+                           dataSource: ReportObject.ProviderOptions[2021],
                            dataTextField: 'ItemName',
                            dataValueField: 'ItemId',
                            optionLabel: 'Seleccione una opción'
@@ -610,13 +610,13 @@ var ReportObject = {
                     }
 
                         //Aditional Information
-                    else if (options.model.ReportInfoType == "805006") {
+                    else if (options.model.ReportInfoType == "2016006") {
 
 
                         $('<input required data-bind="value:' + options.field + '"/>')
                        .appendTo(container)
                        .kendoDropDownList({
-                           dataSource: ReportObject.ProviderOptions[1701],
+                           dataSource: ReportObject.ProviderOptions[2022],
                            dataTextField: 'ItemName',
                            dataValueField: 'ItemId',
                            optionLabel: 'Seleccione una opción'
@@ -624,13 +624,13 @@ var ReportObject = {
                     }
 
                         //Performance Evaluation
-                    else if (options.model.ReportInfoType == "805007") {
+                    else if (options.model.ReportInfoType == "2016007") {
 
 
                         $('<input required data-bind="value:' + options.field + '"/>')
                        .appendTo(container)
                        .kendoDropDownList({
-                           dataSource: ReportObject.ProviderOptions[1204],
+                           dataSource: ReportObject.ProviderOptions[2023],
                            dataTextField: 'ItemName',
                            dataValueField: 'ItemId',
                            optionLabel: 'Seleccione una opción'

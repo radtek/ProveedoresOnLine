@@ -1,4 +1,5 @@
 ﻿using Microsoft.Reporting.WebForms;
+using ProveedoresOnLine.Reports.Models;
 using ProveedoresOnLine.Reports.Models.Reports;
 using ProveedoresOnLine.SurveyModule.Models;
 using System;
@@ -65,11 +66,16 @@ namespace ProveedoresOnLine.Reports.Interfaces
 
         #region Dynamic Report
         string CC_Report_UpSert(ConfigReportModel oConfigReportModel);
-        
+
 
         string CC_ReportInfo_UpSert(ConfigReportInfoModel oConfigReportInfoModel);
 
         List<ProveedoresOnLine.Reports.Models.Reports.ConfigReportModel> CC_Report_GetReportPublicId(string ConfigReportId);
+
+        string CC_ReportTempleate_PublicId(string ReportPublicId, List<Tuple<Enumerations.enumDynamicReportFilters, string>> Filters);
+
+
+
         #endregion
 
         #endregion
