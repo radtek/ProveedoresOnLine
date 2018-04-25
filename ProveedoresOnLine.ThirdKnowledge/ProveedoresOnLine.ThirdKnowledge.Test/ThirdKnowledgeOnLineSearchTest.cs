@@ -53,7 +53,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
         public async Task RegisterEntitySearch()
         {
             List<Tuple<string, List<string>, List<string>>> resultado = null;
-            resultado = await Controller.ThirdKnowledgeModule.RegisterEntitySearch(1, "", "71984381");
+            resultado = await Controller.ThirdKnowledgeModule.RegisterEntitySearch(1, "", "1031169089");
         }
 
         [TestMethod]

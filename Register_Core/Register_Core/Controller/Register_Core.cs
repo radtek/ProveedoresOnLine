@@ -36,13 +36,13 @@ namespace Register_Core.Controller
                     HtmlDocument HtmlDocResponse = new HtmlDocument();
                     HtmlDocResponse.LoadHtml(resultContent);
 
-                    if (HtmlDocResponse.DocumentNode.SelectNodes("//h3")[1] != null)
+                    if (HtmlDocResponse.DocumentNode.SelectNodes("//h3").Count > 1)
                     {
                         NameResult = HtmlDocResponse.DocumentNode.SelectNodes("//tr")[0].SelectNodes("//td")[0].InnerHtml.ToString();                        
                     }
                     else
                     {
-                        NameResult = "No existe nombre o razón social";
+                        NameResult = IdentificationNumber + " - Nombre no registra";
                     }
 
                 }
@@ -71,7 +71,7 @@ namespace Register_Core.Controller
                     IsSuccess = false,
                 };
                 RegisterDataController.Instance.SaveTransaction(oTransaction.Token, oTransaction.Message, oTransaction.Query, (int)oTransaction.ServiceType, oTransaction.IsSuccess);
-                return " ";
+                return "Nombre No Disponible";
             }
         }
         public static bool IsAuthorized(string Token)
