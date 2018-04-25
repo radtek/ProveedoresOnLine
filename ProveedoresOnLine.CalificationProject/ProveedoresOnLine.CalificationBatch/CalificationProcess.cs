@@ -23,6 +23,7 @@ namespace ProveedoresOnLine.CalificationBatch
                 //cruzar ObjNuevo vs oCalificationProjectConfigModel oCalificationProjectConfigModel  == oCalificationProjectConfigModel  Cruzado
                 List<CalificationProjectConfigModel> oCalificationProjectConfigModel = CalificationProject.Controller.CalificationProject.CalificationProjectConfig_GetAll();
 
+                oCalificationProjectConfigModel = oCalificationProjectConfigModel.Where(x => x.CalificationProjectConfigId == 8).Select(x => x).ToList();
                 var oRelatedProvider = new List<CompanyModel>();
 
                 oCalificationProjectConfigModel = oCalificationProjectConfigModel.Where(x => oCalificationProjectConfigInfoModel.Any(y => x.CalificationProjectConfigId == y.RelatedCalificationProjectConfig.CalificationProjectConfigId)).Select(x=>x).ToList();

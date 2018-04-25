@@ -38,7 +38,7 @@ namespace Register_Core.Controller
 
                     if (HtmlDocResponse.DocumentNode.SelectNodes("//h3")[1] != null)
                     {
-                        NameResult = HtmlDocResponse.DocumentNode.SelectNodes("//h3")[1].InnerHtml.Replace("Obtene un informe de: ", "").ToString();                        
+                        NameResult = HtmlDocResponse.DocumentNode.SelectNodes("//tr")[0].SelectNodes("//td")[0].InnerHtml.ToString();                        
                     }
                     else
                     {
@@ -71,7 +71,7 @@ namespace Register_Core.Controller
                     IsSuccess = false,
                 };
                 RegisterDataController.Instance.SaveTransaction(oTransaction.Token, oTransaction.Message, oTransaction.Query, (int)oTransaction.ServiceType, oTransaction.IsSuccess);
-                return "Service temporally out of service";
+                return "Error - Por favor verifique el parámetro de búsqueda";
             }
         }
         public static bool IsAuthorized(string Token)

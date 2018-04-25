@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Fakes Include="Fakes\System.Core.fakes" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -163,7 +163,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                 #endregion
 
                 #region Registraduría Puesto de Votación
-                if (RegEntityResult.Count > 0 && !string.IsNullOrEmpty(RegEntityResult.FirstOrDefault().Item1))
+                if (RegEntityResult != null &&  RegEntityResult.Count > 0 && !string.IsNullOrEmpty(RegEntityResult.FirstOrDefault().Item1))
                 {
                     TDQueryInfoModel oInfoCreate = new TDQueryInfoModel()
                     {
@@ -224,7 +224,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                         IdentificationNumber = SearchParam,
                         GroupName = "RAMA JUDICIAL DEL PODER PUBLICO - Criticidad Media",
                         Link = judProcResult.FirstOrDefault().Item1,
-                        ListName = "RAMA JUDICIAL DEL PODER PUBLICO, CONSEJO SUPERIOR DE LA JUDICATURA y/o JUZGADOS DE EJECUCION DE PENAS Y MEDIDAS DE SEGURIDAD",
+                        ListName = "RAMA JUDICIAL DEL PODER PUBLICO",
                         Zone = "N/A",
                         ChargeOffense = "El tercero " + judProcResult.FirstOrDefault().Item2[1] + "Con Identificación No. " + judProcResult.FirstOrDefault().Item2[0] + "Presenta Antecedentes Judiciales",
                         ElasticId = (int)enumElasticGroupId.JudicialProces,

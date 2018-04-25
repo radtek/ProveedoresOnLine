@@ -34,7 +34,7 @@ namespace JudicialProcess_Core.Controller
                     {
                         new KeyValuePair<string, string>("cbadju", IdentificationType.ToString()),
                         new KeyValuePair<string, string>("norad", IdentificationNumber),
-                        new KeyValuePair<string, string>("Buscar", "Buscar"),
+                        new KeyValuePair<string, string>("Buscar", "BUSCAR"),
                     });
 
                     Uri myUri = new Uri(Url, UriKind.Absolute);

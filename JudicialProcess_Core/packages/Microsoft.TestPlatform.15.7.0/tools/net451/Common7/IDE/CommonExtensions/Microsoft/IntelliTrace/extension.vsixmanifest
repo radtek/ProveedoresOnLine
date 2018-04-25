@@ -1,0 +1,14 @@
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011">
+  <Metadata>
+    <Identity Id="a152e705-02c1-452f-92d0-4c9f8be6be3b" Version="1.0" Language="en-US" Publisher="Microsoft" />
+    <DisplayName>Production Breakpoints Package</DisplayName>
+    <Description>Package that supports production breakpoints in Visual Studio</Description>
+  </Metadata>
+  <Installation InstalledByMsi="false">
+    <InstallationTarget Version="[14.0,15.0)" Id="Microsoft.VisualStudio.Ultimate" />
+  </Installation>
+  <Dependencies />
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.VsPackage" Path="SnappointPackage.pkgdef" />
+  </Assets>
+</PackageManifest>
