@@ -535,10 +535,7 @@ namespace MarketPlace.Web.Controllers
 
                                 #endregion
 
-                                //qb &= f2.Terms(tms => tms
-                                // .Field(fi => fi.ProviderPublicId.ToLower())
-                                // .Terms<string>(resultPrv.Documents.Select(x => x.CompanyPublicId.ToLower()).ToList().Take(1000))
-                                //);
+                                
                                 return qb;
 
                             })))));
