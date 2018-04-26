@@ -31,7 +31,7 @@ function selectRow() {
 
 function ProviderSearchGrid(vidDiv, cmbForm, cmbCustomer, chkName) {
     //configure grid
-        $('#' + vidDiv).kendoGrid({
+    $('#' + vidDiv).kendoGrid({
         toolbar: [{ template: $('#' + vidDiv + '_Header').html() }],
         pageable: true,
         //persistSelection: true,
@@ -46,7 +46,7 @@ function ProviderSearchGrid(vidDiv, cmbForm, cmbCustomer, chkName) {
                 model: {
                     id: "RelatedProvider.ProviderPublicId",
                     fields: {
-                        Selected: { editable: true, type: "boolean", defaultValue: true  }
+                        Selected: { editable: true, type: "boolean", defaultValue: true }
                     },
                 },
                 /*total: function (data) {
@@ -72,7 +72,7 @@ function ProviderSearchGrid(vidDiv, cmbForm, cmbCustomer, chkName) {
                         dataType: "json",
                         type: "POST",
                         success: function (result) {
-                            
+
                             options.success(result.RelatedProvider)
                         },
                         error: function (result) {
@@ -105,7 +105,7 @@ function ProviderSearchGrid(vidDiv, cmbForm, cmbCustomer, chkName) {
             field: "RelatedProvider.IdentificationNumber",
             title: "Númer identificación",
             width: 150
-        },{
+        }, {
             field: "checkDigit",
             title: "Dígito Verificación",
             width: 150
@@ -121,20 +121,20 @@ function ProviderSearchGrid(vidDiv, cmbForm, cmbCustomer, chkName) {
             field: "FormUrl",
             title: "URL",
             width: 200,
-            template: function (dataItem) {                
+            template: function (dataItem) {
                 var oReturn = '';
                 if (dataItem != null && dataItem.RelatedProvider.FormPublicId != null) {
-                    var linkForm =  $('#' + vidDiv + '_FormUrl').html();
-                    
+                    var linkForm = $('#' + vidDiv + '_FormUrl').html();
+
                     oReturn = linkForm.replace('FormPublicIdParam', dataItem.RelatedProvider.FormPublicId);
                     oReturn = oReturn.replace('ProviderPublicIdParam', dataItem.RelatedProvider.ProviderPublicId)
                 }
                 else {
-                    oReturn = 'SIN FORMULARIO' 
+                    oReturn = 'SIN FORMULARIO'
                 }
                 return oReturn;
             },
-            
+
         }, {
             field: "RelatedProvider.CustomerCount",
             title: "# Comp. Relacionados",
@@ -203,7 +203,7 @@ function ProviderSearchGrid(vidDiv, cmbForm, cmbCustomer, chkName) {
         });
     });
 
-   
+
 }
 
 function EditDialog(ProviderPublicId, IdentificationType, IdentificationNumber, Email, CustomerPublicId, ProviderName, infoId, checkDigit, checkDigitInfoIdedit) {
@@ -218,7 +218,7 @@ function EditDialog(ProviderPublicId, IdentificationType, IdentificationNumber, 
     $('#Email').val(Email);
     $('#ProviderInfoIdEdit').val(infoId);
     $('#checkDigitInfoIdEdit').val(checkDigitInfoIdedit);
-    
+
 }
 
 function initCmb(cmbForm, cmbCustomer) {
@@ -231,7 +231,7 @@ function initCmb(cmbForm, cmbCustomer) {
         success: function (result) {
             $('#' + cmbForm).html('');
             $('#' + cmbForm).append('<option value="' + "" + '">' + " " + '</option>')
-            for (item in result.RelatedForm) {                
+            for (item in result.RelatedForm) {
                 $('#' + cmbForm).append('<option value="' + result.RelatedForm[item].FormPublicId + '">' + result.RelatedForm[item].Name + '</option>')
             }
         },
@@ -271,10 +271,10 @@ var L_AdminLogProvider = {
                         $.ajax({
                             url: BaseUrl.ApiUrl + '/ProviderApi?ProviderLog=true&ProviderPublicId=' + L_AdminLogProvider.ProviderPublicId,
                             dataType: 'json',
-                            success: function (result) {                                
+                            success: function (result) {
                                 if (result != null) {
                                     options.success(result);
-                                }                                
+                                }
                             },
                             error: function (result) {
                                 options.error(result);
@@ -303,8 +303,7 @@ var L_AdminLogProvider = {
     },
 };
 
-function ChangesControl(vidDiv, SearchParam)
-{    
+function ChangesControl(vidDiv, SearchParam) {
     //configure grid
     $('#' + vidDiv).kendoGrid({
         toolbar: [{ template: $('#' + vidDiv + '_Header').html() }],
@@ -328,10 +327,10 @@ function ChangesControl(vidDiv, SearchParam)
                         url: BaseUrl.ApiUrl + '/ProviderApi?ChangesControlSearch=true&SearchParam=' + oSearchParam + '&PageNumber=' + (new Number(options.data.page) - 1) + '&RowCount=' + options.data.pageSize,
                         dataType: "json",
                         type: "POST",
-                        success: function (result) {                            
+                        success: function (result) {
                             options.success(result)
                         },
-                        error: function (result) {                            
+                        error: function (result) {
                             options.error(result);
                         }
                     });
@@ -370,12 +369,12 @@ function ChangesControl(vidDiv, SearchParam)
         $('#' + vidDiv).getKendoGrid().dataSource.read();
     });
 
-    $('#' + vidDiv + '_txtSearch').keypress(function (event) {        
+    $('#' + vidDiv + '_txtSearch').keypress(function (event) {
         if (event.keyCode == 13) {
             event.preventDefault();
             $('#' + vidDiv + '_SearchButton').click();
         }
     });
-    
+
 }
 

@@ -67,6 +67,7 @@
     <Compile Include="Interfaces\IProviderData.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\Enumerations.cs" />
+    <Compile Include="Models\NotificationProviderModel.cs" />
     <Compile Include="Models\Provider\ProviderInfoModel.cs" />
     <Compile Include="Models\Provider\ChangesControlModel.cs" />
     <Compile Include="Models\Provider\ProviderModel.cs" />

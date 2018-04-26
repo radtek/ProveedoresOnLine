@@ -81,7 +81,7 @@ namespace DocumentManagement.Provider_Test
 
         [TestMethod]
         public void ChangesControlGetByProviderPublicId()
-        {            
+        {
             Assert.IsNotNull(DocumentManagement.Provider.Controller.Provider.ChangesControlGetByProviderPublicId("16B19596"));
         }
 

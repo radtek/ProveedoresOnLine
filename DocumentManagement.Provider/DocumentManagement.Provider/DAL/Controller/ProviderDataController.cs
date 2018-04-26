@@ -89,7 +89,7 @@ namespace DocumentManagement.Provider.DAL.Controller
 
         public List<ChangesControlModel> ChangesControlSearch(string SearchParam, int PageNumber, int RowCount, out int TotalRows)
         {
-            return DataFactory.ChangesControlSearch(SearchParam,PageNumber, RowCount, out TotalRows);
+            return DataFactory.ChangesControlSearch(SearchParam, PageNumber, RowCount, out TotalRows);
         }
 
         public List<ChangesControlModel> ChangesControlGetByProviderPublicId(string ProviderPublicId)

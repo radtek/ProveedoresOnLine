@@ -26,7 +26,7 @@ namespace DocumentManagement.Provider.Interfaces
         Dictionary<int, List<DocumentManagement.Provider.Models.Util.CatalogModel>> CatalogGetProviderOptions();
 
         DocumentManagement.Provider.Models.Provider.ProviderModel ProviderGetByInfoType(string IdentificationNumber, int IdentificationTypeId, int ProviderInfoTypeId);
-        
+
         #region ChangesControl 
 
         string ChangesControlUpsert(string ChangesPublicId, int ProviderInfoId, string FormUrl, int StepId, int Status, bool Enable);

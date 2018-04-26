@@ -29,12 +29,12 @@ namespace DocumentManagement.Web.ControllersApi
             {
                 #region Lead     
                 prv.RelatedProviderCustomerInfo.All(y =>
-                           {
-                               if (y.ProviderInfoType.ItemId == 403)
-                                   y.Value = DocumentManagement.Models.General.InternalSettings.Instance[DocumentManagement.Models.General.Constants.C_Settings_Path_SalesForce].Value + y.Value;                            
-                               return true;
-                           }); 
-                #endregion                
+                {
+                    if (y.ProviderInfoType.ItemId == 403)
+                        y.Value = DocumentManagement.Models.General.InternalSettings.Instance[DocumentManagement.Models.General.Constants.C_Settings_Path_SalesForce].Value + y.Value;
+                    return true;
+                });
+                #endregion
                 oReturn.RelatedProvider.Add(new ProviderItemSearchModel()
                 {
                     RelatedProvider = prv,
@@ -46,7 +46,7 @@ namespace DocumentManagement.Web.ControllersApi
                     checkDigitInfoId = prv.RelatedProviderCustomerInfo.Where(x => x.ProviderInfoType.ItemId == 378).Select(x => x.ProviderInfoId).FirstOrDefault() == null ? 0 : prv.RelatedProviderCustomerInfo.Where(x => x.ProviderInfoType.ItemId == 378).Select(x => x.ProviderInfoId).FirstOrDefault(),
                     oTotalRows = oTotalRows
                 });
-                
+
                 return true;
             });
 
@@ -89,7 +89,7 @@ namespace DocumentManagement.Web.ControllersApi
 
             List<ChangesControlModel> oReturn = DocumentManagement.Provider.Controller.Provider.ChangesControlSearch(SearchParam, PageNumber, RowCount, out oTotalRows);
 
-            return oReturn; 
+            return oReturn;
         }
 
         [HttpPost]

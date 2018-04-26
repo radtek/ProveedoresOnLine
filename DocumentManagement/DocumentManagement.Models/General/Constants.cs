@@ -36,7 +36,7 @@
 
         #region Provider General
 
-        public const string C_Settings_File_TmpExcelDir = "File_TmpProviderExcelDir";        
+        public const string C_Settings_File_TmpExcelDir = "File_TmpProviderExcelDir";
         #endregion
 
         #region Administrator User Roles
@@ -66,7 +66,7 @@
         #region PublicIdPublicar
 
         public const string C_Settings_PublicId_Publicar = "CustomerPublicId_Publicar";
-        
+
         #endregion
 
         #endregion

@@ -140,7 +140,7 @@
         AlertRisk = 203008,
         OtherProviders = 203010,
         CheckDigit = 203013,
-        CustomData = 203019,       
+        CustomData = 203019,
 
         CustomEconomicActivity = 220001,
     }
@@ -438,7 +438,7 @@
         SurveyType = 111012,
         SurveyRank = 111013,
         SurveyEvaluator = 111014,
-        CalificationType  = 111019,
+        CalificationType = 111019,
         CalificationResult = 111020,
         CustomFilterType = 111021,
         CustomFilterItem = 111022,
@@ -565,7 +565,7 @@
         ExpirationDate = 1204013,
         CurrentArea = 1204014,
         Reminder = 1204015,
-        Eval_Reeval= 1204016,
+        Eval_Reeval = 1204016,
         //SurveyRepor
 
         //Report By Date
@@ -628,8 +628,8 @@
     //SurveyConfig QuestionType
     public enum enumSurveyQuestionType
     {
-        Question =118001,
-        File = 118002        
+        Question = 118001,
+        File = 118002
     }
 
 
@@ -798,7 +798,7 @@
         StatusFilter = 701003,
         DomainFilter = 701004,
         DateFromFilter = 701005,
-        DateToFilter = 701006,        
+        DateToFilter = 701006,
     }
 
     #endregion
@@ -917,7 +917,7 @@
         SurveyProgram = 813003,
 
         //Thirdknowledge
-        IndividualQuery=815001,
+        IndividualQuery = 815001,
         MasiveQuery = 815002,
         MyQueries = 815003,
         QueryDetails = 815004,

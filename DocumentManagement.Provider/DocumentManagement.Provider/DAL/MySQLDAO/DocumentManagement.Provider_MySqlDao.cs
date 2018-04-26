@@ -17,7 +17,7 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
         public Provider_MySqlDao()
         {
             DataInstance = new ADO.MYSQL.MySqlImplement(Constants.C_DMProviderConnectionName);
-        } 
+        }
 
         public string ProviderUpsert(string ProviderPublicId, string Name, int IdentificationTypeId, string IdentificationNumber, string Email)
         {
@@ -179,16 +179,16 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
             lstParams.Add(DataInstance.CreateTypedParameter("vProviderPublicId", ProviderPublicId));
 
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
-                {
-                    CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
-                    CommandText = "P_ProviderLog_ByPublicId",
-                    CommandType = CommandType.StoredProcedure,
-                    Parameters = lstParams,
-                });
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "P_ProviderLog_ByPublicId",
+                CommandType = CommandType.StoredProcedure,
+                Parameters = lstParams,
+            });
 
             List<LogManager.Models.LogModel> oReturn = null;
 
-            if (response.DataTableResult != null && 
+            if (response.DataTableResult != null &&
                 response.DataTableResult.Rows.Count > 0)
             {
                 oReturn =
@@ -205,13 +205,13 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
                          CreateDate = l.Field<DateTime>("CreateDate"),
                      }
                          into li
-                         select new LogManager.Models.LogModel()
-                         {
-                             LogId = li.Key.LogId,
-                             User = li.Key.User,
-                             Source = li.Key.Source,
-                             CreateDate = li.Key.CreateDate,
-                             RelatedLogInfo = new List<LogManager.Models.LogInfoModel>()
+                     select new LogManager.Models.LogModel()
+                     {
+                         LogId = li.Key.LogId,
+                         User = li.Key.User,
+                         Source = li.Key.Source,
+                         CreateDate = li.Key.CreateDate,
+                         RelatedLogInfo = new List<LogManager.Models.LogInfoModel>()
                              {
                                  new LogManager.Models.LogInfoModel()
                                  {
@@ -220,7 +220,7 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
                                      Value = li.Key.Name,
                                  }
                              }
-                         }).ToList();                           
+                     }).ToList();
             }
             return oReturn;
         }
@@ -247,21 +247,21 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
                 response.DataTableResult.Rows.Count > 0)
             {
                 oReturn = new ProviderModel()
+                {
+                    ProviderPublicId = response.DataTableResult.Rows[0].Field<string>("ProviderPublicId"),
+                    Name = response.DataTableResult.Rows[0].Field<string>("Name"),
+                    IdentificationType = new CatalogModel()
                     {
-                        ProviderPublicId = response.DataTableResult.Rows[0].Field<string>("ProviderPublicId"),
-                        Name = response.DataTableResult.Rows[0].Field<string>("Name"),
-                        IdentificationType = new CatalogModel()
-                        {
-                            ItemId = response.DataTableResult.Rows[0].Field<int>("IdentificationTypeId"),
-                            ItemName = response.DataTableResult.Rows[0].Field<string>("IdentificationTypeName"),
-                        },
-                        IdentificationNumber = response.DataTableResult.Rows[0].Field<string>("IdentificationNumber"),
-                        Email = response.DataTableResult.Rows[0].Field<string>("Email"),
+                        ItemId = response.DataTableResult.Rows[0].Field<int>("IdentificationTypeId"),
+                        ItemName = response.DataTableResult.Rows[0].Field<string>("IdentificationTypeName"),
+                    },
+                    IdentificationNumber = response.DataTableResult.Rows[0].Field<string>("IdentificationNumber"),
+                    Email = response.DataTableResult.Rows[0].Field<string>("Email"),
 
-                        CustomerPublicId = response.DataTableResult.Rows[0].Field<string>("CustomerPublicId"),
-                        CustomerName = response.DataTableResult.Rows[0].Field<string>("CustomerName"),
+                    CustomerPublicId = response.DataTableResult.Rows[0].Field<string>("CustomerPublicId"),
+                    CustomerName = response.DataTableResult.Rows[0].Field<string>("CustomerName"),
 
-                        RelatedProviderCustomerInfo =
+                    RelatedProviderCustomerInfo =
                             (from pci in response.DataTableResult.AsEnumerable()
                              where !pci.IsNull("ProviderCustomerInfoId")
                              select new ProviderInfoModel()
@@ -275,7 +275,7 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
                                  Value = pci.Field<string>("ProviderCustomerInfoValue"),
                                  LargeValue = pci.Field<string>("ProviderCustomerInfoLargeValue"),
                              }).ToList(),
-                    };
+                };
             }
 
             return oReturn;
@@ -437,7 +437,7 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
                     },
                     IdentificationNumber = response.DataTableResult.Rows[0].Field<string>("IdentificationNumber"),
                     Email = response.DataTableResult.Rows[0].Field<string>("Email")
-                   
+
                 };
             }
             return oReturn;
@@ -449,13 +449,13 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
         public string ChangesControlUpsert(string ChangesPublicId, int ProviderInfoId, string FormUrl, int StepId, int Status, bool Enable)
         {
             List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
-                        
+
             lstParams.Add(DataInstance.CreateTypedParameter("vChangesPublicId", ChangesPublicId));
             lstParams.Add(DataInstance.CreateTypedParameter("vProviderInfoId", ProviderInfoId));
             lstParams.Add(DataInstance.CreateTypedParameter("vFormUrl", FormUrl));
             lstParams.Add(DataInstance.CreateTypedParameter("vStepId", StepId));
             lstParams.Add(DataInstance.CreateTypedParameter("vStatus", Status));
-            lstParams.Add(DataInstance.CreateTypedParameter("vEnable", Enable == false ? 0 : 1));            
+            lstParams.Add(DataInstance.CreateTypedParameter("vEnable", Enable == false ? 0 : 1));
 
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
@@ -465,18 +465,18 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
                 Parameters = lstParams
             });
 
-            return response.ScalarResult.ToString();            
+            return response.ScalarResult.ToString();
         }
 
         public List<ChangesControlModel> ChangesControlSearch(string SearchParam, int PageNumber, int RowCount, out int TotalRows)
         {
-            TotalRows = 0;           
+            TotalRows = 0;
 
             List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
 
-            lstParams.Add(DataInstance.CreateTypedParameter("vSearchParam", SearchParam));            
+            lstParams.Add(DataInstance.CreateTypedParameter("vSearchParam", SearchParam));
             lstParams.Add(DataInstance.CreateTypedParameter("vPageNumber", PageNumber));
-            lstParams.Add(DataInstance.CreateTypedParameter("vRowCount", RowCount));            
+            lstParams.Add(DataInstance.CreateTypedParameter("vRowCount", RowCount));
 
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
@@ -496,15 +496,15 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
                 oReturn =
                     (from c in response.DataTableResult.AsEnumerable()
                      where !c.IsNull("ProviderPublicId")
-                     select new ChangesControlModel()                     
+                     select new ChangesControlModel()
                      {
-                         ProviderPublicId = c.Field<string>("ProviderPublicId"),                                                 
-                         Name = c.Field<string>("ProviderName"),                                                 
+                         ProviderPublicId = c.Field<string>("ProviderPublicId"),
+                         Name = c.Field<string>("ProviderName"),
                          IdentificationNumber = c.Field<string>("IdentificationNumber"),
                          IdentificationType = new CatalogModel()
                          {
-                            ItemId = c.Field<int>("IdentificationTypeId"),
-                            ItemName = c.Field<string>("IdentificationType"),
+                             ItemId = c.Field<int>("IdentificationTypeId"),
+                             ItemName = c.Field<string>("IdentificationType"),
                          },
                          Status = new CatalogModel()
                          {
@@ -514,8 +514,8 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
                          FormUrl = c.Field<string>("FormPublicId"),
                          StepId = c.Field<int>("StepId"),
                          Enable = c.Field<UInt64>("ChangeEnable") == 1 ? true : false,
-                          
-                         LastModify = c.Field<DateTime>("LastModify"),                     
+
+                         LastModify = c.Field<DateTime>("LastModify"),
                      }).ToList();
             }
             return oReturn;
@@ -525,7 +525,7 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
         {
             List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
 
-            lstParams.Add(DataInstance.CreateTypedParameter("vProviderPublicId", ProviderPublicId));         
+            lstParams.Add(DataInstance.CreateTypedParameter("vProviderPublicId", ProviderPublicId));
 
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
@@ -549,7 +549,7 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
                          ProviderPublicId = c.Field<string>("ProviderPublicId"),
                          Name = c.Field<string>("ProviderName"),
                          IdentificationNumber = c.Field<string>("IdentificationNumber"),
-                         ProviderInfoId = c.Field<int>("ProviderInfoId"),     
+                         ProviderInfoId = c.Field<int>("ProviderInfoId"),
                          Status = new CatalogModel()
                          {
                              ItemId = c.Field<int>("StatusId"),

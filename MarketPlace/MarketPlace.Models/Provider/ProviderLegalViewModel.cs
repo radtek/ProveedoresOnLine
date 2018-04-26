@@ -202,7 +202,7 @@ namespace MarketPlace.Models.Provider
             {
                 if (string.IsNullOrEmpty(oR_PersonType))
                 {
-                    oR_PersonType =  MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(RelatedLegalInfo.ItemInfo.
+                    oR_PersonType = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(RelatedLegalInfo.ItemInfo.
                         Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumLegalInfoType.R_PersonType).
                         Select(y => y.Value).
                         DefaultIfEmpty(string.Empty).
@@ -326,12 +326,12 @@ namespace MarketPlace.Models.Provider
         public bool R_IVA
         {
             get
-            {                
+            {
                 return oR_IVA = RelatedLegalInfo.ItemInfo.
                     Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumLegalInfoType.R_IVA).
                     Select(y => y.Value).
                     DefaultIfEmpty(string.Empty).
-                    FirstOrDefault() == "True" ? true : false;                
+                    FirstOrDefault() == "True" ? true : false;
             }
         }
 
@@ -353,7 +353,7 @@ namespace MarketPlace.Models.Provider
         }
 
         public string oR_ICAId { get; set; }
-        public string R_ICAId 
+        public string R_ICAId
         {
             get
             {
@@ -380,11 +380,11 @@ namespace MarketPlace.Models.Provider
                          Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumLegalInfoType.R_ICA).
                          Select(y => y.Value).
                          DefaultIfEmpty(string.Empty).
-                         FirstOrDefault());                   
+                         FirstOrDefault());
                 }
                 return oR_ICAName;
             }
-        }      
+        }
 
         public string oR_RUTFile { get; set; }
         public string R_RUTFile
@@ -444,11 +444,11 @@ namespace MarketPlace.Models.Provider
             {
                 if (string.IsNullOrEmpty(oR_ClassTax))
                 {
-                   oR_ClassTax = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(RelatedLegalInfo.ItemInfo.
-                       Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumLegalInfoType.R_ClassTax).
-                       Select(y => y.Value).
-                       DefaultIfEmpty(string.Empty).
-                       FirstOrDefault());
+                    oR_ClassTax = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(RelatedLegalInfo.ItemInfo.
+                        Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumLegalInfoType.R_ClassTax).
+                        Select(y => y.Value).
+                        DefaultIfEmpty(string.Empty).
+                        FirstOrDefault());
                 }
                 return oR_ClassTax;
             }
@@ -537,7 +537,7 @@ namespace MarketPlace.Models.Provider
             {
                 if (string.IsNullOrEmpty(oSF_PersonType))
                 {
-                    oSF_PersonType =  MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(RelatedLegalInfo.ItemInfo.
+                    oSF_PersonType = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(RelatedLegalInfo.ItemInfo.
                          Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumLegalInfoType.SF_ProcessDate).
                          Select(y => y.Value).
                          DefaultIfEmpty(string.Empty).
@@ -575,7 +575,7 @@ namespace MarketPlace.Models.Provider
             {
                 if (string.IsNullOrEmpty(oRS_EntityType))
                 {
-                    oRS_EntityType =  MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(RelatedLegalInfo.ItemInfo.
+                    oRS_EntityType = MarketPlace.Models.Company.CompanyUtil.GetProviderOptionName(RelatedLegalInfo.ItemInfo.
                          Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumLegalInfoType.RS_EntityType).
                          Select(y => y.Value).
                          DefaultIfEmpty(string.Empty).
@@ -656,8 +656,8 @@ namespace MarketPlace.Models.Provider
         #endregion
 
         public ProviderLegalViewModel(ProveedoresOnLine.Company.Models.Util.GenericItemModel RelatedLegal)
-        {            
-            RelatedLegalInfo = RelatedLegal;                          
+        {
+            RelatedLegalInfo = RelatedLegal;
         }
 
         public ProviderLegalViewModel() { }

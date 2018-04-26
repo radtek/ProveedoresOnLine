@@ -15,10 +15,10 @@
         <div id="divGridProvider"></div>
     </div>
     <div id="template" style="display:none;">
-        <div id="divGridProvider_FormUrl">       
-            <a target="_blank" href="@(Server.UrlDecode(Url.Action(MVC.ProviderForm.ActionNames.Index, MVC.ProviderForm.Name, new { ProviderPublicId = "ProviderPublicIdParam", FormPublicId = "FormPublicIdParam" })))">Ver formulario proveedor</a>    
+        <div id="divGridProvider_FormUrl">
+            <a target="_blank" href="@(Server.UrlDecode(Url.Action(MVC.ProviderForm.ActionNames.Index, MVC.ProviderForm.Name, new { ProviderPublicId = "ProviderPublicIdParam", FormPublicId = "FormPublicIdParam" })))">Ver formulario proveedor</a>
         </div>
-        <a id="salesForceUrlId"  href="">Ver lead en SalesForce</a>
+        <a id="salesForceUrlId" href="">Ver lead en SalesForce</a>
 
         <div id="divGridProvider_Header">
             <form id="ProfileInfoFormId" action="@UrlAction" method="post">
@@ -28,11 +28,11 @@
                 <select id="CustomerId" name="CustomerName">
                     <option value=""></option>
                     @foreach (var item in Model.Customers)
-        {
-            {
-                <option value="@item.CustomerPublicId">@item.Name</option>
-}
-}
+                    {
+                        {
+                            <option value="@item.CustomerPublicId">@item.Name</option>
+                        }
+                    }
                 </select>
                 <label> | Formulario:</label>
                 <select id="Form" name="FormId"></select>
