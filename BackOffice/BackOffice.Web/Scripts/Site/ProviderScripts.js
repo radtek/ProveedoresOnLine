@@ -2330,9 +2330,10 @@ var Provider_CompanyHSEQObject = {
             dataSource: {
                 schema: {
                     model: {
-                        id: "CertificationId",
+                        id: "CertificationInfoId",
                         fields: {
                             CertificationId: { editable: false, nullable: true },
+                            CertificationInfoId: { editable: false, nullable: true },
                             CertificationName: { editable: true },
                             Enable: { editable: true, type: "boolean", defaultValue: true },
                             
@@ -2510,7 +2511,7 @@ var Provider_CompanyHSEQObject = {
                 title: 'Cual?',
                 width: '100px',
             }, {
-                field: 'CertificationId',
+                field: 'CertificationInfoId',
                 title: 'Id Interno',
                 width: '78px',
             }, ],

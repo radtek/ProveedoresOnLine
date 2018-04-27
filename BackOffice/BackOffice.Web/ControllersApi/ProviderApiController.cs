@@ -1001,6 +1001,12 @@ namespace BackOffice.Web.ControllersApi
 
             if (HIHSEQGetByType == "true")
             {
+                var oViewEnable = ViewEnable;
+                if (HSEQType == ((int)BackOffice.Models.General.enumHSEQType.CompanyHealtyPolitic).ToString())
+                {
+                    ViewEnable = "true";
+                }
+
                 List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> oCertification = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.CertficationGetBasicInfo
                     (ProviderPublicId,
                     string.IsNullOrEmpty(HSEQType) ? null : (int?)Convert.ToInt32(HSEQType.Trim()), Convert.ToBoolean(ViewEnable));
@@ -1059,9 +1065,12 @@ namespace BackOffice.Web.ControllersApi
                         oCertification.All(x =>
                         {
                             x.ItemInfo.
-                                Where(y => ArrayDocuments.Count(f => f == y.ItemInfoType.ItemId) > 0).All(t =>
+                                Where(y => ArrayDocuments.Count(z => z == y.ItemInfoType.ItemId) > 0).All(z =>
                                 {
-                                    oReturn.Add(new BackOffice.Models.Provider.ProviderHSEQViewModel(x, oRule, oCompanyRule, oARL, t.ItemInfoType.ItemId));
+                                    if (z.Enable.ToString().ToUpper() == oViewEnable.ToUpper())
+                                    {
+                                        oReturn.Add(new BackOffice.Models.Provider.ProviderHSEQViewModel(x, oRule, oCompanyRule, oARL, z.ItemInfoType.ItemId));
+                                    }
                                     return true;
                                 });
 
@@ -1235,7 +1244,7 @@ namespace BackOffice.Web.ControllersApi
                             ItemId = (int)BackOffice.Models.General.enumHSEQInfoType.CH_Year
                         },
                         Value = oDataToUpsert.CH_Year,
-                        Enable = true,
+                        Enable = oDataToUpsert.Enable,
                     });
 
                     oProvider.RelatedCertification.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
@@ -1247,9 +1256,10 @@ namespace BackOffice.Web.ControllersApi
                         },
                         Value = oDataToUpsert.CH_Document,
                         LargeValue = oDataToUpsert.CH_Other,
-                        Enable = true,
+                        Enable = oDataToUpsert.Enable,
                     });
 
+                    oProvider.RelatedCertification.FirstOrDefault().Enable = true;
                 }
                 else if (oProvider.RelatedCertification.FirstOrDefault().ItemType.ItemId == (int)BackOffice.Models.General.enumHSEQType.CompanyRiskPolicies)
                 {
