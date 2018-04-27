@@ -241,5 +241,20 @@ namespace DocumentManagement.Provider.Controller
             return DAL.Controller.ProviderDataController.Instance.ChangesControlGetByProviderPublicId(ProviderPublicId);
         }
         #endregion
+
+        #region Notifications
+
+        public static string SendNotification_Upsert(string CustomerPublicId, string ProviderPublicId, string FormPublicId, Enumerations.enumNotificationType  NotificationType)
+        {
+            return DAL.Controller.ProviderDataController.Instance.SendNotification_Upsert(CustomerPublicId, ProviderPublicId, FormPublicId,  Convert.ToInt32(NotificationType));
+        }
+
+        public static List<NotificationProviderModel> Get_SendNotification(string CustomerPublicId, string ProviderPublicId, string FormPublicId, int? NotificationType)
+        {
+            return DAL.Controller.ProviderDataController.Instance.Get_SendNotification(CustomerPublicId, ProviderPublicId, FormPublicId, NotificationType);
+        }
+
+
+        #endregion
     }
 }

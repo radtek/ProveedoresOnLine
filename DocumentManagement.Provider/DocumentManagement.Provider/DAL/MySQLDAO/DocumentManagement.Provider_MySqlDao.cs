@@ -151,6 +151,7 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
                          CustomerCount = prov.Key.CustomerCount,
                          LogUser = prov.Key.logUser,
                          LogCreateDate = prov.Key.LogCreateDate,
+                         Selected = this.Get_SendNotification(prov.Key.CustomerPublicId, prov.Key.ProviderPublicId, prov.Key.FormPublicId, (int)Enumerations.enumNotificationType.Welcome).Count == 0 ? "false" : "true",
 
                          RelatedProviderCustomerInfo =
                             (from pci in response.DataTableResult.AsEnumerable()
@@ -565,5 +566,80 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
             return oReturn;
         }
         #endregion
+
+        #region Notifications
+
+        public string SendNotification_Upsert(string CustomerPublicId, string ProviderPublicId, string FormPublicId, int NotificationType)
+        {
+            List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
+
+            lstParams.Add(DataInstance.CreateTypedParameter("vCustomerPublicId", CustomerPublicId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vProviderPublicId", ProviderPublicId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vFormPublicId", FormPublicId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vNotificationTypeId", NotificationType));     
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.Scalar,
+                CommandText = "P_NotificationProvider_Upsert",
+                CommandType = System.Data.CommandType.StoredProcedure,
+                Parameters = lstParams
+            });
+
+            return response.ScalarResult.ToString();
+        }
+
+        public List<NotificationProviderModel> Get_SendNotification(string CustomerPublicId, string ProviderPublicId, string FormPublicId, int? NotificationType)
+        {
+            List<NotificationProviderModel> oReturn = new List<NotificationProviderModel>();
+
+            List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
+
+            lstParams.Add(DataInstance.CreateTypedParameter("vCustomerPublicId", CustomerPublicId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vProviderPublicId", ProviderPublicId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vFormPublicId", FormPublicId));
+            lstParams.Add(DataInstance.CreateTypedParameter("vNotificationInfoType", NotificationType));
+
+            ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
+            {
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandText = "P_NotificationProvider_SearchByProvider",
+                CommandType = System.Data.CommandType.StoredProcedure,
+                Parameters = lstParams
+            });
+
+            if (response.DataTableResult != null &&
+                response.DataTableResult.Rows.Count > 0)
+            {
+                oReturn =
+                    (from c in response.DataTableResult.AsEnumerable()
+                     where !c.IsNull("NotificationProviderId")
+                     select new NotificationProviderModel()
+                     {
+                         //CustomerPublicId, ProviderPublicId, FormPublicId, NotificationInfoType, NotificationProviderId, CatalogId, ItemName, Name, id
+
+                         NotificationProviderId = c.Field<int>("NotificationProviderId"),
+                         NotificationInfoType = new CatalogModel() {
+                             CatalogId = c.Field<int>("CatalogId"),
+                             CatalogName = c.Field<string>("Name"),
+                             ItemId = c.Field<int>("NotificationInfoType"),
+                             ItemName = c.Field<string>("ItemName")
+                         },
+                        CustomerPublicId = c.Field<string>("CustomerPublicId"),
+                        ProviderPublicId = c.Field<string>("ProviderPublicId"),
+                        FormPublicId = c.Field<string>("FormPublicId"),
+
+                     }).ToList();
+            }
+
+
+            return oReturn;
+
+        }
+
+
+        #endregion
+
+
     }
 }

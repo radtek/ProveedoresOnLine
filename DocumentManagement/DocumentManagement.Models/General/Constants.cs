@@ -86,5 +86,12 @@
         public const string P_LegalTerms_364_Url = "LegalTerms_364_Url";
 
         #endregion
+
+        #region Notifications
+
+        public const string N_DM_NotificationsMail = "DM_NotificationsMail";
+
+        #endregion
+
     }
 }

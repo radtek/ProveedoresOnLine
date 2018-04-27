@@ -1,4 +1,5 @@
-﻿using DocumentManagement.Provider.Models.Provider;
+﻿using DocumentManagement.Provider.Models;
+using DocumentManagement.Provider.Models.Provider;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,14 @@ namespace DocumentManagement.Provider.Interfaces
         List<ChangesControlModel> ChangesControlSearch(string SearchParam, int PageNumber, int RowCount, out int TotalRows);
 
         List<ChangesControlModel> ChangesControlGetByProviderPublicId(string ProviderPublicId);
+        #endregion
+
+        #region Notifications
+
+        string SendNotification_Upsert(string CustomerPublicId, string ProviderPublicId, string FormPublicId, int NotificationType);
+
+        List<NotificationProviderModel> Get_SendNotification(string CustomerPublicId, string ProviderPublicId, string FormPublicId, int? NotificationType);
+
         #endregion
     }
 }

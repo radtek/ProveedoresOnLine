@@ -137,6 +137,8 @@
       ]]>
     </key>
 
+    <key name="DM_NotificationsMail">DM_NotificationsMail</key>
+
   </DocumentManagement>
 </Settings>
 

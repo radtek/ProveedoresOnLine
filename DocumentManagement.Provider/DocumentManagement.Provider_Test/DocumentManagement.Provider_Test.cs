@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DocumentManagement.Provider.Models.Provider;
 using System.Collections.Generic;
 using DocumentManagement.Provider.Models.Util;
+using DocumentManagement.Provider.Models;
 
 namespace DocumentManagement.Provider_Test
 {
@@ -83,6 +84,22 @@ namespace DocumentManagement.Provider_Test
         public void ChangesControlGetByProviderPublicId()
         {
             Assert.IsNotNull(DocumentManagement.Provider.Controller.Provider.ChangesControlGetByProviderPublicId("16B19596"));
+        }
+
+        #endregion
+
+        #region Notifications
+
+        [TestMethod]
+        public void SendNotification_Upsert()
+        {
+            var Result = DocumentManagement.Provider.Controller.Provider.SendNotification_Upsert("17B9D714", "166A1228", "F393FCBD", Enumerations.enumNotificationType.Welcome);
+        }
+
+        [TestMethod]
+        public void GetNotification()
+        {
+            var Result = DocumentManagement.Provider.Controller.Provider.Get_SendNotification(null, "166A1228", null, null);
         }
 
         #endregion

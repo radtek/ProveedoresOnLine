@@ -1,4 +1,5 @@
 ﻿using DocumentManagement.Models.Provider;
+using DocumentManagement.Provider.Models;
 using DocumentManagement.Provider.Models.Provider;
 using System;
 using System.Collections.Generic;
@@ -94,9 +95,47 @@ namespace DocumentManagement.Web.ControllersApi
 
         [HttpPost]
         [HttpGet]
-        public void ChangesConSendUrltrolSearch(string SendUrl)
+        public void SendNotificationWelcome(string SendNotificationWelcome)
         {
-            var ttt = System.Web.HttpContext.Current.Request["DataToUpsert"];
+            if (SendNotificationWelcome == "true")
+            {
+                List<ProviderItemSearchModel> oDataToUpsert =
+                    (List<ProviderItemSearchModel>)
+                    (new System.Web.Script.Serialization.JavaScriptSerializer()).
+                    Deserialize(System.Web.HttpContext.Current.Request["DataToUpsert"],
+                                typeof(List<ProviderItemSearchModel>));
+
+
+                oDataToUpsert.Where(x => x.RelatedProvider.Selected == "True").All(x => {
+
+                    //Send Email
+                    MessageModule.Client.Models.ClientMessageModel oDataMessage = new MessageModule.Client.Models.ClientMessageModel()
+                    {
+                        Agent = DocumentManagement.Models.General.InternalSettings.Instance[DocumentManagement.Models.General.Constants.N_DM_NotificationsMail].Value,
+                        User = x.LastModifyUser,
+                        ProgramTime = DateTime.Now,
+                        MessageQueueInfo = new List<Tuple<string, string>>() ,
+                    };
+
+                    oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                        ("To", x.RelatedProvider.Email));
+
+                    oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                        ("CustomerName", x.RelatedProvider.CustomerName));
+
+                    MessageModule.Client.Controller.ClientController.CreateMessage(oDataMessage);
+
+
+                    //update data
+                    DocumentManagement.Provider.Controller.Provider.SendNotification_Upsert(x.RelatedProvider.CustomerPublicId, x.RelatedProvider.ProviderPublicId, x.RelatedProvider.FormPublicId, Enumerations.enumNotificationType.Welcome);
+                    
+                    return true;
+                });
+
+
+
+            }
+           
         }
     }
 }

@@ -40,5 +40,7 @@ namespace DocumentManagement.Provider.Models.Provider
         public string LogCreateDate { get; set; }
 
         public string LogUser { get; set; }
+
+        public string Selected { get; set; }
     }
 }

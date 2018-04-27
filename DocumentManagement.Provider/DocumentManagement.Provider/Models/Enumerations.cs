@@ -305,6 +305,13 @@
 
         #endregion
 
+        #region Notifications
+        public enum enumNotificationType {
+            Welcome = 801
+        }
+
+        #endregion
+
         public enum enumCatalog
         {
             //Company

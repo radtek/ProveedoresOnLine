@@ -97,5 +97,20 @@ namespace DocumentManagement.Provider.DAL.Controller
             return DataFactory.ChangesControlGetByProviderPublicId(ProviderPublicId);
         }
         #endregion
+
+        #region Notifications
+
+        public string SendNotification_Upsert(string CustomerPublicId, string ProviderPublicId, string FormPublicId, int NotificationType)
+        {
+            return DataFactory.SendNotification_Upsert(CustomerPublicId, ProviderPublicId, FormPublicId, NotificationType);
+        }
+
+        public List<NotificationProviderModel> Get_SendNotification(string CustomerPublicId, string ProviderPublicId, string FormPublicId, int? NotificationType)
+        {
+            return DataFactory.Get_SendNotification(CustomerPublicId, ProviderPublicId, FormPublicId, NotificationType);
+        }
+
+        #endregion
+
     }
 }
