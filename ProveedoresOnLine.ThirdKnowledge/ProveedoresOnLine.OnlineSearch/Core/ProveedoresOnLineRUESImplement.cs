@@ -63,7 +63,8 @@ namespace ProveedoresOnLine.OnlineSearch.Core
                             link = HtmlDocResponse.DocumentNode
                                           .Descendants("a")
                                           .First(x => x.Attributes["class"] != null
-                                                   && x.Attributes["class"].Value == "rupoff");
+                                                   && x.Attributes["class"].Value == "rupoff"
+                                                   || x.Attributes["class"].Value == "rup");
                         }
                         else if (!string.IsNullOrEmpty(deserializedProduct.rows.FirstOrDefault().detalleRNT))
                         {
