@@ -11,6 +11,7 @@ namespace BackOffice.Models.Provider
         public ProveedoresOnLine.Company.Models.Util.GenericItemModel RelatedCertification { get; private set; }
 
         public string CertificationId { get; set; }
+        public string CertificationInfoId { get; set; }
 
         public string CertificationName { get; set; }
 
@@ -112,8 +113,18 @@ namespace BackOffice.Models.Provider
         {
             RelatedCertification = oRelatedCertification;
             CertificationId = RelatedCertification.ItemId.ToString();
+            CertificationInfoId = RelatedCertification.ItemInfo.
+                Where(y => y.ItemInfoType.ItemId == pTypeDocumentId).
+                Select(y => y.ItemInfoId.ToString()).
+                DefaultIfEmpty(string.Empty).
+                FirstOrDefault();
             CertificationName = RelatedCertification.ItemName;
-            Enable = RelatedCertification.Enable;
+            Enable = pTypeDocumentId == 0 ? RelatedCertification.Enable : (
+                    RelatedCertification.ItemInfo.
+                        Where(y => y.ItemInfoType.ItemId == pTypeDocumentId).
+                        Select(y => y.Enable).
+                        FirstOrDefault()
+                );
 
             #region Certifications
 
