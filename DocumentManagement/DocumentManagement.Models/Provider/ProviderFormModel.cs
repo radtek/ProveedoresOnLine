@@ -73,5 +73,7 @@ namespace DocumentManagement.Models.Provider
         public DocumentManagement.Models.Provider.ProviderLegalTermsResource RelatedLegalTermsResource { get; set; }
 
         public DocumentManagement.Models.Provider.ProviderLegalTermsData RelatedLegalTermsData { get; set; }
+
+
     }
 }

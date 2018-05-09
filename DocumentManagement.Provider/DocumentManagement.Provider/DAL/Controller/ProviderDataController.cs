@@ -35,9 +35,9 @@ namespace DocumentManagement.Provider.DAL.Controller
 
         #endregion
 
-        public string ProviderUpsert(string ProviderPublicId, string Name, int IdentificationTypeId, string IdentificationNumber, string Email)
+        public string ProviderUpsert(string ProviderPublicId, string Name, int IdentificationTypeId, string IdentificationNumber, string Email, string ValueToPay)
         {
-            return DataFactory.ProviderUpsert(ProviderPublicId, Name, IdentificationTypeId, IdentificationNumber, Email);
+            return DataFactory.ProviderUpsert(ProviderPublicId, Name, IdentificationTypeId, IdentificationNumber, Email, ValueToPay);
         }
 
         public int ProviderInfoUpsert(string ProviderPublicId, int ProviderInfoId, int ProviderInfoTypeId, string Value, string LargeValue)

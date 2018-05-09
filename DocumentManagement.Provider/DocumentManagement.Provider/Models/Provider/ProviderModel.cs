@@ -42,5 +42,7 @@ namespace DocumentManagement.Provider.Models.Provider
         public string LogUser { get; set; }
 
         public string Selected { get; set; }
+
+        public string ValueToPay { get; set; }
     }
 }

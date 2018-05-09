@@ -71,7 +71,8 @@ function ProviderSearchGrid(vidDiv, cmbForm, cmbCustomer, chkName) {
                         "FormUrl" : { editable : false },
                         "RelatedProvider.CustomerCount" : { editable : false },
                         "LastModifyUser" : { editable : false },
-                        "lastModify": { editable : false },
+                        "lastModify": { editable: false },
+                        "RelatedProvider.ValueToPay": { editable: false},
                     },
                 },
             },
@@ -204,15 +205,12 @@ function ProviderSearchGrid(vidDiv, cmbForm, cmbCustomer, chkName) {
                 DataToUpsert: kendo.stringify(checkedIds)
             },
             success: function (result) {
-                options.success(result);
-                Message('success', 'Se editó la fila con el id ' + options.data.CertificationId + '.');
+                Message('success', 'El Mensaje se envió correctamente.');
             },
-            error: function (result) {
-                options.error(result);
-                Message('error', 'Error en la fila con el id ' + options.data.CertificationId + '.');
+            error: function (result) {                
+                Message('error', 'No se ha podido enviar el mensaje, por favor revise la información');
             },
         });
-
     });
 
     var grid = $('#' + vidDiv).data("kendoGrid");
@@ -410,3 +408,25 @@ function ChangesControl(vidDiv, SearchParam) {
 
 }
 
+function Message(style, msjText) {
+    if ($('div.message').length) {
+        $('div.message').remove();
+    }
+
+    var mess = '';
+
+    if (msjText != null) {
+        mess = msjText;
+    }
+    else if (style == 'error') {
+        mess = 'Hay un error!';
+    } else {
+        mess = 'Operación exitosa.';
+    }
+
+    $('<div class="message m_' + style + '">' + mess + '</div>').css({
+        top: $(window).scrollTop() + 'px'
+    }).appendTo('body').slideDown(200).delay(3000).fadeOut(300, function () {
+        $(this).remove();
+    });
+}

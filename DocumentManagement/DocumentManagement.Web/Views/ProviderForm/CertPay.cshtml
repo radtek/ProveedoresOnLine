@@ -1,0 +1,108 @@
+﻿@model DocumentManagement.Models.Provider.ProviderFormModel
+
+@{
+    ViewBag.Title = "Proveedores";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="">
+    <div class="DMLogIntopWrapper">
+        <img class="DMProviderlogo" src="@Model.RealtedForm.Logo" alt="" />
+        <label>SISTEMA DE REGISTRO DE PROVEEDORES DE @Model.RealtedCustomer.Name.ToUpper()</label>
+        <img class="DMPOLogo" src="@Url.Content("~/Content/Images/LogoPOLogInAlpha.png")" alt="" />
+    </div>
+
+
+    <div class="container-fluid DMStepsLayOutWrapper">
+        <div class="row">
+            <!--Provider form legal terms-->
+            <div class="TitleProviderLegalTerms">
+                <label>@Model.RealtedProvider.Name</label>
+                <label>@Model.RealtedProvider.IdentificationType.ItemName</label>
+                <label>@Model.RealtedProvider.IdentificationNumber</label>
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+
+        <div class="">
+            <form action="@Url.Action(MVC.ProviderForm.ActionNames.CertPay,
+                MVC.ProviderForm.Name, new
+                {
+                    ProviderPublicId = Model.RealtedProvider.ProviderPublicId,
+                    FormPublicId = Model.RealtedForm.FormPublicId,
+                    //StepId = Model.RealtedStep.StepId,
+                })" method="post" enctype="multipart/form-data">
+                <div class="DMFormDataWrapper">
+                    <div class="container">
+                        <span class="spanTitleForm"><strong>Recibo de Pago</strong></span>
+                        <ul>
+                            <li><label>Estimado Proveedor, por favor adjunte a continuación el recibo de pago para iniciar el proceso de registro/actualización de proveedor para <strong>@Model.RealtedCustomer.Name</strong> . Recuerde que el monto correspondiente a pagar es de <strong>@Model.RealtedProvider.ValueToPay</strong> </label></li>
+                            <li>
+                                <br />
+                                                                
+                                @if (Model.RelatedLegalTermsData != null &&
+                                        Model.RelatedLegalTermsData.oProviderInfo != null)
+                                {
+                                    <a href="@(Model.RelatedLegalTermsData.oProviderInfo.LargeValue)">Ver Archivo </a>
+                                }
+                                else
+                                {
+                                    <span>Archivo a cargar:</span>
+                                    <input type="file" name="PayCertFile" id="PayCertFile" />
+                                }
+                            </li>
+                            <div class="col-xs-4 pull-right">
+                                <button id="ButtonCertPay" name="ButtonCertPay" class="ButtonLegalTerms" type="submit" value="true">Siguiente</button>
+                            </div>
+                            <input type="hidden" name="CertPayValueId" id="CertPayValueId" value="@(Model.RelatedLegalTermsData.oProviderInfo != null ? Model.RelatedLegalTermsData.oProviderInfo.ProviderInfoId : 0)" />
+                            <input type="hidden" name="CertPayTypeId" id="CertPayTypeId" value="@Model.RelatedLegalTermsResource.oProviderLegalTermsType.ItemId" />
+                        </ul>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="DMStepsBottomWrapper">
+        <img class="DMLogPublicar" src="@Url.Content("~/Content/Images/LogoPOLogInAlpha.png")" alt="" />
+        <label class="DMPublicarCopyright">Proveedores Online &copy; 2014 - 2018</label>
+    </div>
+
+</div>
+
+
+
+@section inlinescripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            @*@{
+                string oMessage = (string) TempData["SaveProvider"];
+            }
+
+            var oTemp = @Html.Raw(!string.IsNullOrEmpty(oMessage) ? "true" : "false");
+
+            if (oTemp)
+            {
+                var msjText = '@TempData["SaveProvider"]';
+
+                if ($('div.message').length) {
+                    $('div.message').remove();
+                }
+
+                $('<div class="mensj">' + msjText + '</div>').css({
+                    top: $(window).scrollTop() + 'px'
+                }).appendTo('body').slideDown(200).delay(3000).fadeOut(300, function () {
+                    $(this).remove();
+                });
+            }*@
+        });
+    </script>
+}

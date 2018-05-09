@@ -83,6 +83,15 @@
     <key name="_P_FieldFormPdf_395_FormUrl">https://s3.amazonaws.com/devproveedoresonline/DocumentManagment/0General/Formato+de+Conocimiento+de+Proveedores+y+Clientes.pdf</key>
     <key name="_P_FieldFormPdf_395_FormText">Descargar formato de conocimiento de terceros .pdf</key>
 
+    <key name="_P_FieldFormPdf_397_FormUrl">https://s3.amazonaws.com/devproveedoresonline/DocumentManagment/0General/ACUERDO+SEGURIDAD+Y+CONFIDENCIALIDAD+PROVEEDORES.pdf</key>
+    <key name="_P_FieldFormPdf_397_FormText">Descargar Acuerdo Seguridad y Confidencial Proveedores .pdf</key>
+    
+    <key name="_P_FieldFormPdf_398_FormUrl">https://s3.amazonaws.com/devproveedoresonline/DocumentManagment/0General/Circular+170.xlsx</key>
+    <key name="_P_FieldFormPdf_398_FormText">Descargar Circular 170 .pdf</key>
+    
+     <key name="_P_FieldFormPdf_399_FormUrl">https://s3.amazonaws.com/devproveedoresonline/DocumentManagment/0General/Informaci%C3%B3n+de+Contactos.docx</key>
+    <key name="_P_FieldFormPdf_399_FormText">Descargar Formato de Información de Contactos .pdf</key>
+    
     <key name="LegalTerms_363_TextHeader">
       <![CDATA[
         Con el diligenciamiento de la información en el portal de Proveedores Online ó Landing Pages de envío de información ó el suministro de información ó documentación de cualquier tipo usted está aceptando:
