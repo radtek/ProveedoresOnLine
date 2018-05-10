@@ -57,6 +57,12 @@ function ProviderSearchGrid(vidDiv, cmbForm, cmbCustomer, chkName) {
             pageSize: 20,
             serverPaging: true,
             schema: {
+                total: function (data) {
+                    if (data != null && data.length > 0) {
+                        return data[0].oTotalRows;
+                    }
+                    return 0;
+                },
                 model: {
                     id: "RelatedProvider.FormPublicId",
                     fields: {
