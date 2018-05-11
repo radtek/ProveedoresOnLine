@@ -16,7 +16,7 @@
     </div>
     <div id="template" style="display:none;">
         <div id="divGridProvider_FormUrl">
-            <a target="_blank" href="@(Server.UrlDecode(Url.Action(MVC.ProviderForm.ActionNames.Index, MVC.ProviderForm.Name, new { ProviderPublicId = "ProviderPublicIdParam", FormPublicId = "FormPublicIdParam" })))">Ver formulario proveedor</a>
+            <a target="_blank" href="@(Server.UrlDecode(Url.Action(MVC.ProviderForm.ActionNames.Index, MVC.ProviderForm.Name, new { ProviderPublicId = "ProviderPublicIdParam", FormPublicId = "FormPublicIdParam" })))">{{FormName}}</a>
         </div>
         <a id="salesForceUrlId" href="">Ver lead en SalesForce</a>
 
@@ -89,7 +89,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             //start customer grid
-            ProviderSearchGrid('divGridProvider', 'Form', 'CustomerId', 'chk_Unique');
+            ProviderSearchGrid('divGridProvider', 'Form', 'CustomerId', 'chk_Unique', 'https://s3.amazonaws.com/proveedoresonline/DocumentManagment/Images/Green+point.png');//ToDo: Change for constant
             initCmb('Form');
         });
     </script>

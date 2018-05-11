@@ -1,12 +1,12 @@
 ﻿var checkedIds = [];
 
 function selectRow() {
-    
+
     var checked = this.checked,
         row = $(this).closest("tr"),
         grid = $("#divGridProvider").data("kendoGrid"),
         dataItem = grid.dataItem(row);
-        dataItem.RelatedProvider.Selected = checked;
+    dataItem.RelatedProvider.Selected = checked;
     var edit = false;
 
     $.each(checkedIds, function (i, v) {
@@ -43,14 +43,14 @@ function selectRow() {
     }
 }
 
-function ProviderSearchGrid(vidDiv, cmbForm, cmbCustomer, chkName) {
+function ProviderSearchGrid(vidDiv, cmbForm, cmbCustomer, chkName, imgStatusUrl) {
     //configure grid
     $('#' + vidDiv).kendoGrid({
         toolbar: [{ template: $('#' + vidDiv + '_Header').html() }],
         pageable: true,
         //persistSelection: true,
         scrollable: true,
-        sortable: true,
+        //sortable: true,
         //dataBound: onDataBound,
         editable: true,
         dataSource: {
@@ -66,19 +66,19 @@ function ProviderSearchGrid(vidDiv, cmbForm, cmbCustomer, chkName) {
                 model: {
                     id: "RelatedProvider.FormPublicId",
                     fields: {
-                        "RelatedProvider.Selected" :  { editable: true, type: "boolean", defaultValue: true },
-                        "RelatedProvider.ProviderPublicId" : { editable : false },
-                        "RelatedProvider.Name" : { editable : false },
-                        "RelatedProvider.IdentificationType" : { editable : false },
-                        "RelatedProvider.IdentificationNumber" : { editable : false },
-                        "RelatedProvider.CustomerName" : { editable : false },
-                        "checkDigit" : { editable : false },
-                        "RelatedProvider.Email" : { editable : false },
-                        "FormUrl" : { editable : false },
-                        "RelatedProvider.CustomerCount" : { editable : false },
-                        "LastModifyUser" : { editable : false },
+                        "RelatedProvider.Selected": { editable: true, type: "boolean", defaultValue: true },
+                        "RelatedProvider.ProviderPublicId": { editable: false },
+                        "RelatedProvider.Name": { editable: false },
+                        "RelatedProvider.IdentificationType": { editable: false },
+                        "RelatedProvider.IdentificationNumber": { editable: false },
+                        "RelatedProvider.CustomerName": { editable: false },
+                        "checkDigit": { editable: false },
+                        "RelatedProvider.Email": { editable: false },
+                        "FormUrl": { editable: false },
+                        "RelatedProvider.CustomerCount": { editable: false },
+                        "LastModifyUser": { editable: false },
                         "lastModify": { editable: false },
-                        "RelatedProvider.ValueToPay": { editable: false},
+                        "RelatedProvider.ValueToPay": { editable: false },
                     },
                 },
             },
@@ -111,24 +111,22 @@ function ProviderSearchGrid(vidDiv, cmbForm, cmbCustomer, chkName) {
             title: 'Select All',
             headerTemplate: "<input type='checkbox' id='header-chb' class='k-checkbox header-checkbox'><label class='k-checkbox-label' for='header-chb'></label>",
             template: function (dataItem) {
-                
 
                 var oReturn = "";
 
-                //debugger;
                 if (dataItem.RelatedProvider.Email != null && dataItem.RelatedProvider.Email != "") {
-                    debugger;
+
                     if (dataItem.RelatedProvider.Selected == "true") {
-                        oReturn = "<div>Notificadó</div>";
+                        oReturn = '<div><img style="width:15px;" src="' + imgStatusUrl + '" ></div>';
                     } else {
                         oReturn = "<input type='checkbox' id='" + dataItem.RelatedProvider.ProviderPublicId + "' class='k-checkbox row-checkbox'><label class='k-checkbox-label' for='" + dataItem.RelatedProvider.ProviderPublicId + "'></label>";
                     }
                 }
 
                 return oReturn;
-                
+
             },
-            width: 80
+            width: 30
         }, {
             field: "RelatedProvider.ProviderPublicId",
             title: "Id Proveedor",
@@ -167,6 +165,7 @@ function ProviderSearchGrid(vidDiv, cmbForm, cmbCustomer, chkName) {
                     var linkForm = $('#' + vidDiv + '_FormUrl').html();
 
                     oReturn = linkForm.replace('FormPublicIdParam', dataItem.RelatedProvider.FormPublicId);
+                    oReturn = linkForm.replace('{{FormName}}', dataItem.RelatedProvider.FormName);
                     oReturn = oReturn.replace('ProviderPublicIdParam', dataItem.RelatedProvider.ProviderPublicId)
                 }
                 else {
@@ -212,11 +211,14 @@ function ProviderSearchGrid(vidDiv, cmbForm, cmbCustomer, chkName) {
             },
             success: function (result) {
                 Message('success', 'El Mensaje se envió correctamente.');
+                $('#' + vidDiv).data('kendoGrid').dataSource.read();
+                checkedIds = [];
             },
-            error: function (result) {                
+            error: function (result) {
                 Message('error', 'No se ha podido enviar el mensaje, por favor revise la información');
             },
         });
+        
     });
 
     var grid = $('#' + vidDiv).data("kendoGrid");
