@@ -19,7 +19,7 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
             DataInstance = new ADO.MYSQL.MySqlImplement(Constants.C_DMProviderConnectionName);
         }
 
-        public string ProviderUpsert(string ProviderPublicId, string Name, int IdentificationTypeId, string IdentificationNumber, string Email)
+        public string ProviderUpsert(string ProviderPublicId, string Name, int IdentificationTypeId, string IdentificationNumber, string Email, string ValueToPay)
         {
             List<System.Data.IDbDataParameter> lstParams = new List<System.Data.IDbDataParameter>();
 
@@ -28,6 +28,7 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
             lstParams.Add(DataInstance.CreateTypedParameter("vIdentificationTypeId", IdentificationTypeId));
             lstParams.Add(DataInstance.CreateTypedParameter("vIdentificationNumber", IdentificationNumber));
             lstParams.Add(DataInstance.CreateTypedParameter("vEmail", Email));
+            lstParams.Add(DataInstance.CreateTypedParameter("vValueToPay", ValueToPay));
 
 
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
@@ -122,6 +123,7 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
                          ProviderPublicId = c.Field<string>("ProviderPublicId"),
                          Name = c.Field<string>("Name"),
                          Email = c.Field<string>("Email"),
+                         ValueToPay = c.Field<string>("ValueToPay"),
                          IdentificationTypeId = c.Field<int>("IdentificationTypeId"),
                          IdentificationTypeName = c.Field<string>("IdentificationTypeName"),
                          IdentificationNumber = c.Field<string>("IdentificationNumber"),
@@ -138,6 +140,7 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
                          ProviderPublicId = prov.Key.ProviderPublicId,
                          Name = prov.Key.Name,
                          Email = prov.Key.Email,
+                         ValueToPay = prov.Key.ValueToPay,
                          IdentificationType = new CatalogModel()
                          {
                              ItemId = prov.Key.IdentificationTypeId,
@@ -315,6 +318,7 @@ namespace DocumentManagement.Provider.DAL.MySQLDAO
                     },
                     IdentificationNumber = response.DataSetResult.Tables[0].Rows[0].Field<string>("IdentificationNumber"),
                     Email = response.DataSetResult.Tables[0].Rows[0].Field<string>("Email"),
+                    ValueToPay = response.DataSetResult.Tables[0].Rows[0].Field<string>("ValueToPay"),
 
                     CustomerPublicId = response.DataSetResult.Tables[0].Rows[0].Field<string>("CustomerPublicId"),
                     CustomerName = response.DataSetResult.Tables[0].Rows[0].Field<string>("CustomerName"),

@@ -24,7 +24,8 @@ namespace DocumentManagement.Provider.Controller
                     , ProviderToUpsert.Name
                     , ProviderToUpsert.IdentificationType.ItemId
                     , ProviderToUpsert.IdentificationNumber
-                    , ProviderToUpsert.Email);
+                    , ProviderToUpsert.Email
+                    ,ProviderToUpsert.ValueToPay);
 
                 ProviderToUpsert.ProviderPublicId = oResult;
                 ProviderInfoUpsert(ProviderToUpsert);

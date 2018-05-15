@@ -10,7 +10,7 @@ namespace DocumentManagement.Provider.Interfaces
 {
     interface IProviderData
     {
-        string ProviderUpsert(string ProviderPublicId, string Name, int IdentificationTypeId, string IdentificationNumber, string Email);
+        string ProviderUpsert(string ProviderPublicId, string Name, int IdentificationTypeId, string IdentificationNumber, string Email, string ValueToPay);
 
         int ProviderInfoUpsert(string ProviderPublicId, int ProviderInfoId, int ProviderInfoTypeId, string Value, string LargeValue);
 

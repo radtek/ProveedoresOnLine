@@ -143,7 +143,7 @@ namespace DocumentManagement.Web.Controllers
                     string CheckDigit = string.IsNullOrEmpty(Request["CheckDigit"]) ? string.Empty : Request["CheckDigit"];
 
                     string Email = Request["Email"].ToString();
-                    //string Salesforce = Request["Salesforce"].ToString();
+                    string ValueToPay = Request["ValueToPay"].ToString();
 
                     #region Operation
                     //Validate provider
@@ -180,6 +180,7 @@ namespace DocumentManagement.Web.Controllers
                         IdentificationType = new Provider.Models.Util.CatalogModel() { ItemId = Convert.ToInt32(IdentificationType) },
                         IdentificationNumber = IdentificationNumber,
                         Email = Email,
+                        ValueToPay = ValueToPay,
                         RelatedProviderCustomerInfo = ListCustomerProviderInfo
                     };
                     if (oResultValidate == null)
@@ -342,6 +343,7 @@ namespace DocumentManagement.Web.Controllers
                         IdentificationType = new Provider.Models.Util.CatalogModel() { ItemId = Convert.ToInt32(prv.TipoIdentificacion) },
                         IdentificationNumber = prv.NumeroIdentificacion,
                         Email = prv.Email,
+                        ValueToPay = prv.ValorTarifa,
                         RelatedProviderCustomerInfo = ListCustomerProviderInfo
                     };
                     if (oResultValidate == null)

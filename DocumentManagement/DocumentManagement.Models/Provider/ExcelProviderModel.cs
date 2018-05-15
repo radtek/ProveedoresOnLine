@@ -19,5 +19,7 @@ namespace DocumentManagement.Models.Provider
         public string Email { get; set; }
 
         public string CampanaSalesforce { get; set; }
+
+        public string ValorTarifa { get; set; }
     }
 }

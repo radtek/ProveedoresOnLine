@@ -105,6 +105,9 @@ namespace DocumentManagement.Models.Provider
 
         public ProviderLegalTermsResource(DocumentManagement.Customer.Models.Form.FieldModel oRelatedField)
         {
+            if (oFieldModel == null)            
+                oFieldModel = oRelatedField;
+            
             oFieldModel = oRelatedField;
 
             oFieldId = oFieldModel.FieldId.ToString();

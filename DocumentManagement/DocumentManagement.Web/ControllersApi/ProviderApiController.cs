@@ -45,7 +45,7 @@ namespace DocumentManagement.Web.ControllersApi
                     LastModifyUser = prv.LogUser,
                     CustomerInfoTypeId = prv.RelatedProviderCustomerInfo.Where(x => x.ProviderInfoType.ItemId == 403).Select(x => x.ProviderInfoId).FirstOrDefault() == null ? 0 : prv.RelatedProviderCustomerInfo.Where(x => x.ProviderInfoType.ItemId == 403).Select(x => x.ProviderInfoId).FirstOrDefault(),
                     checkDigitInfoId = prv.RelatedProviderCustomerInfo.Where(x => x.ProviderInfoType.ItemId == 378).Select(x => x.ProviderInfoId).FirstOrDefault() == null ? 0 : prv.RelatedProviderCustomerInfo.Where(x => x.ProviderInfoType.ItemId == 378).Select(x => x.ProviderInfoId).FirstOrDefault(),
-                    oTotalRows = oTotalRows
+                    oTotalRows = oTotalRows,
                 });
 
                 return true;
@@ -105,14 +105,13 @@ namespace DocumentManagement.Web.ControllersApi
                     Deserialize(System.Web.HttpContext.Current.Request["DataToUpsert"],
                                 typeof(List<ProviderItemSearchModel>));
 
-
                 oDataToUpsert.Where(x => x.RelatedProvider.Selected == "True").All(x => {
 
                     //Send Email
                     MessageModule.Client.Models.ClientMessageModel oDataMessage = new MessageModule.Client.Models.ClientMessageModel()
                     {
                         Agent = DocumentManagement.Models.General.InternalSettings.Instance[DocumentManagement.Models.General.Constants.N_DM_NotificationsMail].Value,
-                        User = x.LastModifyUser,
+                        User = SessionManager.SessionController.Auth_UserLogin.Email,
                         ProgramTime = DateTime.Now,
                         MessageQueueInfo = new List<Tuple<string, string>>() ,
                     };
@@ -123,19 +122,21 @@ namespace DocumentManagement.Web.ControllersApi
                     oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
                         ("CustomerName", x.RelatedProvider.CustomerName));
 
-                    MessageModule.Client.Controller.ClientController.CreateMessage(oDataMessage);
+                    oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                        ("ValueToPay", x.RelatedProvider.ValueToPay));
 
+                    string FromUrl = "https://www.proveedoresonline.co/Registro/ProviderForm?ProviderPublicId=" + x.RelatedProvider.ProviderPublicId + "&FormPublicId=" + x.RelatedProvider.FormPublicId;
+                    oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                        ("URL", FromUrl));
+
+                    MessageModule.Client.Controller.ClientController.CreateMessage(oDataMessage);
 
                     //update data
                     DocumentManagement.Provider.Controller.Provider.SendNotification_Upsert(x.RelatedProvider.CustomerPublicId, x.RelatedProvider.ProviderPublicId, x.RelatedProvider.FormPublicId, Enumerations.enumNotificationType.Welcome);
                     
                     return true;
                 });
-
-
-
-            }
-           
+            }           
         }
     }
 }

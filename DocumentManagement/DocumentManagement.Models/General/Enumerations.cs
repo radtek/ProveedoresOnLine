@@ -10,6 +10,7 @@
     {
         LegalStep = 119,
         LegalTermsNational = 363,
-        legalTermsExternal = 364
+        legalTermsExternal = 364,
+        CertToPay = 396
     }
 }

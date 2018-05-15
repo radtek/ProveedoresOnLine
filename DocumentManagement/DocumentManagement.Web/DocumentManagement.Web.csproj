@@ -1085,6 +1085,7 @@
     <Content Include="Views\ProviderForm\AdminLogProvider.cshtml" />
     <Content Include="Views\Provider\ChangesControl.cshtml" />
     <Content Include="Views\ProviderForm\LegalTerms.cshtml" />
+    <Content Include="Views\ProviderForm\CertPay.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -15,7 +15,7 @@ namespace DocumentManagement.Web.Controllers
     {
         public virtual ActionResult Index(string ProviderPublicId, string FormPublicId, string StepId, string msg)
         {
-            DocumentManagement.Provider.Models.Provider.ProviderModel oProviderModel = DocumentManagement.Provider.Controller.Provider.ProviderGetById(ProviderPublicId, null);
+            ProviderModel oProviderModel = DocumentManagement.Provider.Controller.Provider.ProviderGetById(ProviderPublicId, null);
 
             if (SessionModel.CurrentLoginUser == null)
             {
@@ -45,16 +45,14 @@ namespace DocumentManagement.Web.Controllers
                     {
                         //legal terms empty
                         return RedirectToAction
-                            (MVC.ProviderForm.ActionNames.Index,
-                            MVC.ProviderForm.Name,
-                            new
-                            {
-                                ProviderPublicId = ProviderPublicId,
-                                FormPublicId = FormPublicId,
-                            });
+                             (MVC.ProviderForm.ActionNames.LegalTerms,
+                             MVC.ProviderForm.Name,
+                             new
+                             {
+                                 ProviderPublicId = ProviderPublicId,
+                                 FormPublicId = FormPublicId,
+                             });
                     }
-
-
                 }
             }
 
@@ -145,6 +143,7 @@ namespace DocumentManagement.Web.Controllers
             DocumentManagement.Customer.Models.Customer.CustomerModel RealtedCustomer =
                 DocumentManagement.Customer.Controller.Customer.CustomerGetByFormId(FormPublicId);
 
+            #region Get Button Action Logic
             if (!string.IsNullOrEmpty(Request["ButtonLegalTerms"]) && Request["ButtonLegalTerms"] == "true")
             {
                 var FormStepId = 0;
@@ -184,20 +183,36 @@ namespace DocumentManagement.Web.Controllers
                             FirstOrDefault().
                             StepId;
 
-
-                //legal terms success
-                return RedirectToAction
-                    (MVC.ProviderForm.ActionNames.Index,
-                    MVC.ProviderForm.Name,
-                    new
-                    {
-                        ProviderPublicId = ProviderPublicId,
-                        FormPublicId = FormPublicId,
-                        StepId = FormStepId,
-                    });
+                if (LegalTermsStepId != 0)
+                {
+                    //Cert Pay
+                    return RedirectToAction
+                        (MVC.ProviderForm.ActionNames.CertPay,
+                        MVC.ProviderForm.Name,
+                        new
+                        {
+                            ProviderPublicId = ProviderPublicId,
+                            FormPublicId = FormPublicId,
+                            StepId = StepId
+                        });
+                }
+                else
+                {
+                    //legal terms canceled
+                    return RedirectToAction
+                        (MVC.ProviderForm.ActionNames.Index,
+                        MVC.ProviderForm.Name,
+                        new
+                        {
+                            ProviderPublicId = ProviderPublicId,
+                            FormPublicId = FormPublicId,
+                        });
+                }
             }
+            #endregion
 
             //Cancel legal terms
+            #region Cancel Legal Terms
             if (!string.IsNullOrEmpty(Request["CancelLegalTerms"]) && Request["CancelLegalTerms"] == "true")
             {
                 //legal terms canceled
@@ -210,8 +225,10 @@ namespace DocumentManagement.Web.Controllers
                         FormPublicId = FormPublicId,
                     });
             }
+            #endregion
 
             //Upsert legal terms
+            #region Upsert
             if (!string.IsNullOrEmpty(Request["UpsertAction"]) && Request["UpsertAction"] == "true")
             {
                 //get generic models
@@ -274,7 +291,6 @@ namespace DocumentManagement.Web.Controllers
                     RealtedCustomer.RelatedForm.FirstOrDefault().RelatedStep.Remove(LegalTermsModelStep);
                 }
 
-
                 FormStepId = RealtedCustomer.
                             RelatedForm.
                             Where(x => x.FormPublicId == FormPublicId).
@@ -282,9 +298,10 @@ namespace DocumentManagement.Web.Controllers
                             RelatedStep.OrderBy(x => x.Position).
                             FirstOrDefault().
                             StepId;
+
                 //legal terms success
                 return RedirectToAction
-                    (MVC.ProviderForm.ActionNames.Index,
+                    (MVC.ProviderForm.ActionNames.CertPay,
                     MVC.ProviderForm.Name,
                     new
                     {
@@ -293,6 +310,7 @@ namespace DocumentManagement.Web.Controllers
                         StepId = FormStepId,
                     });
             }
+            #endregion
 
             int? oStepId = string.IsNullOrEmpty(StepId) ? null : (int?)Convert.ToInt32(StepId.Trim());
 
@@ -301,15 +319,13 @@ namespace DocumentManagement.Web.Controllers
                 ProviderOptions = DocumentManagement.Provider.Controller.Provider.CatalogGetProviderOptions(),
                 RealtedCustomer = DocumentManagement.Customer.Controller.Customer.CustomerGetByFormId(FormPublicId),
                 RealtedProvider = DocumentManagement.Provider.Controller.Provider.ProviderGetById(ProviderPublicId, null),
+                
                 errorMessage = msg != null ? msg : string.Empty,
             };
-
-
             bool returnLegalTerms = false;
 
             oModel.RealtedCustomer.RelatedForm.All(frm =>
             {
-
                 frm.RelatedStep.All(stp =>
                 {
                     if (stp.RelatedField.Any(fld => fld.ProviderInfoType.ItemId == (int)enumLegalTerms.LegalTermsNational || fld.ProviderInfoType.ItemId == (int)enumLegalTerms.LegalTermsNational))
@@ -321,7 +337,6 @@ namespace DocumentManagement.Web.Controllers
 
                     return true;
                 });
-
                 return true;
             });
 
@@ -374,6 +389,211 @@ namespace DocumentManagement.Web.Controllers
 
             return View(oModel);
         }
+
+        public virtual ActionResult CertPay(string ProviderPublicId, string FormPublicId, string StepId, string msg)
+        {
+            //get first step
+            #region Logic
+            DocumentManagement.Customer.Models.Customer.CustomerModel RealtedCustomer =
+                  DocumentManagement.Customer.Controller.Customer.CustomerGetByFormId(FormPublicId);
+
+            ProviderFormModel oModel = new ProviderFormModel()
+            {
+                ProviderOptions = DocumentManagement.Provider.Controller.Provider.CatalogGetProviderOptions(),
+                RealtedCustomer = DocumentManagement.Customer.Controller.Customer.CustomerGetByFormId(FormPublicId),
+                RealtedProvider = DocumentManagement.Provider.Controller.Provider.ProviderGetById(ProviderPublicId, null),
+                errorMessage = msg != null ? msg : string.Empty,
+            };
+            int? oStepId = string.IsNullOrEmpty(StepId) ? null : (int?)Convert.ToInt32(StepId.Trim());
+            oModel.RealtedForm = oModel.RealtedCustomer.
+                 RelatedForm.
+                 Where(x => x.FormPublicId == FormPublicId).
+                 FirstOrDefault();
+
+            var FormStepId = 0;
+            var CerttoPayModelStep = new StepModel();
+            var CertToPayStepId = 0;
+            bool returnCertToPay = false;
+
+            if (oModel.RealtedProvider != null &&
+                oModel.RealtedProvider.RelatedProviderInfo != null &&
+                oModel.RealtedProvider.RelatedProviderInfo.Count > 0)
+            {
+                oModel.RelatedLegalTermsData = new ProviderLegalTermsData(oModel.RealtedProvider.RelatedProviderInfo.Where(pinf => pinf.ProviderInfoType.ItemId == (int)DocumentManagement.Models.General.enumLegalTerms.CertToPay).Select(pinf => pinf).FirstOrDefault());
+            }
+            oModel.RealtedCustomer.RelatedForm.All(frm =>
+            {
+                frm.RelatedStep.All(stp =>
+                {
+                    if (stp.RelatedField.Any(fld => fld.ProviderInfoType.ItemId == (int)enumLegalTerms.CertToPay))
+                    {
+                        oModel.RelatedLegalTermsResource = new ProviderLegalTermsResource(stp.RelatedField.Where(fld => fld.ProviderInfoType.ItemId == (int)enumLegalTerms.CertToPay).Select(fld => fld).FirstOrDefault());
+
+                        returnCertToPay = true;
+                    }
+                    return true;
+                });
+
+                return true;
+            });
+            FormStepId = RealtedCustomer.
+                         RelatedForm.
+                         Where(x => x.FormPublicId == FormPublicId).
+                         FirstOrDefault().
+                         RelatedStep.OrderBy(x => x.Position).
+                         FirstOrDefault().
+                         StepId;
+            foreach (var Form in RealtedCustomer.RelatedForm)
+            {
+                foreach (var Steps in Form.RelatedStep)
+                {
+                    foreach (var Fields in Steps.RelatedField)
+                    {
+                        if (Fields.ProviderInfoType.ItemId == (int)DocumentManagement.Models.General.enumLegalTerms.CertToPay || Fields.ProviderInfoType.ItemId == (int)DocumentManagement.Models.General.enumLegalTerms.CertToPay)
+                        {
+                            CertToPayStepId = Steps.StepId;
+                        }
+                    }
+                }
+            }
+            if (!returnCertToPay)
+            {
+                //legal terms canceled
+                return RedirectToAction
+                    (MVC.ProviderForm.ActionNames.Index,
+                    MVC.ProviderForm.Name,
+                    new
+                    {
+                        ProviderPublicId = ProviderPublicId,
+                        FormPublicId = FormPublicId,
+                    });
+            }
+            CerttoPayModelStep = RealtedCustomer.
+                            RelatedForm.
+                            Where(x => x.FormPublicId == FormPublicId).
+                            FirstOrDefault().
+                            RelatedStep.Where(x => x.StepId == FormStepId).FirstOrDefault();
+            if (CerttoPayModelStep != null)
+            {
+                RealtedCustomer.RelatedForm.FirstOrDefault().RelatedStep.Remove(CerttoPayModelStep);
+            }
+            if (oModel.RelatedLegalTermsData.oProviderInfo != null)
+            {
+                //all success
+                return RedirectToAction
+                    (MVC.ProviderForm.ActionNames.Index,
+                    MVC.ProviderForm.Name,
+                    new
+                    {
+                        ProviderPublicId = ProviderPublicId,
+                        FormPublicId = FormPublicId,
+                        StepId = FormStepId,
+                    });
+            }
+
+            if (!string.IsNullOrEmpty(Request["ButtonCertPay"]) && Request["ButtonCertPay"] == "true")
+            {
+                try
+                {
+                    #region Get File
+
+                    System.Web.HttpFileCollectionBase files = HttpContext.Request.Files;
+                    string[] fieldNames = files.AllKeys;
+                    for (int i = 0; i < fieldNames.Length; ++i)
+                    {
+                        string field = fieldNames[i]; //The 'name' attribute of the html form
+                        System.Web.HttpPostedFileBase file = files[i];
+                        string fileName = files[i].FileName; //The path to the file on the client computer
+                        int len = files[i].ContentLength; //The length of the file
+                        string type = files[i].ContentType; //The file's MIME type
+                        System.IO.Stream stream = files[i].InputStream; //The actual file data
+                    }
+
+                    //get folder
+                    string strFolder = Server.MapPath(DocumentManagement.Models.General.InternalSettings.Instance
+                        [DocumentManagement.Models.General.Constants.C_Settings_File_TempDirectory].Value);
+
+                    if (!System.IO.Directory.Exists(strFolder))
+                        System.IO.Directory.CreateDirectory(strFolder);
+
+                    //get File
+                    HttpPostedFileBase UploadFile = (HttpPostedFileBase)Request.Files[files.AllKeys.FirstOrDefault()];
+
+                    if (UploadFile != null && !string.IsNullOrEmpty(UploadFile.FileName))
+                    {
+                        string strFile = strFolder.TrimEnd('\\') +
+                            "\\ProviderFile_" +
+                            ProviderPublicId + "_" +
+                            files.AllKeys.FirstOrDefault().Replace(" ", "") + "_" +
+                            DateTime.Now.ToString("yyyyMMddHHmmss") + "." +
+                            UploadFile.FileName.Split('.').DefaultIfEmpty("pdf").LastOrDefault();
+
+                        UploadFile.SaveAs(strFile);
+
+                        //load file to s3
+                        string strRemoteFile = ProveedoresOnLine.FileManager.FileController.LoadFile
+                            (strFile,
+                            DocumentManagement.Models.General.InternalSettings.Instance
+                                [DocumentManagement.Models.General.Constants.C_Settings_File_RemoteDirectoryProvider].Value +
+                                ProviderPublicId + "\\");
+
+                        //remove temporal file
+                        if (System.IO.File.Exists(strFile))
+                            System.IO.File.Delete(strFile);
+                        #endregion
+
+                        //get generic models
+                        ProviderFormModel oGenericModels = new ProviderFormModel()
+                        {
+                            ProviderOptions = DocumentManagement.Provider.Controller.Provider.CatalogGetProviderOptions(),
+                            RealtedCustomer = DocumentManagement.Customer.Controller.Customer.CustomerGetByFormId(FormPublicId),
+                            RealtedProvider = DocumentManagement.Provider.Controller.Provider.ProviderGetById(ProviderPublicId, null),
+                        };
+
+                        //PrevModel
+                        ProviderModel oPervProviderModel = DocumentManagement.Provider.Controller.Provider.ProviderGetById(ProviderPublicId, Convert.ToInt32(StepId));
+
+                        #region GetRequest
+
+                        //request legal terms into generic model
+                        oGenericModels.RealtedProvider.RelatedProviderInfo = new List<ProviderInfoModel>()
+                        {
+                            new ProviderInfoModel()
+                            {
+                                ProviderInfoId = !string.IsNullOrEmpty(Request["CertPayValueId"]) ? Convert.ToInt32(Request["CertPayValueId"].Trim()) : 0,
+                                LargeValue = strRemoteFile,
+                                ProviderInfoType = new Provider.Models.Util.CatalogModel()
+                                {
+                                    ItemId = !string.IsNullOrEmpty(Request["CertPayTypeId"]) ? Convert.ToInt32(Request["CertPayTypeId"].Trim()) : 0,
+                                },
+                            },
+                        };
+
+                        #endregion
+
+                        //upsert fields in database
+                        DocumentManagement.Provider.Controller.Provider.ProviderInfoUpsert(oGenericModels.RealtedProvider);
+
+                        //all success
+                        return RedirectToAction
+                            (MVC.ProviderForm.ActionNames.Index,
+                            MVC.ProviderForm.Name,
+                            new
+                            {
+                                ProviderPublicId = ProviderPublicId,
+                                FormPublicId = FormPublicId,
+                                StepId = FormStepId,
+                            });
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+            #endregion
+            return View(oModel);
+        }
+
 
         public virtual ActionResult LoginProvider(string ProviderPublicId, string FormPublicId, string CustomerPublicId)
         {
@@ -614,11 +834,11 @@ namespace DocumentManagement.Web.Controllers
 
                     DocumentManagement.Provider.Models.Provider.ProviderModel ProviderToUpsert =
                         new Provider.Models.Provider.ProviderModel()
-                    {
-                        ProviderPublicId = oModel.RealtedProvider.ProviderPublicId,
-                        CustomerPublicId = oModel.RealtedProvider.CustomerPublicId,
-                        RelatedProviderCustomerInfo = new List<Provider.Models.Provider.ProviderInfoModel>()
-                    };
+                        {
+                            ProviderPublicId = oModel.RealtedProvider.ProviderPublicId,
+                            CustomerPublicId = oModel.RealtedProvider.CustomerPublicId,
+                            RelatedProviderCustomerInfo = new List<Provider.Models.Provider.ProviderInfoModel>()
+                        };
 
                     if (oCurrentStatus.Value.Replace(" ", "").ToLower() != strStatus.Replace(" ", "").ToLower())
                     {
@@ -627,9 +847,9 @@ namespace DocumentManagement.Web.Controllers
                             {
                                 ProviderInfoId = oCurrentStatus.ProviderInfoId,
                                 ProviderInfoType = new Provider.Models.Util.CatalogModel()
-                                    {
-                                        ItemId = 401,
-                                    },
+                                {
+                                    ItemId = 401,
+                                },
                                 Value = strStatus.Replace(" ", ""),
                             });
 
@@ -652,9 +872,9 @@ namespace DocumentManagement.Web.Controllers
                             {
                                 ProviderInfoId = 0,
                                 ProviderInfoType = new Provider.Models.Util.CatalogModel()
-                                    {
-                                        ItemId = 402,
-                                    },
+                                {
+                                    ItemId = 402,
+                                },
                                 LargeValue = strStatus.Replace(" ", "") + " - " + strNote,
                             });
                     }
@@ -1732,7 +1952,7 @@ namespace DocumentManagement.Web.Controllers
                                                     ItemId = (int)DocumentManagement.Provider.Models.Enumerations.enumContactType.CompanyContact,
                                                 },
                                                 ItemName = oGeneralHomologateData.Where(y => y.Item2.Target.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumContactType.CompanyContact)
-                                                        .Select(y => y.Item1).FirstOrDefault() != null ? 
+                                                        .Select(y => y.Item1).FirstOrDefault() != null ?
                                                         Request.Form[oGeneralHomologateData.Where(y => y.Item2.Target.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumContactType.CompanyContact).
                                                         Select(y => y.Item1).FirstOrDefault().Replace("Sync_", "")] : string.Empty,
                                                 Enable = true,
@@ -2408,7 +2628,7 @@ namespace DocumentManagement.Web.Controllers
                     {
                         new ProveedoresOnLine.Company.Models.Util.GenericItemModel()
                         {
-                            ItemId = oProviderModel.RelatedFinantial != null ? oProviderModel.RelatedFinantial.Where(x => x.ItemType.ItemId == 
+                            ItemId = oProviderModel.RelatedFinantial != null ? oProviderModel.RelatedFinantial.Where(x => x.ItemType.ItemId ==
                                     (int)DocumentManagement.Provider.Models.Enumerations.enumFinancialType.OrganizationStructure).
                                     Select(x => x.ItemId).FirstOrDefault() : 0,
                             ItemType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
@@ -2416,7 +2636,7 @@ namespace DocumentManagement.Web.Controllers
                                 ItemId = (int)DocumentManagement.Provider.Models.Enumerations.enumFinancialType.OrganizationStructure,
                             },
                             ItemName = oFinantialToSync.Where(y => y.Item2.Target.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumFinancialType.OrganizationStructure)
-                                    .Select(y => y.Item1).FirstOrDefault() != null ? 
+                                    .Select(y => y.Item1).FirstOrDefault() != null ?
                                     Request.Form[oGeneralHomologateData.Where(y => y.Item2.Target.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumFinancialType.OrganizationStructure).
                                     Select(y => y.Item1).FirstOrDefault().Replace("Sync_", "")] : string.Empty,
                             Enable = true,
@@ -2587,7 +2807,7 @@ namespace DocumentManagement.Web.Controllers
                     {
                         new ProveedoresOnLine.Company.Models.Util.GenericItemModel()
                         {
-                            ItemId = oProviderModel.RelatedLegal != null ? oProviderModel.RelatedLegal.Where(x => x.ItemType.ItemId == 
+                            ItemId = oProviderModel.RelatedLegal != null ? oProviderModel.RelatedLegal.Where(x => x.ItemType.ItemId ==
                                     (int)DocumentManagement.Provider.Models.Enumerations.enumLegalType.ChaimberOfCommerce).
                                     Select(x => x.ItemId).FirstOrDefault() : 0,
                             ItemType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
@@ -2595,7 +2815,7 @@ namespace DocumentManagement.Web.Controllers
                                 ItemId = (int)DocumentManagement.Provider.Models.Enumerations.enumLegalType.ChaimberOfCommerce,
                             },
                             ItemName = oChaimberOfCommerceToSync.Where(y => y.Item2.Target.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumLegalType.ChaimberOfCommerce)
-                                    .Select(y => y.Item1).FirstOrDefault() != null ? 
+                                    .Select(y => y.Item1).FirstOrDefault() != null ?
                                     Request.Form[oGeneralHomologateData.Where(y => y.Item2.Target.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumLegalType.ChaimberOfCommerce).
                                     Select(y => y.Item1).FirstOrDefault().Replace("Sync_", "")] : string.Empty,
                             Enable = true,
@@ -2679,7 +2899,7 @@ namespace DocumentManagement.Web.Controllers
                                 {
                                     ItemId = (int)DocumentManagement.Provider.Models.Enumerations.enumLegalType.RUT,
                                 },
-                                ItemName = "Rut Sync GD",  
+                                ItemName = "Rut Sync GD",
                                 Enable = true,
                                 ItemInfo = new List<ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel>(),
                             },
@@ -2884,7 +3104,7 @@ namespace DocumentManagement.Web.Controllers
                     {
                         new ProveedoresOnLine.Company.Models.Util.GenericItemModel()
                         {
-                            ItemId = oProviderModel.RelatedLegal != null ? oProviderModel.RelatedLegal.Where(x => x.ItemType.ItemId == 
+                            ItemId = oProviderModel.RelatedLegal != null ? oProviderModel.RelatedLegal.Where(x => x.ItemType.ItemId ==
                                     (int)DocumentManagement.Provider.Models.Enumerations.enumHSEQType.CompanyRiskPolicies).
                                     Select(x => x.ItemId).FirstOrDefault() : 0,
                             ItemType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
@@ -2892,7 +3112,7 @@ namespace DocumentManagement.Web.Controllers
                                 ItemId = (int)DocumentManagement.Provider.Models.Enumerations.enumHSEQType.CompanyRiskPolicies,
                             },
                             ItemName = oRiskPoliciesToSync.Where(y => y.Item2.Target.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumHSEQType.CompanyRiskPolicies)
-                                    .Select(y => y.Item1).FirstOrDefault() != null ? 
+                                    .Select(y => y.Item1).FirstOrDefault() != null ?
                                     Request.Form[oGeneralHomologateData.Where(y => y.Item2.Target.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumHSEQType.CompanyRiskPolicies).
                                     Select(y => y.Item1).FirstOrDefault().Replace("Sync_", "")] : string.Empty,
                             Enable = true,
