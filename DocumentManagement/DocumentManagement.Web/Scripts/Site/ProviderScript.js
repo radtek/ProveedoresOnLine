@@ -165,7 +165,7 @@ function ProviderSearchGrid(vidDiv, cmbForm, cmbCustomer, chkName, imgStatusUrl)
                     var linkForm = $('#' + vidDiv + '_FormUrl').html();
 
                     oReturn = linkForm.replace('FormPublicIdParam', dataItem.RelatedProvider.FormPublicId);
-                    oReturn = linkForm.replace('{{FormName}}', dataItem.RelatedProvider.FormName);
+                    oReturn = oReturn.replace('{{FormName}}', dataItem.RelatedProvider.FormName);
                     oReturn = oReturn.replace('ProviderPublicIdParam', dataItem.RelatedProvider.ProviderPublicId)
                 }
                 else {
