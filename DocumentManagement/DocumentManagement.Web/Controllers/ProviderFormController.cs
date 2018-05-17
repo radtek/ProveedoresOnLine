@@ -319,7 +319,7 @@ namespace DocumentManagement.Web.Controllers
                 ProviderOptions = DocumentManagement.Provider.Controller.Provider.CatalogGetProviderOptions(),
                 RealtedCustomer = DocumentManagement.Customer.Controller.Customer.CustomerGetByFormId(FormPublicId),
                 RealtedProvider = DocumentManagement.Provider.Controller.Provider.ProviderGetById(ProviderPublicId, null),
-                
+
                 errorMessage = msg != null ? msg : string.Empty,
             };
             bool returnLegalTerms = false;
@@ -1888,7 +1888,7 @@ namespace DocumentManagement.Web.Controllers
 
                     oCompanyToUpsert.CompanyInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
                     {
-                        ItemInfoId = oCurrentCompanyModel.CompanyInfo != null ? oCurrentCompanyModel.CompanyInfo.Where(x => x.ItemInfoType.ItemId == 203007).Select(x => x.ItemInfoId).FirstOrDefault() : 0,
+                        ItemInfoId = oCurrentCompanyModel != null && oCurrentCompanyModel.CompanyInfo != null ? oCurrentCompanyModel.CompanyInfo.Where(x => x.ItemInfoType.ItemId == 203007).Select(x => x.ItemInfoId).FirstOrDefault() : 0,
                         ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
                         {
                             ItemId = c.Item2.Target.ItemId,
@@ -1896,7 +1896,7 @@ namespace DocumentManagement.Web.Controllers
                         Value = Request.Form[c.Item1.Replace("Sync_", "")],
                     });
 
-                    oCompanyToUpsert.CompanyPublicId = oCurrentCompanyModel.CompanyPublicId;
+                    oCompanyToUpsert.CompanyPublicId = oCompanyPublicid;
                     ProveedoresOnLine.Company.Controller.Company.CompanyInfoUpsert(oCompanyToUpsert);
                     return true;
                 });
@@ -2049,6 +2049,8 @@ namespace DocumentManagement.Web.Controllers
                     };
                     oBranchToSync.All(x =>
                     {
+                        var geographyResult = ProveedoresOnLine.Company.Controller.Company.CategorySearchByGeography(Request.Form[x.Item1.Replace("Sync_", "")], null, 0, 0, out oTotalRows);
+                        
                         if (oCompany.RelatedContact != null)
                         {
                             oCompany.RelatedContact.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
@@ -2059,9 +2061,7 @@ namespace DocumentManagement.Web.Controllers
                                     ItemId = x.Item2.Target.ItemId
                                 },
                                 Value = x.Item2.Target.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumContactInfoType.BR_City ?
-                                                ProveedoresOnLine.Company.Controller.Company.
-                                                CategorySearchByGeography(Request.Form[x.Item1.Replace("Sync_", "")], null, 0, 0, out oTotalRows).
-                                                FirstOrDefault().City.ItemId.ToString() : Request.Form[x.Item1.Replace("Sync_", "")],
+                                        geographyResult != null ? geographyResult.FirstOrDefault().City.ItemId.ToString() : "": "",
                                 Enable = true,
                             });
                         }

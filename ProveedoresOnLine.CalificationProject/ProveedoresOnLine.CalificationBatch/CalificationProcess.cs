@@ -37,8 +37,8 @@ namespace ProveedoresOnLine.CalificationBatch
                         //Get all related provider by customer
                         oRelatedProvider = new List<CompanyModel>();
                         oRelatedProvider.AddRange(oCalificationProjectConfigInfoModel.Where(x =>x.RelatedCalificationProjectConfig.CalificationProjectConfigId == cnf.CalificationProjectConfigId).Select(x=>x.RelatedProvider));
-                        //oRelatedProvider = oRelatedProvider.Where(x => x.CompanyPublicId == "56E27B37").Select(x => x).ToList();
-                    var oModelToUpsert = new Models.CalificationProjectBatch.CalificationProjectBatchModel();
+                        //oRelatedProvider = oRelatedProvider.Where(x => x.CompanyPublicId == "2DA7B9AD").Select(x => x).ToList();
+                        var oModelToUpsert = new Models.CalificationProjectBatch.CalificationProjectBatchModel();
                         LogFile("Running: "+ cnf.CalificationProjectConfigName);
                         //validate provider list
                         if (oRelatedProvider != null &&

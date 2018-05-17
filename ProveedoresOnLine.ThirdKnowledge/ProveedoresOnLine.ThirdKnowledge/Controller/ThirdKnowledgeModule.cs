@@ -63,8 +63,8 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                             RegEntityResult = await RegisterEntitySearch(IdType, null, SearchParam);
                         }
 
-                        if (RegDianResult.Count > 0 && !string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1))
-                            ppResult = await PPSearch(1, RegDianResult.FirstOrDefault().Item1, SearchParam);
+                        //if (RegDianResult.Count > 0 && !string.IsNullOrEmpty(RegDianResult.FirstOrDefault().Item1))
+                            //ppResult = await PPSearch(1, RegDianResult.FirstOrDefault().Item1, SearchParam);
 
                         //RUES Implement
                         if (IdType == 2)
@@ -660,7 +660,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
             var builder = new ContainerBuilder();
             builder.RegisterType<OnlineSearch.Core.ProveedoresOnLinePPImplement>().As<OnlineSearch.Interfaces.IOnLineSearch>();
             var container = builder.Build();
-            return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber);
+            return await container.Resolve<OnlineSearch.Interfaces.IOnLineSearch>().Search(IdType, Name, IndentificationNumber); 
         }
 
         public static async Task<List<Tuple<string, List<string>, List<string>>>> JudicialProcessSearch(int IdType, string Name, string IndentificationNumber)

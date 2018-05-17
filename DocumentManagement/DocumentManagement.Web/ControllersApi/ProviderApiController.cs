@@ -115,7 +115,7 @@ namespace DocumentManagement.Web.ControllersApi
                         ProgramTime = DateTime.Now,
                         MessageQueueInfo = new List<Tuple<string, string>>() ,
                     };
-
+                  
                     oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
                         ("To", x.RelatedProvider.Email));
 
@@ -129,8 +129,9 @@ namespace DocumentManagement.Web.ControllersApi
                     oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
                         ("URL", FromUrl));
 
-                    MessageModule.Client.Controller.ClientController.CreateMessage(oDataMessage);
-
+                    if (oDataMessage.MessageQueueInfo.Any(p => p.Item2 == null) != true)                    
+                        MessageModule.Client.Controller.ClientController.CreateMessage(oDataMessage);
+                    
                     //update data
                     DocumentManagement.Provider.Controller.Provider.SendNotification_Upsert(x.RelatedProvider.CustomerPublicId, x.RelatedProvider.ProviderPublicId, x.RelatedProvider.FormPublicId, Enumerations.enumNotificationType.Welcome);
                     
