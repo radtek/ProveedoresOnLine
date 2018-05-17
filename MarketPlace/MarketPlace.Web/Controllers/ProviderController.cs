@@ -4855,6 +4855,21 @@ namespace MarketPlace.Web.Controllers
 
                 StringBuilder data = new StringBuilder();
                 string strSep = ";";
+                string strCustomField = "";
+
+
+                ProviderList.Where(x=> x.CustomField.Count > 0).FirstOrDefault(x =>{
+                    if (x.CustomField.Count > 0)
+                    {
+                        x.CustomField.All(y => {
+                            strCustomField += strSep + "\"" + y.Item1.ToUpper().Replace("_", " ") + "\"";
+                            return true;
+                        });
+                    }
+                    return true;
+                });
+
+
                 data.AppendLine
                     (
                     "\"" + "TIPO IDENTIFICACION" + "\"" + strSep +
@@ -4866,12 +4881,25 @@ namespace MarketPlace.Web.Controllers
                     "\"" + "ESTADO" + "\"" + strSep +
                     "\"" + "DIRECCION" + "\"" + strSep +
                     "\"" + "TELEFONO" + "\"" + strSep +
-                    "\"" + "REPRESENTANTE" + "\"");
+                    "\"" + "REPRESENTANTE LEGAL" + "\"" + strSep +
+                    "\"" + "CORREO CONTACTO" + "\"" + strCustomField);
 
                 if (ProviderList != null && ProviderList.Count > 0)
                 {
                     ProviderList.All(x =>
                     {
+                        string strData = "";
+                        if (x.CustomField.Count > 0)
+                        {
+
+                            x.CustomField.All(y =>
+                            {
+                                strData += strSep + "\"" + y.Item2.Split('/')[1].Replace("_", " ") + "\"";
+                                return true;
+                            });
+                        }
+
+
                         data.AppendLine
                         (
                              "\"" + x.IdentificationType + "\"" + strSep +
@@ -4883,7 +4911,9 @@ namespace MarketPlace.Web.Controllers
                              "\"" + x.State + "\"" + strSep +
                              "\"" + x.Address + "\"" + strSep +
                              "\"" + x.PhoneNumber + "\"" + strSep +
-                             "\"" + x.LegalRepresentative + "\""
+                             "\"" + x.LegalRepresentative + "\"" + strSep +
+                             "\"" + x.EmailContact + "\"" +
+                             strData
                         );
 
                         return true;
