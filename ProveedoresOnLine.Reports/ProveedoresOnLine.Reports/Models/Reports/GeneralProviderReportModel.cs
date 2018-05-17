@@ -18,5 +18,8 @@ namespace ProveedoresOnLine.Reports.Models.Reports
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public string LegalRepresentative { get; set; }
+        public string EmailContact { get; set; }
+
+        public List<Tuple<string, string>> CustomField { get; set; }
     }
 }

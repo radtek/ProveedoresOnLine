@@ -973,7 +973,7 @@ namespace ProveedoresOnLine.Reports.DAL.MySQLDAO
 
             ADO.Models.ADOModelResponse response = DataInstance.ExecuteQuery(new ADO.Models.ADOModelRequest()
             {
-                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataTable,
+                CommandExecutionType = ADO.Models.enumCommandExecutionType.DataSet,
                 CommandText = "MP_CP_ProviderGeneralReport",
                 CommandType = CommandType.StoredProcedure,
                 Parameters = lstParams,
@@ -981,10 +981,21 @@ namespace ProveedoresOnLine.Reports.DAL.MySQLDAO
 
             List<GeneralProviderReportModel> oReturn = new List<GeneralProviderReportModel>();
 
-            if (response.DataTableResult != null && response.DataTableResult.Rows.Count > 0)
+
+            if (response.DataSetResult != null &&
+                response.DataSetResult.Tables.Count > 1 &&
+                response.DataSetResult.Tables[0] != null &&
+                response.DataSetResult.Tables[0].Rows.Count > 0 &&
+                response.DataSetResult.Tables[1] != null &&
+                response.DataSetResult.Tables[1].Rows.Count > 0)
             {
+                List<Tuple<string, string>> oCustomField = (from rp in response.DataSetResult.Tables[1].AsEnumerable()
+                                                 where !rp.IsNull("CustomerPublicId")
+                                                 select new Tuple<string, string>(rp.Field<string>("label"), rp.Field<string>("value"))).ToList();
+
+
                 oReturn =
-                    (from rp in response.DataTableResult.AsEnumerable()
+                    (from rp in response.DataSetResult.Tables[0].AsEnumerable()
                      where !rp.IsNull("IdentificationNumber")
                      group rp by new
                      {
@@ -997,7 +1008,8 @@ namespace ProveedoresOnLine.Reports.DAL.MySQLDAO
                          State = rp.Field<string>("State"),
                          Address = rp.Field<string>("Address"),
                          PhoneNumber = rp.Field<string>("PhoneNumber"),
-                         LegalRepresentative = rp.Field<string>("LegalRepresentative")
+                         LegalRepresentative = rp.Field<string>("LegalRepresentative"),
+                         EmailContact = rp.Field<string>("EmailContact"),
                      }
                      into rpg
                      select new GeneralProviderReportModel()
@@ -1011,7 +1023,9 @@ namespace ProveedoresOnLine.Reports.DAL.MySQLDAO
                          State = rpg.Key.State,
                          Address = rpg.Key.Address,
                          PhoneNumber = rpg.Key.PhoneNumber,
-                         LegalRepresentative = rpg.Key.LegalRepresentative
+                         LegalRepresentative = rpg.Key.LegalRepresentative,
+                         EmailContact = rpg.Key.EmailContact,
+                         CustomField = oCustomField
                      }).ToList();
             }
             return oReturn;
