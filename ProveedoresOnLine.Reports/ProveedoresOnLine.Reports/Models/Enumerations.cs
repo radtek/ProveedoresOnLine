@@ -28,7 +28,8 @@
             RP_FinancialReport = 1501009,
             RP_GIBlackListDetailQueryReport = 1501010,
             RP_CalificationReport = 1501011,
-            RP_ThirdKnowledgeMyQueriesReport = 1501012
+            RP_ThirdKnowledgeMyQueriesReport = 1501012,
+            RP_ProviderValidated = 1501013
         }
 
         #endregion
