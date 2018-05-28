@@ -147,6 +147,10 @@
     </key>
 
     <key name="DM_NotificationsMail">DM_NotificationsMail</key>
+    
+    <key name="DM_CertPayMail">DM_CertPayMail</key>
+    
+    <key name="DM_POL_ResponsableEmail"> <![CDATA[marcela.tibata@proveedoresonline.co;sebastian.martinez@proveedoresonline.co]]></key>  
 
   </DocumentManagement>
 </Settings>

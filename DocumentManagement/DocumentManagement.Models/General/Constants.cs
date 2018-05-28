@@ -91,6 +91,10 @@
 
         public const string N_DM_NotificationsMail = "DM_NotificationsMail";
 
+        public const string N_DM_CertPayMail = "DM_CertPayMail";
+
+        public const string N_DM_POL_ResponsableEmail = "DM_POL_ResponsableEmail";
+
         #endregion
 
     }

@@ -436,6 +436,7 @@ namespace DocumentManagement.Web.Controllers
 
                 return true;
             });
+
             FormStepId = RealtedCustomer.
                          RelatedForm.
                          Where(x => x.FormPublicId == FormPublicId).
@@ -573,6 +574,56 @@ namespace DocumentManagement.Web.Controllers
 
                         //upsert fields in database
                         DocumentManagement.Provider.Controller.Provider.ProviderInfoUpsert(oGenericModels.RealtedProvider);
+
+                        //Send Email 
+
+                        List<string> ResponsableEmails = DocumentManagement.Models.General.InternalSettings.Instance[DocumentManagement.Models.General.Constants.N_DM_POL_ResponsableEmail].Value.Split(';').ToList();
+                        ResponsableEmails.All(zx =>
+                        {
+                            //Send Email
+                            MessageModule.Client.Models.ClientMessageModel oDataMessage = new MessageModule.Client.Models.ClientMessageModel()
+                            {
+                                Agent = DocumentManagement.Models.General.InternalSettings.Instance[DocumentManagement.Models.General.Constants.N_DM_CertPayMail].Value,
+                                User = "Responsable:_" + oGenericModels.RealtedProvider.Email,
+                                ProgramTime = DateTime.Now,
+                                MessageQueueInfo = new List<Tuple<string, string>>(),
+                            };
+
+                            oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                                ("To", zx));
+
+                            oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                                ("ProviderName", oGenericModels.RealtedProvider.Name));
+
+                            oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                                ("NIT", oGenericModels.RealtedProvider.IdentificationNumber));
+
+                            if (oGenericModels.RealtedProvider.IdentificationType.ItemId == 101)
+                            {
+                                oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                                ("TID", "RUT"));
+                            }
+                            else if (oGenericModels.RealtedProvider.IdentificationType.ItemId == 102)
+                            {
+                                oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                               ("TID", "NIT" ));
+                            }
+                            else if (oGenericModels.RealtedProvider.IdentificationType.ItemId == 103)
+                            {
+                                oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                               ("TID", "TAX ID"));
+                            }
+
+                            oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                                ("ValueToPay", oGenericModels.RealtedProvider.ValueToPay));
+
+                            string FromUrl = "https://www.proveedoresonline.co/Registro/ProviderForm?ProviderPublicId=" + oGenericModels.RealtedProvider.ProviderPublicId + "&FormPublicId=" + FormPublicId;
+                            oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                                ("URL", FromUrl));
+
+                            MessageModule.Client.Controller.ClientController.CreateMessage(oDataMessage);
+                            return true;
+                        });
 
                         //all success
                         return RedirectToAction
@@ -2050,7 +2101,7 @@ namespace DocumentManagement.Web.Controllers
                     oBranchToSync.All(x =>
                     {
                         var geographyResult = ProveedoresOnLine.Company.Controller.Company.CategorySearchByGeography(Request.Form[x.Item1.Replace("Sync_", "")], null, 0, 0, out oTotalRows);
-                        
+
                         if (oCompany.RelatedContact != null)
                         {
                             oCompany.RelatedContact.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
@@ -2061,7 +2112,7 @@ namespace DocumentManagement.Web.Controllers
                                     ItemId = x.Item2.Target.ItemId
                                 },
                                 Value = x.Item2.Target.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumContactInfoType.BR_City ?
-                                        geographyResult != null ? geographyResult.FirstOrDefault().City.ItemId.ToString() : "": "",
+                                        geographyResult != null ? geographyResult.FirstOrDefault().City.ItemId.ToString() : "" : "",
                                 Enable = true,
                             });
                         }
@@ -2121,7 +2172,7 @@ namespace DocumentManagement.Web.Controllers
                                                 {
                                                     ItemId = (int)DocumentManagement.Provider.Models.Enumerations.enumContactType.PersonContact,
                                                 },
-                                                ItemName = "Person Contact Sync GD",
+                                                ItemName = !string.IsNullOrEmpty(Request[p.Item1.Replace("Sync_","")]) ?Request[p.Item1.Replace("Sync_","")] :  "Person Contact Sync GD",
                                                 Enable = true,
                                                 ItemInfo = new List<ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel>(),
                                             },
@@ -2132,11 +2183,7 @@ namespace DocumentManagement.Web.Controllers
                         oCommercialTypeGD.Add(new Tuple<string, HomologateModel>(oPersonToSyncBO.Where(z => z.Item2.Source.ItemId ==
                                                                             (int)DocumentManagement.Provider.Models.Enumerations.enumSourceItem.CommercialPhone).Select(z => z.Item1).FirstOrDefault(),//Item1
                         oPersonToSyncBO.Where(f => f.Item2.Source.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumSourceItem.CommercialPhone).Select(f => f.Item2).FirstOrDefault()));
-
-                        oCommercialTypeGD.Add(new Tuple<string, HomologateModel>(oPersonToSyncBO.Where(z => z.Item2.Source.ItemId ==
-                                                                            (int)DocumentManagement.Provider.Models.Enumerations.enumSourceItem.CommercialIdentification).Select(z => z.Item1).FirstOrDefault(),//Item1
-                        oPersonToSyncBO.Where(f => f.Item2.Source.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumSourceItem.CommercialIdentification).Select(f => f.Item2).FirstOrDefault()));
-
+                                            
                         oCommercialTypeGD.Add(new Tuple<string, HomologateModel>(oPersonToSyncBO.Where(z => z.Item2.Source.ItemId ==
                                                                             (int)DocumentManagement.Provider.Models.Enumerations.enumSourceItem.CommercialEmail).Select(z => z.Item1).FirstOrDefault(),//Item1
                         oPersonToSyncBO.Where(f => f.Item2.Source.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumSourceItem.CommercialEmail).Select(f => f.Item2).FirstOrDefault()));
@@ -2184,6 +2231,7 @@ namespace DocumentManagement.Web.Controllers
                     oLegalContactTypeGD.All(p =>
                     {
                         #region Legal data
+                        //Build obj contact
                         //Build obj contact
                         ProveedoresOnLine.Company.Models.Company.CompanyModel oCompany = new ProveedoresOnLine.Company.Models.Company.CompanyModel()
                         {
@@ -2267,6 +2315,7 @@ namespace DocumentManagement.Web.Controllers
                                 return true;
                             });
                         }
+
                         #endregion
                         //Upsertinfo BO
                         oCompany = ProveedoresOnLine.Company.Controller.Company.ContactUpsert(oCompany);
@@ -2282,19 +2331,19 @@ namespace DocumentManagement.Web.Controllers
                         {
                             CompanyPublicId = oCompanyPublicid,
                             RelatedContact = new List<ProveedoresOnLine.Company.Models.Util.GenericItemModel>()
-                                        {
-                                            new ProveedoresOnLine.Company.Models.Util.GenericItemModel()
-                                            {
-                                                ItemId = 0,
-                                                ItemType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
-                                                {
-                                                    ItemId = (int)DocumentManagement.Provider.Models.Enumerations.enumContactType.PersonContact,
-                                                },
-                                                ItemName = "Person Contact Sync GD",
-                                                Enable = true,
-                                                ItemInfo = new List<ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel>(),
-                                            },
-                                        }
+                            {
+                                new ProveedoresOnLine.Company.Models.Util.GenericItemModel()
+                                {
+                                    ItemId = 0,
+                                    ItemType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
+                                    {
+                                        ItemId = (int)DocumentManagement.Provider.Models.Enumerations.enumContactType.PersonContact,
+                                    },
+                                    ItemName =  !string.IsNullOrEmpty(Request[p.Item1.Replace("Sync_","")]) ?Request[p.Item1.Replace("Sync_","")] :  "Person Contact Sync GD",
+                                    Enable = true,
+                                    ItemInfo = new List<ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel>(),
+                                },
+                            }
                         };
 
 
@@ -2303,12 +2352,7 @@ namespace DocumentManagement.Web.Controllers
                                                                             (int)DocumentManagement.Provider.Models.Enumerations.enumSourceItem.FinnancialName).Select(z => z.Item1).FirstOrDefault(),//Item1
                                                                             oPersonToSyncBO.Where(f => f.Item2.Source.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumSourceItem.FinnancialName).
                                                                             Select(f => f.Item2).FirstOrDefault()));
-
-                        oFinancialTypeGD.Add(new Tuple<string, HomologateModel>(oPersonToSyncBO.Where(z => z.Item2.Source.ItemId ==
-                                                                            (int)DocumentManagement.Provider.Models.Enumerations.enumSourceItem.FinnancianIdentification).Select(z => z.Item1).FirstOrDefault(),//Item1
-                                                                            oPersonToSyncBO.Where(f => f.Item2.Source.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumSourceItem.FinnancianIdentification).
-                                                                            Select(f => f.Item2).FirstOrDefault()));
-
+                       
                         oFinancialTypeGD.Add(new Tuple<string, HomologateModel>(oPersonToSyncBO.Where(z => z.Item2.Source.ItemId ==
                                                                             (int)DocumentManagement.Provider.Models.Enumerations.enumSourceItem.FinnancialPhone).Select(z => z.Item1).FirstOrDefault(),//Item1
                                                                             oPersonToSyncBO.Where(f => f.Item2.Source.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumSourceItem.FinnancialPhone).
@@ -2375,7 +2419,7 @@ namespace DocumentManagement.Web.Controllers
                                                 {
                                                     ItemId = (int)DocumentManagement.Provider.Models.Enumerations.enumContactType.PersonContact,
                                                 },
-                                                ItemName = "Person Contact Sync GD",
+                                                ItemName = !string.IsNullOrEmpty(Request[p.Item1.Replace("Sync_","")]) ?Request[p.Item1.Replace("Sync_","")] :  "Person Contact Sync GD",
                                                 Enable = true,
                                                 ItemInfo = new List<ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel>(),
                                             },
@@ -2388,11 +2432,7 @@ namespace DocumentManagement.Web.Controllers
                                                                             (int)DocumentManagement.Provider.Models.Enumerations.enumSourceItem.HSEQEmail).Select(z => z.Item1).FirstOrDefault(),//Item1
                                                                             oPersonToSyncBO.Where(f => f.Item2.Source.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumSourceItem.HSEQEmail).
                                                                             Select(f => f.Item2).FirstOrDefault()));
-
-                        oHSEQTypeGD.Add(new Tuple<string, HomologateModel>(oPersonToSyncBO.Where(z => z.Item2.Source.ItemId ==
-                                                                            (int)DocumentManagement.Provider.Models.Enumerations.enumSourceItem.HSEQIdentification).Select(z => z.Item1).FirstOrDefault(),//Item1
-                                                                            oPersonToSyncBO.Where(f => f.Item2.Source.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumSourceItem.HSEQIdentification).
-                                                                            Select(f => f.Item2).FirstOrDefault()));
+                                              
 
                         oHSEQTypeGD.Add(new Tuple<string, HomologateModel>(oPersonToSyncBO.Where(z => z.Item2.Source.ItemId ==
                                                                             (int)DocumentManagement.Provider.Models.Enumerations.enumSourceItem.HSEQPhone).Select(z => z.Item1).FirstOrDefault(),//Item1
@@ -2825,10 +2865,19 @@ namespace DocumentManagement.Web.Controllers
 
                     oChaimberOfCommerceToSync.All(x =>
                     {
+                        int infoId = 0;
+                        //if (oProviderModel.RelatedLegal != null)
+                        //{
+                        //    infoId = oProviderModel.RelatedLegal.Where(p => p.ItemInfo != null).
+                        //       Select(p => p.ItemInfo.Where(y => y.ItemInfoType.ItemId == x.Item2.Target.ItemId).
+                        //       Select(y => y) != null ? oProviderModel.RelatedLegal.Where(p => p.ItemInfo != null).
+                        //       Select(p => p.ItemInfo.Where(y => y.ItemInfoType.ItemId == x.Item2.Target.ItemId).
+                        //       Select(y => y).FirstOrDefault;
+                        //}
+
                         oChaimberOfCommerceToUpsert.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
                         {
-                            ItemInfoId = oProviderModel.RelatedLegal != null ? oProviderModel.RelatedLegal.Where(p => p.ItemInfo != null).
-                                                        Select(p => p.ItemInfo.Where(y => y.ItemInfoType.ItemId == x.Item2.Target.ItemId).Select(y => y).FirstOrDefault().ItemInfoId).FirstOrDefault() : 0,
+                            ItemInfoId = infoId,
                             ItemInfoType = new ProveedoresOnLine.Company.Models.Util.CatalogModel()
                             {
                                 ItemId = x.Item2.Target.ItemId

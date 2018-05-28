@@ -19,7 +19,7 @@
     <key name="TK_ReadyResultAgent">POL_ReadyResult_Mail</key>
 
     <!--Temp Folder-->
-    <key name="File_TempDirectory">C:\Users\Proveedores Online\source\repos\ProveedoresOnLine\ProveedoresOnLine.ThirdKnowledge\ProveedoresOnLine.ThirdKnowledge.Test\TempDirectory\</key>
+    <key name="File_TempDirectory">D:\Repositories\ProveedoresOnLine\ProveedoresOnLine.ThirdKnowledge\ProveedoresOnLine.ThirdKnowledge.Test\TempDirectory\</key>
 
     <!--S3 Path File-->
     <key name="File_S3FilePath">https://s3.amazonaws.com/devproveedoresonline/MarketPlace/ThirdKnowledge/</key>
