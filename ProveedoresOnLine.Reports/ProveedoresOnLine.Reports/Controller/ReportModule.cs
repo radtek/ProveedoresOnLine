@@ -1051,30 +1051,44 @@ namespace ProveedoresOnLine.Reports.Controller
             return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_SurveyReport + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
         }
 
-        public static byte[] SurveyReportGenerator(List<string> Params, string CustomerPublicId)
+        #region ReportProviderValidated
+
+        public static Tuple<byte[], string, string> GetProviderValitaed(List<ReportParameter> ReportData, string FormatType, string FilePath)
         {
-            string SettingFile = Models.Constants.R_SVFileReport.Replace("{CustomerPublicId}", CustomerPublicId);
+            LocalReport localReport = new LocalReport();
+            localReport.EnableExternalImages = true;
+            localReport.ReportPath = FilePath;
+            localReport.SetParameters(ReportData);
 
-            FileStream fStream = new FileStream(SettingFile, FileMode.Open, FileAccess.Read);
-            using (StreamReader sr = new StreamReader(fStream, ASCIIEncoding.ASCII))
-            {
-                while (!sr.EndOfStream)
-                {
-                    var line = sr.ReadLine();
-                    var lineWords = line.Split(' ');
-                }
-            }
-            //Obtain the Report to replace
-            using (var mappedFile1 = MemoryMappedFile.CreateFromFile(ProveedoresOnLine.Reports.Models.Util.InternalSettings.Instance[SettingFile].Value))
-            {
-                using (Stream mmStream = mappedFile1.CreateViewStream())
-                {
-
-                }
-            }
-
-
-            return null;
+            string mimeType;
+            string encoding;
+            string fileNameExtension;
+            string deviceInfo =
+                       "<DeviceInfo>" +
+                       "  <OutputFormat>" + FormatType + "</OutputFormat>" +
+                       "  <PageWidth>8.5in</PageWidth>" +
+                       "  <PageHeight>11in</PageHeight>" +
+                       "  <MarginTop>0.3in</MarginTop>" +
+                       "  <MarginLeft>0.3in</MarginLeft>" +
+                       "  <MarginRight>0.3in</MarginRight>" +
+                       "  <MarginBottom>0.3in</MarginBottom>" +
+                       "</DeviceInfo>";
+            Warning[] warnings;
+            string[] streams;
+            byte[] renderedBytes;
+            renderedBytes = localReport.Render(
+                FormatType,
+                deviceInfo,
+                out mimeType,
+                out encoding,
+                out fileNameExtension,
+                out streams,
+                out warnings);
+            if (FormatType == "Excel") { FormatType = "xls"; }
+            return Tuple.Create(renderedBytes, mimeType, "Proveedores_" + ProveedoresOnLine.Reports.Models.Enumerations.enumReportType.RP_ProviderValidated + "_" + DateTime.Now.ToString("yyyyMMddHHmm") + "." + FormatType);
         }
+
+
+        #endregion
     }
 }
