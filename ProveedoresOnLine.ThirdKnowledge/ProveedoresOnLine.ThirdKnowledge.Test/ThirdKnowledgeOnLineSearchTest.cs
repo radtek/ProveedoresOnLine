@@ -67,7 +67,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Test
         public async Task RUESSearch()
         {
             List<Tuple<string, List<string>, List<string>>> resultado = null;
-            resultado = await Controller.ThirdKnowledgeModule.RUESSearch(2, null, "900775412");
+            resultado = await Controller.ThirdKnowledgeModule.RUESSearch(2, null, "860045854");
         }
 
         [TestMethod]

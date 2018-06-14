@@ -1,6 +1,7 @@
 ﻿using DocumentManagement.Customer.Models.Form;
 using DocumentManagement.Models.General;
 using DocumentManagement.Models.Provider;
+using DocumentManagement.Provider.Models;
 using DocumentManagement.Provider.Models.Provider;
 using ProveedoresOnLine.AsociateProvider.Client.Models;
 using System;
@@ -811,6 +812,68 @@ namespace DocumentManagement.Web.Controllers
 
                     //upsert fields in database
                     DocumentManagement.Provider.Controller.Provider.ProviderInfoUpsert(oGenericModels.RealtedProvider);
+
+                    var providerInfo = DocumentManagement.Provider.Controller.Provider.ProviderGetById(oGenericModels.RealtedProvider.ProviderPublicId, null);
+                    if (providerInfo != null)
+                    {
+                        var Notifications = DocumentManagement.Provider.Controller.Provider.Get_SendNotification(oGenericModels.RealtedCustomer.CustomerPublicId, ProviderPublicId, FormPublicId, (int)Enumerations.enumNotificationType.UploadInfo);
+                        List<string> ResponsableEmails = DocumentManagement.Models.General.InternalSettings.Instance[DocumentManagement.Models.General.Constants.N_DM_POL_ResponsableEmail].Value.Split(';').ToList();
+
+                        if (Notifications.Count == 0 && providerInfo.RelatedProviderInfo.Count > 25)
+                        {
+                            ResponsableEmails.All(x =>
+                            {
+                                //Send Email
+                                MessageModule.Client.Models.ClientMessageModel oDataMessage = new MessageModule.Client.Models.ClientMessageModel()
+                                {
+                                    Agent = DocumentManagement.Models.General.InternalSettings.Instance[DocumentManagement.Models.General.Constants.N_DM_NotificationUploadInfo].Value,
+                                    User = oGenericModels.RealtedProvider.Email,
+                                    ProgramTime = DateTime.Now,
+                                    MessageQueueInfo = new List<Tuple<string, string>>(),
+                                };
+
+                                oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                                    ("To", x));
+
+                                oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                                   ("ProviderName", oGenericModels.RealtedProvider.Name));
+
+                                oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                                    ("CustomerName", oGenericModels.RealtedCustomer.Name));
+
+
+                                oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                                    ("NIT", oGenericModels.RealtedProvider.IdentificationNumber));
+
+                                if (oGenericModels.RealtedProvider.IdentificationType.ItemId == 101)
+                                {
+                                    oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                                    ("TID", "RUT"));
+                                }
+                                else if (oGenericModels.RealtedProvider.IdentificationType.ItemId == 102)
+                                {
+                                    oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                                   ("TID", "NIT"));
+                                }
+                                else if (oGenericModels.RealtedProvider.IdentificationType.ItemId == 103)
+                                {
+                                    oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                                   ("TID", "TAX ID"));
+                                }
+
+                                string FromUrl = "https://www.proveedoresonline.co/Registro/ProviderForm?ProviderPublicId=" + ProviderPublicId + "&FormPublicId=" + FormPublicId;
+                                oDataMessage.MessageQueueInfo.Add(new Tuple<string, string>
+                                    ("URL", FromUrl));
+
+                                if (oDataMessage.MessageQueueInfo.Any(p => p.Item2 == null) != true)
+                                    MessageModule.Client.Controller.ClientController.CreateMessage(oDataMessage);
+
+                                return true;
+                            });
+                            //update data
+                            DocumentManagement.Provider.Controller.Provider.SendNotification_Upsert(oGenericModels.RealtedCustomer.CustomerPublicId, ProviderPublicId, FormPublicId, Enumerations.enumNotificationType.UploadInfo);
+                        }
+                    }
                 }
                 #endregion
             }
@@ -2101,7 +2164,7 @@ namespace DocumentManagement.Web.Controllers
                     oBranchToSync.All(x =>
                     {
                         var geographyResult = ProveedoresOnLine.Company.Controller.Company.CategorySearchByGeography(Request.Form[x.Item1.Replace("Sync_", "")], null, 0, 0, out oTotalRows);
-
+                        
                         if (oCompany.RelatedContact != null)
                         {
                             oCompany.RelatedContact.FirstOrDefault().ItemInfo.Add(new ProveedoresOnLine.Company.Models.Util.GenericItemInfoModel()
@@ -2112,7 +2175,7 @@ namespace DocumentManagement.Web.Controllers
                                     ItemId = x.Item2.Target.ItemId
                                 },
                                 Value = x.Item2.Target.ItemId == (int)DocumentManagement.Provider.Models.Enumerations.enumContactInfoType.BR_City ?
-                                        geographyResult != null ? geographyResult.FirstOrDefault().City.ItemId.ToString() : "" : "",
+                                        geographyResult != null ? geographyResult.FirstOrDefault().City.ItemId.ToString() : "" : Request.Form[x.Item1.Replace("Sync_", "")],
                                 Enable = true,
                             });
                         }

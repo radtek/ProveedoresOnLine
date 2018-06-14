@@ -308,6 +308,7 @@
         #region Notifications
         public enum enumNotificationType {
             Welcome = 801
+            ,UploadInfo = 802
         }
 
         #endregion

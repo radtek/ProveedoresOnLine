@@ -150,6 +150,8 @@
     
     <key name="DM_CertPayMail">DM_CertPayMail</key>
     
+    <key name="DM_NotificationUploadInfo">DM_NotificationUploadInfo</key>
+    
     <key name="DM_POL_ResponsableEmail"> <![CDATA[marcela.tibata@proveedoresonline.co;sebastian.martinez@proveedoresonline.co]]></key>  
 
   </DocumentManagement>
