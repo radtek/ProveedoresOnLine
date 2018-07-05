@@ -9,5 +9,6 @@
         public const string C_SettingsPublicIdPublicar = "C_POL_CustomerPublicId_Publicar";
         public const string C_SettingsPublicIdFalabella = "C_POL_CustomerPublicId_Falabella";
         public const string C_SettingsPublicIdAlpina = "C_POL_CustomerPublicId_Alpina";
+        public const string C_SettingsPublicIdAje = "C_POL_CustomerPublicId_Aje";
     }
 }

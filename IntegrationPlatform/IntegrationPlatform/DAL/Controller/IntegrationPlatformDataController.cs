@@ -97,6 +97,20 @@ namespace IntegrationPlatform.DAL.Controller
 
         #endregion
 
+        #region Aje
+
+        public int Aje_AditionalData_Upsert(int AditionalDataId, string ProviderPublicId, int AditionalFieldId, string AditionalDataName, bool Enable)
+        {
+            return DataFactory.Aje_AditionalData_Upsert(AditionalDataId, ProviderPublicId, AditionalFieldId, AditionalDataName, Enable);
+        }
+
+        public int Aje_AditionalDataInfo_Upsert(int AditionalDataInfoId, int AditionalDataId, int? AditionalDataInfoType, string Value, string LargeValue, bool Enable)
+        {
+            return DataFactory.Aje_AditionalDataInfo_Upsert(AditionalDataInfoId, AditionalDataId, AditionalDataInfoType, Value, LargeValue, Enable);
+        }
+
+        #endregion
+
         #region Integration Publicar
 
         public int Publicar_AditionalData_Upsert(int AditionalDataId, string ProviderPublicId, int AditionalFieldId, string AditionalDataName, bool Enable)

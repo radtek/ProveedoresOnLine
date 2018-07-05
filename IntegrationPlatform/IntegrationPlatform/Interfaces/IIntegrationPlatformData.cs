@@ -39,6 +39,12 @@ namespace IntegrationPlatform.Interfaces
 
         #endregion
 
+        #region Aje
+        int Aje_AditionalData_Upsert(int AditionalDataId, string ProviderPublicId, int AditionalFieldId, string AditionalDataName, bool Enable);
+
+        int Aje_AditionalDataInfo_Upsert(int AditionalDataInfoId, int AditionalDataId, int? AditionalDataInfoType, string Value, string LargeValue, bool Enable);
+        #endregion
+
         #region Publicar
 
         int Publicar_AditionalData_Upsert(int AditionalDataId, string ProviderPublicId, int AditionalFieldId, string AditionalDataName, bool Enable);
