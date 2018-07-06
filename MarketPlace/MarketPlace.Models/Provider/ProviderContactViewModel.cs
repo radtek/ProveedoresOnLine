@@ -548,7 +548,7 @@ namespace MarketPlace.Models.Provider
         {
             get
             {
-                if (string.IsNullOrEmpty(oDT_Representative))
+                if (string.IsNullOrEmpty(oDT_DistributorFile))
                 {
                     oDT_DistributorFile = RelatedContactInfo.ItemInfo.
                       Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumContactInfoType.D_DistributorFile).
