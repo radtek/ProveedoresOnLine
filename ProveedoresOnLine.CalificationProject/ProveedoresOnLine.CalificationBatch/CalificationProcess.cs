@@ -18,12 +18,12 @@ namespace ProveedoresOnLine.CalificationBatch
                 LogFile("Start Process:::" + DateTime.Now);
                 //Get all calification project configInfo
                 var oCalificationProjectConfigInfoModel = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoGetAll();
-                oCalificationProjectConfigInfoModel = oCalificationProjectConfigInfoModel.Where(x => x.RelatedCalificationProjectConfig.CalificationProjectConfigId == 8).Select(x => x).ToList();
+                oCalificationProjectConfigInfoModel = oCalificationProjectConfigInfoModel.Where(x => x.RelatedCalificationProjectConfig.CalificationProjectConfigId == 11).Select(x => x).ToList();
                 //Select All a la nueva tabla ObjNuevo
                 //cruzar ObjNuevo vs oCalificationProjectConfigModel oCalificationProjectConfigModel  == oCalificationProjectConfigModel  Cruzado
                 List<CalificationProjectConfigModel> oCalificationProjectConfigModel = CalificationProject.Controller.CalificationProject.CalificationProjectConfig_GetAll();
 
-                oCalificationProjectConfigModel = oCalificationProjectConfigModel.Where(x => x.CalificationProjectConfigId == 8).Select(x => x).ToList();
+                oCalificationProjectConfigModel = oCalificationProjectConfigModel.Where(x => x.CalificationProjectConfigId == 11).Select(x => x).ToList();
                 var oRelatedProvider = new List<CompanyModel>();
 
                 oCalificationProjectConfigModel = oCalificationProjectConfigModel.Where(x => oCalificationProjectConfigInfoModel.Any(y => x.CalificationProjectConfigId == y.RelatedCalificationProjectConfig.CalificationProjectConfigId)).Select(x=>x).ToList();
