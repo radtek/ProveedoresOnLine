@@ -1066,8 +1066,8 @@ namespace ProveedoresOnLine.Reports.Controller
             string deviceInfo =
                        "<DeviceInfo>" +
                        "  <OutputFormat>" + FormatType + "</OutputFormat>" +
-                       "  <PageWidth>8.5in</PageWidth>" +
-                       "  <PageHeight>11in</PageHeight>" +
+                       "  <PageWidth>11in</PageWidth>" +
+                       "  <PageHeight>8.5in</PageHeight>" +
                        "  <MarginTop>0.3in</MarginTop>" +
                        "  <MarginLeft>0.3in</MarginLeft>" +
                        "  <MarginRight>0.3in</MarginRight>" +
