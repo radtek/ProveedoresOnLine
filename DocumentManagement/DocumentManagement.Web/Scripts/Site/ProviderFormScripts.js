@@ -406,8 +406,8 @@ var PF_MultipleFileObject = {
 
         $('#' + PF_MultipleFileObject.DivId + '-').val(oReq);
         $('#' + PF_MultipleFileObject.DivId + '-').attr('name', $('#' + PF_MultipleFileObject.DivId + '-').attr('name') + ProviderInfoId);
-
-        var strUrl = BaseUrl.SiteUrl+"/ProviderForm/SyncMultipleFileGrid?ProviderPublicId=" + ProviderPublicId + "&ProviderInfoUrl=" + ProviderInfoUrl + "&Name=" + Name + "&ProviderInfoId=" + ProviderInfoId + "&ItemType=" + ItemType
+        debugger;
+        var strUrl =  "https://localhost:44306/ProviderForm/SyncMultipleFileGrid?ProviderPublicId=" + ProviderPublicId + "&ProviderInfoUrl=" + ProviderInfoUrl + "&Name=" + Name + "&ProviderInfoId=" + ProviderInfoId + "&ItemType=" + ItemType
         $("#" + "FrmGenericStep").attr('action', strUrl);
 
         $("#" + "FrmGenericStep").submit();

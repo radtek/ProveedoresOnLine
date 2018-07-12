@@ -40,6 +40,10 @@ namespace ProveedoresOnLine.OnlineSearch.Core
                     RuesModel deserializedProduct = JsonConvert.DeserializeObject<RuesModel>(stringJsonResult.FirstOrDefault());
                     if (deserializedProduct.codigo_error == "0000")
                     {
+                        deserializedProduct.rows = deserializedProduct.rows.Where(x => !string.IsNullOrEmpty(x.detalleESAL)
+                                            || !string.IsNullOrEmpty(x.detalleRM)
+                                            || !string.IsNullOrEmpty(x.detalleRUP)
+                                            || !string.IsNullOrEmpty(x.detalleRNT)).Select(x => x).ToList();
                         HtmlNode link = null;
                         if (!string.IsNullOrEmpty(deserializedProduct.rows.FirstOrDefault().detalleRM))
                         {

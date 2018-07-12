@@ -153,9 +153,6 @@
       <HintPath>..\packages\Microsoft.ReportViewer.2015.12.0.2.2402\lib\net40\Microsoft.ReportViewer.WinForms.DLL</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.SqlServer.Types.11.0.0\lib\net20\Microsoft.SqlServer.Types.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.DistributedCache, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\AppFabric\Microsoft.Web.DistributedCache.dll</HintPath>
@@ -2094,8 +2091,6 @@
     <Content Include="Areas\Desktop\Views\Shared\_TK_ThirdKnowledgeMasiveDetail.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Sebastian_Martinez-Marketplace.pubxml" />
-    <Content Include="SqlServerTypes\x64\SqlServerSpatial110.dll" />
-    <Content Include="SqlServerTypes\x86\SqlServerSpatial110.dll" />
     <Content Include="T4MVC.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>T4MVC.cs</LastGenOutput>

@@ -91,7 +91,11 @@
 
         public const string N_DM_NotificationsMail = "DM_NotificationsMail";
 
-        #endregion
+        public const string N_DM_CertPayMail = "DM_CertPayMail";
 
+        public const string N_DM_POL_ResponsableEmail = "DM_POL_ResponsableEmail";
+        public const string N_DM_NotificationUploadInfo = "DM_NotificationUploadInfo";
+        
+        #endregion
     }
 }

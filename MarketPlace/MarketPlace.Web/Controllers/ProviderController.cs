@@ -101,7 +101,7 @@ namespace MarketPlace.Web.Controllers
                     (agg => agg
                         .Nested("myproviders_avg", x => x.
                             Path(p => p.oCustomerProviderIndexModel).
-                                Aggregations(aggs => aggs.Terms("myproviders", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().CustomerPublicId)
+                                Aggregations(aggs => aggs.Terms("myproviders", term => term.Field(fi => fi.oCustomerProviderIndexModel.First().CustomerPublicId).Size(50)
                                 )
                             )
                         )

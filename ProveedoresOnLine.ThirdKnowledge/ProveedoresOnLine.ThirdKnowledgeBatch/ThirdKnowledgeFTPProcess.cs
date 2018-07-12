@@ -275,6 +275,8 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
 
                     if (oExcelToProcessInfo != null)
                     {
+                        List<string> Params = ThirdKnowledge.Models.InternalSettings.Instance[
+                                        ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.Param_Critery].Value.Split(';').ToList();
                         oExcelToProcessInfo.All(x =>
                         {
                             if (!string.IsNullOrEmpty(x.SEARCHCRITERY) && !string.IsNullOrEmpty(x.SEARCHPARAM))
@@ -285,13 +287,11 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                                 TDQueryInfoModel oInfoCreate = new TDQueryInfoModel();
                                 oInfoCreate.QueryPublicId = oQuery.QueryPublicId;
 
-                                if (x.SEARCHPARAM != ThirdKnowledge.Models.InternalSettings.Instance[
-                                        ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.Param_Denominacion].Value)
+                                if (x.SEARCHPARAM != Params[3])
                                 {
                                     oInfoCreate.QueryIdentification = !string.IsNullOrEmpty(x.SEARCHPARAM) ? x.SEARCHPARAM : string.Empty;
                                 }
-                                else if (x.SEARCHPARAM == ThirdKnowledge.Models.InternalSettings.Instance[
-                                        ProveedoresOnLine.ThirdKnowledgeBacth.Models.Constants.Param_Denominacion].Value)
+                                else if (x.SEARCHPARAM == Params[3])
                                 {
                                     oInfoCreate.QueryName = !string.IsNullOrEmpty(x.SEARCHPARAM) ? x.SEARCHPARAM : string.Empty;
                                 }

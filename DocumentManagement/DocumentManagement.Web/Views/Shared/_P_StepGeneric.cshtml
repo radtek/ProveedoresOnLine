@@ -26,10 +26,25 @@
                     <li><span class="CheckBox-All-spanText">Seleccionar todos los cambios</span></li>
                 </ul>
             </div>
-        </div>
-    }
 
-    <form id="FrmGenericStep" action="@(Server.UrlDecode(Url.Action(MVC.ProviderForm.ActionNames.UpsertGenericStep,
+            @{
+                if (Model.RealtedProvider.RelatedProviderInfo != null)
+                {
+                    string payCertDocument = Model.RealtedProvider.RelatedProviderInfo.Where(x => x.ProviderInfoType.ItemId == (int)DocumentManagement.Models.General.enumLegalTerms.CertToPay).Select(x => x.LargeValue).FirstOrDefault();
+                    if (!string.IsNullOrEmpty(payCertDocument))
+                    {
+                        <div class="col-md-3">                    
+                            <a href="@payCertDocument">Certificado de Pago</a>
+                        </div>
+                    }
+                }
+            }
+            
+
+        </div>
+                }
+
+                <form id="FrmGenericStep" action="@(Server.UrlDecode(Url.Action(MVC.ProviderForm.ActionNames.UpsertGenericStep,
                             MVC.ProviderForm.Name,
                             new
                             {
@@ -39,31 +54,31 @@
                                 NewStepId = "{{NewStepId}}",
                                 IsSync = "{{IsSync}}"
                             })))" method="post" enctype="multipart/form-data">
-        <ul class="DMFormGenericFields">
-            @{
-                foreach (var Item in Model.RealtedStep.RelatedField.OrderBy(x => x.Position))
-                {
-                    //get partial view to render
-                    string strFieldType = DocumentManagement.Models.Provider.ProviderFormModel.
-                        FieldInfoTypes.
-                        Where(strView => strView.Value.Any(InfoType => InfoType == Item.ProviderInfoType.ItemId)).
-                        Select(strView => strView.Key).
-                        DefaultIfEmpty(string.Empty).
-                        FirstOrDefault();
-                    bool ShowChanges = false;
+                    <ul class="DMFormGenericFields">
+                        @{
+                            foreach (var Item in Model.RealtedStep.RelatedField.OrderBy(x => x.Position))
+                            {
+                                //get partial view to render
+                                string strFieldType = DocumentManagement.Models.Provider.ProviderFormModel.
+                                    FieldInfoTypes.
+                                    Where(strView => strView.Value.Any(InfoType => InfoType == Item.ProviderInfoType.ItemId)).
+                                    Select(strView => strView.Key).
+                                    DefaultIfEmpty(string.Empty).
+                                    FirstOrDefault();
+                                bool ShowChanges = false;
 
-                    if (Model.RealtedProvider.RelatedProviderInfo.
-                                                Where(x => x.ProviderInfoType.ItemId == Item.ProviderInfoType.ItemId).
-                                                ToList().Count > 0)
-                    {
-                        ShowChanges = Model.ChangesControlModel.Any(y => y.ProviderInfoId == (Model.RealtedProvider.RelatedProviderInfo.
-                                                               Where(x => x.ProviderInfoType.ItemId == Item.ProviderInfoType.ItemId).
-                                                               ToList().FirstOrDefault().ProviderInfoId)) ? true : false;
-                    }
-                    if (!string.IsNullOrEmpty(strFieldType))
-                    {
-                        <li>
-                            @(Html.Partial(Url.Content(strFieldType),
+                                if (Model.RealtedProvider.RelatedProviderInfo.
+                                                            Where(x => x.ProviderInfoType.ItemId == Item.ProviderInfoType.ItemId).
+                                                            ToList().Count > 0)
+                                {
+                                    ShowChanges = Model.ChangesControlModel.Any(y => y.ProviderInfoId == (Model.RealtedProvider.RelatedProviderInfo.
+                                                                           Where(x => x.ProviderInfoType.ItemId == Item.ProviderInfoType.ItemId).
+                                                                           ToList().FirstOrDefault().ProviderInfoId)) ? true : false;
+                                }
+                                if (!string.IsNullOrEmpty(strFieldType))
+                                {
+                                    <li>
+                                        @(Html.Partial(Url.Content(strFieldType),
                                 new DocumentManagement.Models.Provider.ProviderFieldModel()
                                 {
                                     ProviderPublicId = Model.ChangesControlModel.Count > 0 ? Model.ChangesControlModel.FirstOrDefault().ProviderPublicId : string.Empty,
@@ -76,90 +91,90 @@
                                     FieldType = strFieldType,
                                     IsModified = Model.ShowChanges == true ? ShowChanges : false,
                                 }))
-                        </li>
-                    }
-                }
-            }
-        </ul>
-        @Html.Partial(MVC.Shared.Views._P_StepNavigator)
-        <div style="display:none">
-            <input type="hidden" name="UpsertAction" id="UpsertAction" value="true" />
-        </div>
-    </form>
-}
-else
-{
-    <script type="text/javascript">
-        $(document).ready(function () {
-            PF_ValidateFormObject.Init({
-                FormId:'FrmGenericStep',
-            });
-            PF_ValidateFormObject.RenderAsync();
-        });
-    </script>
+                                    </li>
+                                }
+                            }
+                        }
+                    </ul>
+                    @Html.Partial(MVC.Shared.Views._P_StepNavigator)
+                    <div style="display:none">
+                        <input type="hidden" name="UpsertAction" id="UpsertAction" value="true" />
+                    </div>
+                </form>
+                            }
+                            else
+                            {
+                                <script type="text/javascript">
+                                    $(document).ready(function () {
+                                        PF_ValidateFormObject.Init({
+                                            FormId:'FrmGenericStep',
+                                        });
+                                        PF_ValidateFormObject.RenderAsync();
+                                    });
+                                </script>
 
 
-    int TotalRequiredFields = 0, FillRequiredFields = 0;
+                                int TotalRequiredFields = 0, FillRequiredFields = 0;
 
 
-    foreach (var Item in Model.RealtedStep.RelatedField.OrderBy(x => x.Position))
-    {
-        bool ShowChanges = false;
-        //get partial view to render
-        string strFieldType = DocumentManagement.Models.Provider.ProviderFormModel.
-            FieldInfoTypes.
-            Where(strView => strView.Value.Any(InfoType => InfoType == Item.ProviderInfoType.ItemId)).
-            Select(strView => strView.Key).
-            DefaultIfEmpty(string.Empty).
-            FirstOrDefault();
-        if (Model.RealtedProvider.RelatedProviderInfo.
-                                               Where(x => x.ProviderInfoType.ItemId == Item.ProviderInfoType.ItemId).
-                                               ToList().Count > 0)
-        {
-            ShowChanges = Model.ChangesControlModel.Any(y => y.ProviderInfoId == Model.RealtedProvider.RelatedProviderInfo.
-                                                   Where(x => x.ProviderInfoType.ItemId == Item.ProviderInfoType.ItemId).
-                                                   ToList().FirstOrDefault().ProviderInfoId) ? true : false;
-        }
-        DocumentManagement.Models.Provider.ProviderFieldModel ItemModel = new DocumentManagement.Models.Provider.ProviderFieldModel()
-            {
-                RenderScripts = true,
-                RealtedField = Item,
-                RealtedProviderInfo = Model.RealtedProvider.RelatedProviderInfo.
-                    Where(x => x.ProviderInfoType.ItemId == Item.ProviderInfoType.ItemId).
-                    ToList(),
-                ProviderOptions = Model.ProviderOptions,
-                FieldType = strFieldType,
-                IsModified = Model.ShowChanges == true ? ShowChanges : false,
-                ProviderPublicId = Model.ChangesControlModel.Count > 0 ? Model.ChangesControlModel.FirstOrDefault().ProviderPublicId : string.Empty,
-            };
-        ItemModel.IsModified = Model.ShowChanges == true ? ShowChanges : false;
-        if (ItemModel.RealtedField.IsRequired)
-        {
-            TotalRequiredFields++;
-            if (ItemModel.RealtedProviderInfo.Any(x => !string.IsNullOrEmpty(x.Value) || !string.IsNullOrEmpty(x.LargeValue)))
-            {
-                FillRequiredFields++;
-            }
-        }
+                                foreach (var Item in Model.RealtedStep.RelatedField.OrderBy(x => x.Position))
+                                {
+                                    bool ShowChanges = false;
+                                    //get partial view to render
+                                    string strFieldType = DocumentManagement.Models.Provider.ProviderFormModel.
+                                        FieldInfoTypes.
+                                        Where(strView => strView.Value.Any(InfoType => InfoType == Item.ProviderInfoType.ItemId)).
+                                        Select(strView => strView.Key).
+                                        DefaultIfEmpty(string.Empty).
+                                        FirstOrDefault();
+                                    if (Model.RealtedProvider.RelatedProviderInfo.
+                                                                           Where(x => x.ProviderInfoType.ItemId == Item.ProviderInfoType.ItemId).
+                                                                           ToList().Count > 0)
+                                    {
+                                        ShowChanges = Model.ChangesControlModel.Any(y => y.ProviderInfoId == Model.RealtedProvider.RelatedProviderInfo.
+                                                                               Where(x => x.ProviderInfoType.ItemId == Item.ProviderInfoType.ItemId).
+                                                                               ToList().FirstOrDefault().ProviderInfoId) ? true : false;
+                                    }
+                                    DocumentManagement.Models.Provider.ProviderFieldModel ItemModel = new DocumentManagement.Models.Provider.ProviderFieldModel()
+                                    {
+                                        RenderScripts = true,
+                                        RealtedField = Item,
+                                        RealtedProviderInfo = Model.RealtedProvider.RelatedProviderInfo.
+                                                Where(x => x.ProviderInfoType.ItemId == Item.ProviderInfoType.ItemId).
+                                                ToList(),
+                                        ProviderOptions = Model.ProviderOptions,
+                                        FieldType = strFieldType,
+                                        IsModified = Model.ShowChanges == true ? ShowChanges : false,
+                                        ProviderPublicId = Model.ChangesControlModel.Count > 0 ? Model.ChangesControlModel.FirstOrDefault().ProviderPublicId : string.Empty,
+                                    };
+                                    ItemModel.IsModified = Model.ShowChanges == true ? ShowChanges : false;
+                                    if (ItemModel.RealtedField.IsRequired)
+                                    {
+                                        TotalRequiredFields++;
+                                        if (ItemModel.RealtedProviderInfo.Any(x => !string.IsNullOrEmpty(x.Value) || !string.IsNullOrEmpty(x.LargeValue)))
+                                        {
+                                            FillRequiredFields++;
+                                        }
+                                    }
 
-        if (!string.IsNullOrEmpty(strFieldType))
-        {
-            Html.RenderPartial(Url.Content(strFieldType), ItemModel);
-        }
-    }
+                                    if (!string.IsNullOrEmpty(strFieldType))
+                                    {
+                                        Html.RenderPartial(Url.Content(strFieldType), ItemModel);
+                                    }
+                                }
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            PF_InitProgressBar('divProgressBar', @(TotalRequiredFields > 0 ? (int)((FillRequiredFields * 100)/ TotalRequiredFields) : 0), '@(FillRequiredFields + "/" + TotalRequiredFields)');
-        });
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            PF_InitProgressBar('divProgressBar', @(TotalRequiredFields > 0 ? (int)((FillRequiredFields * 100)/ TotalRequiredFields) : 0), '@(FillRequiredFields + "/" + TotalRequiredFields)');
-        });
-        $("#checkAll").click(function () {
-            $('input:checkbox').not(this).prop('checked', this.checked);
-        });
-    </script>
+                                <script type="text/javascript">
+                                    $(document).ready(function () {
+                                        PF_InitProgressBar('divProgressBar', @(TotalRequiredFields > 0 ? (int)((FillRequiredFields * 100)/ TotalRequiredFields) : 0), '@(FillRequiredFields + "/" + TotalRequiredFields)');
+                                    });
+                                </script>
+                                <script type="text/javascript">
+                                    $(document).ready(function () {
+                                        PF_InitProgressBar('divProgressBar', @(TotalRequiredFields > 0 ? (int)((FillRequiredFields * 100)/ TotalRequiredFields) : 0), '@(FillRequiredFields + "/" + TotalRequiredFields)');
+                                    });
+                                    $("#checkAll").click(function () {
+                                        $('input:checkbox').not(this).prop('checked', this.checked);
+                                    });
+                                </script>
 
-}
+                            }
