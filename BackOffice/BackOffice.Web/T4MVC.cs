@@ -642,6 +642,7 @@ namespace Links
             public static readonly string CustomerScripts_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/CustomerScripts.min.js") ? Url("CustomerScripts.min.js") : Url("CustomerScripts.js");
             public static readonly string GeneralScripts_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/GeneralScripts.min.js") ? Url("GeneralScripts.min.js") : Url("GeneralScripts.js");
             public static readonly string ProviderScripts_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/ProviderScripts.min.js") ? Url("ProviderScripts.min.js") : Url("ProviderScripts.js");
+            public static readonly string ReportScript_js = T4MVCHelpers.IsProduction() && T4Extensions.FileExists(URLPATH + "/ReportScript.min.js") ? Url("ReportScript.min.js") : Url("ReportScript.js");
         }
     
     }
@@ -1538,6 +1539,7 @@ namespace Links
                     public const string CustomerScripts_js = "~/Scripts/Site/CustomerScripts.js"; 
                     public const string GeneralScripts_js = "~/Scripts/Site/GeneralScripts.js"; 
                     public const string ProviderScripts_js = "~/Scripts/Site/ProviderScripts.js"; 
+                    public const string ReportScript_js = "~/Scripts/Site/ReportScript.js"; 
                 }
             }
             public static class Assets

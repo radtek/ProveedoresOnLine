@@ -1,5 +1,6 @@
 ﻿using BackOffice.Models.General;
 using BackOffice.Models.Provider;
+using Microsoft.Reporting.WebForms;
 using Nest;
 using ProveedoresOnLine.Company.Models.Company;
 using ProveedoresOnLine.Company.Models.Util;
@@ -3751,5 +3752,180 @@ namespace BackOffice.Web.ControllersApi
         }
         #endregion
 
+        #region Notifications
+
+        [HttpPost]
+        [HttpGet]
+        public Boolean SendCertificationStatusProviderByCustomer(string SendCertificationStatusProviderByCustomer)
+        {
+            Boolean oRestul = false;
+
+
+            string ProviderPublicId =
+                    (string)
+                    (new System.Web.Script.Serialization.JavaScriptSerializer()).
+                    Deserialize(System.Web.HttpContext.Current.Request["ProviderPublicId"],
+                                typeof(string));
+
+            string CustomerProviderId =
+                    (string)
+                    (new System.Web.Script.Serialization.JavaScriptSerializer()).
+                    Deserialize(System.Web.HttpContext.Current.Request["CustomerProviderId"],
+                                typeof(string));
+
+            string CustomerPublicId =
+                    (string)
+                    (new System.Web.Script.Serialization.JavaScriptSerializer()).
+                    Deserialize(System.Web.HttpContext.Current.Request["CustomerPublicId"],
+                                typeof(string));
+
+            string[] Responsables =
+                    (string[])
+                    (new System.Web.Script.Serialization.JavaScriptSerializer()).
+                    Deserialize(System.Web.HttpContext.Current.Request["Responsables"],
+                                typeof(string[]));
+
+            string bodyEmail =
+                    (string)
+                    (new System.Web.Script.Serialization.JavaScriptSerializer()).
+                    Deserialize(System.Web.HttpContext.Current.Request["bodyEmail"],
+                                typeof(string));
+
+
+
+            //Notification Certification
+
+            if (SendCertificationStatusProviderByCustomer == "true")
+            {
+
+                if (!string.IsNullOrWhiteSpace(CustomerProviderId) && !string.IsNullOrWhiteSpace(CustomerPublicId))
+                {
+
+                    try
+                    {
+
+                        //get Provider Info
+                        BackOffice.Models.Provider.ProviderViewModel oModel = new Models.Provider.ProviderViewModel();
+                        oModel.RelatedProvider = new ProveedoresOnLine.CompanyProvider.Models.Provider.ProviderModel()
+                        {
+                            RelatedCompany = ProveedoresOnLine.Company.Controller.Company.CompanyGetBasicInfo(ProviderPublicId),
+                        };
+
+                        //get Customer info
+                        BackOffice.Models.Provider.ProviderViewModel oCustomer = new Models.Provider.ProviderViewModel();
+                        oCustomer.RelatedProvider = new ProveedoresOnLine.CompanyProvider.Models.Provider.ProviderModel()
+                        {
+                            RelatedCompany = ProveedoresOnLine.Company.Controller.Company.CompanyGetBasicInfo(CustomerPublicId),
+                        };
+
+                        //Create Certification
+                        List<ReportParameter> parameters = new List<ReportParameter>();
+
+                        parameters.Add(new ReportParameter("ProviderName", oModel.RelatedProvider.RelatedCompany.CompanyName.ToString()));
+
+                        parameters.Add(new ReportParameter("DocumentType", oModel.RelatedProvider.RelatedCompany.IdentificationType.ItemName.ToString()));
+
+                        parameters.Add(new ReportParameter("IdentificationProvider", oModel.RelatedProvider.RelatedCompany.IdentificationNumber.ToString()));
+
+                        parameters.Add(new ReportParameter("CustomerLogo", oCustomer.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.CompanyLogo).Select(x => x.Value).FirstOrDefault()));
+
+                        parameters.Add(new ReportParameter("ExpeditionDate", DateTime.Now.ToString()));
+
+
+                        Tuple<byte[], string, string> report = ProveedoresOnLine.Reports.Controller.ReportModule.GetProviderValitaed(
+                                                            parameters,
+                                                            enumCategoryInfoType.PDF.ToString(),
+                                                            Models.General.InternalSettings.Instance[Models.General.Constants.C_Settings_BO_CP_ReportPath].Value.Trim() + "C_ReportProviderValidated.rdlc");
+
+                        //Save Certifications S3
+                        //get folder
+                        string strFolder = System.Web.HttpContext.Current.Server.MapPath
+                            (BackOffice.Models.General.InternalSettings.Instance
+                            [BackOffice.Models.General.Constants.C_Settings_File_TempDirectory].Value);
+
+                        if (!System.IO.Directory.Exists(strFolder))
+                            System.IO.Directory.CreateDirectory(strFolder);
+
+                        string strFile = strFolder.TrimEnd('\\') +
+                                "\\CompanyFile_" +
+                                oModel.RelatedProvider.RelatedCompany.CompanyPublicId + "_" +
+                                DateTime.Now.ToString("yyyyMMddHHmmss") + "." +
+                                "pdf";
+
+                        System.IO.File.WriteAllBytes(strFile, report.Item1);
+
+                        //load file to s3
+                        string strRemoteFile = ProveedoresOnLine.FileManager.FileController.LoadFile
+                            (strFile,
+                            BackOffice.Models.General.InternalSettings.Instance
+                                [BackOffice.Models.General.Constants.C_Settings_File_RemoteDirectory].Value.TrimEnd('\\') +
+                                "\\CompanyFile\\" + oModel.RelatedProvider.RelatedCompany.CompanyPublicId + "\\");
+
+                        //remove temporal file
+                        if (System.IO.File.Exists(strFile))
+                            System.IO.File.Delete(strFile);
+
+                        //Send Emails
+                        if (Responsables.Length > 0)
+                        {
+                            Responsables.Where(x => !string.IsNullOrEmpty(x)).All(x =>
+                            {
+                                MessageModule.Client.Models.ClientMessageModel oMessage = new MessageModule.Client.Models.ClientMessageModel()
+                                {
+                                    Agent = Models.General.InternalSettings.Instance[Models.General.Constants.C_Settings_N_Provider_Certification_Mail].Value,
+                                    User = SessionModel.CurrentLoginUser.Email.ToString(),
+                                    ProgramTime = DateTime.Now,
+                                    MessageQueueInfo = new System.Collections.Generic.List<Tuple<string, string>>()
+                                {
+                                    new Tuple<string,string>("To",x.Replace("Emails_","")),
+                                    new Tuple<string,string>("CertificationUrl", strRemoteFile),
+                                    new Tuple<string,string>("ProviderName",oModel.RelatedProvider.RelatedCompany.CompanyName.ToString()),
+                                    new Tuple<string,string>("IdentificationProvider",oModel.RelatedProvider.RelatedCompany.IdentificationNumber.ToString()),
+                                    new Tuple<string,string>("CustomerName",oCustomer.RelatedProvider.RelatedCompany.CompanyName),
+                                    new Tuple<string,string>("CustomerLogo",oCustomer.RelatedProvider.RelatedCompany.CompanyInfo.Where(y=> y.ItemInfoType.ItemId == (int)enumCompanyInfoType.CompanyLogo).Select(y => y.Value).FirstOrDefault()),
+                                    new Tuple<string,string>("BodyMessage", bodyEmail == null ? ""  : bodyEmail),
+                                },
+                                };
+
+                                MessageModule.Client.Controller.ClientController.CreateMessage(oMessage);
+
+                                return true;
+                            });
+                        }
+
+                        //Save Certification
+                        CustomerProviderModel oCustomerProvider = new CustomerProviderModel()
+                        {
+                            CustomerProviderId = Convert.ToInt32(CustomerProviderId),
+                            CustomerProviderInfo = new List<GenericItemInfoModel>() {
+                            new GenericItemInfoModel(){
+                                ItemInfoType = new CatalogModel(){
+                                    ItemId = (int)enumProviderCustomerType.CertificationUrl
+                                },
+                                Value = "",
+                                LargeValue = strRemoteFile,
+                                Enable = true
+                            }
+                        }
+                        };
+
+                        ProveedoresOnLine.CompanyCustomer.Controller.CompanyCustomer.CustomerProviderInfoUpsert(oCustomerProvider);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        oRestul = false;
+                    }
+
+
+                }
+
+            }
+
+
+            return oRestul;
+        }
+
+        #endregion
     }
 }

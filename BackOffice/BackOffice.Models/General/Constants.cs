@@ -111,5 +111,15 @@
         public const string C_Settings_NotificationIconGeneralInfo = "UrlNotificationIconGeneralInfo";
         #endregion
 
+        #region Certification Provider
+
+        public const string C_Settings_BO_CP_ReportPath = "BO_CP_ReportPath";
+
+        public const string C_Settings_N_Provider_Certification_Mail = "N_Provider_Certification_Mail";
+
+        public const string C_Settings_File_S3FileProviderCertificatioPath = "File_S3FileProviderCertificatioPath";
+
+        #endregion
+
     }
 }

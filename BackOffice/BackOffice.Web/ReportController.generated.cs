@@ -59,6 +59,18 @@ namespace BackOffice.Web.Controllers
             return RedirectToActionPermanent(taskResult.Result);
         }
 
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.ActionResult CC_Report_Upsert()
+        {
+            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.CC_Report_Upsert);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.ActionResult CC_ReportInfo_Upsert()
+        {
+            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.CC_ReportInfo_Upsert);
+        }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ReportController Actions { get { return MVC.Report; } }
@@ -78,6 +90,8 @@ namespace BackOffice.Web.Controllers
             public readonly string Index = "Index";
             public readonly string Template = "Template";
             public readonly string GeneredReport = "GeneredReport";
+            public readonly string CC_Report_Upsert = "CC_Report_Upsert";
+            public readonly string CC_ReportInfo_Upsert = "CC_ReportInfo_Upsert";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -86,9 +100,29 @@ namespace BackOffice.Web.Controllers
             public const string Index = "Index";
             public const string Template = "Template";
             public const string GeneredReport = "GeneredReport";
+            public const string CC_Report_Upsert = "CC_Report_Upsert";
+            public const string CC_ReportInfo_Upsert = "CC_ReportInfo_Upsert";
         }
 
 
+        static readonly ActionParamsClass_CC_Report_Upsert s_params_CC_Report_Upsert = new ActionParamsClass_CC_Report_Upsert();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_CC_Report_Upsert CC_Report_UpsertParams { get { return s_params_CC_Report_Upsert; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_CC_Report_Upsert
+        {
+            public readonly string ReportId = "ReportId";
+        }
+        static readonly ActionParamsClass_CC_ReportInfo_Upsert s_params_CC_ReportInfo_Upsert = new ActionParamsClass_CC_ReportInfo_Upsert();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_CC_ReportInfo_Upsert CC_ReportInfo_UpsertParams { get { return s_params_CC_ReportInfo_Upsert; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_CC_ReportInfo_Upsert
+        {
+            public readonly string ReportInfoId = "ReportInfoId";
+            public readonly string ReportInfoFieldId = "ReportInfoFieldId";
+            public readonly string ReportInfoEnableId = "ReportInfoEnableId";
+        }
         static readonly ViewsClass s_views = new ViewsClass();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ViewsClass Views { get { return s_views; } }
@@ -99,9 +133,13 @@ namespace BackOffice.Web.Controllers
             public _ViewNamesClass ViewNames { get { return s_ViewNames; } }
             public class _ViewNamesClass
             {
+                public readonly string GeneredReport = "GeneredReport";
                 public readonly string Index = "Index";
+                public readonly string Template = "Template";
             }
+            public readonly string GeneredReport = "~/Views/Report/GeneredReport.cshtml";
             public readonly string Index = "~/Views/Report/Index.cshtml";
+            public readonly string Template = "~/Views/Report/Template.cshtml";
         }
     }
 
@@ -140,6 +178,32 @@ namespace BackOffice.Web.Controllers
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.GeneredReport);
             GeneredReportOverride(callInfo);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void CC_Report_UpsertOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string ReportId);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult CC_Report_Upsert(string ReportId)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.CC_Report_Upsert);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "ReportId", ReportId);
+            CC_Report_UpsertOverride(callInfo, ReportId);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void CC_ReportInfo_UpsertOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string ReportInfoId, string ReportInfoFieldId, string ReportInfoEnableId);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult CC_ReportInfo_Upsert(string ReportInfoId, string ReportInfoFieldId, string ReportInfoEnableId)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.CC_ReportInfo_Upsert);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "ReportInfoId", ReportInfoId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "ReportInfoFieldId", ReportInfoFieldId);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "ReportInfoEnableId", ReportInfoEnableId);
+            CC_ReportInfo_UpsertOverride(callInfo, ReportInfoId, ReportInfoFieldId, ReportInfoEnableId);
             return callInfo;
         }
 

@@ -5,6 +5,7 @@
     <key name="Agent">
       <![CDATA[POL_RememberPassword_Mail,POL_ProjectRejectArea_Mail,POL_ProjectApproveArea_Mail,POL_ProjectApprovalRequest_Mail,
                POL_SurveyWriteBackNotification_Mail,POL_SurveyReminder_Mail,POL_UploadSuccessFile_Mail,POL_ReadyResult_Mail,POL_SanofiProcessFile_Mail,
+               POL_Redeban_Mail,POL_Procables_Mail, POL_NotificationMessage_Mail,DM_NotificationsMail, BO_CertificationProvider]]>
                POL_Redeban_Mail,POL_Procables_Mail, POL_NotificationMessage_Mail,DM_NotificationsMail,DM_CertPayMail]]>
     </key>
 
@@ -1196,6 +1197,36 @@
                       ]]&gt;
                     </key>
                   </DM_NotificationsMail>
+      ]]>
+    </key>
+    
+    <key name="AgentConfig_POL_BO_CertificationProvider">
+      <![CDATA[
+        <BO_CertificationProvider>
+          <key name="Assemblie">
+            &lt;![CDATA[MessageModule.Agent.AWSMail.AWSMail, MessageModule.Agent.AWSMail]]&gt;
+          </key>
+          <key name="AccessKeyId">
+            &lt;![CDATA[My AccesKeyId]]&gt;
+          </key>
+          <key name="SecretAccessKey">
+            &lt;![CDATA[My SecretAccessKey]]&gt;
+          </key>
+          <key name="RegionEndpoint">
+            &lt;![CDATA[us-east-1]]&gt;
+          </key>
+          <key name="Subject">
+            &lt;![CDATA[{Subject}]]&gt;
+          </key>
+          <key name="From">
+            &lt;![CDATA[Proveedores OnLine<comunicaciones@proveedoresonline.co>]]&gt;
+          </key>
+          <key name="MessageBody">
+            &lt;![CDATA[
+           
+            ]]&gt;
+          </key>
+        </BO_CertificationProvider>
       ]]>
     </key>
     
