@@ -267,10 +267,13 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                     if (oExclude != null)
                     {
                         oExclude.All(x =>
-                            {
-                                oExcelToProcessInfo = oExcelToProcessInfo.Where(y => y.SEARCHCRITERY.ToLower() != x.SEARCHCRITERY.ToLower() || y.SEARCHPARAM != x.SEARCHPARAM).Select(y => y).ToList();
-                                return true;
-                            });
+                        {
+                            x.SEARCHCRITERY = string.IsNullOrEmpty(x.SEARCHCRITERY) ? "" : x.SEARCHCRITERY;
+                            x.SEARCHPARAM = string.IsNullOrEmpty(x.SEARCHPARAM) ? "" : x.SEARCHPARAM;
+
+                            oExcelToProcessInfo = oExcelToProcessInfo.Where(y => y.SEARCHCRITERY.ToLower() != x.SEARCHCRITERY.ToLower() || y.SEARCHPARAM != x.SEARCHPARAM).Select(y => y).ToList();
+                            return true;
+                        });
                     }
 
                     if (oExcelToProcessInfo != null)
@@ -404,8 +407,8 @@ namespace ProveedoresOnLine.ThirdKnowledgeBatch
                     {
                         oCoincidences.Add(new Tuple<string, string>(x.IdentificationResult, x.NameResult));
                         return true;
-                    });                    
-                }                
+                    });
+                }
             }
             oReturn = new Tuple<List<Tuple<string, string>>, TDQueryModel>(oCoincidences, Query);
             return oReturn;

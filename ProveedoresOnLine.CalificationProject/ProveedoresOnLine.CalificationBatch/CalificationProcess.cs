@@ -18,12 +18,12 @@ namespace ProveedoresOnLine.CalificationBatch
                 LogFile("Start Process:::" + DateTime.Now);
                 //Get all calification project configInfo
                 var oCalificationProjectConfigInfoModel = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfigInfoGetAll();
-                oCalificationProjectConfigInfoModel = oCalificationProjectConfigInfoModel.Where(x => x.RelatedCalificationProjectConfig.CalificationProjectConfigId == 11).Select(x => x).ToList();
+                oCalificationProjectConfigInfoModel = oCalificationProjectConfigInfoModel.Where(x => x.RelatedCalificationProjectConfig.CalificationProjectConfigId == 2).Select(x => x).ToList();
                 //Select All a la nueva tabla ObjNuevo
                 //cruzar ObjNuevo vs oCalificationProjectConfigModel oCalificationProjectConfigModel  == oCalificationProjectConfigModel  Cruzado
                 List<CalificationProjectConfigModel> oCalificationProjectConfigModel = CalificationProject.Controller.CalificationProject.CalificationProjectConfig_GetAll();
 
-                oCalificationProjectConfigModel = oCalificationProjectConfigModel.Where(x => x.CalificationProjectConfigId == 11).Select(x => x).ToList();
+                oCalificationProjectConfigModel = oCalificationProjectConfigModel.Where(x => x.CalificationProjectConfigId == 2).Select(x => x).ToList();
                 var oRelatedProvider = new List<CompanyModel>();
 
                 oCalificationProjectConfigModel = oCalificationProjectConfigModel.Where(x => oCalificationProjectConfigInfoModel.Any(y => x.CalificationProjectConfigId == y.RelatedCalificationProjectConfig.CalificationProjectConfigId)).Select(x=>x).ToList();
@@ -37,7 +37,7 @@ namespace ProveedoresOnLine.CalificationBatch
                         //Get all related provider by customer
                         oRelatedProvider = new List<CompanyModel>();
                         oRelatedProvider.AddRange(oCalificationProjectConfigInfoModel.Where(x =>x.RelatedCalificationProjectConfig.CalificationProjectConfigId == cnf.CalificationProjectConfigId).Select(x=>x.RelatedProvider));
-                        //oRelatedProvider = oRelatedProvider.Where(x => x.CompanyPublicId == "41961D14").Select(x => x).ToList();
+                        oRelatedProvider = oRelatedProvider.Where(x => x.CompanyPublicId == "16D3733D").Select(x => x).ToList();
                         var oModelToUpsert = new Models.CalificationProjectBatch.CalificationProjectBatchModel();
                         LogFile("Running: "+ cnf.CalificationProjectConfigName);
                         //validate provider list
