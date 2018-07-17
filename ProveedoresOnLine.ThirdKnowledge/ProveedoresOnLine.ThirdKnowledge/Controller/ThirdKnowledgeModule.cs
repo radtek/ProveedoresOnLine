@@ -355,7 +355,7 @@ namespace ProveedoresOnLine.ThirdKnowledge.Controller
                     }
                     oQueryToCreate.QueryPublicId = await QueryCreate(oQueryToCreate);
 
-                    Task.Run(async () => await QueryUpsert(oQueryToCreate));
+                    var result =  await QueryUpsert(oQueryToCreate);
                 }
                 catch (Exception)
                 {
