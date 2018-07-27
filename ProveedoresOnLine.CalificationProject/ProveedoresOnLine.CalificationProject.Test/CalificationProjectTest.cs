@@ -254,5 +254,17 @@ namespace ProveedoresOnLine.CalificationProject.Test
             Assert.AreEqual(true, oReturn != null && oReturn.Count > 0);
         }
         #endregion
+
+        #region Backoffice
+        [TestMethod]
+        public void StartProcessByProviderAndCustomer()
+        {
+            Controller.CalificationProject.StartProcessByProviderAndCustomer("19E6D43D", 8);
+
+            //Assert.AreEqual(true, oReturn.Count > 0);
+        }
+        
+
+        #endregion
     }
 }

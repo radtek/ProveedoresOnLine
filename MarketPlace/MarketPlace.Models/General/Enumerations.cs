@@ -155,7 +155,7 @@
         Brach = 204003,
         Distributor = 204004
     }
-
+   
     public enum enumRoleCompanyInfoType
     {
         Modules = 801001,
@@ -220,7 +220,7 @@
         CP_CertificateExpeditionDate = 602007,
         CP_SocialObject = 602008,
         CP_UndefinedDate = 602012,
-
+        CP_ActionComposisition = 602014,
         //RUT
         R_PersonType = 603001,
         R_LargeContributor = 603002,
@@ -394,6 +394,9 @@
         BI_PasivePatrimony = 4931,
         BI_ExerciseUtility = 3820,
         BI_EBITDA = 4914,
+        BI_CurrentReason = 4916,
+        BI_Indebtedness = 4923,
+        BI_OperationalProfitability = 4927,
 
         //K_Recruitment InfoType
         FK_TotalExpirienceScore = 507001,
@@ -900,7 +903,7 @@
         BankInfo = 809004,
 
         //CommercialInfo
-        Experiences = 810001,
+        Experiences = 810001,      
 
         //HSEQInfo
         Certifications = 811001,

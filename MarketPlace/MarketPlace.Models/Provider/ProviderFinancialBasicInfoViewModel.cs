@@ -189,6 +189,60 @@ namespace MarketPlace.Models.Provider
             }
         }
 
+        public string oBI_CurrentReason { get; set; }
+        public string BI_CurrentReason
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(oBI_CurrentReason))
+                {
+                    oBI_CurrentReason = RelatedFinancialBasicInfo.ItemInfo.
+                        Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumFinancialInfoType.BI_CurrentReason).
+                        Select(y => y.Value).
+                        DefaultIfEmpty(string.Empty).
+                        FirstOrDefault();
+                }
+
+                return oBI_CurrentReason;
+            }
+        }
+
+        public string oBI_Indebtedness { get; set; }
+        public string BI_Indebtedness
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(oBI_Indebtedness))
+                {
+                    oBI_Indebtedness = RelatedFinancialBasicInfo.ItemInfo.
+                        Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumFinancialInfoType.BI_Indebtedness).
+                        Select(y => y.Value).
+                        DefaultIfEmpty(string.Empty).
+                        FirstOrDefault();
+                }
+
+                return oBI_Indebtedness;
+            }
+        }
+
+        public string oBI_OperationalProfitability { get; set; }
+        public string BI_OperationalProfitability
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(oBI_OperationalProfitability))
+                {
+                    oBI_OperationalProfitability = RelatedFinancialBasicInfo.ItemInfo.
+                        Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumFinancialInfoType.BI_OperationalProfitability).
+                        Select(y => y.Value).
+                        DefaultIfEmpty(string.Empty).
+                        FirstOrDefault();
+                }
+
+                return oBI_OperationalProfitability;
+            }
+        }
+
         public string oBI_ExerciseUtility { get; set; }
         public string BI_ExerciseUtility
         {
@@ -251,7 +305,7 @@ namespace MarketPlace.Models.Provider
                 return oCurrency;
             }
         }
-
+               
         #endregion
 
         public ProviderFinancialBasicInfoViewModel(ProveedoresOnLine.Company.Models.Util.GenericItemModel oRelatedInfo, decimal oExchange)
@@ -262,5 +316,7 @@ namespace MarketPlace.Models.Provider
         }
 
         public ProviderFinancialBasicInfoViewModel() { }
+
+
     }
 }

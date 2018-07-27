@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DS_GerencialReport_FinancialIndicators" targetNamespace="http://tempuri.org/DS_GerencialReport_FinancialIndicators.xsd" xmlns:mstns="http://tempuri.org/DS_GerencialReport_FinancialIndicators.xsd" xmlns="http://tempuri.org/DS_GerencialReport_FinancialIndicators.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DS_GerencialReport_FinancialIndicators" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DS_GerencialReport_FinancialIndicators" msprop:Generator_UserDSName="DS_GerencialReport_FinancialIndicators">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DS_GerencialReport_FinancialIndicators" msprop:Generator_TableClassName="DS_GerencialReport_FinancialIndicatorsDataTable" msprop:Generator_TableVarName="tableDS_GerencialReport_FinancialIndicators" msprop:Generator_TablePropName="_DS_GerencialReport_FinancialIndicators" msprop:Generator_RowDeletingName="DS_GerencialReport_FinancialIndicatorsRowDeleting" msprop:Generator_RowChangingName="DS_GerencialReport_FinancialIndicatorsRowChanging" msprop:Generator_RowEvHandlerName="DS_GerencialReport_FinancialIndicatorsRowChangeEventHandler" msprop:Generator_RowDeletedName="DS_GerencialReport_FinancialIndicatorsRowDeleted" msprop:Generator_UserTableName="DS_GerencialReport_FinancialIndicators" msprop:Generator_RowChangedName="DS_GerencialReport_FinancialIndicatorsRowChanged" msprop:Generator_RowEvArgName="DS_GerencialReport_FinancialIndicatorsRowChangeEvent" msprop:Generator_RowClassName="DS_GerencialReport_FinancialIndicatorsRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Concepto" msprop:Generator_ColumnVarNameInTable="columnConcepto" msprop:Generator_ColumnPropNameInRow="Concepto" msprop:Generator_ColumnPropNameInTable="ConceptoColumn" msprop:Generator_UserColumnName="Concepto" type="xs:string" minOccurs="0" />
+              <xs:element name="Valor" msprop:Generator_ColumnVarNameInTable="columnValor" msprop:Generator_ColumnPropNameInRow="Valor" msprop:Generator_ColumnPropNameInTable="ValorColumn" msprop:Generator_UserColumnName="Valor" type="xs:string" minOccurs="0" />
+              <xs:element name="Interpretación" msprop:Generator_ColumnVarNameInTable="columnInterpretación" msprop:Generator_ColumnPropNameInRow="Interpretación" msprop:Generator_ColumnPropNameInTable="InterpretaciónColumn" msprop:Generator_UserColumnName="Interpretación" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

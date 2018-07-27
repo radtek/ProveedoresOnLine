@@ -171,10 +171,26 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Reports\DataSet\DS_GerencialReportCertiicationsHSEQ.cs">
+      <DependentUpon>DS_GerencialReportCertiicationsHSEQ.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\DataSet\DS_GerencialReportCertiicationsHSEQ.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DS_GerencialReportCertiicationsHSEQ.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Reports\DataSet\DS_GerencialReport_CalificationInfo.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DS_GerencialReport_CalificationInfo.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\DataSet\DS_GerencialReport_CommercialCompanies.cs">
+      <DependentUpon>DS_GerencialReport_CommercialCompanies.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\DataSet\DS_GerencialReport_CommercialCompanies.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DS_GerencialReport_CommercialCompanies.xsd</DependentUpon>
     </Compile>
     <Compile Include="Reports\DataSet\DS_GerencialReport_Contact.cs">
       <DependentUpon>DS_GerencialReport_Contact.xsd</DependentUpon>
@@ -183,6 +199,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DS_GerencialReport_Contact.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\DataSet\DS_GerencialReport_FinancialIndicators.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DS_GerencialReport_FinancialIndicators.xsd</DependentUpon>
     </Compile>
     <Compile Include="Reports\DataSet\DS_GerencialReport_LegalRepresent.cs">
       <DependentUpon>DS_GerencialReport_LegalRepresent.xsd</DependentUpon>
@@ -419,6 +440,17 @@
     <None Include="Reports\DataSet\DS_GerencialReport.xss">
       <DependentUpon>DS_GerencialReport.xsd</DependentUpon>
     </None>
+    <None Include="Reports\DataSet\DS_GerencialReportCertiicationsHSEQ.xsc">
+      <DependentUpon>DS_GerencialReportCertiicationsHSEQ.xsd</DependentUpon>
+    </None>
+    <None Include="Reports\DataSet\DS_GerencialReportCertiicationsHSEQ.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DS_GerencialReportCertiicationsHSEQ.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reports\DataSet\DS_GerencialReportCertiicationsHSEQ.xss">
+      <DependentUpon>DS_GerencialReportCertiicationsHSEQ.xsd</DependentUpon>
+    </None>
     <None Include="Reports\DataSet\DS_GerencialReport_CalificationInfo.xsc">
       <DependentUpon>DS_GerencialReport_CalificationInfo.xsd</DependentUpon>
     </None>
@@ -430,6 +462,17 @@
     <None Include="Reports\DataSet\DS_GerencialReport_CalificationInfo.xss">
       <DependentUpon>DS_GerencialReport_CalificationInfo.xsd</DependentUpon>
     </None>
+    <None Include="Reports\DataSet\DS_GerencialReport_CommercialCompanies.xsc">
+      <DependentUpon>DS_GerencialReport_CommercialCompanies.xsd</DependentUpon>
+    </None>
+    <None Include="Reports\DataSet\DS_GerencialReport_CommercialCompanies.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DS_GerencialReport_CommercialCompanies.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reports\DataSet\DS_GerencialReport_CommercialCompanies.xss">
+      <DependentUpon>DS_GerencialReport_CommercialCompanies.xsd</DependentUpon>
+    </None>
     <None Include="Reports\DataSet\DS_GerencialReport_Contact.xsc">
       <DependentUpon>DS_GerencialReport_Contact.xsd</DependentUpon>
     </None>
@@ -440,6 +483,17 @@
     </None>
     <None Include="Reports\DataSet\DS_GerencialReport_Contact.xss">
       <DependentUpon>DS_GerencialReport_Contact.xsd</DependentUpon>
+    </None>
+    <None Include="Reports\DataSet\DS_GerencialReport_FinancialIndicators.xsc">
+      <DependentUpon>DS_GerencialReport_FinancialIndicators.xsd</DependentUpon>
+    </None>
+    <None Include="Reports\DataSet\DS_GerencialReport_FinancialIndicators.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DS_GerencialReport_FinancialIndicators.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reports\DataSet\DS_GerencialReport_FinancialIndicators.xss">
+      <DependentUpon>DS_GerencialReport_FinancialIndicators.xsd</DependentUpon>
     </None>
     <None Include="Reports\DataSet\DS_GerencialReport_LegalRepresent.xsc">
       <DependentUpon>DS_GerencialReport_LegalRepresent.xsd</DependentUpon>

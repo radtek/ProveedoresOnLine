@@ -100,6 +100,7 @@
   <ItemGroup>
     <Compile Include="ElasticSearchModels\ElasticSearchModel.cs" />
     <Compile Include="Provider\ProviderAditionalDocumentViewModel.cs" />
+    <Compile Include="Provider\ProviderBankInfoViewModel.cs" />
     <Compile Include="Provider\ProviderCalificationViewModel.cs" />
     <Compile Include="Survey\SurveySearchViewModel.cs" />
     <Compile Include="Survey\SurveyUtil.cs" />

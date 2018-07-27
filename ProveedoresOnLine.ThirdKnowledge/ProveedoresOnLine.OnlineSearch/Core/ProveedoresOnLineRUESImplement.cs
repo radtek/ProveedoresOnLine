@@ -50,8 +50,7 @@ namespace ProveedoresOnLine.OnlineSearch.Core
                             HtmlDocResponse.LoadHtml(deserializedProduct.rows.FirstOrDefault().detalleRM);
                             link = HtmlDocResponse.DocumentNode
                                           .Descendants("a")
-                                          .First(x => x.Attributes["class"] != null
-                                                   && x.Attributes["class"].Value == "rm");
+                                          .First();
                         }
                         else if (!string.IsNullOrEmpty(deserializedProduct.rows.FirstOrDefault().detalleESAL))
                         {

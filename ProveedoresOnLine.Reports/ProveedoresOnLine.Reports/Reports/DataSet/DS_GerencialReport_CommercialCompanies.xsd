@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DS_GerencialReport_CommercialCompanies" targetNamespace="http://tempuri.org/DS_GerencialReport_CommercialCompanies.xsd" xmlns:mstns="http://tempuri.org/DS_GerencialReport_CommercialCompanies.xsd" xmlns="http://tempuri.org/DS_GerencialReport_CommercialCompanies.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DS_GerencialReport_CommercialCompanies" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DS_GerencialReport_CommercialCompanies" msprop:Generator_UserDSName="DS_GerencialReport_CommercialCompanies">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DS_GerencialReport_CommercialCompanies" msprop:Generator_TableClassName="DS_GerencialReport_CommercialCompaniesDataTable" msprop:Generator_TableVarName="tableDS_GerencialReport_CommercialCompanies" msprop:Generator_RowChangedName="DS_GerencialReport_CommercialCompaniesRowChanged" msprop:Generator_TablePropName="_DS_GerencialReport_CommercialCompanies" msprop:Generator_RowDeletingName="DS_GerencialReport_CommercialCompaniesRowDeleting" msprop:Generator_RowChangingName="DS_GerencialReport_CommercialCompaniesRowChanging" msprop:Generator_RowEvHandlerName="DS_GerencialReport_CommercialCompaniesRowChangeEventHandler" msprop:Generator_RowDeletedName="DS_GerencialReport_CommercialCompaniesRowDeleted" msprop:Generator_RowClassName="DS_GerencialReport_CommercialCompaniesRow" msprop:Generator_UserTableName="DS_GerencialReport_CommercialCompanies" msprop:Generator_RowEvArgName="DS_GerencialReport_CommercialCompaniesRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Compania" msprop:Generator_ColumnVarNameInTable="columnCompania" msprop:Generator_ColumnPropNameInRow="Compania" msprop:Generator_ColumnPropNameInTable="CompaniaColumn" msprop:Generator_UserColumnName="Compania" type="xs:string" minOccurs="0" />
+              <xs:element name="InitDate" msprop:Generator_ColumnVarNameInTable="columnInitDate" msprop:Generator_ColumnPropNameInRow="InitDate" msprop:Generator_ColumnPropNameInTable="InitDateColumn" msprop:Generator_UserColumnName="InitDate" type="xs:string" minOccurs="0" />
+              <xs:element name="FinishDate" msprop:Generator_ColumnVarNameInTable="columnFinishDate" msprop:Generator_ColumnPropNameInRow="FinishDate" msprop:Generator_ColumnPropNameInTable="FinishDateColumn" msprop:Generator_UserColumnName="FinishDate" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
