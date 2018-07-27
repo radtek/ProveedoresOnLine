@@ -7004,8 +7004,8 @@ var Provider_CalificationProjectConfigInfo = {
                 }
             }, {
                 title: 'Procesar',
-                template: function (options) {
-                    debugger;
+                width: '100px',
+                template: function (options) {                    
                     return '<a onClick=Provider_CalificationProjectConfigInfo.StartCalificationProcess(' + options.CalificationProjectConfigId +')>Generar Calificación</a>';
                 },
             }
