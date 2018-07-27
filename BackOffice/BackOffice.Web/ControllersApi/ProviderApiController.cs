@@ -3831,6 +3831,15 @@ namespace BackOffice.Web.ControllersApi
 
                         parameters.Add(new ReportParameter("ExpeditionDate", DateTime.Now.ToString()));
 
+                        if (true)
+                        {
+                            parameters.Add(new ReportParameter("CalificationProviderValue", ""));
+
+                            parameters.Add(new ReportParameter("CalificationProviderName", ""));
+                        }
+
+                        
+
 
                         Tuple<byte[], string, string> report = ProveedoresOnLine.Reports.Controller.ReportModule.GetProviderValitaed(
                                                             parameters,

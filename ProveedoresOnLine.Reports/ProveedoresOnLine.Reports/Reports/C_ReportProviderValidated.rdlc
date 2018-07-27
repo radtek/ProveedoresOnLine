@@ -134,7 +134,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox11</rd:DefaultName>
-        <Top>5.90984in</Top>
+        <Top>6.28484in</Top>
         <Left>5.58605in</Left>
         <Height>0.38029in</Height>
         <Width>3.47825in</Width>
@@ -166,7 +166,7 @@
         <Source>External</Source>
         <Value>=Parameters!CustomerLogo.Value</Value>
         <Sizing>FitProportional</Sizing>
-        <Top>5.51072in</Top>
+        <Top>5.88572in</Top>
         <Left>1.65483in</Left>
         <Height>1.32189in</Height>
         <Width>2.67471in</Width>
@@ -341,6 +341,76 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
+      <Textbox Name="Textbox1">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>="Calification: " + Parameters!CalificationProviderName.Value</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox1</rd:DefaultName>
+        <Top>5.45575in</Top>
+        <Left>1.65483in</Left>
+        <Height>0.25in</Height>
+        <Width>3.25554in</Width>
+        <ZIndex>15</ZIndex>
+        <Visibility>
+          <Hidden>=IIF(Parameters!CalificationProviderName.Value = "NA",False,True)</Hidden>
+        </Visibility>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox2">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>="Score: " + Parameters!CalificationProviderName.Value</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox1</rd:DefaultName>
+        <Top>5.45575in</Top>
+        <Left>5.21183in</Left>
+        <Height>0.25in</Height>
+        <Width>3.25554in</Width>
+        <ZIndex>16</ZIndex>
+        <Visibility>
+          <Hidden>=Microsoft.VisualBasic.Interaction.IIF(Parameters!CalificationProviderValue.Value = "NA", False, True)</Hidden>
+        </Visibility>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
     <Height>7.87402in</Height>
     <Style>
@@ -379,6 +449,16 @@
     </ReportParameter>
     <ReportParameter Name="CustomerLogo">
       <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CalificationProviderValue">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CalificationProviderName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
