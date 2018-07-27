@@ -7002,7 +7002,33 @@ var Provider_CalificationProjectConfigInfo = {
                             optionLabel: 'Seleccione una opción',
                         });
                 }
-            }],
+            }, {
+                title: 'Procesar',
+                template: function (options) {
+                    debugger;
+                    return '<a onClick=Provider_CalificationProjectConfigInfo.StartCalificationProcess(' + options.CalificationProjectConfigId +')>Generar Calificación</a>';
+                },
+            }
+            ],
         });
+    },
+
+    StartCalificationProcess: function (obj) {
+        debugger;
+        $.ajax({
+            url: BaseUrl.ApiUrl + '/ProviderApi?CPCStartProcessByProviderAndCustomer=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId + '&CalificationId=' + obj,
+            dataType: 'json',
+            type: 'post',          
+            success: function () {
+                //options.success();
+                //$('#' + Provider_CalificationProjectConfigInfo.ObjectId).data('kendoGrid').dataSource.read();
+                Message('success', 'En un momento recibirá un correo, notificando que se validó correctamente.');
+            },
+            error: function (result) {
+                options.error(result);
+                Message('error', 'Parece que faltan datos importantes para validar el proceso.');
+            },
+        });
+    
     },
 };

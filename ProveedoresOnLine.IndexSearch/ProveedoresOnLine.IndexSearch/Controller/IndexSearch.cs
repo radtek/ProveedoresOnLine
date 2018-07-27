@@ -285,7 +285,7 @@ namespace ProveedoresOnLine.IndexSearch.Controller
 
                 client.Map<CompanySurveyIndexModel>(m => m.AutoMap());
 
-                var Index = client.IndexMany(oCompanySurveyIndexSearch, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_SurveyIndex].Value);
+                var Index = client.IndexMany(oCompanySurveyIndexSearch, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CompanySurveyIndex].Value);
             }
             catch (Exception err)
             {

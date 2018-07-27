@@ -191,6 +191,24 @@ namespace MarketPlace.Models.Provider
             }
         }
 
+        public string oCP_ActionCompotitionFile { get; set; }
+
+
+        public string CP_ActionCompotitionFile
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(oCP_ActionCompotitionFile))
+                {
+                    oCP_ActionCompotitionFile = RelatedLegalInfo.ItemInfo.
+                         Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumLegalInfoType.CP_ActionComposisition).
+                         Select(y => y.Value).
+                         DefaultIfEmpty(string.Empty).
+                         FirstOrDefault();
+                }
+                return oCP_ActionCompotitionFile;
+            }
+        }
         #endregion
 
         #region RUT

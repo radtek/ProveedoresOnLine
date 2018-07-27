@@ -3750,6 +3750,14 @@ namespace BackOffice.Web.ControllersApi
 
             }
         }
+
+        [HttpPost]
+        [HttpGet]
+        public void CPCStartProcessByProviderAndCustomer(string CPCStartProcessByProviderAndCustomer, string ProviderPublicId, string CalificationId)
+        {
+            ProveedoresOnLine.CalificationProject.Controller.CalificationProject.StartProcessByProviderAndCustomer(ProviderPublicId, int.Parse(CalificationId));
+        }
+
         #endregion
 
         #region Notifications
@@ -3759,8 +3767,7 @@ namespace BackOffice.Web.ControllersApi
         public Boolean SendCertificationStatusProviderByCustomer(string SendCertificationStatusProviderByCustomer)
         {
             Boolean oRestul = false;
-
-
+            
             string ProviderPublicId =
                     (string)
                     (new System.Web.Script.Serialization.JavaScriptSerializer()).
@@ -3790,20 +3797,14 @@ namespace BackOffice.Web.ControllersApi
                     (new System.Web.Script.Serialization.JavaScriptSerializer()).
                     Deserialize(System.Web.HttpContext.Current.Request["bodyEmail"],
                                 typeof(string));
-
-
-
             //Notification Certification
 
             if (SendCertificationStatusProviderByCustomer == "true")
             {
-
                 if (!string.IsNullOrWhiteSpace(CustomerProviderId) && !string.IsNullOrWhiteSpace(CustomerPublicId))
                 {
-
                     try
                     {
-
                         //get Provider Info
                         BackOffice.Models.Provider.ProviderViewModel oModel = new Models.Provider.ProviderViewModel();
                         oModel.RelatedProvider = new ProveedoresOnLine.CompanyProvider.Models.Provider.ProviderModel()
@@ -3910,19 +3911,13 @@ namespace BackOffice.Web.ControllersApi
                         };
 
                         ProveedoresOnLine.CompanyCustomer.Controller.CompanyCustomer.CustomerProviderInfoUpsert(oCustomerProvider);
-
                     }
                     catch (Exception ex)
                     {
                         oRestul = false;
                     }
-
-
                 }
-
             }
-
-
             return oRestul;
         }
 

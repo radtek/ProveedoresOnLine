@@ -92,6 +92,15 @@
                             <span>@CurrentLegalInfo.CP_SocialObject</span>
                         </div>
                     }
+                    @if (!string.IsNullOrEmpty(CurrentLegalInfo.CP_ActionCompotitionFile))
+                    {
+                        <div class="col-sm-12 POMPBorderbottom POMPProviderBoxInfo">
+                            <br />
+                            <label class="POMPProviderBoxInfo">Composición Accionaria</label>
+                            <br />
+                            <a class="POMPProviderDocumetIcon" target="_blank" href="@CurrentLegalInfo.CP_ActionCompotitionFile">Ver Archivo de Composición Accionaria</a>
+                        </div>
+                    }
                 </div>
                 <br />
             </div>
