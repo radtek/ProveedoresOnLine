@@ -64,7 +64,7 @@ namespace ProveedoresOnLine.Reports.Test
             DataTable data4 = new DataTable();
             DataTable data5 = new DataTable();
 
-            Tuple<byte[], string, string> report =
+            /*Tuple<byte[], string, string> report =
                 ProveedoresOnLine.Reports.Controller.ReportModule.CP_GerencialReport("PDF",
                                                                                      data,
                                                                                      data2,
@@ -72,7 +72,7 @@ namespace ProveedoresOnLine.Reports.Test
                                                                                      data4,
                                                                                      data5,
                                                                                      parameters,
-                                                                                     "C:\\Publicar Software\\ProveedoresOnLine\\ProveedoresOnLine.Reports\\ProveedoresOnLine.Reports.Test\\Reports\\C_Report_GerencialInfo.rdlc");
+                                                                                     "C:\\Publicar Software\\ProveedoresOnLine\\ProveedoresOnLine.Reports\\ProveedoresOnLine.Reports.Test\\Reports\\C_Report_GerencialInfo.rdlc");*/
             parameters = null;
         }
 

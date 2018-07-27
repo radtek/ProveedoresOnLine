@@ -12,7 +12,7 @@
                 <Value>SE ENCUENTRA CON TODA LA DOCUMENTACIÓN VALIDADA</Value>
                 <Style>
                   <FontFamily>Times New Roman</FontFamily>
-                  <FontSize>22pt</FontSize>
+                  <FontSize>20pt</FontSize>
                 </Style>
               </TextRun>
             </TextRuns>
@@ -24,7 +24,7 @@
         <rd:DefaultName>Textbox8</rd:DefaultName>
         <Top>4.41194in</Top>
         <Left>1.25383in</Left>
-        <Height>0.84937in</Height>
+        <Height>0.69312in</Height>
         <Width>7.77757in</Width>
         <Style>
           <Border>
@@ -134,7 +134,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox11</rd:DefaultName>
-        <Top>5.90984in</Top>
+        <Top>6.40984in</Top>
         <Left>5.58605in</Left>
         <Height>0.38029in</Height>
         <Width>3.47825in</Width>
@@ -166,9 +166,9 @@
         <Source>External</Source>
         <Value>=Parameters!CustomerLogo.Value</Value>
         <Sizing>FitProportional</Sizing>
-        <Top>5.51072in</Top>
-        <Left>1.65483in</Left>
-        <Height>1.32189in</Height>
+        <Top>5.66061in</Top>
+        <Left>1.672in</Left>
+        <Height>1.08231in</Height>
         <Width>2.67471in</Width>
         <ZIndex>5</ZIndex>
         <Style>
@@ -341,6 +341,76 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
+      <Textbox Name="Textbox1">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!CalificationProviderName.Value</Value>
+                <Style>
+                  <FontSize>16pt</FontSize>
+                  <Color>DarkOrange</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox1</rd:DefaultName>
+        <Top>5.18492in</Top>
+        <Left>3.72192in</Left>
+        <Height>0.31944in</Height>
+        <Width>2.9398in</Width>
+        <ZIndex>15</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox2">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>= Parameters!CalificationProviderValue.Value + "Pts"</Value>
+                <Style>
+                  <FontSize>18pt</FontSize>
+                  <Color>DarkOrange</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox1</rd:DefaultName>
+        <Top>5.18492in</Top>
+        <Left>7.05558in</Left>
+        <Height>0.31944in</Height>
+        <Width>1.97582in</Width>
+        <ZIndex>16</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
     <Height>7.87402in</Height>
     <Style>
@@ -379,6 +449,16 @@
     </ReportParameter>
     <ReportParameter Name="CustomerLogo">
       <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CalificationProviderValue">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CalificationProviderName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
