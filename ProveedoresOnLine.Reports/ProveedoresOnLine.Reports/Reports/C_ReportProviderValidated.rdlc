@@ -12,7 +12,7 @@
                 <Value>SE ENCUENTRA CON TODA LA DOCUMENTACIÓN VALIDADA</Value>
                 <Style>
                   <FontFamily>Times New Roman</FontFamily>
-                  <FontSize>22pt</FontSize>
+                  <FontSize>20pt</FontSize>
                 </Style>
               </TextRun>
             </TextRuns>
@@ -24,7 +24,7 @@
         <rd:DefaultName>Textbox8</rd:DefaultName>
         <Top>4.41194in</Top>
         <Left>1.25383in</Left>
-        <Height>0.84937in</Height>
+        <Height>0.69312in</Height>
         <Width>7.77757in</Width>
         <Style>
           <Border>
@@ -134,7 +134,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox11</rd:DefaultName>
-        <Top>6.28484in</Top>
+        <Top>6.40984in</Top>
         <Left>5.58605in</Left>
         <Height>0.38029in</Height>
         <Width>3.47825in</Width>
@@ -166,9 +166,9 @@
         <Source>External</Source>
         <Value>=Parameters!CustomerLogo.Value</Value>
         <Sizing>FitProportional</Sizing>
-        <Top>5.88572in</Top>
-        <Left>1.65483in</Left>
-        <Height>1.32189in</Height>
+        <Top>5.66061in</Top>
+        <Left>1.672in</Left>
+        <Height>1.08231in</Height>
         <Width>2.67471in</Width>
         <ZIndex>5</ZIndex>
         <Style>
@@ -348,8 +348,11 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="Calification: " + Parameters!CalificationProviderName.Value</Value>
-                <Style />
+                <Value>=Parameters!CalificationProviderName.Value</Value>
+                <Style>
+                  <FontSize>16pt</FontSize>
+                  <Color>DarkOrange</Color>
+                </Style>
               </TextRun>
             </TextRuns>
             <Style>
@@ -358,14 +361,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
-        <Top>5.45575in</Top>
-        <Left>1.65483in</Left>
-        <Height>0.25in</Height>
-        <Width>3.25554in</Width>
+        <Top>5.18492in</Top>
+        <Left>3.72192in</Left>
+        <Height>0.31944in</Height>
+        <Width>2.9398in</Width>
         <ZIndex>15</ZIndex>
-        <Visibility>
-          <Hidden>=IIF(Parameters!CalificationProviderName.Value = "NA",False,True)</Hidden>
-        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -383,8 +383,11 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="Score: " + Parameters!CalificationProviderName.Value</Value>
-                <Style />
+                <Value>= Parameters!CalificationProviderValue.Value + "Pts"</Value>
+                <Style>
+                  <FontSize>18pt</FontSize>
+                  <Color>DarkOrange</Color>
+                </Style>
               </TextRun>
             </TextRuns>
             <Style>
@@ -393,14 +396,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
-        <Top>5.45575in</Top>
-        <Left>5.21183in</Left>
-        <Height>0.25in</Height>
-        <Width>3.25554in</Width>
+        <Top>5.18492in</Top>
+        <Left>7.05558in</Left>
+        <Height>0.31944in</Height>
+        <Width>1.97582in</Width>
         <ZIndex>16</ZIndex>
-        <Visibility>
-          <Hidden>=Microsoft.VisualBasic.Interaction.IIF(Parameters!CalificationProviderValue.Value = "NA", False, True)</Hidden>
-        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>

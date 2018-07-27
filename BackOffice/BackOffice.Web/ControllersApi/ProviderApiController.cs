@@ -3831,16 +3831,32 @@ namespace BackOffice.Web.ControllersApi
                         parameters.Add(new ReportParameter("CustomerLogo", oCustomer.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.CompanyLogo).Select(x => x.Value).FirstOrDefault()));
 
                         parameters.Add(new ReportParameter("ExpeditionDate", DateTime.Now.ToString()));
-
-                        if (true)
-                        {
-                            parameters.Add(new ReportParameter("CalificationProviderValue", ""));
-
-                            parameters.Add(new ReportParameter("CalificationProviderName", ""));
-                        }
-
                         
+                        string stringCalification = oModel.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.CalificationProcess).Select(x => x.Value).FirstOrDefault();
 
+                        if (stringCalification != null)
+                        {
+                            string[] split = stringCalification.Split('_');
+
+                            if (split[0] == CustomerPublicId)
+                            {
+                                parameters.Add(new ReportParameter("CalificationProviderValue", split[1].ToUpper()));
+
+                                parameters.Add(new ReportParameter("CalificationProviderName", split[2]));
+                            }
+                            else
+                            {
+                                parameters.Add(new ReportParameter("CalificationProviderValue", "NA"));
+
+                                parameters.Add(new ReportParameter("CalificationProviderName", "NA"));
+                            }
+                        }
+                        else
+                        {
+                            parameters.Add(new ReportParameter("CalificationProviderValue", "NA"));
+
+                            parameters.Add(new ReportParameter("CalificationProviderName", "NA"));
+                        }
 
                         Tuple<byte[], string, string> report = ProveedoresOnLine.Reports.Controller.ReportModule.GetProviderValitaed(
                                                             parameters,
