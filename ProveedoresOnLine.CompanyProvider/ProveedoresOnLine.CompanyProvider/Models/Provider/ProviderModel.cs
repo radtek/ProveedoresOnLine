@@ -29,6 +29,7 @@ namespace ProveedoresOnLine.CompanyProvider.Models.Provider
         public List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> RelatedFinantial { get; set; }
 
         public List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> RelatedKContractInfo { get; set; }
+        public List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> RelatedBankInfo { get; set; }
 
         public List<BalanceSheetModel> RelatedBalanceSheet { get; set; }
 

@@ -975,6 +975,21 @@ namespace MarketPlace.Web.Controllers
 
                 #endregion Legal Info
 
+                #region Bank Info
+
+                oModel.RelatedLiteProvider.RelatedProvider.RelatedBankInfo = response.RelatedBankInfo;
+                oModel.RelatedBankInfo = new List<ProviderBankInfoViewModel>();
+                if (oModel.RelatedLiteProvider.RelatedProvider.RelatedBankInfo != null)
+                {
+                    oModel.RelatedLiteProvider.RelatedProvider.RelatedBankInfo.All(x =>
+                    {
+                        oModel.RelatedBankInfo.Add(new ProviderBankInfoViewModel(x));
+                        return true;
+                    });
+                }
+
+                #endregion Bank Info
+
                 #region Basic Financial Info
 
                 oModel.RelatedLiteProvider.RelatedProvider.RelatedFinantial = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPFinancialGetBasicInfo(ProviderPublicId, (int)enumFinancialType.BalanceSheetInfoType);
@@ -3915,6 +3930,9 @@ namespace MarketPlace.Web.Controllers
             else
             {
                 parameters.Add(new ReportParameter("ExpressedIn", "NA"));
+                parameters.Add(new ReportParameter("AccountType", "NA"));
+                parameters.Add(new ReportParameter("AccountNumber", "NA"));
+                parameters.Add(new ReportParameter("AccountHolder", "NA"));
             }
 
             #region Basic Info
@@ -4002,6 +4020,19 @@ namespace MarketPlace.Web.Controllers
 
             parameters.Add(new ReportParameter("Altman", oModel.RelatedFinancialBasicInfo.Where(x => x.BI_Altman != null).Select(x => x.BI_Altman).DefaultIfEmpty("NA").FirstOrDefault()));
 
+            parameters.Add(new ReportParameter("CurrentReason", oModel.RelatedFinancialBasicInfo.Where(x => x.BI_CurrentReason != null).Select(x => x.BI_CurrentReason).DefaultIfEmpty("NA").FirstOrDefault()));
+
+            parameters.Add(new ReportParameter("Indebtedness", oModel.RelatedFinancialBasicInfo.Where(x => x.BI_Indebtedness != null).Select(x => x.BI_Indebtedness).DefaultIfEmpty("NA").FirstOrDefault()));
+
+            parameters.Add(new ReportParameter("OperationalProfitability", oModel.RelatedFinancialBasicInfo.Where(x => x.BI_OperationalProfitability != null).Select(x => x.BI_OperationalProfitability).DefaultIfEmpty("NA").FirstOrDefault()));
+
+
+            //Bank Info
+            parameters.Add(new ReportParameter("AccountType", oModel.RelatedBankInfo.Where(x => x.IB_AccountType != null).Select(x => x.IB_AccountType).DefaultIfEmpty("NA").FirstOrDefault()));
+            parameters.Add(new ReportParameter("AccountNumber", oModel.RelatedBankInfo.Where(x => x.IB_AccountNumber != null).Select(x => x.IB_AccountNumber).DefaultIfEmpty("NA").FirstOrDefault()));
+            parameters.Add(new ReportParameter("AccountHolder", oModel.RelatedBankInfo.Where(x => x.IB_AccountHolder != null).Select(x => x.IB_AccountHolder).DefaultIfEmpty("NA").FirstOrDefault()));
+
+
             if (oModel.RelatedFinancialBasicInfo != null && !string.IsNullOrWhiteSpace(oModel.RelatedFinancialBasicInfo.Where(x => x.BI_ExerciseUtility != null).Select(x => x.BI_ExerciseUtility).DefaultIfEmpty("").FirstOrDefault()))
                 parameters.Add(new ReportParameter("ExcerciseUtility", oModel.RelatedFinancialBasicInfo.Where(x => x.BI_ExerciseUtility != null).Select(x => x.BI_ExerciseUtility).FirstOrDefault()));
             else
@@ -4015,9 +4046,27 @@ namespace MarketPlace.Web.Controllers
             #endregion Finacial Info
 
             #region HSEQ Info
+            DataTable data6 = new DataTable();
 
             if (oModel.RelatedHSEQlInfo != null && oModel.RelatedHSEQlInfo.Count > 0)
             {
+            data6.Columns.Add("CompaniaCertificadora");
+            data6.Columns.Add("Norma");
+            data6.Columns.Add("FechadeCaducidad");
+
+            DataRow row6;
+            oModel.RelatedHSEQlInfo?.All(x =>
+            {
+                if (x.C_CertificationCompany != null)
+                { 
+                row6 = data6.NewRow();
+                row6["CompaniaCertificadora"] = x.C_CertificationCompany.ItemName;
+                row6["Norma"] = x.C_Rule.ItemName;
+                row6["FechadeCaducidad"] = x.C_EndDateCertification;
+                data6.Rows.Add(row6);
+                }
+                return true;
+            });
                 parameters.Add(new ReportParameter("SystemOccupationalHazards", oModel.RelatedHSEQlInfo.FirstOrDefault() == null || oModel.RelatedHSEQlInfo.FirstOrDefault().CR_SystemOccupationalHazards == null ? "NA" : oModel.RelatedHSEQlInfo.FirstOrDefault().CR_SystemOccupationalHazards));
                 parameters.Add(new ReportParameter("RateARL", oModel.RelatedHSEQlInfo.FirstOrDefault() == null || oModel.RelatedHSEQlInfo.FirstOrDefault().CR_RateARL == null ? "NA" : oModel.RelatedHSEQlInfo.FirstOrDefault().CR_RateARL));
                 parameters.Add(new ReportParameter("LTIFResult", oModel.RelatedHSEQlInfo.FirstOrDefault() == null || string.IsNullOrEmpty(oModel.RelatedHSEQlInfo.FirstOrDefault().CR_LTIFResult) ? "NA" : oModel.RelatedHSEQlInfo.FirstOrDefault().CR_LTIFResult));
@@ -4135,6 +4184,44 @@ namespace MarketPlace.Web.Controllers
 
             #endregion Personas de Contacto
 
+            #region CommercialInfo
+
+            DataTable data7 = new DataTable();
+            data7.Columns.Add("Compania");
+            data7.Columns.Add("InidDate");
+            data7.Columns.Add("FinishDate");
+
+            DataRow row7;
+
+            List<GenericItemModel> oDesignations = null;
+            oDesignations = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPCommercialGetBasicInfo(oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyPublicId, (int)enumCommercialType.Experience, SessionModel.CurrentCompany.CompanyPublicId);
+            oModel.RelatedDesignationsInfo = new List<ProviderDesignationsViewModel>();
+
+            System.Globalization.TextInfo textCultureInfoformat = System.Globalization.CultureInfo.CurrentCulture.TextInfo;
+
+            if (oDesignations != null && oDesignations.Count > 0)
+            {
+                oDesignations
+                    //.Where(x => x.ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCommercialInfoType.EX_Client).Any())
+                   // .Select(x => x.ItemInfo.GroupBy(y => y.Value))
+                   .All(x => {
+
+                    if (x.ItemInfo.Count(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCommercialInfoType.EX_Client) > 0)
+                    {
+                        row7 = data7.NewRow();
+                        row7["Compania"] = x.ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCommercialInfoType.EX_Client).Select(y => y.Value).SingleOrDefault();
+                        row7["InidDate"] = x.ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCommercialInfoType.EX_DateIssue).Select(y => y.Value).SingleOrDefault();
+                        row7["FinishDate"] = x.ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCommercialInfoType.EX_DueDate).Select(y => y.Value).SingleOrDefault();
+
+                           data7.Rows.Add(row7);
+                            oModel.RelatedDesignationsInfo.Add(new ProviderDesignationsViewModel(x));
+                        }
+                        return true;
+                    });
+            }
+
+            #endregion
+
             #region ComercialExperience
 
             oModel.RelatedLiteProvider.RelatedProvider.RelatedCommercial =
@@ -4237,21 +4324,21 @@ namespace MarketPlace.Web.Controllers
             DataRow row5;
 
 
-            List<GenericItemModel> oDesignations = null;
-            oDesignations = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPLegalGetBasicInfo(oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyPublicId, (int)enumLegalType.Designations);
+            List<GenericItemModel> oDesignations7 = null;
+            oDesignations7 = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPLegalGetBasicInfo(oModel.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyPublicId, (int)enumLegalType.Designations);
             oModel.RelatedDesignationsInfo = new List<ProviderDesignationsViewModel>();
 
-            System.Globalization.TextInfo ti = System.Globalization.CultureInfo.CurrentCulture.TextInfo;
+            System.Globalization.TextInfo textCultureInfo = System.Globalization.CultureInfo.CurrentCulture.TextInfo;
 
-            if (oDesignations != null && oDesignations.Count > 0)
+            if (oDesignations7 != null && oDesignations7.Count > 0)
             {
-                oDesignations.All(x =>
+                oDesignations7.All(x =>
                 {
                     if (x.ItemInfo.Count(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumLegalInfoType.CD_PartnerRank && y.Value == "219002") > 0)
                     {
                         row5 = data5.NewRow();
                         row5["Identification"] = x.ItemInfo.Where( y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumLegalInfoType.CD_PartnerIdentificationNumber).Select( y=> y.Value).SingleOrDefault();
-                        row5["Name"] = ti.ToTitleCase(x.ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumLegalInfoType.CD_PartnerName).Select(y => y.Value).SingleOrDefault().ToLower());
+                        row5["Name"] = textCultureInfo.ToTitleCase(x.ItemInfo.Where(y => y.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumLegalInfoType.CD_PartnerName).Select(y => y.Value).SingleOrDefault().ToLower());
                         data5.Rows.Add(row5);
                         //oModel.RelatedDesignationsInfo.Add(new ProviderDesignationsViewModel(x));
                     }
@@ -4270,6 +4357,8 @@ namespace MarketPlace.Web.Controllers
                                                             data3,
                                                             data4,
                                                             data5,
+                                                            data6,
+                                                            data7,
                                                             parameters,
                                                             Models.General.InternalSettings.Instance[Models.General.Constants.MP_CP_ReportPath].Value.Trim() + "C_Report_GerencialInfo.rdlc");
 
@@ -5559,7 +5648,6 @@ namespace MarketPlace.Web.Controllers
                 parameters.Add(new ReportParameter("EBITDA", "NA"));
 
             parameters.Add(new ReportParameter("Altman", oModel.RelatedFinancialBasicInfo.Where(x => x.BI_Altman != null).Select(x => x.BI_Altman).DefaultIfEmpty("NA").FirstOrDefault()));
-
             #endregion Finacial Info
 
             #region HSEQ Info
