@@ -47,6 +47,10 @@
     <Reference Include="ProveedoresOnLine.Company">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.Company\developer\ProveedoresOnLine.Company.dll</HintPath>
     </Reference>
+    <Reference Include="ProveedoresOnLine.CompanyProvider, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ProveedoresOnLine.CalificationBatch\bin\Debug\ProveedoresOnLine.CompanyProvider.dll</HintPath>
+    </Reference>
     <Reference Include="SessionManager">
       <HintPath>\\ProjectAssemblies\Assemblies\ProveedoresOnLine\SessionManager\developer\SessionManager.dll</HintPath>
     </Reference>
@@ -77,7 +81,12 @@
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ProveedoresOnLine.CalificationBatch\ProveedoresOnLine.CalificationBatch.csproj">
+      <Project>{94d5b69e-04e4-4a0c-888a-be57d3350a44}</Project>
+      <Name>ProveedoresOnLine.CalificationBatch</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>XCOPY "$(ProjectDir)$(OutDir)*.dll" "\\ProjectAssemblies\Assemblies\ProveedoresOnLine\ProveedoresOnLine.CalificationProject\developer\" /y</PostBuildEvent>

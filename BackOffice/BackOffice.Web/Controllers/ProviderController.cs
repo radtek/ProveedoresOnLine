@@ -4,6 +4,7 @@ using Nest;
 using ProveedoresOnLine.Company.Models.Company;
 using ProveedoresOnLine.Company.Models.Util;
 using ProveedoresOnLine.CompanyCustomer.Models.Customer;
+using ProveedoresOnLine.CompanyProvider.Controller;
 using ProveedoresOnLine.CompanyProvider.Models.Provider;
 using ProveedoresOnLine.SurveyModule.Models.Index;
 using System;
@@ -1464,6 +1465,10 @@ namespace BackOffice.Web.Controllers
 
                 //get provider menu
                 oModel.ProviderMenu = GetProviderMenu(oModel);
+
+                //Get Contacts
+                oModel.ContactCompanyInfo = new List<GenericItemModel>();
+                oModel.ContactCompanyInfo = CompanyProvider.MPContactGetBasicInfo(oModel.RelatedProvider.RelatedCompany.CompanyPublicId, (int)enumContactType.PersonContact);
             }
 
             return View(oModel);

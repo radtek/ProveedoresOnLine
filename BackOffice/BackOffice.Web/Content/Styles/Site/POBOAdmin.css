@@ -37,3 +37,23 @@ ul.POBOAdminRestrictiveList > li > input[type="file"] {
     width:49.3%;
     border-radius:2px;
 }
+
+
+
+
+.ProviderStatusCertificationDialog > ul > li {
+    text-decoration: none;
+    border-bottom: none;
+    padding: 8px 0px;
+    font-weight: normal !important;
+}
+
+.panel-yellow {
+    border-color: #ff8300;
+}
+
+    .panel-yellow > .panel-heading {
+        border-color: #ff8300;
+        color: white;
+        background-color: #ff8300;
+    }

@@ -39,6 +39,8 @@ namespace BackOffice.Models.Provider
 
         public List<ProveedoresOnLine.Company.Models.Util.GenericFilterModel> SearchFilter { get; set; }
 
+        public List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> ContactCompanyInfo { get; set; }
+
         public string GridToSave { get; set; }
 
         public List<ProveedoresOnLine.Company.Models.Util.GenericItemModel> CustomerCustomField { get; set; }

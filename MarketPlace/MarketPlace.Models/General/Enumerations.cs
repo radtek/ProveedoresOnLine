@@ -220,7 +220,7 @@
         CP_CertificateExpeditionDate = 602007,
         CP_SocialObject = 602008,
         CP_UndefinedDate = 602012,
-
+        CP_ActionComposisition = 602014,
         //RUT
         R_PersonType = 603001,
         R_LargeContributor = 603002,

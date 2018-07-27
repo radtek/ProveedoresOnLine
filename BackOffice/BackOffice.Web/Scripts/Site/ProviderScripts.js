@@ -6261,7 +6261,9 @@ var Provider_LegalInfoObject = {
 var Provider_CustomerInfoObject = {
 
     ObjectId: '',
+    DialogCertificationId: '',
     ProviderPublicId: '',
+    CustomerPublicId: '',
     ProviderCustomerInfoType: '',
     CustomerProviderId: '',
     PageSize: '',
@@ -6270,6 +6272,7 @@ var Provider_CustomerInfoObject = {
 
     Init: function (vInitObject) {
         this.ObjectId = vInitObject.ObjectId;
+        this.DialogCertificationId = vInitObject.DialogCertificationId;
         this.ProviderPublicId = vInitObject.ProviderPublicId;
         this.ProviderCustomerInfoType = vInitObject.ProviderCustomerInfoType;
         this.PageSize = vInitObject.PageSize;
@@ -6405,6 +6408,7 @@ var Provider_CustomerInfoObject = {
                 var selectedRows = this.select();
                 for (var i = 0; i < selectedRows.length; i++) {
                     Provider_CustomerInfoObject.CustomerProviderId = this.dataItem(selectedRows[i]).CP_CustomerProviderId;
+                    Provider_CustomerInfoObject.CustomerPublicId = this.dataItem(selectedRows[i]).CP_CustomerPublicId;
                     Provider_CustomerInfoObject.RenderCustomerByProviderDetail();
 
                     //config grid infro visible enable event
@@ -6454,6 +6458,7 @@ var Provider_CustomerInfoObject = {
                 { name: 'save', text: 'Guardar' },
                 { name: 'cancel', text: 'Descartar' },
                 { name: 'ViewEnable', template: $('#' + Provider_CustomerInfoObject.ObjectId + '_Detail_ViewEnablesTemplate').html() },
+                { name: 'Certification', template: '<a class="k-button" href="javascript:Provider_CustomerInfoObject.SendCertificationToProvider();">Enviar Certificado</a>' },
             ],
             dataSource: {
                 pageSize: Provider_CustomerInfoObject.PageSize,
@@ -6640,6 +6645,53 @@ var Provider_CustomerInfoObject = {
         $('#' + Provider_CustomerInfoObject.ObjectId + '_Tracking_Dialog').dialog({
             width: 500,
         });
+    },
+    
+    SendCertificationToProvider: function () {
+
+        var DialogDiv = $('<div style="display:none">' + $('#' + Provider_CustomerInfoObject.DialogCertificationId).html() + '</div>');
+
+        //show dialog
+        DialogDiv.dialog({
+            width: 500,
+            minWidth: 300,
+            modal: true,
+            buttons: {
+                'Cancelar': function () {
+                    $(this).dialog("close");
+                },
+                'Enviar': function () {
+
+                    var Emails = DialogDiv.find('#' + Provider_CustomerInfoObject.DialogCertificationId + '_OtherEmails').val().split(";");
+
+                    $('.' + Provider_CustomerInfoObject.DialogCertificationId + '_Emails').each(function () {
+                        Emails.push($(this).attr('value'))
+                    });
+
+                        
+                    $.ajax({
+                        url: BaseUrl.ApiUrl + '/ProviderApi?SendCertificationStatusProviderByCustomer=true',
+                        type: "POST",
+                        data: {
+                                ProviderPublicId : kendo.stringify(Provider_CustomerInfoObject.ProviderPublicId),
+                                CustomerProviderId : kendo.stringify(Provider_CustomerInfoObject.CustomerProviderId),
+                                CustomerPublicId : kendo.stringify(Provider_CustomerInfoObject.CustomerPublicId),
+                                Responsables : kendo.stringify(Emails),
+                                bodyEmail : kendo.stringify(DialogDiv.find('#' + Provider_CustomerInfoObject.DialogCertificationId + '_bodyEmail').val())  
+                        },
+                        success: function (result) {
+                            Message('success', 'Se envió la Certificacion correctamente.');
+                        },
+                        error: function (result) {
+                            Message('error', 'Error. al tratar de Enviar el Certificado.');
+                        }
+                    });
+                    
+                    DialogDiv.dialog("close");
+                }
+            }
+        });
+        
     },
 
     UpsertCustomerByProviderTraking: function () {
@@ -6950,7 +7002,33 @@ var Provider_CalificationProjectConfigInfo = {
                             optionLabel: 'Seleccione una opción',
                         });
                 }
-            }],
+            }, {
+                title: 'Procesar',
+                template: function (options) {
+                    debugger;
+                    return '<a onClick=Provider_CalificationProjectConfigInfo.StartCalificationProcess(' + options.CalificationProjectConfigId +')>Generar Calificación</a>';
+                },
+            }
+            ],
         });
+    },
+
+    StartCalificationProcess: function (obj) {
+        debugger;
+        $.ajax({
+            url: BaseUrl.ApiUrl + '/ProviderApi?CPCStartProcessByProviderAndCustomer=true&ProviderPublicId=' + Provider_CalificationProjectConfigInfo.ProviderPublicId + '&CalificationId=' + obj,
+            dataType: 'json',
+            type: 'post',          
+            success: function () {
+                //options.success();
+                //$('#' + Provider_CalificationProjectConfigInfo.ObjectId).data('kendoGrid').dataSource.read();
+                Message('success', 'En un momento recibirá un correo, notificando que se validó correctamente.');
+            },
+            error: function (result) {
+                options.error(result);
+                Message('error', 'Parece que faltan datos importantes para validar el proceso.');
+            },
+        });
+    
     },
 };
