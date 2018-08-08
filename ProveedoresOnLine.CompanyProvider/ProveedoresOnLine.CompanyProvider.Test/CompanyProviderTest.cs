@@ -2055,7 +2055,7 @@ namespace ProveedoresOnLine.CompanyProvider.Test
         [TestMethod]
         public void MPGetBasicInfo()
         {
-            var oReturn = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPGetBasicInfo("1CA3A147");
+            var oReturn = ProveedoresOnLine.CompanyProvider.Controller.CompanyProvider.MPGetBasicInfo("D9334A51");
         }
 
         [TestMethod]

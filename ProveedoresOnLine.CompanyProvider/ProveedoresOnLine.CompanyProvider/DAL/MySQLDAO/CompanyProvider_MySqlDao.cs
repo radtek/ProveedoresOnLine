@@ -1800,17 +1800,17 @@ namespace ProveedoresOnLine.CompanyProvider.DAL.MySQLDAO
                 if (response.DataSetResult.Tables[8] != null && response.DataSetResult.Tables[8].Rows.Count > 0)
                 {
                     oModel.RelatedBankInfo =
-                    (from bl in response.DataSetResult.Tables[3].AsEnumerable()
+                    (from bl in response.DataSetResult.Tables[8].AsEnumerable()
                      where !bl.IsNull("CompanyId")
                      group bl by new
                      {
                          CompanyId = bl.Field<int>("CompanyId"),
-                         Year = bl.Field<string>("Year"),
+                        // Year = bl.Field<string>("Year"),
                      } into blg
                      select new GenericItemModel()
                      {
                          ItemId = blg.Key.CompanyId,
-                         ItemName = blg.Key.Year,
+                       //  ItemName = blg.Key.Year,
                          ItemInfo =
                               (from blinf in response.DataSetResult.Tables[8].AsEnumerable()
                                where !blinf.IsNull("FinancialInfoId") &&
