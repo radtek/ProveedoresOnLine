@@ -6665,7 +6665,9 @@ var Provider_CustomerInfoObject = {
                     var Emails = DialogDiv.find('#' + Provider_CustomerInfoObject.DialogCertificationId + '_OtherEmails').val().split(";");
 
                     $('.' + Provider_CustomerInfoObject.DialogCertificationId + '_Emails').each(function () {
-                        Emails.push($(this).attr('value'))
+                        if ($(this).prop('checked')) {
+                            Emails.push($(this).attr('value'))
+                        }
                     });
 
                         
@@ -7004,8 +7006,8 @@ var Provider_CalificationProjectConfigInfo = {
                 }
             }, {
                 title: 'Procesar',
-                template: function (options) {
-                    debugger;
+                width: '100px',
+                template: function (options) {                    
                     return '<a onClick=Provider_CalificationProjectConfigInfo.StartCalificationProcess(' + options.CalificationProjectConfigId +')>Generar Calificación</a>';
                 },
             }

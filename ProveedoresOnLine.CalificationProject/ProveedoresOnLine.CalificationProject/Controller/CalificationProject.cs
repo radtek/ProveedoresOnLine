@@ -875,7 +875,7 @@ namespace ProveedoresOnLine.CalificationProject.Controller
                                         int InfoId = 0;
                                         if (oProvider.RelatedCompany.CompanyInfo.Any(x => x.ItemInfoType.ItemId == 203021))                                        
                                             InfoId = oProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == 203021).Select(x => x).FirstOrDefault().ItemInfoId;
-                                        
+
                                         GenericItemInfoModel oInfo = new GenericItemInfoModel()
                                         {
                                             ItemInfoId = InfoId,
@@ -884,7 +884,8 @@ namespace ProveedoresOnLine.CalificationProject.Controller
                                                 ItemId = 203021,
                                                 ItemEnable = true,
                                             },
-                                            Value = cnf.Company.CompanyPublicId + '_' + oTotalScore.ToString() + ' ' + Calification,
+                                            Value = cnf.Company.CompanyPublicId + '_' + oTotalScore.ToString() + '_' + Calification,
+                                            Enable = true,
                                         };
                                         oProvider.RelatedCompany.CompanyInfo.Add(oInfo);
 

@@ -159,6 +159,7 @@
         TCIntDataBase = 203017,
         TCIntVerificationInfo = 203018,
         CustomData = 203019,
+        CalificationProcess = 203021,
 
         CustomEconomicActivity = 220001,
         SurveyGroup = 220002,
