@@ -3930,9 +3930,6 @@ namespace MarketPlace.Web.Controllers
             else
             {
                 parameters.Add(new ReportParameter("ExpressedIn", "NA"));
-                parameters.Add(new ReportParameter("AccountType", "NA"));
-                parameters.Add(new ReportParameter("AccountNumber", "NA"));
-                parameters.Add(new ReportParameter("AccountHolder", "NA"));
             }
 
             #region Basic Info
