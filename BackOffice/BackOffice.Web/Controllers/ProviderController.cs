@@ -1816,14 +1816,49 @@ namespace BackOffice.Web.Controllers
 
                                 #endregion
 
-                                oCustomDataToUpsert = IntegrationPlatform.Controller.IntegrationPlatformController.CustomerProvider_CustomData_Upsert(oCustomDataToUpsert, ProviderPublicId);
-
+                                oCustomDataToUpsert = IntegrationPlatform.Controller.IntegrationPlatformController.CustomerProvider_CustomData_Upsert(oCustomDataToUpsert, ProviderPublicId);                                
                                 break;
                         }
                     }
-
+                    
                     return true;
                 });
+
+                List<CustomFiltersIndexModel> oCustomFiltersToIndex = ProveedoresOnLine.Company.Controller.Company.CustomFiltersGetAll();
+
+                Uri nodeToIndex = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+                var settingsToIndex = new ConnectionSettings(nodeToIndex);
+                settingsToIndex.DefaultIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CustomFiltesIndex].Value);
+                ElasticClient clientToIndex = new ElasticClient(settingsToIndex);
+
+                clientToIndex.DeleteIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CustomFiltesIndex].Value);
+                //Index all Customfilters
+
+                Uri node = new Uri(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_ElasticSearchUrl].Value);
+                var settings = new ConnectionSettings(node);
+                settings.DefaultIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CustomFiltesIndex].Value);
+                ElasticClient client = new ElasticClient(settings);
+
+                ICreateIndexResponse oElasticResponse = client.
+                        CreateIndex(ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CustomFiltesIndex].Value, c => c
+                        .Settings(s => s.NumberOfReplicas(0).NumberOfShards(1)
+                        .Analysis(a => a.
+                            Analyzers(an => an.
+                                Custom("customWhiteSpace", anc => anc.
+                                    Filters("asciifolding", "lowercase").
+                                    Tokenizer("whitespace")
+                                        )
+                                    ).TokenFilters(tf => tf
+                                    .EdgeNGram("customEdgeNGram", engrf => engrf
+                                    .MinGram(1)
+                                    .MaxGram(10))
+                                )
+                            ).NumberOfShards(1)
+                        )
+                    );
+                client.Map<CustomFiltersIndexModel>(m => m.AutoMap());
+                var Index = client.IndexMany(oCustomFiltersToIndex, ProveedoresOnLine.IndexSearch.Models.Util.InternalSettings.Instance[ProveedoresOnLine.IndexSearch.Models.Constants.C_Settings_CustomFiltesIndex].Value);
+
             }
 
             #region Custom Field

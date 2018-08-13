@@ -240,9 +240,7 @@ namespace ProveedoresOnLine.IndexSearch.DAL.MySQLDAO
 
             return oRetun;
         }
-
-
-
+        
         #endregion
 
         #region Survey Index

@@ -3161,7 +3161,7 @@ namespace ProveedoresOnLine.Company.DAL.MySQLDAO
                           (from cp in response.DataTableResult.AsEnumerable()
                            where !cp.IsNull("CustomerPublicId")
                            group cp by new
-                           {
+                           {   
                                CustomerPublicId = !cp.IsNull("CustomerPublicId") ? cp.Field<string>("CustomerPublicId") : "",
                                ProviderPublicId = !cp.IsNull("ProviderPublicId") ? cp.Field<string>("ProviderPublicId") : "",
                                Label = !cp.IsNull("Label") ? cp.Field<string>("Label") : "",

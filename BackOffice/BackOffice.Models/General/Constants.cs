@@ -119,6 +119,7 @@
 
         public const string C_Settings_File_S3FileProviderCertificatioPath = "File_S3FileProviderCertificatioPath";
 
+        public const string C_Settings_CalificationProcessEnd_Mail = "N_Provider_CalificationProcessEnd_Mail";
         #endregion
 
     }

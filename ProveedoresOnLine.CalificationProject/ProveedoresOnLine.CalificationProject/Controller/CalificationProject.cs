@@ -884,7 +884,7 @@ namespace ProveedoresOnLine.CalificationProject.Controller
                                                 ItemId = 203021,
                                                 ItemEnable = true,
                                             },
-                                            Value = cnf.Company.CompanyPublicId + '_' + oTotalScore.ToString() + '_' + Calification,
+                                            Value = cnf.Company.CompanyPublicId + '_' + oTotalScore.ToString() + '_' + Calification.TrimStart().ToUpper(),
                                             Enable = true,
                                         };
                                         oProvider.RelatedCompany.CompanyInfo.Add(oInfo);

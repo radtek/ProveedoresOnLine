@@ -114,20 +114,11 @@
                                 <span>@Model.RelatedGeneralInfo.Where(x => x.BR_IsPrincipal == true).Select(x => x.BR_Phone).FirstOrDefault()</span>
                             </div>
                         }
-                        @if (!string.IsNullOrWhiteSpace(Model.RelatedGeneralInfo.Where(x => x.BR_IsPrincipal == true).Select(x => x.BR_Fax).FirstOrDefault()))
-                        {
-                            <div class="col-sm-4 POMPBorderbottom POMPProviderBoxInfo">
-                                <br />
-                                <label class="POMPProviderBoxInfo">Fax</label>
-                                <br />
-                                <span>@Model.RelatedGeneralInfo.Where(x => x.BR_IsPrincipal == true).Select(x => x.BR_Fax).FirstOrDefault()</span>
-                            </div>
-                        }
                         @if (!string.IsNullOrWhiteSpace(Model.RelatedGeneralInfo.Where(x => x.BR_IsPrincipal == true).Select(x => x.BR_Email).FirstOrDefault()))
                         {
                             <div class="col-sm-4 POMPBorderbottom POMPProviderBoxInfo">
                                 <br />
-                                <label class="POMPProviderBoxInfo">Mail</label>
+                                <label class="POMPProviderBoxInfo">Correo Corporativo</label>
                                 <br />
                                 <span>@Model.RelatedGeneralInfo.Where(x => x.BR_IsPrincipal == true).Select(x => x.BR_Email).FirstOrDefault()</span>
                             </div>
@@ -141,7 +132,7 @@
                                 <span>@Model.RelatedGeneralInfo.Where(x => x.BR_IsPrincipal == true).Select(x => x.BR_Website).FirstOrDefault()</span>
                             </div>
                         }
-                        @if (Model.RelatedLegalInfo.Count > 0 && !string.IsNullOrWhiteSpace(Model.RelatedLegalInfo.Where(x=>x.RelatedLegalInfo.ItemType.ItemId ==(int)MarketPlace.Models.General.enumLegalType.ChaimberOfCommerce).Select(x=>x.CP_SocialObject).FirstOrDefault()))
+                        @if (Model.RelatedLegalInfo.Count > 0 && !string.IsNullOrWhiteSpace(Model.RelatedLegalInfo.Where(x => x.RelatedLegalInfo.ItemType.ItemId == (int)MarketPlace.Models.General.enumLegalType.ChaimberOfCommerce).Select(x => x.CP_SocialObject).FirstOrDefault()))
                         {
                             <div class="col-xs-12 POMPBorderbottom POMPProviderBoxInfo">
                                 <br />
@@ -155,7 +146,7 @@
             }
 
             @*Calification Section*@
-            @if (Model.ProviderCalification.ProRelatedCalificationProject != null && Model.ProviderCalification.ProRelatedCalificationProject.Count > 0 && Model.ProviderCalification.RelatedCalificationProjectConfig != null && Model.ProviderCalification.RelatedCalificationProjectConfig.Count >0)
+            @if (Model.ProviderCalification.ProRelatedCalificationProject != null && Model.ProviderCalification.ProRelatedCalificationProject.Count > 0 && Model.ProviderCalification.RelatedCalificationProjectConfig != null && Model.ProviderCalification.RelatedCalificationProjectConfig.Count > 0)
             {
                 foreach (var CalificationProject in Model.ProviderCalification.RelatedCalificationProjectConfig)
                 {
@@ -166,12 +157,12 @@
 
 
 
-                    <div class="row POMPSectionTitlesBox">
-                        <div class="col-xs-6">
-                            <label>Calificación del Proveedor: @Model.ProviderCalification.TotalCalification </label>
-                        </div>
-                        <div class="col-sm-6 text-right">
-                            <a class="POMPLinkDetail_Provider" href="@(Url.RouteUrl
+                        <div class="row POMPSectionTitlesBox">
+                            <div class="col-xs-6">
+                                <label>Calificación del Proveedor: @Model.ProviderCalification.TotalCalification </label>
+                            </div>
+                            <div class="col-sm-6 text-right">
+                                <a class="POMPLinkDetail_Provider" href="@(Url.RouteUrl
                                (MarketPlace.Models.General.Constants.C_Routes_Default,
                                new
                                {
@@ -179,45 +170,45 @@
                                    action = MVC.Provider.ActionNames.GICalificationProjectDetail,
                                    ProviderPublicId = Request["ProviderPublicId"]
                                }))">
-                                Ver Detalle
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="container-fluid POMPProviderDetailContainer">
-                        <div class="col-lg-12">
-                            @foreach (var CalificationProjectConfigItem in CalificationProject.ConfigItemModel)
-                            {
-                                if (CalificationProjectBatch.CalificationProjectItemBatchModel.Any(y => y.CalificationProjectConfigItem.CalificationProjectConfigItemId == CalificationProjectConfigItem.CalificationProjectConfigItemId))
-                                {
-                                    <div class="col-sm-2  POMPBorderbottom POMPProviderBoxInfo">
-                                        <br />
-                                        <label class="POMPProviderBoxInfo">
-                                            @(!string.IsNullOrEmpty(CalificationProjectConfigItem.CalificationProjectConfigItemName) ? CalificationProjectConfigItem.CalificationProjectConfigItemName : CalificationProjectConfigItem.CalificationProjectConfigItemType.ItemName)
-                                        </label>
-                                        <br />
-                                        <span>@CalificationProjectBatch.CalificationProjectItemBatchModel.Where(y => y.CalificationProjectConfigItem.CalificationProjectConfigItemId == CalificationProjectConfigItem.CalificationProjectConfigItemId).Select(x => x.ItemScore).FirstOrDefault()</span>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="col-sm-2  POMPBorderbottom POMPProviderBoxInfo">
-                                        <br />
-                                        <label class="POMPProviderBoxInfo">@CalificationProjectConfigItem.CalificationProjectConfigItemType.ItemName</label>
-                                        <br />
-                                        <span>0</span>
-                                    </div>
-                                }
-                            }
-
-                            <div class="col-sm-2  POMPBorderbottom POMPProviderBoxInfo ">
-                                <br />
-                                <label class="POMPProviderBoxInfo">Puntuación Total</label>
-                                <br />
-                                <span class="POMPTotalScoreBox">@Model.ProviderCalification.TotalScore</span>
+                                    Ver Detalle
+                                </a>
                             </div>
                         </div>
-                    </div>
+
+                        <div class="container-fluid POMPProviderDetailContainer">
+                            <div class="col-lg-12">
+                                @foreach (var CalificationProjectConfigItem in CalificationProject.ConfigItemModel)
+                                {
+                                    if (CalificationProjectBatch.CalificationProjectItemBatchModel.Any(y => y.CalificationProjectConfigItem.CalificationProjectConfigItemId == CalificationProjectConfigItem.CalificationProjectConfigItemId))
+                                    {
+                                        <div class="col-sm-2  POMPBorderbottom POMPProviderBoxInfo">
+                                            <br />
+                                            <label class="POMPProviderBoxInfo">
+                                                @(!string.IsNullOrEmpty(CalificationProjectConfigItem.CalificationProjectConfigItemName) ? CalificationProjectConfigItem.CalificationProjectConfigItemName : CalificationProjectConfigItem.CalificationProjectConfigItemType.ItemName)
+                                            </label>
+                                            <br />
+                                            <span>@CalificationProjectBatch.CalificationProjectItemBatchModel.Where(y => y.CalificationProjectConfigItem.CalificationProjectConfigItemId == CalificationProjectConfigItem.CalificationProjectConfigItemId).Select(x => x.ItemScore).FirstOrDefault()</span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-sm-2  POMPBorderbottom POMPProviderBoxInfo">
+                                            <br />
+                                            <label class="POMPProviderBoxInfo">@CalificationProjectConfigItem.CalificationProjectConfigItemType.ItemName</label>
+                                            <br />
+                                            <span>0</span>
+                                        </div>
+                                    }
+                                }
+
+                                <div class="col-sm-2  POMPBorderbottom POMPProviderBoxInfo ">
+                                    <br />
+                                    <label class="POMPProviderBoxInfo">Puntuación Total</label>
+                                    <br />
+                                    <span class="POMPTotalScoreBox">@Model.ProviderCalification.TotalScore</span>
+                                </div>
+                            </div>
+                        </div>
                     }
                 }
             }
@@ -230,14 +221,14 @@
                 {
                     <br />
                     @*AQUI ESTA EL AREA DE LISTAS RESTRICTIVAS*@
-                    if (!string.IsNullOrWhiteSpace(Model.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == 203012).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault().ToString()))
-                    {
-                        <div class="row POMPSectionTitlesBox">
-                            <div class="col-sm-6 text-left">
-                                <label>Consulta Listas Restrictivas - Última Validación @Model.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == 203012).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault() </label>
-                            </div>
-                            <div class="col-sm-6 text-right">
-                                <a class="POMPLinkDetail_Provider" href="@(Url.RouteUrl
+            if (!string.IsNullOrWhiteSpace(Model.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == 203012).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault().ToString()))
+            {
+                <div class="row POMPSectionTitlesBox">
+                    <div class="col-sm-6 text-left">
+                        <label>Consulta Listas Restrictivas - Última Validación @Model.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == 203012).Select(x => x.Value).DefaultIfEmpty(string.Empty).FirstOrDefault() </label>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        <a class="POMPLinkDetail_Provider" href="@(Url.RouteUrl
                                                                 (MarketPlace.Models.General.Constants.C_Routes_Default,
                                                                 new
                                                                 {
@@ -245,14 +236,14 @@
                                                                     action = MVC.Provider.ActionNames.GIBlackList,
                                                                     ProviderPublicId = Request["ProviderPublicId"]
                                                                 }))">
-                                    Ver Detalle
-                                </a>
-                            </div>
-                        </div>
+                            Ver Detalle
+                        </a>
+                    </div>
+                </div>
                         <br />
                         <div class="container-fluid POMPProviderDetailContainer">
                             <div class="row">
-                                @if (Int32.Parse(Model.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x=>x.ItemInfoType.ItemId== (int)MarketPlace.Models.General.enumCompanyInfoType.AlertRisk).Select(x=>x.Value).FirstOrDefault())==(int)MarketPlace.Models.General.enumBlackListStatus.DontShowAlert)
+                                @if (Int32.Parse(Model.RelatedLiteProvider.RelatedProvider.RelatedCompany.CompanyInfo.Where(x => x.ItemInfoType.ItemId == (int)MarketPlace.Models.General.enumCompanyInfoType.AlertRisk).Select(x => x.Value).FirstOrDefault()) == (int)MarketPlace.Models.General.enumBlackListStatus.DontShowAlert)
                                 {
                                     <p>No se encontraron coincidencias en listas restrictivas.</p>
                                 }
@@ -262,55 +253,55 @@
                                 }
                             </div>
                         </div>
-                    }
                 }
-                if (oCurrentSubMenu.Any(x => x == (int)MarketPlace.Models.General.enumProviderSubMenu.Tracing))
-                {
-                    <br />
+            }
+            if (oCurrentSubMenu.Any(x => x == (int)MarketPlace.Models.General.enumProviderSubMenu.Tracing))
+            {
+                <br />
                     @*AQUI ESTA EL AREA SEGUIMIENTOS*@
-                    if (Model.RelatedTrackingInfo != null && Model.RelatedTrackingInfo.Count > 0)
-                    {
-                        <div class="container-fluid POMPProviderDetailContainer">
-                            <div class="row POMPSectionTitlesBox">
-                                <div class="col-sm-12  text-left">
-                                    <label>Seguimientos</label>
-                                </div>
-                            </div>
-                            <div class="row POMPBorderbottom">
-                                <div class="col-sm-6 POMPBorderbottom POMPProviderBoxInfo">
-                                    <label>Seguimiento</label>
-                                </div>
-                                <div class="col-sm-6 POMPProviderBoxInfo">
-                                    <label>Fecha</label>
-                                </div>
-                                @if (!string.IsNullOrEmpty(Model.RelatedTrackingInfo.FirstOrDefault().ItemName))
-                                {
-                                    <div class="col-sm-6 POMPBorderbottom POMPProviderBoxInfo">
-                                        <br />
-                                        <label class="POMPProviderBoxInfo">Objeto Social</label>
-                                        <br />
-                                        <span>@Model.RelatedTrackingInfo.FirstOrDefault().ItemName</span>
-                                    </div>
-                                }
-                                @if (Model.RelatedTrackingInfo.FirstOrDefault().CreateDate != null)
-                                {
-                                    <div class="col-sm-6 POMPBorderbottom POMPProviderBoxInfo">
-                                        <br />
-                                        <label class="POMPProviderBoxInfo">Objeto Social</label>
-                                        <br />
-                                        <span>@Model.RelatedTrackingInfo.FirstOrDefault().CreateDate</span>
-                                    </div>
-                                }
-                            </div>
+            if (Model.RelatedTrackingInfo != null && Model.RelatedTrackingInfo.Count > 0)
+            {
+                <div class="container-fluid POMPProviderDetailContainer">
+                    <div class="row POMPSectionTitlesBox">
+                        <div class="col-sm-12  text-left">
+                            <label>Seguimientos</label>
                         </div>
-                    }
+                    </div>
+                    <div class="row POMPBorderbottom">
+                        <div class="col-sm-6 POMPBorderbottom POMPProviderBoxInfo">
+                            <label>Seguimiento</label>
+                        </div>
+                        <div class="col-sm-6 POMPProviderBoxInfo">
+                            <label>Fecha</label>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.RelatedTrackingInfo.FirstOrDefault().ItemName))
+                        {
+                            <div class="col-sm-6 POMPBorderbottom POMPProviderBoxInfo">
+                                <br />
+                                <label class="POMPProviderBoxInfo">Objeto Social</label>
+                                <br />
+                                <span>@Model.RelatedTrackingInfo.FirstOrDefault().ItemName</span>
+                            </div>
+                        }
+                        @if (Model.RelatedTrackingInfo.FirstOrDefault().CreateDate != null)
+                        {
+                            <div class="col-sm-6 POMPBorderbottom POMPProviderBoxInfo">
+                                <br />
+                                <label class="POMPProviderBoxInfo">Objeto Social</label>
+                                <br />
+                                <span>@Model.RelatedTrackingInfo.FirstOrDefault().CreateDate</span>
+                            </div>
+                        }
+                    </div>
+                </div>
                 }
+            }
 
-                List<int> oCurrentMenu = MarketPlace.Models.General.SessionModel.CurrentProviderMenu();
+            List<int> oCurrentMenu = MarketPlace.Models.General.SessionModel.CurrentProviderMenu();
 
-                if (oCurrentMenu.Any(x => x == (int)MarketPlace.Models.General.enumProviderMenu.FinancialInfo))
-                {
-                    @*AQUI ESTA EL AREA FINANCIERA*@
+            if (oCurrentMenu.Any(x => x == (int)MarketPlace.Models.General.enumProviderMenu.FinancialInfo))
+            {
+                @*AQUI ESTA EL AREA FINANCIERA*@
                     <br />
                     if (Model.RelatedFinancialBasicInfo != null && Model.RelatedFinancialBasicInfo.Count > 0)
                     {
@@ -421,64 +412,6 @@
                         </div>
                     }
                     <br />
-                    @*AQUI ESTA EL AREA DE K *@
-                    if (Model.RelatedKContractInfo != null && Model.RelatedKContractInfo.Count > 0)
-                    {
-                        <div class="row POMPSectionTitlesBox">
-                            <div class="col-sm-2 text-left">
-                                <label>Contratación (K)</label>
-                            </div>
-                            <div class="col-sm-7  text-right">
-                                <i class="POMPResumeItem_Provider">Decreto 4881 de 2008. Fecha de última actualización: 07 de Febrero de 2014</i>
-                            </div>
-                            <div class="col-sm-3 text-right">
-                                <label class="POMPLinkDetail_Provider">
-                                    <a href="@(Url.RouteUrl
-                                                                    (MarketPlace.Models.General.Constants.C_Routes_Default,
-                                                                    new
-                                                                    {
-                                                                        controller = MVC.Provider.Name,
-                                                                        action = MVC.Provider.ActionNames.FIKContract,
-                                                                        ProviderPublicId = Request["ProviderPublicId"]
-                                                                    }))">Ver Detalle</a>
-                                </label>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-sm-4 ">
-                                    <div class="col-sm-12 POMPProviderBoxInfo"><strong>Criterio de Evaluación</strong></div>
-                                    <div class="col-sm-12 POMPProviderBoxInfo"><strong>Puntuación Total</strong></div>
-                                    <div class="col-sm-12 POMPProviderBoxInfo"><strong>Capacidad Organizacional S.M.M.L.V</strong></div>
-                                    <div class="col-sm-12 POMPProviderBoxInfo"><strong>Capacidad Máxima de Contratación en S.M.M.L.V</strong></div>
-                                </div>
-                                <div class="col-sm-8 col-lg-8">
-                                    <div class="row">
-                                        @foreach (var item in Model.RelatedKContractInfo)
-                                        {
-                                            <div class="col-sm-4 ">
-                                                <div class="col-sm-12 POMPProviderBoxInfo text-center">
-                                                    <strong>@item.FK_RoleType</strong>
-                                                </div>
-                                                <div class="col-sm-12 POMPProviderBoxInfo text-center">
-                                                    <span>@item.FK_TotalScore</span>
-                                                </div>
-                                                <div class="col-sm-12 POMPProviderBoxInfo text-center">
-                                                    @{string FK_TotalOrgCapacityScore = Convert.ToDecimal(item.FK_TotalOrgCapacityScore).ToString("#,0.##", System.Globalization.CultureInfo.CreateSpecificCulture("ES-co"));}
-                                                    <span>@FK_TotalOrgCapacityScore</span>
-                                                </div>
-                                                <div class="col-sm-12 POMPProviderBoxInfo text-center">
-                                                    @{string FK_TotalKValueScore = Convert.ToDecimal(item.FK_TotalKValueScore).ToString("#,0.##", System.Globalization.CultureInfo.CreateSpecificCulture("ES-co"));}
-                                                    <span>@FK_TotalKValueScore</span>
-                                                </div>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
                 }
 
                 if (oCurrentMenu.Any(x => x == (int)MarketPlace.Models.General.enumProviderMenu.HSEQInfo))
@@ -589,7 +522,7 @@
                                 {
                                     <div class="col-sm-4 POMPBorderbottom  POMPProviderBoxInfo">
                                         <br />
-                                        <label class="POMPProviderBoxInfo">LTIF</label>
+                                        <label class="POMPProviderBoxInfo">Nivel de Riesgo</label>
                                         <br />
                                         <span>@Model.RelatedHSEQlInfo.FirstOrDefault().CR_LTIFResult</span>
                                     </div>

@@ -10,6 +10,7 @@ namespace ProveedoresOnLine.Company.Models.Company
     [ElasticsearchType(Name = "CustomFilters_index")]
     public class CustomFiltersIndexModel
     {
+
         [String(Analyzer = "customWhiteSpace", SearchAnalyzer = "customWhiteSpace")]
         public string CustomerPublicId { get; set; }
 

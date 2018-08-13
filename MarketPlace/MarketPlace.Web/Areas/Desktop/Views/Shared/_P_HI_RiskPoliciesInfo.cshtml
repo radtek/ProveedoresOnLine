@@ -70,7 +70,7 @@
             }
             <div class="row POMPSectionTitlesBox">
                 <div class="col-md-12">
-                    <label>Reporte LTIF</label>
+                    <label>Información ARL</label>
                 </div>
             </div>
             <div class="container-fluid ">
@@ -84,11 +84,6 @@
                         <label>Calificación de Riesgo ARL</label>
                         <br />
                         <span>@Model.RelatedHSEQlInfo.Select(x => x.CR_RateARL).DefaultIfEmpty(string.Empty).LastOrDefault()</span>
-                    </div>
-                    <div class="col-sm-4">
-                        <label>Resultado LTIF</label>
-                        <br />
-                        <span title="@Model.RelatedHSEQlInfo.Select(x => x.CR_LTIFResult).DefaultIfEmpty(string.Empty).LastOrDefault()">@Model.RelatedHSEQlInfo.Select(x => x.CR_LTIFResult).DefaultIfEmpty(string.Empty).LastOrDefault()</span>
                     </div>
                 </div>
                 <div class="row ProviderData">
@@ -130,12 +125,10 @@
                         <li id="F2">
                             <label>* 1'000.000</label>
                         </li>
-                        <li id="F3">
-                            <label id="lblLTIFResult">Resultado LTIF: @Model.RelatedHSEQlInfo.Select(x => x.CR_LTIFResult).DefaultIfEmpty(string.Empty).LastOrDefault()</label>
-                        </li>
+
                     </ul>
                 </div>
             </div>
         </div>
-    }
-}
+                    }
+                }

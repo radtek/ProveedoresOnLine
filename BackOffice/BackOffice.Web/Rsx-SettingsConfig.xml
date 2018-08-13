@@ -12,4 +12,7 @@
   <Module name="IntegrationPlatform">
     <key name="location">\\ProjectConfigFiles\ConfigFiles\ProveedoresOnLine\IntegratonPlatform\Rsx-IntegrationPlatform.xml</key>
   </Module>
+  <Module name="IndexSearch">
+    <key name="location">D:\Repositories\ProveedoresOnLine\ProveedoresOnLine.IndexSearch\ProveedoresOnLine.IndexSearch.Test\Rsx-IndexSearch.xml</key>
+  </Module>
 </SettingsConfig>

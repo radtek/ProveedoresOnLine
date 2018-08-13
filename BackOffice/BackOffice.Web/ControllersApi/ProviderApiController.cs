@@ -3755,7 +3755,29 @@ namespace BackOffice.Web.ControllersApi
         [HttpGet]
         public void CPCStartProcessByProviderAndCustomer(string CPCStartProcessByProviderAndCustomer, string ProviderPublicId, string CalificationId)
         {
+            var CalificationCompanyInfo = ProveedoresOnLine.CalificationProject.Controller.CalificationProject.CalificationProjectConfig_GetByCalificationProjectConfigId(int.Parse(CalificationId));
             ProveedoresOnLine.CalificationProject.Controller.CalificationProject.StartProcessByProviderAndCustomer(ProviderPublicId, int.Parse(CalificationId));
+            var Provider = ProveedoresOnLine.Company.Controller.Company.CompanyGetBasicInfo(ProviderPublicId);
+            var Customer = ProveedoresOnLine.Company.Controller.Company.CompanyGetBasicInfo(CalificationCompanyInfo.Company.CompanyPublicId);
+            MessageModule.Client.Models.ClientMessageModel oMessage = new MessageModule.Client.Models.ClientMessageModel()
+            {
+                Agent = Models.General.InternalSettings.Instance[Models.General.Constants.C_Settings_CalificationProcessEnd_Mail].Value,
+                User = SessionModel.CurrentLoginUser.Email.ToString(),
+                ProgramTime = DateTime.Now,
+                MessageQueueInfo = new System.Collections.Generic.List<Tuple<string, string>>()
+                                {
+                                    new Tuple<string,string>("To", SessionModel.CurrentLoginUser.Email),
+                                    new Tuple<string,string>("ProviderLogo", Provider.CompanyInfo.Any(x => x.ItemInfoType.ItemId == (int)enumCompanyInfoType.CompanyLogo) ? Provider.CompanyInfo.Where(y=> y.ItemInfoType.ItemId == (int)enumCompanyInfoType.CompanyLogo).Select(y => y.Value).FirstOrDefault() : Models.General.InternalSettings.Instance[Models.General.Constants.C_Settings_DefaultImage].Value),
+                                    new Tuple<string,string>("ProviderName", Provider.CompanyName),
+                                    new Tuple<string,string>("ProviderPublicId", ProviderPublicId),
+                                    new Tuple<string,string>("ProviderIdentification",Provider.IdentificationNumber),
+                                    new Tuple<string,string>("CustomerName",Customer.CompanyName),
+                                    new Tuple<string,string>("CustomerIdentification",Customer.CompanyName),
+                                    new Tuple<string,string>("CustomerLogo",Customer.CompanyInfo.Where(y=> y.ItemInfoType.ItemId == (int)enumCompanyInfoType.CompanyLogo).Select(y => y.Value).FirstOrDefault()),
+                                    new Tuple<string,string>("CalificationProcessName",CalificationCompanyInfo.CalificationProjectConfigName),
+                                },
+            };
+            MessageModule.Client.Controller.ClientController.CreateMessage(oMessage);            
         }
 
         #endregion

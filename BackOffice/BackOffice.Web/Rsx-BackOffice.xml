@@ -61,6 +61,7 @@
     <key name="BO_CP_ReportPath">C:/Users/Yamile García Vega/source/repos/ProveedoresOnLine/ProveedoresOnLine.Reports/ProveedoresOnLine.Reports/Reports/</key>
     <key name="N_Provider_Certification_Mail">BO_CertificationProvider</key>
     <key name="File_S3FileProviderCertificatioPath">http://devproveedoresonline.s3.amazonaws.com/BackOffice/CompanyFile</key>
+    <key name="N_Provider_CalificationProcessEnd_Mail">BO_CalificationProcessEnd</key>  
 
   </BackOffice>
 </Settings>
